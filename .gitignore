@@ -1,0 +1,6 @@
+api_cache/
+cricsheet/
+out.csv
+*.zip
+__pycache__/
+*.pyc

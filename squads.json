@@ -1,0 +1,782 @@
+{
+"IND": {
+"name": "India Women",
+"players": [
+[
+"Smriti Mandhana",
+"BAT"
+],
+[
+"Shafali Verma",
+"BAT"
+],
+[
+"Jemimah Rodrigues",
+"BAT"
+],
+[
+"Harmanpreet Kaur",
+"BAT"
+],
+[
+"Richa Ghosh",
+"WK"
+],
+[
+"Deepti Sharma",
+"AR"
+],
+[
+"Arundhati Reddy",
+"AR"
+],
+[
+"Shree Charani",
+"BOWL"
+],
+[
+"Radha Yadav",
+"BOWL"
+],
+[
+"Renuka Singh Thakur",
+"BOWL"
+],
+[
+"Kranti Gaud",
+"BOWL"
+],
+[
+"Yastika Bhatia",
+"WK"
+],
+[
+"Bharti Fulmali",
+"BAT"
+],
+[
+"Nandani Sharma",
+"BOWL"
+],
+[
+"Shreyanka Patil",
+"AR"
+]
+]
+},
+"AUS": {
+"name": "Australia Women",
+"players": [
+[
+"Beth Mooney",
+"WK"
+],
+[
+"Georgia Voll",
+"BAT"
+],
+[
+"Phoebe Litchfield",
+"BAT"
+],
+[
+"Ellyse Perry",
+"AR"
+],
+[
+"Tahlia McGrath",
+"AR"
+],
+[
+"Ashleigh Gardner",
+"AR"
+],
+[
+"Annabel Sutherland",
+"AR"
+],
+[
+"Sophie Molineux",
+"AR"
+],
+[
+"Georgia Wareham",
+"BOWL"
+],
+[
+"Alana King",
+"BOWL"
+],
+[
+"Megan Schutt",
+"BOWL"
+],
+[
+"Grace Harris",
+"AR"
+],
+[
+"Nicola Carey",
+"AR"
+],
+[
+"Kim Garth",
+"BOWL"
+],
+[
+"Lucy Hamilton",
+"BOWL"
+]
+]
+},
+"ENG": {
+"name": "England Women",
+"players": [
+[
+"Sophia Dunkley",
+"BAT"
+],
+[
+"Danni Wyatt-Hodge",
+"BAT"
+],
+[
+"Nat Sciver-Brunt",
+"AR"
+],
+[
+"Alice Capsey",
+"AR"
+],
+[
+"Heather Knight",
+"BAT"
+],
+[
+"Amy Jones",
+"WK"
+],
+[
+"Freya Kemp",
+"AR"
+],
+[
+"Charlie Dean",
+"AR"
+],
+[
+"Sophie Ecclestone",
+"BOWL"
+],
+[
+"Lauren Bell",
+"BOWL"
+],
+[
+"Linsey Smith",
+"BOWL"
+],
+[
+"Danielle Gibson",
+"AR"
+],
+[
+"Issy Wong",
+"BOWL"
+],
+[
+"Lauren Filer",
+"BOWL"
+],
+[
+"Tilly Corteen-Coleman",
+"BOWL"
+]
+]
+},
+"SA": {
+"name": "South Africa Women",
+"players": [
+[
+"Tazmin Brits",
+"BAT"
+],
+[
+"Laura Wolvaardt",
+"BAT"
+],
+[
+"Marizanne Kapp",
+"AR"
+],
+[
+"Annerie Dercksen",
+"AR"
+],
+[
+"Sune Luus",
+"BAT"
+],
+[
+"Nadine de Klerk",
+"AR"
+],
+[
+"Chloe Tryon",
+"AR"
+],
+[
+"Sinalo Jafta",
+"WK"
+],
+[
+"Ayabonga Khaka",
+"BOWL"
+],
+[
+"Shabnim Ismail",
+"BOWL"
+],
+[
+"Nonkululeko Mlaba",
+"BOWL"
+],
+[
+"Kayla Reyneke",
+"AR"
+],
+[
+"Tumi Sekhukhune",
+"BOWL"
+],
+[
+"Karabo Meso",
+"WK"
+],
+[
+"Dane van Niekerk",
+"AR"
+]
+]
+},
+"NZ": {
+"name": "New Zealand Women",
+"players": [
+[
+"Georgia Plimmer",
+"BAT"
+],
+[
+"Izzy Gaze",
+"WK"
+],
+[
+"Amelia Kerr",
+"AR"
+],
+[
+"Sophie Devine",
+"AR"
+],
+[
+"Brooke Halliday",
+"BAT"
+],
+[
+"Maddy Green",
+"BAT"
+],
+[
+"Izzy Sharp",
+"WK"
+],
+[
+"Suzie Bates",
+"BAT"
+],
+[
+"Jess Kerr",
+"BOWL"
+],
+[
+"Rosemary Mair",
+"BOWL"
+],
+[
+"Bree Illing",
+"BOWL"
+],
+[
+"Flora Devonshire",
+"AR"
+],
+[
+"Polly Inglis",
+"WK"
+],
+[
+"Nensi Patel",
+"BOWL"
+],
+[
+"Lea Tahuhu",
+"BOWL"
+]
+]
+},
+"WI": {
+"name": "West Indies Women",
+"players": [
+[
+"Hayley Matthews",
+"AR"
+],
+[
+"Qiana Joseph",
+"BAT"
+],
+[
+"Jahzara Claxton",
+"BAT"
+],
+[
+"Stafanie Taylor",
+"AR"
+],
+[
+"Deandra Dottin",
+"AR"
+],
+[
+"Chinelle Henry",
+"AR"
+],
+[
+"Shemaine Campbelle",
+"WK"
+],
+[
+"Jannillea Glasgow",
+"AR"
+],
+[
+"Aaliyah Alleyne",
+"BOWL"
+],
+[
+"Afy Fletcher",
+"BOWL"
+],
+[
+"Karishma Ramharack",
+"BOWL"
+],
+[
+"Ashmini Munisar",
+"AR"
+],
+[
+"Zaida James",
+"AR"
+],
+[
+"Mandy Mangru",
+"BOWL"
+],
+[
+"Shawnisha Hector",
+"BOWL"
+]
+]
+},
+"PAK": {
+"name": "Pakistan Women",
+"players": [
+[
+"Muneeba Ali",
+"WK"
+],
+[
+"Gull Feroza",
+"BAT"
+],
+[
+"Ayesha Zafar",
+"BAT"
+],
+[
+"Aliya Riaz",
+"BAT"
+],
+[
+"Iram Javed",
+"BAT"
+],
+[
+"Saira Jabeen",
+"AR"
+],
+[
+"Fatima Sana",
+"AR"
+],
+[
+"Rameen Shamim",
+"AR"
+],
+[
+"Diana Baig",
+"BOWL"
+],
+[
+"Nashra Sandhu",
+"BOWL"
+],
+[
+"Sadia Iqbal",
+"BOWL"
+],
+[
+"Natalia Parvaiz",
+"BAT"
+],
+[
+"Eyman Fatima",
+"BOWL"
+],
+[
+"Tuba Hassan",
+"BOWL"
+],
+[
+"Tasmia Rubab",
+"BOWL"
+]
+]
+},
+"SL": {
+"name": "Sri Lanka Women",
+"players": [
+[
+"Chamari Athapaththu",
+"AR"
+],
+[
+"Vishmi Gunarathne",
+"BAT"
+],
+[
+"Hasini Perera",
+"WK"
+],
+[
+"Harshitha Samarawickrama",
+"BAT"
+],
+[
+"Imesha Dulani",
+"BAT"
+],
+[
+"Kaveesha Dilhari",
+"AR"
+],
+[
+"Nilakshika Silva",
+"AR"
+],
+[
+"Hansima Karunaratne",
+"AR"
+],
+[
+"Sugandika Dasanayaka",
+"BOWL"
+],
+[
+"Malki Madara",
+"BOWL"
+],
+[
+"Nimasha Madushani",
+"BOWL"
+],
+[
+"Kaushini Nuthyangana",
+"WK"
+],
+[
+"Shashini Gimhani",
+"BOWL"
+],
+[
+"Kawya Kavindi",
+"BOWL"
+],
+[
+"Mithali Ayodhya",
+"BAT"
+]
+]
+},
+"BAN": {
+"name": "Bangladesh Women",
+"players": [
+[
+"Dilara Akter",
+"BAT"
+],
+[
+"Juairiya Ferdous",
+"BAT"
+],
+[
+"Sobhana Mostary",
+"BAT"
+],
+[
+"Nigar Sultana Joty",
+"WK"
+],
+[
+"Sharmin Akter Supta",
+"BAT"
+],
+[
+"Shorna Akter",
+"AR"
+],
+[
+"Ritu Moni",
+"AR"
+],
+[
+"Nahida Akter",
+"BOWL"
+],
+[
+"Rabeya Khan",
+"AR"
+],
+[
+"Fariha Islam Trisna",
+"BOWL"
+],
+[
+"Marufa Akter",
+"BOWL"
+],
+[
+"Fahima Khatun",
+"AR"
+],
+[
+"Shanjida Akther Maghla",
+"BOWL"
+],
+[
+"Sultana Khatun",
+"BOWL"
+],
+[
+"Taj Nehar",
+"BAT"
+]
+]
+},
+"IRE": {
+"name": "Ireland Women",
+"players": [
+[
+"Amy Hunter",
+"WK"
+],
+[
+"Gaby Lewis",
+"BAT"
+],
+[
+"Orla Prendergast",
+"AR"
+],
+[
+"Leah Paul",
+"AR"
+],
+[
+"Rebecca Stokell",
+"BAT"
+],
+[
+"Laura Delany",
+"AR"
+],
+[
+"Arlene Kelly",
+"AR"
+],
+[
+"Cara Murray",
+"BOWL"
+],
+[
+"Georgina Dempsey",
+"BOWL"
+],
+[
+"Ava Canning",
+"BOWL"
+],
+[
+"Aimee Maguire",
+"BOWL"
+],
+[
+"Louise Little",
+"AR"
+],
+[
+"Alana Dalzell",
+"BOWL"
+],
+[
+"Christina Coulter Reilly",
+"AR"
+],
+[
+"Lara McBride",
+"BAT"
+]
+]
+},
+"SCO": {
+"name": "Scotland Women",
+"players": [
+[
+"Sarah Bryce",
+"WK"
+],
+[
+"Darcey Carter",
+"BAT"
+],
+[
+"Kathryn Bryce",
+"AR"
+],
+[
+"Ailsa Lister",
+"BAT"
+],
+[
+"Megan McColl",
+"AR"
+],
+[
+"Priyanaz Chatterji",
+"AR"
+],
+[
+"Katherine Fraser",
+"AR"
+],
+[
+"Abtaha Maqsood",
+"BOWL"
+],
+[
+"Kirstie Gordon",
+"BOWL"
+],
+[
+"Chloe Abel",
+"BOWL"
+],
+[
+"Rachel Slater",
+"BOWL"
+],
+[
+"Olivia Bell",
+"AR"
+],
+[
+"Gabriella Fontenla",
+"BOWL"
+],
+[
+"Maisie Maceira",
+"BOWL"
+],
+[
+"Pippa Sproul",
+"WK"
+]
+]
+},
+"NED": {
+"name": "Netherlands Women",
+"players": [
+[
+"Sterre Kalis",
+"BAT"
+],
+[
+"Heather Siegers",
+"AR"
+],
+[
+"Phebe Molkenboer",
+"AR"
+],
+[
+"Babette de Leede",
+"WK"
+],
+[
+"Robine Rijke",
+"AR"
+],
+[
+"Sanya Khurana",
+"BOWL"
+],
+[
+"Frederique Overdijk",
+"AR"
+],
+[
+"Iris Zwilling",
+"BOWL"
+],
+[
+"Caroline de Lange",
+"AR"
+],
+[
+"Silver Siegers",
+"AR"
+],
+[
+"Myrthe van den Raad",
+"BOWL"
+],
+[
+"Rosalie Ann Lawrence",
+"WK"
+],
+[
+"Hannah Landheer",
+"BOWL"
+],
+[
+"Isabel van der Woning",
+"BOWL"
+],
+[
+"Lara Leemhuis",
+"BOWL"
+]
+]
+}
+}

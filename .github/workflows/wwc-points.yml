@@ -1,0 +1,50 @@
+name: WWC T20 Points
+
+# Triggered from the Google Sheet button (workflow_dispatch) AND on a schedule
+# as a safety net so finished matches + newly-posted cricsheet dots appear
+# without anyone having to click.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */2 * * *"   # every 2 hours (UTC)
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - run: pip install -r requirements.txt
+
+      # Persist cricapi scorecards between runs (completed matches are immutable),
+      # so we don't re-fetch them every run and blow the 100 hits/day free limit.
+      - name: Cache cricapi scorecards
+        uses: actions/cache@v4
+        with:
+          path: api_cache
+          key: wc-apicache-${{ github.run_id }}
+          restore-keys: wc-apicache-
+
+      - name: Download cricsheet ball-by-ball (gold source: exact dots)
+        run: |
+          curl -sL -o t20s.zip https://cricsheet.org/downloads/t20s_json.zip
+          mkdir -p cricsheet && unzip -o -q t20s.zip "*.json" -d cricsheet
+
+      - name: Compute D11 points and write to Google Sheet
+        env:
+          CRICKET_API_KEY: ${{ secrets.CRICKET_API_KEY }}
+          GSHEET_ID: ${{ secrets.GSHEET_ID }}
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          CRICSHEET_DIR: cricsheet
+          WC_CACHE_DIR: api_cache
+        run: python wc_fps_to_csv.py out.csv
+
+      - name: Upload CSV artifact (backup / debugging)
+        uses: actions/upload-artifact@v4
+        with:
+          name: wwc-points-csv
+          path: out.csv
