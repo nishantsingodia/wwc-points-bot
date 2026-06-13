@@ -29,7 +29,7 @@ jobs:
           key: wc-apicache-${{ github.run_id }}
           restore-keys: wc-apicache-
 
-      - name: Download cricsheet ball-by-ball (gold source: exact dots)
+      - name: Download cricsheet ball-by-ball (gold source - exact dots)
         run: |
           curl -sL -o t20s.zip https://cricsheet.org/downloads/t20s_json.zip
           mkdir -p cricsheet && unzip -o -q t20s.zip "*.json" -d cricsheet
