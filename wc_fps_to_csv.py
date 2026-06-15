@@ -31,6 +31,10 @@ OUT = sys.argv[1] if len(sys.argv) > 1 else "/tmp/wc_fantasy_points.csv"
 # Google Sheet write target (CI). If both set, also writes cells into the tab.
 GSHEET_ID = os.environ.get("GSHEET_ID", "").strip()
 GSHEET_TAB = os.environ.get("GSHEET_TAB", "WWC T20 POINTS").strip()
+# ESPN = free ball-by-ball source for completed matches -> exact bowler dot-balls
+# (cricsheet is exact too but lags days; ESPN is available right after a match).
+ESPN_BASE = "https://site.api.espn.com/apis/site/v2/sports/cricket"
+ESPN_SERIES = os.environ.get("ESPN_SERIES_ID", "1483859").strip()  # ICC Women's T20 WC 2026
 
 # ---- Dream11 T20 rules (mirror of rules.ts) ----
 R = dict(
@@ -61,8 +65,13 @@ def match_squad_to_perf(team_players, pool):
             pt = ak.split(); pl, pf = pt[-1], pt[0][0]
             if ak == nn:
                 sc = 100.0
+            elif set(nt).issubset(set(pt)):   # all squad-name tokens present (ESPN's verbose names)
+                sc = 95.0
             elif pl == ln and pf == fi:
                 sc = 92.0
+            elif pl == ln and max((SequenceMatcher(None, a, b).ratio()
+                                   for a in nt for b in pt), default=0) >= 0.85:
+                sc = 90.0   # same surname + a near-matching given name (Kaveesha~Kavisha)
             else:
                 sc = SequenceMatcher(None, nn, ak).ratio() * 100
                 if pl == ln: sc += 8
@@ -204,6 +213,58 @@ def parse_cricsheet(path):
                 get(over_bowler)["maidens"] += 1
     return perf, info.get("teams", [])
 
+def espn_get(path, cache=True, **params):
+    os.makedirs(CACHE, exist_ok=True)
+    qs = "&".join(f"{k}={v}" for k, v in params.items())
+    key = re.sub(r"[^a-z0-9]", "_", f"espn_{path}_{qs}".lower())
+    fp = os.path.join(CACHE, key + ".json")
+    if cache and os.path.exists(fp):
+        return json.load(open(fp))
+    url = f"{ESPN_BASE}/{ESPN_SERIES}/{path}?{qs}"
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=30) as r:
+            data = json.load(r)
+    except Exception:
+        return {}
+    json.dump(data, open(fp, "w"))
+    time.sleep(0.3)
+    return data
+
+def espn_event_id(date, teams):
+    """Map a match (date 'YYYY-MM-DD' + team names) to its ESPN event id."""
+    d = espn_get("scoreboard", cache=False, dates=date.replace("-", ""))
+    want = team_key(teams)
+    for e in d.get("events", []):
+        comps = e.get("competitions", [{}])[0].get("competitors", [])
+        tnames = [c.get("team", {}).get("displayName", "") for c in comps]
+        if team_key(tnames) == want:
+            return e.get("id")
+    return None
+
+def espn_dots(event_id):
+    """Per-bowler dot-ball counts from ESPN ball-by-ball (completed match)."""
+    d = espn_get("playbyplay", event=event_id, limit=600)
+    out = {}
+    for it in d.get("commentary", {}).get("items", []):
+        ath = (it.get("bowler") or {}).get("athlete") or {}
+        name = ath.get("fullName") or ath.get("name")
+        if not name:
+            continue
+        k = norm(name)
+        if k not in out:
+            out[k] = {"name": name, "dots": 0}
+        desc = (it.get("playType", {}).get("description") or "").lower()
+        if "wide" in desc or "no ball" in desc or "no-ball" in desc:
+            continue  # illegal delivery: not a dot
+        try:
+            sv = int(it.get("scoreValue", 0) or 0)
+        except (TypeError, ValueError):
+            sv = 0
+        if sv == 0 and desc not in ("bye", "leg bye"):
+            out[k]["dots"] += 1
+    return out
+
 def crosscheck(cs, api):
     """Compare overlapping stats between cricsheet & cricapi for the same match.
     Returns list of (player, field, cricsheet_val, cricapi_val) disagreements.
@@ -337,6 +398,7 @@ def main():
     for mi, m in enumerate(sorted(ended, key=lambda x: x.get("dateTimeGMT", x.get("date", ""))), 1):
         teams = m.get("teams", [])
         date = m.get("date", "")
+        espn = {}
         label = f"Match {mi} — " + " v ".join(name2short.get(norm(t), t) for t in teams)
 
         # Pull BOTH sources. cricsheet = authoritative (exact dots, ball-by-ball).
@@ -360,8 +422,12 @@ def main():
             else:
                 source = "cricsheet"
         else:
-            perf = api_perf; n_api += 1; dots_final = False
-            source = "cricapi (dots pending — awaiting cricsheet)"
+            perf = api_perf; n_api += 1
+            # Exact dots from ESPN ball-by-ball (completed matches), since cricsheet lags.
+            ev = espn_event_id(date, teams)
+            espn = espn_dots(ev) if ev else {}
+            dots_final = bool(espn)
+            source = "cricapi + ESPN dots" if espn else "cricapi (dots pending — awaiting cricsheet)"
 
         team_players = []
         for tname in teams:
@@ -369,6 +435,13 @@ def main():
             if short:
                 team_players += [(short, n, r) for n, r in squads[short]["players"]]
         assigned, leftover = match_squad_to_perf(team_players, perf)
+
+        # Inject ESPN dot-balls into the matched cricapi performances (completed matches).
+        if espn:
+            espn_assigned, _ = match_squad_to_perf(team_players, espn)
+            for k, entry in espn_assigned.items():
+                if assigned.get(k):
+                    assigned[k]["dots"] = entry["dots"]
 
         def emit(short, name, role, d, in_squad):
             if d:
