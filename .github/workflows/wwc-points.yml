@@ -42,6 +42,10 @@ jobs:
           CRICKET_API_KEY: ${{ secrets.CRICKET_API_KEY }}
           GSHEET_ID: ${{ secrets.GSHEET_ID }}
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          # Switch/add a tour with NO code change: set repo Variables SERIES_ID + GSHEET_TAB
+          # (Settings > Secrets and variables > Actions > Variables). Defaults = Women's T20 WC.
+          SERIES_ID: ${{ vars.SERIES_ID || 'f3e5c7dd-332c-4893-9067-aa2bfe6d2b85' }}
+          GSHEET_TAB: ${{ vars.GSHEET_TAB || 'WWC T20 POINTS' }}
           CRICSHEET_DIR: cricsheet
           WC_CACHE_DIR: api_cache
         run: python wc_fps_to_csv.py out.csv
