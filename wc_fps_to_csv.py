@@ -18,6 +18,15 @@ Usage:
 """
 import os, sys, json, re, csv, time, glob, unicodedata, urllib.request
 from difflib import SequenceMatcher
+from datetime import date, timedelta
+
+def date_variants(d):
+    """A date plus ±1 day (ISO strings) — to absorb timezone differences between feeds."""
+    try:
+        b = date.fromisoformat(d)
+        return [d, (b - timedelta(days=1)).isoformat(), (b + timedelta(days=1)).isoformat()]
+    except ValueError:
+        return [d]
 
 API = "https://api.cricapi.com/v1"
 KEY = os.environ.get("CRICKET_API_KEY", "").strip()
@@ -57,9 +66,11 @@ def match_squad_to_perf(team_players, pool):
     """team_players: [(short,name,role)]; pool: {normname: perf}.
     Greedy 1-1 best-match. Returns {(short,name): perf or None}, plus leftover pool."""
     pairs = []
+    by_target = {}   # (short,name) -> sorted [(score, pk)]
     for short, name, role in team_players:
         nn = norm(name)
         nt = nn.split(); ln, fi = nt[-1], nt[0][0]
+        cand = []
         for pk in pool:
             ak = ALIAS.get(pk, pk)
             pt = ak.split(); pl, pf = pt[-1], pt[0][0]
@@ -77,6 +88,8 @@ def match_squad_to_perf(team_players, pool):
                 if pl == ln: sc += 8
                 if pt[0] == nt[0]: sc += 6
             pairs.append((sc, short, name, pk))
+            cand.append((sc, pk))
+        by_target[(short, name)] = sorted(cand, key=lambda x: -x[0])
     pairs.sort(key=lambda x: -x[0])
     assigned, used_sq, used_pk = {}, set(), set()
     for sc, short, name, pk in pairs:
@@ -84,8 +97,14 @@ def match_squad_to_perf(team_players, pool):
             continue
         assigned[(short, name)] = pool[pk]
         used_sq.add((short, name)); used_pk.add(pk)
+    # ambiguity: an assigned player whose top-2 *different* candidates score within 6 pts
+    # (e.g. same-surname siblings) — caller should flag it rather than trust silently.
+    ambiguous = set()
+    for t, cands in by_target.items():
+        if t in assigned and len(cands) >= 2 and cands[0][0] >= 84 and (cands[0][0] - cands[1][0]) < 6:
+            ambiguous.add(t)
     leftover = {k: v for k, v in pool.items() if k not in used_pk}
-    return assigned, leftover
+    return assigned, leftover, ambiguous
 
 def api(path, cache=True, **params):
     """GET with optional caching. Scorecards are cached (immutable once ended);
@@ -231,15 +250,17 @@ def espn_get(path, cache=True, **params):
     time.sleep(0.3)
     return data
 
-def espn_event_id(date, teams):
-    """Map a match (date 'YYYY-MM-DD' + team names) to its ESPN event id."""
-    d = espn_get("scoreboard", cache=False, dates=date.replace("-", ""))
+def espn_event_id(mdate, teams):
+    """Map a match (date 'YYYY-MM-DD' + team names) to its ESPN event id, tolerating
+    a ±1 day timezone offset between feeds."""
     want = team_key(teams)
-    for e in d.get("events", []):
-        comps = e.get("competitions", [{}])[0].get("competitors", [])
-        tnames = [c.get("team", {}).get("displayName", "") for c in comps]
-        if team_key(tnames) == want:
-            return e.get("id")
+    for d in date_variants(mdate):
+        sb = espn_get("scoreboard", cache=False, dates=d.replace("-", ""))
+        for e in sb.get("events", []):
+            comps = e.get("competitions", [{}])[0].get("competitors", [])
+            tnames = [c.get("team", {}).get("displayName", "") for c in comps]
+            if team_key(tnames) == want:
+                return e.get("id")
     return None
 
 def espn_dots(event_id):
@@ -277,6 +298,87 @@ def espn_xi(event_id):
             if nm and (p.get("starter") or p.get("subbedIn")):
                 out[norm(nm)] = {"name": nm}
     return out
+
+def parse_espn(event_id):
+    """Full scorecard from ESPN ball-by-ball (cricinfo) — exact dots/maidens/fielding,
+    plus the XI from the summary. Super-over deliveries (period>2) are excluded
+    (Dream11 awards no points for them). Returns (perf, super_over_seen)."""
+    pbp = espn_get("playbyplay", event=event_id, limit=600)
+    items = pbp.get("commentary", {}).get("items", [])
+    perf, overs, super_over = {}, {}, False
+    def get(n):
+        k = norm(n)
+        if k not in perf:
+            perf[k] = blank_perf(n)
+        return perf[k]
+    for it in items:
+        per = it.get("period")
+        if per and per > 2:
+            super_over = True
+            continue
+        desc = (it.get("playType", {}).get("description") or "").lower()
+        bw = (it.get("bowler", {}).get("athlete") or {}).get("fullName")
+        bt = (it.get("batsman", {}).get("athlete") or {}).get("fullName")
+        try:
+            sv = int(it.get("scoreValue", 0) or 0)
+        except (TypeError, ValueError):
+            sv = 0
+        is_wide = desc == "wide"
+        legal = not is_wide and "no ball" not in desc
+        if bt:
+            pb = get(bt); pb["played"] = True
+            if not is_wide:
+                pb["b"] += 1
+            if desc in ("run", "four", "six"):
+                pb["r"] += sv
+            if desc == "four":
+                pb["4s"] += 1
+            elif desc == "six":
+                pb["6s"] += 1
+        if bw:
+            pw = get(bw); pw["played"] = True
+            if legal:
+                pw["balls"] += 1
+            if desc not in ("bye", "leg bye"):
+                pw["runs_conceded"] += sv
+            if legal and sv == 0:
+                pw["dots"] += 1
+            ok = (per, it.get("over", {}).get("number"))
+            o = overs.setdefault(ok, {"legal": 0, "runs": 0, "bowler": bw})
+            o["bowler"] = bw
+            if legal:
+                o["legal"] += 1; o["runs"] += sv
+        dis = it.get("dismissal") or {}
+        if dis.get("dismissal"):
+            typ = (dis.get("type") or "").lower()
+            if bt:
+                pb = get(bt); pb["dismissed"] = True; pb["dismissal"] = it.get("shortText", typ)
+            if bw and typ not in ("run out", "retired hurt", "retired not out", "obstructing the field"):
+                pw = get(bw); pw["w"] += 1
+                if typ in ("bowled", "lbw"):
+                    pw["lbwb"] += 1
+            fld = (dis.get("fielder", {}).get("athlete") or {}).get("fullName")
+            if typ == "caught" and fld and norm(fld) != norm(bw or ""):
+                get(fld)["catches"] += 1
+            elif typ == "stumped" and fld:
+                get(fld)["stumpings"] += 1
+            elif typ == "run out":
+                m = re.search(r"run out \(([^)]*)\)", it.get("shortText", "") or "", re.I)
+                names = ([re.sub(r"(sub\b|†|\[|\])", "", x).strip() for x in m.group(1).split("/")]
+                         if m else ([fld] if fld else []))
+                names = [n for n in names if n]
+                for n in names:
+                    rp = get(n); rp["runouts"] += 1
+                    if len(names) == 1:
+                        rp["dro"] += 1
+    for o in overs.values():
+        if o["legal"] == 6 and o["runs"] == 0 and o["bowler"]:
+            get(o["bowler"])["maidens"] += 1
+    for k, e in espn_xi(event_id).items():   # +4 in-XI even for players with no stat line
+        if k not in perf:
+            perf[k] = blank_perf(e["name"])
+        perf[k]["played"] = True
+    return perf, super_over
 
 def crosscheck(cs, api):
     """Compare overlapping stats between cricsheet & cricapi for the same match.
@@ -411,90 +513,98 @@ def main():
             "Pts Bat", "Pts Bowl", "Pts Field", "Pts SR", "Pts Econ", "Pts XI",
             "Fantasy Points", "Source", "In Squad List"]
     rows = []
-    n_cs = n_api = 0
+    n_cs = n_espn = n_api = 0
     for mi, m in enumerate(sorted(ended, key=lambda x: x.get("dateTimeGMT", x.get("date", ""))), 1):
         teams = m.get("teams", [])
-        date = m.get("date", "")
-        espn = {}; xi = {}
+        mdate = m.get("date", "")
         label = f"Match {mi} — " + " v ".join(name2short.get(norm(t), t) for t in teams)
 
-        # Pull BOTH sources. cricsheet = authoritative (exact dots, ball-by-ball).
-        # cricapi = live coverage. They are cross-checked, never blindly substituted.
-        cs_path = cs_idx.get((date, team_key(teams)))
-        cs_perf = {k: v for k, v in parse_cricsheet(cs_path)[0].items() if v["played"]} if cs_path else {}
+        # cricapi scorecard (used as fallback + an independent cross-check)
         try:
             api_perf = {k: v for k, v in parse_match(m["id"]).items() if v["played"]} if m.get("id") else {}
         except Exception:
             api_perf = {}
 
-        if cs_perf:
-            perf = cs_perf; n_cs += 1; dots_final = True
-            if api_perf:
-                diffs = crosscheck(cs_perf, api_perf)
-                source = "cricsheet ✓xchecked" if not diffs else f"cricsheet ({len(diffs)} stat diffs vs cricapi)"
-                if diffs:
-                    print(f"  [{label}] {len(diffs)} cross-check diffs:", file=sys.stderr)
-                    for nm, fld, cv, av in diffs[:8]:
-                        print(f"      {nm}: {fld} cricsheet={cv} cricapi={av}", file=sys.stderr)
-            else:
-                source = "cricsheet"
+        # Source priority:
+        #   cricsheet (official, exact everything) — when posted, overrides all
+        #   else cricapi scorecard (PRIMARY base) + ESPN/cricinfo for dot-balls & the +4 XI
+        #        (cricapi's scorecard tracks the official card best; ESPN fills what it lacks)
+        #   else cricapi alone (limited: no dots/XI) if ESPN is unavailable
+        cs_path = next((cs_idx[(d, team_key(teams))] for d in date_variants(mdate)
+                        if (d, team_key(teams)) in cs_idx), None)
+        espn_perf, super_over = {}, False
+        if cs_path:
+            perf = {k: v for k, v in parse_cricsheet(cs_path)[0].items() if v["played"]}
+            n_cs += 1; dots_final = True; status = "cricsheet · official"
         else:
-            perf = api_perf; n_api += 1
-            # Exact dots from ESPN ball-by-ball (completed matches), since cricsheet lags.
-            ev = espn_event_id(date, teams)
-            espn = espn_dots(ev) if ev else {}
-            xi = espn_xi(ev) if ev else {}
-            dots_final = bool(espn)
-            source = "cricapi + ESPN dots" if espn else "cricapi (dots pending — awaiting cricsheet)"
+            perf = api_perf
+            ev = espn_event_id(mdate, teams)
+            if ev:
+                espn_perf, super_over = parse_espn(ev)
+                espn_perf = {k: v for k, v in espn_perf.items() if v["played"]}
+            if espn_perf:
+                n_espn += 1; dots_final = True
+                status = "cricapi + ESPN dots/XI" + (" · super-over excl" if super_over else "")
+            else:
+                n_api += 1; dots_final = False
+                status = "cricapi · limited (no dots/XI — ESPN unavailable)"
 
         team_players = []
         for tname in teams:
             short = name2short.get(norm(tname))
             if short:
                 team_players += [(short, n, r) for n, r in squads[short]["players"]]
-        assigned, leftover = match_squad_to_perf(team_players, perf)
+        assigned, leftover, ambiguous = match_squad_to_perf(team_players, perf)
 
-        # Inject ESPN dot-balls into the matched cricapi performances (completed matches).
-        if espn:
-            espn_assigned, _ = match_squad_to_perf(team_players, espn)
-            for k, entry in espn_assigned.items():
-                if assigned.get(k):
-                    assigned[k]["dots"] = entry["dots"]
-        # Credit +4 in-XI to squad players who were in the ESPN XI but never batted/bowled/fielded.
-        xi_keys = set(match_squad_to_perf(team_players, xi)[0]) if xi else set()
+        # Merge ESPN (squad-level): inject dot-balls, credit +4 in-XI to players cricapi
+        # didn't list, and cross-check runs/wickets — disagreements flagged for review.
+        xcheck = set()
+        if espn_perf:
+            espn_assigned = match_squad_to_perf(team_players, espn_perf)[0]
+            for k, e in espn_assigned.items():
+                base = assigned.get(k)
+                if base:
+                    base["dots"] = e["dots"]                      # exact dots from ESPN
+                    if base.get("r", 0) != e.get("r", 0) or base.get("w", 0) != e.get("w", 0):
+                        xcheck.add(k)                             # cricapi vs ESPN disagree
+                elif e.get("played"):
+                    np = blank_perf(e["name"]); np["played"] = True; np["dots"] = e.get("dots", 0)
+                    assigned[k] = np                              # in XI, no cricapi line -> +4
 
         def emit(short, name, role, d, in_squad):
+            src = status
+            if (short, name) in ambiguous:
+                src += " · ⚠ name-match?"
+            if (short, name) in xcheck:
+                src += " · ⚠ differs vs ESPN"
             if d:
                 s = score(d, role)
                 sr = round(d["r"] / d["b"] * 100, 1) if d["b"] else ""
                 econ = round(d["runs_conceded"] / (d["balls"] / 6), 2) if d["balls"] else ""
-                dots_out = d["dots"] if dots_final else ""  # never fill dots from cricapi
-                rows.append([label, date, short, name, role, "Y",
+                dots_out = d["dots"] if dots_final else ""  # never fill dots from a no-dots source
+                rows.append([label, mdate, short, name, role, "Y",
                              d["r"], d["b"], d["4s"], d["6s"], sr, d["dismissal"],
                              round(d["balls"] / 6, 1) if d["balls"] else "",
                              d["maidens"], dots_out, d["runs_conceded"], d["w"], econ,
                              d["catches"], d["stumpings"], d["runouts"],
                              s["bat"], s["bowl"], s["field"], s["sr"], s["eco"], s["xi"],
-                             s["total"], source, in_squad])
+                             s["total"], src, in_squad])
             else:
-                rows.append([label, date, short, name, role, "N"] + [""] * 22 +
-                            [source, in_squad])
+                rows.append([label, mdate, short, name, role, "N"] + [""] * 22 +
+                            [src, in_squad])
 
         for short, name, role in team_players:
-            d = assigned.get((short, name))
-            if d is None and (short, name) in xi_keys:
-                d = blank_perf(name); d["played"] = True   # in XI, no stats -> +4 only
-            emit(short, name, role, d, "Y")
+            emit(short, name, role, assigned.get((short, name)), "Y")
         # players who featured but matched no squad name -> show for manual review
         for d in leftover.values():
             emit("?", d["name"], "?", d, "N")
-    print(f"sources: {n_cs} cricsheet, {n_api} cricapi", file=sys.stderr)
+    print(f"sources: {n_cs} cricsheet(official), {n_espn} cricapi+ESPN, {n_api} cricapi-only", file=sys.stderr)
 
     with open(OUT, "w", newline="") as f:
         w = csv.writer(f)
         w.writerow(cols)
         w.writerows(rows)
-    print(f"Wrote {len(rows)} rows -> {OUT} | sources: {n_cs} cricsheet, {n_api} cricapi", file=sys.stderr)
+    print(f"Wrote {len(rows)} rows -> {OUT}", file=sys.stderr)
 
     if GSHEET_ID:
         write_to_gsheet(cols, rows)
