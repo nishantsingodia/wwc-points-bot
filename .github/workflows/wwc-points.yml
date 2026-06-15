@@ -30,9 +30,12 @@ jobs:
           restore-keys: wc-apicache-
 
       - name: Download cricsheet ball-by-ball (gold source - exact dots)
+        continue-on-error: true   # non-fatal: if cricsheet is slow/down, fall back to cricapi
         run: |
-          curl -sL -o t20s.zip https://cricsheet.org/downloads/t20s_json.zip
-          mkdir -p cricsheet && unzip -o -q t20s.zip "*.json" -d cricsheet
+          mkdir -p cricsheet
+          curl -fsSL --retry 3 --retry-delay 5 --max-time 180 -o t20s.zip \
+            https://cricsheet.org/downloads/t20s_json.zip
+          unzip -o -q t20s.zip "*.json" -d cricsheet
 
       - name: Compute D11 points and write to Google Sheet
         env:

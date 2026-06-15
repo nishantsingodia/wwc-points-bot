@@ -21,9 +21,10 @@ from difflib import SequenceMatcher
 
 API = "https://api.cricapi.com/v1"
 KEY = os.environ.get("CRICKET_API_KEY", "").strip()
-WC_SERIES = "f3e5c7dd-332c-4893-9067-aa2bfe6d2b85"  # ICC Women's T20 World Cup 2026
+# Series id to pull. Override with env SERIES_ID to run ANY other tour (no code change).
+WC_SERIES = os.environ.get("SERIES_ID", "f3e5c7dd-332c-4893-9067-aa2bfe6d2b85").strip()  # default: ICC Women's T20 WC 2026
 SQUAD_TS = os.path.join(os.path.dirname(__file__), "..", "src", "lib", "squads", "womens-t20-wc-2026.ts")
-SQUADS_JSON = os.path.join(os.path.dirname(__file__), "squads.json")  # standalone fallback
+SQUADS_JSON = os.environ.get("SQUADS_JSON", os.path.join(os.path.dirname(__file__), "squads.json"))  # standalone / per-tour
 CACHE = os.environ.get("WC_CACHE_DIR", "/tmp/wc_api_cache")
 CRICSHEET_DIR = os.environ.get("CRICSHEET_DIR", "/tmp/t20scan")  # extracted cricsheet JSONs
 OUT = sys.argv[1] if len(sys.argv) > 1 else "/tmp/wc_fantasy_points.csv"
@@ -101,6 +102,10 @@ def load_squads():
         raw = json.load(open(SQUADS_JSON))
         return {k: {"name": v["name"], "players": [tuple(p) for p in v["players"]]}
                 for k, v in raw.items()}
+    if not os.path.exists(SQUAD_TS):
+        # No squad list for this tour -> "featured players only" mode: the sheet lists
+        # everyone who appears in a scorecard (no DNP rows, Team shown from cricsheet).
+        return {}
     txt = open(SQUAD_TS).read()
     teams = {}              # short -> {"name":..., "players":[(name,role)]}
     cur = None
@@ -218,9 +223,10 @@ def score(p, role):
     bat = bowl = field = sr_pts = eco_pts = 0
     if p["b"] > 0 or p["r"] > 0:
         bat += p["r"] * R["perRun"] + p["4s"] * R["b4"] + p["6s"] * R["b6"]
+        # Milestone bonus: only the HIGHEST reached applies (each replaces the lower).
         if p["r"] >= 100: bat += R["m100"]
-        elif p["r"] >= 75: bat += R["m75"] + R["m50"] + R["m25"]
-        elif p["r"] >= 50: bat += R["m50"] + R["m25"]
+        elif p["r"] >= 75: bat += R["m75"]
+        elif p["r"] >= 50: bat += R["m50"]
         elif p["r"] >= 25: bat += R["m25"]
         if p["dismissed"] and p["r"] == 0 and role != "BOWL":
             bat += R["duck"]
