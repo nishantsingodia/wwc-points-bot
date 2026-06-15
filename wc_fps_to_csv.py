@@ -265,6 +265,19 @@ def espn_dots(event_id):
             out[k]["dots"] += 1
     return out
 
+def espn_xi(event_id):
+    """Playing XI (incl. subs that came on) from ESPN summary -> for the +4 in-XI bonus,
+    even for players who didn't bat/bowl/field (e.g. a captain who wasn't needed)."""
+    d = espn_get("summary", event=event_id)
+    out = {}
+    for team in d.get("rosters", []):
+        for p in team.get("roster", []):
+            a = p.get("athlete", {})
+            nm = a.get("fullName") or a.get("displayName")
+            if nm and (p.get("starter") or p.get("subbedIn")):
+                out[norm(nm)] = {"name": nm}
+    return out
+
 def crosscheck(cs, api):
     """Compare overlapping stats between cricsheet & cricapi for the same match.
     Returns list of (player, field, cricsheet_val, cricapi_val) disagreements.
@@ -398,7 +411,7 @@ def main():
     for mi, m in enumerate(sorted(ended, key=lambda x: x.get("dateTimeGMT", x.get("date", ""))), 1):
         teams = m.get("teams", [])
         date = m.get("date", "")
-        espn = {}
+        espn = {}; xi = {}
         label = f"Match {mi} — " + " v ".join(name2short.get(norm(t), t) for t in teams)
 
         # Pull BOTH sources. cricsheet = authoritative (exact dots, ball-by-ball).
@@ -426,6 +439,7 @@ def main():
             # Exact dots from ESPN ball-by-ball (completed matches), since cricsheet lags.
             ev = espn_event_id(date, teams)
             espn = espn_dots(ev) if ev else {}
+            xi = espn_xi(ev) if ev else {}
             dots_final = bool(espn)
             source = "cricapi + ESPN dots" if espn else "cricapi (dots pending — awaiting cricsheet)"
 
@@ -442,6 +456,8 @@ def main():
             for k, entry in espn_assigned.items():
                 if assigned.get(k):
                     assigned[k]["dots"] = entry["dots"]
+        # Credit +4 in-XI to squad players who were in the ESPN XI but never batted/bowled/fielded.
+        xi_keys = set(match_squad_to_perf(team_players, xi)[0]) if xi else set()
 
         def emit(short, name, role, d, in_squad):
             if d:
@@ -461,7 +477,10 @@ def main():
                             [source, in_squad])
 
         for short, name, role in team_players:
-            emit(short, name, role, assigned.get((short, name)), "Y")
+            d = assigned.get((short, name))
+            if d is None and (short, name) in xi_keys:
+                d = blank_perf(name); d["played"] = True   # in XI, no stats -> +4 only
+            emit(short, name, role, d, "Y")
         # players who featured but matched no squad name -> show for manual review
         for d in leftover.values():
             emit("?", d["name"], "?", d, "N")
