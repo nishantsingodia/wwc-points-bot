@@ -2,16 +2,18 @@
 """
 Women's T20 WC 2026 -> Dream11 fantasy-points sheet (CSV).
 
-Pulls every COMPLETED WC match scorecard from cricketdata.org, computes D11 T20
-points mirroring src/lib/fantasy-points/{rules,calculator}.ts EXACTLY, and writes
-one flat CSV (Match column) listing ALL squad players of both playing teams, with
-raw stats + a points breakdown for manual review. DNP players get blank stats.
+Computes Dream11 T20 points (mirrors src/lib/fantasy-points/{rules,calculator}.ts)
+for every COMPLETED match and writes one flat CSV (Match column) listing ALL squad
+players of both teams + raw stats + points breakdown. DNP players get blank stats.
 
-Caveats (data the API scorecard does NOT provide -> set to 0):
-  - bowling dot-balls (D11 +1/dot)         -> not available from scorecard feed
-  - direct vs assisted run-outs            -> all run-outs scored as assisted (6)
-Everything else (runs/4s/6s/milestones/SR, wickets/lbw-bowled/maidens/hauls/econ,
-catches/stumpings, +4 in-XI) matches the app's calculator.
+Source priority per match (recorded in the Status column):
+  1. cricsheet (official, exact everything) — overrides all when posted (lags days)
+  2. else cricapi scorecard (PRIMARY base) + ESPN/cricinfo ball-by-ball for the
+     dot-balls and the +4 in-XI cricapi can't supply; runs/wickets cross-checked
+     between the two (disagreements flagged in Status)
+  3. else cricapi alone (no dots/XI) if ESPN is unavailable
+Super-over deliveries are excluded. Match<->feed joins tolerate a ±1 day offset.
+Milestone bonuses are highest-only (25/50/75/100 replace lower).
 
 Usage:
   CRICKET_API_KEY=<key> python3 data/wc_fps_to_csv.py [out.csv]
