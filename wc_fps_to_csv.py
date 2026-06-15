@@ -396,6 +396,10 @@ def main():
 
     info = api("series_info", cache=False, id=WC_SERIES)
     matches = info.get("data", {}).get("matchList", [])
+    # Guard: if cricapi failed/returned nothing, ABORT before touching the sheet
+    # (otherwise we'd clear it and write an empty table — wiping good data).
+    if info.get("status") != "success" or not matches:
+        sys.exit("series_info fetch failed or empty — aborting; sheet left unchanged.")
     ended = [m for m in matches if m.get("matchEnded")]
     cs_idx = load_cricsheet_index(CRICSHEET_DIR)
     print(f"{len(ended)}/{len(matches)} matches completed | cricsheet female matches indexed: {len(cs_idx)}", file=sys.stderr)
@@ -502,6 +506,9 @@ def write_to_gsheet(cols, rows):
     creds = os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON", "")
     if not creds:
         print("GSHEET_ID set but GOOGLE_SERVICE_ACCOUNT_JSON missing — skipping sheet write.", file=sys.stderr)
+        return
+    if not rows:
+        print("0 data rows — leaving sheet unchanged (guard against accidental wipe).", file=sys.stderr)
         return
     gc = gspread.service_account_from_dict(json.loads(creds))
     sh = gc.open_by_key(GSHEET_ID)
