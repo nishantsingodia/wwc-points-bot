@@ -563,9 +563,15 @@ def run_tour(tour):
     # (otherwise we'd clear it and write an empty table — wiping good data).
     if info.get("status") != "success" or not matches:
         sys.exit("series_info fetch failed or empty — aborting; sheet left unchanged.")
-    # T20Is only — a tour can mix formats (e.g. ODIs + T20Is); D11 scoring here is T20.
-    ended = [m for m in matches if m.get("matchEnded")
-             and "t20" in (m.get("matchType") or "t20").lower()]
+    # T20Is only — a tour can mix formats. cricapi sometimes leaves matchType null
+    # (seen on ODIs!), so trust matchType when present, else fall back to the match name.
+    def is_t20(m):
+        mt = (m.get("matchType") or "").lower()
+        if mt:
+            return "t20" in mt
+        nm = (m.get("name") or "").lower()
+        return "t20" in nm and "odi" not in nm and "test" not in nm
+    ended = [m for m in matches if m.get("matchEnded") and is_t20(m)]
     cs_idx = load_cricsheet_index(CRICSHEET_DIR, tour.get("gender", "female"))
     print(f"{len(ended)}/{len(matches)} matches completed | cricsheet female matches indexed: {len(cs_idx)}", file=sys.stderr)
 
@@ -713,9 +719,9 @@ def write_to_gsheet(cols, rows):
     if not creds:
         print("GSHEET_ID set but GOOGLE_SERVICE_ACCOUNT_JSON missing — skipping sheet write.", file=sys.stderr)
         return
-    if not rows:
-        print("0 data rows — leaving sheet unchanged (guard against accidental wipe).", file=sys.stderr)
-        return
+    # Note: a wipe from a failed upstream fetch is prevented earlier (run_tour aborts before
+    # we get here). Reaching here with 0 rows means the series is valid but has no completed
+    # T20Is yet -> we DO write a clean header (e.g. clears stale rows from a format mis-tag).
     gc = gspread.service_account_from_dict(json.loads(creds))
     sh = gc.open_by_key(GSHEET_ID)
     try:
