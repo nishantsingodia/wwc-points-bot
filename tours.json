@@ -4,6 +4,14 @@
     "cricapi_series": "f3e5c7dd-332c-4893-9067-aa2bfe6d2b85",
     "espn_series": "1483859",
     "tab": "WWC T20 POINTS",
+    "gender": "female",
     "squads": "squads.json"
+  },
+  {
+    "name": "Australia tour of Bangladesh 2026 (Men T20I)",
+    "cricapi_series": "b64e8180-a896-41ee-b1ca-2dbc9c938a0f",
+    "espn_series": "1532475",
+    "tab": "AUS v BAN T20 POINTS",
+    "gender": "male"
   }
 ]

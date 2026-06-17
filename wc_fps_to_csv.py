@@ -185,8 +185,9 @@ def team_key(teams):
     return frozenset(norm(t.replace("Women", "").replace("women", "")) for t in teams)
 
 # ---- cricsheet ball-by-ball (mirror of etl_cricsheet.py) -> EXACT dots/maidens/XI ----
-def load_cricsheet_index(dirpath):
-    """(date, team_key) -> json path, for completed female T20s."""
+def load_cricsheet_index(dirpath, gender="female"):
+    """(date, team_key) -> json path, for completed T20s of the given gender
+    (so a men's tour matches men's cricsheet files, not women's, and vice versa)."""
     idx = {}
     if not os.path.isdir(dirpath):
         return idx
@@ -197,7 +198,7 @@ def load_cricsheet_index(dirpath):
             info = json.load(open(f)).get("info", {})
         except Exception:
             continue
-        if info.get("gender") != "female" or not info.get("dates"):
+        if info.get("gender") != gender or not info.get("dates"):
             continue
         idx[(info["dates"][0], team_key(info.get("teams", [])))] = f
     return idx
@@ -562,8 +563,10 @@ def run_tour(tour):
     # (otherwise we'd clear it and write an empty table — wiping good data).
     if info.get("status") != "success" or not matches:
         sys.exit("series_info fetch failed or empty — aborting; sheet left unchanged.")
-    ended = [m for m in matches if m.get("matchEnded")]
-    cs_idx = load_cricsheet_index(CRICSHEET_DIR)
+    # T20Is only — a tour can mix formats (e.g. ODIs + T20Is); D11 scoring here is T20.
+    ended = [m for m in matches if m.get("matchEnded")
+             and "t20" in (m.get("matchType") or "t20").lower()]
+    cs_idx = load_cricsheet_index(CRICSHEET_DIR, tour.get("gender", "female"))
     print(f"{len(ended)}/{len(matches)} matches completed | cricsheet female matches indexed: {len(cs_idx)}", file=sys.stderr)
 
     cols = ["Match", "Date", "Team", "Full Name", "Role", "Played",

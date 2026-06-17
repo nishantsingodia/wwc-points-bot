@@ -37,7 +37,10 @@ auction). Claude does the rest:
 | `cricapi_series` | yes | cricketdata series id (primary scorecard) |
 | `espn_series` | yes* | ESPN/cricinfo series id (dot-balls, +4 XI, team attribution). *Omit only if you accept no dots/XI. |
 | `tab` | yes | Google Sheet tab to write (created if missing) |
+| `gender` | yes | `male` or `female` — so cricsheet matches the right files |
 | `squads` | no | filename of a squad JSON in this repo; omit for featured-players-only |
+
+Only **T20Is** are scored (a tour can mix formats — ODIs/Tests are ignored).
 
 Each tour writes its tab independently; if one tour's feed fails, the others still run,
 and a failing tour **never blanks its tab** (the run aborts before writing).
