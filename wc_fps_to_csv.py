@@ -108,6 +108,27 @@ def match_squad_to_perf(team_players, pool):
     leftover = {k: v for k, v in pool.items() if k not in used_pk}
     return assigned, leftover, ambiguous
 
+def best_team(name, team_map):
+    """Fuzzy-match a player name to an ESPN roster {norm_name: team} and return the team
+    (handles verbose ESPN spellings). '' if no confident match."""
+    nn = norm(name); nt = nn.split(); ln, fi = nt[-1], nt[0][0]
+    best, best_sc = "", 0.0
+    for k, tfull in team_map.items():
+        kt = k.split(); kl, kf = kt[-1], kt[0][0]
+        if k == nn:
+            sc = 100.0
+        elif set(nt).issubset(set(kt)) or set(kt).issubset(set(nt)):
+            sc = 95.0
+        elif kl == ln and kf == fi:
+            sc = 92.0
+        elif kl == ln:
+            sc = 86.0
+        else:
+            sc = SequenceMatcher(None, nn, k).ratio() * 100
+        if sc > best_sc:
+            best_sc, best = sc, tfull
+    return best if best_sc >= 84 else ""
+
 def api(path, cache=True, **params):
     """GET with optional caching. Scorecards are cached (immutable once ended);
     series_info is NOT (so re-runs detect newly-completed matches)."""
@@ -155,7 +176,7 @@ def load_squads():
     return teams
 
 def blank_perf(name):
-    return dict(name=name, r=0, b=0, **{"4s": 0, "6s": 0}, dismissed=False,
+    return dict(name=name, team="", r=0, b=0, **{"4s": 0, "6s": 0}, dismissed=False,
                 dismissal="", balls=0, runs_conceded=0, w=0, lbwb=0, dots=0,
                 maidens=0, catches=0, stumpings=0, runouts=0, dro=0, played=False)
 
@@ -189,9 +210,9 @@ def parse_cricsheet(path):
         if k not in perf:
             perf[k] = blank_perf(n)
         return perf[k]
-    for plist in info.get("players", {}).values():   # known playing XI -> +4 each
+    for tname, plist in info.get("players", {}).items():   # known playing XI -> +4 each
         for n in plist:
-            get(n)["played"] = True
+            p = get(n); p["played"] = True; p["team"] = p["team"] or tname
     for inn in d.get("innings", []):
         for over in inn.get("overs", []):
             legal = over_runs = 0; over_bowler = None
@@ -286,6 +307,20 @@ def espn_dots(event_id):
             sv = 0
         if sv == 0 and desc not in ("bye", "leg bye"):
             out[k]["dots"] += 1
+    return out
+
+def espn_team_map(event_id):
+    """{norm(player): team displayName} from ESPN rosters — reliable team attribution
+    (cricapi's innings labels are sometimes malformed)."""
+    d = espn_get("summary", event=event_id)
+    out = {}
+    for team in d.get("rosters", []):
+        tn = team.get("team", {}).get("displayName", "")
+        for p in team.get("roster", []):
+            a = p.get("athlete", {})
+            nm = a.get("fullName") or a.get("displayName")
+            if nm and tn:
+                out[norm(nm)] = tn
     return out
 
 def espn_xi(event_id):
@@ -451,9 +486,19 @@ def parse_match(mid):
         if k not in perf:
             perf[k] = blank_perf(n)
         return perf[k]
-    for inn in d.get("data", {}).get("scorecard", []):
+    innings = d.get("data", {}).get("scorecard", [])
+    bat_teams = [re.sub(r"\s+Inning.*$", "", inn.get("inning", "")).strip() for inn in innings]
+    all_teams = list(dict.fromkeys(t for t in bat_teams if t))
+    def other(t):
+        o = [x for x in all_teams if x != t]
+        return o[0] if len(o) == 1 else ""
+    def setteam(pl, t):
+        if t and "," not in t and not pl["team"]:   # skip cricapi's malformed combined labels
+            pl["team"] = t
+    for i, inn in enumerate(innings):
+        bat_team = bat_teams[i]; bowl_team = other(bat_team)
         for bt in inn.get("batting", []):
-            pl = get(bt["batsman"]["name"]); pl["played"] = True
+            pl = get(bt["batsman"]["name"]); pl["played"] = True; setteam(pl, bat_team)
             pl["r"] += bt.get("r", 0) or 0; pl["b"] += bt.get("b", 0) or 0
             pl["4s"] += bt.get("4s", 0) or 0; pl["6s"] += bt.get("6s", 0) or 0
             dis = (bt.get("dismissal") or "").lower()
@@ -462,6 +507,7 @@ def parse_match(mid):
                 pl["dismissed"] = True; pl["dismissal"] = dtext
             # credit lbw/bowled bonus to the bowler
             if ("bowled" in dis or "lbw" in dis) and bt.get("bowler"):
+                setteam(get(bt["bowler"]["name"]), bowl_team)
                 get(bt["bowler"]["name"])["lbwb"] += 1
             # run-outs: parse fielders from dismissal text -> direct (1 fielder) vs assisted (2+)
             if "run out" in dtext.lower():
@@ -472,12 +518,12 @@ def parse_match(mid):
                     fielders = [f for f in fielders if f]
                     direct = len(fielders) == 1
                     for fn in fielders:
-                        fp = get(fn); fp["played"] = True
+                        fp = get(fn); fp["played"] = True; setteam(fp, bowl_team)
                         fp["runouts"] += 1
                         if direct:
                             fp["dro"] += 1
         for bw in inn.get("bowling", []):
-            pl = get(bw["bowler"]["name"]); pl["played"] = True
+            pl = get(bw["bowler"]["name"]); pl["played"] = True; setteam(pl, bowl_team)
             pl["balls"] += overs_to_balls(bw.get("o", 0))
             pl["runs_conceded"] += bw.get("r", 0) or 0
             pl["w"] += bw.get("w", 0) or 0
@@ -485,7 +531,7 @@ def parse_match(mid):
         for ct in inn.get("catching", []):
             if not ct.get("catcher", {}).get("name"):
                 continue
-            pl = get(ct["catcher"]["name"]); pl["played"] = True
+            pl = get(ct["catcher"]["name"]); pl["played"] = True; setteam(pl, bowl_team)
             pl["catches"] += ct.get("catch", 0) or 0
             pl["stumpings"] += ct.get("stumped", 0) or 0
             # run-outs come from dismissal-text parsing (direct vs assisted), not here
@@ -495,8 +541,13 @@ def main():
     if not KEY:
         sys.exit("Set CRICKET_API_KEY env var.")
     squads = load_squads()
-    # map normalized full team name -> short code
+    # map normalized full team name -> short code (plus a "Women"-stripped variant,
+    # since feeds vary between "Sri Lanka" and "Sri Lanka Women")
     name2short = {norm(v["name"]): k for k, v in squads.items()}
+    strip_women = lambda s: norm(re.sub(r"(?i)\bwomen\b", "", s or ""))
+    name2short_stripped = {strip_women(v["name"]): k for k, v in squads.items()}
+    def short_of(team_full):
+        return name2short.get(norm(team_full)) or name2short_stripped.get(strip_women(team_full))
 
     info = api("series_info", cache=False, id=WC_SERIES)
     matches = info.get("data", {}).get("matchList", [])
@@ -534,7 +585,7 @@ def main():
         #   else cricapi alone (limited: no dots/XI) if ESPN is unavailable
         cs_path = next((cs_idx[(d, team_key(teams))] for d in date_variants(mdate)
                         if (d, team_key(teams)) in cs_idx), None)
-        espn_perf, super_over = {}, False
+        espn_perf, super_over, team_map = {}, False, {}
         if cs_path:
             perf = {k: v for k, v in parse_cricsheet(cs_path)[0].items() if v["played"]}
             n_cs += 1; dots_final = True; status = "cricsheet · official"
@@ -544,6 +595,7 @@ def main():
             if ev:
                 espn_perf, super_over = parse_espn(ev)
                 espn_perf = {k: v for k, v in espn_perf.items() if v["played"]}
+                team_map = espn_team_map(ev)
             if espn_perf:
                 n_espn += 1; dots_final = True
                 status = "cricapi + ESPN dots/XI" + (" · super-over excl" if super_over else "")
@@ -580,7 +632,9 @@ def main():
             if (short, name) in xcheck:
                 src += " · ⚠ differs vs ESPN"
             if d:
-                s = score(d, role)
+                # unknown-role leftovers: infer BOWL if they only bowled, so duck/SR isn't misapplied
+                srole = role if role != "?" else ("BOWL" if d.get("balls", 0) > 0 and d.get("b", 0) == 0 else "BAT")
+                s = score(d, srole)
                 sr = round(d["r"] / d["b"] * 100, 1) if d["b"] else ""
                 econ = round(d["runs_conceded"] / (d["balls"] / 6), 2) if d["balls"] else ""
                 dots_out = d["dots"] if dots_final else ""  # never fill dots from a no-dots source
@@ -597,9 +651,12 @@ def main():
 
         for short, name, role in team_players:
             emit(short, name, role, assigned.get((short, name)), "Y")
-        # players who featured but matched no squad name -> show for manual review
+        # players who featured but matched no squad name -> show for manual review,
+        # attributing their team (ESPN roster first, then the parsed team) so it's never a bare "?".
         for d in leftover.values():
-            emit("?", d["name"], "?", d, "N")
+            tfull = team_map.get(norm(d["name"])) or best_team(d["name"], team_map) or d.get("team", "")
+            short = short_of(tfull) or "?"
+            emit(short, d["name"], "?", d, "N")
     print(f"sources: {n_cs} cricsheet(official), {n_espn} cricapi+ESPN, {n_api} cricapi-only", file=sys.stderr)
 
     with open(OUT, "w", newline="") as f:
