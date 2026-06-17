@@ -149,13 +149,13 @@ def api(path, cache=True, **params):
 # ---- squads: short -> {"name": full team name, "players": [(name, role)]} ----
 def load_squads():
     # Standalone (CI) path: a committed squads.json, so the app's TS isn't needed.
-    if os.path.exists(SQUADS_JSON):
+    if SQUADS_JSON and os.path.exists(SQUADS_JSON):
         raw = json.load(open(SQUADS_JSON))
         return {k: {"name": v["name"], "players": [tuple(p) for p in v["players"]]}
                 for k, v in raw.items()}
-    if not os.path.exists(SQUAD_TS):
+    if not SQUADS_JSON or not os.path.exists(SQUAD_TS):
         # No squad list for this tour -> "featured players only" mode: the sheet lists
-        # everyone who appears in a scorecard (no DNP rows, Team shown from cricsheet).
+        # everyone who appears in a scorecard (no DNP rows; team attributed from the feed).
         return {}
     txt = open(SQUAD_TS).read()
     teams = {}              # short -> {"name":..., "players":[(name,role)]}
@@ -258,7 +258,7 @@ def parse_cricsheet(path):
 def espn_get(path, cache=True, **params):
     os.makedirs(CACHE, exist_ok=True)
     qs = "&".join(f"{k}={v}" for k, v in params.items())
-    key = re.sub(r"[^a-z0-9]", "_", f"espn_{path}_{qs}".lower())
+    key = re.sub(r"[^a-z0-9]", "_", f"espn_{ESPN_SERIES}_{path}_{qs}".lower())
     fp = os.path.join(CACHE, key + ".json")
     if cache and os.path.exists(fp):
         return json.load(open(fp))
@@ -537,9 +537,16 @@ def parse_match(mid):
             # run-outs come from dismissal-text parsing (direct vs assisted), not here
     return perf
 
-def main():
-    if not KEY:
-        sys.exit("Set CRICKET_API_KEY env var.")
+def run_tour(tour):
+    """Process ONE tour (its own cricapi+ESPN series + squad list) and write its tab."""
+    global WC_SERIES, ESPN_SERIES, SQUADS_JSON, GSHEET_TAB
+    WC_SERIES = tour["cricapi_series"]
+    ESPN_SERIES = tour.get("espn_series", "")
+    SQUADS_JSON = tour.get("squads_path", "")
+    GSHEET_TAB = tour["tab"]
+    out_csv = tour.get("out_csv", OUT)
+    print(f"=== Tour: {tour['name']}  ->  tab '{GSHEET_TAB}' ===", file=sys.stderr)
+
     squads = load_squads()
     # map normalized full team name -> short code (plus a "Women"-stripped variant,
     # since feeds vary between "Sri Lanka" and "Sri Lanka Women")
@@ -659,14 +666,41 @@ def main():
             emit(short, d["name"], "?", d, "N")
     print(f"sources: {n_cs} cricsheet(official), {n_espn} cricapi+ESPN, {n_api} cricapi-only", file=sys.stderr)
 
-    with open(OUT, "w", newline="") as f:
+    with open(out_csv, "w", newline="") as f:
         w = csv.writer(f)
         w.writerow(cols)
         w.writerows(rows)
-    print(f"Wrote {len(rows)} rows -> {OUT}", file=sys.stderr)
+    print(f"Wrote {len(rows)} rows -> {out_csv}", file=sys.stderr)
 
     if GSHEET_ID:
         write_to_gsheet(cols, rows)
+
+def load_tours():
+    """Tours to process. Driven by tours.json (multi-tour); falls back to a single
+    tour from env vars for backward compatibility."""
+    path = os.environ.get("TOURS_JSON", os.path.join(os.path.dirname(__file__), "tours.json"))
+    here = os.path.dirname(__file__)
+    if os.path.exists(path):
+        tours = json.load(open(path))
+        for t in tours:
+            t["squads_path"] = os.path.join(here, t["squads"]) if t.get("squads") else ""
+            t["out_csv"] = re.sub(r"[^a-z0-9]+", "_", t["tab"].lower()).strip("_") + ".csv"
+        return tours
+    return [{"name": "default", "cricapi_series": WC_SERIES, "espn_series": ESPN_SERIES,
+             "tab": GSHEET_TAB, "squads_path": SQUADS_JSON, "out_csv": OUT}]
+
+def main():
+    if not KEY:
+        sys.exit("Set CRICKET_API_KEY env var.")
+    tours = load_tours()
+    print(f"{len(tours)} tour(s): {', '.join(t['name'] for t in tours)}", file=sys.stderr)
+    for t in tours:
+        try:
+            run_tour(t)
+        except SystemExit as e:           # one tour aborting must not kill the others
+            print(f"!! tour '{t.get('name')}' skipped: {e}", file=sys.stderr)
+        except Exception as e:
+            print(f"!! tour '{t.get('name')}' error: {e}", file=sys.stderr)
 
 def write_to_gsheet(cols, rows):
     """Write cells directly into the Google Sheet tab via a service account.

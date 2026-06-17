@@ -1,6 +1,6 @@
 api_cache/
 cricsheet/
-out.csv
+*.csv
 *.zip
 __pycache__/
 *.pyc
