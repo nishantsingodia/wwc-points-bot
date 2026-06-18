@@ -39,8 +39,16 @@ auction). Claude does the rest:
 | `tab` | yes | Google Sheet tab to write (created if missing) |
 | `gender` | yes | `male` or `female` — so cricsheet matches the right files |
 | `squads` | no | filename of a squad JSON in this repo; omit for featured-players-only |
+| `ends` | no | last match date `YYYY-MM-DD`. After `ends` + 21 days the tour **auto-freezes**: no API calls, no writes, the tab is kept with its final data. Omit to run forever. |
 
 Only **T20Is** are scored (a tour can mix formats — ODIs/Tests are ignored).
+
+## Completed / old tours
+A tour stops being polled **21 days after its `ends` date** (configurable via the
+`FREEZE_GRACE_DAYS` env var) — by then cricsheet has posted the official data, so the tab is
+final and frozen. No more API calls or sheet rewrites for it. To retire a tour sooner just
+remove its entry from `tours.json` (the tab stays in the Sheet); to revive it, restore the
+entry or bump `ends`.
 
 Each tour writes its tab independently; if one tour's feed fails, the others still run,
 and a failing tour **never blanks its tab** (the run aborts before writing).

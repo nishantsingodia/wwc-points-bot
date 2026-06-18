@@ -698,12 +698,29 @@ def load_tours():
     return [{"name": "default", "cricapi_series": WC_SERIES, "espn_series": ESPN_SERIES,
              "tab": GSHEET_TAB, "squads_path": SQUADS_JSON, "out_csv": OUT}]
 
+# Days after a tour's last match to keep refreshing (lets cricsheet post its official
+# data + a buffer); after this the tour is FROZEN — no API calls, no writes, tab kept as-is.
+FREEZE_GRACE_DAYS = int(os.environ.get("FREEZE_GRACE_DAYS", "21"))
+
+def is_active(tour):
+    """A tour stays live until `ends` + grace; then it's dormant (skipped entirely)."""
+    e = tour.get("ends")
+    if not e:
+        return True
+    try:
+        return date.today() <= date.fromisoformat(e) + timedelta(days=FREEZE_GRACE_DAYS)
+    except ValueError:
+        return True
+
 def main():
     if not KEY:
         sys.exit("Set CRICKET_API_KEY env var.")
     tours = load_tours()
     print(f"{len(tours)} tour(s): {', '.join(t['name'] for t in tours)}", file=sys.stderr)
     for t in tours:
+        if not is_active(t):
+            print(f"-- {t['name']}: dormant (ended {t.get('ends')}, frozen) — skipped", file=sys.stderr)
+            continue
         try:
             run_tour(t)
         except SystemExit as e:           # one tour aborting must not kill the others
