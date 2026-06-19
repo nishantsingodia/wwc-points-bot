@@ -73,6 +73,9 @@ ALIAS = {
 def match_squad_to_perf(team_players, pool):
     """team_players: [(short,name,role)]; pool: {normname: perf}.
     Greedy 1-1 best-match. Returns {(short,name): perf or None}, plus leftover pool."""
+    # Drop junk feed entries whose name normalizes to empty (e.g. the stray "(" cricapi
+    # sometimes emits in a scorecard): they match no one and would crash the tokenizer below.
+    pool = {k: v for k, v in pool.items() if k}
     pairs = []
     by_target = {}   # (short,name) -> sorted [(score, pk)]
     for short, name, role in team_players:
@@ -117,7 +120,10 @@ def match_squad_to_perf(team_players, pool):
 def best_team(name, team_map):
     """Fuzzy-match a player name to an ESPN roster {norm_name: team} and return the team
     (handles verbose ESPN spellings). '' if no confident match."""
-    nn = norm(name); nt = nn.split(); ln, fi = nt[-1], nt[0][0]
+    nn = norm(name); nt = nn.split()
+    if not nt:
+        return ""
+    ln, fi = nt[-1], nt[0][0]
     best, best_sc = "", 0.0
     for k, tfull in team_map.items():
         kt = k.split(); kl, kf = kt[-1], kt[0][0]
