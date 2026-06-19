@@ -62,6 +62,12 @@ def norm(s):
 ALIAS = {
     "kavisha dilhari": "kaveesha dilhari",
     "sugandika kumari": "sugandika dasanayaka",
+    # MLC 2026: cricsheet uses initials whose first letter differs from the announced
+    # first name, so the surname+first-initial rule can't catch them (the rest of the
+    # MLC roster's initials DO match the announced names -> handled by fuzzy matching).
+    "pwa mulder": "wiaan mulder",
+    "gc viljoen": "hardus viljoen",
+    "gsnfg jayasuriya": "shehan jayasuriya",
 }
 
 def match_squad_to_perf(team_players, pool):
@@ -573,7 +579,7 @@ def run_tour(tour):
         return "t20" in nm and "odi" not in nm and "test" not in nm
     ended = [m for m in matches if m.get("matchEnded") and is_t20(m)]
     cs_idx = load_cricsheet_index(CRICSHEET_DIR, tour.get("gender", "female"))
-    print(f"{len(ended)}/{len(matches)} matches completed | cricsheet female matches indexed: {len(cs_idx)}", file=sys.stderr)
+    print(f"{len(ended)}/{len(matches)} matches completed | cricsheet {tour.get('gender','female')} matches indexed: {len(cs_idx)}", file=sys.stderr)
 
     cols = ["Match", "Date", "Team", "Full Name", "Role", "Played",
             "Runs", "Balls", "4s", "6s", "SR", "Dismissal",

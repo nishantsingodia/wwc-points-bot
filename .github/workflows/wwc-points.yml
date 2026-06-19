@@ -33,9 +33,15 @@ jobs:
         continue-on-error: true   # non-fatal: if cricsheet is slow/down, fall back to cricapi
         run: |
           mkdir -p cricsheet
+          # International T20Is (men's & women's) — covers WWC + bilateral T20I tours.
           curl -fsSL --retry 3 --retry-delay 5 --max-time 180 -o t20s.zip \
             https://cricsheet.org/downloads/t20s_json.zip
           unzip -o -q t20s.zip "*.json" -d cricsheet
+          # Major League Cricket (USA franchise T20) — its own archive; the internationals
+          # zip above does NOT contain league matches, so MLC needs this for its gold source.
+          curl -fsSL --retry 3 --retry-delay 5 --max-time 180 -o mlc.zip \
+            https://cricsheet.org/downloads/mlc_json.zip
+          unzip -o -q mlc.zip "*.json" -d cricsheet
 
       - name: Compute D11 points and write to Google Sheet(s)
         # Tours are defined in tours.json (each writes its own tab). See TOURS.md.

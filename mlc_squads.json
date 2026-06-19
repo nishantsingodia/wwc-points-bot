@@ -1,0 +1,464 @@
+{
+ "MINY": {
+  "name": "MI New York",
+  "players": [
+   [
+    "Ryan Rickelton",
+    "WK"
+   ],
+   [
+    "Quinton de Kock",
+    "BAT"
+   ],
+   [
+    "Nicholas Pooran",
+    "BAT"
+   ],
+   [
+    "Monank Patel",
+    "BAT"
+   ],
+   [
+    "Kieron Pollard",
+    "AR"
+   ],
+   [
+    "Corey Anderson",
+    "AR"
+   ],
+   [
+    "Corbin Bosch",
+    "AR"
+   ],
+   [
+    "Sunny Patel",
+    "AR"
+   ],
+   [
+    "Nosthush Kenjige",
+    "BOWL"
+   ],
+   [
+    "Trent Boult",
+    "BOWL"
+   ],
+   [
+    "Rushil Ugarkar",
+    "BOWL"
+   ],
+   [
+    "Romario Shepherd",
+    "AR"
+   ],
+   [
+    "Allah Ghazanfar",
+    "BOWL"
+   ],
+   [
+    "Tristan Luus",
+    "BOWL"
+   ],
+   [
+    "Tajinder Singh",
+    "AR"
+   ],
+   [
+    "Agni Chopra",
+    "BAT"
+   ],
+   [
+    "Kunwarjeet Singh",
+    "AR"
+   ],
+   [
+    "Faisal Khan Ahmadzai",
+    "AR"
+   ]
+  ]
+ },
+ "WAF": {
+  "name": "Washington Freedom",
+  "players": [
+   [
+    "Mitchell Owen",
+    "AR"
+   ],
+   [
+    "Andries Gous",
+    "WK"
+   ],
+   [
+    "Steven Smith",
+    "BAT"
+   ],
+   [
+    "Glenn Maxwell",
+    "AR"
+   ],
+   [
+    "Mark Chapman",
+    "BAT"
+   ],
+   [
+    "Mukhtar Ahmed",
+    "BAT"
+   ],
+   [
+    "Obus Pienaar",
+    "AR"
+   ],
+   [
+    "Marco Jansen",
+    "AR"
+   ],
+   [
+    "Ian Holland",
+    "AR"
+   ],
+   [
+    "Ben Dwarshuis",
+    "BOWL"
+   ],
+   [
+    "Saurabh Netravalkar",
+    "BOWL"
+   ],
+   [
+    "Rachin Ravindra",
+    "AR"
+   ],
+   [
+    "Lockie Ferguson",
+    "BOWL"
+   ],
+   [
+    "Jack Edwards",
+    "AR"
+   ],
+   [
+    "Nikhil Chaudhary",
+    "AR"
+   ],
+   [
+    "Amila Aponso",
+    "BOWL"
+   ],
+   [
+    "Lahiru Milantha",
+    "WK"
+   ],
+   [
+    "Abhishek Paradkar",
+    "BOWL"
+   ]
+  ]
+ },
+ "TSK": {
+  "name": "Texas Super Kings",
+  "players": [
+   [
+    "Smit Patel",
+    "WK"
+   ],
+   [
+    "Faf du Plessis",
+    "BAT"
+   ],
+   [
+    "Saiteja Mukkamalla",
+    "BAT"
+   ],
+   [
+    "Shubham Ranjane",
+    "AR"
+   ],
+   [
+    "Rilee Rossouw",
+    "BAT"
+   ],
+   [
+    "Donovan Ferreira",
+    "WK"
+   ],
+   [
+    "Calvin Savage",
+    "AR"
+   ],
+   [
+    "Akeal Hosein",
+    "AR"
+   ],
+   [
+    "Keshav Maharaj",
+    "BOWL"
+   ],
+   [
+    "Adam Milne",
+    "BOWL"
+   ],
+   [
+    "Mohammad Mohsin",
+    "BOWL"
+   ],
+   [
+    "Wiaan Mulder",
+    "AR"
+   ],
+   [
+    "Nandre Burger",
+    "BOWL"
+   ],
+   [
+    "Hardus Viljoen",
+    "BOWL"
+   ],
+   [
+    "Milind Kumar",
+    "BAT"
+   ],
+   [
+    "Joshua Tromp",
+    "WK"
+   ],
+   [
+    "Amshi de Silva",
+    "AR"
+   ],
+   [
+    "Abhimanyu Lamba",
+    "BOWL"
+   ]
+  ]
+ },
+ "SFU": {
+  "name": "San Francisco Unicorns",
+  "players": [
+   [
+    "Finn Allen",
+    "WK"
+   ],
+   [
+    "Matthew Short",
+    "AR"
+   ],
+   [
+    "Lhuan-dre Pretorius",
+    "BAT"
+   ],
+   [
+    "Connor Esterhuizen",
+    "BAT"
+   ],
+   [
+    "Hammad Azam",
+    "AR"
+   ],
+   [
+    "Hassan Khan",
+    "AR"
+   ],
+   [
+    "Ravichandran Ashwin",
+    "AR"
+   ],
+   [
+    "Sanjay Krishnamurthi",
+    "BAT"
+   ],
+   [
+    "Haris Rauf",
+    "BOWL"
+   ],
+   [
+    "Brody Couch",
+    "BOWL"
+   ],
+   [
+    "Zia-ul-Haq",
+    "BOWL"
+   ],
+   [
+    "Aaron Hardie",
+    "AR"
+   ],
+   [
+    "Xavier Bartlett",
+    "BOWL"
+   ],
+   [
+    "Oliver Peake",
+    "BAT"
+   ],
+   [
+    "Peter Siddle",
+    "BOWL"
+   ],
+   [
+    "Saideep Ganesh",
+    "WK"
+   ],
+   [
+    "Mohammad Ilyas",
+    "BOWL"
+   ],
+   [
+    "Juanoy Drysdale",
+    "AR"
+   ]
+  ]
+ },
+ "SEO": {
+  "name": "Seattle Orcas",
+  "players": [
+   [
+    "Tim Seifert",
+    "WK"
+   ],
+   [
+    "Matthew Breetzke",
+    "BAT"
+   ],
+   [
+    "Tim Robinson",
+    "BAT"
+   ],
+   [
+    "Shimron Hetmyer",
+    "BAT"
+   ],
+   [
+    "Marcus Stoinis",
+    "AR"
+   ],
+   [
+    "Shehan Jayasuriya",
+    "AR"
+   ],
+   [
+    "Harmeet Singh",
+    "AR"
+   ],
+   [
+    "Tanveer Sangha",
+    "BOWL"
+   ],
+   [
+    "Cameron Gannon",
+    "BOWL"
+   ],
+   [
+    "Jasdeep Singh",
+    "BOWL"
+   ],
+   [
+    "Ayan Desai",
+    "BOWL"
+   ],
+   [
+    "Dasun Shanaka",
+    "AR"
+   ],
+   [
+    "Lutho Sipamla",
+    "BOWL"
+   ],
+   [
+    "Ottniel Baartman",
+    "BOWL"
+   ],
+   [
+    "Shayan Jahangir",
+    "WK"
+   ],
+   [
+    "Sharad Lumba",
+    "BAT"
+   ],
+   [
+    "Sujit Nayak",
+    "BAT"
+   ],
+   [
+    "Ali Sheikh",
+    "AR"
+   ]
+  ]
+ },
+ "LAKR": {
+  "name": "Los Angeles Knight Riders",
+  "players": [
+   [
+    "Alex Hales",
+    "BAT"
+   ],
+   [
+    "Unmukt Chand",
+    "WK"
+   ],
+   [
+    "Colin Munro",
+    "BAT"
+   ],
+   [
+    "Saif Badar",
+    "BAT"
+   ],
+   [
+    "Sherfane Rutherford",
+    "AR"
+   ],
+   [
+    "Andre Russell",
+    "AR"
+   ],
+   [
+    "Sunil Narine",
+    "AR"
+   ],
+   [
+    "Shadley van Schalkwyk",
+    "AR"
+   ],
+   [
+    "Jason Holder",
+    "AR"
+   ],
+   [
+    "Carmi le Roux",
+    "BOWL"
+   ],
+   [
+    "Ali Khan",
+    "BOWL"
+   ],
+   [
+    "Anrich Nortje",
+    "BOWL"
+   ],
+   [
+    "Rovman Powell",
+    "BAT"
+   ],
+   [
+    "Matheesha Pathirana",
+    "BOWL"
+   ],
+   [
+    "Nitish Kumar",
+    "AR"
+   ],
+   [
+    "Jahmar Hamilton",
+    "WK"
+   ],
+   [
+    "Matthew Tromp",
+    "BOWL"
+   ],
+   [
+    "Karthik Gattepalli",
+    "AR"
+   ]
+  ]
+ }
+}

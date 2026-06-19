@@ -41,7 +41,8 @@ auction). Claude does the rest:
 | `squads` | no | filename of a squad JSON in this repo; omit for featured-players-only |
 | `ends` | no | last match date `YYYY-MM-DD`. After `ends` + 21 days the tour **auto-freezes**: no API calls, no writes, the tab is kept with its final data. Omit to run forever. |
 
-Only **T20Is** are scored (a tour can mix formats — ODIs/Tests are ignored).
+Only **T20s** are scored — T20Is **and** franchise leagues like MLC (a tour can mix
+formats; ODIs/Tests are ignored).
 
 ## Completed / old tours
 A tour stops being polled **21 days after its `ends` date** (configurable via the
@@ -64,9 +65,11 @@ Super-overs excluded; feed joins tolerate ±1 day; same-surname / cross-source
 disagreements / unknown players are flagged in Status rather than silently guessed.
 
 ## Gotchas
-- **cricsheet only covers what's in its `t20s` archive** (men's & women's T20Is). An ODI
-  tour would need a different cricsheet archive — tell Claude; the cricapi+ESPN path still
-  works regardless.
+- **cricsheet's `t20s` archive only holds internationals** (men's & women's T20Is). A
+  franchise league (e.g. MLC) or an ODI tour lives in its OWN cricsheet archive, which must
+  be added to the download step in `.github/workflows/wwc-points.yml` for the *official*
+  source to kick in (MLC uses `mlc_json.zip`). The cricapi+ESPN path — including exact
+  dot-balls — works regardless, so a tour is fully scored even before its archive is wired.
 - **Squad name aliases**: if a feed spells a name very differently, add it to `ALIAS` in
   `wc_fps_to_csv.py` (rare; most are handled by fuzzy matching).
 - **API budget**: cricketdata free = 100 hits/day. Completed-match scorecards are cached,

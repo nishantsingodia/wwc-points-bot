@@ -15,5 +15,14 @@
     "tab": "AUS v BAN T20 POINTS",
     "gender": "male",
     "ends": "2026-06-21"
+  },
+  {
+    "name": "Major League Cricket 2026",
+    "cricapi_series": "5994841b-0383-4706-a913-e3cd95793b62",
+    "espn_series": "1528556",
+    "tab": "MLC 2026 POINTS",
+    "gender": "male",
+    "squads": "mlc_squads.json",
+    "ends": "2026-07-18"
   }
 ]
