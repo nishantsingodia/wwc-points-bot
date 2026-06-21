@@ -1,0 +1,42 @@
+{
+ "tour": "Australia tour of Bangladesh 2026 (Men T20I)",
+ "slug": "aus_v_ban_t20_points",
+ "teams": {
+  "MAUS": [
+   "3d8feaf8",
+   "989889ff",
+   "fe366f34",
+   "218d4d78",
+   "espn:892749",
+   "espn:1079380",
+   "espn:1295851",
+   "espn:1050545",
+   "9eb1455b",
+   "espn:1123718",
+   "espn:379504",
+   "eaa76d3c",
+   "d405c0d5",
+   "slug:josh-philippe",
+   "7b953689",
+   "espn:961713"
+  ],
+  "MBAN": [
+   "80fe764d",
+   "4d9f9686",
+   "bb95564b",
+   "489aaf0a",
+   "9e52a414",
+   "711249d1",
+   "9dad0f2e",
+   "5935d694",
+   "bb34fd31",
+   "espn:1182029",
+   "espn:330902",
+   "espn:536936",
+   "ef18b66e",
+   "5318ee68",
+   "37654b75",
+   "d365d463"
+  ]
+ }
+}

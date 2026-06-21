@@ -1,0 +1,4388 @@
+{
+ "anchor": "cricsheet_id (pid); espn:/slug: fallback when unknown",
+ "count": 310,
+ "players": {
+  "5d2eda89": {
+   "aliases": [
+    "s mandhana",
+    "smriti mandhana",
+    "smriti shriniwas mandhana"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Smriti Mandhana",
+   "cricsheet_id": "5d2eda89",
+   "espn_id": "597806",
+   "draft_id": 1073,
+   "auction_id": 1073
+  },
+  "185e6c0c": {
+   "aliases": [
+    "s verma",
+    "shafali verma"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Shafali Verma",
+   "cricsheet_id": "185e6c0c",
+   "espn_id": "1182523",
+   "draft_id": 1641,
+   "auction_id": 3855
+  },
+  "cb08b611": {
+   "aliases": [
+    "jemimah ivan rodrigues",
+    "jemimah rodrigues",
+    "ji rodrigues"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Jemimah Rodrigues",
+   "cricsheet_id": "cb08b611",
+   "espn_id": "883405",
+   "draft_id": 1074,
+   "auction_id": 1074
+  },
+  "espn:372317": {
+   "aliases": [
+    "harmanpreet kaur",
+    "harmanpreet kaur bhullar"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Harmanpreet Kaur",
+   "cricsheet_id": null,
+   "espn_id": "372317",
+   "draft_id": 1075,
+   "auction_id": null
+  },
+  "721e0199": {
+   "aliases": [
+    "richa ghosh",
+    "richa manabendra ghosh",
+    "rm ghosh"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Richa Ghosh",
+   "cricsheet_id": "721e0199",
+   "espn_id": "1212830",
+   "draft_id": 1642,
+   "auction_id": 1642
+  },
+  "espn:597811": {
+   "aliases": [
+    "deepti bhagwan sharma",
+    "deepti sharma"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Deepti Sharma",
+   "cricsheet_id": null,
+   "espn_id": "597811",
+   "draft_id": 1077,
+   "auction_id": null
+  },
+  "a3ead8da": {
+   "aliases": [
+    "a sharma",
+    "arundhati reddy"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Arundhati Reddy",
+   "cricsheet_id": "a3ead8da",
+   "espn_id": "960867",
+   "draft_id": 1081,
+   "auction_id": 1380
+  },
+  "583ce32c": {
+   "aliases": [
+    "n shree charani",
+    "nallapureddy shree charani",
+    "shree charani"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Shree Charani",
+   "cricsheet_id": "583ce32c",
+   "espn_id": "1464461",
+   "draft_id": 2870,
+   "auction_id": 2870
+  },
+  "slug:radha-yadav": {
+   "aliases": [
+    "radha yadav"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Radha Yadav",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 1080,
+   "auction_id": null
+  },
+  "7298db76": {
+   "aliases": [
+    "renuka singh",
+    "renuka singh thakur"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Renuka Singh",
+   "cricsheet_id": "7298db76",
+   "espn_id": null,
+   "draft_id": 1646,
+   "auction_id": 1646
+  },
+  "espn:1464471": {
+   "aliases": [
+    "kranti gaud"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Kranti Gaud",
+   "cricsheet_id": null,
+   "espn_id": "1464471",
+   "draft_id": 7307,
+   "auction_id": 7307
+  },
+  "espn:960715": {
+   "aliases": [
+    "yastika bhatia",
+    "yastika harish bhatia"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Yastika Bhatia",
+   "cricsheet_id": null,
+   "espn_id": "960715",
+   "draft_id": 1640,
+   "auction_id": null
+  },
+  "bd8689b0": {
+   "aliases": [
+    "bharti fulmali",
+    "bharti shrikrushna fulmali",
+    "bs fulmali"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Bharti Fulmali",
+   "cricsheet_id": "bd8689b0",
+   "espn_id": "961179",
+   "draft_id": 7079,
+   "auction_id": 7079
+  },
+  "espn:1289676": {
+   "aliases": [
+    "nandani sharma",
+    "nandani shyam sunder sharma",
+    "nandni sharma"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Nandani Sharma",
+   "cricsheet_id": null,
+   "espn_id": "1289676",
+   "draft_id": 7306,
+   "auction_id": 7306
+  },
+  "espn:1289948": {
+   "aliases": [
+    "shreyanka patil",
+    "shreyanka rajesh patil"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Shreyanka Patil",
+   "cricsheet_id": null,
+   "espn_id": "1289948",
+   "draft_id": 3130,
+   "auction_id": null
+  },
+  "52d1dbc8": {
+   "aliases": [
+    "beth mooney",
+    "bethany louise mooney",
+    "bl mooney"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Beth Mooney",
+   "cricsheet_id": "52d1dbc8",
+   "espn_id": "381258",
+   "draft_id": 852,
+   "auction_id": 852
+  },
+  "5c30d455": {
+   "aliases": [
+    "g voll",
+    "georgia voll"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Georgia Voll",
+   "cricsheet_id": "5c30d455",
+   "espn_id": "1215360",
+   "draft_id": 2480,
+   "auction_id": 2480
+  },
+  "4e6ef14f": {
+   "aliases": [
+    "p litchfield",
+    "phoebe litchfield"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Phoebe Litchfield",
+   "cricsheet_id": "4e6ef14f",
+   "espn_id": "1176132",
+   "draft_id": 2481,
+   "auction_id": 2481
+  },
+  "be150fc8": {
+   "aliases": [
+    "ea perry",
+    "ellyse alexandra perry",
+    "ellyse perry"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Ellyse Perry",
+   "cricsheet_id": "be150fc8",
+   "espn_id": "275487",
+   "draft_id": 849,
+   "auction_id": 849
+  },
+  "ca5acfa4": {
+   "aliases": [
+    "tahlia mcgrath",
+    "tm mcgrath"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Tahlia McGrath",
+   "cricsheet_id": "ca5acfa4",
+   "espn_id": null,
+   "draft_id": 2483,
+   "auction_id": 2483
+  },
+  "bc969efb": {
+   "aliases": [
+    "a gardner",
+    "ashleigh gardner",
+    "ashleigh katherine gardner"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Ashleigh Gardner",
+   "cricsheet_id": "bc969efb",
+   "espn_id": "858809",
+   "draft_id": 1132,
+   "auction_id": 1132
+  },
+  "65d9b6b6": {
+   "aliases": [
+    "a sutherland",
+    "annabel sutherland"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Annabel Sutherland",
+   "cricsheet_id": "65d9b6b6",
+   "espn_id": "1071705",
+   "draft_id": 2482,
+   "auction_id": 2482
+  },
+  "99e23670": {
+   "aliases": [
+    "s molineux",
+    "sophie molineux"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Sophie Molineux",
+   "cricsheet_id": "99e23670",
+   "espn_id": "944373",
+   "draft_id": 2594,
+   "auction_id": 2594
+  },
+  "f0b4e47d": {
+   "aliases": [
+    "g wareham",
+    "georgia wareham"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Georgia Wareham",
+   "cricsheet_id": "f0b4e47d",
+   "espn_id": "946057",
+   "draft_id": 1135,
+   "auction_id": 1135
+  },
+  "83558266": {
+   "aliases": [
+    "a king",
+    "alana king",
+    "alana maria king"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Alana King",
+   "cricsheet_id": "83558266",
+   "espn_id": "944393",
+   "draft_id": 2485,
+   "auction_id": 2485
+  },
+  "17608a6f": {
+   "aliases": [
+    "megan schutt",
+    "ml schutt"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Megan Schutt",
+   "cricsheet_id": "17608a6f",
+   "espn_id": "420314",
+   "draft_id": 854,
+   "auction_id": 854
+  },
+  "72166006": {
+   "aliases": [
+    "gm harris",
+    "grace harris",
+    "grace margaret harris"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Grace Harris",
+   "cricsheet_id": "72166006",
+   "espn_id": "381268",
+   "draft_id": 2484,
+   "auction_id": 2484
+  },
+  "dff806f4": {
+   "aliases": [
+    "nicola carey",
+    "nicola jane carey",
+    "nj carey"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Nicola Carey",
+   "cricsheet_id": "dff806f4",
+   "espn_id": "381217",
+   "draft_id": 2821,
+   "auction_id": 2821
+  },
+  "espn:418423": {
+   "aliases": [
+    "kim garth",
+    "kimberley jennifer garth"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Kim Garth",
+   "cricsheet_id": null,
+   "espn_id": "418423",
+   "draft_id": 7308,
+   "auction_id": 7308
+  },
+  "espn:1343643": {
+   "aliases": [
+    "lucy hamilton",
+    "lucy kay hamilton"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Lucy Hamilton",
+   "cricsheet_id": null,
+   "espn_id": "1343643",
+   "draft_id": 7309,
+   "auction_id": 7309
+  },
+  "3a9e9cb2": {
+   "aliases": [
+    "sir dunkley",
+    "sophia dunkley",
+    "sophia ivy rose dunkley"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Sophia Dunkley",
+   "cricsheet_id": "3a9e9cb2",
+   "espn_id": "885815",
+   "draft_id": 840,
+   "auction_id": 840
+  },
+  "a139c379": {
+   "aliases": [
+    "danielle nicole wyatt hodge",
+    "danni wyatt hodge",
+    "dn wyatt"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Danni Wyatt-Hodge",
+   "cricsheet_id": "a139c379",
+   "espn_id": "254168",
+   "draft_id": 836,
+   "auction_id": 836
+  },
+  "espn:515905": {
+   "aliases": [
+    "nat sciver brunt",
+    "natalie ruth sciver brunt"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Nat Sciver-Brunt",
+   "cricsheet_id": null,
+   "espn_id": "515905",
+   "draft_id": 837,
+   "auction_id": null
+  },
+  "910dd54e": {
+   "aliases": [
+    "a capsey",
+    "alice capsey"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Alice Capsey",
+   "cricsheet_id": "910dd54e",
+   "espn_id": "1187120",
+   "draft_id": 3049,
+   "auction_id": 3049
+  },
+  "4ba0289e": {
+   "aliases": [
+    "hc knight",
+    "heather clare knight",
+    "heather knight"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Heather Knight",
+   "cricsheet_id": "4ba0289e",
+   "espn_id": "358259",
+   "draft_id": 838,
+   "auction_id": 838
+  },
+  "b05e45e4": {
+   "aliases": [
+    "ae jones",
+    "amy ellen jones",
+    "amy jones"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Amy Jones",
+   "cricsheet_id": "b05e45e4",
+   "espn_id": "515874",
+   "draft_id": 839,
+   "auction_id": 839
+  },
+  "abc9f8a4": {
+   "aliases": [
+    "fg kemp",
+    "freya grace kemp",
+    "freya kemp"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Freya Kemp",
+   "cricsheet_id": "abc9f8a4",
+   "espn_id": "1195947",
+   "draft_id": 2487,
+   "auction_id": 2487
+  },
+  "c6625a26": {
+   "aliases": [
+    "ce dean",
+    "charlie dean",
+    "charlotte dean",
+    "charlotte ellen dean"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Charlie Dean",
+   "cricsheet_id": "c6625a26",
+   "espn_id": "1039421",
+   "draft_id": 2488,
+   "auction_id": 2488
+  },
+  "cdb82f1c": {
+   "aliases": [
+    "s ecclestone",
+    "sophie ecclestone"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Sophie Ecclestone",
+   "cricsheet_id": "cdb82f1c",
+   "espn_id": "878039",
+   "draft_id": 842,
+   "auction_id": 842
+  },
+  "38b4583c": {
+   "aliases": [
+    "lauren bell",
+    "lauren katie bell",
+    "lk bell",
+    "olivia bell"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Lauren Bell",
+   "cricsheet_id": "38b4583c",
+   "espn_id": "878025",
+   "draft_id": 2489,
+   "auction_id": 2489
+  },
+  "espn:517577": {
+   "aliases": [
+    "linsey claire neale smith",
+    "linsey smith"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Linsey Smith",
+   "cricsheet_id": null,
+   "espn_id": "517577",
+   "draft_id": 2838,
+   "auction_id": null
+  },
+  "d2763568": {
+   "aliases": [
+    "dani gibson",
+    "danielle gibson",
+    "danielle rose gibson",
+    "dr gibson"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Danielle Gibson",
+   "cricsheet_id": "d2763568",
+   "espn_id": "886203",
+   "draft_id": 4265,
+   "auction_id": 4265
+  },
+  "e5b17517": {
+   "aliases": [
+    "iecm wong",
+    "issy wong"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Issy Wong",
+   "cricsheet_id": "e5b17517",
+   "espn_id": null,
+   "draft_id": 4340,
+   "auction_id": 4340
+  },
+  "31adb911": {
+   "aliases": [
+    "l filer",
+    "lauren filer"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Lauren Filer",
+   "cricsheet_id": "31adb911",
+   "espn_id": null,
+   "draft_id": 3821,
+   "auction_id": 3821
+  },
+  "slug:tilly-corteen-coleman": {
+   "aliases": [
+    "tilly corteen coleman"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Tilly Corteen-Coleman",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 7310,
+   "auction_id": 7310
+  },
+  "espn:600731": {
+   "aliases": [
+    "tazmin brits"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Tazmin Brits",
+   "cricsheet_id": null,
+   "espn_id": "600731",
+   "draft_id": 1252,
+   "auction_id": null
+  },
+  "e60f81c9": {
+   "aliases": [
+    "l wolvaardt",
+    "laura wolvaardt"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Laura Wolvaardt",
+   "cricsheet_id": "e60f81c9",
+   "espn_id": "922481",
+   "draft_id": 1431,
+   "auction_id": 1431
+  },
+  "63e3b6b3": {
+   "aliases": [
+    "m kapp",
+    "marizanne kapp"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Marizanne Kapp",
+   "cricsheet_id": "63e3b6b3",
+   "espn_id": "351836",
+   "draft_id": 1253,
+   "auction_id": 1253
+  },
+  "d2b1f515": {
+   "aliases": [
+    "a dercksen",
+    "annerie dercksen"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Annerie Dercksen",
+   "cricsheet_id": "d2b1f515",
+   "espn_id": "1163087",
+   "draft_id": 1257,
+   "auction_id": 1257
+  },
+  "6d76bc23": {
+   "aliases": [
+    "s luus",
+    "sune luus"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Sune Luus",
+   "cricsheet_id": "6d76bc23",
+   "espn_id": "487007",
+   "draft_id": 1254,
+   "auction_id": 1254
+  },
+  "ea544967": {
+   "aliases": [
+    "n de klerk",
+    "nadine de klerk"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Nadine de Klerk",
+   "cricsheet_id": "ea544967",
+   "espn_id": "939249",
+   "draft_id": 1256,
+   "auction_id": 1256
+  },
+  "4d4605e6": {
+   "aliases": [
+    "chloe lesleigh tryon",
+    "chloe tryon",
+    "cl tryon"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Chloe Tryon",
+   "cricsheet_id": "4d4605e6",
+   "espn_id": "453370",
+   "draft_id": 1255,
+   "auction_id": 1255
+  },
+  "espn:499254": {
+   "aliases": [
+    "sinalo jafta"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Sinalo Jafta",
+   "cricsheet_id": null,
+   "espn_id": "499254",
+   "draft_id": 1800,
+   "auction_id": null
+  },
+  "0d518f89": {
+   "aliases": [
+    "a khaka",
+    "ayabonga khaka"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Ayabonga Khaka",
+   "cricsheet_id": "0d518f89",
+   "espn_id": "387261",
+   "draft_id": 1432,
+   "auction_id": 1432
+  },
+  "108c4c09": {
+   "aliases": [
+    "s ismail",
+    "shabnim ismail"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Shabnim Ismail",
+   "cricsheet_id": "108c4c09",
+   "espn_id": "276997",
+   "draft_id": 1307,
+   "auction_id": 1307
+  },
+  "686362af": {
+   "aliases": [
+    "n mlaba",
+    "nonkululeko mlaba"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Nonkululeko Mlaba",
+   "cricsheet_id": "686362af",
+   "espn_id": "971203",
+   "draft_id": 1259,
+   "auction_id": 1259
+  },
+  "9e5f4ad7": {
+   "aliases": [
+    "k reyneke",
+    "kayla reyneke"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Kayla Reyneke",
+   "cricsheet_id": "9e5f4ad7",
+   "espn_id": "1331328",
+   "draft_id": 5113,
+   "auction_id": 5113
+  },
+  "6e28e586": {
+   "aliases": [
+    "ts sekhukhune",
+    "tumi sekhukhune"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Tumi Sekhukhune",
+   "cricsheet_id": "6e28e586",
+   "espn_id": null,
+   "draft_id": 1261,
+   "auction_id": 1261
+  },
+  "130336c6": {
+   "aliases": [
+    "k meso",
+    "karabo meso"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Karabo Meso",
+   "cricsheet_id": "130336c6",
+   "espn_id": null,
+   "draft_id": 1258,
+   "auction_id": 1258
+  },
+  "8c5775f3": {
+   "aliases": [
+    "d van niekerk",
+    "dane van niekerk"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Dane van Niekerk",
+   "cricsheet_id": "8c5775f3",
+   "espn_id": "364413",
+   "draft_id": 1302,
+   "auction_id": 1302
+  },
+  "575494db": {
+   "aliases": [
+    "ge plimmer",
+    "georgia ellen plimmer",
+    "georgia plimmer"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Georgia Plimmer",
+   "cricsheet_id": "575494db",
+   "espn_id": "1208951",
+   "draft_id": 1190,
+   "auction_id": 1190
+  },
+  "60c250bf": {
+   "aliases": [
+    "ic gaze",
+    "isabella charli gaze",
+    "isabella gaze",
+    "izzy gaze"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Izzy Gaze",
+   "cricsheet_id": "60c250bf",
+   "espn_id": "1211545",
+   "draft_id": 1426,
+   "auction_id": 1426
+  },
+  "7673c908": {
+   "aliases": [
+    "ac kerr",
+    "amelia charlotte kerr",
+    "amelia kerr",
+    "melie kerr"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Amelia Kerr",
+   "cricsheet_id": "7673c908",
+   "espn_id": "803971",
+   "draft_id": 827,
+   "auction_id": 827
+  },
+  "de69af96": {
+   "aliases": [
+    "sfm devine",
+    "sophie devine",
+    "sophie frances monique devine"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Sophie Devine",
+   "cricsheet_id": "de69af96",
+   "espn_id": "231740",
+   "draft_id": 824,
+   "auction_id": 824
+  },
+  "efb6cb2a": {
+   "aliases": [
+    "bm halliday",
+    "brooke halliday",
+    "brooke maree halliday"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Brooke Halliday",
+   "cricsheet_id": "efb6cb2a",
+   "espn_id": "594654",
+   "draft_id": 829,
+   "auction_id": 829
+  },
+  "865eae1f": {
+   "aliases": [
+    "maddy green",
+    "madeline lee green",
+    "ml green"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Maddy Green",
+   "cricsheet_id": "865eae1f",
+   "espn_id": "438265",
+   "draft_id": 830,
+   "auction_id": 830
+  },
+  "4de0779a": {
+   "aliases": [
+    "ig sharp",
+    "izzy sharp"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Izzy Sharp",
+   "cricsheet_id": "4de0779a",
+   "espn_id": "1294098",
+   "draft_id": 3552,
+   "auction_id": 3552
+  },
+  "89bbc67a": {
+   "aliases": [
+    "suzannah wilson bates",
+    "suzie bates",
+    "sw bates"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Suzie Bates",
+   "cricsheet_id": "89bbc67a",
+   "espn_id": "54565",
+   "draft_id": 1189,
+   "auction_id": 1189
+  },
+  "9af58032": {
+   "aliases": [
+    "jess kerr",
+    "jessica mackenzie kerr",
+    "jm kerr"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Jess Kerr",
+   "cricsheet_id": "9af58032",
+   "espn_id": "1068933",
+   "draft_id": 833,
+   "auction_id": 833
+  },
+  "d5eb8b84": {
+   "aliases": [
+    "ra mair",
+    "rosemary alison mair",
+    "rosemary mair"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Rosemary Mair",
+   "cricsheet_id": "d5eb8b84",
+   "espn_id": "701751",
+   "draft_id": 834,
+   "auction_id": 834
+  },
+  "80a0cd77": {
+   "aliases": [
+    "bg illing",
+    "bree illing",
+    "breearne g illing"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Bree Illing",
+   "cricsheet_id": "80a0cd77",
+   "espn_id": "1251598",
+   "draft_id": 3554,
+   "auction_id": 3554
+  },
+  "c8b0b64c": {
+   "aliases": [
+    "fdm devonshire",
+    "flora devonshire"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Flora Devonshire",
+   "cricsheet_id": "c8b0b64c",
+   "espn_id": null,
+   "draft_id": 7036,
+   "auction_id": 7036
+  },
+  "e4a71d18": {
+   "aliases": [
+    "pm inglis",
+    "polly inglis"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Polly Inglis",
+   "cricsheet_id": "e4a71d18",
+   "espn_id": null,
+   "draft_id": 3553,
+   "auction_id": 3553
+  },
+  "d945db3e": {
+   "aliases": [
+    "nensi hiteshkumar patel",
+    "nensi patel",
+    "nh patel"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Nensi Patel",
+   "cricsheet_id": "d945db3e",
+   "espn_id": "1068284",
+   "draft_id": 6325,
+   "auction_id": 6325
+  },
+  "60471339": {
+   "aliases": [
+    "lea tahuhu",
+    "lmm tahuhu"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Lea Tahuhu",
+   "cricsheet_id": "60471339",
+   "espn_id": null,
+   "draft_id": 1193,
+   "auction_id": 1193
+  },
+  "d32cf49a": {
+   "aliases": [
+    "hayley kristen matthews",
+    "hayley matthews",
+    "hk matthews"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Hayley Matthews",
+   "cricsheet_id": "d32cf49a",
+   "espn_id": "474308",
+   "draft_id": 2111,
+   "auction_id": 2111
+  },
+  "d6164dc0": {
+   "aliases": [
+    "q joseph",
+    "qiana joseph"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Qiana Joseph",
+   "cricsheet_id": "d6164dc0",
+   "espn_id": "769485",
+   "draft_id": 2247,
+   "auction_id": 2247
+  },
+  "e22f8ec1": {
+   "aliases": [
+    "jahzara claxton",
+    "jahzara keanna chloe claxton",
+    "jkc claxton"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Jahzara Claxton",
+   "cricsheet_id": "e22f8ec1",
+   "espn_id": "1352172",
+   "draft_id": 2251,
+   "auction_id": 2251
+  },
+  "92cf79a8": {
+   "aliases": [
+    "sr taylor",
+    "stafanie roxann taylor",
+    "stafanie taylor"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Stafanie Taylor",
+   "cricsheet_id": "92cf79a8",
+   "espn_id": "355359",
+   "draft_id": 2496,
+   "auction_id": 2496
+  },
+  "53bee17f": {
+   "aliases": [
+    "deandra dottin",
+    "deandra jalisa shakira dottin",
+    "djs dottin"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Deandra Dottin",
+   "cricsheet_id": "53bee17f",
+   "espn_id": "355349",
+   "draft_id": 2498,
+   "auction_id": 2498
+  },
+  "75820733": {
+   "aliases": [
+    "ca henry",
+    "chinelle akhalia henry",
+    "chinelle henry"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Chinelle Henry",
+   "cricsheet_id": "75820733",
+   "espn_id": "474190",
+   "draft_id": 2114,
+   "auction_id": 2114
+  },
+  "a7cd72b2": {
+   "aliases": [
+    "sa campbelle",
+    "shemaine altia campbelle",
+    "shemaine campbelle"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Shemaine Campbelle",
+   "cricsheet_id": "a7cd72b2",
+   "espn_id": "424631",
+   "draft_id": 2113,
+   "auction_id": 2113
+  },
+  "a2632c7c": {
+   "aliases": [
+    "j glasgow",
+    "jannillea glasgow"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Jannillea Glasgow",
+   "cricsheet_id": "a2632c7c",
+   "espn_id": "1268602",
+   "draft_id": 2249,
+   "auction_id": 2249
+  },
+  "4b0e3049": {
+   "aliases": [
+    "aa alleyne",
+    "aaliyah alicia alleyne",
+    "aaliyah alleyne"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Aaliyah Alleyne",
+   "cricsheet_id": "4b0e3049",
+   "espn_id": "661441",
+   "draft_id": 2116,
+   "auction_id": 2116
+  },
+  "42d9dd09": {
+   "aliases": [
+    "afy fletcher",
+    "afy samantha sharlyn fletcher",
+    "ass fletcher"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Afy Fletcher",
+   "cricsheet_id": "42d9dd09",
+   "espn_id": "355351",
+   "draft_id": 2117,
+   "auction_id": 2117
+  },
+  "321c980e": {
+   "aliases": [
+    "k ramharack",
+    "karishma ramharack"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Karishma Ramharack",
+   "cricsheet_id": "321c980e",
+   "espn_id": "769517",
+   "draft_id": 2121,
+   "auction_id": 2121
+  },
+  "a811cb83": {
+   "aliases": [
+    "a munisar",
+    "ashmini munisar"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Ashmini Munisar",
+   "cricsheet_id": "a811cb83",
+   "espn_id": "1352168",
+   "draft_id": 3052,
+   "auction_id": 3052
+  },
+  "816af623": {
+   "aliases": [
+    "z james",
+    "zaida amiya james",
+    "zaida james"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Zaida James",
+   "cricsheet_id": "816af623",
+   "espn_id": "1268281",
+   "draft_id": 2119,
+   "auction_id": 2119
+  },
+  "b9fec7a5": {
+   "aliases": [
+    "m mangru",
+    "mandy mangru"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Mandy Mangru",
+   "cricsheet_id": "b9fec7a5",
+   "espn_id": null,
+   "draft_id": 3051,
+   "auction_id": 3051
+  },
+  "3faa312e": {
+   "aliases": [
+    "s hector",
+    "shawnisha hector"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Shawnisha Hector",
+   "cricsheet_id": "3faa312e",
+   "espn_id": "1204928",
+   "draft_id": 2248,
+   "auction_id": 2248
+  },
+  "86fdf668": {
+   "aliases": [
+    "muneeba ali",
+    "muneeba ali siddiqi"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Muneeba Ali",
+   "cricsheet_id": "86fdf668",
+   "espn_id": "941795",
+   "draft_id": 1632,
+   "auction_id": 1632
+  },
+  "9ff1e91e": {
+   "aliases": [
+    "gull feroza"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Gull Feroza",
+   "cricsheet_id": "9ff1e91e",
+   "espn_id": "1144870",
+   "draft_id": 4364,
+   "auction_id": 4364
+  },
+  "e15f4fa4": {
+   "aliases": [
+    "ayesha zafar"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Ayesha Zafar",
+   "cricsheet_id": "e15f4fa4",
+   "espn_id": "915489",
+   "draft_id": 1796,
+   "auction_id": 1796
+  },
+  "2904b4b6": {
+   "aliases": [
+    "aliya riaz"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Aliya Riaz",
+   "cricsheet_id": "2904b4b6",
+   "espn_id": "572645",
+   "draft_id": 1635,
+   "auction_id": 1635
+  },
+  "dc596fac": {
+   "aliases": [
+    "iram javed"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Iram Javed",
+   "cricsheet_id": "dc596fac",
+   "espn_id": "572633",
+   "draft_id": 1604,
+   "auction_id": 1604
+  },
+  "e4ff6a62": {
+   "aliases": [
+    "saira jabeen"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Saira Jabeen",
+   "cricsheet_id": "e4ff6a62",
+   "espn_id": "1480245",
+   "draft_id": 7312,
+   "auction_id": 7312
+  },
+  "ea9c54de": {
+   "aliases": [
+    "fatima sana"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Fatima Sana",
+   "cricsheet_id": "ea9c54de",
+   "espn_id": "1144886",
+   "draft_id": 1636,
+   "auction_id": 1636
+  },
+  "0b78b7c1": {
+   "aliases": [
+    "rameen shamim"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Rameen Shamim",
+   "cricsheet_id": "0b78b7c1",
+   "espn_id": "1144881",
+   "draft_id": 1792,
+   "auction_id": 1792
+  },
+  "a51e6c6e": {
+   "aliases": [
+    "diana baig"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Diana Baig",
+   "cricsheet_id": "a51e6c6e",
+   "espn_id": null,
+   "draft_id": 1799,
+   "auction_id": 1799
+  },
+  "c981d3c2": {
+   "aliases": [
+    "nashra sandhu"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Nashra Sandhu",
+   "cricsheet_id": "c981d3c2",
+   "espn_id": "941803",
+   "draft_id": 1638,
+   "auction_id": 1638
+  },
+  "53bb50f0": {
+   "aliases": [
+    "sadia iqbal"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Sadia Iqbal",
+   "cricsheet_id": "53bb50f0",
+   "espn_id": "1204917",
+   "draft_id": 1639,
+   "auction_id": 1639
+  },
+  "espn:1125059": {
+   "aliases": [
+    "natalia parvaiz",
+    "natalia pervaiz"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Natalia Parvaiz",
+   "cricsheet_id": null,
+   "espn_id": "1125059",
+   "draft_id": 7311,
+   "auction_id": null
+  },
+  "4357f6f8": {
+   "aliases": [
+    "eyman fatima"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Eyman Fatima",
+   "cricsheet_id": "4357f6f8",
+   "espn_id": null,
+   "draft_id": 1791,
+   "auction_id": 1791
+  },
+  "0d56e9a5": {
+   "aliases": [
+    "tuba hassan"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Tuba Hassan",
+   "cricsheet_id": "0d56e9a5",
+   "espn_id": "1204959",
+   "draft_id": 1793,
+   "auction_id": 1793
+  },
+  "bf350134": {
+   "aliases": [
+    "tasmia rubab"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Tasmia Rubab",
+   "cricsheet_id": "bf350134",
+   "espn_id": "1405003",
+   "draft_id": 4365,
+   "auction_id": 4365
+  },
+  "ac56b5a7": {
+   "aliases": [
+    "ac jayangani",
+    "athapaththu mudiyanselage chamari jayangani kumai athapaththu",
+    "chamari athapaththu"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Chamari Athapaththu",
+   "cricsheet_id": "ac56b5a7",
+   "espn_id": "318853",
+   "draft_id": 858,
+   "auction_id": 858
+  },
+  "espn:1290105": {
+   "aliases": [
+    "rajapaksha mudiyanselage vishmi dewmini gunarathne",
+    "vishmi gunarathne",
+    "vishmi gunaratne"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Vishmi Gunarathne",
+   "cricsheet_id": null,
+   "espn_id": "1290105",
+   "draft_id": 7313,
+   "auction_id": 7313
+  },
+  "dbd79036": {
+   "aliases": [
+    "gamachchi withanage hasini madushika perera",
+    "hasd siriwardene",
+    "hasini perera"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Hasini Perera",
+   "cricsheet_id": "dbd79036",
+   "espn_id": "371185",
+   "draft_id": 1264,
+   "auction_id": 3632
+  },
+  "espn:557839": {
+   "aliases": [
+    "harshitha madavi dissanayake samarawickrama",
+    "harshitha samarawickrama"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Harshitha Samarawickrama",
+   "cricsheet_id": null,
+   "espn_id": "557839",
+   "draft_id": 7314,
+   "auction_id": 7314
+  },
+  "a2c23f31": {
+   "aliases": [
+    "i dulani",
+    "imesha dulani",
+    "imesha dulani witharana"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Imesha Dulani",
+   "cricsheet_id": "a2c23f31",
+   "espn_id": "924291",
+   "draft_id": 1429,
+   "auction_id": 1429
+  },
+  "c34a15e6": {
+   "aliases": [
+    "kaveesha dilhari",
+    "kavisha dilhari",
+    "welikonthage kavisha dilhari",
+    "wk dilhari"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Kaveesha Dilhari",
+   "cricsheet_id": "c34a15e6",
+   "espn_id": "923703",
+   "draft_id": 1265,
+   "auction_id": 1265
+  },
+  "f0b4294e": {
+   "aliases": [
+    "nilakshika silva",
+    "nishshanka nilakshika damayanthi silva",
+    "nnd de silva"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Nilakshika Silva",
+   "cricsheet_id": "f0b4294e",
+   "espn_id": "557764",
+   "draft_id": 1266,
+   "auction_id": 1266
+  },
+  "espn:631722": {
+   "aliases": [
+    "hansima karunaratne",
+    "hiyarage ishani hansima karunaratne"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Hansima Karunaratne",
+   "cricsheet_id": null,
+   "espn_id": "631722",
+   "draft_id": 4770,
+   "auction_id": null
+  },
+  "espn:631609": {
+   "aliases": [
+    "dasanayaka mudiyanselage sugandika manel kumari",
+    "sugandika dasanayaka",
+    "sugandika kumari"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Sugandika Dasanayaka",
+   "cricsheet_id": null,
+   "espn_id": "631609",
+   "draft_id": 7316,
+   "auction_id": 7316
+  },
+  "ecbcfef6": {
+   "aliases": [
+    "m madara",
+    "malki madara",
+    "palle kankanamage malki madara"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Malki Madara",
+   "cricsheet_id": "ecbcfef6",
+   "espn_id": "1371669",
+   "draft_id": 2867,
+   "auction_id": 2867
+  },
+  "07485bb9": {
+   "aliases": [
+    "hml madushani",
+    "nimasha madushani",
+    "nimasha madushani meepage",
+    "nimasha meepage"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Nimasha Madushani",
+   "cricsheet_id": "07485bb9",
+   "espn_id": "1380033",
+   "draft_id": 6560,
+   "auction_id": 6560
+  },
+  "slug:kaushini-nuthyangana": {
+   "aliases": [
+    "edirisooriya mohottilage kaushini nuthyanga heram senavirathna",
+    "emknh senavirathna",
+    "kaushani nuthyangana",
+    "kaushini nuthyangana"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Kaushini Nuthyangana",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 7315,
+   "auction_id": 7315
+  },
+  "11b78c67": {
+   "aliases": [
+    "s gimhani",
+    "shashini gimhani"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Shashini Gimhani",
+   "cricsheet_id": "11b78c67",
+   "espn_id": null,
+   "draft_id": 2598,
+   "auction_id": 2598
+  },
+  "2fa916b3": {
+   "aliases": [
+    "k kavindi",
+    "kawya kavindi"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Kawya Kavindi",
+   "cricsheet_id": "2fa916b3",
+   "espn_id": "1371878",
+   "draft_id": 1430,
+   "auction_id": 1430
+  },
+  "espn:1503617": {
+   "aliases": [
+    "mithali ayodhya"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Mithali Ayodhya",
+   "cricsheet_id": null,
+   "espn_id": "1503617",
+   "draft_id": 7317,
+   "auction_id": 7317
+  },
+  "f2670a3d": {
+   "aliases": [
+    "dilara akter",
+    "dilara akter dola"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Dilara Akter",
+   "cricsheet_id": "f2670a3d",
+   "espn_id": "1346729",
+   "draft_id": 1197,
+   "auction_id": 1197
+  },
+  "e6f05a84": {
+   "aliases": [
+    "juairiya ferdous"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Juairiya Ferdous",
+   "cricsheet_id": "e6f05a84",
+   "espn_id": "1352221",
+   "draft_id": 3274,
+   "auction_id": 3274
+  },
+  "94de63bf": {
+   "aliases": [
+    "s mostary",
+    "sobhana mostary"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Sobhana Mostary",
+   "cricsheet_id": "94de63bf",
+   "espn_id": "1145089",
+   "draft_id": 2364,
+   "auction_id": 2364
+  },
+  "3827f6a2": {
+   "aliases": [
+    "nigar sultana",
+    "nigar sultana joty"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Nigar Sultana Joty",
+   "cricsheet_id": "3827f6a2",
+   "espn_id": "924177",
+   "draft_id": 1199,
+   "auction_id": 1199
+  },
+  "espn:535868": {
+   "aliases": [
+    "sharmin akhter",
+    "sharmin akhter supta",
+    "sharmin akter supta",
+    "shorna akter"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Sharmin Akter Supta",
+   "cricsheet_id": null,
+   "espn_id": "535868",
+   "draft_id": 7318,
+   "auction_id": 7318
+  },
+  "ad3940a5": {
+   "aliases": [
+    "mst ritu moni",
+    "ritu moni"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Ritu Moni",
+   "cricsheet_id": "ad3940a5",
+   "espn_id": "478808",
+   "draft_id": 1201,
+   "auction_id": 1201
+  },
+  "66078174": {
+   "aliases": [
+    "nahida akter"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Nahida Akter",
+   "cricsheet_id": "66078174",
+   "espn_id": "924183",
+   "draft_id": 1204,
+   "auction_id": 1204
+  },
+  "aaf037b1": {
+   "aliases": [
+    "rabeya khan"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Rabeya Khan",
+   "cricsheet_id": "aaf037b1",
+   "espn_id": "1204964",
+   "draft_id": 2366,
+   "auction_id": 2366
+  },
+  "7b51bfa4": {
+   "aliases": [
+    "fariha islam trisna",
+    "fariha trisna"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Fariha Islam Trisna",
+   "cricsheet_id": "7b51bfa4",
+   "espn_id": null,
+   "draft_id": 3128,
+   "auction_id": 3128
+  },
+  "a50797a4": {
+   "aliases": [
+    "marufa akter"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Marufa Akter",
+   "cricsheet_id": "a50797a4",
+   "espn_id": "1332561",
+   "draft_id": 1203,
+   "auction_id": 1203
+  },
+  "558cdd64": {
+   "aliases": [
+    "fahima khatun",
+    "sultana khatun"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Fahima Khatun",
+   "cricsheet_id": "558cdd64",
+   "espn_id": "1371855",
+   "draft_id": 2365,
+   "auction_id": 2365
+  },
+  "espn:1205142": {
+   "aliases": [
+    "sanjida akter meghla",
+    "shanjida akter meghla",
+    "shanjida akther maghla"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Shanjida Akther Maghla",
+   "cricsheet_id": null,
+   "espn_id": "1205142",
+   "draft_id": 7319,
+   "auction_id": 7319
+  },
+  "426eaf06": {
+   "aliases": [
+    "taj nehar"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Taj Nehar",
+   "cricsheet_id": "426eaf06",
+   "espn_id": null,
+   "draft_id": 6331,
+   "auction_id": 6331
+  },
+  "e8fa03ed": {
+   "aliases": [
+    "a hunter",
+    "amy hunter"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Amy Hunter",
+   "cricsheet_id": "e8fa03ed",
+   "espn_id": "1229014",
+   "draft_id": 1779,
+   "auction_id": 1779
+  },
+  "1b9d1579": {
+   "aliases": [
+    "gaby hollis lewis",
+    "gaby lewis",
+    "gh lewis"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Gaby Lewis",
+   "cricsheet_id": "1b9d1579",
+   "espn_id": "774347",
+   "draft_id": 1780,
+   "auction_id": 1780
+  },
+  "d8f20ba5": {
+   "aliases": [
+    "o prendergast",
+    "orla prendergast"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Orla Prendergast",
+   "cricsheet_id": "d8f20ba5",
+   "espn_id": "1150585",
+   "draft_id": 1781,
+   "auction_id": 1781
+  },
+  "07248d8e": {
+   "aliases": [
+    "l paul",
+    "leah paul"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Leah Paul",
+   "cricsheet_id": "07248d8e",
+   "espn_id": "1026403",
+   "draft_id": 1782,
+   "auction_id": 1782
+  },
+  "def7b1bb": {
+   "aliases": [
+    "r stokell",
+    "rebecca stokell"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Rebecca Stokell",
+   "cricsheet_id": "def7b1bb",
+   "espn_id": "1094717",
+   "draft_id": 1783,
+   "auction_id": 1783
+  },
+  "b4f73b44": {
+   "aliases": [
+    "l delany",
+    "laura delany"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Laura Delany",
+   "cricsheet_id": "b4f73b44",
+   "espn_id": null,
+   "draft_id": 1295,
+   "auction_id": 1295
+  },
+  "397369e0": {
+   "aliases": [
+    "an kelly",
+    "arlene kelly",
+    "arlene nora kelly"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Arlene Kelly",
+   "cricsheet_id": "397369e0",
+   "espn_id": "592593",
+   "draft_id": 1785,
+   "auction_id": 1785
+  },
+  "5a50471c": {
+   "aliases": [
+    "c murray",
+    "cara murray"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Cara Murray",
+   "cricsheet_id": "5a50471c",
+   "espn_id": "1135028",
+   "draft_id": 1786,
+   "auction_id": 1786
+  },
+  "940feccc": {
+   "aliases": [
+    "g dempsey",
+    "georgina dempsey"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Georgina Dempsey",
+   "cricsheet_id": "940feccc",
+   "espn_id": null,
+   "draft_id": 3252,
+   "auction_id": 3252
+  },
+  "ffd5fcd8": {
+   "aliases": [
+    "a canning",
+    "ava canning"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Ava Canning",
+   "cricsheet_id": "ffd5fcd8",
+   "espn_id": "1229015",
+   "draft_id": 1784,
+   "auction_id": 1784
+  },
+  "espn:1351945": {
+   "aliases": [
+    "aimee kate maguire",
+    "aimee maguire"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Aimee Maguire",
+   "cricsheet_id": null,
+   "espn_id": "1351945",
+   "draft_id": 5119,
+   "auction_id": null
+  },
+  "espn:1094718": {
+   "aliases": [
+    "louise little"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Louise Little",
+   "cricsheet_id": null,
+   "espn_id": "1094718",
+   "draft_id": 4030,
+   "auction_id": null
+  },
+  "66498395": {
+   "aliases": [
+    "a dalzell",
+    "alana dalzell"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Alana Dalzell",
+   "cricsheet_id": "66498395",
+   "espn_id": "1229005",
+   "draft_id": 3647,
+   "auction_id": 3647
+  },
+  "slug:christina-coulter-reilly": {
+   "aliases": [
+    "christina coulter reilly"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Christina Coulter Reilly",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 4847,
+   "auction_id": null
+  },
+  "9bd0d19d": {
+   "aliases": [
+    "la mcbride",
+    "lara ava mcbride",
+    "lara mcbride"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Lara McBride",
+   "cricsheet_id": "9bd0d19d",
+   "espn_id": "1469047",
+   "draft_id": 1787,
+   "auction_id": 1787
+  },
+  "2ca65aee": {
+   "aliases": [
+    "sarah bryce",
+    "sarah jennifer bryce",
+    "sj bryce"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Sarah Bryce",
+   "cricsheet_id": "2ca65aee",
+   "espn_id": "914677",
+   "draft_id": 2270,
+   "auction_id": 2270
+  },
+  "c3394c16": {
+   "aliases": [
+    "darcey carter",
+    "darcey elizabeth morris carter",
+    "dem carter"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Darcey Carter",
+   "cricsheet_id": "c3394c16",
+   "espn_id": "1352119",
+   "draft_id": 2386,
+   "auction_id": 2386
+  },
+  "f13d3eba": {
+   "aliases": [
+    "kathryn bryce",
+    "kathryn emma bryce",
+    "ke bryce"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Kathryn Bryce",
+   "cricsheet_id": "f13d3eba",
+   "espn_id": "914675",
+   "draft_id": 2272,
+   "auction_id": 2272
+  },
+  "090c0213": {
+   "aliases": [
+    "a lister",
+    "ailsa lister"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Ailsa Lister",
+   "cricsheet_id": "090c0213",
+   "espn_id": "1184173",
+   "draft_id": 2389,
+   "auction_id": 2389
+  },
+  "d5fa2ab3": {
+   "aliases": [
+    "m mccoll",
+    "megan mccoll"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Megan McColl",
+   "cricsheet_id": "d5fa2ab3",
+   "espn_id": "1146027",
+   "draft_id": 2385,
+   "auction_id": 2385
+  },
+  "8e7be59c": {
+   "aliases": [
+    "pa chatterji",
+    "priyanaz anjum chatterji",
+    "priyanaz chatterji"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Priyanaz Chatterji",
+   "cricsheet_id": "8e7be59c",
+   "espn_id": "526987",
+   "draft_id": 2275,
+   "auction_id": 2275
+  },
+  "a0a65375": {
+   "aliases": [
+    "k fraser",
+    "katherine fraser"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Katherine Fraser",
+   "cricsheet_id": "a0a65375",
+   "espn_id": "1146661",
+   "draft_id": 2280,
+   "auction_id": 2280
+  },
+  "f61e2829": {
+   "aliases": [
+    "abtaha maqsood",
+    "ah maqsood"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Abtaha Maqsood",
+   "cricsheet_id": "f61e2829",
+   "espn_id": null,
+   "draft_id": 2278,
+   "auction_id": 2278
+  },
+  "espn:577317": {
+   "aliases": [
+    "kirstie gordon",
+    "kirstie louise gordon"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Kirstie Gordon",
+   "cricsheet_id": null,
+   "espn_id": "577317",
+   "draft_id": 7628,
+   "auction_id": 7628
+  },
+  "d92d3563": {
+   "aliases": [
+    "c abel",
+    "chloe abel",
+    "chloe grace abel"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Chloe Abel",
+   "cricsheet_id": "d92d3563",
+   "espn_id": "1236784",
+   "draft_id": 2388,
+   "auction_id": 2388
+  },
+  "8a452195": {
+   "aliases": [
+    "r slater",
+    "rachel elizabeth slater",
+    "rachel slater"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Rachel Slater",
+   "cricsheet_id": "8a452195",
+   "espn_id": "1184969",
+   "draft_id": 2387,
+   "auction_id": 2387
+  },
+  "581eec7e": {
+   "aliases": [
+    "g fontenla",
+    "gabriella fontenla"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Gabriella Fontenla",
+   "cricsheet_id": "581eec7e",
+   "espn_id": "1446538",
+   "draft_id": 7517,
+   "auction_id": 7517
+  },
+  "421a0275": {
+   "aliases": [
+    "maisie maceira",
+    "mg maceira"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Maisie Maceira",
+   "cricsheet_id": "421a0275",
+   "espn_id": null,
+   "draft_id": 7574,
+   "auction_id": 7574
+  },
+  "789fe152": {
+   "aliases": [
+    "pippa nancy sproul",
+    "pippa sproul",
+    "pn sproul"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Pippa Sproul",
+   "cricsheet_id": "789fe152",
+   "espn_id": "1469054",
+   "draft_id": 7090,
+   "auction_id": 7090
+  },
+  "2b150c6b": {
+   "aliases": [
+    "sl kalis",
+    "sterre kalis",
+    "sterre laurien kalis"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Sterre Kalis",
+   "cricsheet_id": "2b150c6b",
+   "espn_id": "774311",
+   "draft_id": 1324,
+   "auction_id": 1324
+  },
+  "espn:577359": {
+   "aliases": [
+    "heather diantha jan siegers",
+    "heather siegers"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Heather Siegers",
+   "cricsheet_id": null,
+   "espn_id": "577359",
+   "draft_id": 1323,
+   "auction_id": null
+  },
+  "fa9db243": {
+   "aliases": [
+    "p molkenboer",
+    "phebe molkenboer"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Phebe Molkenboer",
+   "cricsheet_id": "fa9db243",
+   "espn_id": "1385478",
+   "draft_id": 2964,
+   "auction_id": 2964
+  },
+  "b3020075": {
+   "aliases": [
+    "b de leede",
+    "babette de leede",
+    "babette johanna adriana de leede"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Babette de Leede",
+   "cricsheet_id": "b3020075",
+   "espn_id": "877473",
+   "draft_id": 1322,
+   "auction_id": 1322
+  },
+  "42e4b276": {
+   "aliases": [
+    "r rijke",
+    "robine rijke"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Robine Rijke",
+   "cricsheet_id": "42e4b276",
+   "espn_id": "877469",
+   "draft_id": 1325,
+   "auction_id": 1325
+  },
+  "9a9a056d": {
+   "aliases": [
+    "s khurana",
+    "sanya khurana"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Sanya Khurana",
+   "cricsheet_id": "9a9a056d",
+   "espn_id": null,
+   "draft_id": 4891,
+   "auction_id": 4891
+  },
+  "022745d5": {
+   "aliases": [
+    "f overdijk",
+    "frederique overdijk"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Frederique Overdijk",
+   "cricsheet_id": "022745d5",
+   "espn_id": "1185796",
+   "draft_id": 1327,
+   "auction_id": 1327
+  },
+  "espn:1185795": {
+   "aliases": [
+    "iris jeane regine zwilling",
+    "iris zwilling"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Iris Zwilling",
+   "cricsheet_id": null,
+   "espn_id": "1185795",
+   "draft_id": 1326,
+   "auction_id": null
+  },
+  "c6a019f5": {
+   "aliases": [
+    "c de lange",
+    "caroline de lange"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Caroline de Lange",
+   "cricsheet_id": "c6a019f5",
+   "espn_id": "914839",
+   "draft_id": 1332,
+   "auction_id": 1332
+  },
+  "espn:1022083": {
+   "aliases": [
+    "silver naara louise siegers",
+    "silver siegers"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Silver Siegers",
+   "cricsheet_id": null,
+   "espn_id": "1022083",
+   "draft_id": 1331,
+   "auction_id": null
+  },
+  "dead3b10": {
+   "aliases": [
+    "miw van den raad",
+    "myrthe irene wilhelmina van den raad",
+    "myrthe van den raad"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Myrthe van den Raad",
+   "cricsheet_id": "dead3b10",
+   "espn_id": "1393522",
+   "draft_id": 2965,
+   "auction_id": 2965
+  },
+  "8f201b0a": {
+   "aliases": [
+    "ra lawrence",
+    "rosalie ann lawrence"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Rosalie Ann Lawrence",
+   "cricsheet_id": "8f201b0a",
+   "espn_id": null,
+   "draft_id": 7516,
+   "auction_id": 7516
+  },
+  "a6ec88f4": {
+   "aliases": [
+    "hannah landheer",
+    "hwa landheer"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Hannah Landheer",
+   "cricsheet_id": "a6ec88f4",
+   "espn_id": null,
+   "draft_id": 1330,
+   "auction_id": 1330
+  },
+  "5aa8574b": {
+   "aliases": [
+    "i van der woning",
+    "isabel van der woning"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Isabel van der Woning",
+   "cricsheet_id": "5aa8574b",
+   "espn_id": "1271055",
+   "draft_id": 2967,
+   "auction_id": 2967
+  },
+  "c0e88e7d": {
+   "aliases": [
+    "l leemhuis",
+    "lara leemhuis"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Lara Leemhuis",
+   "cricsheet_id": "c0e88e7d",
+   "espn_id": null,
+   "draft_id": 5141,
+   "auction_id": 5141
+  },
+  "3d8feaf8": {
+   "aliases": [
+    "mitchell marsh",
+    "mitchell ross marsh",
+    "mr marsh"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)"
+   ],
+   "display": "Mitchell Marsh",
+   "cricsheet_id": "3d8feaf8",
+   "espn_id": "272450",
+   "draft_id": 10001,
+   "auction_id": 276
+  },
+  "989889ff": {
+   "aliases": [
+    "josh inglis",
+    "joshua patrick inglis",
+    "jp inglis"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)"
+   ],
+   "display": "Josh Inglis",
+   "cricsheet_id": "989889ff",
+   "espn_id": "662235",
+   "draft_id": 10002,
+   "auction_id": 578
+  },
+  "fe366f34": {
+   "aliases": [
+    "c connolly",
+    "cooper connolly",
+    "cooper patrick leonard connolly"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)"
+   ],
+   "display": "Cooper Connolly",
+   "cricsheet_id": "fe366f34",
+   "espn_id": "1210488",
+   "draft_id": 10003,
+   "auction_id": 2913
+  },
+  "218d4d78": {
+   "aliases": [
+    "matt renshaw",
+    "matthew thomas renshaw",
+    "mt renshaw"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)"
+   ],
+   "display": "Matt Renshaw",
+   "cricsheet_id": "218d4d78",
+   "espn_id": "722303",
+   "draft_id": 10004,
+   "auction_id": 4845
+  },
+  "espn:892749": {
+   "aliases": [
+    "tim david",
+    "timothy hays david"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)"
+   ],
+   "display": "Tim David",
+   "cricsheet_id": null,
+   "espn_id": "892749",
+   "draft_id": 10005,
+   "auction_id": null
+  },
+  "espn:1079380": {
+   "aliases": [
+    "nikhil chaudhary"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)",
+    "Major League Cricket 2026"
+   ],
+   "display": "Nikhil Chaudhary",
+   "cricsheet_id": null,
+   "espn_id": "1079380",
+   "draft_id": 10006,
+   "auction_id": null
+  },
+  "espn:1295851": {
+   "aliases": [
+    "joel davies",
+    "joel derek davies"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)"
+   ],
+   "display": "Joel Davies",
+   "cricsheet_id": null,
+   "espn_id": "1295851",
+   "draft_id": 10007,
+   "auction_id": null
+  },
+  "espn:1050545": {
+   "aliases": [
+    "xavier bartlett",
+    "xavier colin bartlett"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)",
+    "Major League Cricket 2026"
+   ],
+   "display": "Xavier Bartlett",
+   "cricsheet_id": null,
+   "espn_id": "1050545",
+   "draft_id": 10008,
+   "auction_id": null
+  },
+  "9eb1455b": {
+   "aliases": [
+    "nathan ellis",
+    "nt ellis"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)"
+   ],
+   "display": "Nathan Ellis",
+   "cricsheet_id": "9eb1455b",
+   "espn_id": "826915",
+   "draft_id": 10009,
+   "auction_id": 369
+  },
+  "espn:1123718": {
+   "aliases": [
+    "spencer henry johnson",
+    "spencer johnson"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)"
+   ],
+   "display": "Spencer Johnson",
+   "cricsheet_id": null,
+   "espn_id": "1123718",
+   "draft_id": 10010,
+   "auction_id": null
+  },
+  "espn:379504": {
+   "aliases": [
+    "adam zampa"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)"
+   ],
+   "display": "Adam Zampa",
+   "cricsheet_id": null,
+   "espn_id": "379504",
+   "draft_id": 10011,
+   "auction_id": null
+  },
+  "eaa76d3c": {
+   "aliases": [
+    "cameron donald green",
+    "cameron green",
+    "maddy green"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)"
+   ],
+   "display": "Cameron Green",
+   "cricsheet_id": "eaa76d3c",
+   "espn_id": "1076713",
+   "draft_id": 10012,
+   "auction_id": 541
+  },
+  "d405c0d5": {
+   "aliases": [
+    "aaron hardie",
+    "aaron mark hardie",
+    "am hardie"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)",
+    "Major League Cricket 2026"
+   ],
+   "display": "Aaron Hardie",
+   "cricsheet_id": "d405c0d5",
+   "espn_id": "1124283",
+   "draft_id": 10013,
+   "auction_id": 2912
+  },
+  "slug:josh-philippe": {
+   "aliases": [
+    "josh philippe"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)"
+   ],
+   "display": "Josh Philippe",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10014,
+   "auction_id": null
+  },
+  "7b953689": {
+   "aliases": [
+    "matthew kuhnemann",
+    "mp kuhnemann"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)"
+   ],
+   "display": "Matthew Kuhnemann",
+   "cricsheet_id": "7b953689",
+   "espn_id": null,
+   "draft_id": 10015,
+   "auction_id": 3255
+  },
+  "espn:961713": {
+   "aliases": [
+    "riley meredith",
+    "riley patrick meredith"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)"
+   ],
+   "display": "Riley Meredith",
+   "cricsheet_id": null,
+   "espn_id": "961713",
+   "draft_id": 10016,
+   "auction_id": null
+  },
+  "80fe764d": {
+   "aliases": [
+    "tanzid hasan",
+    "tanzid hasan tamim"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)"
+   ],
+   "display": "Tanzid Hasan Tamim",
+   "cricsheet_id": "80fe764d",
+   "espn_id": "990023",
+   "draft_id": 10017,
+   "auction_id": 1530
+  },
+  "4d9f9686": {
+   "aliases": [
+    "soumya sarkar"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)"
+   ],
+   "display": "Soumya Sarkar",
+   "cricsheet_id": "4d9f9686",
+   "espn_id": "436677",
+   "draft_id": 10018,
+   "auction_id": 1692
+  },
+  "bb95564b": {
+   "aliases": [
+    "mohammad saif hassan",
+    "saif hassan",
+    "tuba hassan"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)"
+   ],
+   "display": "Saif Hassan",
+   "cricsheet_id": "bb95564b",
+   "espn_id": "821749",
+   "draft_id": 10019,
+   "auction_id": 1531
+  },
+  "489aaf0a": {
+   "aliases": [
+    "mohammad parvez hossain emon",
+    "parvez hossain emon"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)"
+   ],
+   "display": "Parvez Hossain Emon",
+   "cricsheet_id": "489aaf0a",
+   "espn_id": "1139511",
+   "draft_id": 10020,
+   "auction_id": 1529
+  },
+  "9e52a414": {
+   "aliases": [
+    "md towhid hridoy",
+    "towhid hridoy"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)"
+   ],
+   "display": "Towhid Hridoy",
+   "cricsheet_id": "9e52a414",
+   "espn_id": "990031",
+   "draft_id": 10021,
+   "auction_id": 1532
+  },
+  "711249d1": {
+   "aliases": [
+    "shamim hossain",
+    "shamim hossain patwari"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)"
+   ],
+   "display": "Shamim Hossain",
+   "cricsheet_id": "711249d1",
+   "espn_id": "1161044",
+   "draft_id": 10022,
+   "auction_id": 2972
+  },
+  "9dad0f2e": {
+   "aliases": [
+    "mahedi hasan"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)"
+   ],
+   "display": "Mahedi Hasan",
+   "cricsheet_id": "9dad0f2e",
+   "espn_id": "833087",
+   "draft_id": 10023,
+   "auction_id": 1534
+  },
+  "5935d694": {
+   "aliases": [
+    "mohammad rishad hossain",
+    "rishad hossain"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)"
+   ],
+   "display": "Rishad Hossain",
+   "cricsheet_id": "5935d694",
+   "espn_id": "1139523",
+   "draft_id": 10024,
+   "auction_id": 1537
+  },
+  "bb34fd31": {
+   "aliases": [
+    "mohammad shoriful islam",
+    "shoriful islam"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)"
+   ],
+   "display": "Shoriful Islam",
+   "cricsheet_id": "bb34fd31",
+   "espn_id": "990039",
+   "draft_id": 10025,
+   "auction_id": 1536
+  },
+  "espn:1182029": {
+   "aliases": [
+    "abdul gaffar saqlain"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)"
+   ],
+   "display": "Abdul Gaffar Saqlain",
+   "cricsheet_id": null,
+   "espn_id": "1182029",
+   "draft_id": 10026,
+   "auction_id": null
+  },
+  "espn:330902": {
+   "aliases": [
+    "mustafizur rahman"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)"
+   ],
+   "display": "Mustafizur Rahman",
+   "cricsheet_id": null,
+   "espn_id": "330902",
+   "draft_id": 10027,
+   "auction_id": null
+  },
+  "espn:536936": {
+   "aliases": [
+    "litton das",
+    "litton kumer das"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)"
+   ],
+   "display": "Litton Das",
+   "cricsheet_id": null,
+   "espn_id": "536936",
+   "draft_id": 10028,
+   "auction_id": null
+  },
+  "ef18b66e": {
+   "aliases": [
+    "taskin ahmed"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)"
+   ],
+   "display": "Taskin Ahmed",
+   "cricsheet_id": "ef18b66e",
+   "espn_id": "538506",
+   "draft_id": 10029,
+   "auction_id": 1535
+  },
+  "5318ee68": {
+   "aliases": [
+    "nahid rana"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)"
+   ],
+   "display": "Nahid Rana",
+   "cricsheet_id": "5318ee68",
+   "espn_id": "1210511",
+   "draft_id": 10030,
+   "auction_id": 7229
+  },
+  "37654b75": {
+   "aliases": [
+    "nasum ahmed"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)"
+   ],
+   "display": "Nasum Ahmed",
+   "cricsheet_id": "37654b75",
+   "espn_id": "348049",
+   "draft_id": 10031,
+   "auction_id": 2974
+  },
+  "d365d463": {
+   "aliases": [
+    "nurul hasan",
+    "nurul hasan sohan"
+   ],
+   "tours": [
+    "Australia tour of Bangladesh 2026 (Men T20I)"
+   ],
+   "display": "Nurul Hasan Sohan",
+   "cricsheet_id": "d365d463",
+   "espn_id": null,
+   "draft_id": 10032,
+   "auction_id": 2973
+  },
+  "e66732f8": {
+   "aliases": [
+    "rd rickelton",
+    "ryan rickelton"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Ryan Rickelton",
+   "cricsheet_id": "e66732f8",
+   "espn_id": null,
+   "draft_id": 10033,
+   "auction_id": 214
+  },
+  "372455c4": {
+   "aliases": [
+    "q de kock",
+    "quinton de kock"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Quinton de Kock",
+   "cricsheet_id": "372455c4",
+   "espn_id": null,
+   "draft_id": 10034,
+   "auction_id": 70
+  },
+  "3241e3fd": {
+   "aliases": [
+    "n pooran",
+    "nicholas pooran"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Nicholas Pooran",
+   "cricsheet_id": "3241e3fd",
+   "espn_id": null,
+   "draft_id": 10035,
+   "auction_id": 156
+  },
+  "slug:monank-patel": {
+   "aliases": [
+    "monank patel",
+    "nensi patel"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Monank Patel",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10036,
+   "auction_id": null
+  },
+  "a757b0d8": {
+   "aliases": [
+    "ka pollard",
+    "kieron pollard"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Kieron Pollard",
+   "cricsheet_id": "a757b0d8",
+   "espn_id": null,
+   "draft_id": 10037,
+   "auction_id": 73
+  },
+  "slug:corey-anderson": {
+   "aliases": [
+    "corey anderson"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Corey Anderson",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10038,
+   "auction_id": null
+  },
+  "172dff15": {
+   "aliases": [
+    "c bosch",
+    "corbin bosch"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Corbin Bosch",
+   "cricsheet_id": "172dff15",
+   "espn_id": null,
+   "draft_id": 10039,
+   "auction_id": 381
+  },
+  "db481029": {
+   "aliases": [
+    "nensi patel",
+    "sunny patel"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Sunny Patel",
+   "cricsheet_id": "db481029",
+   "espn_id": null,
+   "draft_id": 10040,
+   "auction_id": 7650
+  },
+  "f7d267f7": {
+   "aliases": [
+    "nosthush kenjige",
+    "np kenjige"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Nosthush Kenjige",
+   "cricsheet_id": "f7d267f7",
+   "espn_id": null,
+   "draft_id": 10041,
+   "auction_id": 2441
+  },
+  "a818c1be": {
+   "aliases": [
+    "ta boult",
+    "trent boult"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Trent Boult",
+   "cricsheet_id": "a818c1be",
+   "espn_id": null,
+   "draft_id": 10042,
+   "auction_id": 79
+  },
+  "8a58f203": {
+   "aliases": [
+    "r ugarkar",
+    "rushil ugarkar"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Rushil Ugarkar",
+   "cricsheet_id": "8a58f203",
+   "espn_id": null,
+   "draft_id": 10043,
+   "auction_id": 7642
+  },
+  "c5aef772": {
+   "aliases": [
+    "r shepherd",
+    "romario shepherd"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Romario Shepherd",
+   "cricsheet_id": "c5aef772",
+   "espn_id": null,
+   "draft_id": 10044,
+   "auction_id": 247
+  },
+  "slug:allah-ghazanfar": {
+   "aliases": [
+    "allah ghazanfar"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Allah Ghazanfar",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10045,
+   "auction_id": 7250
+  },
+  "a0b76243": {
+   "aliases": [
+    "sune luus",
+    "t luus",
+    "tristan luus"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Tristan Luus",
+   "cricsheet_id": "a0b76243",
+   "espn_id": null,
+   "draft_id": 10046,
+   "auction_id": 7648
+  },
+  "f9d99806": {
+   "aliases": [
+    "jasdeep singh",
+    "kunwarjeet singh",
+    "tajinder dhillon",
+    "tajinder singh"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Kunwarjeet Singh",
+   "cricsheet_id": "f9d99806",
+   "espn_id": "772471",
+   "draft_id": 10049,
+   "auction_id": 7641
+  },
+  "slug:agni-chopra": {
+   "aliases": [
+    "agni chopra"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Agni Chopra",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10048,
+   "auction_id": null
+  },
+  "slug:faisal-khan-ahmadzai": {
+   "aliases": [
+    "faisal khan ahmadzai"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Faisal Khan Ahmadzai",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10050,
+   "auction_id": null
+  },
+  "f2c936d7": {
+   "aliases": [
+    "mitchell owen",
+    "mj owen"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Mitchell Owen",
+   "cricsheet_id": "f2c936d7",
+   "espn_id": null,
+   "draft_id": 10051,
+   "auction_id": 735
+  },
+  "d1305df0": {
+   "aliases": [
+    "ags gous",
+    "andries gous"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Andries Gous",
+   "cricsheet_id": "d1305df0",
+   "espn_id": null,
+   "draft_id": 10052,
+   "auction_id": 2436
+  },
+  "slug:steven-smith": {
+   "aliases": [
+    "linsey smith",
+    "steven smith"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Steven Smith",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10053,
+   "auction_id": null
+  },
+  "b681e71e": {
+   "aliases": [
+    "gj maxwell",
+    "glenn maxwell"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Glenn Maxwell",
+   "cricsheet_id": "b681e71e",
+   "espn_id": null,
+   "draft_id": 10054,
+   "auction_id": 170
+  },
+  "7fa12533": {
+   "aliases": [
+    "mark chapman",
+    "ms chapman"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Mark Chapman",
+   "cricsheet_id": "7fa12533",
+   "espn_id": null,
+   "draft_id": 10055,
+   "auction_id": 2024
+  },
+  "456f6d99": {
+   "aliases": [
+    "mukhtar ahmed"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Mukhtar Ahmed",
+   "cricsheet_id": "456f6d99",
+   "espn_id": null,
+   "draft_id": 10056,
+   "auction_id": 3451
+  },
+  "647a48da": {
+   "aliases": [
+    "aj pienaar",
+    "obus pienaar"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Obus Pienaar",
+   "cricsheet_id": "647a48da",
+   "espn_id": null,
+   "draft_id": 10057,
+   "auction_id": 7644
+  },
+  "slug:marco-jansen": {
+   "aliases": [
+    "marco jansen"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Marco Jansen",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10058,
+   "auction_id": null
+  },
+  "4167f30b": {
+   "aliases": [
+    "ian holland",
+    "ig holland"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Ian Holland",
+   "cricsheet_id": "4167f30b",
+   "espn_id": null,
+   "draft_id": 10059,
+   "auction_id": 1070
+  },
+  "e1b9f3a9": {
+   "aliases": [
+    "ben dwarshuis",
+    "bj dwarshuis"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Ben Dwarshuis",
+   "cricsheet_id": "e1b9f3a9",
+   "espn_id": null,
+   "draft_id": 10060,
+   "auction_id": 912
+  },
+  "c8a3f688": {
+   "aliases": [
+    "saurabh netravalkar",
+    "sn netravalkar"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Saurabh Netravalkar",
+   "cricsheet_id": "c8a3f688",
+   "espn_id": null,
+   "draft_id": 10061,
+   "auction_id": 1069
+  },
+  "ba5e1069": {
+   "aliases": [
+    "r ravindra",
+    "rachin ravindra"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Rachin Ravindra",
+   "cricsheet_id": "ba5e1069",
+   "espn_id": null,
+   "draft_id": 10062,
+   "auction_id": 413
+  },
+  "slug:lockie-ferguson": {
+   "aliases": [
+    "lockie ferguson"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Lockie Ferguson",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10063,
+   "auction_id": null
+  },
+  "slug:jack-edwards": {
+   "aliases": [
+    "jack edwards"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Jack Edwards",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10064,
+   "auction_id": null
+  },
+  "e2ee90d9": {
+   "aliases": [
+    "amila aponso",
+    "ma aponso"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Amila Aponso",
+   "cricsheet_id": "e2ee90d9",
+   "espn_id": null,
+   "draft_id": 10066,
+   "auction_id": 6790
+  },
+  "dcabd6bc": {
+   "aliases": [
+    "bkel milantha",
+    "lahiru milantha"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Lahiru Milantha",
+   "cricsheet_id": "dcabd6bc",
+   "espn_id": null,
+   "draft_id": 10067,
+   "auction_id": 7661
+  },
+  "96f5b685": {
+   "aliases": [
+    "aa paradkar",
+    "abhishek paradkar"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Abhishek Paradkar",
+   "cricsheet_id": "96f5b685",
+   "espn_id": null,
+   "draft_id": 10068,
+   "auction_id": 6125
+  },
+  "f93b43dd": {
+   "aliases": [
+    "nensi patel",
+    "sk patel",
+    "smit patel"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Smit Patel",
+   "cricsheet_id": "f93b43dd",
+   "espn_id": null,
+   "draft_id": 10069,
+   "auction_id": 6124
+  },
+  "3355b542": {
+   "aliases": [
+    "f du plessis",
+    "faf du plessis",
+    "francois du plessis"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Faf du Plessis",
+   "cricsheet_id": "3355b542",
+   "espn_id": "44828",
+   "draft_id": 10070,
+   "auction_id": 91
+  },
+  "156d0ea2": {
+   "aliases": [
+    "saiteja mukkamalla",
+    "saiteja reddy mukkamalla",
+    "sr mukkamalla"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Saiteja Mukkamalla",
+   "cricsheet_id": "156d0ea2",
+   "espn_id": "1193310",
+   "draft_id": 10071,
+   "auction_id": 2437
+  },
+  "6c7a68d0": {
+   "aliases": [
+    "shubham ranjane",
+    "shubham subhash ranjane"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Shubham Ranjane",
+   "cricsheet_id": "6c7a68d0",
+   "espn_id": "554701",
+   "draft_id": 10072,
+   "auction_id": 5239
+  },
+  "cad00a4d": {
+   "aliases": [
+    "rilee roscoe rossouw",
+    "rilee rossouw",
+    "rr rossouw"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Rilee Rossouw",
+   "cricsheet_id": "cad00a4d",
+   "espn_id": "318845",
+   "draft_id": 10073,
+   "auction_id": 388
+  },
+  "f0af99a7": {
+   "aliases": [
+    "d ferreira",
+    "donovan ferreira"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Donovan Ferreira",
+   "cricsheet_id": "f0af99a7",
+   "espn_id": "698315",
+   "draft_id": 10074,
+   "auction_id": 529
+  },
+  "a55e0360": {
+   "aliases": [
+    "calvin savage",
+    "cp savage"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Calvin Savage",
+   "cricsheet_id": "a55e0360",
+   "espn_id": null,
+   "draft_id": 10075,
+   "auction_id": 7635
+  },
+  "4d7f517e": {
+   "aliases": [
+    "aj hosein",
+    "akeal hosein"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Akeal Hosein",
+   "cricsheet_id": "4d7f517e",
+   "espn_id": null,
+   "draft_id": 10076,
+   "auction_id": 745
+  },
+  "0b60eb09": {
+   "aliases": [
+    "ka maharaj",
+    "keshav maharaj"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Keshav Maharaj",
+   "cricsheet_id": "0b60eb09",
+   "espn_id": null,
+   "draft_id": 10077,
+   "auction_id": 741
+  },
+  "350bb1b1": {
+   "aliases": [
+    "adam fraser milne",
+    "adam milne",
+    "af milne"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Adam Milne",
+   "cricsheet_id": "350bb1b1",
+   "espn_id": "450860",
+   "draft_id": 10078,
+   "auction_id": 325
+  },
+  "79f8472d": {
+   "aliases": [
+    "mohammad mohsin"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Mohammad Mohsin",
+   "cricsheet_id": "79f8472d",
+   "espn_id": "935881",
+   "draft_id": 10079,
+   "auction_id": 5240
+  },
+  "c96f6ac5": {
+   "aliases": [
+    "pieter willem adriaan mulder",
+    "pwa mulder",
+    "wiaan mulder"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Wiaan Mulder",
+   "cricsheet_id": "c96f6ac5",
+   "espn_id": "698189",
+   "draft_id": 10080,
+   "auction_id": 645
+  },
+  "465aa633": {
+   "aliases": [
+    "n burger",
+    "nandre burger"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Nandre Burger",
+   "cricsheet_id": "465aa633",
+   "espn_id": "971349",
+   "draft_id": 10081,
+   "auction_id": 450
+  },
+  "a316d663": {
+   "aliases": [
+    "gc viljoen",
+    "hardus viljoen"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Hardus Viljoen",
+   "cricsheet_id": "a316d663",
+   "espn_id": "375126",
+   "draft_id": 10082,
+   "auction_id": 549
+  },
+  "b4296080": {
+   "aliases": [
+    "milind kumar",
+    "nitish kumar"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Milind Kumar",
+   "cricsheet_id": "b4296080",
+   "espn_id": "451947",
+   "draft_id": 10083,
+   "auction_id": 2438
+  },
+  "slug:joshua-tromp": {
+   "aliases": [
+    "joshua tromp"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Joshua Tromp",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10084,
+   "auction_id": null
+  },
+  "espn:1194775": {
+   "aliases": [
+    "amshi de silva",
+    "nilakshika silva"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Amshi de Silva",
+   "cricsheet_id": null,
+   "espn_id": "1194775",
+   "draft_id": 10085,
+   "auction_id": null
+  },
+  "slug:abhimanyu-lamba": {
+   "aliases": [
+    "abhimanyu lamba"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Abhimanyu Lamba",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10086,
+   "auction_id": null
+  },
+  "bf74b130": {
+   "aliases": [
+    "fh allen",
+    "finn allen",
+    "finnley hugh allen"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Finn Allen",
+   "cricsheet_id": "bf74b130",
+   "espn_id": "959759",
+   "draft_id": 10087,
+   "auction_id": 1694
+  },
+  "espn:605575": {
+   "aliases": [
+    "matthew short",
+    "matthew william short"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Matthew Short",
+   "cricsheet_id": null,
+   "espn_id": "605575",
+   "draft_id": 10088,
+   "auction_id": null
+  },
+  "espn:1385640": {
+   "aliases": [
+    "lhuan dre gilbert pretorius",
+    "lhuan dre pretorious",
+    "lhuan dre pretorius"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Lhuan-dre Pretorius",
+   "cricsheet_id": null,
+   "espn_id": "1385640",
+   "draft_id": 10089,
+   "auction_id": 7271
+  },
+  "ef9acbcc": {
+   "aliases": [
+    "c esterhuizen",
+    "connor esterhuizen"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Connor Esterhuizen",
+   "cricsheet_id": "ef9acbcc",
+   "espn_id": "1070997",
+   "draft_id": 10090,
+   "auction_id": 7471
+  },
+  "57bd3ecc": {
+   "aliases": [
+    "hammad azam"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Hammad Azam",
+   "cricsheet_id": "57bd3ecc",
+   "espn_id": "384518",
+   "draft_id": 10091,
+   "auction_id": 3668
+  },
+  "486065b3": {
+   "aliases": [
+    "ali khan",
+    "hassan khan",
+    "mohammad hassan khan",
+    "rabeya khan"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Hassan Khan",
+   "cricsheet_id": "486065b3",
+   "espn_id": "959789",
+   "draft_id": 10092,
+   "auction_id": 3110
+  },
+  "espn:26421": {
+   "aliases": [
+    "ravichandran ashwin"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Ravichandran Ashwin",
+   "cricsheet_id": null,
+   "espn_id": "26421",
+   "draft_id": 10093,
+   "auction_id": null
+  },
+  "3b8e7647": {
+   "aliases": [
+    "sanjay krishnamurthi",
+    "sanjay prasad krishnamurthi",
+    "sp krishnamurthi"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Sanjay Krishnamurthi",
+   "cricsheet_id": "3b8e7647",
+   "espn_id": "1277627",
+   "draft_id": 10094,
+   "auction_id": 2439
+  },
+  "24bb1c2f": {
+   "aliases": [
+    "haris rauf"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Haris Rauf",
+   "cricsheet_id": "24bb1c2f",
+   "espn_id": null,
+   "draft_id": 10095,
+   "auction_id": 3186
+  },
+  "be69e09d": {
+   "aliases": [
+    "bl couch",
+    "brody couch",
+    "brody l couch"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Brody Couch",
+   "cricsheet_id": "be69e09d",
+   "espn_id": "1219972",
+   "draft_id": 10096,
+   "auction_id": 7646
+  },
+  "99c81226": {
+   "aliases": [
+    "zia ul haq"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Zia-ul-Haq",
+   "cricsheet_id": "99c81226",
+   "espn_id": null,
+   "draft_id": 10097,
+   "auction_id": 7636
+  },
+  "slug:oliver-peake": {
+   "aliases": [
+    "oliver peake"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Oliver Peake",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10100,
+   "auction_id": null
+  },
+  "bd93fea4": {
+   "aliases": [
+    "peter matthew siddle",
+    "peter siddle",
+    "pm siddle"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Peter Siddle",
+   "cricsheet_id": "bd93fea4",
+   "espn_id": "7898",
+   "draft_id": 10101,
+   "auction_id": 3986
+  },
+  "slug:saideep-ganesh": {
+   "aliases": [
+    "saideep ganesh"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Saideep Ganesh",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10102,
+   "auction_id": null
+  },
+  "slug:mohammad-ilyas": {
+   "aliases": [
+    "mohammad ilyas"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Mohammad Ilyas",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10103,
+   "auction_id": null
+  },
+  "23f94c02": {
+   "aliases": [
+    "j drysdale",
+    "juanoy drysdale"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Juanoy Drysdale",
+   "cricsheet_id": "23f94c02",
+   "espn_id": null,
+   "draft_id": 10104,
+   "auction_id": 2442
+  },
+  "4663bd23": {
+   "aliases": [
+    "tim louis seifert",
+    "tim seifert",
+    "tl seifert"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Tim Seifert",
+   "cricsheet_id": "4663bd23",
+   "espn_id": "625964",
+   "draft_id": 10105,
+   "auction_id": 558
+  },
+  "35f173a0": {
+   "aliases": [
+    "matthew breetzke",
+    "matthew paul breetzke",
+    "mp breetzke"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Matthew Breetzke",
+   "cricsheet_id": "35f173a0",
+   "espn_id": "595267",
+   "draft_id": 10106,
+   "auction_id": 739
+  },
+  "slug:tim-robinson": {
+   "aliases": [
+    "tim robinson"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Tim Robinson",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10107,
+   "auction_id": null
+  },
+  "48a1d7b7": {
+   "aliases": [
+    "shimron hetmyer",
+    "shimron odilon hetmyer",
+    "so hetmyer"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Shimron Hetmyer",
+   "cricsheet_id": "48a1d7b7",
+   "espn_id": "670025",
+   "draft_id": 10108,
+   "auction_id": 85
+  },
+  "d9273ee7": {
+   "aliases": [
+    "marcus peter stoinis",
+    "marcus stoinis",
+    "mp stoinis"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Marcus Stoinis",
+   "cricsheet_id": "d9273ee7",
+   "espn_id": "325012",
+   "draft_id": 10109,
+   "auction_id": 283
+  },
+  "b58b7db6": {
+   "aliases": [
+    "gsnfg jayasuriya",
+    "shehan jayasuriya"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Shehan Jayasuriya",
+   "cricsheet_id": "b58b7db6",
+   "espn_id": null,
+   "draft_id": 10110,
+   "auction_id": 4961
+  },
+  "espn:422847": {
+   "aliases": [
+    "harmeet singh",
+    "harmeet singh baddhan"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Harmeet Singh",
+   "cricsheet_id": null,
+   "espn_id": "422847",
+   "draft_id": 10111,
+   "auction_id": null
+  },
+  "52c952d9": {
+   "aliases": [
+    "t sangha",
+    "tanveer sangha"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Tanveer Sangha",
+   "cricsheet_id": "52c952d9",
+   "espn_id": null,
+   "draft_id": 10112,
+   "auction_id": 4846
+  },
+  "519c30cb": {
+   "aliases": [
+    "cameron gannon",
+    "cameron john gannon",
+    "cj gannon"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Cameron Gannon",
+   "cricsheet_id": "519c30cb",
+   "espn_id": "326635",
+   "draft_id": 10113,
+   "auction_id": 6395
+  },
+  "slug:ayan-desai": {
+   "aliases": [
+    "ayan desai"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Ayan Desai",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10115,
+   "auction_id": null
+  },
+  "espn:437316": {
+   "aliases": [
+    "dasun shanaka",
+    "madagamagamage dasun shanaka"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Dasun Shanaka",
+   "cricsheet_id": null,
+   "espn_id": "437316",
+   "draft_id": 10116,
+   "auction_id": 7269
+  },
+  "f892fcf9": {
+   "aliases": [
+    "l sipamla",
+    "lutho sipamla"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Lutho Sipamla",
+   "cricsheet_id": "f892fcf9",
+   "espn_id": null,
+   "draft_id": 10117,
+   "auction_id": 5336
+  },
+  "6b9eb501": {
+   "aliases": [
+    "oeg baartman",
+    "ottneil baartman",
+    "ottneil emile graham baartman",
+    "ottniel baartman"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Ottniel Baartman",
+   "cricsheet_id": "6b9eb501",
+   "espn_id": "535353",
+   "draft_id": 10118,
+   "auction_id": 3780
+  },
+  "571e1d2a": {
+   "aliases": [
+    "shayan jahangir"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Shayan Jahangir",
+   "cricsheet_id": "571e1d2a",
+   "espn_id": "647771",
+   "draft_id": 10119,
+   "auction_id": 3350
+  },
+  "03c29939": {
+   "aliases": [
+    "sharad lumba"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Sharad Lumba",
+   "cricsheet_id": "03c29939",
+   "espn_id": null,
+   "draft_id": 10120,
+   "auction_id": 7666
+  },
+  "e06f7116": {
+   "aliases": [
+    "sujit nayak"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Sujit Nayak",
+   "cricsheet_id": "e06f7116",
+   "espn_id": null,
+   "draft_id": 10121,
+   "auction_id": 7656
+  },
+  "fa4f5a0b": {
+   "aliases": [
+    "ali sheikh"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Ali Sheikh",
+   "cricsheet_id": "fa4f5a0b",
+   "espn_id": "1193309",
+   "draft_id": 10122,
+   "auction_id": 6784
+  },
+  "92aeac25": {
+   "aliases": [
+    "ad hales",
+    "alex hales"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Alex Hales",
+   "cricsheet_id": "92aeac25",
+   "espn_id": null,
+   "draft_id": 10123,
+   "auction_id": 555
+  },
+  "slug:unmukt-chand": {
+   "aliases": [
+    "unmukt chand"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Unmukt Chand",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10124,
+   "auction_id": null
+  },
+  "af2c687b": {
+   "aliases": [
+    "c munro",
+    "colin munro"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Colin Munro",
+   "cricsheet_id": "af2c687b",
+   "espn_id": null,
+   "draft_id": 10125,
+   "auction_id": 508
+  },
+  "e5d452d7": {
+   "aliases": [
+    "saif badar"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Saif Badar",
+   "cricsheet_id": "e5d452d7",
+   "espn_id": null,
+   "draft_id": 10126,
+   "auction_id": 7638
+  },
+  "slug:sherfane-rutherford": {
+   "aliases": [
+    "sherfane rutherford"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Sherfane Rutherford",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10127,
+   "auction_id": null
+  },
+  "bbd41817": {
+   "aliases": [
+    "ad russell",
+    "andre russell"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Andre Russell",
+   "cricsheet_id": "bbd41817",
+   "espn_id": null,
+   "draft_id": 10128,
+   "auction_id": 44
+  },
+  "slug:sunil-narine": {
+   "aliases": [
+    "sunil narine"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Sunil Narine",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10129,
+   "auction_id": null
+  },
+  "97b0e4ff": {
+   "aliases": [
+    "sc van schalkwyk",
+    "shadley van schalkwyk"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Shadley van Schalkwyk",
+   "cricsheet_id": "97b0e4ff",
+   "espn_id": null,
+   "draft_id": 10130,
+   "auction_id": 3351
+  },
+  "0f721006": {
+   "aliases": [
+    "jason holder",
+    "jo holder"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Jason Holder",
+   "cricsheet_id": "0f721006",
+   "espn_id": null,
+   "draft_id": 10131,
+   "auction_id": 311
+  },
+  "7a490dec": {
+   "aliases": [
+    "c le roux",
+    "carmi le roux"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Carmi le Roux",
+   "cricsheet_id": "7a490dec",
+   "espn_id": null,
+   "draft_id": 10132,
+   "auction_id": 7643
+  },
+  "acdc62f5": {
+   "aliases": [
+    "a nortje",
+    "anrich nortje"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Anrich Nortje",
+   "cricsheet_id": "acdc62f5",
+   "espn_id": null,
+   "draft_id": 10134,
+   "auction_id": 88
+  },
+  "slug:rovman-powell": {
+   "aliases": [
+    "rovman powell"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Rovman Powell",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10135,
+   "auction_id": null
+  },
+  "64839cb3": {
+   "aliases": [
+    "m pathirana",
+    "matheesha pathirana"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Matheesha Pathirana",
+   "cricsheet_id": "64839cb3",
+   "espn_id": null,
+   "draft_id": 10136,
+   "auction_id": 34
+  },
+  "slug:jahmar-hamilton": {
+   "aliases": [
+    "jahmar hamilton",
+    "lucy hamilton"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Jahmar Hamilton",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10138,
+   "auction_id": null
+  },
+  "slug:matthew-tromp": {
+   "aliases": [
+    "matthew tromp"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Matthew Tromp",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10139,
+   "auction_id": null
+  },
+  "f6c313ea": {
+   "aliases": [
+    "karthik gattepalli",
+    "ks gattepalli"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Karthik Gattepalli",
+   "cricsheet_id": "f6c313ea",
+   "espn_id": null,
+   "draft_id": 10140,
+   "auction_id": 7665
+  }
+ }
+}

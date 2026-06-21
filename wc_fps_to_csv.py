@@ -63,6 +63,53 @@ def norm(s):
     s = unicodedata.normalize("NFKD", s or "").encode("ascii", "ignore").decode()
     return re.sub(r"\s+", " ", re.sub(r"[^a-z0-9 ]", " ", s.lower())).strip()
 
+# ---- canonical Player Registry (GLOBAL identity; built once by build_registry.py) ----
+# registry/players.json maps each player's stable pid (cricsheet_id when known) to its
+# display name + EVERY feed spelling (aliases). This turns name-matching from a per-match
+# fuzzy gamble into a deterministic dictionary lookup. Identity is global & permanent — a
+# player resolved in one tour is resolved in all future tours with zero rework.
+def load_registry():
+    path = os.path.join(os.path.dirname(__file__), "registry", "players.json")
+    alias2pid, pid2disp = {}, {}
+    try:
+        players = json.load(open(path)).get("players", {})
+    except Exception:
+        return alias2pid, pid2disp
+    for pid, e in players.items():
+        pid2disp[pid] = e.get("display") or pid
+        for a in e.get("aliases", []):
+            alias2pid.setdefault(a, pid)
+    return alias2pid, pid2disp
+
+ALIAS2PID, PID2DISP = load_registry()
+UNMATCHED_LOG = set()   # feed names that needed fuzzy / had no squad match -> grow the registry
+
+def resolve_pid(name):
+    """Deterministic identity lookup: feed/squad name -> stable pid (or None)."""
+    return ALIAS2PID.get(norm(name))
+
+JUNK_NAMES = {"player not found", "sub", "substitute", "not available"}
+def is_junk(name):
+    n = norm(name)
+    return (not n) or n in JUNK_NAMES or "player not found" in n
+
+def merge_perf(a, b):
+    """Merge two perf dicts that resolved to the SAME pid (one player whose stats the feed
+    split across two spellings, e.g. cricsheet 'DN Wyatt' + cricapi 'Danni Wyatt')."""
+    if a is None: return b
+    if b is None: return a
+    out = dict(a)
+    for k in ("r", "b", "4s", "6s", "balls", "runs_conceded", "w", "lbwb", "dots",
+              "maidens", "catches", "stumpings", "runouts", "dro"):
+        out[k] = (a.get(k, 0) or 0) + (b.get(k, 0) or 0)
+    out["played"] = a.get("played") or b.get("played")
+    out["dismissed"] = a.get("dismissed") or b.get("dismissed")
+    out["dismissal"] = a.get("dismissal") or b.get("dismissal")
+    out["bat_order"] = a.get("bat_order") or b.get("bat_order")
+    out["team"] = a.get("team") or b.get("team")
+    out["name"] = a.get("name") or b.get("name")
+    return out
+
 # API spelling -> squad spelling, for cases below the fuzzy threshold.
 # ALSO used to CANONICALIZE within a single feed: cricapi sometimes spells the SAME
 # player two ways in one scorecard (e.g. structured batting/bowling = "Charlotte Dean",
@@ -82,50 +129,66 @@ ALIAS = {
 
 def match_squad_to_perf(team_players, pool):
     """team_players: [(short,name,role)]; pool: {normname: perf}.
-    Greedy 1-1 best-match. Returns {(short,name): perf or None}, plus leftover pool."""
-    # Drop junk feed entries whose name normalizes to empty (e.g. the stray "(" cricapi
-    # sometimes emits in a scorecard): they match no one and would crash the tokenizer below.
-    pool = {k: v for k, v in pool.items() if k}
-    pairs = []
-    by_target = {}   # (short,name) -> sorted [(score, pk)]
+    Identity-first matching: resolve every feed entry and every squad player to a stable
+    registry pid and match on that (deterministic, no threshold, no surname collisions).
+    Feed entries sharing a pid are MERGED (fixes stats split across two spellings). Only
+    players the registry doesn't cover yet fall to the old fuzzy matcher — and every fuzzy
+    hit + every genuine leftover is logged to UNMATCHED_LOG so the registry can be grown.
+    Returns {(short,name): perf or None}, leftover pool, ambiguous set (kept for callers)."""
+    # Drop junk feed entries ("Player Not Found", empty, stray punctuation).
+    pool = {k: v for k, v in pool.items() if k and not is_junk(v.get("name", k))}
+    # 1) index feed entries by pid, merging split spellings of the same player
+    pid_pool, unresolved = {}, {}
+    for k, v in pool.items():
+        pid = resolve_pid(v.get("name", k))
+        if pid:
+            pid_pool[pid] = merge_perf(pid_pool.get(pid), v)
+        else:
+            unresolved[k] = v
+    assigned, used_pid, used_uk = {}, set(), set()
+    pending = []  # squad players the registry couldn't resolve to an available feed pid
     for short, name, role in team_players:
-        nn = norm(name)
-        nt = nn.split(); ln, fi = nt[-1], nt[0][0]
-        cand = []
-        for pk in pool:
-            ak = ALIAS.get(pk, pk)
-            pt = ak.split(); pl, pf = pt[-1], pt[0][0]
-            if ak == nn:
-                sc = 100.0
-            elif set(nt).issubset(set(pt)):   # all squad-name tokens present (ESPN's verbose names)
-                sc = 95.0
-            elif pl == ln and pf == fi:
-                sc = 92.0
-            elif pl == ln and max((SequenceMatcher(None, a, b).ratio()
-                                   for a in nt for b in pt), default=0) >= 0.85:
-                sc = 90.0   # same surname + a near-matching given name (Kaveesha~Kavisha)
-            else:
-                sc = SequenceMatcher(None, nn, ak).ratio() * 100
-                if pl == ln: sc += 8
-                if pt[0] == nt[0]: sc += 6
-            pairs.append((sc, short, name, pk))
-            cand.append((sc, pk))
-        by_target[(short, name)] = sorted(cand, key=lambda x: -x[0])
-    pairs.sort(key=lambda x: -x[0])
-    assigned, used_sq, used_pk = {}, set(), set()
-    for sc, short, name, pk in pairs:
-        if sc < 84 or (short, name) in used_sq or pk in used_pk:
-            continue
-        assigned[(short, name)] = pool[pk]
-        used_sq.add((short, name)); used_pk.add(pk)
-    # ambiguity: an assigned player whose top-2 *different* candidates score within 6 pts
-    # (e.g. same-surname siblings) — caller should flag it rather than trust silently.
-    ambiguous = set()
-    for t, cands in by_target.items():
-        if t in assigned and len(cands) >= 2 and cands[0][0] >= 84 and (cands[0][0] - cands[1][0]) < 6:
-            ambiguous.add(t)
-    leftover = {k: v for k, v in pool.items() if k not in used_pk}
-    return assigned, leftover, ambiguous
+        pid = resolve_pid(name)
+        if pid and pid in pid_pool and pid not in used_pid:
+            assigned[(short, name)] = pid_pool[pid]
+            used_pid.add(pid)
+        else:
+            pending.append((short, name, role))
+    # 2) FUZZY FALLBACK (legacy behaviour) — only squad players unresolved by pid, matched
+    #    against feed entries that also lacked a pid. Logged, never silent.
+    if pending and unresolved:
+        pairs = []
+        for short, name, role in pending:
+            nn = norm(name); nt = nn.split(); ln, fi = nt[-1], nt[0][0]
+            for uk, uv in unresolved.items():
+                ak = ALIAS.get(uk, uk); pt = ak.split()
+                if not pt: continue
+                pl, pf = pt[-1], pt[0][0]
+                if ak == nn: sc = 100.0
+                elif set(nt).issubset(set(pt)): sc = 95.0
+                elif pl == ln and pf == fi: sc = 92.0
+                elif pl == ln and max((SequenceMatcher(None, a, b).ratio()
+                                       for a in nt for b in pt), default=0) >= 0.85: sc = 90.0
+                else:
+                    sc = SequenceMatcher(None, nn, ak).ratio() * 100
+                    if pl == ln: sc += 8
+                    if pt[0] == nt[0]: sc += 6
+                pairs.append((sc, short, name, uk))
+        pairs.sort(key=lambda x: -x[0])
+        used_sq = set()
+        for sc, short, name, uk in pairs:
+            if sc < 84 or (short, name) in used_sq or uk in used_uk:
+                continue
+            assigned[(short, name)] = unresolved[uk]
+            used_sq.add((short, name)); used_uk.add(uk)
+            UNMATCHED_LOG.add(f"FUZZY  feed '{unresolved[uk].get('name', uk)}' -> squad '{name}'"
+                              f" (score {sc:.0f}) — add this spelling as an alias")
+    leftover = {k: v for k, v in unresolved.items() if k not in used_uk}
+    for k, v in leftover.items():
+        if v.get("played"):
+            UNMATCHED_LOG.add(f"LEFTOVER feed '{v.get('name', k)}' (team {v.get('team', '?')})"
+                              f" — featured but no squad match (add to squad or registry?)")
+    return assigned, leftover, set()
 
 def best_team(name, team_map):
     """Fuzzy-match a player name to an ESPN roster {norm_name: team} and return the team
@@ -638,7 +701,7 @@ def run_tour(tour):
     cs_idx = load_cricsheet_index(CRICSHEET_DIR, tour.get("gender", "female"))
     print(f"{len(ended)}/{len(matches)} matches completed | cricsheet {tour.get('gender','female')} matches indexed: {len(cs_idx)}", file=sys.stderr)
 
-    cols = ["Match", "Date", "Team", "Full Name", "Role", "Played",
+    cols = ["Match", "Date", "Team", "Player ID", "Full Name", "Role", "Played",
             "Runs", "Balls", "4s", "6s", "SR", "Dismissal",
             "Overs", "Maidens", "Dots", "Runs Conceded", "Wickets", "Econ",
             "Catches", "Stumpings", "Run Outs",
@@ -711,10 +774,13 @@ def run_tour(tour):
 
         def emit(short, name, role, d, in_squad):
             src = status
-            if (short, name) in ambiguous:
-                src += " · ⚠ name-match?"
             if (short, name) in xcheck:
                 src += " · ⚠ differs vs ESPN"
+            # Resolve identity: stable Player ID + canonical display name (so the row shows
+            # ONE consistent name regardless of which feed/spelling supplied the stats, and
+            # the draft can join by id instead of fuzzy-matching the name).
+            pid = resolve_pid(name) or (resolve_pid(d["name"]) if d else "") or ""
+            full = PID2DISP.get(pid, name) if pid else name
             if d:
                 # unknown-role leftovers: infer BOWL if they only bowled, so duck/SR isn't misapplied
                 srole = role if role != "?" else ("BOWL" if d.get("balls", 0) > 0 and d.get("b", 0) == 0 else "BAT")
@@ -722,7 +788,7 @@ def run_tour(tour):
                 sr = round(d["r"] / d["b"] * 100, 1) if d["b"] else ""
                 econ = round(d["runs_conceded"] / (d["balls"] / 6), 2) if d["balls"] else ""
                 dots_out = d["dots"] if dots_final else ""  # never fill dots from a no-dots source
-                rows.append([label, mdate, short, name, role, "Y",
+                rows.append([label, mdate, short, pid, full, role, "Y",
                              d["r"], d["b"], d["4s"], d["6s"], sr, d["dismissal"],
                              round(d["balls"] / 6, 1) if d["balls"] else "",
                              d["maidens"], dots_out, d["runs_conceded"], d["w"], econ,
@@ -730,7 +796,7 @@ def run_tour(tour):
                              s["bat"], s["bowl"], s["field"], s["sr"], s["eco"], s["xi"],
                              s["total"], src, in_squad, d.get("bat_order") or ""])
             else:
-                rows.append([label, mdate, short, name, role, "N"] + [""] * 22 +
+                rows.append([label, mdate, short, pid, full, role, "N"] + [""] * 22 +
                             [src, in_squad, ""])
 
         for short, name, role in team_players:
@@ -786,7 +852,9 @@ def run_tour(tour):
         assigned, leftover, _ = match_squad_to_perf(team_players, xi_perf)
         for short, name, role in team_players:
             played = "Y" if (short, name) in assigned else "N"
-            rows.append([label, mdate, short, name, role, played] + [""] * 22 +
+            pid = resolve_pid(name) or ""
+            full = PID2DISP.get(pid, name) if pid else name
+            rows.append([label, mdate, short, pid, full, role, played] + [""] * 22 +
                         [src, "Y", ""])
         tmap = {}
         try:
@@ -795,7 +863,9 @@ def run_tour(tour):
             pass
         for d in leftover.values():
             tfull = tmap.get(norm(d["name"])) or d.get("team", "")
-            rows.append([label, mdate, short_of(tfull) or "?", d["name"], "?", "Y"] + [""] * 22 +
+            pid = resolve_pid(d["name"]) or ""
+            full = PID2DISP.get(pid, d["name"]) if pid else d["name"]
+            rows.append([label, mdate, short_of(tfull) or "?", pid, full, "?", "Y"] + [""] * 22 +
                         [src, "N", ""])
         n_toss += 1
     if n_toss:
@@ -806,6 +876,20 @@ def run_tour(tour):
         w.writerow(cols)
         w.writerows(rows)
     print(f"Wrote {len(rows)} rows -> {out_csv}", file=sys.stderr)
+
+    # Surface every feed name the registry didn't cover deterministically (fuzzy hits +
+    # genuine leftovers) so the registry can be grown once and the gap never recurs.
+    if UNMATCHED_LOG:
+        log_path = os.path.join(os.path.dirname(__file__), "registry",
+                                f"UNMATCHED_{re.sub(r'[^a-z0-9]+', '_', GSHEET_TAB.lower()).strip('_')}.log")
+        try:
+            os.makedirs(os.path.dirname(log_path), exist_ok=True)
+            open(log_path, "w").write("\n".join(sorted(UNMATCHED_LOG)) + "\n")
+        except Exception:
+            pass
+        print(f"⚠ {len(UNMATCHED_LOG)} feed name(s) needed fuzzy/had no squad match "
+              f"-> registry/{os.path.basename(log_path)} (add aliases to close the gap)", file=sys.stderr)
+        UNMATCHED_LOG.clear()
 
     if GSHEET_ID:
         write_to_gsheet(cols, rows)

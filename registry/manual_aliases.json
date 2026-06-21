@@ -1,0 +1,8 @@
+{
+  "_comment": "Hand-curated spellings the auto-matcher genuinely cannot link (one player whose feeds use unrelated names/very long full names). Reviewed ONCE, permanent, global. build_registry.py merges these into registry/players.json on every run. 'match' = any existing alias/display already on the player (used to find their pid); 'add' = extra normalized spellings to attach. To add a new one: run the points bot, read registry/UNMATCHED_*.log, confirm it's the same person, add a line here, re-run build_registry.py.",
+  "entries": [
+    { "match": "kaushini nuthyangana", "add": ["edirisooriya mohottilage kaushini nuthyanga heram senavirathna", "emknh senavirathna"] },
+    { "match": "shanjida akther maghla", "add": ["shanjida akter meghla"] },
+    { "match": "tajinder singh", "add": ["tajinder dhillon"] }
+  ]
+}

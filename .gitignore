@@ -4,3 +4,5 @@ cricsheet/
 *.zip
 __pycache__/
 *.pyc
+registry/UNMAPPED_*.txt
+registry/UNMATCHED_*.log
