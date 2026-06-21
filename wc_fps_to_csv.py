@@ -190,7 +190,8 @@ def load_squads():
 def blank_perf(name):
     return dict(name=name, team="", r=0, b=0, **{"4s": 0, "6s": 0}, dismissed=False,
                 dismissal="", balls=0, runs_conceded=0, w=0, lbwb=0, dots=0,
-                maidens=0, catches=0, stumpings=0, runouts=0, dro=0, played=False)
+                maidens=0, catches=0, stumpings=0, runouts=0, dro=0, played=False,
+                bat_order=0)  # 1-based batting position from the scorecard (0 = unknown/DNB)
 
 def team_key(teams):
     """Date-independent team identity: normalized names with 'women' dropped."""
@@ -227,6 +228,13 @@ def parse_cricsheet(path):
         for n in plist:
             p = get(n); p["played"] = True; p["team"] = p["team"] or tname
     for inn in d.get("innings", []):
+        bat_pos = 0  # batting order = order players first appear at the crease this innings
+        def crease(nm):
+            nonlocal bat_pos
+            p = get(nm); p["played"] = True
+            if not p.get("bat_order"):
+                bat_pos += 1; p["bat_order"] = bat_pos
+            return p
         for over in inn.get("overs", []):
             legal = over_runs = 0; over_bowler = None
             for dl in over.get("deliveries", []):
@@ -234,6 +242,9 @@ def parse_cricsheet(path):
                 ex = dl.get("extras", {}); is_wide = "wides" in ex; is_nb = "noballs" in ex
                 legald = not is_wide and not is_nb
                 if over_bowler is None: over_bowler = dl["bowler"]
+                # register striker then non-striker so openers get positions 1 & 2
+                crease(dl["batter"])
+                if dl.get("non_striker"): crease(dl["non_striker"])
                 pb = get(dl["batter"]); pb["played"] = True
                 if not is_wide: pb["b"] += 1
                 pb["r"] += rb
@@ -510,8 +521,10 @@ def parse_match(mid):
             pl["team"] = t
     for i, inn in enumerate(innings):
         bat_team = bat_teams[i]; bowl_team = other(bat_team)
-        for bt in inn.get("batting", []):
+        for pos, bt in enumerate(inn.get("batting", []), 1):
             pl = get(bt["batsman"]["name"]); pl["played"] = True; setteam(pl, bat_team)
+            if not pl.get("bat_order"):
+                pl["bat_order"] = pos  # scorecard batting position (this innings)
             pl["r"] += bt.get("r", 0) or 0; pl["b"] += bt.get("b", 0) or 0
             pl["4s"] += bt.get("4s", 0) or 0; pl["6s"] += bt.get("6s", 0) or 0
             dis = (bt.get("dismissal") or "").lower()
@@ -592,7 +605,7 @@ def run_tour(tour):
             "Overs", "Maidens", "Dots", "Runs Conceded", "Wickets", "Econ",
             "Catches", "Stumpings", "Run Outs",
             "Pts Bat", "Pts Bowl", "Pts Field", "Pts SR", "Pts Econ", "Pts XI",
-            "Fantasy Points", "Source", "In Squad List"]
+            "Fantasy Points", "Source", "In Squad List", "Bat Order"]
     rows = []
     n_cs = n_espn = n_api = 0
     for mi, m in enumerate(sorted(ended, key=lambda x: x.get("dateTimeGMT", x.get("date", ""))), 1):
@@ -672,10 +685,10 @@ def run_tour(tour):
                              d["maidens"], dots_out, d["runs_conceded"], d["w"], econ,
                              d["catches"], d["stumpings"], d["runouts"],
                              s["bat"], s["bowl"], s["field"], s["sr"], s["eco"], s["xi"],
-                             s["total"], src, in_squad])
+                             s["total"], src, in_squad, d.get("bat_order") or ""])
             else:
                 rows.append([label, mdate, short, name, role, "N"] + [""] * 22 +
-                            [src, in_squad])
+                            [src, in_squad, ""])
 
         for short, name, role in team_players:
             emit(short, name, role, assigned.get((short, name)), "Y")
