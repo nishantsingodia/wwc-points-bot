@@ -47,6 +47,7 @@ jobs:
         # Tours are defined in tours.json (each writes its own tab). See TOURS.md.
         env:
           CRICKET_API_KEY: ${{ secrets.CRICKET_API_KEY }}
+          CRICKET_API_KEY2: ${{ secrets.CRICKET_API_KEY2 }}   # optional failover key (2nd cricapi account)
           GSHEET_ID: ${{ secrets.GSHEET_ID }}
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           CRICSHEET_DIR: cricsheet

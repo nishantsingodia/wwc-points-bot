@@ -36,7 +36,14 @@ def date_variants(d):
         return [d]
 
 API = "https://api.cricapi.com/v1"
-KEY = os.environ.get("CRICKET_API_KEY", "").strip()
+# One or more cricapi keys (free tier = 100 hits/day each). Provide extras to fail over
+# when one is exhausted/blocked: CRICKET_API_KEY can be comma-separated, and/or set
+# CRICKET_API_KEY2. The bot rotates to the next key on a quota/"Blocked" response.
+API_KEYS = [k.strip() for k in (
+    os.environ.get("CRICKET_API_KEY", "").split(",") + [os.environ.get("CRICKET_API_KEY2", "")]
+) if k.strip()]
+KEY = API_KEYS[0] if API_KEYS else ""   # primary (back-compat for the startup check)
+_key_idx = 0   # index of the key currently in use; advances on quota/blocked failures
 # Series id to pull. Override with env SERIES_ID to run ANY other tour (no code change).
 WC_SERIES = os.environ.get("SERIES_ID", "f3e5c7dd-332c-4893-9067-aa2bfe6d2b85").strip()  # default: ICC Women's T20 WC 2026
 SQUAD_TS = os.path.join(os.path.dirname(__file__), "..", "src", "lib", "squads", "womens-t20-wc-2026.ts")
@@ -231,12 +238,30 @@ def api(path, cache=True, ttl=None, **params):
     fresh = os.path.exists(fp) and (ttl is None or (time.time() - os.path.getmtime(fp) < ttl))
     if cache and fresh:
         return json.load(open(fp))
-    url = f"{API}/{path}?apikey={KEY}&{qs}"
-    try:
-        with urllib.request.urlopen(url, timeout=30) as r:
-            data = json.load(r)
-    except Exception as e:
-        data = {"status": "failure", "reason": f"fetch error: {e}"}
+
+    def is_quota(d):
+        r = (d.get("reason") or "").lower()
+        return d.get("status") != "success" and ("limit" in r or "block" in r or "hits" in r)
+
+    global _key_idx
+    data = {"status": "failure", "reason": "no api key"}
+    # Try the current key; on a quota/blocked response, fail over to the next key(s).
+    for attempt in range(max(1, len(API_KEYS))):
+        if not API_KEYS:
+            break
+        url = f"{API}/{path}?apikey={API_KEYS[_key_idx]}&{qs}"
+        try:
+            with urllib.request.urlopen(url, timeout=30) as r:
+                data = json.load(r)
+        except Exception as e:
+            data = {"status": "failure", "reason": f"fetch error: {e}"}
+        if data.get("status") == "success" or not is_quota(data):
+            break
+        if _key_idx + 1 < len(API_KEYS):
+            print(f"  api({path}): key #{_key_idx+1} {data.get('reason','')!r} — failing over to key #{_key_idx+2}", file=sys.stderr)
+            _key_idx += 1
+        else:
+            break
     if data.get("status") == "success":
         json.dump(data, open(fp, "w"))
     elif os.path.exists(fp):
