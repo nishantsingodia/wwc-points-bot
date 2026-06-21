@@ -706,8 +706,18 @@ def run_tour(tour):
     # REAL announced XI for the upcoming match instead of last-match's. Once the match
     # ends, the next run replaces these with full-stat rows. Best-effort: if ESPN hasn't
     # posted the XI yet, we simply write nothing (no harm).
-    pending = [m for m in matches if is_t20(m) and not m.get("matchEnded")
-               and (m.get("matchStarted") or m.get("tossWinner"))]
+    # Gate on ESPN having the XI (the real signal), not cricapi's lagging toss flags.
+    # Only look at not-ended matches within ±1 day of today to bound ESPN queries.
+    today = date.today()
+    def near_today(m):
+        for ds in date_variants(m.get("date", "")):
+            try:
+                if abs((date.fromisoformat(ds) - today).days) <= 1:
+                    return True
+            except ValueError:
+                pass
+        return False
+    pending = [m for m in matches if is_t20(m) and not m.get("matchEnded") and near_today(m)]
     n_toss = 0
     for j, m in enumerate(sorted(pending, key=lambda x: x.get("dateTimeGMT", x.get("date", ""))), 1):
         teams = m.get("teams", []); mdate = m.get("date", "")
