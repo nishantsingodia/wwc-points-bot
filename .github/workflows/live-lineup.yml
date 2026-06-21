@@ -1,0 +1,43 @@
+name: Live Lineup (toss XI)
+
+# Every 5 min, but the script exits immediately unless a match is in its toss
+# window ([toss-30m, start+15m]) per committed toss_windows.json — so idle ticks
+# cost zero API. In-window, it does a normal run (ESPN posts the announced XI;
+# series_info is cached 2h so this never threatens cricapi's 100/day cap). The
+# 2-hourly full run (wwc-points.yml) is unchanged and still owns points.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/5 * * * *"
+
+# Don't pile up ticks if one run is slow.
+concurrency:
+  group: live-lineup
+  cancel-in-progress: false
+
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt
+
+      # Share the cricapi scorecard/series cache with the main workflow.
+      - name: Restore cricapi cache
+        uses: actions/cache@v4
+        with:
+          path: api_cache
+          key: wc-apicache-${{ github.run_id }}
+          restore-keys: wc-apicache-
+
+      - name: Live lineup tick (ESPN announced XI, toss-window only)
+        env:
+          FREQUENT: "1"
+          CRICKET_API_KEY: ${{ secrets.CRICKET_API_KEY }}
+          GSHEET_ID: ${{ secrets.GSHEET_ID }}
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          WC_CACHE_DIR: api_cache
+        run: python wc_fps_to_csv.py

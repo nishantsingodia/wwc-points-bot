@@ -20,7 +20,12 @@ Usage:
 """
 import os, sys, json, re, csv, time, glob, unicodedata, urllib.request
 from difflib import SequenceMatcher
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime, timezone
+
+# FREQUENT mode = the every-5-min "live lineup" tick (vs the 2-hourly full run).
+# It only does work inside a match's toss window and caches series_info so the
+# extra ticks don't blow cricapi's 100/day cap. Set via env in live-lineup.yml.
+FREQUENT = os.environ.get("FREQUENT") == "1"
 
 def date_variants(d):
     """A date plus ±1 day (ISO strings) — to absorb timezone differences between feeds."""
@@ -141,14 +146,16 @@ def best_team(name, team_map):
             best_sc, best = sc, tfull
     return best if best_sc >= 84 else ""
 
-def api(path, cache=True, **params):
+def api(path, cache=True, ttl=None, **params):
     """GET with optional caching. Scorecards are cached (immutable once ended);
-    series_info is NOT (so re-runs detect newly-completed matches)."""
+    series_info is NOT in the full run (so re-runs detect newly-completed matches),
+    but the frequent tick caches it with a TTL to stay under cricapi's 100/day cap."""
     os.makedirs(CACHE, exist_ok=True)
     qs = "&".join(f"{k}={v}" for k, v in params.items())
     key = re.sub(r"[^a-z0-9]", "_", f"{path}_{qs}".lower())
     fp = os.path.join(CACHE, key + ".json")
-    if cache and os.path.exists(fp):
+    fresh = os.path.exists(fp) and (ttl is None or (time.time() - os.path.getmtime(fp) < ttl))
+    if cache and fresh:
         return json.load(open(fp))
     url = f"{API}/{path}?apikey={KEY}&{qs}"
     with urllib.request.urlopen(url, timeout=30) as r:
@@ -582,7 +589,9 @@ def run_tour(tour):
     def short_of(team_full):
         return name2short.get(norm(team_full)) or name2short_stripped.get(strip_women(team_full))
 
-    info = api("series_info", cache=False, id=WC_SERIES)
+    # Full run: always fresh (detect newly-ended matches). Frequent tick: cache 2h
+    # so the every-5-min ticks don't spend the cricapi daily budget.
+    info = api("series_info", cache=FREQUENT, ttl=(7200 if FREQUENT else None), id=WC_SERIES)
     matches = info.get("data", {}).get("matchList", [])
     # Guard: if cricapi failed/returned nothing, ABORT before touching the sheet
     # (otherwise we'd clear it and write an empty table — wiping good data).
@@ -792,9 +801,30 @@ def is_active(tour):
     except ValueError:
         return True
 
+def in_toss_window():
+    """True if now is within any match's [toss−30m, start+15m] window. Reads committed
+    start times (toss_windows.json) so the frequent tick costs ZERO API when idle.
+    Regenerate that file from the app's matches.json whenever the schedule changes."""
+    try:
+        windows = json.load(open(os.path.join(os.path.dirname(__file__), "toss_windows.json")))
+    except Exception:
+        return True  # missing file -> don't silently go dark; let the tick run
+    now = datetime.now(timezone.utc)
+    for s in windows:
+        try:
+            st = datetime.fromisoformat(s.replace("Z", "+00:00"))
+        except ValueError:
+            continue
+        if st - timedelta(minutes=30) <= now <= st + timedelta(minutes=15):
+            return True
+    return False
+
 def main():
     if not KEY:
         sys.exit("Set CRICKET_API_KEY env var.")
+    if FREQUENT and not in_toss_window():
+        print("frequent tick: no match in toss window — nothing to do", file=sys.stderr)
+        return
     tours = load_tours()
     print(f"{len(tours)} tour(s): {', '.join(t['name'] for t in tours)}", file=sys.stderr)
     for t in tours:
