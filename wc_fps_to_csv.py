@@ -340,6 +340,18 @@ def espn_dots(event_id):
             out[k]["dots"] += 1
     return out
 
+def espn_toss(event_id):
+    """Toss result text from ESPN summary notes (type 'toss'), e.g.
+    'Bangladesh, elected to bat first'. Empty string if not posted yet."""
+    try:
+        d = espn_get("summary", event=event_id)
+    except Exception:
+        return ""
+    for n in d.get("notes", []):
+        if (n.get("type") or "").lower() == "toss":
+            return re.sub(r"\s*,\s*", ", ", (n.get("text") or "").strip())
+    return ""
+
 def espn_team_map(event_id):
     """{norm(player): team displayName} from ESPN rosters — reliable team attribution
     (cricapi's innings labels are sometimes malformed)."""
@@ -737,6 +749,9 @@ def run_tour(tour):
             xi = {}
         if not xi:
             continue
+        # Toss result (if posted) goes into Source so the app can show it without a schema change.
+        toss = espn_toss(ev)
+        src = "ESPN announced XI (toss)" + (f" · {toss}" if toss else "")
         label = f"Match {len(ended) + j} — " + " v ".join(name2short.get(norm(t), t) for t in teams)
         xi_perf = {}
         for k, v in xi.items():
@@ -750,7 +765,7 @@ def run_tour(tour):
         for short, name, role in team_players:
             played = "Y" if (short, name) in assigned else "N"
             rows.append([label, mdate, short, name, role, played] + [""] * 22 +
-                        ["ESPN announced XI (toss)", "Y", ""])
+                        [src, "Y", ""])
         tmap = {}
         try:
             tmap = espn_team_map(ev)
@@ -759,7 +774,7 @@ def run_tour(tour):
         for d in leftover.values():
             tfull = tmap.get(norm(d["name"])) or d.get("team", "")
             rows.append([label, mdate, short_of(tfull) or "?", d["name"], "?", "Y"] + [""] * 22 +
-                        ["ESPN announced XI (toss)", "N", ""])
+                        [src, "N", ""])
         n_toss += 1
     if n_toss:
         print(f"toss XI written for {n_toss} not-ended match(es)", file=sys.stderr)
