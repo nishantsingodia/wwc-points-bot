@@ -58,9 +58,14 @@ Repo ▸ Settings ▸ Secrets and variables ▸ Actions ▸ **New repository sec
   clean raw layer.
 
 ## Columns
-`Match · Date · Team · Full Name · Role · Played · Runs · Balls · 4s · 6s · SR ·
+`Match · Date · Team · Player ID · Full Name · Role · Played · Runs · Balls · 4s · 6s · SR ·
 Dismissal · Overs · Maidens · Dots · Runs Conceded · Wickets · Econ · Catches ·
 Stumpings · Run Outs · Pts Bat · Pts Bowl · Pts Field · Pts SR · Pts Econ · Pts XI ·
-Fantasy Points · Source · In Squad List`
+Fantasy Points · Source · In Squad List · Bat Order`
+
+- **`Player ID`** — stable player identity (`pid`) from the global registry
+  (`registry/players.json`). The draft app joins points on this, not on the name. See `TOURS.md`.
+- **`Full Name`** — canonical name (the registry resolves every feed spelling to one identity,
+  so the same player never splits into two rows).
 
 Points exclude C/VC — apply your ×2 / ×1.5 in the leaderboard tab.

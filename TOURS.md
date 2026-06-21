@@ -25,8 +25,22 @@ auction). Claude does the rest:
    }
    ```
    - `squads` is optional — omit it for featured-players-only mode.
-4. **Deploy + verify** — commit & push; trigger a run (🏏 WWC button, or `gh workflow run wwc-points.yml`); confirm the new tab fills and the totals look right (Source column clean).
-5. **You wire the leaderboard** — add your ownership / C×2-VC×1.5 / leaderboard tabs that
+4. **Build the player registry** (identity — do this once per tour, locally):
+   ```bash
+   python3 build_registry.py "<tour name substring>"   # extends the GLOBAL registry/players.json
+   cat registry/UNMAPPED_<tab-slug>.txt                 # eyeball the handful it couldn't resolve
+   ```
+   - Identity is **global & permanent** — players already in `registry/players.json` from
+     a prior tour are reused automatically (zero rework). The harvester only adds new
+     players / new spellings (ESPN ids + cricsheet ids + every feed spelling).
+   - For a name the auto-matcher genuinely can't link (a player whose feeds use unrelated
+     names, e.g. "Tajinder Singh" = "Tajinder Dhillon"), add one line to
+     `registry/manual_aliases.json` and re-run. This is the **once-and-for-all** map.
+   - If the draft app uses this tour, push the ids into it:
+     `python3 registry/backfill_draft_pids.py` (adds `pid` to wwc-draft `players-raw.json`).
+   - Commit `registry/players.json` (+ `manual_aliases.json`) — CI reads the committed file.
+5. **Deploy + verify** — commit & push; trigger a run (🏏 WWC button, or `gh workflow run wwc-points.yml`); confirm the new tab fills, the **`Player ID`** column is populated, and totals look right (Source column clean, no phantom `In Squad List = N` rows for squad players). The CI run also prints any registry gaps (`UNMATCHED_*.log`) as a warning.
+6. **You wire the leaderboard** — add your ownership / C×2-VC×1.5 / leaderboard tabs that
    reference the new points tab. The points tab stays the sacrosanct raw layer.
 
 ## tours.json reference
@@ -64,13 +78,30 @@ Source priority per completed match, recorded in the **Status** column:
 Super-overs excluded; feed joins tolerate ±1 day; same-surname / cross-source
 disagreements / unknown players are flagged in Status rather than silently guessed.
 
+## Player identity — the global registry (read this before touching name matching)
+
+Players are matched by a **stable identity (`pid`)**, not by fuzzy name. `registry/players.json`
+is ONE global, permanent file (keyed on `cricsheet_id` when known, else `espn:`/`slug:`) listing
+**every feed spelling** of every player. Built by `build_registry.py` from the auction DB
+(`cricsheet_id` + cricsheet initials), ESPN rosters (`espn_id`), cached cricapi, and all the
+repos' historical alias maps. The bot:
+- resolves each feed/squad name → `pid` **deterministically** (no per-match fuzzy gamble),
+  **merging** stats the feed split across two spellings (e.g. cricsheet "DN Wyatt" + "Danni Wyatt");
+- emits a **`Player ID`** column + the canonical name, so the draft joins by id, not name;
+- drops junk feed names ("Player Not Found", empty);
+- falls back to fuzzy **only** for names not yet in the registry, and **logs** every fallback +
+  every genuine non-squad leftover to `registry/UNMATCHED_*.log` (surfaced in CI) so the gap can
+  be closed once. Identity is global → a player resolved in one tour is resolved in all future ones.
+
 ## Gotchas
 - **cricsheet's `t20s` archive only holds internationals** (men's & women's T20Is). A
   franchise league (e.g. MLC) or an ODI tour lives in its OWN cricsheet archive, which must
   be added to the download step in `.github/workflows/wwc-points.yml` for the *official*
   source to kick in (MLC uses `mlc_json.zip`). The cricapi+ESPN path — including exact
   dot-balls — works regardless, so a tour is fully scored even before its archive is wired.
-- **Squad name aliases**: if a feed spells a name very differently, add it to `ALIAS` in
-  `wc_fps_to_csv.py` (rare; most are handled by fuzzy matching).
+- **Squad name aliases**: the single place is now `registry/manual_aliases.json` (then re-run
+  `build_registry.py`) — NOT the inline `ALIAS` dict in `wc_fps_to_csv.py` (kept only for legacy
+  cricapi-internal split canonicalization like "charlotte dean"→"charlie dean"). The registry is
+  the once-and-for-all map; most names are auto-resolved from the auction DB / ESPN / cricsheet.
 - **API budget**: cricketdata free = 100 hits/day. Completed-match scorecards are cached,
   so each extra tour adds only ~its new matches/day — comfortably within budget.
