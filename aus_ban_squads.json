@@ -1,0 +1,140 @@
+{
+ "MAUS": {
+  "name": "Australia",
+  "players": [
+   [
+    "Mitchell Marsh",
+    "AR"
+   ],
+   [
+    "Josh Inglis",
+    "WK"
+   ],
+   [
+    "Cooper Connolly",
+    "BAT"
+   ],
+   [
+    "Matt Renshaw",
+    "BAT"
+   ],
+   [
+    "Tim David",
+    "BAT"
+   ],
+   [
+    "Nikhil Chaudhary",
+    "AR"
+   ],
+   [
+    "Joel Davies",
+    "BOWL"
+   ],
+   [
+    "Xavier Bartlett",
+    "BOWL"
+   ],
+   [
+    "Nathan Ellis",
+    "BOWL"
+   ],
+   [
+    "Spencer Johnson",
+    "BOWL"
+   ],
+   [
+    "Adam Zampa",
+    "BOWL"
+   ],
+   [
+    "Cameron Green",
+    "AR"
+   ],
+   [
+    "Aaron Hardie",
+    "AR"
+   ],
+   [
+    "Josh Philippe",
+    "WK"
+   ],
+   [
+    "Matthew Kuhnemann",
+    "BOWL"
+   ],
+   [
+    "Riley Meredith",
+    "BOWL"
+   ]
+  ]
+ },
+ "MBAN": {
+  "name": "Bangladesh",
+  "players": [
+   [
+    "Tanzid Hasan Tamim",
+    "BAT"
+   ],
+   [
+    "Soumya Sarkar",
+    "BAT"
+   ],
+   [
+    "Saif Hassan",
+    "BAT"
+   ],
+   [
+    "Parvez Hossain Emon",
+    "WK"
+   ],
+   [
+    "Towhid Hridoy",
+    "AR"
+   ],
+   [
+    "Shamim Hossain",
+    "AR"
+   ],
+   [
+    "Mahedi Hasan",
+    "AR"
+   ],
+   [
+    "Rishad Hossain",
+    "BOWL"
+   ],
+   [
+    "Shoriful Islam",
+    "BOWL"
+   ],
+   [
+    "Abdul Gaffar Saqlain",
+    "BOWL"
+   ],
+   [
+    "Mustafizur Rahman",
+    "BOWL"
+   ],
+   [
+    "Litton Das",
+    "WK"
+   ],
+   [
+    "Taskin Ahmed",
+    "BOWL"
+   ],
+   [
+    "Nahid Rana",
+    "BOWL"
+   ],
+   [
+    "Nasum Ahmed",
+    "BOWL"
+   ],
+   [
+    "Nurul Hasan Sohan",
+    "WK"
+   ]
+  ]
+ }
+}

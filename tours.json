@@ -14,6 +14,7 @@
     "espn_series": "1532475",
     "tab": "AUS v BAN T20 POINTS",
     "gender": "male",
+    "squads": "aus_ban_squads.json",
     "ends": "2026-06-21"
   },
   {
