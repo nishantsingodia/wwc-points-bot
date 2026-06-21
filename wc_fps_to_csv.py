@@ -64,9 +64,14 @@ def norm(s):
     return re.sub(r"\s+", " ", re.sub(r"[^a-z0-9 ]", " ", s.lower())).strip()
 
 # API spelling -> squad spelling, for cases below the fuzzy threshold.
+# ALSO used to CANONICALIZE within a single feed: cricapi sometimes spells the SAME
+# player two ways in one scorecard (e.g. structured batting/bowling = "Charlotte Dean",
+# but the dismissal-text = "Charlie Dean"), which splits her stats across two entries
+# and the squad-matcher then grabs only one. Mapping the variant here collapses them.
 ALIAS = {
     "kavisha dilhari": "kaveesha dilhari",
     "sugandika kumari": "sugandika dasanayaka",
+    "charlotte dean": "charlie dean",   # cricapi formal name vs squad/ESPN "Charlie Dean"
     # MLC 2026: cricsheet uses initials whose first letter differs from the announced
     # first name, so the surname+first-initial rule can't catch them (the rest of the
     # MLC roster's initials DO match the announced names -> handled by fuzzy matching).
@@ -484,8 +489,6 @@ def score(p, role):
         elif p["r"] >= 75: bat += R["m75"]
         elif p["r"] >= 50: bat += R["m50"]
         elif p["r"] >= 25: bat += R["m25"]
-        if p["dismissed"] and p["r"] == 0 and role != "BOWL":
-            bat += R["duck"]
         if p["b"] >= 10 and role != "BOWL":
             sr = p["r"] / p["b"] * 100
             if sr > 170: sr_pts += 6
@@ -494,6 +497,10 @@ def score(p, role):
             elif 60 <= sr <= 70: sr_pts += -2
             elif 50 <= sr < 60: sr_pts += -4
             elif sr < 50: sr_pts += -6
+    # Duck (-2) for BAT/WK/AR dismissed for 0 — OUTSIDE the b>0/r>0 gate so a batter
+    # run out for 0 off 0 balls (backing up at the non-striker's end) still gets it.
+    if p["dismissed"] and p["r"] == 0 and role != "BOWL":
+        bat += R["duck"]
     if p["balls"] > 0:
         bowl += p["w"] * R["wkt"] + p["lbwb"] * R["lbwb"] + p["dots"] * R["dot"] + p["maidens"] * R["maiden"]
         if p["w"] >= 5: bowl += R["h5"]
@@ -526,6 +533,7 @@ def parse_match(mid):
     perf = {}   # norm name -> dict
     def get(n):
         k = norm(n)
+        k = ALIAS.get(k, k)   # canonicalize feed name variants so split spellings merge
         if k not in perf:
             perf[k] = blank_perf(n)
         return perf[k]
@@ -550,10 +558,19 @@ def parse_match(mid):
             dtext = (bt.get("dismissal-text") or "")
             if dtext and "not out" not in dtext.lower() and dtext.lower() != "not out":
                 pl["dismissed"] = True; pl["dismissal"] = dtext
-            # credit lbw/bowled bonus to the bowler
-            if ("bowled" in dis or "lbw" in dis) and bt.get("bowler"):
-                setteam(get(bt["bowler"]["name"]), bowl_team)
-                get(bt["bowler"]["name"])["lbwb"] += 1
+            # credit lbw/bowled bonus to the bowler. cricapi sometimes returns a NULL
+            # bowler object even when the dismissal-text clearly names them (seen for
+            # "Charlie Dean": every "lbw b Charlie Dean" came back bowler=None), so fall
+            # back to parsing the bowler out of the text — else the +8 silently vanishes.
+            if "bowled" in dis or "lbw" in dis:
+                bname = (bt.get("bowler") or {}).get("name")
+                if not bname:
+                    mb = re.search(r"\bb ([^()]+)$", dtext)
+                    if mb:
+                        bname = mb.group(1).strip()
+                if bname:
+                    setteam(get(bname), bowl_team)
+                    get(bname)["lbwb"] += 1
             # run-outs: parse fielders from dismissal text -> direct (1 fielder) vs assisted (2+)
             if "run out" in dtext.lower():
                 m = re.search(r"run out \(([^)]*)\)", dtext, re.I)
@@ -658,12 +675,17 @@ def run_tour(tour):
                 espn_perf, super_over = parse_espn(ev)
                 espn_perf = {k: v for k, v in espn_perf.items() if v["played"]}
                 team_map = espn_team_map(ev)
+            # Not from cricsheet yet -> dots are single-sourced from ESPN with NO validator
+            # (cricapi has no dots, cricsheet not posted). Flag the whole row PROVISIONAL so
+            # it's clear these numbers may be revised once cricsheet posts (lags ~1-5 days),
+            # which then overwrites ESPN dots with exact figures.
             if espn_perf:
                 n_espn += 1; dots_final = True
-                status = "cricapi + ESPN dots/XI" + (" · super-over excl" if super_over else "")
+                status = ("cricapi + ESPN dots/XI · ⏳ provisional (dots unverified, awaiting cricsheet)"
+                          + (" · super-over excl" if super_over else ""))
             else:
                 n_api += 1; dots_final = False
-                status = "cricapi · limited (no dots/XI — ESPN unavailable)"
+                status = "cricapi · limited (no dots/XI — ESPN unavailable) · ⏳ provisional (awaiting cricsheet)"
 
         team_players = []
         for tname in teams:
