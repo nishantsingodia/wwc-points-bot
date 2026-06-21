@@ -700,6 +700,51 @@ def run_tour(tour):
             emit(short, d["name"], "?", d, "N")
     print(f"sources: {n_cs} cricsheet(official), {n_espn} cricapi+ESPN, {n_api} cricapi-only", file=sys.stderr)
 
+    # ── Toss-time announced XI (matches NOT yet ended) ───────────────────────────
+    # After the toss (~30 min pre-play) ESPN posts each side's playing XI. We write it
+    # as Played=Y rows with blank stats so the draft app's getLastPlayedXI shows the
+    # REAL announced XI for the upcoming match instead of last-match's. Once the match
+    # ends, the next run replaces these with full-stat rows. Best-effort: if ESPN hasn't
+    # posted the XI yet, we simply write nothing (no harm).
+    pending = [m for m in matches if is_t20(m) and not m.get("matchEnded")
+               and (m.get("matchStarted") or m.get("tossWinner"))]
+    n_toss = 0
+    for j, m in enumerate(sorted(pending, key=lambda x: x.get("dateTimeGMT", x.get("date", ""))), 1):
+        teams = m.get("teams", []); mdate = m.get("date", "")
+        try:
+            ev = espn_event_id(mdate, teams)
+            xi = espn_xi(ev) if ev else {}
+        except Exception:
+            xi = {}
+        if not xi:
+            continue
+        label = f"Match {len(ended) + j} — " + " v ".join(name2short.get(norm(t), t) for t in teams)
+        xi_perf = {}
+        for k, v in xi.items():
+            p = blank_perf(v["name"]); p["played"] = True; xi_perf[k] = p
+        team_players = []
+        for tname in teams:
+            short = name2short.get(norm(tname))
+            if short:
+                team_players += [(short, n, r) for n, r in squads[short]["players"]]
+        assigned, leftover, _ = match_squad_to_perf(team_players, xi_perf)
+        for short, name, role in team_players:
+            played = "Y" if (short, name) in assigned else "N"
+            rows.append([label, mdate, short, name, role, played] + [""] * 22 +
+                        ["ESPN announced XI (toss)", "Y", ""])
+        tmap = {}
+        try:
+            tmap = espn_team_map(ev)
+        except Exception:
+            pass
+        for d in leftover.values():
+            tfull = tmap.get(norm(d["name"])) or d.get("team", "")
+            rows.append([label, mdate, short_of(tfull) or "?", d["name"], "?", "Y"] + [""] * 22 +
+                        ["ESPN announced XI (toss)", "N", ""])
+        n_toss += 1
+    if n_toss:
+        print(f"toss XI written for {n_toss} not-ended match(es)", file=sys.stderr)
+
     with open(out_csv, "w", newline="") as f:
         w = csv.writer(f)
         w.writerow(cols)
