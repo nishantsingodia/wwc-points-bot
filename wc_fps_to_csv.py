@@ -216,8 +216,14 @@ def best_team(name, team_map):
 
 def api(path, cache=True, ttl=None, **params):
     """GET with optional caching. Scorecards are cached (immutable once ended);
-    series_info is NOT in the full run (so re-runs detect newly-completed matches),
-    but the frequent tick caches it with a TTL to stay under cricapi's 100/day cap."""
+    series_info is NOT cached in the full run (so re-runs detect newly-completed matches),
+    but the frequent tick caches it with a TTL to stay under cricapi's 100/day cap.
+
+    RESILIENCE: if the live fetch fails (network error / quota exhausted / cricapi outage)
+    but a previously-cached copy exists, fall back to the STALE copy rather than failing.
+    Scorecards are immutable so a stale hit is exact; a stale series_info just means a
+    brand-new match is scored one cycle late — far better than freezing the whole sheet
+    (the old behaviour aborted the tour, so a cricapi blip left the sheet stale anyway)."""
     os.makedirs(CACHE, exist_ok=True)
     qs = "&".join(f"{k}={v}" for k, v in params.items())
     key = re.sub(r"[^a-z0-9]", "_", f"{path}_{qs}".lower())
@@ -226,10 +232,17 @@ def api(path, cache=True, ttl=None, **params):
     if cache and fresh:
         return json.load(open(fp))
     url = f"{API}/{path}?apikey={KEY}&{qs}"
-    with urllib.request.urlopen(url, timeout=30) as r:
-        data = json.load(r)
+    try:
+        with urllib.request.urlopen(url, timeout=30) as r:
+            data = json.load(r)
+    except Exception as e:
+        data = {"status": "failure", "reason": f"fetch error: {e}"}
     if data.get("status") == "success":
         json.dump(data, open(fp, "w"))
+    elif os.path.exists(fp):
+        # live fetch failed but we have a cached copy -> use it (stale, but keeps the sheet live)
+        print(f"  api({path}): live fetch failed ({data.get('reason','')}); using cached copy", file=sys.stderr)
+        data = json.load(open(fp))
     time.sleep(0.4)
     return data
 
