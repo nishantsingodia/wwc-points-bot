@@ -6,6 +6,48 @@
 
 ---
 
+## ✅ Status — IMPLEMENTED 2026-06-22
+
+Built and verified locally across all three repos. **Identity is GLOBAL, not per-tour** —
+a player is resolved ONCE and reused in every future tour (you flagged this; the design
+below reflects it).
+
+**What shipped**
+- **`wwc-points-bot`** (`fix/unified-name-match`, builds on merged `fix/scoring-reconciliation`):
+  - `registry/players.json` — ONE global identity file, keyed on stable `pid`
+    (`cricsheet_id` when known, else `espn:<id>` / `slug:<name>`). 310 players, 242 with
+    `cricsheet_id`. Aliases = every feed spelling. `registry/manual_aliases.json` holds the
+    handful of genuinely-unlinkable same-player spellings (reviewed once).
+  - `build_registry.py` — harvests identity from the auction DB (`cricsheet_id` + cricsheet
+    initials), ESPN rosters (`espn_id`), cached cricapi, and all 3 repos' existing alias maps.
+    Idempotent + additive; per-tour squad files supply only membership.
+  - `wc_fps_to_csv.py` — deterministic `pid` lookup first (merges split spellings), junk-name
+    filter, **emits a `Player ID` column + canonical name**; fuzzy only as a logged fallback
+    (`registry/UNMATCHED_*.log`).
+- **`wwc-draft`** (`fix/id-based-points-join`): `players-raw.json` backfilled with `pid`
+  (320/326); points joined by **Player ID** first (fuzzy fallback); `getLastPlayedXI` dedupes
+  by pid + keeps first real bat order; self-heal dedupes by pid. Typecheck clean.
+- **`cricket-auction-helper`** (committed locally): `src/lib/registry/` (registry copy + resolver);
+  both pool builders resolve announced names → `cricsheet_id` registry-first (fuzzy fallback).
+  Additive / read-only at match time — the never-rebuild-a-live-pool rule is unaffected. Typecheck clean.
+
+**Verified vs LIVE data** (cricapi+ESPN path): WWC phantom-with-points rows **13 → 2**
+(the 2 are a genuine non-squad player, correctly surfaced); **Wyatt's 195 back on her row**;
+Nimasha / Athapaththu / Tajinder collapse to one `pid` each; `Player ID` populated on 540/542 rows;
+join keys align between `players-raw.json` and the sheet.
+
+**Adding a tour now** (the once-and-for-all workflow): drop the squad file → `python3 build_registry.py`
+(auto-harvests ESPN/DB, extends the GLOBAL registry, never re-does known players) → eyeball
+`registry/UNMAPPED_<tour>.txt` (a handful) → add any genuinely-unlinkable spelling to
+`registry/manual_aliases.json` → re-run. Run `registry/backfill_draft_pids.py` to push pids into the draft.
+
+**Remaining (deploy):** push `wwc-points-bot` `fix/unified-name-match` → main so CI regenerates
+the sheet with `Player ID` (next scheduled run once cricapi's transient outage clears); deploy the
+draft branch after reconciling the unrelated other-session WIP in that repo. The auction is local-only.
+**Note:** `cricket-auction-helper/data/wc_fps_to_csv.py` is now a STALE copy — `wwc-points-bot` is canonical; delete or re-sync it.
+
+---
+
 ## 0. TL;DR — what's wrong and what I recommend
 
 **One root cause, three symptoms.** Player identity is resolved by **fuzzy name-matching in three independent places** (two TypeScript copies + one Python copy), and **no stable player ID flows between the points bot and the draft**. So every match re-gambles on whether a feed's spelling crosses a similarity threshold. When it misses, the same player splits into two rows; when two players share a surname, they collide; when a feed emits junk ("Player Not Found"), it becomes a phantom player.
@@ -64,9 +106,12 @@
 
 ## 2. The unified fix — Player Registry + stable ID
 
-### 2.1 The single source of truth: `registry/<tour>.json`
+### 2.1 The single source of truth: `registry/players.json` (GLOBAL)
 
-One committed file per tour. Anchored on `cricsheet_id` (the key the draft and auction already store), with **every** normalized spelling each feed uses:
+ONE committed global file — identity is permanent, not per-tour (squads change per tour;
+the player doesn't). Keyed on a stable `pid` (`cricsheet_id` when known), with **every**
+normalized spelling each feed uses. A player resolved in one tour is reused in all future
+tours — zero rework. Per-tour `registry/tours/<slug>.json` carries only team membership.
 
 ```json
 {

@@ -53,6 +53,21 @@ jobs:
           WC_CACHE_DIR: api_cache
         run: python wc_fps_to_csv.py
 
+      - name: Surface unmatched player names (registry gaps to close)
+        if: always()
+        run: |
+          # Non-fatal: prints any feed names the global registry didn't resolve
+          # deterministically (fuzzy fallbacks + genuine non-squad players). Add the
+          # real same-player ones to registry/manual_aliases.json and re-run build_registry.py.
+          shopt -s nullglob
+          logs=(registry/UNMATCHED_*.log)
+          if [ ${#logs[@]} -gt 0 ]; then
+            echo "::warning::Registry gaps — review and add aliases:"
+            for f in "${logs[@]}"; do echo "--- $f ---"; cat "$f"; done
+          else
+            echo "No registry gaps — every feed name resolved deterministically."
+          fi
+
       - name: Upload CSV artifacts (backup / debugging)
         uses: actions/upload-artifact@v4
         with:
