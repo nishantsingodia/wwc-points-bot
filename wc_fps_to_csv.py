@@ -97,8 +97,21 @@ AUTO_ALIASES = []       # high-confidence fuzzy hits -> auto-written to the Play
 CONFIRMED = []          # (feed, correct) the user marked Yes in Needs Review -> persist + apply
 PRIOR_CONFIRM = {}      # (tour, feed) -> the user's Yes/No so far (preserved across rewrites)
 PRIOR_CLOSEST = {}      # (tour, feed) -> the Closest Match value last seen (preserve user edits)
+PRIOR_ROLE = {}         # (tour, feed) -> the Role value last seen (preserve user edits)
 ACK = set()             # norm(feed) the user resolved (Yes/No/New) -> stop re-flagging in Needs Review
 CURRENT_TOUR = ""       # set by run_tour so logged items know which tour they came from
+
+def guess_role(p):
+    """Best-guess role from a player's feed stats (so '?' is never shown bare in review)."""
+    if (p.get("stumpings", 0) or 0) > 0:
+        return "WK"
+    bowled = (p.get("balls", 0) or 0) > 0
+    batted = (p.get("b", 0) or 0) > 0 or (p.get("r", 0) or 0) > 0
+    if bowled and batted:
+        return "AR"
+    if bowled:
+        return "BOWL"
+    return "BAT"
 
 def closest_squad(name, team_players):
     """Best-guess closest squad player for an unmatched feed name (surname-weighted), even
@@ -253,9 +266,9 @@ def match_squad_to_perf(team_players, pool):
             guess, gsc = closest_squad(feed_nm, team_players)
             guess = guess if gsc >= 55 else ""   # blank if no plausible squad player (genuine non-squad)
             UNMATCHED_LOG.add(f"REVIEW feed '{feed_nm}' (team {v.get('team', '?')}) — closest: {guess or '(none)'}")
-            # Low-confidence: needs a human Yes/No. Record the best-guess closest squad player.
+            # Low-confidence: needs a human Yes/No. Record the best-guess closest squad player + role.
             REVIEW.append({"tour": CURRENT_TOUR, "team": v.get("team", "?"), "feed": feed_nm,
-                           "kind": "review", "suggestion": guess})
+                           "kind": "review", "suggestion": guess, "role": guess_role(v)})
     return assigned, leftover, set()
 
 def best_team(name, team_map):
@@ -882,13 +895,14 @@ def run_tour(tour):
             pid = resolve_pid(name) or (resolve_pid(d["name"]) if d else "") or ""
             full = PID2DISP.get(pid, name) if pid else name
             if d:
-                # unknown-role leftovers: infer BOWL if they only bowled, so duck/SR isn't misapplied
-                srole = role if role != "?" else ("BOWL" if d.get("balls", 0) > 0 and d.get("b", 0) == 0 else "BAT")
-                s = score(d, srole)
+                # Unknown-role leftovers: show a best-guess role (from their stats) instead of a
+                # bare "?", and score with it so duck/SR/econ aren't misapplied.
+                role_out = role if role != "?" else guess_role(d)
+                s = score(d, role_out)
                 sr = round(d["r"] / d["b"] * 100, 1) if d["b"] else ""
                 econ = round(d["runs_conceded"] / (d["balls"] / 6), 2) if d["balls"] else ""
                 dots_out = d["dots"] if dots_final else ""  # never fill dots from a no-dots source
-                rows.append([label, mdate, short, pid, full, role, "Y",
+                rows.append([label, mdate, short, pid, full, role_out, "Y",
                              d["r"], d["b"], d["4s"], d["6s"], sr, d["dismissal"],
                              round(d["balls"] / 6, 1) if d["balls"] else "",
                              d["maidens"], dots_out, d["runs_conceded"], d["w"], econ,
@@ -1139,8 +1153,10 @@ def read_review_confirmations():
     if not rows:
         return
     hdr = {c.strip(): i for i, c in enumerate(rows[0])}
-    ci = hdr.get("Correct? (Yes/No)", hdr.get("Correct?", 4))
+    # tolerate the old header without "New"/"Role" so a mid-season schema change doesn't lose answers
+    ci = next((hdr[k] for k in ("Correct? (Yes/No/New)", "Correct? (Yes/No)", "Correct?") if k in hdr), 5)
     ti, fi, si = hdr.get("Tour", 0), hdr.get("Feed Name", 2), hdr.get("Closest Match", 3)
+    ri = hdr.get("Role", -1)
     applied = 0
     for r in rows[1:]:
         if len(r) <= max(ci, fi, si):
@@ -1151,6 +1167,8 @@ def read_review_confirmations():
         key = (r[ti].strip() if len(r) > ti else "", feed)
         PRIOR_CONFIRM[key] = r[ci].strip()
         PRIOR_CLOSEST[key] = closest          # preserve any name you typed across rewrites
+        if ri >= 0 and len(r) > ri and r[ri].strip():
+            PRIOR_ROLE[key] = r[ri].strip()   # preserve any role you set
         # "New" (a genuine non-listed player) or "No" (bad guess) -> acknowledge: stop re-flagging.
         if ans in ("no", "n", "new") or closest.lower() == "new":
             ACK.add(norm(feed)); continue
@@ -1200,16 +1218,17 @@ def write_review_tab():
     if sh is None:
         return
     import gspread
-    header = ["Tour", "Team", "Feed Name", "Closest Match", "Correct? (Yes/No/New)"]
+    header = ["Tour", "Team", "Feed Name", "Closest Match", "Role", "Correct? (Yes/No/New)"]
     # Drop anything you've already resolved (Yes/No/New) so the tab only ever shows open items.
     items = [r for r in dedup_review([r for r in REVIEW if r["kind"] == "review"])
              if norm(r["feed"]) not in ACK]
     if items:
         rows = [[r["tour"], r["team"], r["feed"],
                  PRIOR_CLOSEST.get((r["tour"], r["feed"])) or r["suggestion"],   # keep any name you typed
+                 PRIOR_ROLE.get((r["tour"], r["feed"])) or r.get("role", ""),     # keep any role you set
                  PRIOR_CONFIRM.get((r["tour"], r["feed"]), "")] for r in items]
     else:
-        rows = [["—", "", "All players matched cleanly 🎉", "", ""]]
+        rows = [["—", "", "All players matched cleanly 🎉", "", "", ""]]
     try:
         try:
             ws = sh.worksheet(REVIEW_TAB)
