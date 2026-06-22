@@ -93,7 +93,30 @@ UNMATCHED_LOG = set()   # feed names that needed fuzzy / had no squad match -> g
 # Structured review queue (across all tours), written to the sheet's "Needs Review" tab so the
 # rare manual case is fixable WITHOUT code: {tour, team, feed, kind, suggestion}.
 REVIEW = []
+AUTO_ALIASES = []       # high-confidence fuzzy hits -> auto-written to the Player Aliases tab
+CONFIRMED = []          # (feed, correct) the user marked Yes in Needs Review -> persist + apply
+PRIOR_CONFIRM = {}      # (tour, feed) -> the user's Yes/No so far (preserved across rewrites)
 CURRENT_TOUR = ""       # set by run_tour so logged items know which tour they came from
+
+def closest_squad(name, team_players):
+    """Best-guess closest squad player for an unmatched feed name (surname-weighted), even
+    below the match threshold — so 'Needs Review' can say 'is this <X>? Yes/No'."""
+    nn = norm(name); nt = nn.split()
+    if not nt:
+        return ("", 0.0)
+    ln = nt[-1]
+    best, best_sc = "", 0.0
+    for short, sname, role in team_players:
+        st = norm(sname).split()
+        if not st:
+            continue
+        sc = SequenceMatcher(None, nn, norm(sname)).ratio() * 60
+        sc += SequenceMatcher(None, ln, st[-1]).ratio() * 40   # surname similarity dominates
+        if st[-1] == ln:
+            sc += 10
+        if sc > best_sc:
+            best_sc, best = sc, sname
+    return (best, best_sc)
 
 def dedup_review(items):
     """Collapse repeats (a player flagged in several matches) to one row per (tour, feed, kind)."""
@@ -218,16 +241,19 @@ def match_squad_to_perf(team_players, pool):
             assigned[(short, name)] = unresolved[uk]
             used_sq.add((short, name)); used_uk.add(uk)
             feed_nm = unresolved[uk].get("name", uk)
-            UNMATCHED_LOG.add(f"FUZZY  feed '{feed_nm}' -> squad '{name}' (score {sc:.0f}) — add as alias")
-            REVIEW.append({"tour": CURRENT_TOUR, "team": short, "feed": feed_nm,
-                           "kind": "name alias", "suggestion": name})
+            UNMATCHED_LOG.add(f"AUTO   feed '{feed_nm}' -> squad '{name}' (score {sc:.0f})")
+            # High-confidence fuzzy hit: auto-promote to the Player Aliases store (no user action).
+            AUTO_ALIASES.append((feed_nm, name))
     leftover = {k: v for k, v in unresolved.items() if k not in used_uk}
     for k, v in leftover.items():
         if v.get("played"):
             feed_nm = v.get("name", k)
-            UNMATCHED_LOG.add(f"LEFTOVER feed '{feed_nm}' (team {v.get('team', '?')}) — no squad match")
+            guess, gsc = closest_squad(feed_nm, team_players)
+            guess = guess if gsc >= 55 else ""   # blank if no plausible squad player (genuine non-squad)
+            UNMATCHED_LOG.add(f"REVIEW feed '{feed_nm}' (team {v.get('team', '?')}) — closest: {guess or '(none)'}")
+            # Low-confidence: needs a human Yes/No. Record the best-guess closest squad player.
             REVIEW.append({"tour": CURRENT_TOUR, "team": v.get("team", "?"), "feed": feed_nm,
-                           "kind": "not in squad", "suggestion": ""})
+                           "kind": "review", "suggestion": guess})
     return assigned, leftover, set()
 
 def best_team(name, team_map):
@@ -1021,9 +1047,11 @@ def main():
     if FREQUENT and not in_toss_window():
         print("frequent tick: no match in toss window — nothing to do", file=sys.stderr)
         return
-    # No-code manual fixes: merge any aliases the user typed into the sheet's "Player Aliases"
-    # tab (no-op locally / without creds). Then process tours, then publish the review queue.
+    # No-code manual fixes (no-op locally / without creds): load the persistent alias store,
+    # then apply any rows you marked 'Yes' in Needs Review. Then process tours; finally persist
+    # new aliases and republish the review queue.
     load_sheet_aliases()
+    read_review_confirmations()
     tours = load_tours()
     print(f"{len(tours)} tour(s): {', '.join(t['name'] for t in tours)}", file=sys.stderr)
     for t in tours:
@@ -1037,7 +1065,8 @@ def main():
         except Exception as e:
             print(f"!! tour '{t.get('name')}' error: {e}", file=sys.stderr)
     if not FREQUENT:
-        write_review_tab()   # publish unmatched players to the "Needs Review" sheet tab
+        sync_player_aliases()   # persist auto + confirmed aliases into the Player Aliases store
+        write_review_tab()      # publish remaining unmatched players (closest-match + Yes/No)
 
 _GSHEET = None
 def open_gsheet():
@@ -1060,9 +1089,9 @@ ALIASES_TAB = "Player Aliases"   # user-editable: Feed Name -> Correct Player (n
 REVIEW_TAB = "Needs Review"      # bot-written: players that need a human glance
 
 def load_sheet_aliases():
-    """Read the user-editable 'Player Aliases' tab and merge it into the runtime alias map,
-    so a mis-spelled player is fixable with NO code — just a row in the sheet, applied next
-    run. Creates the tab (headers + instructions) the first time so it's ready to fill."""
+    """Read the 'Player Aliases' tab (Feed Name | Correct Player | Source) and merge it into the
+    runtime alias map. This is the persistent alias store — the bot auto-adds high-confidence
+    matches + your confirmed ones, and you can hand-add any row. Created if missing."""
     sh = open_gsheet()
     if sh is None:
         return
@@ -1071,12 +1100,9 @@ def load_sheet_aliases():
         ws = sh.worksheet(ALIASES_TAB)
     except gspread.WorksheetNotFound:
         try:
-            ws = sh.add_worksheet(title=ALIASES_TAB, rows=50, cols=3)
-            ws.update(range_name="A1", values=[
-                ["Feed Name", "Correct Player", "Note"],
-                ["", "", "Left = the spelling shown in 'Needs Review'. Right = the correct squad "
-                         "player's name. Applied automatically on the next refresh — no code needed."],
-            ], value_input_option="RAW")
+            ws = sh.add_worksheet(title=ALIASES_TAB, rows=200, cols=3)
+            ws.update(range_name="A1", values=[["Feed Name", "Correct Player", "Source"]],
+                      value_input_option="RAW")
         except Exception as e:
             print(f"could not create '{ALIASES_TAB}' tab: {e}", file=sys.stderr)
         return
@@ -1090,23 +1116,89 @@ def load_sheet_aliases():
     except Exception as e:
         print(f"could not read '{ALIASES_TAB}' tab: {e}", file=sys.stderr)
 
-def write_review_tab():
-    """Publish the cross-tour review queue to the 'Needs Review' tab — so the rare unmatched
-    player is visible where you work (not buried in CI logs). Rewritten each full run."""
+def read_review_confirmations():
+    """Read the 'Needs Review' tab BEFORE processing. For every row you marked 'Yes' in the
+    'Correct?' column, treat Feed Name -> Closest Match as a confirmed alias: apply it now AND
+    queue it to be saved into Player Aliases (so it sticks). Also remember every Yes/No so the
+    next rewrite preserves your answers."""
     sh = open_gsheet()
     if sh is None:
         return
     import gspread
-    header = ["Tour", "Team", "Feed Name", "Type", "Suggested Player", "How to fix"]
-    items = dedup_review(REVIEW)
+    try:
+        ws = sh.worksheet(REVIEW_TAB)
+    except gspread.WorksheetNotFound:
+        return
+    try:
+        rows = ws.get_all_values()
+    except Exception as e:
+        print(f"could not read '{REVIEW_TAB}' tab: {e}", file=sys.stderr)
+        return
+    if not rows:
+        return
+    hdr = {c.strip(): i for i, c in enumerate(rows[0])}
+    ci = hdr.get("Correct? (Yes/No)", hdr.get("Correct?", 4))
+    ti, fi, si = hdr.get("Tour", 0), hdr.get("Feed Name", 2), hdr.get("Closest Match", 3)
+    applied = 0
+    for r in rows[1:]:
+        if len(r) <= max(ci, fi, si):
+            continue
+        feed, closest, ans = r[fi].strip(), r[si].strip(), r[ci].strip().lower()
+        if not feed:
+            continue
+        PRIOR_CONFIRM[(r[ti].strip() if len(r) > ti else "", feed)] = r[ci].strip()
+        if ans in ("y", "yes") and closest:
+            pid = ALIAS2PID.get(norm(closest))
+            if pid:
+                ALIAS2PID[norm(feed)] = pid
+                CONFIRMED.append((feed, closest))
+                applied += 1
+    if applied:
+        print(f"Applied {applied} confirmed (Yes) alias(es) from '{REVIEW_TAB}'.", file=sys.stderr)
+
+def sync_player_aliases():
+    """Persist the bot's high-confidence auto-matches + your confirmed-Yes rows into the
+    'Player Aliases' store (append-only, deduped) so they resolve deterministically forever
+    and can be folded into the committed registry (fold_review_aliases.py)."""
+    sh = open_gsheet()
+    if sh is None:
+        return
+    import gspread
+    try:
+        ws = sh.worksheet(ALIASES_TAB)
+    except gspread.WorksheetNotFound:
+        return
+    try:
+        existing = ws.get_all_values()
+        have = {norm(r[0]) for r in existing[1:] if r and r[0].strip()}
+        new = []
+        for feed, correct in CONFIRMED:
+            if norm(feed) not in have:
+                new.append([feed, correct, "confirmed"]); have.add(norm(feed))
+        for feed, correct in AUTO_ALIASES:
+            if norm(feed) not in have:
+                new.append([feed, correct, "auto"]); have.add(norm(feed))
+        if new:
+            ws.append_rows(new, value_input_option="RAW")
+            print(f"Saved {len(new)} alias(es) to the '{ALIASES_TAB}' tab.", file=sys.stderr)
+    except Exception as e:
+        print(f"could not update '{ALIASES_TAB}' tab: {e}", file=sys.stderr)
+
+def write_review_tab():
+    """Publish the still-unmatched players to 'Needs Review' as: closest-match guess + a
+    'Correct?' column you answer Yes/No. A Yes is auto-applied next run (then the row drops
+    off). Your prior Yes/No answers are preserved. Rewritten each full run."""
+    sh = open_gsheet()
+    if sh is None:
+        return
+    import gspread
+    header = ["Tour", "Team", "Feed Name", "Closest Match", "Correct? (Yes/No)"]
+    items = dedup_review([r for r in REVIEW if r["kind"] == "review"])
     if items:
-        rows = [[r["tour"], r["team"], r["feed"], r["kind"], r["suggestion"],
-                 ("Add  " + r["feed"] + "  ->  " + r["suggestion"] + "  in the 'Player Aliases' tab"
-                  if r["kind"] == "name alias"
-                  else "If they're actually in the squad, add them; else ignore (shown as an extra row)")]
-                for r in items]
+        rows = [[r["tour"], r["team"], r["feed"], r["suggestion"],
+                 PRIOR_CONFIRM.get((r["tour"], r["feed"]), "")] for r in items]
     else:
-        rows = [["—", "", "All players matched cleanly 🎉", "", "", ""]]
+        rows = [["—", "", "All players matched cleanly 🎉", "", ""]]
     try:
         try:
             ws = sh.worksheet(REVIEW_TAB)
@@ -1114,7 +1206,8 @@ def write_review_tab():
             ws = sh.add_worksheet(title=REVIEW_TAB, rows=len(rows) + 10, cols=len(header) + 1)
         ws.clear()
         ws.update(range_name="A1", values=[header] + rows, value_input_option="RAW")
-        print(f"Wrote {len(items)} review item(s) to the '{REVIEW_TAB}' tab.", file=sys.stderr)
+        print(f"Wrote {len(items)} review item(s) to the '{REVIEW_TAB}' tab "
+              f"(answer 'Correct?' Yes/No; Yes auto-applies next run).", file=sys.stderr)
     except Exception as e:
         print(f"could not write '{REVIEW_TAB}' tab: {e}", file=sys.stderr)
 

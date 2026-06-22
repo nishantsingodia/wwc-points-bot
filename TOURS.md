@@ -96,16 +96,15 @@ repos' historical alias maps. The bot:
 ### Fixing the rare unmatched player — NO code needed
 
 Two tabs in the Google Sheet make manual fixes self-serve:
-- **`Needs Review`** (bot-written each run): the handful of feed names that didn't resolve, with
-  the **type** (`name alias` = same player spelled differently; `not in squad` = a genuine
-  non-listed player) and a **suggested** match + how to fix. You read this in the sheet, not in
-  GitHub logs.
-- **`Player Aliases`** (you edit): two columns, `Feed Name | Correct Player`. Type the feed
-  spelling on the left and the correct squad player on the right; the bot reads this tab at the
-  start of every run and applies it. No commit, no laptop — just a row, then tap 🏏 (or wait for
-  the 2-hourly run).
-- For a `not in squad` player who really should be there, add them to the squad file (they then
-  get a registry entry); otherwise they harmlessly show as an extra row attributed to their team.
+- **`Needs Review`** (bot-written each run): each unresolved player as `Tour | Team | Feed Name |
+  Closest Match | Correct? (Yes/No)`. The bot names the **closest squad player** it can find; you
+  just type **Yes** (it's that player) or **No** (it isn't) in the last column. On the next run a
+  **Yes** is applied automatically — the alias is saved to `Player Aliases` and the row drops off.
+  A blank Closest Match means no plausible squad player → it's genuinely not in your squad (type
+  No, or add them to the squad file if they should be draftable). Your Yes/No answers are preserved.
+- **`Player Aliases`** (the alias store): `Feed Name | Correct Player | Source`. The bot auto-fills
+  high-confidence matches (`auto`) and your confirmed ones (`confirmed`); you can also hand-add any
+  row. Read + applied at the start of every run. No commit, no laptop.
 
 To make fixes **permanent + shared with the draft/auction** (which read the committed registry,
 not the sheet), run `python3 registry/fold_review_aliases.py` — it auto-folds the **confident**
