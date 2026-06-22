@@ -98,6 +98,7 @@ CONFIRMED = []          # (feed, correct) the user marked Yes in Needs Review ->
 PRIOR_CONFIRM = {}      # (tour, feed) -> the user's Yes/No so far (preserved across rewrites)
 PRIOR_CLOSEST = {}      # (tour, feed) -> the Closest Match value last seen (preserve user edits)
 PRIOR_ROLE = {}         # (tour, feed) -> the Role value last seen (preserve user edits)
+ROLE_OVERRIDE = {}      # norm(feed) -> role you set in Needs Review (drives SR/Econ scoring)
 ACK = set()             # norm(feed) the user resolved (Yes/No/New) -> stop re-flagging in Needs Review
 CURRENT_TOUR = ""       # set by run_tour so logged items know which tour they came from
 
@@ -895,9 +896,9 @@ def run_tour(tour):
             pid = resolve_pid(name) or (resolve_pid(d["name"]) if d else "") or ""
             full = PID2DISP.get(pid, name) if pid else name
             if d:
-                # Unknown-role leftovers: show a best-guess role (from their stats) instead of a
-                # bare "?", and score with it so duck/SR/econ aren't misapplied.
-                role_out = role if role != "?" else guess_role(d)
+                # Unknown-role leftovers: use the role you set in Needs Review if any, else a
+                # best-guess from their stats (never a bare "?"). Role drives SR/Econ penalties.
+                role_out = role if role != "?" else (ROLE_OVERRIDE.get(norm(name)) or guess_role(d))
                 s = score(d, role_out)
                 sr = round(d["r"] / d["b"] * 100, 1) if d["b"] else ""
                 econ = round(d["runs_conceded"] / (d["balls"] / 6), 2) if d["balls"] else ""
@@ -1169,6 +1170,9 @@ def read_review_confirmations():
         PRIOR_CLOSEST[key] = closest          # preserve any name you typed across rewrites
         if ri >= 0 and len(r) > ri and r[ri].strip():
             PRIOR_ROLE[key] = r[ri].strip()   # preserve any role you set
+            ro = r[ri].strip().upper()        # and use it to score this player (SR/Econ depend on it)
+            if ro in ("WK", "BAT", "AR", "BOWL"):
+                ROLE_OVERRIDE[norm(feed)] = ro
         # "New" (a genuine non-listed player) or "No" (bad guess) -> acknowledge: stop re-flagging.
         if ans in ("no", "n", "new") or closest.lower() == "new":
             ACK.add(norm(feed)); continue
