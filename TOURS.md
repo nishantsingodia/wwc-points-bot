@@ -93,6 +93,24 @@ repos' historical alias maps. The bot:
   every genuine non-squad leftover to `registry/UNMATCHED_*.log` (surfaced in CI) so the gap can
   be closed once. Identity is global → a player resolved in one tour is resolved in all future ones.
 
+### Fixing the rare unmatched player — NO code needed
+
+Two tabs in the Google Sheet make manual fixes self-serve:
+- **`Needs Review`** (bot-written each run): the handful of feed names that didn't resolve, with
+  the **type** (`name alias` = same player spelled differently; `not in squad` = a genuine
+  non-listed player) and a **suggested** match + how to fix. You read this in the sheet, not in
+  GitHub logs.
+- **`Player Aliases`** (you edit): two columns, `Feed Name | Correct Player`. Type the feed
+  spelling on the left and the correct squad player on the right; the bot reads this tab at the
+  start of every run and applies it. No commit, no laptop — just a row, then tap 🏏 (or wait for
+  the 2-hourly run).
+- For a `not in squad` player who really should be there, add them to the squad file (they then
+  get a registry entry); otherwise they harmlessly show as an extra row attributed to their team.
+
+To make a sheet-alias **permanent + shared with the draft/auction** (which read the committed
+registry, not the sheet), fold it into `registry/manual_aliases.json` and re-run `build_registry.py`
+periodically (or just ask Claude to do it in a session).
+
 ## Gotchas
 - **cricsheet's `t20s` archive only holds internationals** (men's & women's T20Is). A
   franchise league (e.g. MLC) or an ODI tour lives in its OWN cricsheet archive, which must

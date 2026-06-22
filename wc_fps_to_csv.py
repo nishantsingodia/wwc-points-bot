@@ -90,6 +90,35 @@ def load_registry():
 
 ALIAS2PID, PID2DISP = load_registry()
 UNMATCHED_LOG = set()   # feed names that needed fuzzy / had no squad match -> grow the registry
+# Structured review queue (across all tours), written to the sheet's "Needs Review" tab so the
+# rare manual case is fixable WITHOUT code: {tour, team, feed, kind, suggestion}.
+REVIEW = []
+CURRENT_TOUR = ""       # set by run_tour so logged items know which tour they came from
+
+def dedup_review(items):
+    """Collapse repeats (a player flagged in several matches) to one row per (tour, feed, kind)."""
+    seen, out = set(), []
+    for r in items:
+        k = (r["tour"], r["feed"], r["kind"])
+        if k in seen:
+            continue
+        seen.add(k); out.append(r)
+    return out
+
+def add_sheet_aliases(pairs):
+    """Merge user-entered aliases (from the sheet's 'Player Aliases' tab) into ALIAS2PID.
+    pairs: list of (feed_name, correct_player). 'correct_player' is any spelling/pid already
+    known to the registry; we resolve it to its pid so the feed name points at the same player."""
+    n = 0
+    for feed, correct in pairs:
+        if not feed or not correct:
+            continue
+        pid = ALIAS2PID.get(norm(correct)) or (correct.strip() if correct.strip() in PID2DISP else None)
+        if pid:
+            ALIAS2PID[norm(feed)] = pid; n += 1
+        else:
+            print(f"  sheet-alias: '{correct}' not found in registry — skipping '{feed}'", file=sys.stderr)
+    return n
 
 def resolve_pid(name):
     """Deterministic identity lookup: feed/squad name -> stable pid (or None)."""
@@ -188,13 +217,17 @@ def match_squad_to_perf(team_players, pool):
                 continue
             assigned[(short, name)] = unresolved[uk]
             used_sq.add((short, name)); used_uk.add(uk)
-            UNMATCHED_LOG.add(f"FUZZY  feed '{unresolved[uk].get('name', uk)}' -> squad '{name}'"
-                              f" (score {sc:.0f}) — add this spelling as an alias")
+            feed_nm = unresolved[uk].get("name", uk)
+            UNMATCHED_LOG.add(f"FUZZY  feed '{feed_nm}' -> squad '{name}' (score {sc:.0f}) — add as alias")
+            REVIEW.append({"tour": CURRENT_TOUR, "team": short, "feed": feed_nm,
+                           "kind": "name alias", "suggestion": name})
     leftover = {k: v for k, v in unresolved.items() if k not in used_uk}
     for k, v in leftover.items():
         if v.get("played"):
-            UNMATCHED_LOG.add(f"LEFTOVER feed '{v.get('name', k)}' (team {v.get('team', '?')})"
-                              f" — featured but no squad match (add to squad or registry?)")
+            feed_nm = v.get("name", k)
+            UNMATCHED_LOG.add(f"LEFTOVER feed '{feed_nm}' (team {v.get('team', '?')}) — no squad match")
+            REVIEW.append({"tour": CURRENT_TOUR, "team": v.get("team", "?"), "feed": feed_nm,
+                           "kind": "not in squad", "suggestion": ""})
     return assigned, leftover, set()
 
 def best_team(name, team_map):
@@ -702,11 +735,12 @@ def parse_match(mid):
 
 def run_tour(tour):
     """Process ONE tour (its own cricapi+ESPN series + squad list) and write its tab."""
-    global WC_SERIES, ESPN_SERIES, SQUADS_JSON, GSHEET_TAB
+    global WC_SERIES, ESPN_SERIES, SQUADS_JSON, GSHEET_TAB, CURRENT_TOUR
     WC_SERIES = tour["cricapi_series"]
     ESPN_SERIES = tour.get("espn_series", "")
     SQUADS_JSON = tour.get("squads_path", "")
     GSHEET_TAB = tour["tab"]
+    CURRENT_TOUR = tour["name"]
     out_csv = tour.get("out_csv", OUT)
     print(f"=== Tour: {tour['name']}  ->  tab '{GSHEET_TAB}' ===", file=sys.stderr)
 
@@ -915,19 +949,22 @@ def run_tour(tour):
         w.writerows(rows)
     print(f"Wrote {len(rows)} rows -> {out_csv}", file=sys.stderr)
 
-    # Surface every feed name the registry didn't cover deterministically (fuzzy hits +
-    # genuine leftovers) so the registry can be grown once and the gap never recurs.
-    if UNMATCHED_LOG:
+    # Per-tour CI log of feed names the registry didn't cover (fuzzy hits + genuine leftovers).
+    # NOTE: REVIEW/UNMATCHED_LOG accumulate across tours (the cross-tour "Needs Review" sheet tab
+    # is written once in main()), so we filter to THIS tour here and do NOT clear the accumulators.
+    tour_items = dedup_review([r for r in REVIEW if r["tour"] == CURRENT_TOUR])
+    if tour_items:
         log_path = os.path.join(os.path.dirname(__file__), "registry",
                                 f"UNMATCHED_{re.sub(r'[^a-z0-9]+', '_', GSHEET_TAB.lower()).strip('_')}.log")
         try:
             os.makedirs(os.path.dirname(log_path), exist_ok=True)
-            open(log_path, "w").write("\n".join(sorted(UNMATCHED_LOG)) + "\n")
+            open(log_path, "w").write(
+                "\n".join(f"{r['kind']:13} {r['feed']}  ({r['team']})"
+                          + (f" -> {r['suggestion']}" if r['suggestion'] else "") for r in tour_items) + "\n")
         except Exception:
             pass
-        print(f"⚠ {len(UNMATCHED_LOG)} feed name(s) needed fuzzy/had no squad match "
-              f"-> registry/{os.path.basename(log_path)} (add aliases to close the gap)", file=sys.stderr)
-        UNMATCHED_LOG.clear()
+        print(f"⚠ {len(tour_items)} feed name(s) need review -> registry/{os.path.basename(log_path)} "
+              f"(fix no-code in the 'Player Aliases' sheet tab, or registry/manual_aliases.json)", file=sys.stderr)
 
     if GSHEET_ID:
         write_to_gsheet(cols, rows)
@@ -984,6 +1021,9 @@ def main():
     if FREQUENT and not in_toss_window():
         print("frequent tick: no match in toss window — nothing to do", file=sys.stderr)
         return
+    # No-code manual fixes: merge any aliases the user typed into the sheet's "Player Aliases"
+    # tab (no-op locally / without creds). Then process tours, then publish the review queue.
+    load_sheet_aliases()
     tours = load_tours()
     print(f"{len(tours)} tour(s): {', '.join(t['name'] for t in tours)}", file=sys.stderr)
     for t in tours:
@@ -996,20 +1036,97 @@ def main():
             print(f"!! tour '{t.get('name')}' skipped: {e}", file=sys.stderr)
         except Exception as e:
             print(f"!! tour '{t.get('name')}' error: {e}", file=sys.stderr)
+    if not FREQUENT:
+        write_review_tab()   # publish unmatched players to the "Needs Review" sheet tab
+
+_GSHEET = None
+def open_gsheet():
+    """Open the Google spreadsheet once (cached). None if GSHEET_ID/creds are missing."""
+    global _GSHEET
+    if _GSHEET is not None:
+        return _GSHEET
+    creds = os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON", "")
+    if not GSHEET_ID or not creds:
+        return None
+    try:
+        import gspread
+        _GSHEET = gspread.service_account_from_dict(json.loads(creds)).open_by_key(GSHEET_ID)
+    except Exception as e:
+        print(f"gspread open failed: {e}", file=sys.stderr)
+        _GSHEET = None
+    return _GSHEET
+
+ALIASES_TAB = "Player Aliases"   # user-editable: Feed Name -> Correct Player (no-code fix)
+REVIEW_TAB = "Needs Review"      # bot-written: players that need a human glance
+
+def load_sheet_aliases():
+    """Read the user-editable 'Player Aliases' tab and merge it into the runtime alias map,
+    so a mis-spelled player is fixable with NO code — just a row in the sheet, applied next
+    run. Creates the tab (headers + instructions) the first time so it's ready to fill."""
+    sh = open_gsheet()
+    if sh is None:
+        return
+    import gspread
+    try:
+        ws = sh.worksheet(ALIASES_TAB)
+    except gspread.WorksheetNotFound:
+        try:
+            ws = sh.add_worksheet(title=ALIASES_TAB, rows=50, cols=3)
+            ws.update(range_name="A1", values=[
+                ["Feed Name", "Correct Player", "Note"],
+                ["", "", "Left = the spelling shown in 'Needs Review'. Right = the correct squad "
+                         "player's name. Applied automatically on the next refresh — no code needed."],
+            ], value_input_option="RAW")
+        except Exception as e:
+            print(f"could not create '{ALIASES_TAB}' tab: {e}", file=sys.stderr)
+        return
+    try:
+        vals = ws.get_all_values()
+        pairs = [(r[0].strip(), r[1].strip()) for r in vals[1:]
+                 if len(r) >= 2 and r[0].strip() and r[1].strip()]
+        n = add_sheet_aliases(pairs)
+        if n:
+            print(f"Loaded {n} alias(es) from the '{ALIASES_TAB}' sheet tab.", file=sys.stderr)
+    except Exception as e:
+        print(f"could not read '{ALIASES_TAB}' tab: {e}", file=sys.stderr)
+
+def write_review_tab():
+    """Publish the cross-tour review queue to the 'Needs Review' tab — so the rare unmatched
+    player is visible where you work (not buried in CI logs). Rewritten each full run."""
+    sh = open_gsheet()
+    if sh is None:
+        return
+    import gspread
+    header = ["Tour", "Team", "Feed Name", "Type", "Suggested Player", "How to fix"]
+    items = dedup_review(REVIEW)
+    if items:
+        rows = [[r["tour"], r["team"], r["feed"], r["kind"], r["suggestion"],
+                 ("Add  " + r["feed"] + "  ->  " + r["suggestion"] + "  in the 'Player Aliases' tab"
+                  if r["kind"] == "name alias"
+                  else "If they're actually in the squad, add them; else ignore (shown as an extra row)")]
+                for r in items]
+    else:
+        rows = [["—", "", "All players matched cleanly 🎉", "", "", ""]]
+    try:
+        try:
+            ws = sh.worksheet(REVIEW_TAB)
+        except gspread.WorksheetNotFound:
+            ws = sh.add_worksheet(title=REVIEW_TAB, rows=len(rows) + 10, cols=len(header) + 1)
+        ws.clear()
+        ws.update(range_name="A1", values=[header] + rows, value_input_option="RAW")
+        print(f"Wrote {len(items)} review item(s) to the '{REVIEW_TAB}' tab.", file=sys.stderr)
+    except Exception as e:
+        print(f"could not write '{REVIEW_TAB}' tab: {e}", file=sys.stderr)
 
 def write_to_gsheet(cols, rows):
-    """Write cells directly into the Google Sheet tab via a service account.
-    Reads creds JSON from env GOOGLE_SERVICE_ACCOUNT_JSON (CI secret)."""
-    import gspread
-    creds = os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON", "")
-    if not creds:
+    """Write the points rows into this tour's tab via the shared service-account handle."""
+    sh = open_gsheet()
+    if sh is None:
         print("GSHEET_ID set but GOOGLE_SERVICE_ACCOUNT_JSON missing — skipping sheet write.", file=sys.stderr)
         return
-    # Note: a wipe from a failed upstream fetch is prevented earlier (run_tour aborts before
-    # we get here). Reaching here with 0 rows means the series is valid but has no completed
-    # T20Is yet -> we DO write a clean header (e.g. clears stale rows from a format mis-tag).
-    gc = gspread.service_account_from_dict(json.loads(creds))
-    sh = gc.open_by_key(GSHEET_ID)
+    import gspread
+    # A wipe from a failed upstream fetch is prevented earlier (run_tour aborts before here).
+    # Reaching here with 0 rows means a valid series with no completed T20Is yet -> clean header.
     try:
         ws = sh.worksheet(GSHEET_TAB)
     except gspread.WorksheetNotFound:
