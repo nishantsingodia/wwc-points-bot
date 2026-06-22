@@ -96,6 +96,8 @@ REVIEW = []
 AUTO_ALIASES = []       # high-confidence fuzzy hits -> auto-written to the Player Aliases tab
 CONFIRMED = []          # (feed, correct) the user marked Yes in Needs Review -> persist + apply
 PRIOR_CONFIRM = {}      # (tour, feed) -> the user's Yes/No so far (preserved across rewrites)
+PRIOR_CLOSEST = {}      # (tour, feed) -> the Closest Match value last seen (preserve user edits)
+ACK = set()             # norm(feed) the user resolved (Yes/No/New) -> stop re-flagging in Needs Review
 CURRENT_TOUR = ""       # set by run_tour so logged items know which tour they came from
 
 def closest_squad(name, team_players):
@@ -1146,13 +1148,19 @@ def read_review_confirmations():
         feed, closest, ans = r[fi].strip(), r[si].strip(), r[ci].strip().lower()
         if not feed:
             continue
-        PRIOR_CONFIRM[(r[ti].strip() if len(r) > ti else "", feed)] = r[ci].strip()
+        key = (r[ti].strip() if len(r) > ti else "", feed)
+        PRIOR_CONFIRM[key] = r[ci].strip()
+        PRIOR_CLOSEST[key] = closest          # preserve any name you typed across rewrites
+        # "New" (a genuine non-listed player) or "No" (bad guess) -> acknowledge: stop re-flagging.
+        if ans in ("no", "n", "new") or closest.lower() == "new":
+            ACK.add(norm(feed)); continue
+        # "Yes" -> map Feed -> Closest Match (saved to Player Aliases so it sticks).
         if ans in ("y", "yes") and closest:
             pid = ALIAS2PID.get(norm(closest))
             if pid:
                 ALIAS2PID[norm(feed)] = pid
                 CONFIRMED.append((feed, closest))
-                applied += 1
+                ACK.add(norm(feed)); applied += 1
     if applied:
         print(f"Applied {applied} confirmed (Yes) alias(es) from '{REVIEW_TAB}'.", file=sys.stderr)
 
@@ -1192,10 +1200,13 @@ def write_review_tab():
     if sh is None:
         return
     import gspread
-    header = ["Tour", "Team", "Feed Name", "Closest Match", "Correct? (Yes/No)"]
-    items = dedup_review([r for r in REVIEW if r["kind"] == "review"])
+    header = ["Tour", "Team", "Feed Name", "Closest Match", "Correct? (Yes/No/New)"]
+    # Drop anything you've already resolved (Yes/No/New) so the tab only ever shows open items.
+    items = [r for r in dedup_review([r for r in REVIEW if r["kind"] == "review"])
+             if norm(r["feed"]) not in ACK]
     if items:
-        rows = [[r["tour"], r["team"], r["feed"], r["suggestion"],
+        rows = [[r["tour"], r["team"], r["feed"],
+                 PRIOR_CLOSEST.get((r["tour"], r["feed"])) or r["suggestion"],   # keep any name you typed
                  PRIOR_CONFIRM.get((r["tour"], r["feed"]), "")] for r in items]
     else:
         rows = [["—", "", "All players matched cleanly 🎉", "", ""]]

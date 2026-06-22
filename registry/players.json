@@ -1,6 +1,6 @@
 {
  "anchor": "cricsheet_id (pid); espn:/slug: fallback when unknown",
- "count": 310,
+ "count": 318,
  "players": {
   "5d2eda89": {
    "aliases": [
@@ -4431,6 +4431,117 @@
    "espn_id": "1111454",
    "draft_id": 10140,
    "auction_id": 7665
+  },
+  "espn:1464463": {
+   "aliases": [
+    "prema rawat"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Prema Rawat",
+   "cricsheet_id": null,
+   "espn_id": "1464463",
+   "draft_id": null,
+   "auction_id": null
+  },
+  "d58e9bfb": {
+   "aliases": [
+    "a tector",
+    "alice tector"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Alice Tector",
+   "cricsheet_id": "d58e9bfb",
+   "espn_id": "1444444",
+   "draft_id": 7629,
+   "auction_id": 7392
+  },
+  "7027d12f": {
+   "aliases": [
+    "hannah r a rainey",
+    "hannah rainey",
+    "hra rainey"
+   ],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
+   "display": "Hannah Rainey",
+   "cricsheet_id": "7027d12f",
+   "espn_id": "1095834",
+   "draft_id": null,
+   "auction_id": 2279
+  },
+  "slug:asif-mehmood": {
+   "aliases": [
+    "asif mehmood"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Asif Mehmood",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10141,
+   "auction_id": null
+  },
+  "espn:938937": {
+   "aliases": [
+    "ghulam mudassar"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Ghulam Mudassar",
+   "cricsheet_id": null,
+   "espn_id": "938937",
+   "draft_id": 10142,
+   "auction_id": null
+  },
+  "espn:51862": {
+   "aliases": [
+    "afy fletcher",
+    "andre david stephon fletcher",
+    "andre fletcher"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Andre Fletcher",
+   "cricsheet_id": null,
+   "espn_id": "51862",
+   "draft_id": 10143,
+   "auction_id": null
+  },
+  "26ff4c29": {
+   "aliases": [
+    "rj peterson",
+    "russell peterson"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Russell Peterson",
+   "cricsheet_id": "26ff4c29",
+   "espn_id": null,
+   "draft_id": 10145,
+   "auction_id": 662
+  },
+  "8dd02a98": {
+   "aliases": [
+    "dinesh chandimal",
+    "ld chandimal"
+   ],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "display": "Dinesh Chandimal",
+   "cricsheet_id": "8dd02a98",
+   "espn_id": null,
+   "draft_id": 10144,
+   "auction_id": 2051
   }
  }
 }

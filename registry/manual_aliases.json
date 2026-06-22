@@ -302,6 +302,24 @@
       "add": [
         "BMSM Kumari"
       ]
+    },
+    {
+      "match": "Alice Tector",
+      "add": [
+        "A Tector"
+      ]
+    },
+    {
+      "match": "Hannah Rainey",
+      "add": [
+        "Hannah R A Rainey"
+      ]
+    },
+    {
+      "match": "Andre Fletcher",
+      "add": [
+        "Andre David Stephon Fletcher"
+      ]
     }
   ]
 }
