@@ -107,9 +107,11 @@ Two tabs in the Google Sheet make manual fixes self-serve:
 - For a `not in squad` player who really should be there, add them to the squad file (they then
   get a registry entry); otherwise they harmlessly show as an extra row attributed to their team.
 
-To make a sheet-alias **permanent + shared with the draft/auction** (which read the committed
-registry, not the sheet), fold it into `registry/manual_aliases.json` and re-run `build_registry.py`
-periodically (or just ask Claude to do it in a session).
+To make fixes **permanent + shared with the draft/auction** (which read the committed registry,
+not the sheet), run `python3 registry/fold_review_aliases.py` — it auto-folds the **confident**
+`name alias` rows from the Needs Review tab into `registry/manual_aliases.json` (leaving the
+`not in squad` rows for human judgment). Then `python3 build_registry.py` + commit. Doing this
+each tour shrinks Needs Review to just the genuinely-ambiguous handful.
 
 ## Gotchas
 - **cricsheet's `t20s` archive only holds internationals** (men's & women's T20Is). A

@@ -1,8 +1,289 @@
 {
   "_comment": "Hand-curated spellings the auto-matcher genuinely cannot link (one player whose feeds use unrelated names/very long full names). Reviewed ONCE, permanent, global. build_registry.py merges these into registry/players.json on every run. 'match' = any existing alias/display already on the player (used to find their pid); 'add' = extra normalized spellings to attach. To add a new one: run the points bot, read registry/UNMATCHED_*.log, confirm it's the same person, add a line here, re-run build_registry.py.",
   "entries": [
-    { "match": "kaushini nuthyangana", "add": ["edirisooriya mohottilage kaushini nuthyanga heram senavirathna", "emknh senavirathna"] },
-    { "match": "shanjida akther maghla", "add": ["shanjida akter meghla"] },
-    { "match": "tajinder singh", "add": ["tajinder dhillon"] }
+    {
+      "match": "kaushini nuthyangana",
+      "add": [
+        "edirisooriya mohottilage kaushini nuthyanga heram senavirathna",
+        "emknh senavirathna"
+      ]
+    },
+    {
+      "match": "shanjida akther maghla",
+      "add": [
+        "shanjida akter meghla"
+      ]
+    },
+    {
+      "match": "tajinder singh",
+      "add": [
+        "tajinder dhillon",
+        "Tajinder Singh Dhillon"
+      ]
+    },
+    {
+      "match": "Nat Sciver-Brunt",
+      "add": [
+        "NR Sciver-Brunt"
+      ]
+    },
+    {
+      "match": "Linsey Smith",
+      "add": [
+        "LCN Smith"
+      ]
+    },
+    {
+      "match": "Hansima Karunaratne",
+      "add": [
+        "H Karunaratne"
+      ]
+    },
+    {
+      "match": "Mithali Ayodhya",
+      "add": [
+        "M Ayodhya"
+      ]
+    },
+    {
+      "match": "Kirstie Gordon",
+      "add": [
+        "KL Gordon"
+      ]
+    },
+    {
+      "match": "Aimee Maguire",
+      "add": [
+        "AK Maguire"
+      ]
+    },
+    {
+      "match": "Kim Garth",
+      "add": [
+        "KJ Garth"
+      ]
+    },
+    {
+      "match": "Sinalo Jafta",
+      "add": [
+        "S Jafta"
+      ]
+    },
+    {
+      "match": "Heather Siegers",
+      "add": [
+        "HDJ Siegers"
+      ]
+    },
+    {
+      "match": "Iris Zwilling",
+      "add": [
+        "IJR Zwilling"
+      ]
+    },
+    {
+      "match": "Silver Siegers",
+      "add": [
+        "S Siegers"
+      ]
+    },
+    {
+      "match": "Harmanpreet Kaur",
+      "add": [
+        "H Kaur"
+      ]
+    },
+    {
+      "match": "Deepti Sharma",
+      "add": [
+        "DB Sharma"
+      ]
+    },
+    {
+      "match": "Arundhati Reddy",
+      "add": [
+        "A Reddy"
+      ]
+    },
+    {
+      "match": "Shreyanka Patil",
+      "add": [
+        "SR Patil"
+      ]
+    },
+    {
+      "match": "Isabel van der Woning",
+      "add": [
+        "Isabel Woning"
+      ]
+    },
+    {
+      "match": "Mahedi Hasan",
+      "add": [
+        "Quazi Nurul Hasan"
+      ]
+    },
+    {
+      "match": "Mitchell Owen",
+      "add": [
+        "Mitchell J Owen"
+      ]
+    },
+    {
+      "match": "Andries Gous",
+      "add": [
+        "Andries Gustav Stephanus Gous"
+      ]
+    },
+    {
+      "match": "Steven Smith",
+      "add": [
+        "Steven Peter Devereux Smith"
+      ]
+    },
+    {
+      "match": "Glenn Maxwell",
+      "add": [
+        "Glenn James Maxwell"
+      ]
+    },
+    {
+      "match": "Mark Chapman",
+      "add": [
+        "Mark Sinclair Chapman"
+      ]
+    },
+    {
+      "match": "Ian Holland",
+      "add": [
+        "Ian Gabriel Holland"
+      ]
+    },
+    {
+      "match": "Saurabh Netravalkar",
+      "add": [
+        "Saurabh Naresh Netravalkar"
+      ]
+    },
+    {
+      "match": "Tim Robinson",
+      "add": [
+        "Timothy Blake Robinson"
+      ]
+    },
+    {
+      "match": "Lockie Ferguson",
+      "add": [
+        "Lachlan Hammond Ferguson"
+      ]
+    },
+    {
+      "match": "Obus Pienaar",
+      "add": [
+        "Abraham Jacobus Pienaar"
+      ]
+    },
+    {
+      "match": "Unmukt Chand",
+      "add": [
+        "Unmukt Bharat Thakur Chand"
+      ]
+    },
+    {
+      "match": "Andre Russell",
+      "add": [
+        "Andre Dwayne Russell"
+      ]
+    },
+    {
+      "match": "Sunil Narine",
+      "add": [
+        "Sunil Philip Narine"
+      ]
+    },
+    {
+      "match": "Shadley van Schalkwyk",
+      "add": [
+        "Shadley Claude van Schalkwyk"
+      ]
+    },
+    {
+      "match": "Jason Holder",
+      "add": [
+        "Jason Omar Holder"
+      ]
+    },
+    {
+      "match": "Matthew Tromp",
+      "add": [
+        "Matthew Warren Tromp"
+      ]
+    },
+    {
+      "match": "Oliver Peake",
+      "add": [
+        "Oliver John Peake"
+      ]
+    },
+    {
+      "match": "Jack Edwards",
+      "add": [
+        "Jack Richard Edwards"
+      ]
+    },
+    {
+      "match": "Monank Patel",
+      "add": [
+        "Monank Dilipbhai Patel"
+      ]
+    },
+    {
+      "match": "Kieron Pollard",
+      "add": [
+        "Kieron Adrian Pollard"
+      ]
+    },
+    {
+      "match": "Corey Anderson",
+      "add": [
+        "Corey James Anderson"
+      ]
+    },
+    {
+      "match": "Trent Boult",
+      "add": [
+        "Trent Alexander Boult"
+      ]
+    },
+    {
+      "match": "Rushil Ugarkar",
+      "add": [
+        "Rushil Jayraj Ugarkar"
+      ]
+    },
+    {
+      "match": "Nosthush Kenjige",
+      "add": [
+        "Nosthusha Pradeep Kenjige"
+      ]
+    },
+    {
+      "match": "Smit Patel",
+      "add": [
+        "Smit Kamleshbhai Patel"
+      ]
+    },
+    {
+      "match": "Akeal Hosein",
+      "add": [
+        "Akeal Jerome Hosein"
+      ]
+    },
+    {
+      "match": "Karthik Gattepalli",
+      "add": [
+        "Karthik Sagar Gattepalli"
+      ]
+    }
   ]
 }

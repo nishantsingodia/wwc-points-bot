@@ -48,6 +48,7 @@
   },
   "espn:372317": {
    "aliases": [
+    "h kaur",
     "harmanpreet kaur",
     "harmanpreet kaur bhullar"
    ],
@@ -77,6 +78,7 @@
   },
   "espn:597811": {
    "aliases": [
+    "db sharma",
     "deepti bhagwan sharma",
     "deepti sharma"
    ],
@@ -91,6 +93,7 @@
   },
   "a3ead8da": {
    "aliases": [
+    "a reddy",
     "a sharma",
     "arundhati reddy"
    ],
@@ -205,7 +208,8 @@
   "espn:1289948": {
    "aliases": [
     "shreyanka patil",
-    "shreyanka rajesh patil"
+    "shreyanka rajesh patil",
+    "sr patil"
    ],
    "tours": [
     "Women's T20 WC 2026"
@@ -407,7 +411,8 @@
   "espn:418423": {
    "aliases": [
     "kim garth",
-    "kimberley jennifer garth"
+    "kimberley jennifer garth",
+    "kj garth"
    ],
    "tours": [
     "Women's T20 WC 2026"
@@ -465,7 +470,8 @@
   "espn:515905": {
    "aliases": [
     "nat sciver brunt",
-    "natalie ruth sciver brunt"
+    "natalie ruth sciver brunt",
+    "nr sciver brunt"
    ],
    "tours": [
     "Women's T20 WC 2026"
@@ -583,6 +589,7 @@
   },
   "espn:517577": {
    "aliases": [
+    "lcn smith",
     "linsey claire neale smith",
     "linsey smith"
    ],
@@ -752,6 +759,7 @@
   },
   "espn:499254": {
    "aliases": [
+    "s jafta",
     "sinalo jafta"
    ],
    "tours": [
@@ -1607,6 +1615,7 @@
   },
   "espn:631722": {
    "aliases": [
+    "h karunaratne",
     "hansima karunaratne",
     "hiyarage ishani hansima karunaratne"
    ],
@@ -1711,6 +1720,7 @@
   },
   "espn:1503617": {
    "aliases": [
+    "m ayodhya",
     "mithali ayodhya"
    ],
    "tours": [
@@ -1843,7 +1853,7 @@
    ],
    "display": "Fariha Islam Trisna",
    "cricsheet_id": "7b51bfa4",
-   "espn_id": null,
+   "espn_id": "1195124",
    "draft_id": 3128,
    "auction_id": 3128
   },
@@ -2047,7 +2057,8 @@
   "espn:1351945": {
    "aliases": [
     "aimee kate maguire",
-    "aimee maguire"
+    "aimee maguire",
+    "ak maguire"
    ],
    "tours": [
     "Women's T20 WC 2026"
@@ -2232,7 +2243,8 @@
   "espn:577317": {
    "aliases": [
     "kirstie gordon",
-    "kirstie louise gordon"
+    "kirstie louise gordon",
+    "kl gordon"
    ],
    "tours": [
     "Women's T20 WC 2026"
@@ -2333,6 +2345,7 @@
   },
   "espn:577359": {
    "aliases": [
+    "hdj siegers",
     "heather diantha jan siegers",
     "heather siegers"
    ],
@@ -2398,7 +2411,7 @@
    ],
    "display": "Sanya Khurana",
    "cricsheet_id": "9a9a056d",
-   "espn_id": null,
+   "espn_id": "1425899",
    "draft_id": 4891,
    "auction_id": 4891
   },
@@ -2418,6 +2431,7 @@
   },
   "espn:1185795": {
    "aliases": [
+    "ijr zwilling",
     "iris jeane regine zwilling",
     "iris zwilling"
    ],
@@ -2446,6 +2460,7 @@
   },
   "espn:1022083": {
    "aliases": [
+    "s siegers",
     "silver naara louise siegers",
     "silver siegers"
    ],
@@ -2504,7 +2519,8 @@
   "5aa8574b": {
    "aliases": [
     "i van der woning",
-    "isabel van der woning"
+    "isabel van der woning",
+    "isabel woning"
    ],
    "tours": [
     "Women's T20 WC 2026"
@@ -2845,7 +2861,8 @@
   },
   "9dad0f2e": {
    "aliases": [
-    "mahedi hasan"
+    "mahedi hasan",
+    "quazi nurul hasan"
    ],
    "tours": [
     "Australia tour of Bangladesh 2026 (Men T20I)"
@@ -3001,7 +3018,7 @@
    ],
    "display": "Quinton de Kock",
    "cricsheet_id": "372455c4",
-   "espn_id": null,
+   "espn_id": "379143",
    "draft_id": 10034,
    "auction_id": 70
   },
@@ -3015,12 +3032,13 @@
    ],
    "display": "Nicholas Pooran",
    "cricsheet_id": "3241e3fd",
-   "espn_id": null,
+   "espn_id": "604302",
    "draft_id": 10035,
    "auction_id": 156
   },
   "slug:monank-patel": {
    "aliases": [
+    "monank dilipbhai patel",
     "monank patel",
     "nensi patel"
    ],
@@ -3029,13 +3047,14 @@
    ],
    "display": "Monank Patel",
    "cricsheet_id": null,
-   "espn_id": null,
+   "espn_id": "1159641",
    "draft_id": 10036,
    "auction_id": null
   },
   "a757b0d8": {
    "aliases": [
     "ka pollard",
+    "kieron adrian pollard",
     "kieron pollard"
    ],
    "tours": [
@@ -3043,20 +3062,21 @@
    ],
    "display": "Kieron Pollard",
    "cricsheet_id": "a757b0d8",
-   "espn_id": null,
+   "espn_id": "230559",
    "draft_id": 10037,
    "auction_id": 73
   },
   "slug:corey-anderson": {
    "aliases": [
-    "corey anderson"
+    "corey anderson",
+    "corey james anderson"
    ],
    "tours": [
     "Major League Cricket 2026"
    ],
    "display": "Corey Anderson",
    "cricsheet_id": null,
-   "espn_id": null,
+   "espn_id": "277662",
    "draft_id": 10038,
    "auction_id": null
   },
@@ -3070,7 +3090,7 @@
    ],
    "display": "Corbin Bosch",
    "cricsheet_id": "172dff15",
-   "espn_id": null,
+   "espn_id": "594322",
    "draft_id": 10039,
    "auction_id": 381
   },
@@ -3084,13 +3104,14 @@
    ],
    "display": "Sunny Patel",
    "cricsheet_id": "db481029",
-   "espn_id": null,
+   "espn_id": "290719",
    "draft_id": 10040,
    "auction_id": 7650
   },
   "f7d267f7": {
    "aliases": [
     "nosthush kenjige",
+    "nosthusha pradeep kenjige",
     "np kenjige"
    ],
    "tours": [
@@ -3105,6 +3126,7 @@
   "a818c1be": {
    "aliases": [
     "ta boult",
+    "trent alexander boult",
     "trent boult"
    ],
    "tours": [
@@ -3112,13 +3134,14 @@
    ],
    "display": "Trent Boult",
    "cricsheet_id": "a818c1be",
-   "espn_id": null,
+   "espn_id": "277912",
    "draft_id": 10042,
    "auction_id": 79
   },
   "8a58f203": {
    "aliases": [
     "r ugarkar",
+    "rushil jayraj ugarkar",
     "rushil ugarkar"
    ],
    "tours": [
@@ -3126,7 +3149,7 @@
    ],
    "display": "Rushil Ugarkar",
    "cricsheet_id": "8a58f203",
-   "espn_id": null,
+   "espn_id": "1441684",
    "draft_id": 10043,
    "auction_id": 7642
   },
@@ -3140,7 +3163,7 @@
    ],
    "display": "Romario Shepherd",
    "cricsheet_id": "c5aef772",
-   "espn_id": null,
+   "espn_id": "677077",
    "draft_id": 10044,
    "auction_id": 247
   },
@@ -3177,7 +3200,8 @@
     "jasdeep singh",
     "kunwarjeet singh",
     "tajinder dhillon",
-    "tajinder singh"
+    "tajinder singh",
+    "tajinder singh dhillon"
    ],
    "tours": [
     "Major League Cricket 2026"
@@ -3216,6 +3240,7 @@
   },
   "f2c936d7": {
    "aliases": [
+    "mitchell j owen",
     "mitchell owen",
     "mj owen"
    ],
@@ -3231,7 +3256,8 @@
   "d1305df0": {
    "aliases": [
     "ags gous",
-    "andries gous"
+    "andries gous",
+    "andries gustav stephanus gous"
    ],
    "tours": [
     "Major League Cricket 2026"
@@ -3245,6 +3271,7 @@
   "slug:steven-smith": {
    "aliases": [
     "linsey smith",
+    "steven peter devereux smith",
     "steven smith"
    ],
    "tours": [
@@ -3259,6 +3286,7 @@
   "b681e71e": {
    "aliases": [
     "gj maxwell",
+    "glenn james maxwell",
     "glenn maxwell"
    ],
    "tours": [
@@ -3273,6 +3301,7 @@
   "7fa12533": {
    "aliases": [
     "mark chapman",
+    "mark sinclair chapman",
     "ms chapman"
    ],
    "tours": [
@@ -3299,6 +3328,7 @@
   },
   "647a48da": {
    "aliases": [
+    "abraham jacobus pienaar",
     "aj pienaar",
     "obus pienaar"
    ],
@@ -3326,6 +3356,7 @@
   },
   "4167f30b": {
    "aliases": [
+    "ian gabriel holland",
     "ian holland",
     "ig holland"
    ],
@@ -3354,6 +3385,7 @@
   },
   "c8a3f688": {
    "aliases": [
+    "saurabh naresh netravalkar",
     "saurabh netravalkar",
     "sn netravalkar"
    ],
@@ -3382,6 +3414,7 @@
   },
   "slug:lockie-ferguson": {
    "aliases": [
+    "lachlan hammond ferguson",
     "lockie ferguson"
    ],
    "tours": [
@@ -3395,7 +3428,8 @@
   },
   "slug:jack-edwards": {
    "aliases": [
-    "jack edwards"
+    "jack edwards",
+    "jack richard edwards"
    ],
    "tours": [
     "Major League Cricket 2026"
@@ -3452,6 +3486,7 @@
    "aliases": [
     "nensi patel",
     "sk patel",
+    "smit kamleshbhai patel",
     "smit patel"
    ],
    "tours": [
@@ -3459,7 +3494,7 @@
    ],
    "display": "Smit Patel",
    "cricsheet_id": "f93b43dd",
-   "espn_id": null,
+   "espn_id": "532853",
    "draft_id": 10069,
    "auction_id": 6124
   },
@@ -3553,14 +3588,15 @@
   "4d7f517e": {
    "aliases": [
     "aj hosein",
-    "akeal hosein"
+    "akeal hosein",
+    "akeal jerome hosein"
    ],
    "tours": [
     "Major League Cricket 2026"
    ],
    "display": "Akeal Hosein",
    "cricsheet_id": "4d7f517e",
-   "espn_id": null,
+   "espn_id": "530812",
    "draft_id": 10076,
    "auction_id": 745
   },
@@ -3861,6 +3897,7 @@
   },
   "slug:oliver-peake": {
    "aliases": [
+    "oliver john peake",
     "oliver peake"
    ],
    "tours": [
@@ -3959,7 +3996,8 @@
   },
   "slug:tim-robinson": {
    "aliases": [
-    "tim robinson"
+    "tim robinson",
+    "timothy blake robinson"
    ],
    "tours": [
     "Major League Cricket 2026"
@@ -4182,6 +4220,7 @@
   },
   "slug:unmukt-chand": {
    "aliases": [
+    "unmukt bharat thakur chand",
     "unmukt chand"
    ],
    "tours": [
@@ -4189,7 +4228,7 @@
    ],
    "display": "Unmukt Chand",
    "cricsheet_id": null,
-   "espn_id": null,
+   "espn_id": "446499",
    "draft_id": 10124,
    "auction_id": null
   },
@@ -4203,7 +4242,7 @@
    ],
    "display": "Colin Munro",
    "cricsheet_id": "af2c687b",
-   "espn_id": null,
+   "espn_id": "232359",
    "draft_id": 10125,
    "auction_id": 508
   },
@@ -4216,7 +4255,7 @@
    ],
    "display": "Saif Badar",
    "cricsheet_id": "e5d452d7",
-   "espn_id": null,
+   "espn_id": "922967",
    "draft_id": 10126,
    "auction_id": 7638
   },
@@ -4236,6 +4275,7 @@
   "bbd41817": {
    "aliases": [
     "ad russell",
+    "andre dwayne russell",
     "andre russell"
    ],
    "tours": [
@@ -4243,26 +4283,28 @@
    ],
    "display": "Andre Russell",
    "cricsheet_id": "bbd41817",
-   "espn_id": null,
+   "espn_id": "276298",
    "draft_id": 10128,
    "auction_id": 44
   },
   "slug:sunil-narine": {
    "aliases": [
-    "sunil narine"
+    "sunil narine",
+    "sunil philip narine"
    ],
    "tours": [
     "Major League Cricket 2026"
    ],
    "display": "Sunil Narine",
    "cricsheet_id": null,
-   "espn_id": null,
+   "espn_id": "230558",
    "draft_id": 10129,
    "auction_id": null
   },
   "97b0e4ff": {
    "aliases": [
     "sc van schalkwyk",
+    "shadley claude van schalkwyk",
     "shadley van schalkwyk"
    ],
    "tours": [
@@ -4270,13 +4312,14 @@
    ],
    "display": "Shadley van Schalkwyk",
    "cricsheet_id": "97b0e4ff",
-   "espn_id": null,
+   "espn_id": "334621",
    "draft_id": 10130,
    "auction_id": 3351
   },
   "0f721006": {
    "aliases": [
     "jason holder",
+    "jason omar holder",
     "jo holder"
    ],
    "tours": [
@@ -4284,7 +4327,7 @@
    ],
    "display": "Jason Holder",
    "cricsheet_id": "0f721006",
-   "espn_id": null,
+   "espn_id": "391485",
    "draft_id": 10131,
    "auction_id": 311
   },
@@ -4298,7 +4341,7 @@
    ],
    "display": "Carmi le Roux",
    "cricsheet_id": "7a490dec",
-   "espn_id": null,
+   "espn_id": "440894",
    "draft_id": 10132,
    "auction_id": 7643
   },
@@ -4325,7 +4368,7 @@
    ],
    "display": "Rovman Powell",
    "cricsheet_id": null,
-   "espn_id": null,
+   "espn_id": "820351",
    "draft_id": 10135,
    "auction_id": null
   },
@@ -4359,7 +4402,8 @@
   },
   "slug:matthew-tromp": {
    "aliases": [
-    "matthew tromp"
+    "matthew tromp",
+    "matthew warren tromp"
    ],
    "tours": [
     "Major League Cricket 2026"
@@ -4373,6 +4417,7 @@
   "f6c313ea": {
    "aliases": [
     "karthik gattepalli",
+    "karthik sagar gattepalli",
     "ks gattepalli"
    ],
    "tours": [
@@ -4380,7 +4425,7 @@
    ],
    "display": "Karthik Gattepalli",
    "cricsheet_id": "f6c313ea",
-   "espn_id": null,
+   "espn_id": "1111454",
    "draft_id": 10140,
    "auction_id": 7665
   }
