@@ -1,6 +1,6 @@
 {
  "anchor": "cricsheet_id (pid); espn:/slug: fallback when unknown",
- "count": 318,
+ "count": 325,
  "players": {
   "5d2eda89": {
    "aliases": [
@@ -576,8 +576,7 @@
    "aliases": [
     "lauren bell",
     "lauren katie bell",
-    "lk bell",
-    "olivia bell"
+    "lk bell"
    ],
    "tours": [
     "Women's T20 WC 2026"
@@ -1794,8 +1793,7 @@
    "aliases": [
     "sharmin akhter",
     "sharmin akhter supta",
-    "sharmin akter supta",
-    "shorna akter"
+    "sharmin akter supta"
    ],
    "tours": [
     "Women's T20 WC 2026"
@@ -1875,8 +1873,7 @@
   },
   "558cdd64": {
    "aliases": [
-    "fahima khatun",
-    "sultana khatun"
+    "fahima khatun"
    ],
    "tours": [
     "Women's T20 WC 2026"
@@ -2709,8 +2706,7 @@
   "eaa76d3c": {
    "aliases": [
     "cameron donald green",
-    "cameron green",
-    "maddy green"
+    "cameron green"
    ],
    "tours": [
     "Australia tour of Bangladesh 2026 (Men T20I)"
@@ -2808,8 +2804,7 @@
   "bb95564b": {
    "aliases": [
     "mohammad saif hassan",
-    "saif hassan",
-    "tuba hassan"
+    "saif hassan"
    ],
    "tours": [
     "Australia tour of Bangladesh 2026 (Men T20I)"
@@ -2864,8 +2859,7 @@
   },
   "9dad0f2e": {
    "aliases": [
-    "mahedi hasan",
-    "quazi nurul hasan"
+    "mahedi hasan"
    ],
    "tours": [
     "Australia tour of Bangladesh 2026 (Men T20I)"
@@ -2986,12 +2980,13 @@
   "d365d463": {
    "aliases": [
     "nurul hasan",
-    "nurul hasan sohan"
+    "nurul hasan sohan",
+    "quazi nurul hasan"
    ],
    "tours": [
     "Australia tour of Bangladesh 2026 (Men T20I)"
    ],
-   "display": "Nurul Hasan Sohan",
+   "display": "Nurul Hasan",
    "cricsheet_id": "d365d463",
    "espn_id": null,
    "draft_id": 10032,
@@ -3042,8 +3037,7 @@
   "slug:monank-patel": {
    "aliases": [
     "monank dilipbhai patel",
-    "monank patel",
-    "nensi patel"
+    "monank patel"
    ],
    "tours": [
     "Major League Cricket 2026"
@@ -3099,7 +3093,6 @@
   },
   "db481029": {
    "aliases": [
-    "nensi patel",
     "sunny patel"
    ],
    "tours": [
@@ -3185,7 +3178,6 @@
   },
   "a0b76243": {
    "aliases": [
-    "sune luus",
     "t luus",
     "tristan luus"
    ],
@@ -3200,8 +3192,6 @@
   },
   "f9d99806": {
    "aliases": [
-    "jasdeep singh",
-    "kunwarjeet singh",
     "tajinder dhillon",
     "tajinder singh",
     "tajinder singh dhillon"
@@ -3209,10 +3199,10 @@
    "tours": [
     "Major League Cricket 2026"
    ],
-   "display": "Kunwarjeet Singh",
+   "display": "Tajinder Dhillon",
    "cricsheet_id": "f9d99806",
    "espn_id": "772471",
-   "draft_id": 10049,
+   "draft_id": null,
    "auction_id": 7641
   },
   "slug:agni-chopra": {
@@ -3273,7 +3263,6 @@
   },
   "slug:steven-smith": {
    "aliases": [
-    "linsey smith",
     "steven peter devereux smith",
     "steven smith"
    ],
@@ -3487,7 +3476,6 @@
   },
   "f93b43dd": {
    "aliases": [
-    "nensi patel",
     "sk patel",
     "smit kamleshbhai patel",
     "smit patel"
@@ -3690,8 +3678,7 @@
   },
   "b4296080": {
    "aliases": [
-    "milind kumar",
-    "nitish kumar"
+    "milind kumar"
    ],
    "tours": [
     "Major League Cricket 2026"
@@ -3717,8 +3704,7 @@
   },
   "espn:1194775": {
    "aliases": [
-    "amshi de silva",
-    "nilakshika silva"
+    "amshi de silva"
    ],
    "tours": [
     "Major League Cricket 2026"
@@ -3815,10 +3801,8 @@
   },
   "486065b3": {
    "aliases": [
-    "ali khan",
     "hassan khan",
-    "mohammad hassan khan",
-    "rabeya khan"
+    "mohammad hassan khan"
    ],
    "tours": [
     "Major League Cricket 2026"
@@ -4391,8 +4375,7 @@
   },
   "slug:jahmar-hamilton": {
    "aliases": [
-    "jahmar hamilton",
-    "lucy hamilton"
+    "jahmar hamilton"
    ],
    "tours": [
     "Major League Cricket 2026"
@@ -4502,7 +4485,6 @@
   },
   "espn:51862": {
    "aliases": [
-    "afy fletcher",
     "andre david stephon fletcher",
     "andre fletcher"
    ],
@@ -4542,6 +4524,81 @@
    "espn_id": null,
    "draft_id": 10144,
    "auction_id": 2051
+  },
+  "b0af303d": {
+   "aliases": [
+    "kunwarjeet singh"
+   ],
+   "tours": [],
+   "display": "Kunwarjeet Singh",
+   "cricsheet_id": "b0af303d",
+   "auction_id": 7658,
+   "espn_id": null,
+   "draft_id": null
+  },
+  "5ec41cd7": {
+   "aliases": [
+    "jasdeep singh"
+   ],
+   "tours": [],
+   "display": "Jasdeep Singh",
+   "cricsheet_id": "5ec41cd7",
+   "auction_id": 3352,
+   "espn_id": null,
+   "draft_id": null
+  },
+  "b0eaaac6": {
+   "aliases": [
+    "ali khan"
+   ],
+   "tours": [],
+   "display": "Ali Khan",
+   "cricsheet_id": "b0eaaac6",
+   "auction_id": 2443,
+   "espn_id": null,
+   "draft_id": null
+  },
+  "89895ae1": {
+   "aliases": [
+    "shorna akter"
+   ],
+   "tours": [],
+   "display": "Shorna Akter",
+   "cricsheet_id": "89895ae1",
+   "auction_id": 3275,
+   "espn_id": null,
+   "draft_id": null
+  },
+  "fb0c0bcc": {
+   "aliases": [
+    "sultana khatun"
+   ],
+   "tours": [],
+   "display": "Sultana Khatun",
+   "cricsheet_id": "fb0c0bcc",
+   "auction_id": 4963,
+   "espn_id": null,
+   "draft_id": null
+  },
+  "slug:olivia-bell": {
+   "aliases": [
+    "olivia bell"
+   ],
+   "tours": [],
+   "display": "Olivia Bell",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": null
+  },
+  "slug:nitish-kumar": {
+   "aliases": [
+    "nitish kumar"
+   ],
+   "tours": [],
+   "display": "Nitish Kumar",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": null
   }
  }
 }

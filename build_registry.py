@@ -85,6 +85,25 @@ def score_pair(a, b):
     if ta[0] == tb[0]: sc += 6
     return sc
 
+def given_compatible(squad, cand):
+    """Guard against MERGING two different people who merely share a surname (the bug that
+    collapsed Tajinder Singh+Kunwarjeet Singh, Shorna+Sharmin Akter, etc.). A fuzzy DB/ESPN
+    match is only allowed when the GIVEN names are plausibly the same person:
+      • cricsheet initials-style name (handled by cricsheet_match: surname + first initial), OR
+      • given names equal, or one is a prefix/initial of the other.
+    Different FULL given names sharing a surname (kunwarjeet vs tajinder) are rejected."""
+    if cricsheet_match(squad, cand) or cricsheet_match(cand, squad):
+        return True
+    ta, tb = norm(squad).split(), norm(cand).split()
+    if not ta or not tb:
+        return False
+    ga, gb = ta[0], tb[0]
+    if ga == gb:
+        return True
+    if len(ga) <= 2 or len(gb) <= 2:          # an initial form ('S Luus' vs 'Sune Luus')
+        return True
+    return ga.startswith(gb) or gb.startswith(ga)   # danni/daniel-style abbreviations
+
 def best_match(name, candidates, key=lambda x: x):
     best, best_sc, runner = None, 0.0, 0.0
     for c in candidates:
@@ -252,7 +271,7 @@ def build_tour(tour, con, draft_players, bridges, players, idx):
         ns = norm(sname)
         # ESPN match first (gives espn_id + good aliases regardless of identity route)
         em, esc, _ = best_match(sname, espn_ath, key=lambda a: a["name"])
-        espn_id = em["espn_id"] if (em and esc >= THRESH) else None
+        espn_id = em["espn_id"] if (em and esc >= THRESH and given_compatible(sname, em["name"])) else None
         # 0) CROSS-TOUR REUSE: already known globally? (the whole point — zero rework)
         pid = by_alias.get(ns) or (by_espn.get(espn_id) if espn_id else None)
         cs_id = aid = None; db_name = None
@@ -265,7 +284,8 @@ def build_tour(tour, con, draft_players, bridges, players, idx):
             # 2) DB fuzzy (improved: handles initials/hyphens), scoped to country
             if not cs_id:
                 dbm, dbsc, runner = best_match(sname, pools_by_team[tfull], key=lambda r: r["name"])
-                if dbm and dbsc >= THRESH and (dbsc - runner) >= 4:  # confident + unambiguous
+                if (dbm and dbsc >= THRESH and (dbsc - runner) >= 4    # confident + unambiguous
+                        and given_compatible(sname, dbm["name"])):    # + same person, not just same surname
                     cs_id, aid, db_name = dbm.get("cricsheet_id"), dbm.get("id"), dbm.get("name")
             pid = (by_cs.get(cs_id) if cs_id else None) or cs_id or (f"espn:{espn_id}" if espn_id else f"slug:{ns.replace(' ','-')}")
         else:

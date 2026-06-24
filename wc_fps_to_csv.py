@@ -788,6 +788,41 @@ def parse_match(mid):
             # run-outs come from dismissal-text parsing (direct vs assisted), not here
     return perf
 
+# ── Reconciliation (two-stage audit trail) ──────────────────────────────────
+# L1 = cricapi ↔ ESPN during the provisional cut (both are live feeds; the only
+#      fields BOTH carry are runs/wkts/4s/6s — cricapi has no dots/maidens).
+# L2 = cricsheet (official) ↔ the provisional cut, once cricsheet posts. Richer:
+#      cricsheet has everything, so we compare the full fantasy-relevant set.
+RECON_L1 = ["r", "w", "4s", "6s"]
+RECON_L2 = ["r", "w", "4s", "6s", "dots", "maidens", "runs_conceded",
+            "catches", "stumpings", "runouts"]
+RECON_LABEL = {"r": "runs", "w": "wkts", "4s": "4s", "6s": "6s", "dots": "dots",
+               "maidens": "maid", "runs_conceded": "conc", "catches": "ct",
+               "stumpings": "st", "runouts": "ro"}
+
+def recon_gaps(a, b, fields, sep="/"):
+    """Compare two perf dicts on `fields`; return a compact 'field a{sep}b' gap string
+    (empty if every field agrees, or either side is missing). For L1 use sep='/'
+    (cricapi/ESPN — two parallel feeds); for L2 use sep='→' (provisional→official, so the
+    arrow reads as 'was → corrected to')."""
+    if not a or not b:
+        return ""
+    out = []
+    for f in fields:
+        av, bv = (a.get(f, 0) or 0), (b.get(f, 0) or 0)
+        if av != bv:
+            out.append(f"{RECON_LABEL.get(f, f)} {av}{sep}{bv}")
+    return "; ".join(out)
+
+def _by_pid(perf):
+    """Index a perf dict by stable pid (first spelling wins on a pid collision)."""
+    out = {}
+    for v in perf.values():
+        pid = resolve_pid(v.get("name", ""))
+        if pid and pid not in out:
+            out[pid] = v
+    return out
+
 def run_tour(tour):
     """Process ONE tour (its own cricapi+ESPN series + squad list) and write its tab."""
     global WC_SERIES, ESPN_SERIES, SQUADS_JSON, GSHEET_TAB, CURRENT_TOUR
@@ -833,7 +868,8 @@ def run_tour(tour):
             "Overs", "Maidens", "Dots", "Runs Conceded", "Wickets", "Econ",
             "Catches", "Stumpings", "Run Outs",
             "Pts Bat", "Pts Bowl", "Pts Field", "Pts SR", "Pts Econ", "Pts XI",
-            "Fantasy Points", "Source", "In Squad List", "Bat Order"]
+            "Fantasy Points", "Source", "In Squad List", "Bat Order",
+            "L1 Recon", "L2 Recon"]
     rows = []
     n_cs = n_espn = n_api = 0
     for mi, m in enumerate(sorted(ended, key=lambda x: x.get("dateTimeGMT", x.get("date", ""))), 1):
@@ -854,28 +890,46 @@ def run_tour(tour):
         #   else cricapi alone (limited: no dots/XI) if ESPN is unavailable
         cs_path = next((cs_idx[(d, team_key(teams))] for d in date_variants(mdate)
                         if (d, team_key(teams)) in cs_idx), None)
+        # ALWAYS pull ESPN ball-by-ball when available — it feeds dots/XI in the provisional
+        # cut AND the L1/L2 reconciliation columns (we compare every source against the
+        # scorer, even once cricsheet is the official source). ESPN is free/unmetered.
         espn_perf, super_over, team_map = {}, False, {}
+        ev = espn_event_id(mdate, teams)
+        if ev:
+            espn_perf, super_over = parse_espn(ev)
+            espn_perf = {k: v for k, v in espn_perf.items() if v["played"]}
+            team_map = espn_team_map(ev)
+        cs_perf = ({k: v for k, v in parse_cricsheet(cs_path)[0].items() if v["played"]}
+                   if cs_path else {})
         if cs_path:
-            perf = {k: v for k, v in parse_cricsheet(cs_path)[0].items() if v["played"]}
+            perf = cs_perf
             n_cs += 1; dots_final = True; status = "cricsheet · official"
-        else:
-            perf = api_perf
-            ev = espn_event_id(mdate, teams)
-            if ev:
-                espn_perf, super_over = parse_espn(ev)
-                espn_perf = {k: v for k, v in espn_perf.items() if v["played"]}
-                team_map = espn_team_map(ev)
+        elif espn_perf:
             # Not from cricsheet yet -> dots are single-sourced from ESPN with NO validator
             # (cricapi has no dots, cricsheet not posted). Flag the whole row PROVISIONAL so
             # it's clear these numbers may be revised once cricsheet posts (lags ~1-5 days),
             # which then overwrites ESPN dots with exact figures.
-            if espn_perf:
-                n_espn += 1; dots_final = True
-                status = ("cricapi + ESPN dots/XI · ⏳ provisional (dots unverified, awaiting cricsheet)"
-                          + (" · super-over excl" if super_over else ""))
-            else:
-                n_api += 1; dots_final = False
-                status = "cricapi · limited (no dots/XI — ESPN unavailable) · ⏳ provisional (awaiting cricsheet)"
+            perf = api_perf
+            n_espn += 1; dots_final = True
+            status = ("cricapi + ESPN dots/XI · ⏳ provisional (dots unverified, awaiting cricsheet)"
+                      + (" · super-over excl" if super_over else ""))
+        else:
+            perf = api_perf
+            n_api += 1; dots_final = False
+            status = "cricapi · limited (no dots/XI — ESPN unavailable) · ⏳ provisional (awaiting cricsheet)"
+
+        # Per-pid views of each raw source for reconciliation. `prov_pid` reconstructs the
+        # provisional cut (cricapi scorecard + ESPN dots/maidens) so L2 compares cricsheet
+        # against exactly what the provisional rows would have scored.
+        capi_pid, espn_pid, cs_pid = _by_pid(api_perf), _by_pid(espn_perf), _by_pid(cs_perf)
+        prov_pid = {}
+        for pid in set(capi_pid) | set(espn_pid):
+            c, e = capi_pid.get(pid, {}), espn_pid.get(pid, {})
+            base = dict(c) if c else dict(e)
+            if e:
+                base["dots"] = e.get("dots", 0)
+                base["maidens"] = e.get("maidens", base.get("maidens", 0))
+            prov_pid[pid] = base
 
         team_players = []
         for tname in teams:
@@ -886,8 +940,10 @@ def run_tour(tour):
 
         # Merge ESPN (squad-level): inject dot-balls, credit +4 in-XI to players cricapi
         # didn't list, and cross-check runs/wickets — disagreements flagged for review.
+        # ONLY in the provisional path: when cricsheet is the scorer, its dots/maidens are
+        # exact and must NOT be overwritten by ESPN (ESPN is then recon-only).
         xcheck = set()
-        if espn_perf:
+        if espn_perf and not cs_path:
             espn_assigned = match_squad_to_perf(team_players, espn_perf)[0]
             for k, e in espn_assigned.items():
                 base = assigned.get(k)
@@ -904,13 +960,31 @@ def run_tour(tour):
 
         def emit(short, name, role, d, in_squad):
             src = status
-            if (short, name) in xcheck:
-                src += " · ⚠ differs vs ESPN"
             # Resolve identity: stable Player ID + canonical display name (so the row shows
             # ONE consistent name regardless of which feed/spelling supplied the stats, and
             # the draft can join by id instead of fuzzy-matching the name).
             pid = resolve_pid(name) or (resolve_pid(d["name"]) if d else "") or ""
             full = PID2DISP.get(pid, name) if pid else name
+            # ── Two-stage reconciliation ──────────────────────────────────────────
+            # L1: cricapi ↔ ESPN agreement during the provisional cut (both live feeds).
+            #     Value reads 'cricapi/ESPN' (the legend is appended so the sheet is self-explaining).
+            l1 = recon_gaps(capi_pid.get(pid), espn_pid.get(pid), RECON_L1, sep="/")
+            if capi_pid.get(pid) and espn_pid.get(pid):
+                l1_col = ("⚠ " + l1 + " (cricapi/ESPN)") if l1 else "✓ clean"
+            else:
+                l1_col = ""   # only one provisional feed had this player → nothing to cross-check
+            # L2: official cricsheet ↔ the provisional cut, once cricsheet posts.
+            #     Value reads 'was→corrected' (provisional → official) so the revision is obvious.
+            if cs_pid:
+                if pid in cs_pid:
+                    l2 = recon_gaps(prov_pid.get(pid), cs_pid[pid], RECON_L2, sep="→")
+                    l2_col = ("⚠ revised: " + l2) if l2 else "✓ complete"
+                elif pid in prov_pid and prov_pid[pid].get("played"):
+                    l2_col = "⚠ revised: not in official XI"
+                else:
+                    l2_col = "✓ complete"
+            else:
+                l2_col = "⏳ pending official"
             if d:
                 # Unknown-role leftovers: use the role you set in Needs Review if any, else a
                 # best-guess from their stats (never a bare "?"). Role drives SR/Econ penalties.
@@ -925,10 +999,11 @@ def run_tour(tour):
                              d["maidens"], dots_out, d["runs_conceded"], d["w"], econ,
                              d["catches"], d["stumpings"], d["runouts"],
                              s["bat"], s["bowl"], s["field"], s["sr"], s["eco"], s["xi"],
-                             s["total"], src, in_squad, d.get("bat_order") or ""])
+                             s["total"], src, in_squad, d.get("bat_order") or "",
+                             l1_col, l2_col])
             else:
                 rows.append([label, mdate, short, pid, full, role, "N"] + [""] * 22 +
-                            [src, in_squad, ""])
+                            [src, in_squad, "", l1_col, l2_col])
 
         for short, name, role in team_players:
             emit(short, name, role, assigned.get((short, name)), "Y")
@@ -986,7 +1061,7 @@ def run_tour(tour):
             pid = resolve_pid(name) or ""
             full = PID2DISP.get(pid, name) if pid else name
             rows.append([label, mdate, short, pid, full, role, played] + [""] * 22 +
-                        [src, "Y", ""])
+                        [src, "Y", "", "", ""])
         tmap = {}
         try:
             tmap = espn_team_map(ev)
@@ -997,7 +1072,7 @@ def run_tour(tour):
             pid = resolve_pid(d["name"]) or ""
             full = PID2DISP.get(pid, d["name"]) if pid else d["name"]
             rows.append([label, mdate, short_of(tfull) or "?", pid, full, "?", "Y"] + [""] * 22 +
-                        [src, "N", ""])
+                        [src, "N", "", "", ""])
         n_toss += 1
     if n_toss:
         print(f"toss XI written for {n_toss} not-ended match(es)", file=sys.stderr)
