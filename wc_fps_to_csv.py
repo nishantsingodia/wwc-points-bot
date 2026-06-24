@@ -102,6 +102,15 @@ ROLE_OVERRIDE = {}      # norm(feed) -> role you set in Needs Review (drives SR/
 ACK = set()             # norm(feed) the user resolved (Yes/No/New) -> stop re-flagging in Needs Review
 CURRENT_TOUR = ""       # set by run_tour so logged items know which tour they came from
 
+# Identity-anomaly queue (written to the sheet's "Identity Anomalies" tab). These are the
+# OPPOSITE failure from Needs Review: not "this name matched nobody" but "two DIFFERENT players
+# look merged into one id" (false_merge) or "one id appears on two rows in a match" (duplicate_pid).
+# Surfaced for a Yes/No so identity changes are never silent. Separate tab + separate globals so
+# the Needs Review / Player Aliases no-code flow is completely untouched.
+ANOMALIES = []          # {tour, kind, pid, display, context, names, finding}
+PRIOR_ANOMALY = {}      # (tour, pid, kind) -> the user's Yes/No so far (preserved across rewrites)
+ANOMALY_ACK = set()     # (tour, pid, kind) the user answered -> stop re-flagging
+
 def guess_role(p):
     """Best-guess role from a player's feed stats (so '?' is never shown bare in review)."""
     if (p.get("stumpings", 0) or 0) > 0:
@@ -163,6 +172,31 @@ def resolve_pid(name):
     """Deterministic identity lookup: feed/squad name -> stable pid (or None)."""
     return ALIAS2PID.get(norm(name))
 
+def _cricsheet_match(a, b):
+    """True if `b` is a cricsheet-style initials name of `a` (e.g. 'Danni Wyatt' <-> 'DN Wyatt')."""
+    s, d = norm(a).split(), norm(b).split()
+    if not s or len(d) < 2:
+        return False
+    s_surnames = set(s[1:]) or {s[0]}
+    return (d[-1] in s_surnames and len(d[-1]) >= 4 and d[0][0] == s[0][0])
+
+def same_person_plausible(a, b):
+    """Mirror of build_registry.given_compatible: do two names plausibly denote ONE person?
+    Used to tell an INTENDED merge (two spellings of one player, e.g. cricsheet initials) from a
+    SMEAR (two different people who share a surname). Conservative: when unsure, returns False so
+    the anomaly is surfaced rather than hidden."""
+    if _cricsheet_match(a, b) or _cricsheet_match(b, a):
+        return True
+    ta, tb = norm(a).split(), norm(b).split()
+    if not ta or not tb:
+        return False
+    ga, gb = ta[0], tb[0]
+    if ga == gb:
+        return True
+    if len(ga) <= 2 or len(gb) <= 2:          # an initial form ('S Luus' vs 'Sune Luus')
+        return True
+    return ga.startswith(gb) or gb.startswith(ga)
+
 JUNK_NAMES = {"player not found", "sub", "substitute", "not available"}
 def is_junk(name):
     n = norm(name)
@@ -213,13 +247,28 @@ def match_squad_to_perf(team_players, pool):
     # Drop junk feed entries ("Player Not Found", empty, stray punctuation).
     pool = {k: v for k, v in pool.items() if k and not is_junk(v.get("name", k))}
     # 1) index feed entries by pid, merging split spellings of the same player
-    pid_pool, unresolved = {}, {}
+    pid_pool, unresolved, pid_names = {}, {}, {}
     for k, v in pool.items():
         pid = resolve_pid(v.get("name", k))
         if pid:
             pid_pool[pid] = merge_perf(pid_pool.get(pid), v)
+            pid_names.setdefault(pid, []).append(v.get("name", k))   # track who folded into each pid
         else:
             unresolved[k] = v
+    # FALSE-MERGE detector: a pid that absorbed 2+ feed names that are NOT plausibly the same
+    # person means two DIFFERENT players share one id (a registry smear) — merge_perf just SUMMED
+    # their stats. Surface it (don't silently sum). Intended merges (one player, two spellings)
+    # pass same_person_plausible and are NOT flagged.
+    for pid, names in pid_names.items():
+        uniq = sorted({norm(n) for n in names if n})
+        if len(uniq) > 1:
+            incompatible = any(not same_person_plausible(uniq[0], n) for n in uniq[1:])
+            if incompatible:
+                ANOMALIES.append({"tour": CURRENT_TOUR, "kind": "false_merge", "pid": pid,
+                                  "display": PID2DISP.get(pid, pid), "context": CURRENT_TOUR,
+                                  "names": [n for n in names if n],
+                                  "finding": "feed spellings " + " / ".join(sorted(set(names)))
+                                             + " all resolve to one id -> their stats were summed"})
     assigned, used_pid, used_uk = {}, set(), set()
     pending = []  # squad players the registry couldn't resolve to an available feed pid
     for short, name, role in team_players:
@@ -1013,6 +1062,22 @@ def run_tour(tour):
             tfull = team_map.get(norm(d["name"])) or best_team(d["name"], team_map) or d.get("team", "")
             short = short_of(tfull) or "?"
             emit(short, d["name"], "?", d, "N")
+        # DUPLICATE-PID detector: two distinct squad/feed rows resolving to one pid IN THIS MATCH
+        # (the original "two Wyatt rows" symptom). Surface for a Yes/No instead of letting one
+        # player silently shadow another. Distinct names only (same name twice is just the feed).
+        pid_rows = {}
+        for short, name, role in team_players:
+            p = resolve_pid(name)
+            if p: pid_rows.setdefault(p, set()).add(norm(name))
+        for d in leftover.values():
+            p = resolve_pid(d["name"])
+            if p: pid_rows.setdefault(p, set()).add(norm(d["name"]))
+        for p, names in pid_rows.items():
+            if len(names) > 1:
+                ANOMALIES.append({"tour": CURRENT_TOUR, "kind": "duplicate_pid", "pid": p,
+                                  "display": PID2DISP.get(p, p), "context": label,
+                                  "names": sorted(names),
+                                  "finding": "2+ rows share this id in one match: " + ", ".join(sorted(names))})
     print(f"sources: {n_cs} cricsheet(official), {n_espn} cricapi+ESPN, {n_api} cricapi-only", file=sys.stderr)
 
     # ── Toss-time announced XI (matches NOT yet ended) ───────────────────────────
@@ -1195,6 +1260,8 @@ def open_gsheet():
 
 ALIASES_TAB = "Player Aliases"   # user-editable: Feed Name -> Correct Player (no-code fix)
 REVIEW_TAB = "Needs Review"      # bot-written: players that need a human glance
+ANOMALY_TAB = "Identity Anomalies"  # bot-written: detected merges/duplicates + the audit of past splits
+SPLITS_PATH = os.path.join(os.path.dirname(__file__), "registry", "identity_splits.json")
 
 def load_sheet_aliases():
     """Read the 'Player Aliases' tab (Feed Name | Correct Player | Source) and merge it into the
