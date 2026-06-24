@@ -416,6 +416,8 @@ def parse_cricsheet(path):
         for n in plist:
             p = get(n); p["played"] = True; p["team"] = p["team"] or tname
     for inn in d.get("innings", []):
+        if inn.get("super_over"):
+            continue  # super-over deliveries score no fantasy points (match ESPN's period>2 skip)
         bat_pos = 0  # batting order = order players first appear at the crease this innings
         def crease(nm):
             nonlocal bat_pos
@@ -429,6 +431,9 @@ def parse_cricsheet(path):
                 rb = dl.get("runs", {}).get("batter", 0); rt = dl.get("runs", {}).get("total", 0)
                 ex = dl.get("extras", {}); is_wide = "wides" in ex; is_nb = "noballs" in ex
                 legald = not is_wide and not is_nb
+                # Runs CHARGED TO THE BOWLER exclude byes/leg-byes (the keeper's leak, not the
+                # bowler's) — this drives economy, maidens and dots. Wides/no-balls ARE charged.
+                bcharged = rt - (ex.get("byes", 0) or 0) - (ex.get("legbyes", 0) or 0)
                 if over_bowler is None: over_bowler = dl["bowler"]
                 # register striker then non-striker so openers get positions 1 & 2
                 crease(dl["batter"])
@@ -439,10 +444,10 @@ def parse_cricsheet(path):
                 if rb == 4: pb["4s"] += 1
                 elif rb == 6: pb["6s"] += 1
                 pw = get(dl["bowler"]); pw["played"] = True
-                pw["runs_conceded"] += rt
+                pw["runs_conceded"] += bcharged
                 if legald:
-                    pw["balls"] += 1; legal += 1; over_runs += rt
-                    if rt == 0: pw["dots"] += 1
+                    pw["balls"] += 1; legal += 1; over_runs += bcharged
+                    if bcharged == 0: pw["dots"] += 1
                 for w in dl.get("wickets", []):
                     kind = w.get("kind", ""); fs = w.get("fielders", [])
                     po = get(w.get("player_out", "")); po["dismissed"] = True; po["dismissal"] = kind
@@ -455,6 +460,8 @@ def parse_cricsheet(path):
                         for fi in fs:
                             fn = fi.get("name", "")
                             if fn and fn != dl["bowler"]: get(fn)["catches"] += 1
+                    if kind == "caught and bowled":   # the bowler caught it — credit the catch too
+                        pw["catches"] += 1
                     if kind == "stumped":
                         for fi in fs:
                             if fi.get("name"): get(fi["name"])["stumpings"] += 1
@@ -598,28 +605,34 @@ def parse_espn(event_id):
                 pb["6s"] += 1
         if bw:
             pw = get(bw); pw["played"] = True
+            # Runs charged to the bowler exclude byes/leg-byes (drives economy, maidens, dots).
+            bcharged = 0 if desc in ("bye", "leg bye") else sv
             if legal:
                 pw["balls"] += 1
-            if desc not in ("bye", "leg bye"):
-                pw["runs_conceded"] += sv
-            if legal and sv == 0:
+            pw["runs_conceded"] += bcharged
+            if legal and bcharged == 0:
                 pw["dots"] += 1
             ok = (per, it.get("over", {}).get("number"))
             o = overs.setdefault(ok, {"legal": 0, "runs": 0, "bowler": bw})
             o["bowler"] = bw
             if legal:
-                o["legal"] += 1; o["runs"] += sv
+                o["legal"] += 1; o["runs"] += bcharged
         dis = it.get("dismissal") or {}
         if dis.get("dismissal"):
             typ = (dis.get("type") or "").lower()
             if bt:
                 pb = get(bt); pb["dismissed"] = True; pb["dismissal"] = it.get("shortText", typ)
-            if bw and typ not in ("run out", "retired hurt", "retired not out", "obstructing the field"):
+            if bw and typ not in ("run out", "retired hurt", "retired not out",
+                                  "retired out", "obstructing the field", "hit wicket"):
                 pw = get(bw); pw["w"] += 1
                 if typ in ("bowled", "lbw"):
                     pw["lbwb"] += 1
+            elif bw and typ == "hit wicket":   # bowler's wicket (no lbw/bowled bonus)
+                get(bw)["w"] += 1
             fld = (dis.get("fielder", {}).get("athlete") or {}).get("fullName")
-            if typ == "caught" and fld and norm(fld) != norm(bw or ""):
+            if typ == "caught and bowled" or (typ == "caught" and fld and norm(fld) == norm(bw or "")):
+                if bw: get(bw)["catches"] += 1     # caught off own bowling — credit the catch
+            elif typ == "caught" and fld and norm(fld) != norm(bw or ""):
                 get(fld)["catches"] += 1
             elif typ == "stumped" and fld:
                 get(fld)["stumpings"] += 1
@@ -880,10 +893,13 @@ def run_tour(tour):
                 base = assigned.get(k)
                 if base:
                     base["dots"] = e["dots"]                      # exact dots from ESPN
-                    if base.get("r", 0) != e.get("r", 0) or base.get("w", 0) != e.get("w", 0):
+                    base["maidens"] = e.get("maidens", base.get("maidens", 0))  # + maidens (cricapi has none)
+                    if (base.get("r", 0) != e.get("r", 0) or base.get("w", 0) != e.get("w", 0)
+                            or base.get("runs_conceded", 0) != e.get("runs_conceded", 0)):
                         xcheck.add(k)                             # cricapi vs ESPN disagree
                 elif e.get("played"):
-                    np = blank_perf(e["name"]); np["played"] = True; np["dots"] = e.get("dots", 0)
+                    np = blank_perf(e["name"]); np["played"] = True
+                    np["dots"] = e.get("dots", 0); np["maidens"] = e.get("maidens", 0)
                     assigned[k] = np                              # in XI, no cricapi line -> +4
 
         def emit(short, name, role, d, in_squad):
