@@ -3115,7 +3115,7 @@
    ],
    "display": "Nosthush Kenjige",
    "cricsheet_id": "f7d267f7",
-   "espn_id": null,
+   "espn_id": "1041679",
    "draft_id": 10041,
    "auction_id": 2441
   },
@@ -3242,7 +3242,7 @@
    ],
    "display": "Mitchell Owen",
    "cricsheet_id": "f2c936d7",
-   "espn_id": null,
+   "espn_id": "1213979",
    "draft_id": 10051,
    "auction_id": 735
   },
@@ -3257,7 +3257,7 @@
    ],
    "display": "Andries Gous",
    "cricsheet_id": "d1305df0",
-   "espn_id": null,
+   "espn_id": "485379",
    "draft_id": 10052,
    "auction_id": 2436
   },
@@ -3271,7 +3271,7 @@
    ],
    "display": "Steven Smith",
    "cricsheet_id": null,
-   "espn_id": null,
+   "espn_id": "267192",
    "draft_id": 10053,
    "auction_id": null
   },
@@ -3286,7 +3286,7 @@
    ],
    "display": "Glenn Maxwell",
    "cricsheet_id": "b681e71e",
-   "espn_id": null,
+   "espn_id": "325026",
    "draft_id": 10054,
    "auction_id": 170
   },
@@ -3301,7 +3301,7 @@
    ],
    "display": "Mark Chapman",
    "cricsheet_id": "7fa12533",
-   "espn_id": null,
+   "espn_id": "438563",
    "draft_id": 10055,
    "auction_id": 2024
   },
@@ -3314,7 +3314,7 @@
    ],
    "display": "Mukhtar Ahmed",
    "cricsheet_id": "456f6d99",
-   "espn_id": null,
+   "espn_id": "556916",
    "draft_id": 10056,
    "auction_id": 3451
   },
@@ -3342,7 +3342,7 @@
    ],
    "display": "Marco Jansen",
    "cricsheet_id": null,
-   "espn_id": null,
+   "espn_id": "696401",
    "draft_id": 10058,
    "auction_id": null
   },
@@ -3357,7 +3357,7 @@
    ],
    "display": "Ian Holland",
    "cricsheet_id": "4167f30b",
-   "espn_id": null,
+   "espn_id": "334340",
    "draft_id": 10059,
    "auction_id": 1070
   },
@@ -3386,7 +3386,7 @@
    ],
    "display": "Saurabh Netravalkar",
    "cricsheet_id": "c8a3f688",
-   "espn_id": null,
+   "espn_id": "398513",
    "draft_id": 10061,
    "auction_id": 1069
   },
@@ -3414,7 +3414,7 @@
    ],
    "display": "Lockie Ferguson",
    "cricsheet_id": null,
-   "espn_id": null,
+   "espn_id": "493773",
    "draft_id": 10063,
    "auction_id": null
   },
@@ -3428,7 +3428,7 @@
    ],
    "display": "Jack Edwards",
    "cricsheet_id": null,
-   "espn_id": null,
+   "espn_id": "1088610",
    "draft_id": 10064,
    "auction_id": null
   },
@@ -3850,7 +3850,7 @@
    ],
    "display": "Haris Rauf",
    "cricsheet_id": "24bb1c2f",
-   "espn_id": null,
+   "espn_id": "1161606",
    "draft_id": 10095,
    "auction_id": 3186
   },
@@ -3892,7 +3892,7 @@
    ],
    "display": "Oliver Peake",
    "cricsheet_id": null,
-   "espn_id": null,
+   "espn_id": "1418371",
    "draft_id": 10100,
    "auction_id": null
   },
@@ -3991,7 +3991,7 @@
    ],
    "display": "Tim Robinson",
    "cricsheet_id": null,
-   "espn_id": null,
+   "espn_id": "1290929",
    "draft_id": 10107,
    "auction_id": null
   },
@@ -4396,7 +4396,7 @@
    ],
    "display": "Matthew Tromp",
    "cricsheet_id": null,
-   "espn_id": null,
+   "espn_id": "1339100",
    "draft_id": 10139,
    "auction_id": null
   },
@@ -4466,7 +4466,7 @@
    ],
    "display": "Asif Mehmood",
    "cricsheet_id": null,
-   "espn_id": null,
+   "espn_id": "827423",
    "draft_id": 10141,
    "auction_id": null
   },
@@ -4529,76 +4529,92 @@
    "aliases": [
     "kunwarjeet singh"
    ],
-   "tours": [],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
    "display": "Kunwarjeet Singh",
    "cricsheet_id": "b0af303d",
    "auction_id": 7658,
    "espn_id": null,
-   "draft_id": null
+   "draft_id": 10049
   },
   "5ec41cd7": {
    "aliases": [
     "jasdeep singh"
    ],
-   "tours": [],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
    "display": "Jasdeep Singh",
    "cricsheet_id": "5ec41cd7",
    "auction_id": 3352,
-   "espn_id": null,
-   "draft_id": null
+   "espn_id": "772471",
+   "draft_id": 10114
   },
   "b0eaaac6": {
    "aliases": [
     "ali khan"
    ],
-   "tours": [],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
    "display": "Ali Khan",
    "cricsheet_id": "b0eaaac6",
    "auction_id": 2443,
    "espn_id": null,
-   "draft_id": null
+   "draft_id": 10133
   },
   "89895ae1": {
    "aliases": [
     "shorna akter"
    ],
-   "tours": [],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
    "display": "Shorna Akter",
    "cricsheet_id": "89895ae1",
    "auction_id": 3275,
-   "espn_id": null,
-   "draft_id": null
+   "espn_id": "1352206",
+   "draft_id": 3275
   },
   "fb0c0bcc": {
    "aliases": [
     "sultana khatun"
    ],
-   "tours": [],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
    "display": "Sultana Khatun",
    "cricsheet_id": "fb0c0bcc",
    "auction_id": 4963,
-   "espn_id": null,
-   "draft_id": null
+   "espn_id": "1371855",
+   "draft_id": 4963
   },
   "slug:olivia-bell": {
    "aliases": [
     "olivia bell"
    ],
-   "tours": [],
+   "tours": [
+    "Women's T20 WC 2026"
+   ],
    "display": "Olivia Bell",
    "cricsheet_id": null,
    "espn_id": null,
-   "draft_id": null
+   "draft_id": 3298,
+   "auction_id": null
   },
   "slug:nitish-kumar": {
    "aliases": [
     "nitish kumar"
    ],
-   "tours": [],
+   "tours": [
+    "Major League Cricket 2026"
+   ],
    "display": "Nitish Kumar",
    "cricsheet_id": null,
    "espn_id": null,
-   "draft_id": null
+   "draft_id": 10137,
+   "auction_id": null
   }
  }
 }

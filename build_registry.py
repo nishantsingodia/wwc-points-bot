@@ -291,26 +291,36 @@ def build_tour(tour, con, draft_players, bridges, players, idx):
         else:
             n_reused += 1
 
-        # draft display + id
+        # draft display + id. The given_compatible() guard is applied to EVERY fuzzy source
+        # below (draft/ESPN/cricapi) — NOT just to id resolution — so a wrong same-surname
+        # match can never contribute its NAME as an alias and silently re-merge two people
+        # (the bug that re-smeared Kunwarjeet/Tajinder/Shorna on an earlier rebuild).
         dpool = [p for p in draft_players if p.get("team_code") == short]
         dm, dsc, _ = best_match(sname, dpool or draft_players, key=lambda p: p.get("name", ""))
-        draft_id = dm.get("id") if (dm and dsc >= THRESH) else None
-        display = (dm.get("name") if (dm and dsc >= THRESH) else None) or sname
+        dm_ok = bool(dm and dsc >= THRESH and given_compatible(sname, dm.get("name", "")))
+        draft_id = dm.get("id") if dm_ok else None
+        display = (dm.get("name") if dm_ok else None) or sname
 
         e = players.get(pid, {"aliases": [], "tours": []})
         al = set(e.get("aliases", [])); al.add(ns); al.add(norm(display))
         if db_name: al.add(norm(db_name))
-        if em and esc >= THRESH:
+        if em and esc >= THRESH and given_compatible(sname, em["name"]):
             al.add(norm(em["name"])); al.add(norm(em["display"]))
         # cricapi spelling
         cm, csc, _ = best_match(sname, capi, key=lambda x: x["n"])
-        if cm and csc >= THRESH: al.add(norm(cm["n"]))
+        if cm and csc >= THRESH and given_compatible(sname, cm["n"]): al.add(norm(cm["n"]))
         e["display"] = e.get("display") or display
         e["cricsheet_id"] = e.get("cricsheet_id") or cs_id
         e["espn_id"] = e.get("espn_id") or espn_id
         e["draft_id"] = e.get("draft_id") or draft_id
         e["auction_id"] = e.get("auction_id") or aid
-        e["aliases"] = sorted(a for a in al if a)
+        # INVARIANT: every alias belongs to exactly ONE pid. Never claim an alias that is
+        # already owned by a DIFFERENT player — this is the exact, non-heuristic backstop that
+        # stops a fuzzy match re-stealing a split player's name (e.g. Andre's slot grabbing
+        # 'afy fletcher' from Afy, or Sharmin grabbing 'shorna akter' from Shorna) and silently
+        # re-merging them on a rebuild. (given_compatible above stops adding NEW wrong aliases;
+        # this stops re-claiming ones already correctly assigned elsewhere.)
+        e["aliases"] = sorted(a for a in al if a and by_alias.get(a, pid) == pid)
         if tour["name"] not in e["tours"]: e["tours"].append(tour["name"])
         players[pid] = e
         # keep indices fresh for same-run reuse
