@@ -1225,6 +1225,7 @@ def main():
     # new aliases and republish the review queue.
     load_sheet_aliases()
     read_review_confirmations()
+    read_anomaly_confirmations()   # record Yes/No on identity anomalies (read-only on live identity)
     tours = load_tours()
     print(f"{len(tours)} tour(s): {', '.join(t['name'] for t in tours)}", file=sys.stderr)
     for t in tours:
@@ -1240,6 +1241,7 @@ def main():
     if not FREQUENT:
         sync_player_aliases()   # persist auto + confirmed aliases into the Player Aliases store
         write_review_tab()      # publish remaining unmatched players (closest-match + Yes/No)
+        write_anomaly_tab()     # publish detected merges/dupes + the audit of past splits (Yes/No)
 
 _GSHEET = None
 def open_gsheet():
@@ -1344,6 +1346,64 @@ def read_review_confirmations():
     if applied:
         print(f"Applied {applied} confirmed (Yes) alias(es) from '{REVIEW_TAB}'.", file=sys.stderr)
 
+def _load_splits():
+    try:
+        return json.load(open(SPLITS_PATH))
+    except Exception:
+        return {"splits": []}
+
+def read_anomaly_confirmations():
+    """Read the 'Identity Anomalies' tab BEFORE processing. Record every Yes/No answer (preserved
+    across rewrites in PRIOR_ANOMALY), acknowledge answered DETECTED anomalies so they stop
+    re-flagging (ANOMALY_ACK), and persist PAST-SPLIT decisions into registry/identity_splits.json
+    (status confirmed | undo-requested). IMPORTANT: this NEVER mutates live identity
+    (ALIAS2PID/players.json/the points tabs) — a confirmed split/undo is applied out-of-band by
+    build_registry.py + a commit, exactly like the Player Aliases -> registry fold. Read-only on points."""
+    sh = open_gsheet()
+    if sh is None:
+        return
+    import gspread
+    try:
+        ws = sh.worksheet(ANOMALY_TAB)
+    except gspread.WorksheetNotFound:
+        return
+    try:
+        rows = ws.get_all_values()
+    except Exception as e:
+        print(f"could not read '{ANOMALY_TAB}' tab: {e}", file=sys.stderr)
+        return
+    if not rows:
+        return
+    hdr = {c.strip(): i for i, c in enumerate(rows[0])}
+    ti = hdr.get("Type", 1)
+    pi = hdr.get("Player ID", 2)
+    ai = next((hdr[k] for k in ("Different players? (Yes/No)", "Different players?",
+                                "Correct? (Yes/No)") if k in hdr), 6)
+    splits = _load_splits()
+    sp_by_key = {f"split:{s['id']}": s for s in splits.get("splits", [])}
+    changed = False
+    for r in rows[1:]:
+        if len(r) <= max(ti, pi, ai):
+            continue
+        typ, pid, ans = r[ti].strip(), r[pi].strip(), r[ai].strip().lower()
+        if not pid or not ans:
+            continue
+        key = (typ, pid)
+        PRIOR_ANOMALY[key] = r[ai].strip()
+        ANOMALY_ACK.add(key)                      # answered -> stop re-flagging detected anomalies
+        s = sp_by_key.get(pid)                    # past-split rows: persist the decision
+        if s is not None:
+            newst = ("confirmed" if ans in ("y", "yes")
+                     else "undo-requested" if ans in ("n", "no") else s.get("status"))
+            if newst != s.get("status"):
+                s["status"] = newst; changed = True
+    if changed:
+        try:
+            json.dump(splits, open(SPLITS_PATH, "w"), indent=2, ensure_ascii=False)
+            print(f"Recorded split decisions from '{ANOMALY_TAB}' into identity_splits.json.", file=sys.stderr)
+        except Exception as e:
+            print(f"could not update identity_splits.json: {e}", file=sys.stderr)
+
 def sync_player_aliases():
     """Persist the bot's high-confidence auto-matches + your confirmed-Yes rows into the
     'Player Aliases' store (append-only, deduped) so they resolve deterministically forever
@@ -1402,6 +1462,58 @@ def write_review_tab():
               f"(answer 'Correct?' Yes/No; Yes auto-applies next run).", file=sys.stderr)
     except Exception as e:
         print(f"could not write '{REVIEW_TAB}' tab: {e}", file=sys.stderr)
+
+def write_anomaly_tab():
+    """Publish identity anomalies to the 'Identity Anomalies' tab: (1) the AUDIT of past splits
+    (registry/identity_splits.json) still awaiting your vet, and (2) any merge/duplicate the bot
+    DETECTED this run. Each row has a 'Different players? (Yes/No)' column — Yes = they really are
+    distinct people (keep/do the split), No = same person (undo / it's a legit merge). Only OPEN
+    items show (vetted/acked drop off), mirroring Needs Review. Separate tab — never touches the
+    Needs Review / Player Aliases no-code flow."""
+    sh = open_gsheet()
+    if sh is None:
+        return
+    import gspread
+    header = ["Tour", "Type", "Player ID", "Display", "Players / Names Involved",
+              "Bot Finding", "Different players? (Yes/No)", "Status"]
+    rows = []
+    # (1) past splits — show only those not yet confirmed (pending vet or undo-requested)
+    for s in _load_splits().get("splits", []):
+        if s.get("status") == "confirmed":
+            continue
+        key = ("past split", f"split:{s['id']}")
+        players = s.get("players", [])
+        rows.append(["—", "past split", f"split:{s['id']}",
+                     " ↔ ".join(p.get("display", "") for p in players),
+                     " | ".join(f"{p.get('pid')}={p.get('display')}" for p in players),
+                     f"Separated on {s.get('ts','')} — {s.get('reason','')}. "
+                     "'Yes' = correct (different people, keep split). 'No' = same person (undo).",
+                     PRIOR_ANOMALY.get(key, ""), s.get("status", "")])
+    # (2) detected this run — dedup by (kind, pid), drop ones already answered
+    by_key = {}
+    for a in ANOMALIES:
+        by_key.setdefault((a["kind"], a["pid"]), a)
+    for (kind, pid), a in by_key.items():
+        typ = "false merge" if kind == "false_merge" else "duplicate id"
+        if (typ, pid) in ANOMALY_ACK:
+            continue
+        rows.append([a.get("tour", "—"), typ, pid, a.get("display", ""),
+                     ", ".join(a.get("names", [])),
+                     a.get("finding", "") + "  ('Yes' = different players → split; 'No' = same person → ignore)",
+                     PRIOR_ANOMALY.get((typ, pid), ""), "detected this run"])
+    if not rows:
+        rows = [["—", "—", "", "No open identity anomalies 🎉", "", "", "", ""]]
+    try:
+        try:
+            ws = sh.worksheet(ANOMALY_TAB)
+        except gspread.WorksheetNotFound:
+            ws = sh.add_worksheet(title=ANOMALY_TAB, rows=len(rows) + 10, cols=len(header) + 1)
+        ws.clear()
+        ws.update(range_name="A1", values=[header] + rows, value_input_option="RAW")
+        print(f"Wrote {len(rows)} row(s) to the '{ANOMALY_TAB}' tab "
+              f"(answer 'Different players?' Yes/No).", file=sys.stderr)
+    except Exception as e:
+        print(f"could not write '{ANOMALY_TAB}' tab: {e}", file=sys.stderr)
 
 def write_to_gsheet(cols, rows):
     """Write the points rows into this tour's tab via the shared service-account handle."""
