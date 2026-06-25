@@ -38,6 +38,7 @@ auction). Claude does the rest:
      `registry/manual_aliases.json` and re-run. This is the **once-and-for-all** map.
    - If the draft app uses this tour, push the ids into it:
      `python3 registry/backfill_draft_pids.py` (adds `pid` to wwc-draft `players-raw.json`).
+   - **Also register this tour's `espn_series` in the draft app's `lib/espn.ts` → `SERIES_BY_GENDER`** (same id as here). The draft app fetches the announced XI **straight from ESPN** for "Lineups Out" / In-XI / backup-intelligence; if the series id is missing there, lineups silently fall back to the sheet (which for franchise tours like MLC has no announced-XI rows) and never light up. Points still come from the sheet either way; ESPN only supplies *who* is in the XI.
    - Commit `registry/players.json` (+ `manual_aliases.json`) — CI reads the committed file.
 5. **Deploy + verify** — commit & push; trigger a run (🏏 WWC button, or `gh workflow run wwc-points.yml`); confirm the new tab fills, the **`Player ID`** column is populated, and totals look right (Source column clean, no phantom `In Squad List = N` rows for squad players). The CI run also prints any registry gaps (`UNMATCHED_*.log`) as a warning.
 6. **You wire the leaderboard** — add your ownership / C×2-VC×1.5 / leaderboard tabs that
@@ -95,13 +96,20 @@ repos' historical alias maps. The bot:
 
 ### Fixing the rare unmatched player — NO code needed
 
-Two tabs in the Google Sheet make manual fixes self-serve:
+Three tabs in the Google Sheet make manual fixes self-serve:
 - **`Needs Review`** (bot-written each run): each unresolved player as `Tour | Team | Feed Name |
   Closest Match | Correct? (Yes/No)`. The bot names the **closest squad player** it can find; you
   just type **Yes** (it's that player) or **No** (it isn't) in the last column. On the next run a
   **Yes** is applied automatically — the alias is saved to `Player Aliases` and the row drops off.
   A blank Closest Match means no plausible squad player → it's genuinely not in your squad (type
   No, or add them to the squad file if they should be draftable). Your Yes/No answers are preserved.
+  *Catches the under-matching failure: a feed name that matched nobody.*
+- **`Identity Anomalies`** (bot-written each run): the OPPOSITE failure — two *different* players
+  merged into one id (false-merge) or one id on two rows in a match (duplicate), **plus the audit of
+  past splits**, as `… | Different players? (Yes/No)`. **Yes** = they're distinct (keep/do the split);
+  **No** = same person (undo/ignore). READ-ONLY on live identity — your answer is recorded into
+  `registry/identity_splits.json`; the actual split/undo is applied via `build_registry.py` out-of-band.
+  Mental model: Needs Review = *"who is this unmatched name?"*; Identity Anomalies = *"are these really the same person?"*.
 - **`Player Aliases`** (the alias store): `Feed Name | Correct Player | Source`. The bot auto-fills
   high-confidence matches (`auto`) and your confirmed ones (`confirmed`); you can also hand-add any
   row. Read + applied at the start of every run. No commit, no laptop.

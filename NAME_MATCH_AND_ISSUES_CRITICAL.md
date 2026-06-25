@@ -1,8 +1,49 @@
 # Name-Match & Points Issues — Critical Resolution Plan
 
-**Status:** PROPOSED — awaiting your go-ahead on scope/sequencing.
+**Status:** DEPLOYED & live — see the **2026-06-25 update** immediately below for the current state; the original plan + design follow.
 **Scope:** All three projects — `wwc-points-bot` (Python → Google Sheet), `wwc-draft` (Next.js draft), `cricket-auction-helper` (Next.js auction).
 **Author:** Claude, 2026-06-21. Built on first-hand investigation of LIVE sheet data + a cross-repo code audit.
+
+---
+
+## ✅ UPDATE — 2026-06-24/25 (false-merge fix · rebuild-safety · L1/L2 recon · Identity Anomalies tab — all DEPLOYED to `main`)
+
+Three things shipped since the 2026-06-22 implementation below; all live on the sheet.
+
+**1. The OPPOSITE failure was the real root cause of KK5V8L.** §3 framed Tajinder/Sunny as a *split*
+(one player → two rows). Deeper investigation found the inverse: `build_registry`'s fuzzy harvest had
+**collapsed DISTINCT players onto ONE pid** via shared surnames, across genders/tours (men's
+MLC/AUS-BAN pids eating women's WC players). ~15 clusters — e.g. **Tajinder Dhillon + Kunwarjeet Singh
++ Jasdeep Singh all on one pid** (so the draft's pid-dedup collapsed them and Tajinder "vanished");
+**Nensi Patel smeared across Sunny/Monank/Smit**; **Sharmin + Shorna Akter**, whose runs were being
+*summed* into one 55-run row. Each player split to its own `cricsheet_id` pid; **0 aliases now resolve
+to 2+ pids**; verified live (Tajinder distinct; Sharmin 37 / Shorna 18). Player count 310 → **325**.
+
+**2. `build_registry` is now REBUILD-SAFE.** The first surgical fix to `players.json` was NOT durable —
+re-running the build silently re-merged everything. Fixed at source: `given_compatible()` now gates the
+alias-ACCUMULATION (not just id resolution); removed a genuine cross-player smear from
+`manual_aliases.json` (Mahedi Hasan ← Quazi Nurul Hasan); plus an EXACT invariant — *an alias belongs to
+exactly one pid; a build never claims an alias already owned by another player*. **LESSON: always test a
+registry fix by RE-RUNNING `build_registry` + re-checking 0-aliases-under-2-pids — fixing `players.json`
+output alone is undone by the next build.**
+
+**3. Two new sheet surfaces (no-code):**
+- **L1 / L2 Recon columns** on every points tab — a two-stage audit trail. **L1** = cricapi↔ESPN
+  agreement during the provisional cut; **L2** = official cricsheet↔provisional once cricsheet posts
+  (`✓ complete` / `⏳ pending official` / `⚠ revised: was→corrected`). Surfaces source disagreements and
+  cricsheet revisions that were previously silent. (Freshness reality it exposed: cricsheet lags ~10 days
+  for a LIVE tournament — most WWC matches are still provisional, not yet "official", contrary to the
+  1–5 day assumption in §2.2/§4.)
+- **"Identity Anomalies" tab** — the no-code counterpart to **Needs Review**, for the *over*-matching
+  failure. The bot auto-detects false-merges (2+ incompatible feed names → one pid) and duplicate-pid-in-a-match,
+  gated by `same_person_plausible()` so intended merges (cricsheet initials) aren't flagged, and lists them
+  **plus the 15 past splits** with a `Different players? (Yes/No)` column. Mental model:
+  **Needs Review = "who is this unmatched name?"** · **Identity Anomalies = "wait, are these really the same
+  person?"**. READ-ONLY on live identity — confirmations only record into `registry/identity_splits.json`;
+  a confirmed split/undo is applied OUT-OF-BAND via `build_registry`, never mutated mid-run.
+
+**Open follow-up:** wire `build_registry` to ACT on a user's "undo" / confirmed-new-split answer (it currently
+seeds + reads `identity_splits.json` but does not yet auto-apply an undo — that step is still manual).
 
 ---
 
