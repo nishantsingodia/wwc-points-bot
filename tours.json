@@ -25,5 +25,14 @@
     "gender": "male",
     "squads": "mlc_squads.json",
     "ends": "2026-07-18"
+  },
+  {
+    "name": "India tour of Ireland 2026 (Men T20I)",
+    "cricapi_series": "af12cb8f-9b23-4065-a50d-495a307c95f6",
+    "espn_series": "1528532",
+    "tab": "IND v IRE T20 POINTS",
+    "gender": "male",
+    "squads": "india_ireland_squads.json",
+    "ends": "2026-06-28"
   }
 ]

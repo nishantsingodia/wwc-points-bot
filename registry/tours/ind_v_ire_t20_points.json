@@ -1,0 +1,39 @@
+{
+ "tour": "India tour of Ireland 2026 (Men T20I)",
+ "slug": "ind_v_ire_t20_points",
+ "teams": {
+  "MIND": [
+   "f29185a1",
+   "a4cc73aa",
+   "752f7486",
+   "espn:642519",
+   "b0482a1d",
+   "f19ccfad",
+   "a4e37e47",
+   "espn:554691",
+   "244048f6",
+   "77b1aa15",
+   "80b2fb19",
+   "slug:vaibhav-sooryavanshi",
+   "970ddd24",
+   "slug:prasidh-krishna",
+   "df064e1a"
+  ],
+  "MIRE": [
+   "espn:1195143",
+   "slug:ross-adair",
+   "espn:961407",
+   "3979b5e0",
+   "24ad97e7",
+   "espn:1099379",
+   "99cddc5e",
+   "2c54c49b",
+   "espn:1490554",
+   "05de1a5a",
+   "espn:1448923",
+   "4992d6f6",
+   "slug:gavin-hoey",
+   "espn:1278203"
+  ]
+ }
+}

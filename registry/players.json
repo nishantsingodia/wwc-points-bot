@@ -1,6 +1,6 @@
 {
  "anchor": "cricsheet_id (pid); espn:/slug: fallback when unknown",
- "count": 325,
+ "count": 354,
  "players": {
   "5d2eda89": {
    "aliases": [
@@ -4614,6 +4614,405 @@
    "cricsheet_id": null,
    "espn_id": null,
    "draft_id": 10137,
+   "auction_id": null
+  },
+  "f29185a1": {
+   "aliases": [
+    "abhishek sharma"
+   ],
+   "tours": [
+    "India tour of Ireland 2026 (Men T20I)"
+   ],
+   "display": "Abhishek Sharma",
+   "cricsheet_id": "f29185a1",
+   "espn_id": "1070183",
+   "draft_id": 10146,
+   "auction_id": 2
+  },
+  "a4cc73aa": {
+   "aliases": [
+    "sanju samson",
+    "sanju viswanath samson",
+    "sv samson"
+   ],
+   "tours": [
+    "India tour of Ireland 2026 (Men T20I)"
+   ],
+   "display": "Sanju Samson",
+   "cricsheet_id": "a4cc73aa",
+   "espn_id": "425943",
+   "draft_id": 10147,
+   "auction_id": 202
+  },
+  "752f7486": {
+   "aliases": [
+    "ishan kishan",
+    "ishan pranav kumar pandey kishan"
+   ],
+   "tours": [
+    "India tour of Ireland 2026 (Men T20I)"
+   ],
+   "display": "Ishan Kishan",
+   "cricsheet_id": "752f7486",
+   "espn_id": "720471",
+   "draft_id": 10148,
+   "auction_id": 183
+  },
+  "espn:642519": {
+   "aliases": [
+    "shreyas iyer",
+    "shreyas santosh iyer"
+   ],
+   "tours": [
+    "India tour of Ireland 2026 (Men T20I)"
+   ],
+   "display": "Shreyas Iyer",
+   "cricsheet_id": null,
+   "espn_id": "642519",
+   "draft_id": 10149,
+   "auction_id": null
+  },
+  "b0482a1d": {
+   "aliases": [
+    "tilak varma"
+   ],
+   "tours": [
+    "India tour of Ireland 2026 (Men T20I)"
+   ],
+   "display": "Tilak Varma",
+   "cricsheet_id": "b0482a1d",
+   "espn_id": null,
+   "draft_id": 10150,
+   "auction_id": 185
+  },
+  "f19ccfad": {
+   "aliases": [
+    "washington sundar"
+   ],
+   "tours": [
+    "India tour of Ireland 2026 (Men T20I)"
+   ],
+   "display": "Washington Sundar",
+   "cricsheet_id": "f19ccfad",
+   "espn_id": "719715",
+   "draft_id": 10151,
+   "auction_id": 157
+  },
+  "a4e37e47": {
+   "aliases": [
+    "s dube",
+    "shivam dube"
+   ],
+   "tours": [
+    "India tour of Ireland 2026 (Men T20I)"
+   ],
+   "display": "Shivam Dube",
+   "cricsheet_id": "a4e37e47",
+   "espn_id": "714451",
+   "draft_id": 10152,
+   "auction_id": 29
+  },
+  "espn:554691": {
+   "aliases": [
+    "axar patel",
+    "axar rajeshbhai patel"
+   ],
+   "tours": [
+    "India tour of Ireland 2026 (Men T20I)"
+   ],
+   "display": "Axar Patel",
+   "cricsheet_id": null,
+   "espn_id": "554691",
+   "draft_id": 10153,
+   "auction_id": null
+  },
+  "244048f6": {
+   "aliases": [
+    "arshdeep singh"
+   ],
+   "tours": [
+    "India tour of Ireland 2026 (Men T20I)"
+   ],
+   "display": "Arshdeep Singh",
+   "cricsheet_id": "244048f6",
+   "espn_id": "1125976",
+   "draft_id": 10154,
+   "auction_id": 13
+  },
+  "77b1aa15": {
+   "aliases": [
+    "harshit pradeep rana",
+    "harshit rana"
+   ],
+   "tours": [
+    "India tour of Ireland 2026 (Men T20I)"
+   ],
+   "display": "Harshit Rana",
+   "cricsheet_id": "77b1aa15",
+   "espn_id": "1312645",
+   "draft_id": 10155,
+   "auction_id": 320
+  },
+  "80b2fb19": {
+   "aliases": [
+    "prince yadav"
+   ],
+   "tours": [
+    "India tour of Ireland 2026 (Men T20I)"
+   ],
+   "display": "Prince Yadav",
+   "cricsheet_id": "80b2fb19",
+   "espn_id": null,
+   "draft_id": 10156,
+   "auction_id": 690
+  },
+  "slug:vaibhav-sooryavanshi": {
+   "aliases": [
+    "vaibhav sooryavanshi"
+   ],
+   "tours": [
+    "India tour of Ireland 2026 (Men T20I)"
+   ],
+   "display": "Vaibhav Sooryavanshi",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10157,
+   "auction_id": null
+  },
+  "970ddd24": {
+   "aliases": [
+    "suryansh shedge"
+   ],
+   "tours": [
+    "India tour of Ireland 2026 (Men T20I)"
+   ],
+   "display": "Suryansh Shedge",
+   "cricsheet_id": "970ddd24",
+   "espn_id": null,
+   "draft_id": 10158,
+   "auction_id": 284
+  },
+  "slug:prasidh-krishna": {
+   "aliases": [
+    "prasidh krishna"
+   ],
+   "tours": [
+    "India tour of Ireland 2026 (Men T20I)"
+   ],
+   "display": "Prasidh Krishna",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10159,
+   "auction_id": null
+  },
+  "df064e1a": {
+   "aliases": [
+    "ravi bishnoi"
+   ],
+   "tours": [
+    "India tour of Ireland 2026 (Men T20I)"
+   ],
+   "display": "Ravi Bishnoi",
+   "cricsheet_id": "df064e1a",
+   "espn_id": null,
+   "draft_id": 10160,
+   "auction_id": 279
+  },
+  "espn:1195143": {
+   "aliases": [
+    "tim heatley tector",
+    "tim tector"
+   ],
+   "tours": [
+    "India tour of Ireland 2026 (Men T20I)"
+   ],
+   "display": "Tim Tector",
+   "cricsheet_id": null,
+   "espn_id": "1195143",
+   "draft_id": 10161,
+   "auction_id": null
+  },
+  "slug:ross-adair": {
+   "aliases": [
+    "ross adair"
+   ],
+   "tours": [
+    "India tour of Ireland 2026 (Men T20I)"
+   ],
+   "display": "Ross Adair",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10162,
+   "auction_id": null
+  },
+  "espn:961407": {
+   "aliases": [
+    "harry tector",
+    "harry tom tector"
+   ],
+   "tours": [
+    "India tour of Ireland 2026 (Men T20I)"
+   ],
+   "display": "Harry Tector",
+   "cricsheet_id": null,
+   "espn_id": "961407",
+   "draft_id": 10163,
+   "auction_id": null
+  },
+  "3979b5e0": {
+   "aliases": [
+    "l tucker",
+    "lorcan john tucker",
+    "lorcan tucker"
+   ],
+   "tours": [
+    "India tour of Ireland 2026 (Men T20I)"
+   ],
+   "display": "Lorcan Tucker",
+   "cricsheet_id": "3979b5e0",
+   "espn_id": "928057",
+   "draft_id": 10164,
+   "auction_id": 1153
+  },
+  "24ad97e7": {
+   "aliases": [
+    "ben calitz",
+    "benjamin fredeman calitz",
+    "bf calitz"
+   ],
+   "tours": [
+    "India tour of Ireland 2026 (Men T20I)"
+   ],
+   "display": "Ben Calitz",
+   "cricsheet_id": "24ad97e7",
+   "espn_id": "1193295",
+   "draft_id": 10165,
+   "auction_id": 1484
+  },
+  "espn:1099379": {
+   "aliases": [
+    "gareth delany",
+    "gareth james delany"
+   ],
+   "tours": [
+    "India tour of Ireland 2026 (Men T20I)"
+   ],
+   "display": "Gareth Delany",
+   "cricsheet_id": null,
+   "espn_id": "1099379",
+   "draft_id": 10166,
+   "auction_id": null
+  },
+  "99cddc5e": {
+   "aliases": [
+    "george dockrell",
+    "george henry dockrell",
+    "gh dockrell"
+   ],
+   "tours": [
+    "India tour of Ireland 2026 (Men T20I)"
+   ],
+   "display": "George Dockrell",
+   "cricsheet_id": "99cddc5e",
+   "espn_id": "348034",
+   "draft_id": 10167,
+   "auction_id": 1154
+  },
+  "2c54c49b": {
+   "aliases": [
+    "matthew humphreys",
+    "matthew james humphreys",
+    "mj humphreys"
+   ],
+   "tours": [
+    "India tour of Ireland 2026 (Men T20I)"
+   ],
+   "display": "Matthew Humphreys",
+   "cricsheet_id": "2c54c49b",
+   "espn_id": "1263361",
+   "draft_id": 10168,
+   "auction_id": 1485
+  },
+  "espn:1490554": {
+   "aliases": [
+    "matt hollard",
+    "matthew hollard",
+    "matthew kyle hollard"
+   ],
+   "tours": [
+    "India tour of Ireland 2026 (Men T20I)"
+   ],
+   "display": "Matthew Hollard",
+   "cricsheet_id": null,
+   "espn_id": "1490554",
+   "draft_id": 10169,
+   "auction_id": null
+  },
+  "05de1a5a": {
+   "aliases": [
+    "gc wilson",
+    "reuben wilson"
+   ],
+   "tours": [
+    "India tour of Ireland 2026 (Men T20I)"
+   ],
+   "display": "Reuben Wilson",
+   "cricsheet_id": "05de1a5a",
+   "espn_id": null,
+   "draft_id": 10170,
+   "auction_id": 1665
+  },
+  "espn:1448923": {
+   "aliases": [
+    "jai moondra"
+   ],
+   "tours": [
+    "India tour of Ireland 2026 (Men T20I)"
+   ],
+   "display": "Jai Moondra",
+   "cricsheet_id": null,
+   "espn_id": "1448923",
+   "draft_id": 10171,
+   "auction_id": null
+  },
+  "4992d6f6": {
+   "aliases": [
+    "st doheny",
+    "stephen doheny"
+   ],
+   "tours": [
+    "India tour of Ireland 2026 (Men T20I)"
+   ],
+   "display": "Stephen Doheny",
+   "cricsheet_id": "4992d6f6",
+   "espn_id": null,
+   "draft_id": 10172,
+   "auction_id": 6747
+  },
+  "slug:gavin-hoey": {
+   "aliases": [
+    "gavin hoey"
+   ],
+   "tours": [
+    "India tour of Ireland 2026 (Men T20I)"
+   ],
+   "display": "Gavin Hoey",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10173,
+   "auction_id": null
+  },
+  "espn:1278203": {
+   "aliases": [
+    "liam mccarthy"
+   ],
+   "tours": [
+    "India tour of Ireland 2026 (Men T20I)"
+   ],
+   "display": "Liam McCarthy",
+   "cricsheet_id": null,
+   "espn_id": "1278203",
+   "draft_id": 10174,
    "auction_id": null
   }
  }

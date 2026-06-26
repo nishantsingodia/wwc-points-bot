@@ -1,0 +1,41 @@
+{
+ "MIND": {
+  "name": "India",
+  "players": [
+   ["Abhishek Sharma", "AR"],
+   ["Sanju Samson", "WK"],
+   ["Ishan Kishan", "WK"],
+   ["Shreyas Iyer", "BAT"],
+   ["Tilak Varma", "BAT"],
+   ["Washington Sundar", "AR"],
+   ["Shivam Dube", "AR"],
+   ["Axar Patel", "AR"],
+   ["Arshdeep Singh", "BOWL"],
+   ["Harshit Rana", "BOWL"],
+   ["Prince Yadav", "BOWL"],
+   ["Vaibhav Sooryavanshi", "BAT"],
+   ["Suryansh Shedge", "AR"],
+   ["Prasidh Krishna", "BOWL"],
+   ["Ravi Bishnoi", "BOWL"]
+  ]
+ },
+ "MIRE": {
+  "name": "Ireland",
+  "players": [
+   ["Tim Tector", "BAT"],
+   ["Ross Adair", "BAT"],
+   ["Harry Tector", "BAT"],
+   ["Lorcan Tucker", "WK"],
+   ["Ben Calitz", "BAT"],
+   ["Gareth Delany", "AR"],
+   ["George Dockrell", "AR"],
+   ["Matthew Humphreys", "BOWL"],
+   ["Matthew Hollard", "BOWL"],
+   ["Reuben Wilson", "BOWL"],
+   ["Jai Moondra", "BOWL"],
+   ["Stephen Doheny", "WK"],
+   ["Gavin Hoey", "AR"],
+   ["Liam McCarthy", "BOWL"]
+  ]
+ }
+}
