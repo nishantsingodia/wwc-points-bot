@@ -589,10 +589,10 @@ def espn_toss(event_id):
             return re.sub(r"\s*,\s*", ", ", (n.get("text") or "").strip())
     return ""
 
-def espn_team_map(event_id):
+def espn_team_map(event_id, fresh=False):
     """{norm(player): team displayName} from ESPN rosters — reliable team attribution
     (cricapi's innings labels are sometimes malformed)."""
-    d = espn_get("summary", event=event_id)
+    d = espn_get("summary", cache=not fresh, event=event_id)
     out = {}
     for team in d.get("rosters", []):
         tn = team.get("team", {}).get("displayName", "")
@@ -603,10 +603,10 @@ def espn_team_map(event_id):
                 out[norm(nm)] = tn
     return out
 
-def espn_xi(event_id):
+def espn_xi(event_id, fresh=False):
     """Playing XI (incl. subs that came on) from ESPN summary -> for the +4 in-XI bonus,
     even for players who didn't bat/bowl/field (e.g. a captain who wasn't needed)."""
-    d = espn_get("summary", event=event_id)
+    d = espn_get("summary", cache=not fresh, event=event_id)
     out = {}
     for team in d.get("rosters", []):
         for p in team.get("roster", []):
@@ -616,11 +616,14 @@ def espn_xi(event_id):
                 out[norm(nm)] = {"name": nm}
     return out
 
-def parse_espn(event_id):
+def parse_espn(event_id, fresh=False):
     """Full scorecard from ESPN ball-by-ball (cricinfo) — exact dots/maidens/fielding,
     plus the XI from the summary. Super-over deliveries (period>2) are excluded
-    (Dream11 awards no points for them). Returns (perf, super_over_seen)."""
-    pbp = espn_get("playbyplay", event=event_id, limit=600)
+    (Dream11 awards no points for them). Returns (perf, super_over_seen).
+    fresh=True bypasses the cache — used for PROVISIONAL (no-cricsheet) matches whose ESPN
+    data is still settling, so a stale mid-match snapshot can't freeze an incomplete XI
+    (the bug that dropped Shubham Ranjane, an in-XI player who didn't bat/bowl)."""
+    pbp = espn_get("playbyplay", cache=not fresh, event=event_id, limit=600)
     items = pbp.get("commentary", {}).get("items", [])
     perf, overs, super_over = {}, {}, False
     def get(n):
@@ -697,7 +700,7 @@ def parse_espn(event_id):
     for o in overs.values():
         if o["legal"] == 6 and o["runs"] == 0 and o["bowler"]:
             get(o["bowler"])["maidens"] += 1
-    for k, e in espn_xi(event_id).items():   # +4 in-XI even for players with no stat line
+    for k, e in espn_xi(event_id, fresh).items():   # +4 in-XI even for players with no stat line
         if k not in perf:
             perf[k] = blank_perf(e["name"])
         perf[k]["played"] = True
@@ -942,12 +945,17 @@ def run_tour(tour):
         # ALWAYS pull ESPN ball-by-ball when available — it feeds dots/XI in the provisional
         # cut AND the L1/L2 reconciliation columns (we compare every source against the
         # scorer, even once cricsheet is the official source). ESPN is free/unmetered.
+        # Fetch ESPN FRESH (bypass cache) for provisional matches — their ESPN data is still
+        # settling (roster/stats finalize over hours), so a cached mid-match snapshot would
+        # freeze an incomplete XI and drop in-XI players who hadn't batted/bowled yet (e.g.
+        # Shubham Ranjane). Cricsheet-settled matches keep the cache (ESPN is recon-only there).
+        espn_fresh = not cs_path
         espn_perf, super_over, team_map = {}, False, {}
         ev = espn_event_id(mdate, teams)
         if ev:
-            espn_perf, super_over = parse_espn(ev)
+            espn_perf, super_over = parse_espn(ev, fresh=espn_fresh)
             espn_perf = {k: v for k, v in espn_perf.items() if v["played"]}
-            team_map = espn_team_map(ev)
+            team_map = espn_team_map(ev, fresh=espn_fresh)
         cs_perf = ({k: v for k, v in parse_cricsheet(cs_path)[0].items() if v["played"]}
                    if cs_path else {})
         if cs_path:
