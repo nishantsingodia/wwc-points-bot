@@ -9,7 +9,9 @@ Run:  python3 registry/fold_review_aliases.py        (reads the live "Player Ali
 import os, re, json, csv, io, urllib.parse, urllib.request, unicodedata
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SHEET_ID = os.environ.get("GSHEET_ID", "1um6Scv2MbFzRxTVUJsWxMxX4oxTDojJmujcFBJGDlyg")
+SHEET_ID = os.environ.get("GSHEET_ID")
+if not SHEET_ID:
+    raise SystemExit("Set GSHEET_ID to your Google Sheet ID, e.g. export GSHEET_ID=...")
 ALIASES_TAB = os.environ.get("ALIASES_TAB", "Player Aliases")
 MANUAL = os.path.join(HERE, "manual_aliases.json")
 
