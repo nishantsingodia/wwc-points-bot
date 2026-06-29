@@ -1,0 +1,3 @@
+# Test-only deps (not needed for the production GH Action run).
+#   pip install -r requirements.txt -r requirements-dev.txt && pytest -q
+pytest>=8.0

@@ -1,0 +1,18 @@
+name: Tests
+
+# Unit tests on every push/PR. Separate from wwc-points.yml / live-lineup.yml (which write
+# the live sheet on a schedule) — this job never touches Google Sheets or any feed.
+on:
+  push:
+  pull_request:
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt -r requirements-dev.txt
+      - run: pytest -q

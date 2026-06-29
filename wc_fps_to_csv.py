@@ -111,6 +111,15 @@ ANOMALIES = []          # {tour, kind, pid, display, context, names, finding}
 PRIOR_ANOMALY = {}      # (tour, pid, kind) -> the user's Yes/No so far (preserved across rewrites)
 ANOMALY_ACK = set()     # (tour, pid, kind) the user answered -> stop re-flagging
 
+# Recon-review queue (written to the sheet's "Recon Review" tab). Feed disagreements the human
+# resolves by picking a value; a match stays LIVE until its L1 gaps are approved. Separate tab +
+# globals so the Needs Review / Identity Anomalies flows are untouched. See match_key_of/etc.
+RECON_REVIEW = []       # rows to publish: {match_key, tour, match, date, pid, full, param, s1, s2, tier}
+PRIOR_RECON = {}        # (match_key, pid, param) -> the user's "Correct Value" so far (preserved)
+PRIOR_MANUAL = {}       # (match_key, pid, param) -> the user's "Manual Value" so far (preserved)
+RECON_ACK = set()       # (match_key, pid, param) approved + applied -> stop re-flagging
+RECON_OVERRIDES = {}    # match_key -> [approved override dicts] (loaded once in main, before tours)
+
 def guess_role(p):
     """Best-guess role from a player's feed stats (so '?' is never shown bare in review)."""
     if (p.get("stumpings", 0) or 0) > 0:
@@ -875,6 +884,153 @@ def _by_pid(perf):
             out[pid] = v
     return out
 
+# ── Recon Review: human-in-the-loop reconciliation of feed disagreements ─────
+# When cricapi and ESPN disagree (L1) or cricsheet revises an already-scored match
+# (L2), surface the gap as an APPROVABLE row in the "Recon Review" sheet tab and keep
+# the match LIVE until the human picks a value. Mirrors the Identity Anomalies pattern.
+# Pure helpers below (no sheet/network) so they're unit-testable.
+LABEL2FIELD = {v: k for k, v in RECON_LABEL.items()}  # "runs" -> "r", etc. (reversible)
+SYSTEMIC_MIN = int(os.environ.get("RECON_SYSTEMIC_MIN", "4"))    # >= N players differ -> match-level row
+SYSTEMIC_FRAC = float(os.environ.get("RECON_SYSTEMIC_FRAC", "0.40"))
+
+def match_key_of(mdate, teams):
+    """Stable, order-independent match identity (date + team pair) — NEVER the renumbered
+    'Match N' label. Mirrors the draft app's teams+date join."""
+    return f"{mdate}::" + "|".join(sorted(team_key(teams)))
+
+def compute_l1_gaps(capi_pid, espn_pid):
+    """{pid: gap_string} for pids present in BOTH feeds whose RECON_L1 fields disagree."""
+    gaps = {}
+    for pid in capi_pid:
+        if pid in espn_pid:
+            g = recon_gaps(capi_pid[pid], espn_pid[pid], RECON_L1, sep="/")
+            if g:
+                gaps[pid] = g
+    return gaps
+
+def feed_team_totals(assigned):
+    """Sum runs/wkts per team-short from an assigned dict keyed by (short, name)."""
+    tot = {}
+    for (short, _name), d in assigned.items():
+        t = tot.setdefault(short, {"r": 0, "w": 0})
+        t["r"] += d.get("r", 0) or 0
+        t["w"] += d.get("w", 0) or 0
+    return tot
+
+def totals_differ(a_tot, b_tot):
+    """True if the two feeds' per-team run totals disagree (a frozen feed reads lower)."""
+    for s in set(a_tot) | set(b_tot):
+        if (a_tot.get(s, {}).get("r", 0)) != (b_tot.get(s, {}).get("r", 0)):
+            return True
+    return False
+
+def _totals_str(tot):
+    return " · ".join(f"{s} {t['r']}/{t['w']}" for s, t in sorted(tot.items())) or "—"
+
+def classify_match_status(cs_path, espn_present, l1_gaps, unresolved, l2_dirty):
+    """Per-match status the draft app reads. Decisions: ANY unresolved L1 gap holds LIVE;
+    L1-clean auto-COMPLETED; single-feed COMPLETED but FLAGGED; cricsheet official COMPLETED
+    unless it revises a reconciled value (then FLAGGED, pending approval)."""
+    if cs_path:
+        return ("COMPLETED_FLAGGED", "⚠ official revision pending") if l2_dirty else ("COMPLETED", "")
+    if not espn_present:
+        return ("COMPLETED_FLAGGED", "⚠ unverified — single feed")
+    if unresolved:
+        n = len(unresolved)
+        return ("LIVE", f"⏳ pending recon approval ({n} player{'' if n == 1 else 's'})")
+    return ("COMPLETED", "")
+
+def _resolve_override_value(o, capi_pid, espn_pid):
+    """Concrete value for an override: S1=cricapi feed, S2=ESPN feed, else the stored Manual value."""
+    src = o.get("source")
+    if src == "S1":
+        return (capi_pid.get(o.get("pid"), {}) or {}).get(o.get("field"), o.get("value"))
+    if src == "S2":
+        return (espn_pid.get(o.get("pid"), {}) or {}).get(o.get("field"), o.get("value"))
+    return o.get("value")  # Manual
+
+def apply_recon_overrides(perf_by_pid, capi_pid, espn_pid, l1_gaps, match_key, overrides_idx):
+    """Mutate L1 perf dicts in `perf_by_pid` (keyed by pid) per APPROVED overrides for this
+    match. A match-level seed ('use S1/S2 for the whole match') expands to every differing
+    player's RECON_L1 fields; player-level overrides overlay (win) on the same (pid, field).
+    Re-scoring after this recomputes all derived bonuses. Returns the resolved pids."""
+    ovs = overrides_idx.get(match_key, [])
+    if not ovs:
+        return set()
+    resolved = {}  # (pid, field) -> value
+    for o in ovs:  # match-level seeds first
+        if o.get("scope") == "match":
+            feed = capi_pid if o.get("source") == "S1" else espn_pid if o.get("source") == "S2" else None
+            if feed is None:
+                continue
+            for pid in l1_gaps:
+                f = feed.get(pid)
+                if f:
+                    for field in RECON_L1:
+                        resolved[(pid, field)] = f.get(field, 0)
+    for o in ovs:  # player-level overlays win over seeds
+        if o.get("scope") == "player":
+            pid, field = o.get("pid"), o.get("field")
+            if pid and field:
+                resolved[(pid, field)] = _resolve_override_value(o, capi_pid, espn_pid)
+    applied = set()
+    for (pid, field), val in resolved.items():
+        d = perf_by_pid.get(pid)
+        if d is not None and val is not None:
+            d[field] = val
+            applied.add(pid)
+    return applied
+
+def l2_approved_pids(match_key, overrides_idx):
+    """{pid: source} for L2 (official-revision) approvals on this match. source 'S2' = accept
+    official cricsheet; anything else = keep the held provisional value."""
+    return {o.get("pid"): o.get("source", "S2")
+            for o in overrides_idx.get(match_key, []) if o.get("scope") == "l2"}
+
+def player_recon_markers(unresolved, l2_pairs, l2_appr):
+    """pid -> per-player marker for the draft UI, so it can flag exactly WHICH players aren't
+    settled: '⏳ unreconciled' for an unresolved L1 (cricapi↔ESPN) gap, '⚠ official revision' for
+    an unapproved cricsheet (L2) revision. Resolution-aware: an approved player isn't marked."""
+    out = {pid: "⏳ unreconciled" for pid in unresolved}
+    for pid in l2_pairs:
+        if l2_appr.get(pid) != "S2":
+            out[pid] = "⚠ official revision"
+    return out
+
+def reconciled_provisional(prov_pid, capi_pid, espn_pid, l1_gaps, match_key, overrides_idx):
+    """The provisional cut with the human's APPROVED L1 overrides applied — i.e. the value people
+    actually saw after reconciling cricapi↔ESPN. L2 must compare cricsheet against THIS, not raw
+    cricapi: an official figure that CONFIRMS an approved correction (e.g. you picked ESPN's 2 wkts
+    and cricsheet also says 2) is then silent, and only a genuine change from the shown value is
+    flagged for approval. Returns a fresh dict (prov_pid is not mutated)."""
+    recon = {pid: dict(v) for pid, v in prov_pid.items()}
+    apply_recon_overrides(recon, capi_pid, espn_pid, l1_gaps, match_key, overrides_idx)
+    return recon
+
+def build_recon_rows(match_key, label, mdate, tour, unresolved, capi_pid, espn_pid,
+                     capi_tot, espn_tot, n_compared=0):
+    """Recon Review rows for the UNRESOLVED L1 gaps of one match. Systemic (whole-match
+    freeze) -> ONE match-level row with team-total evidence; else one row per (pid, field)."""
+    n_diff = len(unresolved)
+    frac = (n_diff / n_compared) if n_compared else 0.0
+    systemic = n_diff >= SYSTEMIC_MIN or frac >= SYSTEMIC_FRAC or totals_differ(capi_tot, espn_tot)
+    if systemic:
+        return [{"match_key": match_key, "tour": tour, "match": label, "date": mdate,
+                 "pid": "", "full": "— WHOLE MATCH —", "param": "ALL L1",
+                 "s1": _totals_str(capi_tot), "s2": _totals_str(espn_tot),
+                 "tier": "match", "n_diff": n_diff}]
+    rows = []
+    for pid, _gap in unresolved.items():
+        c, e = capi_pid.get(pid, {}), espn_pid.get(pid, {})
+        for field in RECON_L1:
+            cv, ev = (c.get(field, 0) or 0), (e.get(field, 0) or 0)
+            if cv != ev:
+                rows.append({"match_key": match_key, "tour": tour, "match": label, "date": mdate,
+                             "pid": pid, "full": PID2DISP.get(pid, pid),
+                             "param": RECON_LABEL.get(field, field), "field": field,
+                             "s1": cv, "s2": ev, "tier": "player", "n_diff": n_diff})
+    return rows
+
 def run_tour(tour):
     """Process ONE tour (its own cricapi+ESPN series + squad list) and write its tab."""
     global WC_SERIES, ESPN_SERIES, SQUADS_JSON, GSHEET_TAB, CURRENT_TOUR
@@ -921,7 +1077,7 @@ def run_tour(tour):
             "Catches", "Stumpings", "Run Outs",
             "Pts Bat", "Pts Bowl", "Pts Field", "Pts SR", "Pts Econ", "Pts XI",
             "Fantasy Points", "Source", "In Squad List", "Bat Order",
-            "L1 Recon", "L2 Recon"]
+            "L1 Recon", "L2 Recon", "Match Status", "Recon Flag", "Player Recon"]
     rows = []
     n_cs = n_espn = n_api = 0
     for mi, m in enumerate(sorted(ended, key=lambda x: x.get("dateTimeGMT", x.get("date", ""))), 1):
@@ -1000,6 +1156,7 @@ def run_tour(tour):
         # ONLY in the provisional path: when cricsheet is the scorer, its dots/maidens are
         # exact and must NOT be overwritten by ESPN (ESPN is then recon-only).
         xcheck = set()
+        espn_assigned = {}
         if espn_perf and not cs_path:
             espn_assigned = match_squad_to_perf(team_players, espn_perf)[0]
             for k, e in espn_assigned.items():
@@ -1014,6 +1171,60 @@ def run_tour(tour):
                     np = blank_perf(e["name"]); np["played"] = True
                     np["dots"] = e.get("dots", 0); np["maidens"] = e.get("maidens", 0)
                     assigned[k] = np                              # in XI, no cricapi line -> +4
+
+        # ── Recon Review + match status (human-in-the-loop reconciliation) ───────
+        # Compute per-match status BEFORE emit (emit closes over it). ANY unresolved L1 gap
+        # holds the match LIVE; approved overrides are applied to the perf dicts emit() scores.
+        mk = match_key_of(mdate, teams)
+        l1_gaps = compute_l1_gaps(capi_pid, espn_pid)
+        n_compared = sum(1 for pid in capi_pid if pid in espn_pid)
+        perf_by_pid = {}   # pid -> the SAME perf dict objects emit() scores, so overrides stick
+        for (sh_, nm_), dd in assigned.items():
+            pp = resolve_pid(nm_) or resolve_pid(dd.get("name", "")) or ""
+            if pp and pp not in perf_by_pid:
+                perf_by_pid[pp] = dd
+        applied = apply_recon_overrides(perf_by_pid, capi_pid, espn_pid, l1_gaps, mk, RECON_OVERRIDES)
+        unresolved = {pid: g for pid, g in l1_gaps.items() if pid not in applied}
+        # L2 baseline = the L1-RECONCILED provisional cut (raw cricapi+ESPN with the approved L1
+        # override applied) — exactly what people saw. Comparing cricsheet against THIS (not raw
+        # cricapi) keeps an official figure that confirms an approved correction silent, and flags
+        # only a genuine change from the shown value.
+        recon_prov = reconciled_provisional(prov_pid, capi_pid, espn_pid, l1_gaps, mk, RECON_OVERRIDES)
+        l2_pairs = {}
+        if cs_pid:
+            for pid in cs_pid:
+                g = recon_gaps(recon_prov.get(pid), cs_pid[pid], RECON_L2, sep="→")
+                if g:
+                    l2_pairs[pid] = g
+        l2_appr = l2_approved_pids(mk, RECON_OVERRIDES)
+        # L2 HOLD (decision 3): until the official revision is APPROVED (source S2), keep showing
+        # the last-approved (L1-reconciled) value. Deliberately inverts the usual "cricsheet
+        # overrides everything" rule — we never silently revise a result the user already saw.
+        if cs_path and l2_pairs:
+            for pid in l2_pairs:
+                if l2_appr.get(pid) != "S2" and pid in recon_prov:
+                    dd = perf_by_pid.get(pid)
+                    if dd is not None:
+                        for field in RECON_L2:
+                            pv = recon_prov[pid].get(field)
+                            if pv is not None:
+                                dd[field] = pv
+        l2_dirty = any(l2_appr.get(pid) != "S2" for pid in l2_pairs)
+        match_status, recon_flag = classify_match_status(cs_path, bool(espn_perf), l1_gaps, unresolved, l2_dirty)
+        # Per-player markers so the draft UI can flag WHICH players aren't reconciled yet.
+        player_recon = player_recon_markers(unresolved, l2_pairs, l2_appr)
+        # Queue review rows for UNRESOLVED gaps (skip ones already approved+acked).
+        if unresolved and not cs_path:
+            new_rows = build_recon_rows(mk, label, mdate, CURRENT_TOUR, unresolved,
+                                        capi_pid, espn_pid, feed_team_totals(assigned),
+                                        feed_team_totals(espn_assigned), n_compared=n_compared)
+            RECON_REVIEW.extend(r for r in new_rows
+                                if (mk, r.get("pid", ""), r.get("param", "")) not in RECON_ACK)
+        for pid, g in l2_pairs.items():
+            if l2_appr.get(pid) != "S2" and (mk, pid, "L2") not in RECON_ACK:
+                RECON_REVIEW.append({"match_key": mk, "tour": CURRENT_TOUR, "match": label,
+                                     "date": mdate, "pid": pid, "full": PID2DISP.get(pid, pid),
+                                     "param": "L2", "s1": g, "s2": "official cricsheet", "tier": "l2"})
 
         def emit(short, name, role, d, in_squad):
             src = status
@@ -1057,10 +1268,11 @@ def run_tour(tour):
                              d["catches"], d["stumpings"], d["runouts"],
                              s["bat"], s["bowl"], s["field"], s["sr"], s["eco"], s["xi"],
                              s["total"], src, in_squad, d.get("bat_order") or "",
-                             l1_col, l2_col])
+                             l1_col, l2_col, match_status, recon_flag, player_recon.get(pid, "")])
             else:
                 rows.append([label, mdate, short, pid, full, role, "N"] + [""] * 22 +
-                            [src, in_squad, "", l1_col, l2_col])
+                            [src, in_squad, "", l1_col, l2_col, match_status, recon_flag,
+                             player_recon.get(pid, "")])
 
         for short, name, role in team_players:
             emit(short, name, role, assigned.get((short, name)), "Y")
@@ -1134,7 +1346,7 @@ def run_tour(tour):
             pid = resolve_pid(name) or ""
             full = PID2DISP.get(pid, name) if pid else name
             rows.append([label, mdate, short, pid, full, role, played] + [""] * 22 +
-                        [src, "Y", "", "", ""])
+                        [src, "Y", "", "", "", "SCHEDULED", "", ""])
         tmap = {}
         try:
             tmap = espn_team_map(ev)
@@ -1145,7 +1357,7 @@ def run_tour(tour):
             pid = resolve_pid(d["name"]) or ""
             full = PID2DISP.get(pid, d["name"]) if pid else d["name"]
             rows.append([label, mdate, short_of(tfull) or "?", pid, full, "?", "Y"] + [""] * 22 +
-                        [src, "N", "", "", ""])
+                        [src, "N", "", "", "", "SCHEDULED", "", ""])
         n_toss += 1
     if n_toss:
         print(f"toss XI written for {n_toss} not-ended match(es)", file=sys.stderr)
@@ -1231,9 +1443,12 @@ def main():
     # No-code manual fixes (no-op locally / without creds): load the persistent alias store,
     # then apply any rows you marked 'Yes' in Needs Review. Then process tours; finally persist
     # new aliases and republish the review queue.
+    global RECON_OVERRIDES
     load_sheet_aliases()
     read_review_confirmations()
     read_anomaly_confirmations()   # record Yes/No on identity anomalies (read-only on live identity)
+    read_recon_approvals()         # record recon 'Correct Value' answers -> recon_overrides.json
+    RECON_OVERRIDES = overrides_by_match(_load_overrides())  # index approved overrides for run_tour
     tours = load_tours()
     print(f"{len(tours)} tour(s): {', '.join(t['name'] for t in tours)}", file=sys.stderr)
     for t in tours:
@@ -1250,6 +1465,7 @@ def main():
         sync_player_aliases()   # persist auto + confirmed aliases into the Player Aliases store
         write_review_tab()      # publish remaining unmatched players (closest-match + Yes/No)
         write_anomaly_tab()     # publish detected merges/dupes + the audit of past splits (Yes/No)
+        write_recon_tab()       # publish L1/L2 feed disagreements to approve (pick Correct Value)
 
 _GSHEET = None
 def open_gsheet():
@@ -1272,6 +1488,8 @@ ALIASES_TAB = "Player Aliases"   # user-editable: Feed Name -> Correct Player (n
 REVIEW_TAB = "Needs Review"      # bot-written: players that need a human glance
 ANOMALY_TAB = "Identity Anomalies"  # bot-written: detected merges/duplicates + the audit of past splits
 SPLITS_PATH = os.path.join(os.path.dirname(__file__), "registry", "identity_splits.json")
+RECON_TAB = "Recon Review"          # bot-written: cricapi/ESPN (L1) + cricsheet (L2) disagreements to approve
+OVERRIDES_PATH = os.path.join(os.path.dirname(__file__), "registry", "recon_overrides.json")
 
 def load_sheet_aliases():
     """Read the 'Player Aliases' tab (Feed Name | Correct Player | Source) and merge it into the
@@ -1360,6 +1578,54 @@ def _load_splits():
     except Exception:
         return {"splits": []}
 
+def _load_overrides():
+    try:
+        return json.load(open(OVERRIDES_PATH))
+    except Exception:
+        return {"overrides": []}
+
+def _save_overrides(data):
+    try:
+        json.dump(data, open(OVERRIDES_PATH, "w"), indent=2, ensure_ascii=False)
+    except Exception as e:
+        print(f"could not update recon_overrides.json: {e}", file=sys.stderr)
+
+def overrides_by_match(data):
+    """Index APPROVED overrides by match_key -> [override dicts] for O(1) apply."""
+    idx = {}
+    for o in data.get("overrides", []):
+        if o.get("status") == "approved" and o.get("match_key"):
+            idx.setdefault(o["match_key"], []).append(o)
+    return idx
+
+def _approval_to_override(match_key, pid, param, correct, manual):
+    """Turn one Recon Review answer into an override record (or None if blank/unset).
+    `correct` is the 'Correct Value' cell (S1/S2/Manual); `manual` the 'Manual Value' cell.
+    Pure — unit-testable without the sheet."""
+    correct = (correct or "").strip()
+    if not correct:
+        return None
+    src = correct.upper()
+    if param == "ALL L1":               # match-level seed: use a whole feed
+        if src not in ("S1", "S2"):
+            return None
+        return {"match_key": match_key, "scope": "match", "source": src,
+                "pid": "*", "field": "ALL_L1", "status": "approved"}
+    if param == "L2":                   # accept official (S2) or keep provisional (S1)
+        return {"match_key": match_key, "scope": "l2", "pid": pid,
+                "source": ("S2" if src == "S2" else "S1"), "status": "approved"}
+    field = LABEL2FIELD.get(param, param)   # player-level: a single stat field
+    o = {"match_key": match_key, "scope": "player", "pid": pid, "field": field, "status": "approved"}
+    if src == "MANUAL":
+        try:
+            o["value"] = int(float((manual or "").strip()))
+        except (TypeError, ValueError):
+            return None    # 'Manual' chosen but no value typed yet -> not actionable
+        o["source"] = "Manual"
+    else:
+        o["source"] = src
+    return o
+
 def read_anomaly_confirmations():
     """Read the 'Identity Anomalies' tab BEFORE processing. Record every Yes/No answer (preserved
     across rewrites in PRIOR_ANOMALY), acknowledge answered DETECTED anomalies so they stop
@@ -1411,6 +1677,55 @@ def read_anomaly_confirmations():
             print(f"Recorded split decisions from '{ANOMALY_TAB}' into identity_splits.json.", file=sys.stderr)
         except Exception as e:
             print(f"could not update identity_splits.json: {e}", file=sys.stderr)
+
+def read_recon_approvals():
+    """Read the 'Recon Review' tab BEFORE processing: record each 'Correct Value' answer
+    (preserved across rewrites in PRIOR_RECON/PRIOR_MANUAL), ack answered rows so they stop
+    re-flagging (RECON_ACK), and persist approvals into registry/recon_overrides.json. The
+    overrides are applied to the perf dicts at scoring time (apply_recon_overrides), so an
+    approval takes effect on the very next run. Read-only on the points tabs themselves."""
+    sh = open_gsheet()
+    if sh is None:
+        return
+    import gspread
+    try:
+        ws = sh.worksheet(RECON_TAB)
+    except gspread.WorksheetNotFound:
+        return
+    try:
+        rows = ws.get_all_values()
+    except Exception as e:
+        print(f"could not read '{RECON_TAB}' tab: {e}", file=sys.stderr)
+        return
+    if not rows:
+        return
+    hdr = {c.strip(): i for i, c in enumerate(rows[0])}
+    ki = hdr.get("Match Key", 11); pi = hdr.get("Player ID", 3); pm = hdr.get("Param", 5)
+    ci = hdr.get("Correct Value", 8); mi = hdr.get("Manual Value", 9)
+    data = _load_overrides()
+    have = {(o.get("match_key"), o.get("pid"), o.get("field"), o.get("scope"))
+            for o in data.get("overrides", [])}
+    added = 0
+    for r in rows[1:]:
+        if len(r) <= max(ki, pi, pm, ci):
+            continue
+        mk, pid, param, correct = r[ki].strip(), r[pi].strip(), r[pm].strip(), r[ci].strip()
+        manual = r[mi].strip() if len(r) > mi else ""
+        if not mk or not correct:
+            continue
+        PRIOR_RECON[(mk, pid, param)] = correct
+        if manual:
+            PRIOR_MANUAL[(mk, pid, param)] = manual
+        RECON_ACK.add((mk, pid, param))
+        o = _approval_to_override(mk, pid, param, correct, manual)
+        if o:
+            sig = (o.get("match_key"), o.get("pid"), o.get("field"), o.get("scope"))
+            if sig not in have:
+                data.setdefault("overrides", []).append(o)
+                have.add(sig); added += 1
+    if added:
+        _save_overrides(data)
+        print(f"Recorded {added} recon override(s) from '{RECON_TAB}' into recon_overrides.json.", file=sys.stderr)
 
 def sync_player_aliases():
     """Persist the bot's high-confidence auto-matches + your confirmed-Yes rows into the
@@ -1523,6 +1838,55 @@ def write_anomaly_tab():
     except Exception as e:
         print(f"could not write '{ANOMALY_TAB}' tab: {e}", file=sys.stderr)
 
+def write_recon_tab():
+    """Publish open Recon Review items: cricapi↔ESPN (L1) disagreements + cricsheet (L2)
+    revisions. Pick 'Correct Value' (S1 / S2 / Manual) to approve — the match then completes
+    next run. A systemic whole-match freeze collapses to ONE match-level row (team-total
+    evidence). Rewritten each full run; prior answers preserved, approved rows drop off."""
+    sh = open_gsheet()
+    if sh is None:
+        return
+    import gspread
+    header = ["Tour", "Match", "Date", "Player ID", "Full Name", "Param",
+              "Source 1 (cricapi)", "Source 2 (ESPN)", "Correct Value", "Manual Value",
+              "Status", "Match Key"]
+    seen, items = set(), []
+    for r in RECON_REVIEW:
+        key = (r["match_key"], r.get("pid", ""), r.get("param", ""))
+        if key in seen or key in RECON_ACK:
+            continue
+        seen.add(key); items.append(r)
+    status_text = {"match": "systemic — whole match (pick a feed)", "player": "L1 disagreement",
+                   "l2": "official revision — approve to apply"}
+    rows = []
+    for r in items:
+        key = (r["match_key"], r.get("pid", ""), r.get("param", ""))
+        rows.append([r.get("tour", ""), r.get("match", ""), r.get("date", ""), r.get("pid", ""),
+                     r.get("full", ""), r.get("param", ""), str(r.get("s1", "")), str(r.get("s2", "")),
+                     PRIOR_RECON.get(key, ""), PRIOR_MANUAL.get(key, ""),
+                     status_text.get(r.get("tier", ""), ""), r["match_key"]])
+    if not rows:
+        rows = [["—", "All feeds reconciled cleanly 🎉", "", "", "", "", "", "", "", "", "", ""]]
+    try:
+        try:
+            ws = sh.worksheet(RECON_TAB)
+        except gspread.WorksheetNotFound:
+            ws = sh.add_worksheet(title=RECON_TAB, rows=len(rows) + 10, cols=len(header) + 1)
+        ws.clear()
+        ws.update(range_name="A1", values=[header] + rows, value_input_option="RAW")
+        # Native dropdown on 'Correct Value' (col I). Best-effort — if the gspread version lacks
+        # add_validation, degrade silently to free-text (readback accepts S1/S2/Manual as text).
+        try:
+            from gspread.utils import ValidationConditionType
+            ws.add_validation(f"I2:I{1 + len(rows)}", ValidationConditionType.one_of_list,
+                              ["S1", "S2", "Manual"], strict=False, showCustomUi=True)
+        except Exception as e:
+            print(f"(recon dropdown skipped: {e})", file=sys.stderr)
+        print(f"Wrote {len(items)} recon item(s) to the '{RECON_TAB}' tab "
+              f"(pick 'Correct Value' S1/S2/Manual to approve).", file=sys.stderr)
+    except Exception as e:
+        print(f"could not write '{RECON_TAB}' tab: {e}", file=sys.stderr)
+
 def write_to_gsheet(cols, rows):
     """Write the points rows into this tour's tab via the shared service-account handle."""
     sh = open_gsheet()
@@ -1538,6 +1902,20 @@ def write_to_gsheet(cols, rows):
         ws = sh.add_worksheet(title=GSHEET_TAB, rows=len(rows) + 10, cols=len(cols) + 2)
     ws.clear()
     ws.update(range_name="A1", values=[cols] + rows, value_input_option="RAW")
+    # Highlight loudly (decision 3): red-fill rows of a match whose official revision is pending
+    # approval, so a revised-but-not-yet-approved result can't hide. Best-effort formatting.
+    try:
+        from gspread.utils import rowcol_to_a1
+        si = cols.index("Match Status")
+        last_col = re.sub(r"\d+", "", rowcol_to_a1(1, len(cols)))
+        red = {"backgroundColor": {"red": 1, "green": 0.8, "blue": 0.8}}
+        flagged = [i + 2 for i, row in enumerate(rows)
+                   if len(row) > si + 1 and row[si] == "COMPLETED_FLAGGED"
+                   and "revision" in row[si + 1]]
+        if flagged:
+            ws.batch_format([{"range": f"A{n}:{last_col}{n}", "format": red} for n in flagged])
+    except Exception as e:
+        print(f"(recon highlight skipped: {e})", file=sys.stderr)
     print(f"Wrote {len(rows)} rows to Google Sheet tab '{GSHEET_TAB}'.", file=sys.stderr)
 
 if __name__ == "__main__":

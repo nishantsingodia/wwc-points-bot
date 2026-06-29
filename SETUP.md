@@ -61,7 +61,15 @@ Repo ▸ Settings ▸ Secrets and variables ▸ Actions ▸ **New repository sec
 `Match · Date · Team · Player ID · Full Name · Role · Played · Runs · Balls · 4s · 6s · SR ·
 Dismissal · Overs · Maidens · Dots · Runs Conceded · Wickets · Econ · Catches ·
 Stumpings · Run Outs · Pts Bat · Pts Bowl · Pts Field · Pts SR · Pts Econ · Pts XI ·
-Fantasy Points · Source · In Squad List · Bat Order`
+Fantasy Points · Source · In Squad List · Bat Order · L1 Recon · L2 Recon ·
+Match Status · Recon Flag`
+
+- **`Match Status`** — `LIVE` / `COMPLETED` / `COMPLETED_FLAGGED` (`SCHEDULED` for toss rows).
+  The draft app gates "match completed" on this: a match with an unresolved cricapi↔ESPN (L1)
+  disagreement stays **LIVE** until you approve a value in the **`Recon Review`** tab. See
+  **`RECON_REVIEW_WORKFLOW.md`**.
+- **`Recon Flag`** — the human reason (e.g. `⏳ pending recon approval`, `⚠ official revision
+  pending`, `⚠ unverified — single feed`).
 
 - **`Player ID`** — stable player identity (`pid`) from the global registry
   (`registry/players.json`). The draft app joins points on this, not on the name. See `TOURS.md`.

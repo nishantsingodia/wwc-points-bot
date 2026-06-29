@@ -1,0 +1,4 @@
+{
+  "note": "Human-approved reconciliation overrides, recorded from the 'Recon Review' sheet tab by read_recon_approvals() and applied to the perf dict BEFORE scoring (apply_recon_overrides), after which score() recomputes every derived bonus. Keyed by stable identity (date + order-independent team pair) via match_key_of() — NEVER the renumbered 'Match N' label. scope: 'match' (use a whole feed S1/S2 for every differing player), 'player' (one stat field; source S1/S2/Manual+value), or 'l2' (accept official cricsheet S2, or keep the held provisional value).",
+  "overrides": []
+}
