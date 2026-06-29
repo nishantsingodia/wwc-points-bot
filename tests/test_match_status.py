@@ -51,13 +51,23 @@ def test_compute_l1_gaps_only_flags_differences(wcmod):
     assert set(gaps) == {"a"} and "runs 38/57" in gaps["a"]
 
 
-def test_feed_team_totals_and_diff(wcmod):
-    assigned = {("AUS", "Perry"): {"r": 38, "w": 0}, ("AUS", "Gardner"): {"r": 33, "w": 0},
-                ("IND", "Charani"): {"r": 0, "w": 1}}
+def test_feed_team_totals_wickets_lost_not_bowling(wcmod):
+    # wickets = count of DISMISSED batters (wickets lost), NOT the sum of bowling wickets taken
+    # (the old bug printed the opponent's wickets-lost in the team's own "/N" slot).
+    assigned = {
+        ("AUS", "Perry"): {"r": 38, "w": 0, "dismissed": True},
+        ("AUS", "Gardner"): {"r": 33, "w": 0, "dismissed": False},   # not out
+        ("IND", "Charani"): {"r": 4, "w": 2, "dismissed": True},     # took 2 wkts AND was out batting
+    }
     tot = wcmod.feed_team_totals(assigned)
-    assert tot["AUS"]["r"] == 71 and tot["IND"]["w"] == 1
-    assert wcmod.totals_differ(tot, wcmod.feed_team_totals({("AUS", "Perry"): {"r": 57, "w": 0}})) is True
-    assert wcmod.totals_differ(tot, tot) is False
+    assert tot["AUS"]["r"] == 71 and tot["AUS"]["w"] == 1            # only Perry dismissed
+    assert tot["IND"]["w"] == 1                                      # dismissed once; NOT her 2 bowling wkts
+
+
+def test_totals_differ_tolerates_small_gap(wcmod):
+    assert wcmod.totals_differ({"IND": {"r": 193}}, {"IND": {"r": 194}}) is False   # 1-run feed blip
+    assert wcmod.totals_differ({"AUS": {"r": 121}}, {"AUS": {"r": 164}}) is True     # Match 30 freeze
+    assert wcmod.totals_differ({"IND": {"r": 100}}, {"IND": {"r": 100}}) is False
 
 
 # ── apply_recon_overrides + recompute ───────────────────────────────────────

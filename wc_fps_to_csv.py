@@ -683,10 +683,13 @@ def parse_espn(event_id, fresh=False):
             typ = (dis.get("type") or "").lower()
             if bt:
                 pb = get(bt); pb["dismissed"] = True; pb["dismissal"] = it.get("shortText", typ)
-            if bw and typ not in ("run out", "retired hurt", "retired not out",
-                                  "retired out", "obstructing the field", "hit wicket"):
+            # Robust exclusion: ESPN emits variants like "retired not out (hurt)" that an exact
+            # tuple misses (that bug wrongly credited De Lange a 3rd wicket). Match by prefix.
+            not_bowler_wkt = (typ == "run out" or typ.startswith("retired")
+                              or "obstruct" in typ or typ == "hit wicket")
+            if bw and not not_bowler_wkt:
                 pw = get(bw); pw["w"] += 1
-                if typ in ("bowled", "lbw"):
+                if typ in ("bowled", "lbw", "leg before wicket"):   # ESPN spells lbw out
                     pw["lbwb"] += 1
             elif bw and typ == "hit wicket":   # bowler's wicket (no lbw/bowled bonus)
                 get(bw)["w"] += 1
@@ -821,6 +824,20 @@ def parse_match(mid):
                 if bname:
                     setteam(get(bname), bowl_team)
                     get(bname)["lbwb"] += 1
+            # caught & bowled: cricapi's `catching` array OMITS the bowler-as-catcher, so the
+            # +8 catch silently vanishes. ESPN + cricsheet both credit it; match them here.
+            # Match "c & b X" / "c and b X", or "c X b X" where catcher == bowler.
+            cbn = None
+            mcb = re.search(r"\bc\s*(?:&|and)\s*b\s+(.+)$", dtext, re.I)
+            if mcb:
+                cbn = mcb.group(1).strip()
+            else:
+                m2 = re.search(r"\bc\s+(.+?)\s+b\s+(.+)$", dtext, re.I)
+                if m2 and norm(m2.group(1)) == norm(m2.group(2)):
+                    cbn = m2.group(2).strip()   # catcher == bowler -> caught & bowled
+            if cbn:
+                cbp = get(cbn); cbp["played"] = True; setteam(cbp, bowl_team)
+                cbp["catches"] += 1
             # run-outs: parse fielders from dismissal text -> direct (1 fielder) vs assisted (2+)
             if "run out" in dtext.lower():
                 m = re.search(r"run out \(([^)]*)\)", dtext, re.I)
@@ -909,18 +926,28 @@ def compute_l1_gaps(capi_pid, espn_pid):
     return gaps
 
 def feed_team_totals(assigned):
-    """Sum runs/wkts per team-short from an assigned dict keyed by (short, name)."""
+    """Per team-short, the evidence scoreline: runs off the bat (sum of batters' runs — cricapi
+    leaves the innings 'extras'/'totals' blank, so this is bat-runs only, ~10-15 below the official
+    total but fine for a cricapi-vs-ESPN comparison) and wickets LOST = count of dismissed batters.
+    NOTE: do NOT sum d['w'] — that's wickets a player TOOK as a bowler (the opponent's wickets
+    lost), which previously printed the wrong team's wickets in the '/N' slot."""
     tot = {}
     for (short, _name), d in assigned.items():
         t = tot.setdefault(short, {"r": 0, "w": 0})
         t["r"] += d.get("r", 0) or 0
-        t["w"] += d.get("w", 0) or 0
+        if d.get("dismissed"):
+            t["w"] += 1
     return tot
 
+# A trivial cross-feed run gap (a single batter off by 1-2 between cricapi and ESPN) should NOT
+# trip the "systemic — whole match" row. Tunable; 0 restores exact-match behavior.
+TOTALS_TOL = int(os.environ.get("RECON_TOTALS_TOL", "3"))
+
 def totals_differ(a_tot, b_tot):
-    """True if the two feeds' per-team run totals disagree (a frozen feed reads lower)."""
+    """True if the two feeds' per-team run totals disagree by MORE than TOTALS_TOL (a frozen feed
+    reads far lower; a 1-run blip is ignored)."""
     for s in set(a_tot) | set(b_tot):
-        if (a_tot.get(s, {}).get("r", 0)) != (b_tot.get(s, {}).get("r", 0)):
+        if abs((a_tot.get(s, {}).get("r", 0)) - (b_tot.get(s, {}).get("r", 0))) > TOTALS_TOL:
             return True
     return False
 
