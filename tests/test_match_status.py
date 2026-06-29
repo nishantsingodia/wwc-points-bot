@@ -123,6 +123,20 @@ def test_systemic_when_team_totals_differ(wcmod):
     assert rows[0]["tier"] == "match"
 
 
+def test_systemic_evidence_lists_player_diffs_not_a_scoreline(wcmod):
+    capi = {"per": {"r": 38, "w": 0, "4s": 5, "6s": 0}, "cha": {"r": 0, "w": 1, "4s": 0, "6s": 0}}
+    espn = {"per": {"r": 57, "w": 0, "4s": 8, "6s": 0}, "cha": {"r": 0, "w": 2, "4s": 0, "6s": 0}}
+    unresolved = wcmod.compute_l1_gaps(capi, espn)
+    rows = wcmod.build_recon_rows("M", "lbl", "d", "T", unresolved, capi, espn,
+                                  {"X": {"r": 100}}, {"X": {"r": 200}}, n_compared=2)  # totals trip systemic
+    assert rows[0]["tier"] == "match"
+    s1, s2 = rows[0]["s1"], rows[0]["s2"]
+    # real per-player feed values (Perry 38→57 runs, Charani 1→2 wkts), not a "TEAM 121/5" scoreline
+    assert "38r" in s1 and "57r" in s2
+    assert "1w" in s1 and "2w" in s2
+    assert "/" not in s1 and "/" not in s2
+
+
 def test_isolated_disagreement_is_per_player(wcmod):
     unresolved = {"x": "wkts 1/2"}
     capi = {"x": {"r": 0, "w": 1, "4s": 0, "6s": 0}}

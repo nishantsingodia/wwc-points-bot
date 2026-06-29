@@ -1034,18 +1034,41 @@ def reconciled_provisional(prov_pid, capi_pid, espn_pid, l1_gaps, match_key, ove
     apply_recon_overrides(recon, capi_pid, espn_pid, l1_gaps, match_key, overrides_idx)
     return recon
 
+FIELD_ABBR = {"r": "r", "w": "w", "4s": "×4", "6s": "×6"}
+
+def _systemic_evidence(unresolved, capi_pid, espn_pid, limit=6):
+    """Evidence for a whole-match row = the ACTUAL per-player fantasy-stat disagreements between
+    the feeds (e.g. 'Perry 38r · Charani 1w' vs 'Perry 57r · Charani 2w'), NOT a reconstructed
+    team scoreline. Team scorelines mislead — they omit extras (which earn no fantasy points) so
+    they never match the broadcast, and a frozen feed's wicket count is stale. The real decision
+    is 'which feed has the right per-player numbers', so we show exactly that."""
+    s1, s2 = [], []
+    for pid in list(unresolved)[:limit]:
+        c, e = capi_pid.get(pid, {}), espn_pid.get(pid, {})
+        last = (PID2DISP.get(pid, pid).split() or [pid])[-1]
+        for f in RECON_L1:
+            cv, ev = (c.get(f, 0) or 0), (e.get(f, 0) or 0)
+            if cv != ev:
+                s1.append(f"{last} {cv}{FIELD_ABBR[f]}")
+                s2.append(f"{last} {ev}{FIELD_ABBR[f]}")
+    extra = len(unresolved) - limit
+    if extra > 0:
+        s1.append(f"+{extra} more"); s2.append(f"+{extra} more")
+    return (" · ".join(s1) or "—", " · ".join(s2) or "—")
+
 def build_recon_rows(match_key, label, mdate, tour, unresolved, capi_pid, espn_pid,
                      capi_tot, espn_tot, n_compared=0):
     """Recon Review rows for the UNRESOLVED L1 gaps of one match. Systemic (whole-match
-    freeze) -> ONE match-level row with team-total evidence; else one row per (pid, field)."""
+    freeze) -> ONE match-level row listing the differing players per feed; else one row per
+    (pid, field). capi_tot/espn_tot are used only as a systemic TRIGGER heuristic, not display."""
     n_diff = len(unresolved)
     frac = (n_diff / n_compared) if n_compared else 0.0
     systemic = n_diff >= SYSTEMIC_MIN or frac >= SYSTEMIC_FRAC or totals_differ(capi_tot, espn_tot)
     if systemic:
+        s1, s2 = _systemic_evidence(unresolved, capi_pid, espn_pid)
         return [{"match_key": match_key, "tour": tour, "match": label, "date": mdate,
                  "pid": "", "full": "— WHOLE MATCH —", "param": "ALL L1",
-                 "s1": _totals_str(capi_tot), "s2": _totals_str(espn_tot),
-                 "tier": "match", "n_diff": n_diff}]
+                 "s1": s1, "s2": s2, "tier": "match", "n_diff": n_diff}]
     rows = []
     for pid, _gap in unresolved.items():
         c, e = capi_pid.get(pid, {}), espn_pid.get(pid, {})
