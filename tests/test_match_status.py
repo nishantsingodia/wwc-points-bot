@@ -43,31 +43,27 @@ def test_match_key_order_independent(wcmod):
     assert a == b and a.startswith("2026-06-28::")
 
 
-# ── compute_l1_gaps / feed_team_totals / totals_differ ──────────────────────
-def test_compute_l1_gaps_only_flags_differences(wcmod):
+# ── compute_l1_gaps + materiality tolerance ─────────────────────────────────
+def test_compute_l1_gaps_only_flags_material(wcmod):
     capi = {"a": {"r": 38, "w": 0, "4s": 5, "6s": 0}, "b": {"r": 10, "w": 0, "4s": 1, "6s": 0}}
     espn = {"a": {"r": 57, "w": 0, "4s": 8, "6s": 0}, "b": {"r": 10, "w": 0, "4s": 1, "6s": 0}}
     gaps = wcmod.compute_l1_gaps(capi, espn)
     assert set(gaps) == {"a"} and "runs 38/57" in gaps["a"]
 
 
-def test_feed_team_totals_wickets_lost_not_bowling(wcmod):
-    # wickets = count of DISMISSED batters (wickets lost), NOT the sum of bowling wickets taken
-    # (the old bug printed the opponent's wickets-lost in the team's own "/N" slot).
-    assigned = {
-        ("AUS", "Perry"): {"r": 38, "w": 0, "dismissed": True},
-        ("AUS", "Gardner"): {"r": 33, "w": 0, "dismissed": False},   # not out
-        ("IND", "Charani"): {"r": 4, "w": 2, "dismissed": True},     # took 2 wkts AND was out batting
-    }
-    tot = wcmod.feed_team_totals(assigned)
-    assert tot["AUS"]["r"] == 71 and tot["AUS"]["w"] == 1            # only Perry dismissed
-    assert tot["IND"]["w"] == 1                                      # dismissed once; NOT her 2 bowling wkts
+def test_l1_field_material(wcmod):
+    assert wcmod._l1_field_material("r", 105, 106) is False   # 1-run blip ignored
+    assert wcmod._l1_field_material("r", 100, 105) is True    # >1 run flagged
+    assert wcmod._l1_field_material("w", 1, 2) is True         # wickets always
+    assert wcmod._l1_field_material("4s", 5, 6) is True        # boundaries always
+    assert wcmod._l1_field_material("r", 50, 50) is False      # equal -> never
 
 
-def test_totals_differ_tolerates_small_gap(wcmod):
-    assert wcmod.totals_differ({"IND": {"r": 193}}, {"IND": {"r": 194}}) is False   # 1-run feed blip
-    assert wcmod.totals_differ({"AUS": {"r": 121}}, {"AUS": {"r": 164}}) is True     # Match 30 freeze
-    assert wcmod.totals_differ({"IND": {"r": 100}}, {"IND": {"r": 100}}) is False
+def test_compute_l1_gaps_ignores_one_run_blip(wcmod):
+    # Wyatt 105 vs 106 (1 run, identical otherwise) does NOT hold the match; Charani 1/2 wkts does.
+    capi = {"wyatt": {"r": 105, "w": 0, "4s": 9, "6s": 1}, "cha": {"r": 0, "w": 1, "4s": 0, "6s": 0}}
+    espn = {"wyatt": {"r": 106, "w": 0, "4s": 9, "6s": 1}, "cha": {"r": 0, "w": 2, "4s": 0, "6s": 0}}
+    assert set(wcmod.compute_l1_gaps(capi, espn)) == {"cha"}
 
 
 # ── apply_recon_overrides + recompute ───────────────────────────────────────
@@ -107,44 +103,27 @@ def test_no_overrides_is_noop(perf, wcmod):
     assert p["r"] == 38
 
 
-# ── build_recon_rows: systemic (1 row) vs isolated (per-player) ──────────────
-def test_systemic_when_4plus_players_differ(wcmod):
-    unresolved = {f"p{i}": "runs 1/2" for i in range(4)}
-    rows = wcmod.build_recon_rows("M", "Match 30", "2026-06-28", "WWC", unresolved,
-                                  {}, {}, {}, {}, n_compared=20)
-    assert len(rows) == 1 and rows[0]["tier"] == "match" and rows[0]["full"] == "— WHOLE MATCH —"
+# ── build_recon_rows: one row per (player, MATERIAL field), no whole-match collapse ──
+def test_build_recon_rows_per_player_handles_mixed_match(wcmod):
+    # a mixed match (Match-23 class): each differing player gets its own row so the user can
+    # pick S1 for one and S2 for another — no single whole-match pick is forced.
+    unresolved = {"ferdous": "runs 33/40", "cha": "wkts 1/2"}
+    capi = {"ferdous": {"r": 33, "w": 0, "4s": 2, "6s": 0}, "cha": {"r": 0, "w": 1, "4s": 0, "6s": 0}}
+    espn = {"ferdous": {"r": 40, "w": 0, "4s": 2, "6s": 0}, "cha": {"r": 0, "w": 2, "4s": 0, "6s": 0}}
+    rows = wcmod.build_recon_rows("M", "IND v BAN", "d", "WWC", unresolved, capi, espn)
+    assert all(r["tier"] == "player" for r in rows)            # NO whole-match collapse
+    got = {(r["pid"], r["param"]): (r["s1"], r["s2"]) for r in rows}
+    assert got[("ferdous", "runs")] == (33, 40)
+    assert got[("cha", "wkts")] == (1, 2)
 
 
-def test_systemic_when_team_totals_differ(wcmod):
-    unresolved = {"p0": "runs 1/2"}   # only 1 player, but team totals diverge -> systemic
-    rows = wcmod.build_recon_rows("M", "lbl", "d", "T", unresolved,
-                                  {"p0": {"r": 1}}, {"p0": {"r": 2}},
-                                  {"AUS": {"r": 100, "w": 0}}, {"AUS": {"r": 171, "w": 0}}, n_compared=11)
-    assert rows[0]["tier"] == "match"
-
-
-def test_systemic_evidence_lists_player_diffs_not_a_scoreline(wcmod):
-    capi = {"per": {"r": 38, "w": 0, "4s": 5, "6s": 0}, "cha": {"r": 0, "w": 1, "4s": 0, "6s": 0}}
-    espn = {"per": {"r": 57, "w": 0, "4s": 8, "6s": 0}, "cha": {"r": 0, "w": 2, "4s": 0, "6s": 0}}
-    unresolved = wcmod.compute_l1_gaps(capi, espn)
-    rows = wcmod.build_recon_rows("M", "lbl", "d", "T", unresolved, capi, espn,
-                                  {"X": {"r": 100}}, {"X": {"r": 200}}, n_compared=2)  # totals trip systemic
-    assert rows[0]["tier"] == "match"
-    s1, s2 = rows[0]["s1"], rows[0]["s2"]
-    # real per-player feed values (Perry 38→57 runs, Charani 1→2 wkts), not a "TEAM 121/5" scoreline
-    assert "38r" in s1 and "57r" in s2
-    assert "1w" in s1 and "2w" in s2
-    assert "/" not in s1 and "/" not in s2
-
-
-def test_isolated_disagreement_is_per_player(wcmod):
-    unresolved = {"x": "wkts 1/2"}
-    capi = {"x": {"r": 0, "w": 1, "4s": 0, "6s": 0}}
-    espn = {"x": {"r": 0, "w": 2, "4s": 0, "6s": 0}}
-    rows = wcmod.build_recon_rows("M", "lbl", "d", "T", unresolved, capi, espn,
-                                  {"IND": {"r": 50, "w": 5}}, {"IND": {"r": 50, "w": 5}}, n_compared=11)
-    assert len(rows) == 1 and rows[0]["tier"] == "player"
-    assert rows[0]["param"] == "wkts" and rows[0]["s1"] == 1 and rows[0]["s2"] == 2
+def test_build_recon_rows_skips_one_run_blip(wcmod):
+    # a 1-run-only diff yields NO row (materiality); the wicket diff does
+    unresolved = {"wyatt": "_", "cha": "_"}
+    capi = {"wyatt": {"r": 105, "w": 0, "4s": 9, "6s": 1}, "cha": {"r": 0, "w": 1, "4s": 0, "6s": 0}}
+    espn = {"wyatt": {"r": 106, "w": 0, "4s": 9, "6s": 1}, "cha": {"r": 0, "w": 2, "4s": 0, "6s": 0}}
+    rows = wcmod.build_recon_rows("M", "lbl", "d", "T", unresolved, capi, espn)
+    assert len(rows) == 1 and rows[0]["pid"] == "cha" and rows[0]["param"] == "wkts"
 
 
 # ── _approval_to_override mapping ───────────────────────────────────────────
@@ -234,10 +213,10 @@ def test_match30_live_then_completed(perf, wcmod):
     capi = {"cha": {"r": 0, "w": 1, "4s": 0, "6s": 0}, "per": {"r": 38, "w": 0, "4s": 5, "6s": 0}}
     espn = {"cha": {"r": 0, "w": 2, "4s": 0, "6s": 0}, "per": {"r": 57, "w": 0, "4s": 8, "6s": 0}}
     l1 = wcmod.compute_l1_gaps(capi, espn)
-    # systemic detection -> one match-level row
-    assert wcmod.build_recon_rows("M", "AUS v IND", "2026-06-28", "WWC", l1, capi, espn,
-                                  {"AUS": {"r": 130, "w": 4}}, {"AUS": {"r": 171, "w": 4}},
-                                  n_compared=22)[0]["tier"] == "match"
+    # one per-player row per differing player (Charani wkts, Perry runs+4s) — no whole-match collapse
+    rows = wcmod.build_recon_rows("M", "AUS v IND", "2026-06-28", "WWC", l1, capi, espn)
+    assert rows and all(r["tier"] == "player" for r in rows)
+    assert {(r["pid"], r["param"]) for r in rows} >= {("cha", "wkts"), ("per", "runs")}
     # pre-approval: every gap unresolved -> LIVE
     assert wcmod.classify_match_status(False, True, l1, l1, False)[0] == "LIVE"
     # approve 'use ESPN' for the whole match -> all gaps resolved -> COMPLETED

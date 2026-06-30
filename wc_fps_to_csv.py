@@ -119,6 +119,11 @@ PRIOR_RECON = {}        # (match_key, pid, param) -> the user's "Correct Value" 
 PRIOR_MANUAL = {}       # (match_key, pid, param) -> the user's "Manual Value" so far (preserved)
 RECON_ACK = set()       # (match_key, pid, param) approved + applied -> stop re-flagging
 RECON_OVERRIDES = {}    # match_key -> [approved override dicts] (loaded once in main, before tours)
+# Approved rows captured from the sheet, re-emitted by write_recon_tab as "✓ applied". The SHEET
+# is the persistent store (CI runners are ephemeral; a committed JSON would be discarded), so an
+# approved pick is RETAINED here and re-read every run to keep its correction applied — without it
+# the points would silently revert on the next run.
+APPLIED_RECON = []      # [{tour, match, date, pid, full, param, s1, s2, correct, manual}]
 
 def guess_role(p):
     """Best-guess role from a player's feed stats (so '?' is never shown bare in review)."""
@@ -907,8 +912,20 @@ def _by_pid(perf):
 # the match LIVE until the human picks a value. Mirrors the Identity Anomalies pattern.
 # Pure helpers below (no sheet/network) so they're unit-testable.
 LABEL2FIELD = {v: k for k, v in RECON_LABEL.items()}  # "runs" -> "r", etc. (reversible)
-SYSTEMIC_MIN = int(os.environ.get("RECON_SYSTEMIC_MIN", "4"))    # >= N players differ -> match-level row
-SYSTEMIC_FRAC = float(os.environ.get("RECON_SYSTEMIC_FRAC", "0.40"))
+
+# A trivial cross-feed run gap (one batter off by 1-2 between cricapi and ESPN) isn't worth
+# holding a match for — it's a single fantasy point of uncertainty. Wickets and boundaries are
+# ALWAYS flagged (they move real points: a wicket is 30, a four/six is 4-6 + the run).
+L1_RUN_TOL = int(os.environ.get("RECON_L1_RUN_TOL", "1"))
+
+def _l1_field_material(field, cv, ev):
+    """Is this per-field cricapi/ESPN difference worth flagging? Runs only beyond L1_RUN_TOL;
+    wickets/4s/6s always (equal -> never)."""
+    if cv == ev:
+        return False
+    if field == "r":
+        return abs(cv - ev) > L1_RUN_TOL
+    return True
 
 def match_key_of(mdate, teams):
     """Stable, order-independent match identity (date + team pair) — NEVER the renumbered
@@ -916,43 +933,18 @@ def match_key_of(mdate, teams):
     return f"{mdate}::" + "|".join(sorted(team_key(teams)))
 
 def compute_l1_gaps(capi_pid, espn_pid):
-    """{pid: gap_string} for pids present in BOTH feeds whose RECON_L1 fields disagree."""
+    """{pid: gap_string} for pids in BOTH feeds with a MATERIAL RECON_L1 disagreement (a 1-run
+    blip is ignored; wickets/boundaries always count — see _l1_field_material)."""
     gaps = {}
     for pid in capi_pid:
-        if pid in espn_pid:
-            g = recon_gaps(capi_pid[pid], espn_pid[pid], RECON_L1, sep="/")
-            if g:
-                gaps[pid] = g
+        if pid not in espn_pid:
+            continue
+        c, e = capi_pid[pid], espn_pid[pid]
+        parts = [f"{RECON_LABEL.get(f, f)} {c.get(f, 0) or 0}/{e.get(f, 0) or 0}"
+                 for f in RECON_L1 if _l1_field_material(f, c.get(f, 0) or 0, e.get(f, 0) or 0)]
+        if parts:
+            gaps[pid] = "; ".join(parts)
     return gaps
-
-def feed_team_totals(assigned):
-    """Per team-short, the evidence scoreline: runs off the bat (sum of batters' runs — cricapi
-    leaves the innings 'extras'/'totals' blank, so this is bat-runs only, ~10-15 below the official
-    total but fine for a cricapi-vs-ESPN comparison) and wickets LOST = count of dismissed batters.
-    NOTE: do NOT sum d['w'] — that's wickets a player TOOK as a bowler (the opponent's wickets
-    lost), which previously printed the wrong team's wickets in the '/N' slot."""
-    tot = {}
-    for (short, _name), d in assigned.items():
-        t = tot.setdefault(short, {"r": 0, "w": 0})
-        t["r"] += d.get("r", 0) or 0
-        if d.get("dismissed"):
-            t["w"] += 1
-    return tot
-
-# A trivial cross-feed run gap (a single batter off by 1-2 between cricapi and ESPN) should NOT
-# trip the "systemic — whole match" row. Tunable; 0 restores exact-match behavior.
-TOTALS_TOL = int(os.environ.get("RECON_TOTALS_TOL", "3"))
-
-def totals_differ(a_tot, b_tot):
-    """True if the two feeds' per-team run totals disagree by MORE than TOTALS_TOL (a frozen feed
-    reads far lower; a 1-run blip is ignored)."""
-    for s in set(a_tot) | set(b_tot):
-        if abs((a_tot.get(s, {}).get("r", 0)) - (b_tot.get(s, {}).get("r", 0))) > TOTALS_TOL:
-            return True
-    return False
-
-def _totals_str(tot):
-    return " · ".join(f"{s} {t['r']}/{t['w']}" for s, t in sorted(tot.items())) or "—"
 
 def classify_match_status(cs_path, espn_present, l1_gaps, unresolved, l2_dirty):
     """Per-match status the draft app reads. Decisions: ANY unresolved L1 gap holds LIVE;
@@ -1034,51 +1026,21 @@ def reconciled_provisional(prov_pid, capi_pid, espn_pid, l1_gaps, match_key, ove
     apply_recon_overrides(recon, capi_pid, espn_pid, l1_gaps, match_key, overrides_idx)
     return recon
 
-FIELD_ABBR = {"r": "r", "w": "w", "4s": "×4", "6s": "×6"}
-
-def _systemic_evidence(unresolved, capi_pid, espn_pid, limit=6):
-    """Evidence for a whole-match row = the ACTUAL per-player fantasy-stat disagreements between
-    the feeds (e.g. 'Perry 38r · Charani 1w' vs 'Perry 57r · Charani 2w'), NOT a reconstructed
-    team scoreline. Team scorelines mislead — they omit extras (which earn no fantasy points) so
-    they never match the broadcast, and a frozen feed's wicket count is stale. The real decision
-    is 'which feed has the right per-player numbers', so we show exactly that."""
-    s1, s2 = [], []
-    for pid in list(unresolved)[:limit]:
-        c, e = capi_pid.get(pid, {}), espn_pid.get(pid, {})
-        last = (PID2DISP.get(pid, pid).split() or [pid])[-1]
-        for f in RECON_L1:
-            cv, ev = (c.get(f, 0) or 0), (e.get(f, 0) or 0)
-            if cv != ev:
-                s1.append(f"{last} {cv}{FIELD_ABBR[f]}")
-                s2.append(f"{last} {ev}{FIELD_ABBR[f]}")
-    extra = len(unresolved) - limit
-    if extra > 0:
-        s1.append(f"+{extra} more"); s2.append(f"+{extra} more")
-    return (" · ".join(s1) or "—", " · ".join(s2) or "—")
-
-def build_recon_rows(match_key, label, mdate, tour, unresolved, capi_pid, espn_pid,
-                     capi_tot, espn_tot, n_compared=0):
-    """Recon Review rows for the UNRESOLVED L1 gaps of one match. Systemic (whole-match
-    freeze) -> ONE match-level row listing the differing players per feed; else one row per
-    (pid, field). capi_tot/espn_tot are used only as a systemic TRIGGER heuristic, not display."""
-    n_diff = len(unresolved)
-    frac = (n_diff / n_compared) if n_compared else 0.0
-    systemic = n_diff >= SYSTEMIC_MIN or frac >= SYSTEMIC_FRAC or totals_differ(capi_tot, espn_tot)
-    if systemic:
-        s1, s2 = _systemic_evidence(unresolved, capi_pid, espn_pid)
-        return [{"match_key": match_key, "tour": tour, "match": label, "date": mdate,
-                 "pid": "", "full": "— WHOLE MATCH —", "param": "ALL L1",
-                 "s1": s1, "s2": s2, "tier": "match", "n_diff": n_diff}]
+def build_recon_rows(match_key, label, mdate, tour, unresolved, capi_pid, espn_pid):
+    """ONE row per (player, differing field) — NO whole-match collapse. A match where neither
+    feed is wholly right (some players' correct value is cricapi, others ESPN — e.g. Match 23)
+    can only be resolved per-player, and even a 'whole-match freeze' flags just the handful of
+    players who actually differ. Only MATERIAL field diffs (see _l1_field_material) become rows."""
     rows = []
-    for pid, _gap in unresolved.items():
+    for pid in unresolved:
         c, e = capi_pid.get(pid, {}), espn_pid.get(pid, {})
         for field in RECON_L1:
             cv, ev = (c.get(field, 0) or 0), (e.get(field, 0) or 0)
-            if cv != ev:
+            if _l1_field_material(field, cv, ev):
                 rows.append({"match_key": match_key, "tour": tour, "match": label, "date": mdate,
                              "pid": pid, "full": PID2DISP.get(pid, pid),
                              "param": RECON_LABEL.get(field, field), "field": field,
-                             "s1": cv, "s2": ev, "tier": "player", "n_diff": n_diff})
+                             "s1": cv, "s2": ev, "tier": "player"})
     return rows
 
 def run_tour(tour):
@@ -1227,7 +1189,6 @@ def run_tour(tour):
         # holds the match LIVE; approved overrides are applied to the perf dicts emit() scores.
         mk = match_key_of(mdate, teams)
         l1_gaps = compute_l1_gaps(capi_pid, espn_pid)
-        n_compared = sum(1 for pid in capi_pid if pid in espn_pid)
         perf_by_pid = {}   # pid -> the SAME perf dict objects emit() scores, so overrides stick
         for (sh_, nm_), dd in assigned.items():
             pp = resolve_pid(nm_) or resolve_pid(dd.get("name", "")) or ""
@@ -1265,9 +1226,7 @@ def run_tour(tour):
         player_recon = player_recon_markers(unresolved, l2_pairs, l2_appr)
         # Queue review rows for UNRESOLVED gaps (skip ones already approved+acked).
         if unresolved and not cs_path:
-            new_rows = build_recon_rows(mk, label, mdate, CURRENT_TOUR, unresolved,
-                                        capi_pid, espn_pid, feed_team_totals(assigned),
-                                        feed_team_totals(espn_assigned), n_compared=n_compared)
+            new_rows = build_recon_rows(mk, label, mdate, CURRENT_TOUR, unresolved, capi_pid, espn_pid)
             RECON_REVIEW.extend(r for r in new_rows
                                 if (mk, r.get("pid", ""), r.get("param", "")) not in RECON_ACK)
         for pid, g in l2_pairs.items():
@@ -1729,11 +1688,12 @@ def read_anomaly_confirmations():
             print(f"could not update identity_splits.json: {e}", file=sys.stderr)
 
 def read_recon_approvals():
-    """Read the 'Recon Review' tab BEFORE processing: record each 'Correct Value' answer
-    (preserved across rewrites in PRIOR_RECON/PRIOR_MANUAL), ack answered rows so they stop
-    re-flagging (RECON_ACK), and persist approvals into registry/recon_overrides.json. The
-    overrides are applied to the perf dicts at scoring time (apply_recon_overrides), so an
-    approval takes effect on the very next run. Read-only on the points tabs themselves."""
+    """Read the 'Recon Review' tab BEFORE processing and REBUILD the override set from it (the
+    sheet is the persistent store — CI runners are ephemeral, so we never rely on a committed
+    JSON). For every row with a 'Correct Value': record the answer (PRIOR_RECON/PRIOR_MANUAL),
+    ack it (RECON_ACK, so it isn't re-queued as a fresh pending row), build its override, and
+    capture it into APPLIED_RECON so write_recon_tab RE-EMITS it as '✓ applied' (retaining the
+    pick keeps the correction alive next run). Read-only on the points tabs themselves."""
     sh = open_gsheet()
     if sh is None:
         return
@@ -1749,33 +1709,36 @@ def read_recon_approvals():
         return
     if not rows:
         return
-    hdr = {c.strip(): i for i, c in enumerate(rows[0])}
-    ki = hdr.get("Match Key", 11); pi = hdr.get("Player ID", 3); pm = hdr.get("Param", 5)
-    ci = hdr.get("Correct Value", 8); mi = hdr.get("Manual Value", 9)
-    data = _load_overrides()
-    have = {(o.get("match_key"), o.get("pid"), o.get("field"), o.get("scope"))
-            for o in data.get("overrides", [])}
-    added = 0
+    h = {c.strip(): i for i, c in enumerate(rows[0])}
+    ti = h.get("Tour", 0); ma = h.get("Match", 1); da = h.get("Date", 2)
+    pi = h.get("Player ID", 3); fu = h.get("Full Name", 4); pm = h.get("Param", 5)
+    s1i = h.get("Source 1 (cricapi)", 6); s2i = h.get("Source 2 (ESPN)", 7)
+    ci = h.get("Correct Value", 8); mi = h.get("Manual Value", 9); ki = h.get("Match Key", 11)
+    data = {"overrides": []}   # rebuild fresh from the sheet (the source of truth), not the file
+    have = set()
+    cell = lambda r, i: (r[i].strip() if i is not None and i < len(r) else "")
     for r in rows[1:]:
-        if len(r) <= max(ki, pi, pm, ci):
-            continue
-        mk, pid, param, correct = r[ki].strip(), r[pi].strip(), r[pm].strip(), r[ci].strip()
-        manual = r[mi].strip() if len(r) > mi else ""
+        mk, pid, param, correct = cell(r, ki), cell(r, pi), cell(r, pm), cell(r, ci)
+        manual = cell(r, mi)
         if not mk or not correct:
             continue
         PRIOR_RECON[(mk, pid, param)] = correct
         if manual:
             PRIOR_MANUAL[(mk, pid, param)] = manual
         RECON_ACK.add((mk, pid, param))
+        # retain the approved row so it re-appears as "✓ applied" (and is re-read next run)
+        APPLIED_RECON.append({"tour": cell(r, ti), "match": cell(r, ma), "date": cell(r, da),
+                              "pid": pid, "full": cell(r, fu), "param": param,
+                              "s1": cell(r, s1i), "s2": cell(r, s2i),
+                              "correct": correct, "manual": manual, "match_key": mk})
         o = _approval_to_override(mk, pid, param, correct, manual)
         if o:
             sig = (o.get("match_key"), o.get("pid"), o.get("field"), o.get("scope"))
             if sig not in have:
-                data.setdefault("overrides", []).append(o)
-                have.add(sig); added += 1
-    if added:
-        _save_overrides(data)
-        print(f"Recorded {added} recon override(s) from '{RECON_TAB}' into recon_overrides.json.", file=sys.stderr)
+                data["overrides"].append(o); have.add(sig)
+    _save_overrides(data)   # runner-local hand-off; main() reloads into RECON_OVERRIDES
+    if data["overrides"]:
+        print(f"Rebuilt {len(data['overrides'])} recon override(s) from the '{RECON_TAB}' tab.", file=sys.stderr)
 
 def sync_player_aliases():
     """Persist the bot's high-confidence auto-matches + your confirmed-Yes rows into the
@@ -1889,10 +1852,11 @@ def write_anomaly_tab():
         print(f"could not write '{ANOMALY_TAB}' tab: {e}", file=sys.stderr)
 
 def write_recon_tab():
-    """Publish open Recon Review items: cricapi↔ESPN (L1) disagreements + cricsheet (L2)
-    revisions. Pick 'Correct Value' (S1 / S2 / Manual) to approve — the match then completes
-    next run. A systemic whole-match freeze collapses to ONE match-level row (team-total
-    evidence). Rewritten each full run; prior answers preserved, approved rows drop off."""
+    """Publish Recon Review: one row per (player, differing field). Pick 'Correct Value'
+    (S1 / S2 / Manual) to resolve it. PENDING rows (need your pick) sort to the TOP; approved
+    rows are RETAINED at the bottom as '✓ applied' (that's the persistent ledger — re-read each
+    run so the correction sticks; if they were deleted the points would revert). Rewritten each
+    full run; your picks are preserved."""
     sh = open_gsheet()
     if sh is None:
         return
@@ -1900,21 +1864,28 @@ def write_recon_tab():
     header = ["Tour", "Match", "Date", "Player ID", "Full Name", "Param",
               "Source 1 (cricapi)", "Source 2 (ESPN)", "Correct Value", "Manual Value",
               "Status", "Match Key"]
-    seen, items = set(), []
+    status_text = {"player": "⚠ pick a value", "l2": "official revision — approve to apply"}
+    seen, rows = set(), []
+    # 1) PENDING (top): freshly-detected disagreements you haven't resolved yet.
+    n_pending = 0
     for r in RECON_REVIEW:
         key = (r["match_key"], r.get("pid", ""), r.get("param", ""))
         if key in seen or key in RECON_ACK:
             continue
-        seen.add(key); items.append(r)
-    status_text = {"match": "systemic — whole match (pick a feed)", "player": "L1 disagreement",
-                   "l2": "official revision — approve to apply"}
-    rows = []
-    for r in items:
-        key = (r["match_key"], r.get("pid", ""), r.get("param", ""))
+        seen.add(key); n_pending += 1
         rows.append([r.get("tour", ""), r.get("match", ""), r.get("date", ""), r.get("pid", ""),
                      r.get("full", ""), r.get("param", ""), str(r.get("s1", "")), str(r.get("s2", "")),
                      PRIOR_RECON.get(key, ""), PRIOR_MANUAL.get(key, ""),
-                     status_text.get(r.get("tier", ""), ""), r["match_key"]])
+                     status_text.get(r.get("tier", ""), "⚠ pick a value"), r["match_key"]])
+    # 2) APPLIED (bottom): your approved picks, retained as the persistent ledger.
+    for a in APPLIED_RECON:
+        key = (a["match_key"], a.get("pid", ""), a.get("param", ""))
+        if key in seen:
+            continue
+        seen.add(key)
+        rows.append([a.get("tour", ""), a.get("match", ""), a.get("date", ""), a.get("pid", ""),
+                     a.get("full", ""), a.get("param", ""), str(a.get("s1", "")), str(a.get("s2", "")),
+                     a.get("correct", ""), a.get("manual", ""), "✓ applied", a["match_key"]])
     if not rows:
         rows = [["—", "All feeds reconciled cleanly 🎉", "", "", "", "", "", "", "", "", "", ""]]
     try:
@@ -1932,8 +1903,8 @@ def write_recon_tab():
                               ["S1", "S2", "Manual"], strict=False, showCustomUi=True)
         except Exception as e:
             print(f"(recon dropdown skipped: {e})", file=sys.stderr)
-        print(f"Wrote {len(items)} recon item(s) to the '{RECON_TAB}' tab "
-              f"(pick 'Correct Value' S1/S2/Manual to approve).", file=sys.stderr)
+        print(f"Wrote {n_pending} pending + {len(APPLIED_RECON)} applied recon item(s) to "
+              f"'{RECON_TAB}' (pick 'Correct Value' on the pending ones to resolve).", file=sys.stderr)
     except Exception as e:
         print(f"could not write '{RECON_TAB}' tab: {e}", file=sys.stderr)
 
