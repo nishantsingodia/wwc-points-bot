@@ -1,4 +1,250 @@
 {
   "note": "Human-approved reconciliation overrides, recorded from the 'Recon Review' sheet tab by read_recon_approvals() and applied to the perf dict BEFORE scoring (apply_recon_overrides), after which score() recomputes every derived bonus. Keyed by stable identity (date + order-independent team pair) via match_key_of() — NEVER the renumbered 'Match N' label. scope: 'match' (use a whole feed S1/S2 for every differing player), 'player' (one stat field; source S1/S2/Manual+value), or 'l2' (accept official cricsheet S2, or keep the held provisional value).",
-  "overrides": []
+  "overrides": [
+    {
+      "match_key": "2026-06-13::new zealand|west indies",
+      "scope": "l2",
+      "pid": "d5eb8b84",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-13::new zealand|west indies",
+      "scope": "l2",
+      "pid": "e22f8ec1",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-18::scotland|west indies",
+      "scope": "l2",
+      "pid": "d6164dc0",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-24::england|west indies",
+      "scope": "l2",
+      "pid": "c6625a26",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-25::bangladesh|india",
+      "scope": "l2",
+      "pid": "ad3940a5",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-25::bangladesh|india",
+      "scope": "l2",
+      "pid": "66078174",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-25::bangladesh|india",
+      "scope": "l2",
+      "pid": "espn:372317",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-25::bangladesh|india",
+      "scope": "l2",
+      "pid": "espn:597811",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-28::australia|india",
+      "scope": "l2",
+      "pid": "185e6c0c",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-28::australia|india",
+      "scope": "l2",
+      "pid": "espn:597811",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-28::australia|india",
+      "scope": "l2",
+      "pid": "583ce32c",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-28::australia|india",
+      "scope": "l2",
+      "pid": "7298db76",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-28::australia|india",
+      "scope": "l2",
+      "pid": "be150fc8",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-28::australia|india",
+      "scope": "l2",
+      "pid": "bc969efb",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-28::australia|india",
+      "scope": "l2",
+      "pid": "f0b4e47d",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-20::los angeles knight riders|san francisco unicorns",
+      "scope": "l2",
+      "pid": "bbd41817",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-21::mi new york|washington freedom",
+      "scope": "l2",
+      "pid": "172dff15",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-21::san francisco unicorns|texas super kings",
+      "scope": "l2",
+      "pid": "486065b3",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-21::san francisco unicorns|texas super kings",
+      "scope": "l2",
+      "pid": "57bd3ecc",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-22::los angeles knight riders|seattle orcas",
+      "scope": "l2",
+      "pid": "0f721006",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-26::seattle orcas|washington freedom",
+      "scope": "l2",
+      "pid": "4167f30b",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-28::los angeles knight riders|mi new york",
+      "scope": "l2",
+      "pid": "372455c4",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-26::india|ireland",
+      "scope": "l2",
+      "pid": "espn:1448923",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-26::india|ireland",
+      "scope": "l2",
+      "pid": "f29185a1",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-28::india|ireland",
+      "scope": "l2",
+      "pid": "espn:1195143",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-28::india|ireland",
+      "scope": "l2",
+      "pid": "espn:961407",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-28::india|ireland",
+      "scope": "l2",
+      "pid": "espn:1278203",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-28::india|ireland",
+      "scope": "l2",
+      "pid": "espn:1448923",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-28::india|ireland",
+      "scope": "l2",
+      "pid": "espn:1490554",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-28::india|ireland",
+      "scope": "l2",
+      "pid": "2c54c49b",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-28::india|ireland",
+      "scope": "l2",
+      "pid": "b0482a1d",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-28::india|ireland",
+      "scope": "l2",
+      "pid": "970ddd24",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-28::india|ireland",
+      "scope": "l2",
+      "pid": "77b1aa15",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-28::india|ireland",
+      "scope": "l2",
+      "pid": "244048f6",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-06-28::india|ireland",
+      "scope": "l2",
+      "pid": "80b2fb19",
+      "source": "S2",
+      "status": "approved"
+    }
+  ]
 }
