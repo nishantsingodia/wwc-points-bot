@@ -119,11 +119,6 @@ PRIOR_RECON = {}        # (match_key, pid, param) -> the user's "Correct Value" 
 PRIOR_MANUAL = {}       # (match_key, pid, param) -> the user's "Manual Value" so far (preserved)
 RECON_ACK = set()       # (match_key, pid, param) approved + applied -> stop re-flagging
 RECON_OVERRIDES = {}    # match_key -> [approved override dicts] (loaded once in main, before tours)
-# Approved rows captured from the sheet, re-emitted by write_recon_tab as "✓ applied". The SHEET
-# is the persistent store (CI runners are ephemeral; a committed JSON would be discarded), so an
-# approved pick is RETAINED here and re-read every run to keep its correction applied — without it
-# the points would silently revert on the next run.
-APPLIED_RECON = []      # [{tour, match, date, pid, full, param, s1, s2, correct, manual}]
 
 def guess_role(p):
     """Best-guess role from a player's feed stats (so '?' is never shown bare in review)."""
@@ -1695,12 +1690,11 @@ def read_anomaly_confirmations():
             print(f"could not update identity_splits.json: {e}", file=sys.stderr)
 
 def read_recon_approvals():
-    """Read the 'Recon Review' tab BEFORE processing and REBUILD the override set from it (the
-    sheet is the persistent store — CI runners are ephemeral, so we never rely on a committed
-    JSON). For every row with a 'Correct Value': record the answer (PRIOR_RECON/PRIOR_MANUAL),
-    ack it (RECON_ACK, so it isn't re-queued as a fresh pending row), build its override, and
-    capture it into APPLIED_RECON so write_recon_tab RE-EMITS it as '✓ applied' (retaining the
-    pick keeps the correction alive next run). Read-only on the points tabs themselves."""
+    """Read the 'Recon Review' tab BEFORE processing. For every row with a 'Correct Value':
+    record the answer (PRIOR_RECON/PRIOR_MANUAL), ack it (RECON_ACK, so it's DROPPED from the
+    tab next run — a resolved row disappears), and add its override to recon_overrides.json.
+    That file is the durable ledger: the workflow COMMITS it back to git after the run, so the
+    correction survives the ephemeral runner even though the row is gone. Read-only on points."""
     sh = open_gsheet()
     if sh is None:
         return
@@ -1717,13 +1711,13 @@ def read_recon_approvals():
     if not rows:
         return
     h = {c.strip(): i for i, c in enumerate(rows[0])}
-    ti = h.get("Tour", 0); ma = h.get("Match", 1); da = h.get("Date", 2)
-    pi = h.get("Player ID", 3); fu = h.get("Full Name", 4); pm = h.get("Param", 5)
-    s1i = h.get("Source 1 (cricapi)", 6); s2i = h.get("Source 2 (ESPN)", 7)
+    pi = h.get("Player ID", 3); pm = h.get("Param", 5)
     ci = h.get("Correct Value", 8); mi = h.get("Manual Value", 9); ki = h.get("Match Key", 11)
-    data = {"overrides": []}   # rebuild fresh from the sheet (the source of truth), not the file
-    have = set()
+    data = _load_overrides()   # committed ledger (persisted across runs by the workflow)
+    have = {(o.get("match_key"), o.get("pid"), o.get("field"), o.get("scope"))
+            for o in data.get("overrides", [])}
     cell = lambda r, i: (r[i].strip() if i is not None and i < len(r) else "")
+    added = 0
     for r in rows[1:]:
         mk, pid, param, correct = cell(r, ki), cell(r, pi), cell(r, pm), cell(r, ci)
         manual = cell(r, mi)
@@ -1732,20 +1726,14 @@ def read_recon_approvals():
         PRIOR_RECON[(mk, pid, param)] = correct
         if manual:
             PRIOR_MANUAL[(mk, pid, param)] = manual
-        RECON_ACK.add((mk, pid, param))
-        # retain the approved row so it re-appears as "✓ applied" (and is re-read next run)
-        APPLIED_RECON.append({"tour": cell(r, ti), "match": cell(r, ma), "date": cell(r, da),
-                              "pid": pid, "full": cell(r, fu), "param": param,
-                              "s1": cell(r, s1i), "s2": cell(r, s2i),
-                              "correct": correct, "manual": manual, "match_key": mk})
+        RECON_ACK.add((mk, pid, param))   # answered -> dropped from the tab next write
         o = _approval_to_override(mk, pid, param, correct, manual)
         if o:
             sig = (o.get("match_key"), o.get("pid"), o.get("field"), o.get("scope"))
             if sig not in have:
-                data["overrides"].append(o); have.add(sig)
-    _save_overrides(data)   # runner-local hand-off; main() reloads into RECON_OVERRIDES
-    if data["overrides"]:
-        print(f"Rebuilt {len(data['overrides'])} recon override(s) from the '{RECON_TAB}' tab.", file=sys.stderr)
+                data["overrides"].append(o); have.add(sig); added += 1
+    _save_overrides(data)   # the workflow commits this back to git after the run
+    print(f"Recon: {added} new override(s) this run; {len(data['overrides'])} total persisted.", file=sys.stderr)
 
 def sync_player_aliases():
     """Persist the bot's high-confidence auto-matches + your confirmed-Yes rows into the
@@ -1859,11 +1847,10 @@ def write_anomaly_tab():
         print(f"could not write '{ANOMALY_TAB}' tab: {e}", file=sys.stderr)
 
 def write_recon_tab():
-    """Publish Recon Review: one row per (player, differing field). Pick 'Correct Value'
-    (S1 / S2 / Manual) to resolve it. PENDING rows (need your pick) sort to the TOP; approved
-    rows are RETAINED at the bottom as '✓ applied' (that's the persistent ledger — re-read each
-    run so the correction sticks; if they were deleted the points would revert). Rewritten each
-    full run; your picks are preserved."""
+    """Publish OPEN Recon Review items: one row per (player, differing field) you haven't
+    resolved yet. Pick 'Correct Value' (S1 / S2 / Manual) and the row DROPS next run — the
+    approval is persisted to registry/recon_overrides.json (committed back by the workflow), so
+    the correction sticks even though the row is gone. Rewritten each full run."""
     sh = open_gsheet()
     if sh is None:
         return
@@ -1873,26 +1860,16 @@ def write_recon_tab():
               "Status", "Match Key"]
     status_text = {"player": "⚠ pick a value", "l2": "official revision — approve to apply"}
     seen, rows = set(), []
-    # 1) PENDING (top): freshly-detected disagreements you haven't resolved yet.
-    n_pending = 0
     for r in RECON_REVIEW:
         key = (r["match_key"], r.get("pid", ""), r.get("param", ""))
-        if key in seen or key in RECON_ACK:
+        if key in seen or key in RECON_ACK:   # already answered -> dropped (resolved)
             continue
-        seen.add(key); n_pending += 1
+        seen.add(key)
         rows.append([r.get("tour", ""), r.get("match", ""), r.get("date", ""), r.get("pid", ""),
                      r.get("full", ""), r.get("param", ""), str(r.get("s1", "")), str(r.get("s2", "")),
                      PRIOR_RECON.get(key, ""), PRIOR_MANUAL.get(key, ""),
                      status_text.get(r.get("tier", ""), "⚠ pick a value"), r["match_key"]])
-    # 2) APPLIED (bottom): your approved picks, retained as the persistent ledger.
-    for a in APPLIED_RECON:
-        key = (a["match_key"], a.get("pid", ""), a.get("param", ""))
-        if key in seen:
-            continue
-        seen.add(key)
-        rows.append([a.get("tour", ""), a.get("match", ""), a.get("date", ""), a.get("pid", ""),
-                     a.get("full", ""), a.get("param", ""), str(a.get("s1", "")), str(a.get("s2", "")),
-                     a.get("correct", ""), a.get("manual", ""), "✓ applied", a["match_key"]])
+    n_pending = len(rows)
     if not rows:
         rows = [["—", "All feeds reconciled cleanly 🎉", "", "", "", "", "", "", "", "", "", ""]]
     try:
@@ -1910,8 +1887,8 @@ def write_recon_tab():
                               ["S1", "S2", "Manual"], strict=False, showCustomUi=True)
         except Exception as e:
             print(f"(recon dropdown skipped: {e})", file=sys.stderr)
-        print(f"Wrote {n_pending} pending + {len(APPLIED_RECON)} applied recon item(s) to "
-              f"'{RECON_TAB}' (pick 'Correct Value' on the pending ones to resolve).", file=sys.stderr)
+        print(f"Wrote {n_pending} open recon item(s) to '{RECON_TAB}' "
+              f"(pick 'Correct Value' to resolve; resolved rows drop next run).", file=sys.stderr)
     except Exception as e:
         print(f"could not write '{RECON_TAB}' tab: {e}", file=sys.stderr)
 
