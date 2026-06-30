@@ -932,12 +932,19 @@ def match_key_of(mdate, teams):
     'Match N' label. Mirrors the draft app's teams+date join."""
     return f"{mdate}::" + "|".join(sorted(team_key(teams)))
 
+def _espn_has_ballbyball(e):
+    """ESPN with no balls faced/bowled and no runs/wkts/boundaries is a '+4 in-XI' placeholder
+    (ESPN lacks ball-by-ball for this match), NOT an observed 0. Without this guard, a match
+    ESPN never ball-tracked would falsely flag EVERY player as cricapi-vs-0."""
+    return any(e.get(k, 0) for k in ("b", "balls", "r", "w", "4s", "6s"))
+
 def compute_l1_gaps(capi_pid, espn_pid):
     """{pid: gap_string} for pids in BOTH feeds with a MATERIAL RECON_L1 disagreement (a 1-run
-    blip is ignored; wickets/boundaries always count — see _l1_field_material)."""
+    blip is ignored; wickets/boundaries always count — see _l1_field_material). Players ESPN has
+    no ball-by-ball for are skipped (nothing to cross-check)."""
     gaps = {}
     for pid in capi_pid:
-        if pid not in espn_pid:
+        if pid not in espn_pid or not _espn_has_ballbyball(espn_pid[pid]):
             continue
         c, e = capi_pid[pid], espn_pid[pid]
         parts = [f"{RECON_LABEL.get(f, f)} {c.get(f, 0) or 0}/{e.get(f, 0) or 0}"

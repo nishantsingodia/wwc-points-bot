@@ -66,6 +66,16 @@ def test_compute_l1_gaps_ignores_one_run_blip(wcmod):
     assert set(wcmod.compute_l1_gaps(capi, espn)) == {"cha"}
 
 
+def test_compute_l1_gaps_skips_espn_without_ballbyball(wcmod):
+    # ESPN lacks ball-by-ball for the match (all-zero placeholders) -> do NOT flag every player
+    # as cricapi-vs-0. A player ESPN DID ball-track (b>0) is still compared.
+    capi = {"a": {"r": 50, "b": 30, "w": 0, "4s": 5, "6s": 0},
+            "b": {"r": 16, "b": 12, "w": 0, "4s": 2, "6s": 0}}
+    espn = {"a": {"r": 0, "b": 0, "balls": 0, "w": 0, "4s": 0, "6s": 0},   # no ball-by-ball
+            "b": {"r": 20, "b": 12, "w": 0, "4s": 2, "6s": 0}}              # tracked, differs
+    assert set(wcmod.compute_l1_gaps(capi, espn)) == {"b"}   # 'a' skipped (ESPN blank), 'b' flagged
+
+
 # ── apply_recon_overrides + recompute ───────────────────────────────────────
 def test_match_seed_uses_espn_and_recomputes(perf, wcmod):
     charani = perf("Shree Charani", w=1, balls=18, runs_conceded=26, dots=9, played=True)
