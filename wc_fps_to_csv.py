@@ -111,6 +111,12 @@ ANOMALIES = []          # {tour, kind, pid, display, context, names, finding}
 PRIOR_ANOMALY = {}      # (tour, pid, kind) -> the user's Yes/No so far (preserved across rewrites)
 ANOMALY_ACK = set()     # (tour, pid, kind) the user answered -> stop re-flagging
 
+# Sheet-driven NEW players: global identity (pid+aliases) + per-tour membership, loaded at startup
+# and injected into the tour squads — so a player added via "New" (or auto-added on a silent-drop)
+# resolves + counts + is draftable WITHOUT a build_registry rebuild. Persisted to
+# registry/new_players.json and committed back by the workflow. See load_new_players/register_new_player.
+NEW_PLAYERS_DATA = {"players": []}   # the loaded ledger, mutated in-memory, saved once at run end
+
 # Recon-review queue (written to the sheet's "Recon Review" tab). Feed disagreements the human
 # resolves by picking a value; a match stays LIVE until its L1 gaps are approved. Separate tab +
 # globals so the Needs Review / Identity Anomalies flows are untouched. See match_key_of/etc.
@@ -1163,7 +1169,36 @@ def run_tour(tour):
             short = name2short.get(norm(tname))
             if short:
                 team_players += [(short, n, r) for n, r in squads[short]["players"]]
+        # Inject sheet-driven NEW players (marked "New" or auto-added on a past run) who belong to
+        # this match's teams + tour — so they're scored without a build_registry rebuild.
+        match_shorts = {name2short.get(norm(t)) for t in teams} - {None}
+        have_names = {norm(n) for _, n, _ in team_players}
+        for e in NEW_PLAYERS_DATA.get("players", []):
+            if CURRENT_TOUR not in e.get("tours", []):
+                continue
+            es = short_of(e.get("team", "")) or e.get("team", "")
+            if es in match_shorts and norm(e.get("display", "")) not in have_names:
+                team_players.append((es, e["display"], e.get("role") or "?"))
+                have_names.add(norm(e["display"]))
         assigned, leftover, ambiguous = match_squad_to_perf(team_players, perf)
+
+        # SILENT-DROP AUTO-ADD: a globally-known player who PLAYED but is in no squad slot would
+        # otherwise vanish (resolves to a pid -> not a no-pid leftover -> never emitted). Add her
+        # to this match (so she counts now) AND persist (source:'auto') so she's a member next run.
+        # Guard (i) played; (ii) pid not already claimed (find_silent_drops ensures this) -> one
+        # slot, no double-count. The false-merge detector in match_squad_to_perf stays on.
+        for pid, v in find_silent_drops(perf, assigned, team_players):
+            es = short_of(v.get("team", "")) or ""
+            if es not in match_shorts:
+                continue  # can't safely attribute to a team — leave it (rare; blank feed team)
+            disp = PID2DISP.get(pid, v.get("name", "")) or v.get("name", "")
+            role = guess_role(v)
+            team_players.append((es, disp, role))
+            assigned[(es, disp)] = v
+            register_new_player(pid=pid, display=disp, feed=v.get("name", ""), team=es,
+                                role=role, tour=CURRENT_TOUR, source="auto")
+            print(f"AUTO-ADD: {disp} (pid {pid}) played {GSHEET_TAB} but was in no squad slot "
+                  f"-> added to {es} this run + persisted.", file=sys.stderr)
 
         # Merge ESPN (squad-level): inject dot-balls, credit +4 in-XI to players cricapi
         # didn't list, and cross-check runs/wickets — disagreements flagged for review.
@@ -1456,7 +1491,8 @@ def main():
     # new aliases and republish the review queue.
     global RECON_OVERRIDES
     load_sheet_aliases()
-    read_review_confirmations()
+    load_new_players()             # merge sheet-added players' identity into the registry (before reads)
+    read_review_confirmations()    # 'New' registers a player into NEW_PLAYERS_DATA (+ identity)
     read_anomaly_confirmations()   # record Yes/No on identity anomalies (read-only on live identity)
     read_recon_approvals()         # record recon 'Correct Value' answers -> recon_overrides.json
     RECON_OVERRIDES = overrides_by_match(_load_overrides())  # index approved overrides for run_tour
@@ -1474,6 +1510,7 @@ def main():
             print(f"!! tour '{t.get('name')}' error: {e}", file=sys.stderr)
     if not FREQUENT:
         sync_player_aliases()   # persist auto + confirmed aliases into the Player Aliases store
+        _save_new_players(NEW_PLAYERS_DATA)   # persist New + auto-added players (workflow commits it)
         write_review_tab()      # publish remaining unmatched players (closest-match + Yes/No)
         write_anomaly_tab()     # publish detected merges/dupes + the audit of past splits (Yes/No)
         write_recon_tab()       # publish L1/L2 feed disagreements to approve (pick Correct Value)
@@ -1501,6 +1538,7 @@ ANOMALY_TAB = "Identity Anomalies"  # bot-written: detected merges/duplicates + 
 SPLITS_PATH = os.path.join(os.path.dirname(__file__), "registry", "identity_splits.json")
 RECON_TAB = "Recon Review"          # bot-written: cricapi/ESPN (L1) + cricsheet (L2) disagreements to approve
 OVERRIDES_PATH = os.path.join(os.path.dirname(__file__), "registry", "recon_overrides.json")
+NEW_PLAYERS_PATH = os.path.join(os.path.dirname(__file__), "registry", "new_players.json")
 
 def load_sheet_aliases():
     """Read the 'Player Aliases' tab (Feed Name | Correct Player | Source) and merge it into the
@@ -1554,7 +1592,7 @@ def read_review_confirmations():
     # tolerate the old header without "New"/"Role" so a mid-season schema change doesn't lose answers
     ci = next((hdr[k] for k in ("Correct? (Yes/No/New)", "Correct? (Yes/No)", "Correct?") if k in hdr), 5)
     ti, fi, si = hdr.get("Tour", 0), hdr.get("Feed Name", 2), hdr.get("Closest Match", 3)
-    ri = hdr.get("Role", -1)
+    tmi, ri = hdr.get("Team", 1), hdr.get("Role", -1)
     applied = 0
     for r in rows[1:]:
         if len(r) <= max(ci, fi, si):
@@ -1570,8 +1608,18 @@ def read_review_confirmations():
             ro = r[ri].strip().upper()        # and use it to score this player (SR/Econ depend on it)
             if ro in ("WK", "BAT", "AR", "BOWL"):
                 ROLE_OVERRIDE[norm(feed)] = ro
-        # "New" (a genuine non-listed player) or "No" (bad guess) -> acknowledge: stop re-flagging.
-        if ans in ("no", "n", "new") or closest.lower() == "new":
+        # "New" -> register a genuinely-new player (sheet-driven): create a global identity +
+        # this tour's membership so they resolve + count + become draftable from now on.
+        if ans == "new" or closest.lower() == "new":
+            disp = closest if (closest and closest.lower() != "new") else feed   # type the real name
+            pid = resolve_pid(feed) or slugify(disp)                              # reuse if known, else slug
+            team = r[tmi].strip() if len(r) > tmi else ""
+            role = ((r[ri].strip() if (ri >= 0 and len(r) > ri) else "") or guess_role({"name": feed}))
+            register_new_player(pid=pid, display=disp, feed=feed, team=team,
+                                role=role, tour=key[0], source="new")
+            ACK.add(norm(feed)); applied += 1; continue
+        # "No" (bad guess) -> acknowledge: stop re-flagging.
+        if ans in ("no", "n"):
             ACK.add(norm(feed)); continue
         # "Yes" -> map Feed -> Closest Match (saved to Player Aliases so it sticks).
         if ans in ("y", "yes") and closest:
@@ -1600,6 +1648,84 @@ def _save_overrides(data):
         json.dump(data, open(OVERRIDES_PATH, "w"), indent=2, ensure_ascii=False)
     except Exception as e:
         print(f"could not update recon_overrides.json: {e}", file=sys.stderr)
+
+# ── Sheet-driven NEW players (identity once + per-tour membership; no build_registry needed) ──
+def slugify(name):
+    """A stable, tour-agnostic pid for a brand-new player: 'slug:jane-maguire'. A later
+    build_registry run can upgrade this to the player's real cricsheet_id."""
+    return "slug:" + re.sub(r"\s+", "-", norm(name)).strip("-")
+
+def _load_new_players():
+    try:
+        return json.load(open(NEW_PLAYERS_PATH))
+    except Exception:
+        return {"players": []}
+
+def _save_new_players(data):
+    try:
+        json.dump(data, open(NEW_PLAYERS_PATH, "w"), indent=2, ensure_ascii=False)
+    except Exception as e:
+        print(f"could not update new_players.json: {e}", file=sys.stderr)
+
+def load_new_players():
+    """Load new_players.json into NEW_PLAYERS_DATA and merge each entry's identity (pid + aliases
+    + display) into the runtime registry (ALIAS2PID/PID2DISP) — so a sheet-added player resolves
+    THIS run with no build_registry rebuild. Membership is injected per-match in run_tour."""
+    global NEW_PLAYERS_DATA
+    NEW_PLAYERS_DATA = _load_new_players()
+    for e in NEW_PLAYERS_DATA.get("players", []):
+        pid, disp = e.get("pid"), e.get("display")
+        if not pid:
+            continue
+        PID2DISP.setdefault(pid, disp or pid)
+        for a in list(e.get("aliases", [])) + ([disp] if disp else []):
+            if a:
+                ALIAS2PID.setdefault(norm(a), pid)
+    return NEW_PLAYERS_DATA.get("players", [])
+
+def register_new_player(pid, display, feed, team, role, tour, source):
+    """Add/merge a player into NEW_PLAYERS_DATA (saved + committed at run end) and reflect their
+    identity in the runtime registry so resolution works immediately. Deduped by pid; aliases +
+    tours accumulate. `source`: 'new' (you marked New) | 'auto' (silent-drop auto-add)."""
+    players = NEW_PLAYERS_DATA.setdefault("players", [])
+    e = next((x for x in players if x.get("pid") == pid), None)
+    if e is None:
+        e = {"pid": pid, "display": display, "aliases": [], "team": team,
+             "role": role, "tours": [], "source": source}
+        players.append(e)
+    al = set(e.get("aliases", []))
+    if feed:
+        al.add(norm(feed))
+    e["aliases"] = sorted(a for a in al if a)
+    if tour and tour not in e.setdefault("tours", []):
+        e["tours"].append(tour)
+    PID2DISP.setdefault(pid, display or pid)
+    for a in e["aliases"] + ([display] if display else []):
+        if a:
+            ALIAS2PID.setdefault(norm(a), pid)
+    return e
+
+def find_silent_drops(perf, assigned, team_players):
+    """Played feed players that resolve to a pid but NO squad slot claimed it — the silent-drop
+    set (otherwise lost: not assigned, and not a no-pid `leftover`). Returns [(pid, perf)]."""
+    claimed = set()
+    for d in assigned.values():
+        p = resolve_pid(d.get("name", ""))
+        if p:
+            claimed.add(p)
+    for (_, n, _) in team_players:
+        p = resolve_pid(n)
+        if p:
+            claimed.add(p)
+    out, seen = [], set()
+    for k, v in perf.items():
+        if not v.get("played"):
+            continue
+        p = resolve_pid(v.get("name", k))
+        if p and p not in claimed and p not in seen:
+            seen.add(p)
+            out.append((p, v))
+    return out
 
 def overrides_by_match(data):
     """Index APPROVED overrides by match_key -> [override dicts] for O(1) apply."""

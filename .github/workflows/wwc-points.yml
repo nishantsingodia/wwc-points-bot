@@ -63,20 +63,21 @@ jobs:
           WC_CACHE_DIR: api_cache
         run: python wc_fps_to_csv.py
 
-      - name: Persist approved recon overrides to git
+      - name: Persist approved recon overrides + new players to git
         if: always()   # commit even if a later step fails — the approvals are already recorded
         run: |
-          # read_recon_approvals() folds the sheet's 'Correct Value' picks into this file; commit
-          # it so the corrections survive the ephemeral runner (the row is dropped from the sheet).
-          if [ -n "$(git status --porcelain registry/recon_overrides.json)" ]; then
+          # The bot folds sheet decisions into these committed ledgers (recon picks ->
+          # recon_overrides.json; "New"/auto-added players -> new_players.json); commit them so
+          # they survive the ephemeral runner (and the sheet rows can be dropped).
+          if [ -n "$(git status --porcelain registry/recon_overrides.json registry/new_players.json)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add registry/recon_overrides.json
-            git commit -m "chore: persist approved recon overrides [skip ci]"
+            git add registry/recon_overrides.json registry/new_players.json
+            git commit -m "chore: persist recon overrides + new players [skip ci]"
             git push origin "HEAD:${GITHUB_REF_NAME}"
-            echo "Persisted recon overrides."
+            echo "Persisted recon overrides + new players."
           else
-            echo "No recon override changes to persist."
+            echo "Nothing to persist."
           fi
 
       - name: Surface unmatched player names (registry gaps to close)

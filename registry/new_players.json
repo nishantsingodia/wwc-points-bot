@@ -1,0 +1,4 @@
+{
+  "note": "Sheet-driven NEW players (the no-code path for a player the squad list is missing). Each entry is a GLOBAL, tour-agnostic identity (pid + display + feed-spelling aliases) PLUS the tours/team it's a member of. read_review_confirmations adds entries when you mark a Needs Review row 'New'; match_squad_to_perf adds them (source:'auto') when a globally-known player plays a tour they're not squad-listed for (the silent-drop fix). The bot loads this at startup (merges identity into the registry) and injects membership into each tour's squad — so it works WITHOUT a build_registry rebuild. pid is reused if the feed already resolves, else a slug:<name> (upgradeable to a cricsheet_id by a later build_registry run). Committed back to git by the workflow so it persists. source: 'new' (you marked New) | 'auto' (silent-drop auto-add).",
+  "players": []
+}
