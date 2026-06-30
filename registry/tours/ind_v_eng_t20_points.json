@@ -1,0 +1,43 @@
+{
+ "tour": "India tour of England 2026 (Men T20I)",
+ "slug": "ind_v_eng_t20_points",
+ "teams": {
+  "MIND": [
+   "f29185a1",
+   "a4cc73aa",
+   "752f7486",
+   "espn:642519",
+   "b0482a1d",
+   "f19ccfad",
+   "a4e37e47",
+   "espn:554691",
+   "244048f6",
+   "77b1aa15",
+   "80b2fb19",
+   "slug:vaibhav-sooryavanshi",
+   "970ddd24",
+   "slug:prasidh-krishna",
+   "df064e1a",
+   "slug:varun-chakravarthy"
+  ],
+  "MENG": [
+   "slug:harry-brook",
+   "3d284ca3",
+   "99b75528",
+   "25f7b7d6",
+   "ff154ecd",
+   "3c55c703",
+   "9caf69a1",
+   "e94915e6",
+   "4a461c24",
+   "0ecb4de6",
+   "slug:james-coles",
+   "slug:adil-rashid",
+   "5574750c",
+   "slug:saqib-mahmood",
+   "slug:josh-tongue",
+   "65b6943c",
+   "78c12883"
+  ]
+ }
+}

@@ -34,5 +34,14 @@
     "gender": "male",
     "squads": "india_ireland_squads.json",
     "ends": "2026-06-28"
+  },
+  {
+    "name": "India tour of England 2026 (Men T20I)",
+    "cricapi_series": "660b3bb0-f5ce-453d-835f-5456a1de1c5e",
+    "espn_series": "1496489",
+    "tab": "IND v ENG T20 POINTS",
+    "gender": "male",
+    "squads": "india_england_squads.json",
+    "ends": "2026-07-11"
   }
 ]

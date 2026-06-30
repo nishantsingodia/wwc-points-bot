@@ -1,0 +1,45 @@
+{
+ "MIND": {
+  "name": "India",
+  "players": [
+   ["Abhishek Sharma", "AR"],
+   ["Sanju Samson", "WK"],
+   ["Ishan Kishan", "WK"],
+   ["Shreyas Iyer", "BAT"],
+   ["Tilak Varma", "BAT"],
+   ["Washington Sundar", "AR"],
+   ["Shivam Dube", "AR"],
+   ["Axar Patel", "AR"],
+   ["Arshdeep Singh", "BOWL"],
+   ["Harshit Rana", "BOWL"],
+   ["Prince Yadav", "BOWL"],
+   ["Vaibhav Sooryavanshi", "BAT"],
+   ["Suryansh Shedge", "AR"],
+   ["Prasidh Krishna", "BOWL"],
+   ["Ravi Bishnoi", "BOWL"],
+   ["Varun Chakravarthy", "BOWL"]
+  ]
+ },
+ "MENG": {
+  "name": "England",
+  "players": [
+   ["Harry Brook", "BAT"],
+   ["Phil Salt", "WK"],
+   ["Jos Buttler", "WK"],
+   ["Tom Banton", "BAT"],
+   ["Jordan Cox", "WK"],
+   ["Jacob Bethell", "AR"],
+   ["Will Jacks", "AR"],
+   ["Sam Curran", "AR"],
+   ["Liam Dawson", "AR"],
+   ["Rehan Ahmed", "AR"],
+   ["James Coles", "AR"],
+   ["Adil Rashid", "BOWL"],
+   ["Jofra Archer", "BOWL"],
+   ["Saqib Mahmood", "BOWL"],
+   ["Josh Tongue", "BOWL"],
+   ["Luke Wood", "BOWL"],
+   ["Sonny Baker", "BOWL"]
+  ]
+ }
+}

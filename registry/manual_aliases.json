@@ -314,6 +314,30 @@
       "add": [
         "Andre David Stephon Fletcher"
       ]
+    },
+    {
+      "match": "Varun Chakravarthy",
+      "add": [
+        "Varun Chakaravarthy"
+      ]
+    },
+    {
+      "match": "Harry Brook",
+      "add": [
+        "HC Brook"
+      ]
+    },
+    {
+      "match": "Adil Rashid",
+      "add": [
+        "AU Rashid"
+      ]
+    },
+    {
+      "match": "Saqib Mahmood",
+      "add": [
+        "S Mahmood"
+      ]
     }
   ]
 }

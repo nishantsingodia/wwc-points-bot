@@ -1,6 +1,6 @@
 {
  "anchor": "cricsheet_id (pid); espn:/slug: fallback when unknown",
- "count": 354,
+ "count": 372,
  "players": {
   "5d2eda89": {
    "aliases": [
@@ -4621,7 +4621,8 @@
     "abhishek sharma"
    ],
    "tours": [
-    "India tour of Ireland 2026 (Men T20I)"
+    "India tour of Ireland 2026 (Men T20I)",
+    "India tour of England 2026 (Men T20I)"
    ],
    "display": "Abhishek Sharma",
    "cricsheet_id": "f29185a1",
@@ -4636,7 +4637,8 @@
     "sv samson"
    ],
    "tours": [
-    "India tour of Ireland 2026 (Men T20I)"
+    "India tour of Ireland 2026 (Men T20I)",
+    "India tour of England 2026 (Men T20I)"
    ],
    "display": "Sanju Samson",
    "cricsheet_id": "a4cc73aa",
@@ -4650,7 +4652,8 @@
     "ishan pranav kumar pandey kishan"
    ],
    "tours": [
-    "India tour of Ireland 2026 (Men T20I)"
+    "India tour of Ireland 2026 (Men T20I)",
+    "India tour of England 2026 (Men T20I)"
    ],
    "display": "Ishan Kishan",
    "cricsheet_id": "752f7486",
@@ -4664,7 +4667,8 @@
     "shreyas santosh iyer"
    ],
    "tours": [
-    "India tour of Ireland 2026 (Men T20I)"
+    "India tour of Ireland 2026 (Men T20I)",
+    "India tour of England 2026 (Men T20I)"
    ],
    "display": "Shreyas Iyer",
    "cricsheet_id": null,
@@ -4677,7 +4681,8 @@
     "tilak varma"
    ],
    "tours": [
-    "India tour of Ireland 2026 (Men T20I)"
+    "India tour of Ireland 2026 (Men T20I)",
+    "India tour of England 2026 (Men T20I)"
    ],
    "display": "Tilak Varma",
    "cricsheet_id": "b0482a1d",
@@ -4690,7 +4695,8 @@
     "washington sundar"
    ],
    "tours": [
-    "India tour of Ireland 2026 (Men T20I)"
+    "India tour of Ireland 2026 (Men T20I)",
+    "India tour of England 2026 (Men T20I)"
    ],
    "display": "Washington Sundar",
    "cricsheet_id": "f19ccfad",
@@ -4704,7 +4710,8 @@
     "shivam dube"
    ],
    "tours": [
-    "India tour of Ireland 2026 (Men T20I)"
+    "India tour of Ireland 2026 (Men T20I)",
+    "India tour of England 2026 (Men T20I)"
    ],
    "display": "Shivam Dube",
    "cricsheet_id": "a4e37e47",
@@ -4718,7 +4725,8 @@
     "axar rajeshbhai patel"
    ],
    "tours": [
-    "India tour of Ireland 2026 (Men T20I)"
+    "India tour of Ireland 2026 (Men T20I)",
+    "India tour of England 2026 (Men T20I)"
    ],
    "display": "Axar Patel",
    "cricsheet_id": null,
@@ -4731,7 +4739,8 @@
     "arshdeep singh"
    ],
    "tours": [
-    "India tour of Ireland 2026 (Men T20I)"
+    "India tour of Ireland 2026 (Men T20I)",
+    "India tour of England 2026 (Men T20I)"
    ],
    "display": "Arshdeep Singh",
    "cricsheet_id": "244048f6",
@@ -4745,7 +4754,8 @@
     "harshit rana"
    ],
    "tours": [
-    "India tour of Ireland 2026 (Men T20I)"
+    "India tour of Ireland 2026 (Men T20I)",
+    "India tour of England 2026 (Men T20I)"
    ],
    "display": "Harshit Rana",
    "cricsheet_id": "77b1aa15",
@@ -4758,7 +4768,8 @@
     "prince yadav"
    ],
    "tours": [
-    "India tour of Ireland 2026 (Men T20I)"
+    "India tour of Ireland 2026 (Men T20I)",
+    "India tour of England 2026 (Men T20I)"
    ],
    "display": "Prince Yadav",
    "cricsheet_id": "80b2fb19",
@@ -4771,7 +4782,8 @@
     "vaibhav sooryavanshi"
    ],
    "tours": [
-    "India tour of Ireland 2026 (Men T20I)"
+    "India tour of Ireland 2026 (Men T20I)",
+    "India tour of England 2026 (Men T20I)"
    ],
    "display": "Vaibhav Sooryavanshi",
    "cricsheet_id": null,
@@ -4784,7 +4796,8 @@
     "suryansh shedge"
    ],
    "tours": [
-    "India tour of Ireland 2026 (Men T20I)"
+    "India tour of Ireland 2026 (Men T20I)",
+    "India tour of England 2026 (Men T20I)"
    ],
    "display": "Suryansh Shedge",
    "cricsheet_id": "970ddd24",
@@ -4797,7 +4810,8 @@
     "prasidh krishna"
    ],
    "tours": [
-    "India tour of Ireland 2026 (Men T20I)"
+    "India tour of Ireland 2026 (Men T20I)",
+    "India tour of England 2026 (Men T20I)"
    ],
    "display": "Prasidh Krishna",
    "cricsheet_id": null,
@@ -4810,7 +4824,8 @@
     "ravi bishnoi"
    ],
    "tours": [
-    "India tour of Ireland 2026 (Men T20I)"
+    "India tour of Ireland 2026 (Men T20I)",
+    "India tour of England 2026 (Men T20I)"
    ],
    "display": "Ravi Bishnoi",
    "cricsheet_id": "df064e1a",
@@ -5014,6 +5029,255 @@
    "espn_id": "1278203",
    "draft_id": 10174,
    "auction_id": null
+  },
+  "slug:varun-chakravarthy": {
+   "aliases": [
+    "varun chakaravarthy",
+    "varun chakravarthy"
+   ],
+   "tours": [
+    "India tour of England 2026 (Men T20I)"
+   ],
+   "display": "Varun Chakravarthy",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": null,
+   "auction_id": null
+  },
+  "slug:harry-brook": {
+   "aliases": [
+    "harry brook",
+    "hc brook"
+   ],
+   "tours": [
+    "India tour of England 2026 (Men T20I)"
+   ],
+   "display": "Harry Brook",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": null,
+   "auction_id": null
+  },
+  "3d284ca3": {
+   "aliases": [
+    "pd salt",
+    "phil salt"
+   ],
+   "tours": [
+    "India tour of England 2026 (Men T20I)"
+   ],
+   "display": "Phil Salt",
+   "cricsheet_id": "3d284ca3",
+   "espn_id": null,
+   "draft_id": null,
+   "auction_id": 245
+  },
+  "99b75528": {
+   "aliases": [
+    "jc buttler",
+    "jos buttler"
+   ],
+   "tours": [
+    "India tour of England 2026 (Men T20I)"
+   ],
+   "display": "Jos Buttler",
+   "cricsheet_id": "99b75528",
+   "espn_id": null,
+   "draft_id": null,
+   "auction_id": 208
+  },
+  "25f7b7d6": {
+   "aliases": [
+    "t banton",
+    "tom banton"
+   ],
+   "tours": [
+    "India tour of England 2026 (Men T20I)"
+   ],
+   "display": "Tom Banton",
+   "cricsheet_id": "25f7b7d6",
+   "espn_id": null,
+   "draft_id": null,
+   "auction_id": 713
+  },
+  "ff154ecd": {
+   "aliases": [
+    "jm cox",
+    "jordan cox"
+   ],
+   "tours": [
+    "India tour of England 2026 (Men T20I)"
+   ],
+   "display": "Jordan Cox",
+   "cricsheet_id": "ff154ecd",
+   "espn_id": null,
+   "draft_id": null,
+   "auction_id": 5905
+  },
+  "3c55c703": {
+   "aliases": [
+    "jacob bethell",
+    "jg bethell"
+   ],
+   "tours": [
+    "India tour of England 2026 (Men T20I)"
+   ],
+   "display": "Jacob Bethell",
+   "cricsheet_id": "3c55c703",
+   "espn_id": null,
+   "draft_id": null,
+   "auction_id": 551
+  },
+  "9caf69a1": {
+   "aliases": [
+    "wg jacks",
+    "will jacks"
+   ],
+   "tours": [
+    "India tour of England 2026 (Men T20I)"
+   ],
+   "display": "Will Jacks",
+   "cricsheet_id": "9caf69a1",
+   "espn_id": null,
+   "draft_id": null,
+   "auction_id": 380
+  },
+  "e94915e6": {
+   "aliases": [
+    "sam curran",
+    "sm curran"
+   ],
+   "tours": [
+    "India tour of England 2026 (Men T20I)"
+   ],
+   "display": "Sam Curran",
+   "cricsheet_id": "e94915e6",
+   "espn_id": null,
+   "draft_id": null,
+   "auction_id": 17
+  },
+  "4a461c24": {
+   "aliases": [
+    "la dawson",
+    "liam dawson"
+   ],
+   "tours": [
+    "India tour of England 2026 (Men T20I)"
+   ],
+   "display": "Liam Dawson",
+   "cricsheet_id": "4a461c24",
+   "espn_id": null,
+   "draft_id": null,
+   "auction_id": 1889
+  },
+  "0ecb4de6": {
+   "aliases": [
+    "rehan ahmed"
+   ],
+   "tours": [
+    "India tour of England 2026 (Men T20I)"
+   ],
+   "display": "Rehan Ahmed",
+   "cricsheet_id": "0ecb4de6",
+   "espn_id": null,
+   "draft_id": null,
+   "auction_id": 3992
+  },
+  "slug:james-coles": {
+   "aliases": [
+    "james coles"
+   ],
+   "tours": [
+    "India tour of England 2026 (Men T20I)"
+   ],
+   "display": "James Coles",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": null,
+   "auction_id": null
+  },
+  "slug:adil-rashid": {
+   "aliases": [
+    "adil rashid",
+    "au rashid"
+   ],
+   "tours": [
+    "India tour of England 2026 (Men T20I)"
+   ],
+   "display": "Adil Rashid",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": null,
+   "auction_id": null
+  },
+  "5574750c": {
+   "aliases": [
+    "jc archer",
+    "jofra archer"
+   ],
+   "tours": [
+    "India tour of England 2026 (Men T20I)"
+   ],
+   "display": "Jofra Archer",
+   "cricsheet_id": "5574750c",
+   "espn_id": null,
+   "draft_id": null,
+   "auction_id": 351
+  },
+  "slug:saqib-mahmood": {
+   "aliases": [
+    "s mahmood",
+    "saqib mahmood"
+   ],
+   "tours": [
+    "India tour of England 2026 (Men T20I)"
+   ],
+   "display": "Saqib Mahmood",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": null,
+   "auction_id": null
+  },
+  "slug:josh-tongue": {
+   "aliases": [
+    "josh tongue"
+   ],
+   "tours": [
+    "India tour of England 2026 (Men T20I)"
+   ],
+   "display": "Josh Tongue",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": null,
+   "auction_id": null
+  },
+  "65b6943c": {
+   "aliases": [
+    "l wood",
+    "luke wood"
+   ],
+   "tours": [
+    "India tour of England 2026 (Men T20I)"
+   ],
+   "display": "Luke Wood",
+   "cricsheet_id": "65b6943c",
+   "espn_id": null,
+   "draft_id": null,
+   "auction_id": 732
+  },
+  "78c12883": {
+   "aliases": [
+    "s baker",
+    "sonny baker"
+   ],
+   "tours": [
+    "India tour of England 2026 (Men T20I)"
+   ],
+   "display": "Sonny Baker",
+   "cricsheet_id": "78c12883",
+   "espn_id": null,
+   "draft_id": null,
+   "auction_id": 6729
   }
  }
 }
