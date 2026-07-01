@@ -245,6 +245,13 @@
       "pid": "80b2fb19",
       "source": "S2",
       "status": "approved"
+    },
+    {
+      "match_key": "2026-06-29::los angeles knight riders|seattle orcas",
+      "scope": "l2",
+      "pid": "slug:fabian-allen",
+      "source": "S2",
+      "status": "approved"
     }
   ]
 }
