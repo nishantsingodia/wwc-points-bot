@@ -1590,7 +1590,8 @@ def read_review_confirmations():
         return
     hdr = {c.strip(): i for i, c in enumerate(rows[0])}
     # tolerate the old header without "New"/"Role" so a mid-season schema change doesn't lose answers
-    ci = next((hdr[k] for k in ("Correct? (Yes/No/New)", "Correct? (Yes/No)", "Correct?") if k in hdr), 5)
+    ci = next((hdr[k] for k in ("Correct? (Yes/New)", "Correct? (Yes/No/New)",
+                                "Correct? (Yes/No)", "Correct?") if k in hdr), 5)
     ti, fi, si = hdr.get("Tour", 0), hdr.get("Feed Name", 2), hdr.get("Closest Match", 3)
     tmi, ri = hdr.get("Team", 1), hdr.get("Role", -1)
     applied = 0
@@ -1909,14 +1910,15 @@ def sync_player_aliases():
 
 def write_review_tab():
     """Publish the still-unmatched players to 'Needs Review' as: closest-match guess + a
-    'Correct?' column you answer Yes/No. A Yes is auto-applied next run (then the row drops
-    off). Your prior Yes/No answers are preserved. Rewritten each full run."""
+    'Correct?' column you answer Yes (guess is right) or New (real player the squad list is
+    missing). A Yes/New is applied next run (then the row drops off). Prior answers are
+    preserved. Rewritten each full run."""
     sh = open_gsheet()
     if sh is None:
         return
     import gspread
-    header = ["Tour", "Team", "Feed Name", "Closest Match", "Role", "Correct? (Yes/No/New)"]
-    # Drop anything you've already resolved (Yes/No/New) so the tab only ever shows open items.
+    header = ["Tour", "Team", "Feed Name", "Closest Match", "Role", "Correct? (Yes/New)"]
+    # Drop anything you've already resolved (Yes/New) so the tab only ever shows open items.
     items = [r for r in dedup_review([r for r in REVIEW if r["kind"] == "review"])
              if norm(r["feed"]) not in ACK]
     if items:
@@ -1934,7 +1936,7 @@ def write_review_tab():
         ws.clear()
         ws.update(range_name="A1", values=[header] + rows, value_input_option="RAW")
         print(f"Wrote {len(items)} review item(s) to the '{REVIEW_TAB}' tab "
-              f"(answer 'Correct?' Yes/No; Yes auto-applies next run).", file=sys.stderr)
+              f"(answer 'Correct?' Yes/New; applied next run).", file=sys.stderr)
     except Exception as e:
         print(f"could not write '{REVIEW_TAB}' tab: {e}", file=sys.stderr)
 
