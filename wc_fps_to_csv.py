@@ -1792,7 +1792,15 @@ def read_anomaly_confirmations():
                                 "Correct? (Yes/No)") if k in hdr), 6)
     splits = _load_splits()
     sp_by_key = {f"split:{s['id']}": s for s in splits.get("splits", [])}
+    acks = splits.setdefault("acks", [])          # persisted DETECTED-anomaly answers (durable ACKs)
+    ack_by_key = {(a.get("type"), a.get("pid")): a for a in acks}
     changed = False
+    # Seed ACKs from the committed ledger FIRST: a detected anomaly answered on a PAST run must stay
+    # acknowledged even though its sheet row was dropped (the ephemeral CI runner has no other memory,
+    # and re-reading the sheet can't help once the row is gone). This is what stops re-surfacing.
+    for (atyp, apid), a in ack_by_key.items():
+        ANOMALY_ACK.add((atyp, apid))
+        PRIOR_ANOMALY.setdefault((atyp, apid), a.get("answer", ""))
     for r in rows[1:]:
         if len(r) <= max(ti, pi, ai):
             continue
@@ -1808,6 +1816,13 @@ def read_anomaly_confirmations():
                      else "undo-requested" if ans in ("n", "no") else s.get("status"))
             if newst != s.get("status"):
                 s["status"] = newst; changed = True
+        else:                                     # detected anomaly -> persist the ACK durably
+            prev = ack_by_key.get(key)
+            if prev is None:
+                rec = {"type": typ, "pid": pid, "answer": r[ai].strip()}
+                acks.append(rec); ack_by_key[key] = rec; changed = True
+            elif prev.get("answer") != r[ai].strip():
+                prev["answer"] = r[ai].strip(); changed = True
     if changed:
         try:
             json.dump(splits, open(SPLITS_PATH, "w"), indent=2, ensure_ascii=False)

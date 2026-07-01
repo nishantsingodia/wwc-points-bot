@@ -63,19 +63,21 @@ jobs:
           WC_CACHE_DIR: api_cache
         run: python wc_fps_to_csv.py
 
-      - name: Persist approved recon overrides + new players to git
+      - name: Persist sheet decisions (recon overrides + new players + anomaly acks) to git
         if: always()   # commit even if a later step fails — the approvals are already recorded
         run: |
           # The bot folds sheet decisions into these committed ledgers (recon picks ->
-          # recon_overrides.json; "New"/auto-added players -> new_players.json); commit them so
-          # they survive the ephemeral runner (and the sheet rows can be dropped).
-          if [ -n "$(git status --porcelain registry/recon_overrides.json registry/new_players.json)" ]; then
+          # recon_overrides.json; "New"/auto-added players -> new_players.json; Identity Anomalies
+          # Yes/No -> identity_splits.json); commit them so they survive the ephemeral runner
+          # (and the answered sheet rows can be dropped without the answer re-surfacing).
+          LEDGERS="registry/recon_overrides.json registry/new_players.json registry/identity_splits.json"
+          if [ -n "$(git status --porcelain $LEDGERS)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add registry/recon_overrides.json registry/new_players.json
-            git commit -m "chore: persist recon overrides + new players [skip ci]"
+            git add $LEDGERS
+            git commit -m "chore: persist recon overrides + new players + anomaly acks [skip ci]"
             git push origin "HEAD:${GITHUB_REF_NAME}"
-            echo "Persisted recon overrides + new players."
+            echo "Persisted sheet decisions."
           else
             echo "Nothing to persist."
           fi
