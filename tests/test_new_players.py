@@ -1,5 +1,7 @@
 """Tests for the sheet-driven 'New' player feature: slugify, find_silent_drops (the lapse),
 register_new_player (identity + membership), load_new_players, and the Jane Maguire regression."""
+import sys
+import types
 import pytest
 
 
@@ -89,3 +91,21 @@ def test_jane_maguire_new_flow(wcmod):
     assert wcmod.resolve_pid("J Maguire") == "slug:jane-maguire"   # now resolves -> assigned + emitted next run
     e = wcmod.NEW_PLAYERS_DATA["players"][0]
     assert e["team"] == "Ireland" and e["role"] == "BOWL" and e["source"] == "new"
+
+
+# ── "New" on an EXISTING player must LINK, not duplicate (surname-collision safety) ──
+def test_new_reuses_existing_identity(wcmod, monkeypatch):
+    # Finn Allen is already in the registry; marking a new spelling of him "New" must reuse his
+    # real pid (link the alias) — NOT mint slug:finn-allen and split him in two.
+    assert wcmod.resolve_pid("Finn Allen") == "bf74b130"
+    gs = types.ModuleType("gspread")
+    gs.WorksheetNotFound = type("WorksheetNotFound", (Exception,), {})
+    monkeypatch.setitem(sys.modules, "gspread", gs)
+    header = ["Tour", "Team", "Feed Name", "Closest Match", "Role", "Correct? (Yes/No/New)"]
+    rows = [header, ["Major League Cricket 2026", "Texas SC", "Fin Allen", "Finn Allen", "BAT", "New"]]
+    monkeypatch.setattr(wcmod, "open_gsheet",
+                        lambda: type("SH", (), {"worksheet": lambda s, n: type(
+                            "WS", (), {"get_all_values": lambda s: rows})()})())
+    wcmod.read_review_confirmations()
+    entry = next(e for e in wcmod.NEW_PLAYERS_DATA["players"] if "fin allen" in e.get("aliases", []))
+    assert entry["pid"] == "bf74b130"                              # reused Finn's identity, no duplicate slug

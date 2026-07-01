@@ -1612,7 +1612,10 @@ def read_review_confirmations():
         # this tour's membership so they resolve + count + become draftable from now on.
         if ans == "new" or closest.lower() == "new":
             disp = closest if (closest and closest.lower() != "new") else feed   # type the real name
-            pid = resolve_pid(feed) or slugify(disp)                              # reuse if known, else slug
+            # Reuse an EXISTING identity if either the feed spelling OR the real name you typed
+            # already resolves (so marking an existing player "New" LINKS the spelling to their
+            # real pid instead of minting a duplicate); only mint a slug for a truly-new player.
+            pid = resolve_pid(feed) or resolve_pid(disp) or slugify(disp)
             team = r[tmi].strip() if len(r) > tmi else ""
             role = ((r[ri].strip() if (ri >= 0 and len(r) > ri) else "") or guess_role({"name": feed}))
             register_new_player(pid=pid, display=disp, feed=feed, team=team,
