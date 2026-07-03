@@ -252,6 +252,22 @@
       "pid": "slug:fabian-allen",
       "source": "S2",
       "status": "approved"
+    },
+    {
+      "match_key": "2026-07-03::mi new york|seattle orcas",
+      "scope": "player",
+      "pid": "372455c4",
+      "field": "r",
+      "status": "approved",
+      "source": "S1"
+    },
+    {
+      "match_key": "2026-07-03::mi new york|seattle orcas",
+      "scope": "player",
+      "pid": "372455c4",
+      "field": "4s",
+      "status": "approved",
+      "source": "S1"
     }
   ]
 }
