@@ -5,6 +5,9 @@ name: On-Demand Live Refresh
 # no review write-back) — but SKIPS the toss-window gate, because a human is explicitly
 # asking mid-innings. Uses BOTH cricapi keys so a near-exhausted primary fails over.
 # Cost ≈ 1-2 cricapi hits/run; the app gates taps on a cooldown + the quota gauge.
+# RESTORES the cricsheet cache (seeded by the 2-hourly full run) so it does NOT downgrade
+# cricsheet-resolved completed matches to LIVE — restore-only, so it never saves an empty
+# dir that could poison the cache.
 on:
   workflow_dispatch:
 
@@ -31,6 +34,15 @@ jobs:
           key: wc-apicache-${{ github.run_id }}
           restore-keys: wc-apicache-
 
+      # Restore-only: use the cricsheet the full run cached (keeps completed matches
+      # COMPLETED). Never saves — a light run has no fresh cricsheet to contribute.
+      - name: Restore cricsheet cache
+        uses: actions/cache/restore@v4
+        with:
+          path: cricsheet
+          key: wc-cricsheet-${{ github.run_id }}
+          restore-keys: wc-cricsheet-
+
       - name: On-demand live refresh (light, no toss gate, both keys)
         env:
           FREQUENT: "1"
@@ -39,5 +51,6 @@ jobs:
           CRICKET_API_KEY2: ${{ secrets.CRICKET_API_KEY2 }}   # failover key (2nd cricapi account)
           GSHEET_ID: ${{ secrets.GSHEET_ID }}
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          CRICSHEET_DIR: cricsheet
           WC_CACHE_DIR: api_cache
         run: python wc_fps_to_csv.py

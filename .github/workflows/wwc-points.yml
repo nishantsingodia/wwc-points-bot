@@ -38,6 +38,17 @@ jobs:
           key: wc-apicache-${{ github.run_id }}
           restore-keys: wc-apicache-
 
+      # Cache the extracted cricsheet dir so the light runs (on-demand + live-lineup)
+      # can RESTORE it and classify completed matches identically — without it, a
+      # cricsheet-less run downgrades cricsheet-resolved matches (unresolved L1 gap)
+      # from COMPLETED back to LIVE. This full run refreshes + re-saves it every 2h.
+      - name: Cache cricsheet (shared with light runs)
+        uses: actions/cache@v4
+        with:
+          path: cricsheet
+          key: wc-cricsheet-${{ github.run_id }}
+          restore-keys: wc-cricsheet-
+
       - name: Download cricsheet ball-by-ball (gold source - exact dots)
         continue-on-error: true   # non-fatal: if cricsheet is slow/down, fall back to cricapi
         run: |
