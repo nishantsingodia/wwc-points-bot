@@ -26,6 +26,19 @@
         "Major League Cricket 2026"
       ],
       "source": "new"
+    },
+    {
+      "pid": "slug:dian-forrester",
+      "display": "Dian Forrester",
+      "aliases": [
+        "dian forrester"
+      ],
+      "team": "Texas Super Kings",
+      "role": "AR",
+      "tours": [
+        "Major League Cricket 2026"
+      ],
+      "source": "new"
     }
   ]
 }
