@@ -370,7 +370,7 @@ def best_team(name, team_map):
             best_sc, best = sc, tfull
     return best if best_sc >= 84 else ""
 
-def api(path, cache=True, ttl=None, **params):
+def api(path, cache=True, ttl=None, persist=True, **params):
     """GET with optional caching. Scorecards are cached (immutable once ended);
     series_info is NOT cached in the full run (so re-runs detect newly-completed matches),
     but the frequent tick caches it with a TTL to stay under cricapi's 100/day cap.
@@ -427,7 +427,8 @@ def api(path, cache=True, ttl=None, **params):
         else:
             break
     if data.get("status") == "success":
-        json.dump(data, open(fp, "w"))
+        if persist:   # live/in-progress scorecards pass persist=False: never cache a
+            json.dump(data, open(fp, "w"))   # mid-match snapshot (would freeze live pts + poison the final read)
         record_quota(data)   # only on a live hit — a cached/stale read spends no quota
     elif os.path.exists(fp):
         # live fetch failed but we have a cached copy -> use it (stale, but keeps the sheet live)
@@ -812,9 +813,11 @@ def overs_to_balls(o):
     whole = int(o)
     return whole * 6 + round((o - whole) * 10)
 
-def parse_match(mid):
-    """Return {normalized_name: perf-dict} for one match's scorecard."""
-    d = api("match_scorecard", id=mid)
+def parse_match(mid, live=False):
+    """Return {normalized_name: perf-dict} for one match's scorecard. For a LIVE (in-progress)
+    match, fetch FRESH and don't persist — the scorecard is still changing, so a cached snapshot
+    would freeze live points, and persisting it would poison the final read once the match ends."""
+    d = api("match_scorecard", id=mid, cache=not live, persist=not live)
     perf = {}   # norm name -> dict
     def get(n):
         k = norm(n)
@@ -1099,7 +1102,10 @@ def run_tour(tour):
 
     # Full run: always fresh (detect newly-ended matches). Frequent tick: cache 2h
     # so the every-5-min ticks don't spend the cricapi daily budget.
-    info = api("series_info", cache=FREQUENT, ttl=(7200 if FREQUENT else None), id=WC_SERIES)
+    # On-demand fetches series_info FRESH (a human is asking mid-match — detect the just-started
+    # game); the every-5-min tick still caches 2h to protect the cricapi daily budget.
+    info = api("series_info", cache=(FREQUENT and not ON_DEMAND),
+               ttl=(7200 if FREQUENT else None), id=WC_SERIES)
     matches = info.get("data", {}).get("matchList", [])
     # Guard: if cricapi failed/returned nothing, ABORT before touching the sheet
     # (otherwise we'd clear it and write an empty table — wiping good data).
@@ -1114,8 +1120,22 @@ def run_tour(tour):
         nm = (m.get("name") or "").lower()
         return "t20" in nm and "odi" not in nm and "test" not in nm
     ended = [m for m in matches if m.get("matchEnded") and is_t20(m)]
+    today = date.today()
+    def near_today(m):
+        for ds in date_variants(m.get("date", "")):
+            try:
+                if abs((date.fromisoformat(ds) - today).days) <= 1:
+                    return True
+            except ValueError:
+                pass
+        return False
+    # LIVE = started but not yet ended (near today). Scored in-progress from cricapi (fetched
+    # fresh) + ESPN, marked Match Status=LIVE; points grow as the match unfolds and are superseded
+    # by the exact ended-path scoring (with cricsheet) once cricapi flips matchEnded.
+    live = [m for m in matches if is_t20(m) and m.get("matchStarted")
+            and not m.get("matchEnded") and near_today(m)]
     cs_idx = load_cricsheet_index(CRICSHEET_DIR, tour.get("gender", "female"))
-    print(f"{len(ended)}/{len(matches)} matches completed | cricsheet {tour.get('gender','female')} matches indexed: {len(cs_idx)}", file=sys.stderr)
+    print(f"{len(ended)}/{len(matches)} completed, {len(live)} in-progress | cricsheet {tour.get('gender','female')} matches indexed: {len(cs_idx)}", file=sys.stderr)
 
     cols = ["Match", "Date", "Team", "Player ID", "Full Name", "Role", "Played",
             "Runs", "Balls", "4s", "6s", "SR", "Dismissal",
@@ -1126,14 +1146,17 @@ def run_tour(tour):
             "L1 Recon", "L2 Recon", "Match Status", "Recon Flag", "Player Recon"]
     rows = []
     n_cs = n_espn = n_api = 0
-    for mi, m in enumerate(sorted(ended, key=lambda x: x.get("dateTimeGMT", x.get("date", ""))), 1):
+    _key = lambda x: x.get("dateTimeGMT", x.get("date", ""))
+    to_score = [(m, False) for m in sorted(ended, key=_key)] + [(m, True) for m in sorted(live, key=_key)]
+    for mi, (m, is_live) in enumerate(to_score, 1):
         teams = m.get("teams", [])
         mdate = m.get("date", "")
         label = f"Match {mi} — " + " v ".join(name2short.get(norm(t), t) for t in teams)
 
-        # cricapi scorecard (used as fallback + an independent cross-check)
+        # cricapi scorecard (used as fallback + an independent cross-check). LIVE matches fetch
+        # it fresh (no-persist) so points reflect the current score, not a frozen snapshot.
         try:
-            api_perf = {k: v for k, v in parse_match(m["id"]).items() if v["played"]} if m.get("id") else {}
+            api_perf = {k: v for k, v in parse_match(m["id"], live=is_live).items() if v["played"]} if m.get("id") else {}
         except Exception:
             api_perf = {}
 
@@ -1287,8 +1310,12 @@ def run_tour(tour):
         match_status, recon_flag = classify_match_status(cs_path, bool(espn_perf), l1_gaps, unresolved, l2_dirty)
         # Per-player markers so the draft UI can flag WHICH players aren't reconciled yet.
         player_recon = player_recon_markers(unresolved, l2_pairs, l2_appr)
+        # LIVE (in-progress): the whole match is provisional-live — force the status, and skip
+        # recon gating/queueing + per-player noise (mid-match cricapi↔ESPN gaps settle by end).
+        if is_live:
+            match_status, recon_flag, player_recon = "LIVE", "🔴 in progress", {}
         # Queue review rows for UNRESOLVED gaps (skip ones already approved+acked).
-        if unresolved and not cs_path:
+        if unresolved and not cs_path and not is_live:
             new_rows = build_recon_rows(mk, label, mdate, CURRENT_TOUR, unresolved, capi_pid, espn_pid)
             RECON_REVIEW.extend(r for r in new_rows
                                 if (mk, r.get("pid", ""), r.get("param", "")) not in RECON_ACK)
@@ -1379,17 +1406,10 @@ def run_tour(tour):
     # ends, the next run replaces these with full-stat rows. Best-effort: if ESPN hasn't
     # posted the XI yet, we simply write nothing (no harm).
     # Gate on ESPN having the XI (the real signal), not cricapi's lagging toss flags.
-    # Only look at not-ended matches within ±1 day of today to bound ESPN queries.
-    today = date.today()
-    def near_today(m):
-        for ds in date_variants(m.get("date", "")):
-            try:
-                if abs((date.fromisoformat(ds) - today).days) <= 1:
-                    return True
-            except ValueError:
-                pass
-        return False
-    pending = [m for m in matches if is_t20(m) and not m.get("matchEnded") and near_today(m)]
+    # Only not-STARTED matches near today: started-but-not-ended ones are now SCORED above
+    # (the `live` set), so writing SCHEDULED lineup rows for them too would duplicate.
+    pending = [m for m in matches if is_t20(m) and not m.get("matchStarted")
+               and not m.get("matchEnded") and near_today(m)]
     n_toss = 0
     for j, m in enumerate(sorted(pending, key=lambda x: x.get("dateTimeGMT", x.get("date", ""))), 1):
         teams = m.get("teams", []); mdate = m.get("date", "")
@@ -1403,7 +1423,7 @@ def run_tour(tour):
         # Toss result (if posted) goes into Source so the app can show it without a schema change.
         toss = espn_toss(ev)
         src = "ESPN announced XI (toss)" + (f" · {toss}" if toss else "")
-        label = f"Match {len(ended) + j} — " + " v ".join(name2short.get(norm(t), t) for t in teams)
+        label = f"Match {len(ended) + len(live) + j} — " + " v ".join(name2short.get(norm(t), t) for t in teams)
         xi_perf = {}
         for k, v in xi.items():
             p = blank_perf(v["name"]); p["played"] = True; xi_perf[k] = p
