@@ -1,0 +1,43 @@
+name: On-Demand Live Refresh
+
+# Fired by the draft app's "Refresh live points" button (workflow_dispatch via a
+# fine-grained PAT). Runs the LIGHT path — like the 5-min live tick (cached series_info,
+# no review write-back) — but SKIPS the toss-window gate, because a human is explicitly
+# asking mid-innings. Uses BOTH cricapi keys so a near-exhausted primary fails over.
+# Cost ≈ 1-2 cricapi hits/run; the app gates taps on a cooldown + the quota gauge.
+on:
+  workflow_dispatch:
+
+# Don't let taps pile up — one refresh at a time (the app also rejects a tap while running).
+concurrency:
+  group: on-demand-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt
+
+      # Share the cricapi scorecard/series cache with the other workflows.
+      - name: Restore cricapi cache
+        uses: actions/cache@v4
+        with:
+          path: api_cache
+          key: wc-apicache-${{ github.run_id }}
+          restore-keys: wc-apicache-
+
+      - name: On-demand live refresh (light, no toss gate, both keys)
+        env:
+          FREQUENT: "1"
+          ON_DEMAND: "1"
+          CRICKET_API_KEY: ${{ secrets.CRICKET_API_KEY }}
+          CRICKET_API_KEY2: ${{ secrets.CRICKET_API_KEY2 }}   # failover key (2nd cricapi account)
+          GSHEET_ID: ${{ secrets.GSHEET_ID }}
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          WC_CACHE_DIR: api_cache
+        run: python wc_fps_to_csv.py

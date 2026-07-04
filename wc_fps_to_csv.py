@@ -26,6 +26,12 @@ from datetime import date, timedelta, datetime, timezone
 # It only does work inside a match's toss window and caches series_info so the
 # extra ticks don't blow cricapi's 100/day cap. Set via env in live-lineup.yml.
 FREQUENT = os.environ.get("FREQUENT") == "1"
+# ON_DEMAND mode = a human tapped "Refresh live points" in the draft app
+# (workflow_dispatch from on-demand-refresh.yml). Runs LIGHT like the frequent tick
+# (cached series_info, no review write-back) but SKIPS the toss-window gate, because
+# the human is explicitly asking mid-innings. ~1-2 cricapi hits/run.
+ON_DEMAND = os.environ.get("ON_DEMAND") == "1"
+FREQUENT = FREQUENT or ON_DEMAND   # on-demand inherits the light-run behaviour
 
 def date_variants(d):
     """A date plus ±1 day (ISO strings) — to absorb timezone differences between feeds."""
@@ -44,6 +50,10 @@ API_KEYS = [k.strip() for k in (
 ) if k.strip()]
 KEY = API_KEYS[0] if API_KEYS else ""   # primary (back-compat for the startup check)
 _key_idx = 0   # index of the key currently in use; advances on quota/blocked failures
+# Per-key quota snapshot captured from cricapi's `info` block on each live hit
+# (free tier = 100 hits/day per key). {key_index: {"today": hitsToday, "limit": hitsLimit}}.
+# Surfaced to the draft app via write_status_tab -> the "hits left today" gauge.
+API_QUOTA = {}
 # Series id to pull. Override with env SERIES_ID to run ANY other tour (no code change).
 WC_SERIES = os.environ.get("SERIES_ID", "f3e5c7dd-332c-4893-9067-aa2bfe6d2b85").strip()  # default: ICC Women's T20 WC 2026
 SQUAD_TS = os.path.join(os.path.dirname(__file__), "..", "src", "lib", "squads", "womens-t20-wc-2026.ts")
@@ -382,6 +392,21 @@ def api(path, cache=True, ttl=None, **params):
         r = (d.get("reason") or "").lower()
         return d.get("status") != "success" and ("limit" in r or "block" in r or "hits" in r)
 
+    def record_quota(d):
+        # cricapi returns {"info": {"hitsToday": N, "hitsLimit": 100, ...}} on every v1
+        # response; remember the current key's day-cumulative usage so we can show it.
+        info = d.get("info") if isinstance(d, dict) else None
+        if not isinstance(info, dict):
+            return
+        today, limit = info.get("hitsToday"), info.get("hitsLimit")
+        if today is None and limit is None:
+            return
+        prev = API_QUOTA.get(_key_idx, {})
+        API_QUOTA[_key_idx] = {
+            "today": int(today) if today is not None else prev.get("today", 0),
+            "limit": int(limit) if limit is not None else prev.get("limit", 100),
+        }
+
     global _key_idx
     data = {"status": "failure", "reason": "no api key"}
     # Try the current key; on a quota/blocked response, fail over to the next key(s).
@@ -403,6 +428,7 @@ def api(path, cache=True, ttl=None, **params):
             break
     if data.get("status") == "success":
         json.dump(data, open(fp, "w"))
+        record_quota(data)   # only on a live hit — a cached/stale read spends no quota
     elif os.path.exists(fp):
         # live fetch failed but we have a cached copy -> use it (stale, but keeps the sheet live)
         print(f"  api({path}): live fetch failed ({data.get('reason','')}); using cached copy", file=sys.stderr)
@@ -1483,7 +1509,7 @@ def in_toss_window():
 def main():
     if not KEY:
         sys.exit("Set CRICKET_API_KEY env var.")
-    if FREQUENT and not in_toss_window():
+    if FREQUENT and not ON_DEMAND and not in_toss_window():
         print("frequent tick: no match in toss window — nothing to do", file=sys.stderr)
         return
     # No-code manual fixes (no-op locally / without creds): load the persistent alias store,
@@ -1508,6 +1534,12 @@ def main():
             print(f"!! tour '{t.get('name')}' skipped: {e}", file=sys.stderr)
         except Exception as e:
             print(f"!! tour '{t.get('name')}' error: {e}", file=sys.stderr)
+    # Refresh the quota/health snapshot in ALL modes (full, frequent, on-demand) so the
+    # draft app's "hits left today" gauge stays current whenever the sheet is touched.
+    try:
+        write_status_tab("on-demand" if ON_DEMAND else ("frequent" if FREQUENT else "full"))
+    except Exception as e:
+        print(f"status tab: {e}", file=sys.stderr)
     if not FREQUENT:
         sync_player_aliases()   # persist auto + confirmed aliases into the Player Aliases store
         _save_new_players(NEW_PLAYERS_DATA)   # persist New + auto-added players (workflow commits it)
@@ -1531,6 +1563,38 @@ def open_gsheet():
         print(f"gspread open failed: {e}", file=sys.stderr)
         _GSHEET = None
     return _GSHEET
+
+STATUS_TAB = "STATUS"   # bot-written quota/freshness snapshot (2 cols: Metric | Value).
+                        # The draft app reads this to show "hits left today" next to its
+                        # "Refresh live points" button. Not a data tab — never merged into points.
+
+def write_status_tab(mode):
+    """Write a small quota/freshness snapshot the draft app reads. Best-effort — a failure
+    here must never break a run. cricapi free tier = 100 hits/day per key; we know each key's
+    day-cumulative usage from the `info` blocks captured this run (unqueried keys are unknown,
+    so hits_* are only emitted once at least one live hit gave us real numbers)."""
+    sh = open_gsheet()
+    if not sh:
+        return
+    import gspread
+    now = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    keys = max(1, len(API_KEYS))
+    rows = [["Metric", "Value"], ["updated_utc", now], ["keys", str(keys)], ["mode", mode]]
+    if API_QUOTA:   # at least one live hit this run -> real numbers (else leave hits_* blank)
+        used = sum(API_QUOTA.get(i, {}).get("today", 0) for i in range(keys))
+        limit_total = sum(API_QUOTA.get(i, {}).get("limit", 100) for i in range(keys))
+        rows += [["hits_used", str(used)],
+                 ["hits_limit", str(limit_total)],
+                 ["hits_left", str(max(0, limit_total - used))]]
+    try:
+        try:
+            ws = sh.worksheet(STATUS_TAB)
+        except gspread.WorksheetNotFound:
+            ws = sh.add_worksheet(title=STATUS_TAB, rows=20, cols=2)
+        ws.clear()
+        ws.update(range_name="A1", values=rows, value_input_option="RAW")
+    except Exception as e:
+        print(f"write_status_tab failed: {e}", file=sys.stderr)
 
 ALIASES_TAB = "Player Aliases"   # user-editable: Feed Name -> Correct Player (no-code fix)
 REVIEW_TAB = "Needs Review"      # bot-written: players that need a human glance

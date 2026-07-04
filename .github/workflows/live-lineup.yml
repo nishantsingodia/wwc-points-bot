@@ -37,6 +37,7 @@ jobs:
         env:
           FREQUENT: "1"
           CRICKET_API_KEY: ${{ secrets.CRICKET_API_KEY }}
+          CRICKET_API_KEY2: ${{ secrets.CRICKET_API_KEY2 }}   # failover key — the frequent tick had none
           GSHEET_ID: ${{ secrets.GSHEET_ID }}
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           WC_CACHE_DIR: api_cache
