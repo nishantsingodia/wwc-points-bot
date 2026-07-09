@@ -275,6 +275,46 @@
       "pid": "4167f30b",
       "source": "S2",
       "status": "approved"
+    },
+    {
+      "match_key": "2026-07-06::seattle orcas|texas super kings",
+      "scope": "player",
+      "pid": "espn:437316",
+      "field": "w",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-06::seattle orcas|texas super kings",
+      "scope": "player",
+      "pid": "f0af99a7",
+      "field": "r",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-06::seattle orcas|texas super kings",
+      "scope": "player",
+      "pid": "f0af99a7",
+      "field": "6s",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-06::seattle orcas|texas super kings",
+      "scope": "player",
+      "pid": "6c7a68d0",
+      "field": "r",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-06::seattle orcas|texas super kings",
+      "scope": "player",
+      "pid": "6c7a68d0",
+      "field": "4s",
+      "status": "approved",
+      "source": "S2"
     }
   ]
 }
