@@ -1,0 +1,21 @@
+name: resolve-series
+# Utility: resolve a cricapi series id by search term using the repo's API key (masked in
+# logs). Prints ONLY matching series (id | name | dates | matches). Run when adding a tour.
+on:
+  workflow_dispatch:
+    inputs:
+      search:
+        description: "series search term (e.g. a team name)"
+        required: true
+        default: "New Zealand"
+
+jobs:
+  resolve:
+    runs-on: ubuntu-latest
+    steps:
+      - name: cricapi series search
+        run: |
+          q="${{ github.event.inputs.search }}"
+          echo "===== search=$q ====="
+          curl -s "https://api.cricapi.com/v1/series?apikey=${{ secrets.CRICKET_API_KEY }}&search=$q" \
+            | python3 -c "import sys,json; d=json.load(sys.stdin); rows=d.get('data',[]); print('\n'.join(f\"{s.get('id')} | {s.get('name')} | {s.get('startDate')}..{s.get('endDate')} | matches={s.get('matches')}\" for s in rows)) if rows else print('(no results)')"
