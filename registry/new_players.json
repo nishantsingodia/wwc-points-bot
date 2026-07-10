@@ -39,6 +39,32 @@
         "Major League Cricket 2026"
       ],
       "source": "new"
+    },
+    {
+      "pid": "slug:anirudh-immanuel",
+      "display": "Anirudh Immanuel",
+      "aliases": [
+        "anirudh immanuel"
+      ],
+      "team": "San Francisco Unicorns",
+      "role": "AR",
+      "tours": [
+        "Major League Cricket 2026"
+      ],
+      "source": "new"
+    },
+    {
+      "pid": "slug:shakib-al-hasan",
+      "display": "Shakib Al Hasan",
+      "aliases": [
+        "shakib al hasan"
+      ],
+      "team": "MI New York",
+      "role": "BAT",
+      "tours": [
+        "Major League Cricket 2026"
+      ],
+      "source": "new"
     }
   ]
 }

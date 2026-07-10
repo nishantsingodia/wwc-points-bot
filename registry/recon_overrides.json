@@ -315,6 +315,32 @@
       "field": "4s",
       "status": "approved",
       "source": "S2"
+    },
+    {
+      "match_key": "2026-07-09::england|india",
+      "scope": "player",
+      "pid": "3d284ca3",
+      "field": "r",
+      "status": "approved",
+      "value": 59,
+      "source": "Manual"
+    },
+    {
+      "match_key": "2026-07-09::england|india",
+      "scope": "player",
+      "pid": "3d284ca3",
+      "field": "4s",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-09::england|india",
+      "scope": "player",
+      "pid": "slug:harry-brook",
+      "field": "r",
+      "status": "approved",
+      "value": 79,
+      "source": "Manual"
     }
   ]
 }
