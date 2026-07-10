@@ -1,0 +1,39 @@
+{
+ "tour": "Ireland vs West Indies Women's ODI 2026",
+ "slug": "ire_v_wi_w_odi_points",
+ "teams": {
+  "OIRE": [
+   "1b9d1579",
+   "e8fa03ed",
+   "def7b1bb",
+   "d8f20ba5",
+   "07248d8e",
+   "5ecfab18",
+   "5a50471c",
+   "espn:1094718",
+   "espn:1229018",
+   "espn:1351945",
+   "66498395",
+   "771b44ed",
+   "slug:christina-coulter-reilly",
+   "940feccc"
+  ],
+  "OWI": [
+   "d32cf49a",
+   "d6164dc0",
+   "a7cd72b2",
+   "92cf79a8",
+   "53bee17f",
+   "816af623",
+   "4b0e3049",
+   "a811cb83",
+   "42d9dd09",
+   "321c980e",
+   "3faa312e",
+   "espn:1352170",
+   "a2632c7c",
+   "b9fec7a5",
+   "e22f8ec1"
+  ]
+ }
+}

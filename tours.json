@@ -43,5 +43,15 @@
     "gender": "male",
     "squads": "india_england_squads.json",
     "ends": "2026-07-11"
+  },
+  {
+    "name": "Ireland vs West Indies Women's ODI 2026",
+    "cricapi_series": "af7f493b-31ef-4223-b84e-b2cf9cf774fd",
+    "espn_series": "1528524",
+    "tab": "IRE v WI W ODI POINTS",
+    "gender": "female",
+    "squads": "ire_wi_w_odi_squads.json",
+    "format": "ODI",
+    "ends": "2026-07-15"
   }
 ]

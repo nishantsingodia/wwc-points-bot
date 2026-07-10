@@ -1,6 +1,6 @@
 {
  "anchor": "cricsheet_id (pid); espn:/slug: fallback when unknown",
- "count": 372,
+ "count": 376,
  "players": {
   "5d2eda89": {
    "aliases": [
@@ -1099,7 +1099,8 @@
     "hk matthews"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Ireland vs West Indies Women's ODI 2026"
    ],
    "display": "Hayley Matthews",
    "cricsheet_id": "d32cf49a",
@@ -1113,7 +1114,8 @@
     "qiana joseph"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Ireland vs West Indies Women's ODI 2026"
    ],
    "display": "Qiana Joseph",
    "cricsheet_id": "d6164dc0",
@@ -1128,7 +1130,8 @@
     "jkc claxton"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Ireland vs West Indies Women's ODI 2026"
    ],
    "display": "Jahzara Claxton",
    "cricsheet_id": "e22f8ec1",
@@ -1143,7 +1146,8 @@
     "stafanie taylor"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Ireland vs West Indies Women's ODI 2026"
    ],
    "display": "Stafanie Taylor",
    "cricsheet_id": "92cf79a8",
@@ -1158,7 +1162,8 @@
     "djs dottin"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Ireland vs West Indies Women's ODI 2026"
    ],
    "display": "Deandra Dottin",
    "cricsheet_id": "53bee17f",
@@ -1188,7 +1193,8 @@
     "shemaine campbelle"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Ireland vs West Indies Women's ODI 2026"
    ],
    "display": "Shemaine Campbelle",
    "cricsheet_id": "a7cd72b2",
@@ -1202,7 +1208,8 @@
     "jannillea glasgow"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Ireland vs West Indies Women's ODI 2026"
    ],
    "display": "Jannillea Glasgow",
    "cricsheet_id": "a2632c7c",
@@ -1217,7 +1224,8 @@
     "aaliyah alleyne"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Ireland vs West Indies Women's ODI 2026"
    ],
    "display": "Aaliyah Alleyne",
    "cricsheet_id": "4b0e3049",
@@ -1232,7 +1240,8 @@
     "ass fletcher"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Ireland vs West Indies Women's ODI 2026"
    ],
    "display": "Afy Fletcher",
    "cricsheet_id": "42d9dd09",
@@ -1246,7 +1255,8 @@
     "karishma ramharack"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Ireland vs West Indies Women's ODI 2026"
    ],
    "display": "Karishma Ramharack",
    "cricsheet_id": "321c980e",
@@ -1260,7 +1270,8 @@
     "ashmini munisar"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Ireland vs West Indies Women's ODI 2026"
    ],
    "display": "Ashmini Munisar",
    "cricsheet_id": "a811cb83",
@@ -1275,7 +1286,8 @@
     "zaida james"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Ireland vs West Indies Women's ODI 2026"
    ],
    "display": "Zaida James",
    "cricsheet_id": "816af623",
@@ -1289,11 +1301,12 @@
     "mandy mangru"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Ireland vs West Indies Women's ODI 2026"
    ],
    "display": "Mandy Mangru",
    "cricsheet_id": "b9fec7a5",
-   "espn_id": null,
+   "espn_id": "907733",
    "draft_id": 3051,
    "auction_id": 3051
   },
@@ -1303,7 +1316,8 @@
     "shawnisha hector"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Ireland vs West Indies Women's ODI 2026"
    ],
    "display": "Shawnisha Hector",
    "cricsheet_id": "3faa312e",
@@ -1918,7 +1932,8 @@
     "amy hunter"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Ireland vs West Indies Women's ODI 2026"
    ],
    "display": "Amy Hunter",
    "cricsheet_id": "e8fa03ed",
@@ -1933,7 +1948,8 @@
     "gh lewis"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Ireland vs West Indies Women's ODI 2026"
    ],
    "display": "Gaby Lewis",
    "cricsheet_id": "1b9d1579",
@@ -1947,7 +1963,8 @@
     "orla prendergast"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Ireland vs West Indies Women's ODI 2026"
    ],
    "display": "Orla Prendergast",
    "cricsheet_id": "d8f20ba5",
@@ -1961,7 +1978,8 @@
     "leah paul"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Ireland vs West Indies Women's ODI 2026"
    ],
    "display": "Leah Paul",
    "cricsheet_id": "07248d8e",
@@ -1975,7 +1993,8 @@
     "rebecca stokell"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Ireland vs West Indies Women's ODI 2026"
    ],
    "display": "Rebecca Stokell",
    "cricsheet_id": "def7b1bb",
@@ -2018,7 +2037,8 @@
     "cara murray"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Ireland vs West Indies Women's ODI 2026"
    ],
    "display": "Cara Murray",
    "cricsheet_id": "5a50471c",
@@ -2032,11 +2052,12 @@
     "georgina dempsey"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Ireland vs West Indies Women's ODI 2026"
    ],
    "display": "Georgina Dempsey",
    "cricsheet_id": "940feccc",
-   "espn_id": null,
+   "espn_id": "1229017",
    "draft_id": 3252,
    "auction_id": 3252
   },
@@ -2061,7 +2082,8 @@
     "ak maguire"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Ireland vs West Indies Women's ODI 2026"
    ],
    "display": "Aimee Maguire",
    "cricsheet_id": null,
@@ -2074,7 +2096,8 @@
     "louise little"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Ireland vs West Indies Women's ODI 2026"
    ],
    "display": "Louise Little",
    "cricsheet_id": null,
@@ -2088,7 +2111,8 @@
     "alana dalzell"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Ireland vs West Indies Women's ODI 2026"
    ],
    "display": "Alana Dalzell",
    "cricsheet_id": "66498395",
@@ -2098,14 +2122,16 @@
   },
   "slug:christina-coulter-reilly": {
    "aliases": [
-    "christina coulter reilly"
+    "christina coulter reilly",
+    "christina e coulter reilly"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Ireland vs West Indies Women's ODI 2026"
    ],
    "display": "Christina Coulter Reilly",
    "cricsheet_id": null,
-   "espn_id": null,
+   "espn_id": "1232213",
    "draft_id": 4847,
    "auction_id": null
   },
@@ -5032,9 +5058,9 @@
   },
   "slug:varun-chakravarthy": {
    "aliases": [
+    "cv varun",
     "varun chakaravarthy",
-    "varun chakravarthy",
-    "cv varun"
+    "varun chakravarthy"
    ],
    "tours": [
     "India tour of England 2026 (Men T20I)"
@@ -5279,6 +5305,61 @@
    "espn_id": null,
    "draft_id": null,
    "auction_id": 6729
+  },
+  "5ecfab18": {
+   "aliases": [
+    "s forbes",
+    "sarah forbes"
+   ],
+   "tours": [
+    "Ireland vs West Indies Women's ODI 2026"
+   ],
+   "display": "Sarah Forbes",
+   "cricsheet_id": "5ecfab18",
+   "espn_id": "1229023",
+   "draft_id": 10198,
+   "auction_id": 3710
+  },
+  "espn:1229018": {
+   "aliases": [
+    "jane maguire"
+   ],
+   "tours": [
+    "Ireland vs West Indies Women's ODI 2026"
+   ],
+   "display": "Jane Maguire",
+   "cricsheet_id": null,
+   "espn_id": "1229018",
+   "draft_id": 10201,
+   "auction_id": null
+  },
+  "771b44ed": {
+   "aliases": [
+    "kia mccartney",
+    "kj mccartney"
+   ],
+   "tours": [
+    "Ireland vs West Indies Women's ODI 2026"
+   ],
+   "display": "Kia McCartney",
+   "cricsheet_id": "771b44ed",
+   "espn_id": null,
+   "draft_id": 10204,
+   "auction_id": 8602
+  },
+  "espn:1352170": {
+   "aliases": [
+    "realeanna grimmond",
+    "realeanna margot ann u grimmond"
+   ],
+   "tours": [
+    "Ireland vs West Indies Women's ODI 2026"
+   ],
+   "display": "Realeanna Grimmond",
+   "cricsheet_id": null,
+   "espn_id": "1352170",
+   "draft_id": 10218,
+   "auction_id": null
   }
  }
 }
