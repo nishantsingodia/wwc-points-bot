@@ -69,10 +69,18 @@ GSHEET_TAB = os.environ.get("GSHEET_TAB", "WWC T20 POINTS").strip()
 ESPN_BASE = "https://site.api.espn.com/apis/site/v2/sports/cricket"
 ESPN_SERIES = os.environ.get("ESPN_SERIES_ID", "1483859").strip()  # ICC Women's T20 WC 2026
 
-# ---- Dream11 T20 rules (mirror of rules.ts) ----
+# ---- Dream11 T20 rules (mirror of T20_RULES in rules.ts) ----
 R = dict(
     perRun=1, b4=4, b6=6, m25=4, m50=8, m75=12, m100=16, duck=-2,
     wkt=30, lbwb=8, dot=1, maiden=12, h3=4, h4=8, h5=12,
+    catch=8, c3=4, stump=12, dro=12, ro=6, xi=4,
+)
+# ---- Dream11 ODI rules (mirror of ODI_RULES in rules.ts) ----
+# vs T20: duck -3; dot = 1 per 3 dots (dotGroup); maiden +4; hauls at 4w/5w/6w;
+# SR gate 20 balls + shifted bands; econ gate 30 balls + shifted bands (see _score_odi).
+R_ODI = dict(
+    perRun=1, b4=4, b6=6, m25=4, m50=8, m75=12, m100=16, duck=-3,
+    wkt=30, lbwb=8, dotGroup=3, dotPts=1, maiden=4, h4=4, h5=8, h6=12,
     catch=8, c3=4, stump=12, dro=12, ro=6, xi=4,
 )
 
@@ -111,6 +119,7 @@ PRIOR_ROLE = {}         # (tour, feed) -> the Role value last seen (preserve use
 ROLE_OVERRIDE = {}      # norm(feed) -> role you set in Needs Review (drives SR/Econ scoring)
 ACK = set()             # norm(feed) the user resolved (Yes/No/New) -> stop re-flagging in Needs Review
 CURRENT_TOUR = ""       # set by run_tour so logged items know which tour they came from
+CURRENT_FMT = "T20"     # set by run_tour from tour["format"] ("T20" | "ODI"); drives score() + match filter
 
 # Identity-anomaly queue (written to the sheet's "Identity Anomalies" tab). These are the
 # OPPOSITE failure from Needs Review: not "this name matched nobody" but "two DIFFERENT players
@@ -478,8 +487,11 @@ def team_key(teams):
 
 # ---- cricsheet ball-by-ball (mirror of etl_cricsheet.py) -> EXACT dots/maidens/XI ----
 def load_cricsheet_index(dirpath, gender="female"):
-    """(date, team_key) -> json path, for completed T20s of the given gender
-    (so a men's tour matches men's cricsheet files, not women's, and vice versa)."""
+    """(date, team_key) -> json path, for completed matches of the given gender
+    (so a men's tour matches men's cricsheet files, not women's, and vice versa).
+    Format-agnostic: filters on gender + dates only, so it indexes whatever archives
+    were unzipped into dirpath (T20s and/or ODIs); the tour's match filter picks the
+    format, and (date, teams) keys it to the specific game."""
     idx = {}
     if not os.path.isdir(dirpath):
         return idx
@@ -766,7 +778,13 @@ def crosscheck(cs, api):
     return diffs
 
 # ---- D11 scoring (mirror of calculator.ts) ----
-def score(p, role):
+def score(p, role, fmt=None):
+    """Dispatch to the format's scorer. fmt defaults to the running tour's CURRENT_FMT."""
+    if (fmt or CURRENT_FMT or "T20").upper() == "ODI":
+        return _score_odi(p, role)
+    return _score_t20(p, role)
+
+def _score_t20(p, role):
     bat = bowl = field = sr_pts = eco_pts = 0
     if p["b"] > 0 or p["r"] > 0:
         bat += p["r"] * R["perRun"] + p["4s"] * R["b4"] + p["6s"] * R["b6"]
@@ -805,6 +823,50 @@ def score(p, role):
     field += p["stumpings"] * R["stump"]
     field += p["dro"] * R["dro"] + (p["runouts"] - p["dro"]) * R["ro"]
     xi = R["xi"] if p["played"] else 0
+    total = bat + bowl + field + sr_pts + eco_pts + xi
+    return dict(bat=bat, bowl=bowl, field=field, sr=sr_pts, eco=eco_pts, xi=xi, total=total)
+
+def _score_odi(p, role):
+    """D11 ODI scorer (mirror of ODI_RULES / calculateOdiPoints in the app + the ETL).
+    vs T20: duck -3; milestones highest-only; dot = 1 per 3 dots; maiden +4; hauls 4w/5w/6w;
+    SR gate 20 balls with shifted bands; econ gate 30 balls with shifted bands."""
+    R2 = R_ODI
+    bat = bowl = field = sr_pts = eco_pts = 0
+    if p["b"] > 0 or p["r"] > 0:
+        bat += p["r"] * R2["perRun"] + p["4s"] * R2["b4"] + p["6s"] * R2["b6"]
+        if p["r"] >= 100: bat += R2["m100"]
+        elif p["r"] >= 75: bat += R2["m75"]
+        elif p["r"] >= 50: bat += R2["m50"]
+        elif p["r"] >= 25: bat += R2["m25"]
+        if p["b"] >= 20 and role != "BOWL":
+            sr = p["r"] / p["b"] * 100
+            if sr > 140: sr_pts += 6
+            elif sr > 120: sr_pts += 4
+            elif sr >= 100: sr_pts += 2
+            elif 40 <= sr <= 50: sr_pts += -2
+            elif 30 <= sr < 40: sr_pts += -4
+            elif sr < 30: sr_pts += -6
+    if p["dismissed"] and p["r"] == 0 and role != "BOWL":
+        bat += R2["duck"]
+    if p["balls"] > 0:
+        bowl += (p["w"] * R2["wkt"] + p["lbwb"] * R2["lbwb"]
+                 + (p["dots"] // R2["dotGroup"]) * R2["dotPts"] + p["maidens"] * R2["maiden"])
+        if p["w"] >= 6: bowl += R2["h6"]
+        elif p["w"] >= 5: bowl += R2["h5"]
+        elif p["w"] >= 4: bowl += R2["h4"]
+        if p["balls"] >= 30:
+            econ = p["runs_conceded"] / (p["balls"] / 6)
+            if econ < 2.5: eco_pts += 6
+            elif econ < 3.5: eco_pts += 4
+            elif econ <= 4.5: eco_pts += 2
+            elif 7 <= econ <= 8: eco_pts += -2
+            elif 8 < econ <= 9: eco_pts += -4
+            elif econ > 9: eco_pts += -6
+    field += p["catches"] * R2["catch"]
+    if p["catches"] >= 3: field += R2["c3"]
+    field += p["stumpings"] * R2["stump"]
+    field += p["dro"] * R2["dro"] + (p["runouts"] - p["dro"]) * R2["ro"]
+    xi = R2["xi"] if p["played"] else 0
     total = bat + bowl + field + sr_pts + eco_pts + xi
     return dict(bat=bat, bowl=bowl, field=field, sr=sr_pts, eco=eco_pts, xi=xi, total=total)
 
@@ -1082,12 +1144,13 @@ def build_recon_rows(match_key, label, mdate, tour, unresolved, capi_pid, espn_p
 
 def run_tour(tour):
     """Process ONE tour (its own cricapi+ESPN series + squad list) and write its tab."""
-    global WC_SERIES, ESPN_SERIES, SQUADS_JSON, GSHEET_TAB, CURRENT_TOUR
+    global WC_SERIES, ESPN_SERIES, SQUADS_JSON, GSHEET_TAB, CURRENT_TOUR, CURRENT_FMT
     WC_SERIES = tour["cricapi_series"]
     ESPN_SERIES = tour.get("espn_series", "")
     SQUADS_JSON = tour.get("squads_path", "")
     GSHEET_TAB = tour["tab"]
     CURRENT_TOUR = tour["name"]
+    CURRENT_FMT = (tour.get("format") or "T20").upper()
     out_csv = tour.get("out_csv", OUT)
     print(f"=== Tour: {tour['name']}  ->  tab '{GSHEET_TAB}' ===", file=sys.stderr)
 
@@ -1111,15 +1174,23 @@ def run_tour(tour):
     # (otherwise we'd clear it and write an empty table — wiping good data).
     if info.get("status") != "success" or not matches:
         sys.exit("series_info fetch failed or empty — aborting; sheet left unchanged.")
-    # T20Is only — a tour can mix formats. cricapi sometimes leaves matchType null
-    # (seen on ODIs!), so trust matchType when present, else fall back to the match name.
-    def is_t20(m):
+    # Format filter — a tour can mix formats, so we keep only the matches in the
+    # running tour's format (CURRENT_FMT: "T20" default, or "ODI"). cricapi sometimes
+    # leaves matchType null (seen on ODIs!), so trust matchType when present, else fall
+    # back to the match name.
+    def is_fmt(m):
         mt = (m.get("matchType") or "").lower()
+        if CURRENT_FMT == "ODI":
+            if mt:
+                return "odi" in mt
+            nm = (m.get("name") or "").lower()
+            return "odi" in nm and "t20" not in nm and "test" not in nm
+        # T20 (default): unchanged behaviour.
         if mt:
             return "t20" in mt
         nm = (m.get("name") or "").lower()
         return "t20" in nm and "odi" not in nm and "test" not in nm
-    ended = [m for m in matches if m.get("matchEnded") and is_t20(m)]
+    ended = [m for m in matches if m.get("matchEnded") and is_fmt(m)]
     today = date.today()
     def near_today(m):
         for ds in date_variants(m.get("date", "")):
@@ -1132,7 +1203,7 @@ def run_tour(tour):
     # LIVE = started but not yet ended (near today). Scored in-progress from cricapi (fetched
     # fresh) + ESPN, marked Match Status=LIVE; points grow as the match unfolds and are superseded
     # by the exact ended-path scoring (with cricsheet) once cricapi flips matchEnded.
-    live = [m for m in matches if is_t20(m) and m.get("matchStarted")
+    live = [m for m in matches if is_fmt(m) and m.get("matchStarted")
             and not m.get("matchEnded") and near_today(m)]
     cs_idx = load_cricsheet_index(CRICSHEET_DIR, tour.get("gender", "female"))
     print(f"{len(ended)}/{len(matches)} completed, {len(live)} in-progress | cricsheet {tour.get('gender','female')} matches indexed: {len(cs_idx)}", file=sys.stderr)
@@ -1408,7 +1479,7 @@ def run_tour(tour):
     # Gate on ESPN having the XI (the real signal), not cricapi's lagging toss flags.
     # Only not-STARTED matches near today: started-but-not-ended ones are now SCORED above
     # (the `live` set), so writing SCHEDULED lineup rows for them too would duplicate.
-    pending = [m for m in matches if is_t20(m) and not m.get("matchStarted")
+    pending = [m for m in matches if is_fmt(m) and not m.get("matchStarted")
                and not m.get("matchEnded") and near_today(m)]
     n_toss = 0
     for j, m in enumerate(sorted(pending, key=lambda x: x.get("dateTimeGMT", x.get("date", ""))), 1):

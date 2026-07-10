@@ -53,11 +53,14 @@ auction). Claude does the rest:
 | `espn_series` | yes* | ESPN/cricinfo series id (dot-balls, +4 XI, team attribution). *Omit only if you accept no dots/XI. |
 | `tab` | yes | Google Sheet tab to write (created if missing) |
 | `gender` | yes | `male` or `female` — so cricsheet matches the right files |
+| `format` | no | `"T20"` (default) or `"ODI"` — selects the match filter + scoring ruleset |
 | `squads` | no | filename of a squad JSON in this repo; omit for featured-players-only |
 | `ends` | no | last match date `YYYY-MM-DD`. After `ends` + 21 days the tour **auto-freezes**: no API calls, no writes, the tab is kept with its final data. Omit to run forever. |
 
-Only **T20s** are scored — T20Is **and** franchise leagues like MLC (a tour can mix
-formats; ODIs/Tests are ignored).
+By default only **T20s** are scored — T20Is **and** franchise leagues like MLC (a tour can
+mix formats; Tests are always ignored). **ODIs are now supported**: set `format: "ODI"` on a
+tour and its match filter selects ODIs instead of T20s and the ODI scoring ruleset is used.
+A tour scores exactly one format (its `format`, defaulting to `"T20"`).
 
 ## Completed / old tours
 A tour stops being polled **21 days after its `ends` date** (configurable via the
@@ -78,6 +81,19 @@ Source priority per completed match, recorded in the **Status** column:
 3. **cricapi · limited** — only if ESPN is unavailable (no dots/XI).
 Super-overs excluded; feed joins tolerate ±1 day; same-surname / cross-source
 disagreements / unknown players are flagged in Status rather than silently guessed.
+
+### ODI scoring ruleset
+
+The pipeline above is identical for ODIs — only the **point rules** change when a tour opts in with
+`format: "ODI"` (see the tours.json reference). ODI differs from the T20 default:
+- **Duck −3** (T20 is −2).
+- **Dot balls +1 per 3 dots.**
+- **Maiden over +4** (T20 is +12).
+- **Wicket hauls at 4w / 5w / 6w = +4 / +8 / +12** (T20's hauls trigger at 3w / 4w / 5w).
+- **Strike-rate bands** (min 20 balls): >140 / 120.1–140 / 100–120 bonuses; 40–50 / 30–39.99 / <30 penalties.
+- **Economy bands** (min 5 overs): <2.5 / 2.5–3.49 / 3.5–4.5 bonuses; 7–8 / 8.01–9 / >9 penalties.
+
+First ODI tour: *Ireland vs West Indies Women's ODI 2026* (3-match women's bilateral).
 
 ## Player identity — the global registry (read this before touching name matching)
 
