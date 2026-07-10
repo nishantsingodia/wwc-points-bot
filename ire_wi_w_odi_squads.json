@@ -1,0 +1,41 @@
+{
+ "OIRE": {
+  "name": "Ireland Women",
+  "players": [
+   ["Gaby Lewis", "BAT"],
+   ["Amy Hunter", "WK"],
+   ["Rebecca Stokell", "BAT"],
+   ["Orla Prendergast", "AR"],
+   ["Leah Paul", "AR"],
+   ["Sarah Forbes", "BAT"],
+   ["Cara Murray", "BOWL"],
+   ["Louise Little", "BOWL"],
+   ["Jane Maguire", "BOWL"],
+   ["Aimee Maguire", "BOWL"],
+   ["Alana Dalzell", "BOWL"],
+   ["Kia McCartney", "AR"],
+   ["Christina Coulter Reilly", "WK"],
+   ["Georgina Dempsey", "BOWL"]
+  ]
+ },
+ "OWI": {
+  "name": "West Indies Women",
+  "players": [
+   ["Hayley Matthews", "AR"],
+   ["Qiana Joseph", "AR"],
+   ["Shemaine Campbelle", "WK"],
+   ["Stafanie Taylor", "AR"],
+   ["Deandra Dottin", "AR"],
+   ["Zaida James", "AR"],
+   ["Aaliyah Alleyne", "BOWL"],
+   ["Ashmini Munisar", "BOWL"],
+   ["Afy Fletcher", "BOWL"],
+   ["Karishma Ramharack", "BOWL"],
+   ["Shawnisha Hector", "BAT"],
+   ["Realeanna Grimmond", "AR"],
+   ["Jannillea Glasgow", "AR"],
+   ["Mandy Mangru", "WK"],
+   ["Jahzara Claxton", "BOWL"]
+  ]
+ }
+}
