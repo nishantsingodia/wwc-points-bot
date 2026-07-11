@@ -1,0 +1,43 @@
+{
+ "MNZ": {
+  "name": "New Zealand",
+  "players": [
+   ["Will Young", "BAT"],
+   ["Tom Latham", "WK"],
+   ["Nick Kelly", "BAT"],
+   ["Daryl Mitchell", "AR"],
+   ["Henry Nicholls", "BAT"],
+   ["Mark Chapman", "BAT"],
+   ["Michael Bracewell", "AR"],
+   ["Mitchell Santner", "AR"],
+   ["Nathan Smith", "AR"],
+   ["Jacob Duffy", "BOWL"],
+   ["Ben Lister", "BOWL"],
+   ["Mitch Hay", "WK"],
+   ["Dean Foxcroft", "AR"],
+   ["Kristian Clarke", "AR"],
+   ["Matthew Fisher", "BOWL"],
+   ["Jayden Lennox", "BOWL"]
+  ]
+ },
+ "MWI": {
+  "name": "West Indies",
+  "players": [
+   ["John Campbell", "BAT"],
+   ["Keacy Carty", "BAT"],
+   ["Ackeem Auguste", "BAT"],
+   ["Shai Hope", "WK"],
+   ["Sherfane Rutherford", "AR"],
+   ["Roston Chase", "AR"],
+   ["Justin Greaves", "AR"],
+   ["Keemo Paul", "AR"],
+   ["Gudakesh Motie", "BOWL"],
+   ["Alzarri Joseph", "BOWL"],
+   ["Jayden Seales", "BOWL"],
+   ["Amir Jangoo", "WK"],
+   ["Matthew Forde", "AR"],
+   ["Shamar Joseph", "BOWL"],
+   ["Vitel Lawes", "BOWL"]
+  ]
+ }
+}
