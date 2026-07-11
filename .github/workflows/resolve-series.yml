@@ -1,6 +1,5 @@
 name: resolve-series
-# Utility: resolve a cricapi series id by search term. Prints raw response + tries the
-# failover key. Series list only (key masked in logs).
+# Utility: resolve a cricapi series id by search term. Prints HTTP + raw body, tries both keys.
 on:
   workflow_dispatch:
     inputs:
@@ -12,26 +11,20 @@ on:
 jobs:
   resolve:
     runs-on: ubuntu-latest
+    env:
+      K1: ${{ secrets.CRICKET_API_KEY }}
+      K2: ${{ secrets.CRICKET_API_KEY2 }}
+      Q: ${{ github.event.inputs.search }}
     steps:
-      - name: cricapi series search (primary + failover key)
-        env:
-          K1: ${{ secrets.CRICKET_API_KEY }}
-          K2: ${{ secrets.CRICKET_API_KEY2 }}
-          Q: ${{ github.event.inputs.search }}
+      - name: cricapi series search
         run: |
           for K in "$K1" "$K2"; do
             echo "===== key=${K:0:4}... search=$Q ====="
-            body=$(curl -s -w "\n__HTTP__%{http_code}" "https://api.cricapi.com/v1/series?apikey=$K&search=$Q&offset=0")
+            body=$(curl -s -w "__HTTP__%{http_code}" "https://api.cricapi.com/v1/series?apikey=$K&search=$Q&offset=0")
             code=$(printf '%s' "$body" | sed -n 's/.*__HTTP__//p')
-            json=$(printf '%s' "$body" | sed 's/__HTTP__.*//')
-            echo "HTTP=$code  bytes=${#json}"
-            echo "RAW(first 300): $(printf '%s' "$json" | head -c 300)"
-            printf '%s' "$json" | python3 -c "import sys,json;
-try:
-    d=json.load(sys.stdin); rows=d.get('data',[])
-    print('STATUS', d.get('status'), d.get('reason',''))
-    [print(s.get('id'),'|',s.get('name'),'|',s.get('startDate'),'..',s.get('endDate'),'| matches=',s.get('matches')) for s in rows if 'new zealand' in (s.get('name','').lower()) or 'west indies' in (s.get('name','').lower())]
-except Exception as e:
-    print('parse-error:', e)"
+            json=$(printf '%s' "$body" | sed 's/__HTTP__[0-9]*$//')
+            echo "HTTP=$code bytes=${#json}"
+            echo "RAW300: $(printf '%s' "$json" | head -c 300)"
+            printf '%s' "$json" | python3 -c "import sys,json; d=json.load(sys.stdin); rows=[s for s in d.get('data',[]) if 'new zealand' in s.get('name','').lower() or 'west indies' in s.get('name','').lower()]; print('MATCHES:'); [print(s.get('id'),'|',s.get('name'),'|',s.get('startDate'),'..',s.get('endDate'),'| m=',s.get('matches')) for s in rows]; print('STATUS', d.get('status'), d.get('reason','')) if not rows else None" || echo "(parse failed - see RAW above)"
             echo
           done
