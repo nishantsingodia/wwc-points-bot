@@ -18,9 +18,10 @@ jobs:
     steps:
       - name: cricapi series search
         run: |
+          Qenc=$(printf '%s' "$Q" | sed 's/ /%20/g')
           for K in "$K1" "$K2"; do
             echo "===== key=${K:0:4}... search=$Q ====="
-            body=$(curl -s -w "__HTTP__%{http_code}" "https://api.cricapi.com/v1/series?apikey=$K&search=$Q&offset=0")
+            body=$(curl -s -w "__HTTP__%{http_code}" "https://api.cricapi.com/v1/series?apikey=$K&search=$Qenc&offset=0") || true
             code=$(printf '%s' "$body" | sed -n 's/.*__HTTP__//p')
             json=$(printf '%s' "$body" | sed 's/__HTTP__[0-9]*$//')
             echo "HTTP=$code bytes=${#json}"
