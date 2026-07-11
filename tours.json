@@ -53,5 +53,15 @@
     "squads": "ire_wi_w_odi_squads.json",
     "format": "ODI",
     "ends": "2026-07-15"
+  },
+  {
+    "name": "New Zealand vs West Indies Men's ODI 2026",
+    "cricapi_series": "01c9b20e-45cd-4c7b-a311-429f83f171c1",
+    "espn_series": "1538619",
+    "tab": "NZ v WI M ODI POINTS",
+    "gender": "male",
+    "squads": "nz_wi_men_odi_squads.json",
+    "format": "ODI",
+    "ends": "2026-07-21"
   }
 ]

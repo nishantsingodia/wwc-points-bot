@@ -1,6 +1,6 @@
 {
  "anchor": "cricsheet_id (pid); espn:/slug: fallback when unknown",
- "count": 376,
+ "count": 405,
  "players": {
   "5d2eda89": {
    "aliases": [
@@ -3323,7 +3323,8 @@
     "ms chapman"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "New Zealand vs West Indies Men's ODI 2026"
    ],
    "display": "Mark Chapman",
    "cricsheet_id": "7fa12533",
@@ -4277,7 +4278,8 @@
     "sherfane rutherford"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "New Zealand vs West Indies Men's ODI 2026"
    ],
    "display": "Sherfane Rutherford",
    "cricsheet_id": null,
@@ -5359,6 +5361,403 @@
    "cricsheet_id": null,
    "espn_id": "1352170",
    "draft_id": 10218,
+   "auction_id": null
+  },
+  "8afe73e2": {
+   "aliases": [
+    "wa young",
+    "will young"
+   ],
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "display": "Will Young",
+   "cricsheet_id": "8afe73e2",
+   "espn_id": null,
+   "draft_id": 10222,
+   "auction_id": 3779
+  },
+  "e824e6ee": {
+   "aliases": [
+    "tom latham",
+    "twm latham"
+   ],
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "display": "Tom Latham",
+   "cricsheet_id": "e824e6ee",
+   "espn_id": null,
+   "draft_id": 10223,
+   "auction_id": 2682
+  },
+  "97f437ed": {
+   "aliases": [
+    "nf kelly",
+    "nick kelly"
+   ],
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "display": "Nick Kelly",
+   "cricsheet_id": "97f437ed",
+   "espn_id": null,
+   "draft_id": 10224,
+   "auction_id": 7374
+  },
+  "slug:daryl-mitchell": {
+   "aliases": [
+    "daryl mitchell"
+   ],
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "display": "Daryl Mitchell",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10225,
+   "auction_id": null
+  },
+  "03521fd3": {
+   "aliases": [
+    "henry nicholls",
+    "hm nicholls"
+   ],
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "display": "Henry Nicholls",
+   "cricsheet_id": "03521fd3",
+   "espn_id": null,
+   "draft_id": 10226,
+   "auction_id": 2684
+  },
+  "slug:michael-bracewell": {
+   "aliases": [
+    "michael bracewell"
+   ],
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "display": "Michael Bracewell",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10228,
+   "auction_id": null
+  },
+  "e4a0deae": {
+   "aliases": [
+    "mitchell santner",
+    "mj santner"
+   ],
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "display": "Mitchell Santner",
+   "cricsheet_id": "e4a0deae",
+   "espn_id": null,
+   "draft_id": 10229,
+   "auction_id": 217
+  },
+  "05b1aef8": {
+   "aliases": [
+    "nathan smith",
+    "ng smith"
+   ],
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "display": "Nathan Smith",
+   "cricsheet_id": "05b1aef8",
+   "espn_id": null,
+   "draft_id": 10230,
+   "auction_id": 7375
+  },
+  "dadbdb68": {
+   "aliases": [
+    "ja duffy",
+    "jacob duffy"
+   ],
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "display": "Jacob Duffy",
+   "cricsheet_id": "dadbdb68",
+   "espn_id": null,
+   "draft_id": 10231,
+   "auction_id": 1696
+  },
+  "79f5bc26": {
+   "aliases": [
+    "ben lister",
+    "bg lister"
+   ],
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "display": "Ben Lister",
+   "cricsheet_id": "79f5bc26",
+   "espn_id": null,
+   "draft_id": 10232,
+   "auction_id": 3989
+  },
+  "732f711b": {
+   "aliases": [
+    "mitch hay",
+    "mj hay"
+   ],
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "display": "Mitch Hay",
+   "cricsheet_id": "732f711b",
+   "espn_id": null,
+   "draft_id": 10233,
+   "auction_id": 3788
+  },
+  "ed6894af": {
+   "aliases": [
+    "d foxcroft",
+    "dean foxcroft"
+   ],
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "display": "Dean Foxcroft",
+   "cricsheet_id": "ed6894af",
+   "espn_id": null,
+   "draft_id": 10234,
+   "auction_id": 6240
+  },
+  "slug:kristian-clarke": {
+   "aliases": [
+    "kristian clarke"
+   ],
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "display": "Kristian Clarke",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10235,
+   "auction_id": null
+  },
+  "slug:matthew-fisher": {
+   "aliases": [
+    "matthew fisher"
+   ],
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "display": "Matthew Fisher",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10236,
+   "auction_id": null
+  },
+  "07793daf": {
+   "aliases": [
+    "jayden lennox",
+    "jr lennox"
+   ],
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "display": "Jayden Lennox",
+   "cricsheet_id": "07793daf",
+   "espn_id": null,
+   "draft_id": 10237,
+   "auction_id": 7575
+  },
+  "slug:john-campbell": {
+   "aliases": [
+    "john campbell"
+   ],
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "display": "John Campbell",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10238,
+   "auction_id": 8605
+  },
+  "6020a3c6": {
+   "aliases": [
+    "keacy carty",
+    "ku carty"
+   ],
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "display": "Keacy Carty",
+   "cricsheet_id": "6020a3c6",
+   "espn_id": null,
+   "draft_id": 10239,
+   "auction_id": 1687
+  },
+  "4b167ede": {
+   "aliases": [
+    "ackeem auguste",
+    "awj auguste"
+   ],
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "display": "Ackeem Auguste",
+   "cricsheet_id": "4b167ede",
+   "espn_id": null,
+   "draft_id": 10240,
+   "auction_id": 1686
+  },
+  "c59d8f8a": {
+   "aliases": [
+    "ka hope",
+    "shai hope"
+   ],
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "display": "Shai Hope",
+   "cricsheet_id": "c59d8f8a",
+   "espn_id": null,
+   "draft_id": 10241,
+   "auction_id": 8188
+  },
+  "3feda4fa": {
+   "aliases": [
+    "rl chase",
+    "roston chase"
+   ],
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "display": "Roston Chase",
+   "cricsheet_id": "3feda4fa",
+   "espn_id": null,
+   "draft_id": 10243,
+   "auction_id": 1892
+  },
+  "74d12124": {
+   "aliases": [
+    "jp greaves",
+    "justin greaves"
+   ],
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "display": "Justin Greaves",
+   "cricsheet_id": "74d12124",
+   "espn_id": null,
+   "draft_id": 10244,
+   "auction_id": 4707
+  },
+  "slug:keemo-paul": {
+   "aliases": [
+    "keemo paul"
+   ],
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "display": "Keemo Paul",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10245,
+   "auction_id": null
+  },
+  "97bdec3d": {
+   "aliases": [
+    "g motie",
+    "gudakesh motie"
+   ],
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "display": "Gudakesh Motie",
+   "cricsheet_id": "97bdec3d",
+   "espn_id": null,
+   "draft_id": 10246,
+   "auction_id": 1893
+  },
+  "slug:alzarri-joseph": {
+   "aliases": [
+    "alzarri joseph"
+   ],
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "display": "Alzarri Joseph",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10247,
+   "auction_id": null
+  },
+  "ded9ff1e": {
+   "aliases": [
+    "jayden seales",
+    "jnt seales"
+   ],
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "display": "Jayden Seales",
+   "cricsheet_id": "ded9ff1e",
+   "espn_id": null,
+   "draft_id": 10248,
+   "auction_id": 4282
+  },
+  "88626ed2": {
+   "aliases": [
+    "aa jangoo",
+    "amir jangoo"
+   ],
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "display": "Amir Jangoo",
+   "cricsheet_id": "88626ed2",
+   "espn_id": null,
+   "draft_id": 10249,
+   "auction_id": 1685
+  },
+  "83d17bbc": {
+   "aliases": [
+    "matthew forde",
+    "mw forde"
+   ],
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "display": "Matthew Forde",
+   "cricsheet_id": "83d17bbc",
+   "espn_id": null,
+   "draft_id": 10250,
+   "auction_id": 4280
+  },
+  "slug:shamar-joseph": {
+   "aliases": [
+    "shamar joseph"
+   ],
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "display": "Shamar Joseph",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10251,
+   "auction_id": null
+  },
+  "slug:vitel-lawes": {
+   "aliases": [
+    "vitel lawes"
+   ],
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "display": "Vitel Lawes",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10252,
    "auction_id": null
   }
  }

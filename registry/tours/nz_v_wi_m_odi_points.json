@@ -1,0 +1,41 @@
+{
+ "tour": "New Zealand vs West Indies Men's ODI 2026",
+ "slug": "nz_v_wi_m_odi_points",
+ "teams": {
+  "MNZ": [
+   "8afe73e2",
+   "e824e6ee",
+   "97f437ed",
+   "slug:daryl-mitchell",
+   "03521fd3",
+   "7fa12533",
+   "slug:michael-bracewell",
+   "e4a0deae",
+   "05b1aef8",
+   "dadbdb68",
+   "79f5bc26",
+   "732f711b",
+   "ed6894af",
+   "slug:kristian-clarke",
+   "slug:matthew-fisher",
+   "07793daf"
+  ],
+  "MWI": [
+   "slug:john-campbell",
+   "6020a3c6",
+   "4b167ede",
+   "c59d8f8a",
+   "slug:sherfane-rutherford",
+   "3feda4fa",
+   "74d12124",
+   "slug:keemo-paul",
+   "97bdec3d",
+   "slug:alzarri-joseph",
+   "ded9ff1e",
+   "88626ed2",
+   "83d17bbc",
+   "slug:shamar-joseph",
+   "slug:vitel-lawes"
+  ]
+ }
+}
