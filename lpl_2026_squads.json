@@ -1,0 +1,419 @@
+{
+  "JK": {
+    "name": "Jaffna Kings",
+    "players": [
+      [
+        "Avishka Fernando",
+        "BAT"
+      ],
+      [
+        "Kamil Mishara",
+        "WK"
+      ],
+      [
+        "Ibrahim Zadran",
+        "BAT"
+      ],
+      [
+        "Bhanuka Rajapaksa",
+        "BAT"
+      ],
+      [
+        "Shakib Al Hasan",
+        "AR"
+      ],
+      [
+        "Dunith Wellalage",
+        "AR"
+      ],
+      [
+        "Chamindu Wickramasinghe",
+        "AR"
+      ],
+      [
+        "Traveen Mathews",
+        "AR"
+      ],
+      [
+        "Taskin Ahmed",
+        "BOWL"
+      ],
+      [
+        "David Wiese",
+        "AR"
+      ],
+      [
+        "Kugathas Mathulan",
+        "BOWL"
+      ],
+      [
+        "Dilshan Madushanka",
+        "BOWL"
+      ],
+      [
+        "Nishan Madushka",
+        "BAT"
+      ],
+      [
+        "Sandeep Lamichhane",
+        "BOWL"
+      ],
+      [
+        "Piyush Chawla",
+        "BOWL"
+      ],
+      [
+        "Zahoor Khan",
+        "BOWL"
+      ],
+      [
+        "Lizaad Williams",
+        "BOWL"
+      ],
+      [
+        "Nuwanidu Fernando",
+        "BAT"
+      ],
+      [
+        "Mohommed Shiraz",
+        "BOWL"
+      ],
+      [
+        "Praveen Manisha",
+        "BAT"
+      ]
+    ]
+  },
+  "CK": {
+    "name": "Colombo Kaps",
+    "players": [
+      [
+        "Sharujan Shanmuganathan",
+        "BAT"
+      ],
+      [
+        "Kusal Mendis",
+        "WK"
+      ],
+      [
+        "Sadeera Samarawickrama",
+        "BAT"
+      ],
+      [
+        "Kamindu Mendis",
+        "AR"
+      ],
+      [
+        "Ben McDermott",
+        "BAT"
+      ],
+      [
+        "Janith Liyanage",
+        "BAT"
+      ],
+      [
+        "Jimmy Neesham",
+        "AR"
+      ],
+      [
+        "Milan Ratnayake",
+        "AR"
+      ],
+      [
+        "Hasan Mahmud",
+        "BOWL"
+      ],
+      [
+        "Jeffrey Vandersay",
+        "BOWL"
+      ],
+      [
+        "Mujeeb Ur Rahman",
+        "BOWL"
+      ],
+      [
+        "Binura Fernando",
+        "BOWL"
+      ],
+      [
+        "Rubin Hermann",
+        "WK"
+      ],
+      [
+        "Kushal Bhurtel",
+        "BAT"
+      ],
+      [
+        "Shahnawaz Dahani",
+        "BOWL"
+      ],
+      [
+        "Thanuka Dabare",
+        "AR"
+      ],
+      [
+        "Movin Subasingha",
+        "AR"
+      ],
+      [
+        "Wanuja Sahan",
+        "BOWL"
+      ],
+      [
+        "Anthony Pragasam",
+        "BOWL"
+      ],
+      [
+        "Malsha Tharupathi",
+        "BAT"
+      ]
+    ]
+  },
+  "KR": {
+    "name": "Kandy Royals",
+    "players": [
+      [
+        "Sediqullah Atal",
+        "BAT"
+      ],
+      [
+        "Vishen Halambage",
+        "BAT"
+      ],
+      [
+        "Kusal Perera",
+        "WK"
+      ],
+      [
+        "Wanindu Hasaranga",
+        "AR"
+      ],
+      [
+        "Angelo Mathews",
+        "AR"
+      ],
+      [
+        "Vijay Shankar",
+        "AR"
+      ],
+      [
+        "Moeen Ali",
+        "AR"
+      ],
+      [
+        "Pawan Sandesh",
+        "AR"
+      ],
+      [
+        "Daniel Sams",
+        "AR"
+      ],
+      [
+        "Asitha Fernando",
+        "BOWL"
+      ],
+      [
+        "Garuka Sanketh",
+        "AR"
+      ],
+      [
+        "Nuwan Thushara",
+        "BOWL"
+      ],
+      [
+        "Zahir Khan",
+        "BOWL"
+      ],
+      [
+        "Brandon McMullen",
+        "AR"
+      ],
+      [
+        "Lahiru Udara",
+        "BAT"
+      ],
+      [
+        "Dushan Hemantha",
+        "AR"
+      ],
+      [
+        "Muditha Lakshan",
+        "BOWL"
+      ],
+      [
+        "Dale Phillips",
+        "BAT"
+      ],
+      [
+        "Sahan Mihira",
+        "WK"
+      ],
+      [
+        "Isitha Wijesundera",
+        "BOWL"
+      ]
+    ]
+  },
+  "GG": {
+    "name": "Galle Gallants",
+    "players": [
+      [
+        "Lasith Croospulle",
+        "BAT"
+      ],
+      [
+        "Chris Lynn",
+        "BAT"
+      ],
+      [
+        "Litton Das",
+        "WK"
+      ],
+      [
+        "Charith Asalanka",
+        "BAT"
+      ],
+      [
+        "Mohammad Nawaz",
+        "AR"
+      ],
+      [
+        "Dasun Shanaka",
+        "AR"
+      ],
+      [
+        "Chamika Karunaratne",
+        "AR"
+      ],
+      [
+        "Dinura Kalupahana",
+        "BOWL"
+      ],
+      [
+        "Pramod Madushan",
+        "BOWL"
+      ],
+      [
+        "Eshan Malinga",
+        "BOWL"
+      ],
+      [
+        "Vijayakanth Viyaskanth",
+        "BOWL"
+      ],
+      [
+        "Mehidy Hasan Miraz",
+        "AR"
+      ],
+      [
+        "Sam Harper",
+        "WK"
+      ],
+      [
+        "Virandeep Singh",
+        "AR"
+      ],
+      [
+        "Akif Javed",
+        "BOWL"
+      ],
+      [
+        "Kasun Rajitha",
+        "BOWL"
+      ],
+      [
+        "Sahan Arachchige",
+        "AR"
+      ],
+      [
+        "Tharindu Rathnayake",
+        "BOWL"
+      ],
+      [
+        "Sachindu Colombage",
+        "AR"
+      ],
+      [
+        "Uri Koththigoda",
+        "BOWL"
+      ]
+    ]
+  },
+  "DS": {
+    "name": "Dambulla Sixers",
+    "players": [
+      [
+        "Sahibzada Farhan",
+        "BAT"
+      ],
+      [
+        "Niroshan Dickwella",
+        "WK"
+      ],
+      [
+        "Reeza Hendricks",
+        "BAT"
+      ],
+      [
+        "Dinesh Chandimal",
+        "BAT"
+      ],
+      [
+        "Pavan Rathnayake",
+        "BAT"
+      ],
+      [
+        "Marques Ackerman",
+        "BAT"
+      ],
+      [
+        "Ramesh Mendis",
+        "AR"
+      ],
+      [
+        "Gayana Weerasinghe",
+        "BOWL"
+      ],
+      [
+        "Maheesh Theekshana",
+        "BOWL"
+      ],
+      [
+        "Akila Dananjaya",
+        "AR"
+      ],
+      [
+        "Dushmantha Chameera",
+        "BOWL"
+      ],
+      [
+        "Gulbadin Naib",
+        "AR"
+      ],
+      [
+        "Mohammad Wasim",
+        "BOWL"
+      ],
+      [
+        "Shadley van Schalkwyk",
+        "AR"
+      ],
+      [
+        "Fazalhaq Farooqi",
+        "BOWL"
+      ],
+      [
+        "Dhananjaya Lakshan",
+        "AR"
+      ],
+      [
+        "Sachitha Jayatilake",
+        "WK"
+      ],
+      [
+        "Vishva Kumara",
+        "BOWL"
+      ]
+    ]
+  }
+}

@@ -63,5 +63,14 @@
     "squads": "nz_wi_men_odi_squads.json",
     "format": "ODI",
     "ends": "2026-07-21"
+  },
+  {
+    "name": "Lanka Premier League 2026",
+    "cricapi_series": "7cce2c26-63d3-4e9a-9728-33546cf732cd",
+    "espn_series": "1537330",
+    "tab": "LPL 2026 POINTS",
+    "gender": "male",
+    "squads": "lpl_2026_squads.json",
+    "ends": "2026-08-08"
   }
 ]
