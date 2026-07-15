@@ -1,0 +1,108 @@
+name: Tour Sync (auto-ingest)
+
+# Discovers cricket tours starting in the next few days (cricapi, watchlist-filtered),
+# generates the draft-app + bot artifacts, VALIDATES them, then commits both repos and
+# triggers a Vercel prod deploy — so a new tour appears in wwc-draft and gets scored by
+# the bot with no manual code edits.
+#
+# REQUIRED SECRETS (set in this repo's Settings -> Secrets -> Actions):
+#   CRICKET_API_KEY      - already used by the points workflow (reuse)
+#   GSHEET_ID            - already used by the points workflow (reuse; builds the tab gviz URL)
+#   DRAFT_REPO_PAT       - a PAT (repo scope) that can push to nishantsingodia/wwc-draft   [NEW]
+#   VERCEL_DEPLOY_HOOK   - the wwc-draft Vercel Deploy Hook URL (Settings -> Git)          [NEW]
+#
+# SAFETY: run once via "Run workflow" (workflow_dispatch) and review the two commits +
+# the deploy before trusting the daily cron. The validation gate (tsc + JSON parse) fails
+# the job BEFORE any commit/deploy if the generated data is malformed.
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * *"   # daily 06:00 UTC
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tour-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout bot
+        uses: actions/checkout@v4
+
+      - name: Checkout draft app
+        uses: actions/checkout@v4
+        with:
+          repository: nishantsingodia/wwc-draft
+          token: ${{ secrets.DRAFT_REPO_PAT }}
+          path: wwc-draft
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # Generate + write artifacts into both working trees (stdlib only, no pip).
+      - name: Generate tours
+        id: gen
+        env:
+          CRICKET_API_KEY: ${{ secrets.CRICKET_API_KEY }}
+          DRAFT_REPO: ${{ github.workspace }}/wwc-draft
+          SYNC_SHEET_ID: ${{ secrets.GSHEET_ID }}
+        run: |
+          python3 tour_sync.py --apply | tee /tmp/sync.out
+          echo "applied=$(grep -oP '(?<=::applied::).*' /tmp/sync.out || echo '[]')" >> "$GITHUB_OUTPUT"
+
+      # VALIDATION GATE — must pass before anything is committed or deployed.
+      - name: Validate draft app
+        run: |
+          cd wwc-draft
+          node -e "['data/matches.json','data/players-raw.json','data/team-codes.json','data/points-tabs.json'].forEach(f=>JSON.parse(require('fs').readFileSync(f)))"
+          npm ci
+          npx tsc --noEmit
+
+      - name: Validate bot JSON
+        run: |
+          python3 -c "import json,glob; [json.load(open(f)) for f in ['tours.json','toss_windows.json']+glob.glob('*_squads.json')]"
+
+      # Commit + push both repos (only if the generator changed anything), then deploy.
+      - name: Commit, push, deploy
+        if: steps.gen.outputs.applied != '[]'
+        env:
+          VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+        run: |
+          git config user.name "tour-sync-bot"
+          git config user.email "noreply@anthropic.com"
+          MSG="Auto-ingest tours: ${{ steps.gen.outputs.applied }}"
+
+          if ! git diff --quiet; then
+            git add tours.json toss_windows.json *_squads.json
+            git commit -m "$MSG"
+            git push
+          fi
+
+          cd wwc-draft
+          git config user.name "tour-sync-bot"
+          git config user.email "noreply@anthropic.com"
+          if ! git diff --quiet; then
+            git add data/matches.json data/players-raw.json data/team-codes.json data/points-tabs.json
+            git commit -m "$MSG"
+            git push
+            # Trigger the Vercel prod deploy so the new matches go live.
+            [ -n "$VERCEL_DEPLOY_HOOK" ] && curl -fsS -X POST "$VERCEL_DEPLOY_HOOK" || echo "no deploy hook set"
+          fi
+
+      # Optional: ping your Telegram-brain bot with what was ingested (safety net for
+      # the no-approval flow). Uncomment + set TELEGRAM_* secrets to enable.
+      # - name: Notify
+      #   if: steps.gen.outputs.applied != '[]'
+      #   run: |
+      #     curl -s "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+      #       -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+      #       -d text="tour-sync ingested: ${{ steps.gen.outputs.applied }}"

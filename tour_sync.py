@@ -267,9 +267,52 @@ def discover(window_days):
     return hits
 
 
+def _load(p):
+    return json.load(open(p, encoding="utf-8"))
+
+def _dump(p, obj):
+    json.dump(obj, open(p, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+    json.load(open(p, encoding="utf-8"))  # re-parse: fail loudly on any corruption
+
+def apply_to_repos(tours):
+    """Append each generated tour into the draft + bot files. Idempotent-ish: skips a
+    tour whose cricapi_series+tab is already registered. Re-parses every file it writes."""
+    if not tours:
+        return []
+    dm = _load(f"{DRAFT}/data/matches.json")
+    dp = _load(f"{DRAFT}/data/players-raw.json")
+    dc = _load(f"{DRAFT}/data/team-codes.json")
+    pt = _load(f"{DRAFT}/data/points-tabs.json")
+    tj = _load(f"{BOT}/tours.json")
+    tw = _load(f"{BOT}/toss_windows.json")
+    have_tabs = {t.get("tab") for t in tj}
+    sheet_id = os.environ.get("SYNC_SHEET_ID", "")
+    applied = []
+    for t in tours:
+        if t["tours_entry"]["tab"] in have_tabs:
+            continue
+        dm.extend(t["matches"])
+        dp.extend(t["players"])
+        dc.update(t["team_codes"])
+        tj.append(t["tours_entry"])
+        tw.extend(t["toss_windows"])
+        _dump(f"{BOT}/{t['squads_path']}", t["squads_json"])
+        if sheet_id:
+            tab = urllib.parse.quote(t["tours_entry"]["tab"])
+            pt.append(f"https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={tab}&headers=1")
+        applied.append(t["tour_name"])
+    _dump(f"{DRAFT}/data/matches.json", dm)
+    _dump(f"{DRAFT}/data/players-raw.json", dp)
+    _dump(f"{DRAFT}/data/team-codes.json", dc)
+    _dump(f"{DRAFT}/data/points-tabs.json", pt)
+    _dump(f"{BOT}/tours.json", tj)
+    _dump(f"{BOT}/toss_windows.json", sorted(set(tw)))
+    return applied
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--apply", action="store_true", help="write artifacts into the draft + bot repo files")
     ap.add_argument("--from-saved", help="dir with capi_series_info.json + capi_match_squad.json (no quota)")
     ap.add_argument("--emit", help="write generated artifacts to this dir")
     args = ap.parse_args()
@@ -324,7 +367,12 @@ def main():
         os.makedirs(args.emit, exist_ok=True)
         json.dump(tours, open(f"{args.emit}/generated.json", "w"), ensure_ascii=False, indent=2)
         print(f"\nwrote {args.emit}/generated.json", file=sys.stderr)
-    if args.dry_run:
+    if args.apply and not args.dry_run:
+        applied = apply_to_repos(tours)
+        print(f"\n[apply] wrote {len(applied)} tour(s): {applied}", file=sys.stderr)
+        # machine-readable summary for the workflow (commit msg / notify)
+        print("::applied::" + json.dumps(applied))
+    elif args.dry_run:
         print("\n[dry-run] no repo files written.", file=sys.stderr)
 
 
