@@ -9,7 +9,9 @@ name: Tour Sync (auto-ingest)
 #   CRICKET_API_KEY      - already used by the points workflow (reuse)
 #   GSHEET_ID            - already used by the points workflow (reuse; builds the tab gviz URL)
 #   DRAFT_REPO_PAT       - a PAT (repo scope) that can push to nishantsingodia/wwc-draft   [NEW]
-#   VERCEL_DEPLOY_HOOK   - the wwc-draft Vercel Deploy Hook URL (Settings -> Git)          [NEW]
+#   VERCEL_TOKEN         - a Vercel access token (Account Settings -> Tokens).             [NEW]
+#                          wwc-draft is NOT git-connected in Vercel, so we deploy via the
+#                          Vercel CLI + token (org/project ids are baked in below, non-secret).
 #
 # SAFETY: run once via "Run workflow" (workflow_dispatch) and review the two commits +
 # the deploy before trusting the daily cron. The validation gate (tsc + JSON parse) fails
@@ -71,32 +73,33 @@ jobs:
         run: |
           python3 -c "import json,glob; [json.load(open(f)) for f in ['tours.json','toss_windows.json']+glob.glob('*_squads.json')]"
 
-      # Commit + push both repos (only if the generator changed anything), then deploy.
-      - name: Commit, push, deploy
+      # Commit + push both repos (only if the generator changed anything).
+      - name: Commit + push
         if: steps.gen.outputs.applied != '[]'
-        env:
-          VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
         run: |
+          MSG="Auto-ingest tours: ${{ steps.gen.outputs.applied }}"
           git config user.name "tour-sync-bot"
           git config user.email "noreply@anthropic.com"
-          MSG="Auto-ingest tours: ${{ steps.gen.outputs.applied }}"
-
-          if ! git diff --quiet; then
-            git add tours.json toss_windows.json *_squads.json
-            git commit -m "$MSG"
-            git push
-          fi
-
+          git diff --quiet || { git add tours.json toss_windows.json *_squads.json; git commit -m "$MSG"; git push; }
           cd wwc-draft
           git config user.name "tour-sync-bot"
           git config user.email "noreply@anthropic.com"
-          if ! git diff --quiet; then
-            git add data/matches.json data/players-raw.json data/team-codes.json data/points-tabs.json
-            git commit -m "$MSG"
-            git push
-            # Trigger the Vercel prod deploy so the new matches go live.
-            [ -n "$VERCEL_DEPLOY_HOOK" ] && curl -fsS -X POST "$VERCEL_DEPLOY_HOOK" || echo "no deploy hook set"
-          fi
+          git diff --quiet || { git add data/matches.json data/players-raw.json data/team-codes.json data/points-tabs.json; git commit -m "$MSG"; git push; }
+
+      # Deploy draft to Vercel prod via CLI (project isn't git-connected, so no deploy hook).
+      # org/project ids are non-secret identifiers; only VERCEL_TOKEN is a secret.
+      - name: Deploy draft to Vercel prod
+        if: steps.gen.outputs.applied != '[]'
+        working-directory: wwc-draft
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: team_OEUjhwwdwT7vvnaNpsKhsYsg
+          VERCEL_PROJECT_ID: prj_8fyGu6fjKbWma87J6gSgGnG2NWCb
+        run: |
+          npm i --global vercel@latest
+          vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+          vercel build --prod --token="$VERCEL_TOKEN"
+          vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"
 
       # Optional: ping your Telegram-brain bot with what was ingested (safety net for
       # the no-approval flow). Uncomment + set TELEGRAM_* secrets to enable.
