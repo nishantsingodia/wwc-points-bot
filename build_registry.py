@@ -136,6 +136,12 @@ def load_bridges():
     b = {}
     b.update(read_ts_alias_map(os.path.join(AUCTION_SRC, "build-womens-pool.ts"), "NAME_ALIASES"))
     b.update(read_ts_alias_map(os.path.join(AUCTION_SRC, "mlc-2026.ts"), "MLC_NAME_ALIASES"))
+    # LPL: announced->cricsheet bridges (like MLC). LPL_NAME_ALIASES is explicit (wins); LPL_DISPLAY_NAMES
+    # is the full cricsheet->announced display map, inverted here so every announced LPL name bridges to
+    # its cricsheet DB spelling (BKG Mendis, AM Fernando, ...) — this is what anchors LPL to cricsheet_ids.
+    b.update(read_ts_alias_map(os.path.join(AUCTION_SRC, "lpl-2026.ts"), "LPL_NAME_ALIASES"))
+    for cs_name, announced in read_ts_alias_map(os.path.join(AUCTION_SRC, "lpl-2026.ts"), "LPL_DISPLAY_NAMES").items():
+        b.setdefault(norm(announced), cs_name)
     # points-bot's own ALIAS (feed-spelling -> squad spelling); reverse not needed here
     # draft DISPLAY_NAME_MAP is cricsheet-name -> announced; invert so announced->cricsheet
     dmap = read_ts_alias_map(os.path.join(DRAFT_LIB, "players.ts"), "DISPLAY_NAME_MAP")
@@ -275,7 +281,12 @@ def build_tour(tour, con, draft_players, bridges, players, idx):
         # 0) CROSS-TOUR REUSE: already known globally? (the whole point — zero rework)
         pid = by_alias.get(ns) or (by_espn.get(espn_id) if espn_id else None)
         cs_id = aid = None; db_name = None
-        if not pid:
+        if pid: n_reused += 1
+        # Anchor a cricsheet_id via bridge/DB lookup — for a NEW player (it forms the pid) AND for a
+        # REUSED slug:/espn: entry that STILL lacks one (upgrade it now that a bridge exists; the
+        # Jul-14 build slug-pinned every LPL player before ESPN rosters were live). Reused entries
+        # that already have a cricsheet_id are left untouched (true zero-rework).
+        if not (pid and players.get(pid, {}).get("cricsheet_id")):
             # 1) bridge (announced -> cricsheet DB spelling) then exact DB lookup
             br = bridges.get(ns)
             if br:
@@ -287,9 +298,8 @@ def build_tour(tour, con, draft_players, bridges, players, idx):
                 if (dbm and dbsc >= THRESH and (dbsc - runner) >= 4    # confident + unambiguous
                         and given_compatible(sname, dbm["name"])):    # + same person, not just same surname
                     cs_id, aid, db_name = dbm.get("cricsheet_id"), dbm.get("id"), dbm.get("name")
-            pid = (by_cs.get(cs_id) if cs_id else None) or cs_id or (f"espn:{espn_id}" if espn_id else f"slug:{ns.replace(' ','-')}")
-        else:
-            n_reused += 1
+            if not pid:
+                pid = (by_cs.get(cs_id) if cs_id else None) or cs_id or (f"espn:{espn_id}" if espn_id else f"slug:{ns.replace(' ','-')}")
 
         # draft display + id. The given_compatible() guard is applied to EVERY fuzzy source
         # below (draft/ESPN/cricapi) — NOT just to id resolution — so a wrong same-surname
