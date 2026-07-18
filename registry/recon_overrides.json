@@ -341,6 +341,167 @@
       "status": "approved",
       "value": 79,
       "source": "Manual"
+    },
+    {
+      "match_key": "2026-07-05::australia|england",
+      "scope": "l2",
+      "pid": "38b4583c",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-06::seattle orcas|texas super kings",
+      "scope": "l2",
+      "pid": "4663bd23",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-06::seattle orcas|texas super kings",
+      "scope": "l2",
+      "pid": "48a1d7b7",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-06::seattle orcas|texas super kings",
+      "scope": "l2",
+      "pid": "espn:437316",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-06::seattle orcas|texas super kings",
+      "scope": "l2",
+      "pid": "5ec41cd7",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-11::los angeles knight riders|san francisco unicorns",
+      "scope": "l2",
+      "pid": "bbd41817",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-12::san francisco unicorns|seattle orcas",
+      "scope": "l2",
+      "pid": "d9273ee7",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-12::san francisco unicorns|seattle orcas",
+      "scope": "l2",
+      "pid": "5ec41cd7",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-12::san francisco unicorns|seattle orcas",
+      "scope": "l2",
+      "pid": "52c952d9",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-12::san francisco unicorns|seattle orcas",
+      "scope": "l2",
+      "pid": "d405c0d5",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-12::san francisco unicorns|seattle orcas",
+      "scope": "l2",
+      "pid": "486065b3",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-13::los angeles knight riders|texas super kings",
+      "scope": "l2",
+      "pid": "espn:1194775",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-13::los angeles knight riders|texas super kings",
+      "scope": "l2",
+      "pid": "bbd41817",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-13::los angeles knight riders|texas super kings",
+      "scope": "l2",
+      "pid": "slug:matthew-tromp",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-09::england|india",
+      "scope": "l2",
+      "pid": "244048f6",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-11::england|india",
+      "scope": "l2",
+      "pid": "9caf69a1",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-11::england|india",
+      "scope": "l2",
+      "pid": "e94915e6",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-11::england|india",
+      "scope": "l2",
+      "pid": "slug:adil-rashid",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-11::england|india",
+      "scope": "l2",
+      "pid": "espn:554691",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-11::england|india",
+      "scope": "l2",
+      "pid": "244048f6",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-11::england|india",
+      "scope": "l2",
+      "pid": "slug:prasidh-krishna",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-12::ireland|west indies",
+      "scope": "l2",
+      "pid": "4b0e3049",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-11::new zealand|west indies",
+      "scope": "l2",
+      "pid": "slug:matthew-fisher",
+      "source": "S2",
+      "status": "approved"
     }
   ]
 }

@@ -66,6 +66,59 @@
         "Major League Cricket 2026"
       ],
       "source": "new"
+    },
+    {
+      "pid": "slug:l-pope",
+      "display": "L Pope",
+      "aliases": [
+        "l pope"
+      ],
+      "team": "Los Angeles Knight Riders",
+      "role": "BOWL",
+      "tours": [
+        "Major League Cricket 2026"
+      ],
+      "source": "new"
+    },
+    {
+      "pid": "slug:aakarshit-gomel",
+      "display": "Aakarshit Gomel",
+      "aliases": [
+        "aakarshit gomel"
+      ],
+      "team": "San Francisco Unicorns",
+      "role": "BAT",
+      "tours": [
+        "Major League Cricket 2026"
+      ],
+      "source": "new"
+    },
+    {
+      "pid": "slug:ehsan-adil",
+      "display": "Ehsan Adil",
+      "aliases": [
+        "ehsan adil"
+      ],
+      "team": "MI New York",
+      "role": "BOWL",
+      "tours": [
+        "Major League Cricket 2026"
+      ],
+      "source": "new"
+    },
+    {
+      "pid": "slug:khary-pierre",
+      "display": "Khary Pierre",
+      "aliases": [
+        "k pierre",
+        "khary pierre"
+      ],
+      "team": "West Indies",
+      "role": "BOWL",
+      "tours": [
+        "New Zealand vs West Indies Men's ODI 2026"
+      ],
+      "source": "new"
     }
   ]
 }
