@@ -1,6 +1,6 @@
 {
  "anchor": "cricsheet_id (pid); espn:/slug: fallback when unknown",
- "count": 498,
+ "count": 499,
  "players": {
   "5d2eda89": {
    "aliases": [
@@ -6537,7 +6537,6 @@
   },
   "9a46c4e5": {
    "aliases": [
-    "dale phillips",
     "gd phillips"
    ],
    "tours": [
@@ -7039,6 +7038,19 @@
    "espn_id": null,
    "draft_id": 10381,
    "auction_id": 1653
+  },
+  "slug:dale-phillips": {
+   "aliases": [
+    "dale phillips"
+   ],
+   "tours": [
+    "Lanka Premier League 2026"
+   ],
+   "display": "Dale Phillips",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10341,
+   "auction_id": 9812
   }
  }
 }
