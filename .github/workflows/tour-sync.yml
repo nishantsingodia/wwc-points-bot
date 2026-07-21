@@ -52,28 +52,48 @@ jobs:
           token: ${{ secrets.DRAFT_REPO_PAT }}
           path: wwc-draft
 
+      # Auction app = the source of curated, identity-anchored LEAGUE squads (cricapi carries
+      # none). We read its seed files; no build, just the .ts squad exports.
+      - name: Checkout auction app (squad seeds)
+        uses: actions/checkout@v4
+        with:
+          repository: nishantsingodia/cricket-auction-helper
+          token: ${{ secrets.DRAFT_REPO_PAT }}
+          path: cricket-auction-helper
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "24"   # TypeScript type-stripping for the squad-seed extractor
+
+      # Dump the auction seed squads to JSON (node strips the TS types). Non-fatal: if it
+      # fails, tour_sync just falls back to cricapi squads for any discovered tour.
+      - name: Extract auction league squads
+        run: |
+          node extract_auction_squads.mjs "$GITHUB_WORKSPACE/cricket-auction-helper" \
+            > auction_squads.json || echo "[]" > auction_squads.json
+          node -e "console.log('auction seeds:', JSON.parse(require('fs').readFileSync('auction_squads.json')).length)"
 
       # Generate + write artifacts into both working trees (stdlib only, no pip).
       - name: Generate tours
         id: gen
         env:
+          # Dedicated key (used exclusively) so tour-sync never contends with the auction /
+          # points-bot for the shared cricapi quota. Falls back to the shared keys if unset.
+          TOUR_SYNC_API_KEY: ${{ secrets.TOUR_SYNC_API_KEY }}
           CRICKET_API_KEY: ${{ secrets.CRICKET_API_KEY }}
-          CRICKET_API_KEY2: ${{ secrets.CRICKET_API_KEY2 }}   # failover key — rotation was missing before
+          CRICKET_API_KEY2: ${{ secrets.CRICKET_API_KEY2 }}
           DRAFT_REPO: ${{ github.workspace }}/wwc-draft
           SYNC_SHEET_ID: ${{ secrets.GSHEET_ID }}
         run: |
           set -o pipefail   # so a quota-blocked / crashed generator fails the step (tee was masking it)
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
             echo "DRY RUN — discovery only, nothing written/committed/deployed"
-            python3 tour_sync.py --dry-run | tee /tmp/sync.out
+            python3 tour_sync.py --dry-run --auction-squads auction_squads.json | tee /tmp/sync.out
           else
-            python3 tour_sync.py --apply | tee /tmp/sync.out
+            python3 tour_sync.py --apply --auction-squads auction_squads.json | tee /tmp/sync.out
           fi
           echo "applied=$(grep -oP '(?<=::applied::).*' /tmp/sync.out || echo '[]')" >> "$GITHUB_OUTPUT"
 

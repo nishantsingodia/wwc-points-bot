@@ -85,6 +85,13 @@ ORD = {1: "1st", 2: "2nd", 3: "3rd", 4: "4th", 5: "5th", 6: "6th", 7: "7th"}
 # green. We now (a) rotate across all keys and (b) RAISE when every key is quota-blocked,
 # so a dead key fails the run visibly instead of masquerading as "nothing on today".
 def _keys():
+    # A DEDICATED key (TOUR_SYNC_API_KEY) wins outright and is used EXCLUSIVELY — that's the
+    # whole point: discovery needs only ~15-25 hits/day, so its own free key never contends
+    # with the auction app or the live points bot (which together drain the shared keys before
+    # tour-sync ever runs). Keep it out of .env.local and out of the points-bot secrets.
+    ded = os.environ.get("TOUR_SYNC_API_KEY", "").strip().strip('"')
+    if ded:
+        return [ded]
     raw = os.environ.get("CRICKET_API_KEY", "").split(",") + [os.environ.get("CRICKET_API_KEY2", "")]
     keys = [k.strip().strip('"') for k in raw if k.strip()]
     if not keys:  # local convenience: borrow the auction app's key(s) for dry-runs
