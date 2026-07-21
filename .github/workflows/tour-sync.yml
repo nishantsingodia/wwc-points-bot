@@ -19,6 +19,11 @@ name: Tour Sync (auto-ingest)
 
 on:
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run: discover + print only (no commit, no deploy)"
+        type: boolean
+        default: true
   schedule:
     - cron: "0 6 * * *"   # daily 06:00 UTC
 
@@ -55,10 +60,16 @@ jobs:
         id: gen
         env:
           CRICKET_API_KEY: ${{ secrets.CRICKET_API_KEY }}
+          CRICKET_API_KEY2: ${{ secrets.CRICKET_API_KEY2 }}   # failover key — rotation was missing before
           DRAFT_REPO: ${{ github.workspace }}/wwc-draft
           SYNC_SHEET_ID: ${{ secrets.GSHEET_ID }}
         run: |
-          python3 tour_sync.py --apply | tee /tmp/sync.out
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            echo "DRY RUN — discovery only, nothing written/committed/deployed"
+            python3 tour_sync.py --dry-run | tee /tmp/sync.out
+          else
+            python3 tour_sync.py --apply | tee /tmp/sync.out
+          fi
           echo "applied=$(grep -oP '(?<=::applied::).*' /tmp/sync.out || echo '[]')" >> "$GITHUB_OUTPUT"
 
       # VALIDATION GATE — must pass before anything is committed or deployed.

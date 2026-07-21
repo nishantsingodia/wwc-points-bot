@@ -5,7 +5,9 @@ points-bot artifacts for them, so a new tour appears in wwc-draft and gets score
 the bot with NO manual code edits.
 
 Pipeline (run daily from GH Actions):
-  discover (cricapi /currentMatches, filtered by watchlist)
+  discover (cricapi /currentMatches for near-live + /series search for upcoming fixtures,
+            watchlist-filtered; rotates across CRICKET_API_KEY/KEY2 and RAISES if all keys
+            are quota-blocked so a dead key never silently reports "0 tours")
     -> for each new (series, format) tour: fixtures (/series_info) + squads (/match_squad)
     -> generate draft artifacts (data/matches.json, data/players-raw.json, data/team-codes.json)
        + bot artifacts (tours.json, <tour>_squads.json, toss_windows.json)
@@ -51,6 +53,15 @@ DENY = ["u19", "under-19", "under 19", "unofficial", "development", "emerging",
 # formats we ingest (cricapi matchType); tests/other are skipped
 FMT_BUCKET = {"t20": "T20", "t20i": "T20", "odi": "ODI"}
 DISCOVERY_WINDOW_DAYS = int(os.environ.get("SYNC_WINDOW_DAYS", "4"))
+# Distinct search tokens for /series fixtures-discovery (fewer than MAJOR_LEAGUES to save
+# quota; cricapi matches substrings and results are de-duped by series id). "hundred"
+# catches both the men's and women's Hundred.
+SEARCH_TERMS = [
+    "hundred", "indian premier league", "big bash", "pakistan super league",
+    "caribbean premier league", "sa20", "international league t20",
+    "major league cricket", "lanka premier league", "bangladesh premier league",
+    "super smash", "vitality blast", "womens premier league", "wbbl",
+]
 
 ROLE_MAP = {
     "wk-batsman": "WK", "wicketkeeper batter": "WK", "wicketkeeper": "WK", "wk": "WK",
@@ -63,21 +74,66 @@ ROLE_ORDER = {"WK": 0, "BAT": 1, "AR": 2, "BOWL": 3}
 ORD = {1: "1st", 2: "2nd", 3: "3rd", 4: "4th", 5: "5th", 6: "6th", 7: "7th"}
 
 
-# ── cricapi layer ────────────────────────────────────────────────────────────
-def _key():
-    k = os.environ.get("CRICKET_API_KEY", "")
-    if not k:  # local convenience: borrow the auction app's key for dry-runs
+# ── cricapi layer (key rotation + loud failures) ─────────────────────────────
+# The free tier is 100 hits/day PER KEY. The points bot (wc_fps_to_csv.py) survives an
+# exhausted key by rotating to CRICKET_API_KEY2; tour-sync historically used ONLY the
+# first key with no failover AND swallowed a failure response as an empty result — so a
+# single blocked key made discovery silently return "0 tours" while the workflow went
+# green. We now (a) rotate across all keys and (b) RAISE when every key is quota-blocked,
+# so a dead key fails the run visibly instead of masquerading as "nothing on today".
+def _keys():
+    raw = os.environ.get("CRICKET_API_KEY", "").split(",") + [os.environ.get("CRICKET_API_KEY2", "")]
+    keys = [k.strip().strip('"') for k in raw if k.strip()]
+    if not keys:  # local convenience: borrow the auction app's key(s) for dry-runs
         p = os.path.expanduser("~/cricket-auction-helper/.env.local")
         if os.path.exists(p):
             m = re.search(r"CRICKET_API_KEY=([^\n\"]+)", open(p).read())
             if m:
-                k = m.group(1)
-    return k.strip().split(",")[0].strip().strip('"')
+                keys = [x.strip().strip('"') for x in m.group(1).split(",") if x.strip()]
+    seen, out = set(), []          # de-dupe, preserve order
+    for k in keys:
+        if k not in seen:
+            seen.add(k); out.append(k)
+    return out
+
+API_KEYS = _keys()
+_key_idx = 0
+
+def _is_quota(d):
+    r = (d.get("reason") or "").lower()
+    return d.get("status") != "success" and ("limit" in r or "block" in r or "hits" in r)
 
 def capi(path, **params):
-    url = f"{API}/{path}?" + urllib.parse.urlencode({**params, "apikey": _key()})
-    with urllib.request.urlopen(url, timeout=30) as r:
-        return json.load(r)
+    """Query cricapi, failing over to the next key on a quota/blocked response. Raises if
+    EVERY key is quota-blocked. A non-quota non-success (e.g. a squad-less match) is returned
+    as-is so tolerant callers can handle it."""
+    global _key_idx
+    if not API_KEYS:
+        raise RuntimeError("no cricapi key (set CRICKET_API_KEY and/or CRICKET_API_KEY2)")
+    data = {"status": "failure", "reason": "no api key"}
+    for _ in range(len(API_KEYS)):
+        url = f"{API}/{path}?" + urllib.parse.urlencode({**params, "apikey": API_KEYS[_key_idx]})
+        try:
+            with urllib.request.urlopen(url, timeout=30) as r:
+                data = json.load(r)
+        except Exception as e:
+            data = {"status": "failure", "reason": f"fetch error: {e}"}
+        if data.get("status") == "success" or not _is_quota(data):
+            break
+        info = data.get("info") or {}
+        if _key_idx + 1 < len(API_KEYS):
+            print(f"  capi({path}): key #{_key_idx+1} blocked "
+                  f"(hits {info.get('hitsToday','?')}/{info.get('hitsLimit','?')}) "
+                  f"— failing over to key #{_key_idx+2}", file=sys.stderr)
+            _key_idx += 1
+        else:
+            break
+    if _is_quota(data):
+        info = data.get("info") or {}
+        raise RuntimeError(f"cricapi {path}: all {len(API_KEYS)} key(s) quota-blocked "
+                           f"(hits {info.get('hitsToday','?')}/{info.get('hitsLimit','?')}). "
+                           f"Discovery aborted — NOT reporting '0 tours'.")
+    return data
 
 
 # ── helpers ───────────────────────────────────────────────────────────────────
@@ -102,6 +158,11 @@ def in_scope(series_name, teams):
     bases = [base(t) for t in teams if t]
     if len(bases) == 2 and all(b in MAJOR_TEAMS for b in bases):
         return True, "bilateral"
+    # /series-search path has no team list -> infer a bilateral from the series NAME
+    if not bases:
+        named = {mt for mt in MAJOR_TEAMS if re.search(r"\b" + re.escape(mt) + r"\b", n)}
+        if len(named) >= 2:
+            return True, "bilateral"
     return False, None
 
 def to_ist_iso(dt_gmt):
@@ -242,13 +303,26 @@ def gen_tour(series_info, squads_by_matchid, fmt, gender, state):
 
 
 # ── discovery ───────────────────────────────────────────────────────────────────
-def discover(window_days):
-    """Return {series_id: {name, teams, genders}} for in-scope series with a match in the window."""
-    now = datetime.now(timezone.utc)
-    horizon = now + timedelta(days=window_days)
-    cm = capi("currentMatches", offset=0).get("data", [])
+def _parse_series_date(s):
+    """cricapi /series dates arrive as 'Jul 21, 2026' (sometimes ISO). Best-effort -> UTC."""
+    if not s:
+        return None
+    for fmt in ("%b %d, %Y", "%Y-%m-%d", "%Y-%m-%dT%H:%M:%S"):
+        try:
+            return datetime.strptime(s.strip(), fmt).replace(tzinfo=timezone.utc)
+        except ValueError:
+            continue
+    return None
+
+def _discover_current(now, horizon):
+    """Near-live discovery: /currentMatches page 0, in the [now-2d, horizon] window."""
+    cm = capi("currentMatches", offset=0)
+    matches = cm.get("data", [])
+    info = cm.get("info") or {}
+    print(f"  discover/currentMatches: {len(matches)} match(es) returned "
+          f"[key hits {info.get('hitsToday','?')}/{info.get('hitsLimit','?')}]", file=sys.stderr)
     hits = {}
-    for m in cm:
+    for m in matches:
         dt = m.get("dateTimeGMT")
         if not dt:
             continue
@@ -258,12 +332,49 @@ def discover(window_days):
             continue
         if not (now - timedelta(days=2) <= when <= horizon):
             continue
-        ok, _ = in_scope(m.get("name", ""), m.get("teams", []))
+        ok, kind = in_scope(m.get("name", ""), m.get("teams", []))
         if not ok:
             continue
         sid = m.get("series_id")
         if sid:
-            hits[sid] = {"name": m.get("name", ""), "teams": m.get("teams", [])}
+            hits[sid] = {"name": m.get("name", ""), "teams": m.get("teams", []), "kind": kind}
+    return hits
+
+def _discover_series(now, horizon):
+    """Fixtures-based discovery: search /series for each watchlist league and keep the ones
+    running or starting inside the window. /currentMatches only shows near-live games, so
+    THIS is what catches a tour (e.g. The Hundred) 3-4 days ahead of its first ball."""
+    hits = {}
+    floor = now - timedelta(days=2)
+    for term in SEARCH_TERMS:
+        r = capi("series", offset=0, search=term)   # raises loudly if all keys are blocked
+        for s in r.get("data", []):
+            sid, name = s.get("id"), s.get("name", "")
+            if not sid or sid in hits:
+                continue
+            ok, kind = in_scope(name, [])
+            if not ok:
+                continue
+            start, end = _parse_series_date(s.get("startDate")), _parse_series_date(s.get("endDate"))
+            in_window = start is not None and floor <= start <= horizon
+            running   = start is not None and end is not None and start <= horizon and end >= floor
+            unknown   = start is None                       # fail-open: unparseable dates
+            if in_window or running or unknown:
+                hits[sid] = {"name": name, "teams": [], "kind": kind,
+                             "start": s.get("startDate"), "end": s.get("endDate")}
+                print(f"  discover/series[{term!r}]: KEEP {name!r} "
+                      f"start={s.get('startDate')} end={s.get('endDate')} ({kind}"
+                      f"{', dates-unparsed' if unknown else ''})", file=sys.stderr)
+    return hits
+
+def discover(window_days):
+    """Return {series_id: {name, teams, kind, ...}} for in-scope series active in the window,
+    combining near-live (/currentMatches) and fixtures (/series search) discovery."""
+    now = datetime.now(timezone.utc)
+    horizon = now + timedelta(days=window_days)
+    hits = _discover_current(now, horizon)
+    for sid, meta in _discover_series(now, horizon).items():
+        hits.setdefault(sid, meta)
     return hits
 
 
@@ -331,6 +442,7 @@ def main():
             if t:
                 tours.append(t)
     else:
+        now = datetime.now(timezone.utc)
         found = discover(DISCOVERY_WINDOW_DAYS)
         print(f"discover: {len(found)} in-scope series in next {DISCOVERY_WINDOW_DAYS}d", file=sys.stderr)
         for sid, meta in found.items():
@@ -338,11 +450,25 @@ def main():
                 print(f"  skip (already ingested): {meta['name'][:50]}", file=sys.stderr)
                 continue
             si = capi("series_info", id=sid).get("data")
-            if not si:
+            if not si or not si.get("matchList"):
+                print(f"  skip (no matchList): {meta['name'][:50]}", file=sys.stderr)
                 continue
-            gender = infer_gender(si["info"]["name"], si["matchList"][0]["teams"])
+            ml = si["matchList"]
+            types = sorted({(m.get("matchType") or "?").lower() for m in ml})
+            def _when(m):
+                try:
+                    return datetime.fromisoformat((m.get("dateTimeGMT") or "").replace("Z", "")).replace(tzinfo=timezone.utc)
+                except ValueError:
+                    return None
+            upcoming = [m for m in ml if (_when(m) is None or _when(m) >= now - timedelta(days=3))]
+            print(f"  series {si['info']['name'][:45]!r}: {len(ml)} matches, types={types}, "
+                  f"{len(upcoming)} now/upcoming", file=sys.stderr)
+            if not upcoming:
+                print(f"  skip (finished edition — no upcoming match): {si['info']['name'][:45]}", file=sys.stderr)
+                continue
+            gender = infer_gender(si["info"]["name"], ml[0].get("teams", []))
             sq_by = {}
-            for m in si["matchList"]:
+            for m in ml:
                 if FMT_BUCKET.get((m.get("matchType") or "").lower()) and m.get("hasSquad"):
                     r = capi("match_squad", id=m["id"])
                     if r.get("status") == "success":
@@ -351,6 +477,8 @@ def main():
                 t = gen_tour(si, sq_by, fmt, gender, state)
                 if t and t["tours_entry"]["tab"] not in state["existing_tabs"]:
                     tours.append(t)
+                elif t:
+                    print(f"  skip (tab exists): {t['tours_entry']['tab']}", file=sys.stderr)
 
     # ---- output ----
     for t in tours:
