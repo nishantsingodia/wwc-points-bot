@@ -107,6 +107,29 @@ def load_registry():
     return alias2pid, pid2disp
 
 ALIAS2PID, PID2DISP = load_registry()
+
+def load_team_aliases():
+    """Central franchise-name identity — the TEAM analog of the player registry/manual_aliases.
+    Maps every feed team-name VARIANT to the canonical franchise name (as used in the squads +
+    auction + draft). Normalizing here fixes BOTH cricapi->squad mapping AND ESPN event resolution
+    when a feed carries a stale/rebranded name (LPL 2026: cricapi feeds the 2025 names while the
+    squads/ESPN use the 2026 ones). Returns {norm(variant): canonical display name}."""
+    path = os.path.join(os.path.dirname(__file__), "registry", "team_aliases.json")
+    canon = {}
+    try:
+        for canonical, variants in json.load(open(path)).get("aliases", {}).items():
+            canon[norm(canonical)] = canonical
+            for v in variants:
+                canon[norm(v)] = canonical
+    except Exception:
+        pass
+    return canon
+
+TEAM_CANON = load_team_aliases()
+
+def canon_team(name):
+    """Resolve a feed team name to its canonical franchise name (no-op if unknown)."""
+    return TEAM_CANON.get(norm(name), name) if name else name
 UNMATCHED_LOG = set()   # feed names that needed fuzzy / had no squad match -> grow the registry
 # Structured review queue (across all tours), written to the sheet's "Needs Review" tab so the
 # rare manual case is fixable WITHOUT code: {tour, team, feed, kind, suggestion}.
@@ -482,8 +505,9 @@ def blank_perf(name):
                 bat_order=0)  # 1-based batting position from the scorecard (0 = unknown/DNB)
 
 def team_key(teams):
-    """Date-independent team identity: normalized names with 'women' dropped."""
-    return frozenset(norm(t.replace("Women", "").replace("women", "")) for t in teams)
+    """Date-independent team identity: canonical franchise names (feed variants folded via the
+    central team-alias map), normalized, with 'women' dropped."""
+    return frozenset(norm(canon_team(t).replace("Women", "").replace("women", "")) for t in teams)
 
 # ---- cricsheet ball-by-ball (mirror of etl_cricsheet.py) -> EXACT dots/maidens/XI ----
 def load_cricsheet_index(dirpath, gender="female"):
@@ -1174,6 +1198,13 @@ def run_tour(tour):
     # (otherwise we'd clear it and write an empty table — wiping good data).
     if info.get("status") != "success" or not matches:
         sys.exit("series_info fetch failed or empty — aborting; sheet left unchanged.")
+    # Fold feed team-name variants to the canonical franchise name up front (central team-alias
+    # map) so EVERY downstream consumer — squad mapping (name2short), match labels, team_key and
+    # cricsheet lookup — sees one consistent name. Without this, cricapi's stale LPL 2026 names
+    # (Marvels/Falcons/Strikers vs squad/ESPN Gallants/Royals/Kaps) silently orphaned those teams.
+    for _m in matches:
+        if _m.get("teams"):
+            _m["teams"] = [canon_team(t) for t in _m["teams"]]
     # Format filter — a tour can mix formats, so we keep only the matches in the
     # running tour's format (CURRENT_FMT: "T20" default, or "ODI"). cricapi sometimes
     # leaves matchType null (seen on ODIs!), so trust matchType when present, else fall
@@ -1190,7 +1221,6 @@ def run_tour(tour):
             return "t20" in mt
         nm = (m.get("name") or "").lower()
         return "t20" in nm and "odi" not in nm and "test" not in nm
-    ended = [m for m in matches if m.get("matchEnded") and is_fmt(m)]
     today = date.today()
     def near_today(m):
         for ds in date_variants(m.get("date", "")):
@@ -1200,11 +1230,35 @@ def run_tour(tour):
             except ValueError:
                 pass
         return False
-    # LIVE = started but not yet ended (near today). Scored in-progress from cricapi (fetched
-    # fresh) + ESPN, marked Match Status=LIVE; points grow as the match unfolds and are superseded
-    # by the exact ended-path scoring (with cricsheet) once cricapi flips matchEnded.
+    # A match is OVER when cricapi flips matchEnded — but that flag is UNRELIABLE on some feeds
+    # (LPL 2026: every played match sat matchStarted=True / matchEnded=False for days, status text
+    # stuck on "Match starts at ..."). So we ALSO treat a started match as over once enough real
+    # time has passed since its scheduled start for the game to have finished. Without this
+    # fallback a completed-but-unflagged match is only scored "live" while within near_today, then
+    # silently vanishes — its points never finalize (the root cause of "LPL points not updating").
+    OVER_HRS = 12 if CURRENT_FMT == "ODI" else 8   # T20 ~3.5h / ODI ~8h, plus a rain/delay buffer
+    def hours_since_start(m):
+        dt = m.get("dateTimeGMT") or ((m.get("date") + "T00:00:00Z") if m.get("date") else "")
+        try:
+            start = datetime.fromisoformat(dt.replace("Z", "+00:00"))
+        except ValueError:
+            return None
+        if start.tzinfo is None:
+            start = start.replace(tzinfo=timezone.utc)
+        return (datetime.now(timezone.utc) - start).total_seconds() / 3600.0
+    def is_over(m):
+        if m.get("matchEnded"):
+            return True
+        if not m.get("matchStarted"):
+            return False
+        h = hours_since_start(m)
+        return h is not None and h >= OVER_HRS
+    ended = [m for m in matches if is_fmt(m) and is_over(m)]
+    # LIVE = started, genuinely still in play (not yet over by time), near today. Scored
+    # in-progress from cricapi (fresh) + ESPN and marked LIVE; superseded by the ended-path scoring
+    # (cricsheet when it posts, else the frozen provisional) once the match is over.
     live = [m for m in matches if is_fmt(m) and m.get("matchStarted")
-            and not m.get("matchEnded") and near_today(m)]
+            and not is_over(m) and near_today(m)]
     cs_idx = load_cricsheet_index(CRICSHEET_DIR, tour.get("gender", "female"))
     print(f"{len(ended)}/{len(matches)} completed, {len(live)} in-progress | cricsheet {tour.get('gender','female')} matches indexed: {len(cs_idx)}", file=sys.stderr)
 
@@ -1224,10 +1278,14 @@ def run_tour(tour):
         mdate = m.get("date", "")
         label = f"Match {mi} — " + " v ".join(name2short.get(norm(t), t) for t in teams)
 
-        # cricapi scorecard (used as fallback + an independent cross-check). LIVE matches fetch
-        # it fresh (no-persist) so points reflect the current score, not a frozen snapshot.
+        # cricapi scorecard (used as fallback + an independent cross-check). Fetch it FRESH
+        # (no-persist) while the match isn't authoritatively final — in-play, OR over-by-time but
+        # cricapi hasn't confirmed matchEnded (LPL's stuck flag), so its card may still be settling.
+        # Once cricapi flips matchEnded we cache the immutable final; a cricsheet card, when posted,
+        # overrides either source.
+        fetch_fresh = is_live or not m.get("matchEnded")
         try:
-            api_perf = {k: v for k, v in parse_match(m["id"], live=is_live).items() if v["played"]} if m.get("id") else {}
+            api_perf = {k: v for k, v in parse_match(m["id"], live=fetch_fresh).items() if v["played"]} if m.get("id") else {}
         except Exception:
             api_perf = {}
 
@@ -1254,6 +1312,17 @@ def run_tour(tour):
             team_map = espn_team_map(ev, fresh=espn_fresh)
         cs_perf = ({k: v for k, v in parse_cricsheet(cs_path)[0].items() if v["played"]}
                    if cs_path else {})
+        # AUTOPILOT DATA GUARD: a match can be over (by cricapi's flag OR our time fallback) yet have
+        # NO scorecard in ANY source — cricsheet not posted, cricapi returns "scorecard not found",
+        # ESPN event unmapped (the LPL 2026 state on 21 Jul). Emitting it anyway would show a
+        # misleading "COMPLETED" match where every player scores only the +4 XI bonus. Skip it and
+        # re-check next run instead; it auto-fills the moment cricsheet, cricapi OR ESPN posts data.
+        _sf = ("r", "b", "balls", "w", "catches", "stumpings", "runouts", "4s", "6s")
+        _has = lambda d: any(any(p.get(f) for f in _sf) for p in d.values())
+        if not cs_perf and not _has(api_perf) and not _has(espn_perf):
+            print(f"  {label}: no scorecard in any source yet "
+                  f"(cricsheet/cricapi/ESPN all empty) — skipped; will retry next run", file=sys.stderr)
+            continue
         if cs_path:
             perf = cs_perf
             n_cs += 1; dots_final = True; status = "cricsheet · official"
@@ -1262,9 +1331,13 @@ def run_tour(tour):
             # (cricapi has no dots, cricsheet not posted). Flag the whole row PROVISIONAL so
             # it's clear these numbers may be revised once cricsheet posts (lags ~1-5 days),
             # which then overwrites ESPN dots with exact figures.
-            perf = api_perf
+            # cricapi is the PRIMARY base, but when its scorecard is EMPTY (LPL 2026: cricapi never
+            # populates a match it hasn't flagged as started) fall back to ESPN's FULL scorecard so
+            # real batting/bowling points flow — otherwise everyone scores just the +4 XI bonus.
+            perf = api_perf if api_perf else espn_perf
             n_espn += 1; dots_final = True
-            status = ("cricapi + ESPN dots/XI · ⏳ provisional (dots unverified, awaiting cricsheet)"
+            base_src = "cricapi + ESPN dots/XI" if api_perf else "ESPN scorecard (cricapi empty)"
+            status = (base_src + " · ⏳ provisional (dots unverified, awaiting cricsheet)"
                       + (" · super-over excl" if super_over else ""))
         else:
             perf = api_perf

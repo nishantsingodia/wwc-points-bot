@@ -1,0 +1,8 @@
+{
+  "_comment": "Central franchise-name identity — the TEAM analog of manual_aliases.json. Maps every feed team-name VARIANT to the canonical franchise name (the one used in the squads + auction + draft). Normalizing at ingestion fixes BOTH cricapi->squad mapping AND ESPN event resolution when a feed carries a stale/rebranded name. LPL 2026: cricapi still feeds the 2025 names (Galle Marvels / Kandy Falcons / Colombo Strikers) while the 2026 franchises are Galle Gallants / Kandy Royals / Colombo Kaps. Keyed by canonical display name -> list of variant spellings. Hand-curated, permanent, global; the bot loads it via load_team_aliases().",
+  "aliases": {
+    "Galle Gallants": ["Galle Marvels"],
+    "Kandy Royals": ["Kandy Falcons"],
+    "Colombo Kaps": ["Colombo Strikers"]
+  }
+}
