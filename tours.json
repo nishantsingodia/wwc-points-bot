@@ -72,5 +72,23 @@
     "gender": "male",
     "squads": "lpl_2026_squads.json",
     "ends": "2026-08-08"
+  },
+  {
+    "cricapi_series": "ac5127e7-663b-4666-83ca-38f5d6935228",
+    "ends": "2026-08-12",
+    "espn_series": "",
+    "gender": "male",
+    "name": "The Hundred Men's Competition 2026",
+    "squads": "the_hundred_men_s_competition_2026_squads.json",
+    "tab": "THE HUNDRED MENS 2026 POINTS"
+  },
+  {
+    "cricapi_series": "99aea2e0-513f-4d4c-b83c-336e456723ae",
+    "ends": "2026-08-12",
+    "espn_series": "",
+    "gender": "female",
+    "name": "The Hundred Women's Competition 2026",
+    "squads": "the_hundred_women_s_competition_2026_squads.json",
+    "tab": "THE HUNDRED WOMENS 2026 POINTS"
   }
 ]

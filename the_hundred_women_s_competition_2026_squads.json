@@ -1,0 +1,550 @@
+{
+  "WTMILO": {
+    "name": "MI London",
+    "players": [
+      [
+        "Hayley Matthews",
+        "AR"
+      ],
+      [
+        "Danni Wyatt-Hodge",
+        "BAT"
+      ],
+      [
+        "Amelia Kerr",
+        "AR"
+      ],
+      [
+        "Hollie Armitage",
+        "BAT"
+      ],
+      [
+        "Chinelle Henry",
+        "AR"
+      ],
+      [
+        "Nicola Carey",
+        "AR"
+      ],
+      [
+        "Kira Chathli",
+        "WK"
+      ],
+      [
+        "Alice Davidson-Richards",
+        "AR"
+      ],
+      [
+        "Kirstie Gordon",
+        "BOWL"
+      ],
+      [
+        "Tara Norris",
+        "BOWL"
+      ],
+      [
+        "Alexa Stonehouse",
+        "BOWL"
+      ],
+      [
+        "Ellie Threlkeld",
+        "WK"
+      ],
+      [
+        "Alice Monaghan",
+        "BOWL"
+      ],
+      [
+        "Kalea Moore",
+        "AR"
+      ],
+      [
+        "Danielle Gregory",
+        "BOWL"
+      ],
+      [
+        "Kate Coppack",
+        "BOWL"
+      ],
+      [
+        "Francesca Sweet",
+        "BAT"
+      ]
+    ]
+  },
+  "WTSUNL": {
+    "name": "Sunrisers Leeds",
+    "players": [
+      [
+        "Phoebe Litchfield",
+        "BAT"
+      ],
+      [
+        "Lauren Winfield-Hill",
+        "WK"
+      ],
+      [
+        "Bryony Smith",
+        "BAT"
+      ],
+      [
+        "Annabel Sutherland",
+        "AR"
+      ],
+      [
+        "Deepti Sharma",
+        "AR"
+      ],
+      [
+        "Dani Gibson",
+        "AR"
+      ],
+      [
+        "Jess Jonassen",
+        "AR"
+      ],
+      [
+        "Kate Cross",
+        "BOWL"
+      ],
+      [
+        "Cassidy McCarthy",
+        "BOWL"
+      ],
+      [
+        "Hannah Baker",
+        "BOWL"
+      ],
+      [
+        "Chloe Skelton",
+        "BOWL"
+      ],
+      [
+        "Katie Jones",
+        "BAT"
+      ],
+      [
+        "Emily Windsor",
+        "BAT"
+      ],
+      [
+        "Claudie Cooper",
+        "AR"
+      ],
+      [
+        "Darcey Carter",
+        "AR"
+      ],
+      [
+        "Sophia Turner",
+        "BOWL"
+      ]
+    ]
+  },
+  "WTSBR": {
+    "name": "Southern Brave",
+    "players": [
+      [
+        "Laura Wolvaardt",
+        "BAT"
+      ],
+      [
+        "Maia Bouchier",
+        "BAT"
+      ],
+      [
+        "Jemimah Rodrigues",
+        "BAT"
+      ],
+      [
+        "Lizelle Lee",
+        "WK"
+      ],
+      [
+        "Sophie Molineux",
+        "AR"
+      ],
+      [
+        "Tilly Corteen-Coleman",
+        "BAT"
+      ],
+      [
+        "Phoebe Franklin",
+        "AR"
+      ],
+      [
+        "Sarah Glenn",
+        "BOWL"
+      ],
+      [
+        "Issy Wong",
+        "BOWL"
+      ],
+      [
+        "Lauren Bell",
+        "BOWL"
+      ],
+      [
+        "Jodi Grewcock",
+        "BOWL"
+      ],
+      [
+        "Ellie Anderson",
+        "BOWL"
+      ],
+      [
+        "Naomi Dattani",
+        "AR"
+      ],
+      [
+        "Rebecca Odgers",
+        "WK"
+      ],
+      [
+        "Katherine Fraser",
+        "AR"
+      ]
+    ]
+  },
+  "WTWLF": {
+    "name": "Welsh Fire",
+    "players": [
+      [
+        "Georgia Voll",
+        "BAT"
+      ],
+      [
+        "Ella McCaughan",
+        "BAT"
+      ],
+      [
+        "Sophie Devine",
+        "AR"
+      ],
+      [
+        "Sarah Bryce",
+        "WK"
+      ],
+      [
+        "Freya Kemp",
+        "AR"
+      ],
+      [
+        "Heather Graham",
+        "AR"
+      ],
+      [
+        "Georgia Wareham",
+        "AR"
+      ],
+      [
+        "Emily Arlott",
+        "BOWL"
+      ],
+      [
+        "Sophia Smale",
+        "BOWL"
+      ],
+      [
+        "Grace Potts",
+        "BOWL"
+      ],
+      [
+        "Fi Morris",
+        "AR"
+      ],
+      [
+        "Abi Norgrove",
+        "BAT"
+      ],
+      [
+        "Rhianna Southby",
+        "WK"
+      ],
+      [
+        "Grace Thompson",
+        "AR"
+      ],
+      [
+        "Georgia Davis",
+        "BOWL"
+      ],
+      [
+        "Niamh Holland",
+        "BAT"
+      ]
+    ]
+  },
+  "WTLSP": {
+    "name": "London Spirit",
+    "players": [
+      [
+        "Amy Jones",
+        "WK"
+      ],
+      [
+        "Grace Harris",
+        "BAT"
+      ],
+      [
+        "Deandra Dottin",
+        "AR"
+      ],
+      [
+        "Marizanne Kapp",
+        "AR"
+      ],
+      [
+        "Nadine de Klerk",
+        "AR"
+      ],
+      [
+        "Charlie Dean",
+        "AR"
+      ],
+      [
+        "Marie Kelly",
+        "BAT"
+      ],
+      [
+        "Sterre Kalis",
+        "BAT"
+      ],
+      [
+        "Katie George",
+        "BOWL"
+      ],
+      [
+        "Lucy Higham",
+        "BOWL"
+      ],
+      [
+        "Charis Pavely",
+        "AR"
+      ],
+      [
+        "Seren Smale",
+        "WK"
+      ],
+      [
+        "Hannah Rainey",
+        "BOWL"
+      ],
+      [
+        "Josephine Groves",
+        "AR"
+      ],
+      [
+        "Liv Barnes",
+        "BOWL"
+      ],
+      [
+        "Trudy Johnson",
+        "BOWL"
+      ]
+    ]
+  },
+  "WTMSG": {
+    "name": "Manchester Super Giants",
+    "players": [
+      [
+        "Smriti Mandhana",
+        "BAT"
+      ],
+      [
+        "Meg Lanning",
+        "BAT"
+      ],
+      [
+        "Grace Scrivens",
+        "AR"
+      ],
+      [
+        "Kathryn Bryce",
+        "AR"
+      ],
+      [
+        "Richa Ghosh",
+        "WK"
+      ],
+      [
+        "Paige Scholfield",
+        "BAT"
+      ],
+      [
+        "Mady Villiers",
+        "AR"
+      ],
+      [
+        "Maitlan Brown",
+        "BOWL"
+      ],
+      [
+        "Sophie Ecclestone",
+        "BOWL"
+      ],
+      [
+        "Grace Ballinger",
+        "BOWL"
+      ],
+      [
+        "Ryana MacDonald-Gay",
+        "BOWL"
+      ],
+      [
+        "Jo Gardner",
+        "BAT"
+      ],
+      [
+        "Rebecca Tyson",
+        "BOWL"
+      ],
+      [
+        "Natasha Wraith",
+        "WK"
+      ],
+      [
+        "Beth Langston",
+        "BOWL"
+      ],
+      [
+        "Mia Rogers",
+        "WK"
+      ]
+    ]
+  },
+  "WTBPH": {
+    "name": "Birmingham Phoenix",
+    "players": [
+      [
+        "Tammy Beaumont",
+        "WK"
+      ],
+      [
+        "Davina Perrin",
+        "BAT"
+      ],
+      [
+        "Alice Capsey",
+        "AR"
+      ],
+      [
+        "Ellyse Perry",
+        "AR"
+      ],
+      [
+        "Annerie Dercksen",
+        "AR"
+      ],
+      [
+        "Emma Lamb",
+        "BAT"
+      ],
+      [
+        "Meg Austin",
+        "AR"
+      ],
+      [
+        "Alana King",
+        "BOWL"
+      ],
+      [
+        "Fatima Sana",
+        "AR"
+      ],
+      [
+        "Linsey Smith",
+        "BOWL"
+      ],
+      [
+        "Lauren Filer",
+        "BOWL"
+      ],
+      [
+        "Eva Gray",
+        "AR"
+      ],
+      [
+        "Jemima Spence",
+        "BAT"
+      ],
+      [
+        "Esmae MacGregor",
+        "AR"
+      ],
+      [
+        "Phoebe Brett",
+        "WK"
+      ],
+      [
+        "Mary Taylor",
+        "AR"
+      ]
+    ]
+  },
+  "WTTRR": {
+    "name": "Trent Rockets",
+    "players": [
+      [
+        "Beth Mooney",
+        "WK"
+      ],
+      [
+        "Sophia Dunkley",
+        "BAT"
+      ],
+      [
+        "Nat Sciver-Brunt",
+        "AR"
+      ],
+      [
+        "Ash Gardner",
+        "AR"
+      ],
+      [
+        "Georgia Elwiss",
+        "AR"
+      ],
+      [
+        "Kim Garth",
+        "AR"
+      ],
+      [
+        "Bess Heath",
+        "WK"
+      ],
+      [
+        "Katie Levick",
+        "BOWL"
+      ],
+      [
+        "Samantha Bates",
+        "BOWL"
+      ],
+      [
+        "Eve Jones",
+        "BAT"
+      ],
+      [
+        "Millicent Taylor",
+        "BOWL"
+      ],
+      [
+        "Sophie Luff",
+        "BAT"
+      ],
+      [
+        "Georgia Adams",
+        "AR"
+      ],
+      [
+        "Charley Phillips",
+        "WK"
+      ],
+      [
+        "Amu Surenkumar",
+        "AR"
+      ]
+    ]
+  }
+}

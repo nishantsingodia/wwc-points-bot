@@ -1,0 +1,514 @@
+{
+  "MTMILO": {
+    "name": "MI London",
+    "players": [
+      [
+        "Jason Roy",
+        "BAT"
+      ],
+      [
+        "Will Jacks",
+        "AR"
+      ],
+      [
+        "James Vince",
+        "BAT"
+      ],
+      [
+        "Nicholas Pooran",
+        "WK"
+      ],
+      [
+        "Sherfane Rutherford",
+        "AR"
+      ],
+      [
+        "Sam Curran",
+        "AR"
+      ],
+      [
+        "Tom Curran",
+        "AR"
+      ],
+      [
+        "Rashid Khan",
+        "AR"
+      ],
+      [
+        "Trent Boult",
+        "BOWL"
+      ],
+      [
+        "Richard Gleeson",
+        "BOWL"
+      ],
+      [
+        "Olly Stone",
+        "BOWL"
+      ],
+      [
+        "Ollie Pope",
+        "BAT"
+      ],
+      [
+        "Callum Parkinson",
+        "BOWL"
+      ],
+      [
+        "Nathan Sowter",
+        "BOWL"
+      ],
+      [
+        "Ollie Sykes",
+        "AR"
+      ]
+    ]
+  },
+  "MTSUNL": {
+    "name": "Sunrisers Leeds",
+    "players": [
+      [
+        "Zak Crawley",
+        "BAT"
+      ],
+      [
+        "Ryan Rickelton",
+        "WK"
+      ],
+      [
+        "Harry Brook",
+        "BAT"
+      ],
+      [
+        "Mitchell Marsh",
+        "AR"
+      ],
+      [
+        "Dan Lawrence",
+        "BAT"
+      ],
+      [
+        "Ed Barnard",
+        "AR"
+      ],
+      [
+        "Benny Howell",
+        "AR"
+      ],
+      [
+        "Brydon Carse",
+        "BOWL"
+      ],
+      [
+        "Nathan Ellis",
+        "BOWL"
+      ],
+      [
+        "Abrar Ahmed",
+        "BOWL"
+      ],
+      [
+        "Matthew Potts",
+        "BOWL"
+      ],
+      [
+        "Tom Alsop",
+        "WK"
+      ],
+      [
+        "Reece Topley",
+        "BOWL"
+      ],
+      [
+        "Liam Patterson-White",
+        "AR"
+      ],
+      [
+        "Tom Lawes",
+        "AR"
+      ]
+    ]
+  },
+  "MTSBR": {
+    "name": "Southern Brave",
+    "players": [
+      [
+        "Jamie Smith",
+        "WK"
+      ],
+      [
+        "Tristan Stubbs",
+        "BAT"
+      ],
+      [
+        "David Miller",
+        "BAT"
+      ],
+      [
+        "Marcus Stoinis",
+        "AR"
+      ],
+      [
+        "Tom Abell",
+        "AR"
+      ],
+      [
+        "Michael Pepper",
+        "WK"
+      ],
+      [
+        "Chris Jordan",
+        "BOWL"
+      ],
+      [
+        "Adil Rashid",
+        "BOWL"
+      ],
+      [
+        "Jofra Archer",
+        "BOWL"
+      ],
+      [
+        "Luke Wood",
+        "BOWL"
+      ],
+      [
+        "Dan Worrall",
+        "BOWL"
+      ],
+      [
+        "Ben McKinney",
+        "BAT"
+      ],
+      [
+        "Nikhil Chaudhary",
+        "AR"
+      ],
+      [
+        "Thomas Rew",
+        "WK"
+      ],
+      [
+        "Caleb Falconer",
+        "BOWL"
+      ]
+    ]
+  },
+  "MTWLF": {
+    "name": "Welsh Fire",
+    "players": [
+      [
+        "Phil Salt",
+        "WK"
+      ],
+      [
+        "Matthew Short",
+        "AR"
+      ],
+      [
+        "Joe Root",
+        "BAT"
+      ],
+      [
+        "Rachin Ravindra",
+        "AR"
+      ],
+      [
+        "Tom Kohler-Cadmore",
+        "BAT"
+      ],
+      [
+        "Chris Woakes",
+        "AR"
+      ],
+      [
+        "Marco Jansen",
+        "AR"
+      ],
+      [
+        "Ben Kellaway",
+        "AR"
+      ],
+      [
+        "Lockie Ferguson",
+        "BOWL"
+      ],
+      [
+        "Sam Cook",
+        "BOWL"
+      ],
+      [
+        "Jafer Chohan",
+        "BOWL"
+      ],
+      [
+        "Jordan Cox",
+        "WK"
+      ],
+      [
+        "Asa Tribe",
+        "BAT"
+      ],
+      [
+        "Tom Aspinwall",
+        "BOWL"
+      ]
+    ]
+  },
+  "MTLSP": {
+    "name": "London Spirit",
+    "players": [
+      [
+        "Jonny Bairstow",
+        "WK"
+      ],
+      [
+        "Dewald Brevis",
+        "BAT"
+      ],
+      [
+        "Liam Livingstone",
+        "AR"
+      ],
+      [
+        "Lhuan-dre Pretorius",
+        "BAT"
+      ],
+      [
+        "Adam Hose",
+        "BAT"
+      ],
+      [
+        "David Willey",
+        "AR"
+      ],
+      [
+        "Jamie Overton",
+        "AR"
+      ],
+      [
+        "James Coles",
+        "AR"
+      ],
+      [
+        "Adam Zampa",
+        "BOWL"
+      ],
+      [
+        "Adam Milne",
+        "BOWL"
+      ],
+      [
+        "Tymal Mills",
+        "BOWL"
+      ],
+      [
+        "James Rew",
+        "WK"
+      ],
+      [
+        "Mason Crane",
+        "BOWL"
+      ],
+      [
+        "Matthew Fisher",
+        "BOWL"
+      ]
+    ]
+  },
+  "MTMSG": {
+    "name": "Manchester Super Giants",
+    "players": [
+      [
+        "Jos Buttler",
+        "WK"
+      ],
+      [
+        "Aiden Markram",
+        "BAT"
+      ],
+      [
+        "Leus du Plooy",
+        "BAT"
+      ],
+      [
+        "Heinrich Klaasen",
+        "WK"
+      ],
+      [
+        "Liam Dawson",
+        "AR"
+      ],
+      [
+        "Paul Walter",
+        "AR"
+      ],
+      [
+        "Gus Atkinson",
+        "BOWL"
+      ],
+      [
+        "Tom Hartley",
+        "BOWL"
+      ],
+      [
+        "Noor Ahmad",
+        "BOWL"
+      ],
+      [
+        "Josh Tongue",
+        "BOWL"
+      ],
+      [
+        "Sonny Baker",
+        "BOWL"
+      ],
+      [
+        "Tim Seifert",
+        "WK"
+      ],
+      [
+        "Max Holden",
+        "BAT"
+      ],
+      [
+        "Tawanda Muyeye",
+        "BAT"
+      ],
+      [
+        "Tom Moores",
+        "WK"
+      ],
+      [
+        "George Scrimshaw",
+        "BOWL"
+      ]
+    ]
+  },
+  "MTBPH": {
+    "name": "Birmingham Phoenix",
+    "players": [
+      [
+        "Will Smeed",
+        "BAT"
+      ],
+      [
+        "Joe Clarke",
+        "WK"
+      ],
+      [
+        "Jacob Bethell",
+        "AR"
+      ],
+      [
+        "Laurie Evans",
+        "BAT"
+      ],
+      [
+        "Donovan Ferreira",
+        "WK"
+      ],
+      [
+        "Mitchell Owen",
+        "AR"
+      ],
+      [
+        "Rehan Ahmed",
+        "AR"
+      ],
+      [
+        "Scott Currie",
+        "AR"
+      ],
+      [
+        "Saqib Mahmood",
+        "BOWL"
+      ],
+      [
+        "Mustafizur Rahman",
+        "BOWL"
+      ],
+      [
+        "Usman Tariq",
+        "BOWL"
+      ],
+      [
+        "Jordan Thompson",
+        "AR"
+      ],
+      [
+        "Chris Wood",
+        "BOWL"
+      ],
+      [
+        "Ethan Brookes",
+        "AR"
+      ]
+    ]
+  },
+  "MTTRR": {
+    "name": "Trent Rockets",
+    "players": [
+      [
+        "Finn Allen",
+        "BAT"
+      ],
+      [
+        "Ben Duckett",
+        "BAT"
+      ],
+      [
+        "Tom Banton",
+        "WK"
+      ],
+      [
+        "Sam Billings",
+        "WK"
+      ],
+      [
+        "Tim David",
+        "AR"
+      ],
+      [
+        "Lewis Gregory",
+        "AR"
+      ],
+      [
+        "Dan Mousley",
+        "AR"
+      ],
+      [
+        "Mitchell Santner",
+        "AR"
+      ],
+      [
+        "Craig Overton",
+        "BOWL"
+      ],
+      [
+        "Matt Henry",
+        "BOWL"
+      ],
+      [
+        "Mohammad Amir",
+        "BOWL"
+      ],
+      [
+        "Danny Briggs",
+        "BOWL"
+      ],
+      [
+        "Aneurin Donald",
+        "BAT"
+      ],
+      [
+        "Brad Currie",
+        "BOWL"
+      ],
+      [
+        "Louis Kimber",
+        "BAT"
+      ]
+    ]
+  }
+}

@@ -55,19 +55,22 @@ FMT_BUCKET = {"t20": "T20", "t20i": "T20", "odi": "ODI"}
 DISCOVERY_WINDOW_DAYS = int(os.environ.get("SYNC_WINDOW_DAYS", "4"))
 # Distinct search tokens for /series fixtures-discovery (fewer than MAJOR_LEAGUES to save
 # quota; cricapi matches substrings and results are de-duped by series id). "hundred"
-# catches both the men's and women's Hundred.
-SEARCH_TERMS = [
+# catches both the men's and women's Hundred. Override with SYNC_SEARCH_TERMS=a,b,c to
+# scope a manual run (e.g. SYNC_SEARCH_TERMS=hundred).
+_DEFAULT_SEARCH_TERMS = [
     "hundred", "indian premier league", "big bash", "pakistan super league",
     "caribbean premier league", "sa20", "international league t20",
     "major league cricket", "lanka premier league", "bangladesh premier league",
     "super smash", "vitality blast", "womens premier league", "wbbl",
 ]
+SEARCH_TERMS = ([s.strip() for s in os.environ["SYNC_SEARCH_TERMS"].split(",") if s.strip()]
+                if os.environ.get("SYNC_SEARCH_TERMS") else _DEFAULT_SEARCH_TERMS)
 
 ROLE_MAP = {
     "wk-batsman": "WK", "wicketkeeper batter": "WK", "wicketkeeper": "WK", "wk": "WK",
-    "batsman": "BAT", "batter": "BAT", "top order batter": "BAT",
+    "batsman": "BAT", "batter": "BAT", "top order batter": "BAT", "bat": "BAT",
     "batting allrounder": "AR", "bowling allrounder": "AR", "allrounder": "AR", "all rounder": "AR",
-    "bowler": "BOWL",
+    "ar": "AR", "bowler": "BOWL", "bowl": "BOWL",   # short codes = the auction seed's role format
 }
 ROLE_EFPPM = {"BAT": 45.0, "WK": 45.0, "AR": 50.0, "BOWL": 45.0}
 ROLE_ORDER = {"WK": 0, "BAT": 1, "AR": 2, "BOWL": 3}
@@ -223,63 +226,150 @@ def resolve_pid(name, reg_alias):
     return reg_alias.get(norm(name)) or "slug:" + re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
 
 
+# ── league squads from the auction seed (cricapi has no franchise-league squads) ────
+# The auction app maintains curated, identity-anchored squads per league. extract_auction_
+# squads.mjs emits them as [{export, gender, teams:[{name, short, players:[{name,role}]}]}].
+# build_league_squads picks the seed export that best covers a discovered series' teams.
+LEAGUE_TEAM_ALIASES = {   # normalized cricapi team name -> normalized canonical (rebrands etc.)
+    "manchester originals": "manchester super giants",
+}
+def _team_key(name):
+    n = re.sub(r"\bwomen\b", "", norm(name)).strip()
+    n = re.sub(r"\s+", " ", n)
+    return LEAGUE_TEAM_ALIASES.get(n, n)
+
+def build_league_squads(seeds, cricapi_teams, gender):
+    """Return the league_squads dict gen_tour expects, or None if no seed covers >=2 of the
+    series' teams. Both a rebrand alias and the new name collapse onto ONE canonical team."""
+    real = [t for t in cricapi_teams if norm(t) not in TBC_NAMES]
+    want = {_team_key(t) for t in real}
+    best, best_hit = None, 0
+    for s in seeds:
+        if gender == "female" and s.get("gender") == "male":
+            continue
+        if gender == "male" and s.get("gender") == "female":
+            continue
+        seed_by_key = {_team_key(t["name"]): t for t in s.get("teams", [])}
+        hit = len(want & set(seed_by_key))
+        if hit > best_hit:
+            best, best_hit = seed_by_key, hit
+    if not best or best_hit < 2:
+        return None
+    canon, squads = {}, {}
+    for t in real:
+        st = best.get(_team_key(t))
+        if not st:
+            continue
+        canon[t] = st["name"]                       # canonical = the seed's team name
+        squads[st["name"]] = {"short": st.get("short") or st["name"][:4].upper(),
+                              "players": [[p["name"], p.get("role", "BAT")] for p in st.get("players", [])]}
+    return {"canon": canon, "squads": squads} if len(squads) >= 2 else None
+
+
 # ── the generator: one (series, format) -> all artifacts ────────────────────────
-def gen_tour(series_info, squads_by_matchid, fmt, gender, state):
-    """series_info = cricapi series_info['data']; squads_by_matchid = {matchId: match_squad['data']}."""
+TBC_NAMES = {"tbc", "tba", "to be confirmed", "to be decided", "winner", ""}
+
+def gen_tour(series_info, squads_by_matchid, fmt, gender, state, league_squads=None):
+    """Build one (series, format) tour's artifacts.
+
+    Handles BOTH 2-team bilaterals and N-team leagues: teams are the union across the whole
+    fixture list (not just match 1), and TBC/knockout placeholders are skipped.
+
+    squads_by_matchid : {matchId: match_squad['data']} from cricapi (empty for most leagues).
+    league_squads     : optional injected squads for a league whose squads cricapi lacks
+                        (e.g. from the auction seed):
+                          {"canon":  {cricapi_team_name: canonical_name, ...},   # collapses
+                                     # aliases (e.g. Manchester Originals -> ...Super Giants),
+                                     # excludes TBC; any name absent here is treated as TBC.
+                           "squads": {canonical_name: {"short": str,
+                                                       "players": [[name, role], ...]}}}  # ordered
+    """
     info = series_info["info"]
     ml = [m for m in series_info["matchList"] if FMT_BUCKET.get((m.get("matchType") or "").lower()) == fmt]
-    ml.sort(key=lambda m: m.get("dateTimeGMT") or m.get("date"))
+    ml.sort(key=lambda m: m.get("dateTimeGMT") or m.get("date") or "")
     if not ml:
         return None
 
-    fmt_label = "ODI" if fmt == "ODI" else "T20I"
-    # team shortnames from teamInfo (fall back to first-3 of name)
-    ti = {t["name"]: t.get("shortname") or t["name"][:3].upper() for m in ml for t in m.get("teamInfo", [])}
-    teams = ml[0]["teams"]
-    shorts = {t: ti.get(t, t[:3].upper()) for t in teams}
-    code = {t: mint_code(gender, fmt, shorts[t], state["codes"]) for t in teams}
+    ti = {t["name"]: t.get("shortname") or t["name"][:3].upper()
+          for m in ml for t in m.get("teamInfo", [])}  # cricapi shortnames
+
+    def canonical(name):
+        """Map a raw cricapi team name to its canonical team, or None to drop it (TBC/unknown)."""
+        if league_squads is not None:
+            return league_squads["canon"].get(name)         # None if unmapped/TBC
+        return None if norm(name) in TBC_NAMES else name
+
+    # union of real teams across ALL matches, in first-appearance order
+    teams, seen = [], set()
+    for m in ml:
+        for cn in (m.get("teams") or []):
+            c = canonical(cn)
+            if c and c not in seen:
+                seen.add(c); teams.append(c)
+    if len(teams) < 2:
+        return None
+    league = len(teams) > 2
 
     gl = "M" if gender == "male" else "W"
-    tour_name = f"{info['name']} ({fmt_label})"
-    tab = f"{shorts[teams[0]]} v {shorts[teams[1]]} {fmt_label} POINTS".upper()
+    if league_squads is not None:
+        shorts = {t: league_squads["squads"][t]["short"] for t in teams}
+    else:
+        shorts = {t: ti.get(t, t[:3].upper()) for t in teams}
+    code = {t: mint_code(gender, fmt, shorts[t], state["codes"]) for t in teams}
 
-    # ---- matches ----
-    matches, toss = [], []
-    for i, m in enumerate(ml, 1):
-        t1, t2 = m["teams"]
+    if league:
+        tour_name = info["name"]                          # e.g. "The Hundred Men's Competition 2026"
+        base = re.sub(r"\bcompetition\b", "", info["name"], flags=re.I)
+        tab = re.sub(r"\s+", " ", re.sub(r"[^A-Za-z0-9 ]", "", base)).strip().upper() + " POINTS"
+        prefix = "".join(w[0] for w in re.findall(r"[A-Za-z]+", info["name"]))[:6].upper()
+    else:
+        fmt_label = "ODI" if fmt == "ODI" else "T20I"
+        tour_name = f"{info['name']} ({fmt_label})"
+        tab = f"{shorts[teams[0]]} v {shorts[teams[1]]} {fmt_label} POINTS".upper()
+
+    # ---- matches (skip TBC/unresolved knockouts) ----
+    matches, toss, mi = [], [], 0
+    for m in ml:
+        raw = (m.get("teams") or [None, None])[:2]
+        if len(raw) < 2:
+            continue
+        c1, c2 = canonical(raw[0] or ""), canonical(raw[1] or "")
+        if not c1 or not c2 or c1 == c2:
+            continue
+        mi += 1
         dt = m.get("dateTimeGMT")
+        if league:
+            key = f"{prefix}_{gl}{mi}_{code[c1]}_{code[c2]}_{mmm_dd(dt)}"
+            label = f"Match {mi}: {code[c1]} v {code[c2]}"
+        else:
+            key = f"AUTO_{gl}_{shorts[c1]}_{shorts[c2]}_{fmt_label}{mi}_{mmm_dd(dt)}"
+            label = f"{ORD.get(mi, str(mi)+'th')} {fmt_label}: {shorts[c1]} v {shorts[c2]}"
         matches.append({
-            "matchNum": state["next_match_num"],
-            "key": f"AUTO_{gl}_{shorts[t1]}_{shorts[t2]}_{fmt_label}{i}_{mmm_dd(dt)}",
-            "gender": gl,
-            "team1": code[t1], "team2": code[t2],
-            "label": f"{ORD.get(i, str(i)+'th')} {fmt_label}: {shorts[t1]} v {shorts[t2]}",
-            "date": to_ist_iso(dt),
+            "matchNum": state["next_match_num"], "key": key, "gender": gl,
+            "team1": code[c1], "team2": code[c2], "label": label, "date": to_ist_iso(dt),
         })
         toss.append(to_utc_z(dt))
         state["next_match_num"] += 1
+    if not matches:
+        return None
 
-    # ---- squads (union of match_squad across this format's matches) ----
-    # {teamName: {playerName: role}}
-    roster = {t: {} for t in teams}
-    for m in ml:
-        sq = squads_by_matchid.get(m["id"])
-        if not sq:
-            continue
-        for team in sq:
-            tn = team.get("teamName")
-            if tn not in roster:
-                continue
-            for p in team.get("players", []):
-                roster[tn][p["name"]] = norm_role(p.get("role"))
-
+    # ---- rosters: injected (ordered, preserves the curated XI-first order) or cricapi union ----
     players, squads_json, team_codes = [], {}, {}
     for t in teams:
         c = code[t]
         team_codes[c] = {"flag": state["name_flag"].get(t.lower(), "🏏"), "name": t}
         squads_json[c] = {"name": t, "players": []}
-        ordered = sorted(roster[t].items(), key=lambda kv: (ROLE_ORDER[kv[1]], kv[0]))
-        for sn, (pname, role) in enumerate(ordered, 1):
+        if league_squads is not None:
+            items = [(p, norm_role(r)) for p, r in league_squads["squads"][t]["players"]]
+        else:
+            roster = {}
+            for m in ml:
+                for team in (squads_by_matchid.get(m["id"]) or []):
+                    if canonical(team.get("teamName") or "") == t:
+                        for p in team.get("players", []):
+                            roster[p["name"]] = norm_role(p.get("role"))
+            items = sorted(roster.items(), key=lambda kv: (ROLE_ORDER[kv[1]], kv[0]))
+        for sn, (pname, role) in enumerate(items, 1):
             players.append({
                 "id": state["next_pid_id"], "name": pname, "country": t, "role": role,
                 "squad_number": sn, "team_code": c, "efppm": ROLE_EFPPM[role],
@@ -426,8 +516,14 @@ def main():
     ap.add_argument("--apply", action="store_true", help="write artifacts into the draft + bot repo files")
     ap.add_argument("--from-saved", help="dir with capi_series_info.json + capi_match_squad.json (no quota)")
     ap.add_argument("--emit", help="write generated artifacts to this dir")
+    ap.add_argument("--auction-squads", help="JSON from extract_auction_squads.mjs; used as the "
+                    "squad source for any discovered league it covers (cricapi has no league squads)")
     args = ap.parse_args()
     state = load_state()
+    seeds = json.load(open(args.auction_squads)) if args.auction_squads else []
+    if seeds:
+        print(f"auction squads: {sum(len(s.get('teams',[])) for s in seeds)} teams across "
+              f"{len(seeds)} seed(s)", file=sys.stderr)
 
     tours = []
     if args.from_saved:
@@ -467,14 +563,19 @@ def main():
                 print(f"  skip (finished edition — no upcoming match): {si['info']['name'][:45]}", file=sys.stderr)
                 continue
             gender = infer_gender(si["info"]["name"], ml[0].get("teams", []))
+            series_teams = sorted({t for m in ml for t in (m.get("teams") or [])})
+            lg = build_league_squads(seeds, series_teams, gender) if seeds else None
             sq_by = {}
-            for m in ml:
-                if FMT_BUCKET.get((m.get("matchType") or "").lower()) and m.get("hasSquad"):
-                    r = capi("match_squad", id=m["id"])
-                    if r.get("status") == "success":
-                        sq_by[m["id"]] = r.get("data", [])
+            if lg:
+                print(f"  squads: injected from auction seed ({len(lg['squads'])} teams)", file=sys.stderr)
+            else:
+                for m in ml:   # cricapi squads (bilaterals / leagues cricapi actually carries)
+                    if FMT_BUCKET.get((m.get("matchType") or "").lower()) and m.get("hasSquad"):
+                        r = capi("match_squad", id=m["id"])
+                        if r.get("status") == "success":
+                            sq_by[m["id"]] = r.get("data", [])
             for fmt in ("ODI", "T20"):
-                t = gen_tour(si, sq_by, fmt, gender, state)
+                t = gen_tour(si, sq_by, fmt, gender, state, league_squads=lg)
                 if t and t["tours_entry"]["tab"] not in state["existing_tabs"]:
                     tours.append(t)
                 elif t:
