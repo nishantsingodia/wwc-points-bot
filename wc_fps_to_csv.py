@@ -1525,6 +1525,23 @@ def run_tour(tour):
     if n_toss:
         print(f"toss XI written for {n_toss} not-ended match(es)", file=sys.stderr)
 
+    # ── Freeze a fully-completed tournament ──────────────────────────────────────
+    # Once every match has ENDED and been resolved from cricsheet (immutable gold source),
+    # with nothing live or upcoming, the tab is final and will never change again. Record
+    # the series id so future runs skip its cricapi poll entirely. Strict guards keep this
+    # from firing mid-tournament: require the `ends` date in the past AND full cricsheet
+    # coverage (n_cs == every fmt match) — a cricsheet outage this run just defers the freeze.
+    matches_fmt = [m for m in matches if is_fmt(m)]
+    try:
+        ended_past = bool(tour.get("ends")) and date.today() > date.fromisoformat(tour["ends"])
+    except ValueError:
+        ended_past = False
+    if (ended_past and matches_fmt and not live and not pending
+            and len(ended) == len(matches_fmt) and n_cs == len(ended)):
+        mark_frozen(WC_SERIES)
+        print(f"tour fully resolved ({n_cs}/{len(matches_fmt)} cricsheet-official) -> FROZEN; "
+              f"future runs skip the cricapi poll for this tour", file=sys.stderr)
+
     with open(out_csv, "w", newline="") as f:
         w = csv.writer(f)
         w.writerow(cols)
@@ -1565,9 +1582,13 @@ def load_tours():
     return [{"name": "default", "cricapi_series": WC_SERIES, "espn_series": ESPN_SERIES,
              "tab": GSHEET_TAB, "squads_path": SQUADS_JSON, "out_csv": OUT}]
 
-# Days after a tour's last match to keep refreshing (lets cricsheet post its official
-# data + a buffer); after this the tour is FROZEN — no API calls, no writes, tab kept as-is.
-FREEZE_GRACE_DAYS = int(os.environ.get("FREEZE_GRACE_DAYS", "21"))
+# Days after a tour's last match to keep refreshing; after this the tour is dormant — no API
+# calls, no writes, tab kept as-is. The old 21 kept ~6 tours "active", draining the daily
+# cricapi budget before the still-live tour was even reached. A fully cricsheet-resolved tour
+# now freezes IMMEDIATELY (see mark_frozen below) regardless of this window, so grace only
+# governs tours cricsheet never fully covers; 5 is aggressive (cricsheet can lag ~5-7d), so a
+# match whose ball-by-ball posts late may be frozen on provisional (ESPN/cricapi) numbers.
+FREEZE_GRACE_DAYS = int(os.environ.get("FREEZE_GRACE_DAYS", "5"))
 
 def is_active(tour):
     """A tour stays live until `ends` + grace; then it's dormant (skipped entirely)."""
@@ -1578,6 +1599,29 @@ def is_active(tour):
         return date.today() <= date.fromisoformat(e) + timedelta(days=FREEZE_GRACE_DAYS)
     except ValueError:
         return True
+
+# Series ids of tournaments that are 100% done (every match ENDED and resolved from cricsheet,
+# the immutable gold source). We stop polling cricapi for these entirely — the tab is already
+# final, so a fetch would only burn the daily hit budget. Distinct from the grace window above:
+# this triggers as soon as a tour is genuinely complete, not on a fixed calendar buffer.
+# Re-enter the poll by deleting a tour's id here (or the whole file).
+FROZEN_PATH = os.path.join(os.path.dirname(__file__), "registry", "frozen_tours.json")
+
+def load_frozen():
+    try:
+        return set(json.load(open(FROZEN_PATH)).get("frozen", []))
+    except Exception:
+        return set()
+
+def mark_frozen(series_id):
+    """Add a series id to the frozen ledger (idempotent; the workflow commits the file so the
+    flag survives the ephemeral runner)."""
+    cur = load_frozen()
+    if series_id in cur:
+        return
+    cur.add(series_id)
+    os.makedirs(os.path.dirname(FROZEN_PATH), exist_ok=True)
+    json.dump({"frozen": sorted(cur)}, open(FROZEN_PATH, "w"), indent=2)
 
 def in_toss_window():
     """True if now is within any match's [toss−30m, start+15m] window. Reads committed
@@ -1614,8 +1658,16 @@ def main():
     read_recon_approvals()         # record recon 'Correct Value' answers -> recon_overrides.json
     RECON_OVERRIDES = overrides_by_match(_load_overrides())  # index approved overrides for run_tour
     tours = load_tours()
+    # Process still-running tours FIRST (latest `ends` first) so a live tour never starves on
+    # the cricapi daily budget behind already-finished ones (tours.json order otherwise put the
+    # live tour last, so the cap could be hit before its series_info was even fetched -> stale).
+    tours.sort(key=lambda t: t.get("ends", ""), reverse=True)
+    frozen = load_frozen()
     print(f"{len(tours)} tour(s): {', '.join(t['name'] for t in tours)}", file=sys.stderr)
     for t in tours:
+        if t.get("cricapi_series") in frozen:
+            print(f"-- {t['name']}: frozen (fully resolved, cricsheet-official) — skipped (0 API)", file=sys.stderr)
+            continue
         if not is_active(t):
             print(f"-- {t['name']}: dormant (ended {t.get('ends')}, frozen) — skipped", file=sys.stderr)
             continue
