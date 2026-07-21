@@ -25,7 +25,11 @@ on:
         type: boolean
         default: true
   schedule:
-    - cron: "0 6 * * *"   # daily 06:00 UTC
+    # 00:10 UTC — right after cricapi's daily quota reset (00:00 UTC), so tour-sync gets
+    # fresh hits BEFORE the 2-hourly points bot drains both keys. (It ran at 06:00 before,
+    # by which point the live points scoring had maxed the free-tier 100/day cap on both
+    # keys, so discovery silently found nothing for 6 days.)
+    - cron: "10 0 * * *"
 
 permissions:
   contents: write
@@ -64,6 +68,7 @@ jobs:
           DRAFT_REPO: ${{ github.workspace }}/wwc-draft
           SYNC_SHEET_ID: ${{ secrets.GSHEET_ID }}
         run: |
+          set -o pipefail   # so a quota-blocked / crashed generator fails the step (tee was masking it)
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
             echo "DRY RUN — discovery only, nothing written/committed/deployed"
             python3 tour_sync.py --dry-run | tee /tmp/sync.out
