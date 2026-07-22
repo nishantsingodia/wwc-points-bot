@@ -1,6 +1,6 @@
 {
  "anchor": "cricsheet_id (pid); espn:/slug: fallback when unknown",
- "count": 499,
+ "count": 658,
  "players": {
   "5d2eda89": {
    "aliases": [
@@ -9,7 +9,8 @@
     "smriti shriniwas mandhana"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Smriti Mandhana",
    "cricsheet_id": "5d2eda89",
@@ -38,7 +39,8 @@
     "ji rodrigues"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Jemimah Rodrigues",
    "cricsheet_id": "cb08b611",
@@ -68,7 +70,8 @@
     "rm ghosh"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Richa Ghosh",
    "cricsheet_id": "721e0199",
@@ -83,7 +86,8 @@
     "deepti sharma"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Deepti Sharma",
    "cricsheet_id": null,
@@ -228,7 +232,8 @@
     "bl mooney"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Beth Mooney",
    "cricsheet_id": "52d1dbc8",
@@ -242,7 +247,8 @@
     "georgia voll"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Georgia Voll",
    "cricsheet_id": "5c30d455",
@@ -256,7 +262,8 @@
     "phoebe litchfield"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Phoebe Litchfield",
    "cricsheet_id": "4e6ef14f",
@@ -271,7 +278,8 @@
     "ellyse perry"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Ellyse Perry",
    "cricsheet_id": "be150fc8",
@@ -314,7 +322,8 @@
     "annabel sutherland"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Annabel Sutherland",
    "cricsheet_id": "65d9b6b6",
@@ -328,7 +337,8 @@
     "sophie molineux"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Sophie Molineux",
    "cricsheet_id": "99e23670",
@@ -342,7 +352,8 @@
     "georgia wareham"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Georgia Wareham",
    "cricsheet_id": "f0b4e47d",
@@ -357,7 +368,8 @@
     "alana maria king"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Alana King",
    "cricsheet_id": "83558266",
@@ -386,7 +398,8 @@
     "grace margaret harris"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Grace Harris",
    "cricsheet_id": "72166006",
@@ -401,7 +414,8 @@
     "nj carey"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Nicola Carey",
    "cricsheet_id": "dff806f4",
@@ -416,7 +430,8 @@
     "kj garth"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Kim Garth",
    "cricsheet_id": null,
@@ -445,7 +460,8 @@
     "sophia ivy rose dunkley"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Sophia Dunkley",
    "cricsheet_id": "3a9e9cb2",
@@ -460,7 +476,8 @@
     "dn wyatt"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Danni Wyatt-Hodge",
    "cricsheet_id": "a139c379",
@@ -475,7 +492,8 @@
     "nr sciver brunt"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Nat Sciver-Brunt",
    "cricsheet_id": null,
@@ -489,7 +507,8 @@
     "alice capsey"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Alice Capsey",
    "cricsheet_id": "910dd54e",
@@ -519,7 +538,8 @@
     "amy jones"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Amy Jones",
    "cricsheet_id": "b05e45e4",
@@ -534,7 +554,8 @@
     "freya kemp"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Freya Kemp",
    "cricsheet_id": "abc9f8a4",
@@ -550,7 +571,8 @@
     "charlotte ellen dean"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Charlie Dean",
    "cricsheet_id": "c6625a26",
@@ -564,7 +586,8 @@
     "sophie ecclestone"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Sophie Ecclestone",
    "cricsheet_id": "cdb82f1c",
@@ -579,7 +602,8 @@
     "lk bell"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Lauren Bell",
    "cricsheet_id": "38b4583c",
@@ -594,7 +618,8 @@
     "linsey smith"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Linsey Smith",
    "cricsheet_id": null,
@@ -610,7 +635,8 @@
     "dr gibson"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Danielle Gibson",
    "cricsheet_id": "d2763568",
@@ -624,7 +650,8 @@
     "issy wong"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Issy Wong",
    "cricsheet_id": "e5b17517",
@@ -638,7 +665,8 @@
     "lauren filer"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Lauren Filer",
    "cricsheet_id": "31adb911",
@@ -651,7 +679,8 @@
     "tilly corteen coleman"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Tilly Corteen-Coleman",
    "cricsheet_id": null,
@@ -678,7 +707,8 @@
     "laura wolvaardt"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Laura Wolvaardt",
    "cricsheet_id": "e60f81c9",
@@ -692,7 +722,8 @@
     "marizanne kapp"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Marizanne Kapp",
    "cricsheet_id": "63e3b6b3",
@@ -706,7 +737,8 @@
     "annerie dercksen"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Annerie Dercksen",
    "cricsheet_id": "d2b1f515",
@@ -734,7 +766,8 @@
     "nadine de klerk"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Nadine de Klerk",
    "cricsheet_id": "ea544967",
@@ -908,7 +941,8 @@
     "melie kerr"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Amelia Kerr",
    "cricsheet_id": "7673c908",
@@ -923,7 +957,8 @@
     "sophie frances monique devine"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Sophie Devine",
    "cricsheet_id": "de69af96",
@@ -1100,7 +1135,8 @@
    ],
    "tours": [
     "Women's T20 WC 2026",
-    "Ireland vs West Indies Women's ODI 2026"
+    "Ireland vs West Indies Women's ODI 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Hayley Matthews",
    "cricsheet_id": "d32cf49a",
@@ -1163,7 +1199,8 @@
    ],
    "tours": [
     "Women's T20 WC 2026",
-    "Ireland vs West Indies Women's ODI 2026"
+    "Ireland vs West Indies Women's ODI 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Deandra Dottin",
    "cricsheet_id": "53bee17f",
@@ -1178,7 +1215,8 @@
     "chinelle henry"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Chinelle Henry",
    "cricsheet_id": "75820733",
@@ -1409,7 +1447,8 @@
     "fatima sana"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Fatima Sana",
    "cricsheet_id": "ea9c54de",
@@ -2157,7 +2196,8 @@
     "sj bryce"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Sarah Bryce",
    "cricsheet_id": "2ca65aee",
@@ -2172,7 +2212,8 @@
     "dem carter"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Darcey Carter",
    "cricsheet_id": "c3394c16",
@@ -2187,7 +2228,8 @@
     "ke bryce"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Kathryn Bryce",
    "cricsheet_id": "f13d3eba",
@@ -2244,7 +2286,8 @@
     "katherine fraser"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Katherine Fraser",
    "cricsheet_id": "a0a65375",
@@ -2273,7 +2316,8 @@
     "kl gordon"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Kirstie Gordon",
    "cricsheet_id": null,
@@ -2361,7 +2405,8 @@
     "sterre laurien kalis"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Sterre Kalis",
    "cricsheet_id": "2b150c6b",
@@ -2578,7 +2623,8 @@
     "mr marsh"
    ],
    "tours": [
-    "Australia tour of Bangladesh 2026 (Men T20I)"
+    "Australia tour of Bangladesh 2026 (Men T20I)",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Mitchell Marsh",
    "cricsheet_id": "3d8feaf8",
@@ -2633,17 +2679,19 @@
   },
   "espn:892749": {
    "aliases": [
+    "th david",
     "tim david",
     "timothy hays david"
    ],
    "tours": [
-    "Australia tour of Bangladesh 2026 (Men T20I)"
+    "Australia tour of Bangladesh 2026 (Men T20I)",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Tim David",
-   "cricsheet_id": null,
+   "cricsheet_id": "f1f99156",
    "espn_id": "892749",
    "draft_id": 10005,
-   "auction_id": null
+   "auction_id": 248
   },
   "espn:1079380": {
    "aliases": [
@@ -2651,7 +2699,8 @@
    ],
    "tours": [
     "Australia tour of Bangladesh 2026 (Men T20I)",
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Nikhil Chaudhary",
    "cricsheet_id": null,
@@ -2694,7 +2743,8 @@
     "nt ellis"
    ],
    "tours": [
-    "Australia tour of Bangladesh 2026 (Men T20I)"
+    "Australia tour of Bangladesh 2026 (Men T20I)",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Nathan Ellis",
    "cricsheet_id": "9eb1455b",
@@ -2718,16 +2768,18 @@
   },
   "espn:379504": {
    "aliases": [
+    "a zampa",
     "adam zampa"
    ],
    "tours": [
-    "Australia tour of Bangladesh 2026 (Men T20I)"
+    "Australia tour of Bangladesh 2026 (Men T20I)",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Adam Zampa",
-   "cricsheet_id": null,
+   "cricsheet_id": "14f96089",
    "espn_id": "379504",
    "draft_id": 10011,
-   "auction_id": null
+   "auction_id": 312
   },
   "eaa76d3c": {
    "aliases": [
@@ -2942,13 +2994,14 @@
     "mustafizur rahman"
    ],
    "tours": [
-    "Australia tour of Bangladesh 2026 (Men T20I)"
+    "Australia tour of Bangladesh 2026 (Men T20I)",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Mustafizur Rahman",
-   "cricsheet_id": null,
+   "cricsheet_id": "0a8fce53",
    "espn_id": "330902",
    "draft_id": 10027,
-   "auction_id": null
+   "auction_id": 313
   },
   "espn:536936": {
    "aliases": [
@@ -3026,7 +3079,8 @@
     "ryan rickelton"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Ryan Rickelton",
    "cricsheet_id": "e66732f8",
@@ -3054,7 +3108,8 @@
     "nicholas pooran"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Nicholas Pooran",
    "cricsheet_id": "3241e3fd",
@@ -3154,7 +3209,8 @@
     "trent boult"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Trent Boult",
    "cricsheet_id": "a818c1be",
@@ -3266,7 +3322,8 @@
     "mj owen"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Mitchell Owen",
    "cricsheet_id": "f2c936d7",
@@ -3367,7 +3424,8 @@
     "marco jansen"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Marco Jansen",
    "cricsheet_id": null,
@@ -3425,7 +3483,8 @@
     "rachin ravindra"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Rachin Ravindra",
    "cricsheet_id": "ba5e1069",
@@ -3439,7 +3498,8 @@
     "lockie ferguson"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Lockie Ferguson",
    "cricsheet_id": null,
@@ -3583,7 +3643,8 @@
     "donovan ferreira"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Donovan Ferreira",
    "cricsheet_id": "f0af99a7",
@@ -3641,7 +3702,8 @@
     "af milne"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Adam Milne",
    "cricsheet_id": "350bb1b1",
@@ -3764,7 +3826,8 @@
     "finnley hugh allen"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Finn Allen",
    "cricsheet_id": "bf74b130",
@@ -3778,7 +3841,8 @@
     "matthew william short"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Matthew Short",
    "cricsheet_id": null,
@@ -3793,7 +3857,8 @@
     "lhuan dre pretorius"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Lhuan-dre Pretorius",
    "cricsheet_id": null,
@@ -3987,7 +4052,8 @@
     "tl seifert"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Tim Seifert",
    "cricsheet_id": "4663bd23",
@@ -4046,7 +4112,8 @@
     "mp stoinis"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Marcus Stoinis",
    "cricsheet_id": "d9273ee7",
@@ -4283,7 +4350,8 @@
    ],
    "tours": [
     "Major League Cricket 2026",
-    "New Zealand vs West Indies Men's ODI 2026"
+    "New Zealand vs West Indies Men's ODI 2026",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Sherfane Rutherford",
    "cricsheet_id": null,
@@ -4482,12 +4550,13 @@
     "hra rainey"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "The Hundred Women's Competition 2026"
    ],
    "display": "Hannah Rainey",
    "cricsheet_id": "7027d12f",
    "espn_id": "1095834",
-   "draft_id": null,
+   "draft_id": 10576,
    "auction_id": 2279
   },
   "slug:asif-mehmood": {
@@ -5085,13 +5154,14 @@
     "hc brook"
    ],
    "tours": [
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Harry Brook",
-   "cricsheet_id": null,
+   "cricsheet_id": "4ae1755b",
    "espn_id": null,
-   "draft_id": null,
-   "auction_id": null
+   "draft_id": 10399,
+   "auction_id": 401
   },
   "3d284ca3": {
    "aliases": [
@@ -5099,12 +5169,13 @@
     "phil salt"
    ],
    "tours": [
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Phil Salt",
    "cricsheet_id": "3d284ca3",
    "espn_id": null,
-   "draft_id": null,
+   "draft_id": 10427,
    "auction_id": 245
   },
   "99b75528": {
@@ -5113,12 +5184,13 @@
     "jos buttler"
    ],
    "tours": [
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Jos Buttler",
    "cricsheet_id": "99b75528",
    "espn_id": null,
-   "draft_id": null,
+   "draft_id": 10455,
    "auction_id": 208
   },
   "25f7b7d6": {
@@ -5127,12 +5199,13 @@
     "tom banton"
    ],
    "tours": [
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Tom Banton",
    "cricsheet_id": "25f7b7d6",
    "espn_id": null,
-   "draft_id": null,
+   "draft_id": 10487,
    "auction_id": 713
   },
   "ff154ecd": {
@@ -5141,12 +5214,13 @@
     "jordan cox"
    ],
    "tours": [
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Jordan Cox",
    "cricsheet_id": "ff154ecd",
    "espn_id": null,
-   "draft_id": null,
+   "draft_id": 10438,
    "auction_id": 5905
   },
   "3c55c703": {
@@ -5155,12 +5229,13 @@
     "jg bethell"
    ],
    "tours": [
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Jacob Bethell",
    "cricsheet_id": "3c55c703",
    "espn_id": null,
-   "draft_id": null,
+   "draft_id": 10473,
    "auction_id": 551
   },
   "9caf69a1": {
@@ -5169,12 +5244,13 @@
     "will jacks"
    ],
    "tours": [
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Will Jacks",
    "cricsheet_id": "9caf69a1",
    "espn_id": null,
-   "draft_id": null,
+   "draft_id": 10383,
    "auction_id": 380
   },
   "e94915e6": {
@@ -5183,12 +5259,13 @@
     "sm curran"
    ],
    "tours": [
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Sam Curran",
    "cricsheet_id": "e94915e6",
    "espn_id": null,
-   "draft_id": null,
+   "draft_id": 10387,
    "auction_id": 17
   },
   "4a461c24": {
@@ -5197,12 +5274,13 @@
     "liam dawson"
    ],
    "tours": [
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Liam Dawson",
    "cricsheet_id": "4a461c24",
    "espn_id": null,
-   "draft_id": null,
+   "draft_id": 10459,
    "auction_id": 1889
   },
   "0ecb4de6": {
@@ -5210,12 +5288,13 @@
     "rehan ahmed"
    ],
    "tours": [
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Rehan Ahmed",
    "cricsheet_id": "0ecb4de6",
    "espn_id": null,
-   "draft_id": null,
+   "draft_id": 10477,
    "auction_id": 3992
   },
   "slug:james-coles": {
@@ -5223,12 +5302,13 @@
     "james coles"
    ],
    "tours": [
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "James Coles",
    "cricsheet_id": null,
    "espn_id": null,
-   "draft_id": null,
+   "draft_id": 10448,
    "auction_id": null
   },
   "slug:adil-rashid": {
@@ -5237,12 +5317,13 @@
     "au rashid"
    ],
    "tours": [
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Adil Rashid",
    "cricsheet_id": null,
    "espn_id": null,
-   "draft_id": null,
+   "draft_id": 10419,
    "auction_id": null
   },
   "5574750c": {
@@ -5251,12 +5332,13 @@
     "jofra archer"
    ],
    "tours": [
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Jofra Archer",
    "cricsheet_id": "5574750c",
    "espn_id": null,
-   "draft_id": null,
+   "draft_id": 10420,
    "auction_id": 351
   },
   "slug:saqib-mahmood": {
@@ -5265,12 +5347,13 @@
     "saqib mahmood"
    ],
    "tours": [
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Saqib Mahmood",
    "cricsheet_id": null,
    "espn_id": null,
-   "draft_id": null,
+   "draft_id": 10479,
    "auction_id": null
   },
   "slug:josh-tongue": {
@@ -5278,12 +5361,13 @@
     "josh tongue"
    ],
    "tours": [
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Josh Tongue",
    "cricsheet_id": null,
    "espn_id": null,
-   "draft_id": null,
+   "draft_id": 10464,
    "auction_id": null
   },
   "65b6943c": {
@@ -5292,12 +5376,13 @@
     "luke wood"
    ],
    "tours": [
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Luke Wood",
    "cricsheet_id": "65b6943c",
    "espn_id": null,
-   "draft_id": null,
+   "draft_id": 10421,
    "auction_id": 732
   },
   "78c12883": {
@@ -5306,12 +5391,13 @@
     "sonny baker"
    ],
    "tours": [
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Sonny Baker",
    "cricsheet_id": "78c12883",
    "espn_id": null,
-   "draft_id": null,
+   "draft_id": 10465,
    "auction_id": 6729
   },
   "5ecfab18": {
@@ -5457,7 +5543,8 @@
     "mj santner"
    ],
    "tours": [
-    "New Zealand vs West Indies Men's ODI 2026"
+    "New Zealand vs West Indies Men's ODI 2026",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Mitchell Santner",
    "cricsheet_id": "e4a0deae",
@@ -5553,7 +5640,8 @@
     "matthew fisher"
    ],
    "tours": [
-    "New Zealand vs West Indies Men's ODI 2026"
+    "New Zealand vs West Indies Men's ODI 2026",
+    "The Hundred Men's Competition 2026"
    ],
    "display": "Matthew Fisher",
    "cricsheet_id": null,
@@ -7051,6 +7139,2159 @@
    "espn_id": null,
    "draft_id": 10341,
    "auction_id": 9812
+  },
+  "slug:jason-roy": {
+   "aliases": [
+    "jason roy"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Jason Roy",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10382,
+   "auction_id": null
+  },
+  "a15618fe": {
+   "aliases": [
+    "james vince",
+    "jm vince"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "James Vince",
+   "cricsheet_id": "a15618fe",
+   "espn_id": null,
+   "draft_id": 10384,
+   "auction_id": 2049
+  },
+  "slug:tom-curran": {
+   "aliases": [
+    "tom curran"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Tom Curran",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10388,
+   "auction_id": null
+  },
+  "slug:rashid-khan": {
+   "aliases": [
+    "rashid khan"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Rashid Khan",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10389,
+   "auction_id": null
+  },
+  "402f8494": {
+   "aliases": [
+    "richard gleeson",
+    "rj gleeson"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Richard Gleeson",
+   "cricsheet_id": "402f8494",
+   "espn_id": null,
+   "draft_id": 10391,
+   "auction_id": 659
+  },
+  "3f659464": {
+   "aliases": [
+    "olly stone",
+    "op stone"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Olly Stone",
+   "cricsheet_id": "3f659464",
+   "espn_id": null,
+   "draft_id": 10392,
+   "auction_id": 5405
+  },
+  "slug:ollie-pope": {
+   "aliases": [
+    "ollie pope"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Ollie Pope",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10393,
+   "auction_id": null
+  },
+  "slug:callum-parkinson": {
+   "aliases": [
+    "callum parkinson"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Callum Parkinson",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10394,
+   "auction_id": null
+  },
+  "ee0c05c0": {
+   "aliases": [
+    "na sowter",
+    "nathan sowter"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Nathan Sowter",
+   "cricsheet_id": "ee0c05c0",
+   "espn_id": null,
+   "draft_id": 10395,
+   "auction_id": 7936
+  },
+  "slug:ollie-sykes": {
+   "aliases": [
+    "ollie sykes"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Ollie Sykes",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10396,
+   "auction_id": null
+  },
+  "922e1b19": {
+   "aliases": [
+    "z crawley",
+    "zak crawley"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Zak Crawley",
+   "cricsheet_id": "922e1b19",
+   "espn_id": null,
+   "draft_id": 10397,
+   "auction_id": 7948
+  },
+  "4b685e2d": {
+   "aliases": [
+    "dan lawrence",
+    "dw lawrence"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Dan Lawrence",
+   "cricsheet_id": "4b685e2d",
+   "espn_id": null,
+   "draft_id": 10401,
+   "auction_id": 7914
+  },
+  "slug:ed-barnard": {
+   "aliases": [
+    "ed barnard"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Ed Barnard",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10402,
+   "auction_id": null
+  },
+  "slug:benny-howell": {
+   "aliases": [
+    "benny howell"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Benny Howell",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10403,
+   "auction_id": null
+  },
+  "cad40f5e": {
+   "aliases": [
+    "ba carse",
+    "brydon carse"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Brydon Carse",
+   "cricsheet_id": "cad40f5e",
+   "espn_id": null,
+   "draft_id": 10404,
+   "auction_id": 1890
+  },
+  "abb7c76c": {
+   "aliases": [
+    "abrar ahmed"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Abrar Ahmed",
+   "cricsheet_id": "abb7c76c",
+   "espn_id": null,
+   "draft_id": 10406,
+   "auction_id": 3564
+  },
+  "slug:matthew-potts": {
+   "aliases": [
+    "matthew potts"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Matthew Potts",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10407,
+   "auction_id": null
+  },
+  "961b8ff1": {
+   "aliases": [
+    "tom alsop",
+    "tp alsop"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Tom Alsop",
+   "cricsheet_id": "961b8ff1",
+   "espn_id": null,
+   "draft_id": 10408,
+   "auction_id": 8047
+  },
+  "8db7f47f": {
+   "aliases": [
+    "reece topley",
+    "rjw topley"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Reece Topley",
+   "cricsheet_id": "8db7f47f",
+   "espn_id": null,
+   "draft_id": 10409,
+   "auction_id": 634
+  },
+  "slug:liam-patterson-white": {
+   "aliases": [
+    "liam patterson white"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Liam Patterson-White",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10410,
+   "auction_id": null
+  },
+  "slug:tom-lawes": {
+   "aliases": [
+    "tom lawes"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Tom Lawes",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10411,
+   "auction_id": null
+  },
+  "slug:jamie-smith": {
+   "aliases": [
+    "jamie smith"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Jamie Smith",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10412,
+   "auction_id": null
+  },
+  "slug:tristan-stubbs": {
+   "aliases": [
+    "tristan stubbs"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Tristan Stubbs",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10413,
+   "auction_id": null
+  },
+  "slug:david-miller": {
+   "aliases": [
+    "david miller"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "David Miller",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10414,
+   "auction_id": null
+  },
+  "ba9258a7": {
+   "aliases": [
+    "tb abell",
+    "tom abell"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Tom Abell",
+   "cricsheet_id": "ba9258a7",
+   "espn_id": null,
+   "draft_id": 10416,
+   "auction_id": 7971
+  },
+  "270e4c23": {
+   "aliases": [
+    "michael pepper",
+    "ms pepper"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Michael Pepper",
+   "cricsheet_id": "270e4c23",
+   "espn_id": null,
+   "draft_id": 10417,
+   "auction_id": 7909
+  },
+  "slug:chris-jordan": {
+   "aliases": [
+    "chris jordan"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Chris Jordan",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10418,
+   "auction_id": null
+  },
+  "208f22ea": {
+   "aliases": [
+    "dan worrall",
+    "dj worrall"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Dan Worrall",
+   "cricsheet_id": "208f22ea",
+   "espn_id": null,
+   "draft_id": 10422,
+   "auction_id": 7957
+  },
+  "1db6e336": {
+   "aliases": [
+    "ben mckinney",
+    "bs mckinney"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Ben McKinney",
+   "cricsheet_id": "1db6e336",
+   "espn_id": null,
+   "draft_id": 10423,
+   "auction_id": 7985
+  },
+  "slug:thomas-rew": {
+   "aliases": [
+    "thomas rew"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Thomas Rew",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10425,
+   "auction_id": null
+  },
+  "slug:caleb-falconer": {
+   "aliases": [
+    "caleb falconer"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Caleb Falconer",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10426,
+   "auction_id": null
+  },
+  "slug:joe-root": {
+   "aliases": [
+    "joe root"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Joe Root",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10429,
+   "auction_id": null
+  },
+  "slug:tom-kohler-cadmore": {
+   "aliases": [
+    "tom kohler cadmore"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Tom Kohler-Cadmore",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10431,
+   "auction_id": null
+  },
+  "4c5d73db": {
+   "aliases": [
+    "chris woakes",
+    "cr woakes"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Chris Woakes",
+   "cricsheet_id": "4c5d73db",
+   "espn_id": null,
+   "draft_id": 10432,
+   "auction_id": 482
+  },
+  "slug:ben-kellaway": {
+   "aliases": [
+    "ben kellaway"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Ben Kellaway",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10434,
+   "auction_id": null
+  },
+  "slug:sam-cook": {
+   "aliases": [
+    "sam cook"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Sam Cook",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10436,
+   "auction_id": null
+  },
+  "slug:jafer-chohan": {
+   "aliases": [
+    "jafer chohan"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Jafer Chohan",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10437,
+   "auction_id": null
+  },
+  "slug:asa-tribe": {
+   "aliases": [
+    "asa tribe"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Asa Tribe",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10439,
+   "auction_id": null
+  },
+  "00b195ae": {
+   "aliases": [
+    "th aspinwall",
+    "tom aspinwall"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Tom Aspinwall",
+   "cricsheet_id": "00b195ae",
+   "espn_id": null,
+   "draft_id": 10440,
+   "auction_id": 7986
+  },
+  "abb83e27": {
+   "aliases": [
+    "jm bairstow",
+    "jonny bairstow"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Jonny Bairstow",
+   "cricsheet_id": "abb83e27",
+   "espn_id": null,
+   "draft_id": 10441,
+   "auction_id": 15
+  },
+  "844e79d1": {
+   "aliases": [
+    "d brevis",
+    "dewald brevis"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Dewald Brevis",
+   "cricsheet_id": "844e79d1",
+   "espn_id": null,
+   "draft_id": 10442,
+   "auction_id": 184
+  },
+  "50c6bc2b": {
+   "aliases": [
+    "liam livingstone",
+    "ls livingstone"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Liam Livingstone",
+   "cricsheet_id": "50c6bc2b",
+   "espn_id": null,
+   "draft_id": 10443,
+   "auction_id": 178
+  },
+  "104e88a4": {
+   "aliases": [
+    "adam hose",
+    "aj hose"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Adam Hose",
+   "cricsheet_id": "104e88a4",
+   "espn_id": null,
+   "draft_id": 10445,
+   "auction_id": 7910
+  },
+  "7f048519": {
+   "aliases": [
+    "david willey",
+    "dj willey"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "David Willey",
+   "cricsheet_id": "7f048519",
+   "espn_id": null,
+   "draft_id": 10446,
+   "auction_id": 467
+  },
+  "slug:jamie-overton": {
+   "aliases": [
+    "jamie overton"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Jamie Overton",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10447,
+   "auction_id": null
+  },
+  "slug:tymal-mills": {
+   "aliases": [
+    "tymal mills"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Tymal Mills",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10451,
+   "auction_id": null
+  },
+  "slug:james-rew": {
+   "aliases": [
+    "james rew"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "James Rew",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10452,
+   "auction_id": null
+  },
+  "f0a0204e": {
+   "aliases": [
+    "mason crane",
+    "ms crane"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Mason Crane",
+   "cricsheet_id": "f0a0204e",
+   "espn_id": null,
+   "draft_id": 10453,
+   "auction_id": 3121
+  },
+  "6a26221c": {
+   "aliases": [
+    "aiden markram",
+    "ak markram"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Aiden Markram",
+   "cricsheet_id": "6a26221c",
+   "espn_id": null,
+   "draft_id": 10456,
+   "auction_id": 3
+  },
+  "slug:leus-du-plooy": {
+   "aliases": [
+    "leus du plooy"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Leus du Plooy",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10457,
+   "auction_id": null
+  },
+  "235c2bb6": {
+   "aliases": [
+    "h klaasen",
+    "heinrich klaasen"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Heinrich Klaasen",
+   "cricsheet_id": "235c2bb6",
+   "espn_id": null,
+   "draft_id": 10458,
+   "auction_id": 6
+  },
+  "57590dbb": {
+   "aliases": [
+    "paul walter",
+    "pi walter"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Paul Walter",
+   "cricsheet_id": "57590dbb",
+   "espn_id": null,
+   "draft_id": 10460,
+   "auction_id": 7882
+  },
+  "slug:gus-atkinson": {
+   "aliases": [
+    "gus atkinson"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Gus Atkinson",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10461,
+   "auction_id": null
+  },
+  "slug:tom-hartley": {
+   "aliases": [
+    "tom hartley"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Tom Hartley",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10462,
+   "auction_id": null
+  },
+  "efc04be7": {
+   "aliases": [
+    "noor ahmad"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Noor Ahmad",
+   "cricsheet_id": "efc04be7",
+   "espn_id": null,
+   "draft_id": 10463,
+   "auction_id": 408
+  },
+  "d34a2268": {
+   "aliases": [
+    "max holden",
+    "mde holden"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Max Holden",
+   "cricsheet_id": "d34a2268",
+   "espn_id": null,
+   "draft_id": 10467,
+   "auction_id": 8011
+  },
+  "10b79140": {
+   "aliases": [
+    "tawanda muyeye",
+    "ts muyeye"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Tawanda Muyeye",
+   "cricsheet_id": "10b79140",
+   "espn_id": null,
+   "draft_id": 10468,
+   "auction_id": 7935
+  },
+  "slug:tom-moores": {
+   "aliases": [
+    "tom moores"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Tom Moores",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10469,
+   "auction_id": null
+  },
+  "95a06106": {
+   "aliases": [
+    "george scrimshaw",
+    "gls scrimshaw"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "George Scrimshaw",
+   "cricsheet_id": "95a06106",
+   "espn_id": null,
+   "draft_id": 10470,
+   "auction_id": 7981
+  },
+  "4e18e961": {
+   "aliases": [
+    "wcf smeed",
+    "will smeed"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Will Smeed",
+   "cricsheet_id": "4e18e961",
+   "espn_id": null,
+   "draft_id": 10471,
+   "auction_id": 7937
+  },
+  "slug:joe-clarke": {
+   "aliases": [
+    "joe clarke"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Joe Clarke",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10472,
+   "auction_id": null
+  },
+  "slug:laurie-evans": {
+   "aliases": [
+    "laurie evans"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Laurie Evans",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10474,
+   "auction_id": null
+  },
+  "slug:scott-currie": {
+   "aliases": [
+    "scott currie"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Scott Currie",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10478,
+   "auction_id": null
+  },
+  "e94d1dcd": {
+   "aliases": [
+    "usman tariq"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Usman Tariq",
+   "cricsheet_id": "e94d1dcd",
+   "espn_id": null,
+   "draft_id": 10481,
+   "auction_id": 2806
+  },
+  "slug:jordan-thompson": {
+   "aliases": [
+    "jordan thompson"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Jordan Thompson",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10482,
+   "auction_id": null
+  },
+  "slug:chris-wood": {
+   "aliases": [
+    "chris wood"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Chris Wood",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10483,
+   "auction_id": null
+  },
+  "slug:ethan-brookes": {
+   "aliases": [
+    "ethan brookes"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Ethan Brookes",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10484,
+   "auction_id": null
+  },
+  "5f26f677": {
+   "aliases": [
+    "ben duckett",
+    "bm duckett"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Ben Duckett",
+   "cricsheet_id": "5f26f677",
+   "espn_id": null,
+   "draft_id": 10486,
+   "auction_id": 1888
+  },
+  "c16d4035": {
+   "aliases": [
+    "sam billings",
+    "sw billings"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Sam Billings",
+   "cricsheet_id": "c16d4035",
+   "espn_id": null,
+   "draft_id": 10488,
+   "auction_id": 407
+  },
+  "06c2de82": {
+   "aliases": [
+    "l gregory",
+    "lewis gregory"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Lewis Gregory",
+   "cricsheet_id": "06c2de82",
+   "espn_id": null,
+   "draft_id": 10490,
+   "auction_id": 3187
+  },
+  "876dbe2d": {
+   "aliases": [
+    "dan mousley",
+    "dr mousley"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Dan Mousley",
+   "cricsheet_id": "876dbe2d",
+   "espn_id": null,
+   "draft_id": 10491,
+   "auction_id": 6327
+  },
+  "slug:craig-overton": {
+   "aliases": [
+    "craig overton"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Craig Overton",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10493,
+   "auction_id": null
+  },
+  "slug:matt-henry": {
+   "aliases": [
+    "matt henry"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Matt Henry",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10494,
+   "auction_id": null
+  },
+  "slug:mohammad-amir": {
+   "aliases": [
+    "mohammad amir"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Mohammad Amir",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10495,
+   "auction_id": null
+  },
+  "f3abd0c9": {
+   "aliases": [
+    "danny briggs",
+    "dr briggs"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Danny Briggs",
+   "cricsheet_id": "f3abd0c9",
+   "espn_id": null,
+   "draft_id": 10496,
+   "auction_id": 4278
+  },
+  "slug:aneurin-donald": {
+   "aliases": [
+    "aneurin donald"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Aneurin Donald",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10497,
+   "auction_id": null
+  },
+  "slug:brad-currie": {
+   "aliases": [
+    "brad currie"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Brad Currie",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10498,
+   "auction_id": null
+  },
+  "slug:louis-kimber": {
+   "aliases": [
+    "louis kimber"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Louis Kimber",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10499,
+   "auction_id": null
+  },
+  "f05167d2": {
+   "aliases": [
+    "hj armitage",
+    "hollie armitage",
+    "hollie jade armitage"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Hollie Armitage",
+   "cricsheet_id": "f05167d2",
+   "espn_id": "715351",
+   "draft_id": 10503,
+   "auction_id": 6667
+  },
+  "6ffbf04c": {
+   "aliases": [
+    "kira chathli",
+    "kira meghan chathli",
+    "km chathli"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Kira Chathli",
+   "cricsheet_id": "6ffbf04c",
+   "espn_id": "1007307",
+   "draft_id": 10506,
+   "auction_id": 7982
+  },
+  "35828bdd": {
+   "aliases": [
+    "alice davidson richards",
+    "alice natica davidson richards",
+    "an davidson richards"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Alice Davidson-Richards",
+   "cricsheet_id": "35828bdd",
+   "espn_id": "515876",
+   "draft_id": 10507,
+   "auction_id": 5392
+  },
+  "8ae7bb3e": {
+   "aliases": [
+    "tara norris",
+    "tg norris"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Tara Norris",
+   "cricsheet_id": "8ae7bb3e",
+   "espn_id": null,
+   "draft_id": 10509,
+   "auction_id": 874
+  },
+  "c9366237": {
+   "aliases": [
+    "a stonehouse",
+    "alexa stonehouse"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Alexa Stonehouse",
+   "cricsheet_id": "c9366237",
+   "espn_id": "1267948",
+   "draft_id": 10510,
+   "auction_id": 7956
+  },
+  "c66c73f9": {
+   "aliases": [
+    "e threlkeld",
+    "ellie threlkeld"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Ellie Threlkeld",
+   "cricsheet_id": "c66c73f9",
+   "espn_id": null,
+   "draft_id": 10511,
+   "auction_id": 7917
+  },
+  "0c694738": {
+   "aliases": [
+    "alice monaghan",
+    "alice zoe monaghan",
+    "az monaghan"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Alice Monaghan",
+   "cricsheet_id": "0c694738",
+   "espn_id": "1030613",
+   "draft_id": 10512,
+   "auction_id": 7945
+  },
+  "slug:kalea-moore": {
+   "aliases": [
+    "kalea moore"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Kalea Moore",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10513,
+   "auction_id": null
+  },
+  "b3ccffff": {
+   "aliases": [
+    "d gregory",
+    "danielle gregory"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Danielle Gregory",
+   "cricsheet_id": "b3ccffff",
+   "espn_id": null,
+   "draft_id": 10514,
+   "auction_id": 7944
+  },
+  "24596e4d": {
+   "aliases": [
+    "kate coppack",
+    "kl coppack"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Kate Coppack",
+   "cricsheet_id": "24596e4d",
+   "espn_id": null,
+   "draft_id": 10515,
+   "auction_id": 8052
+  },
+  "slug:francesca-sweet": {
+   "aliases": [
+    "francesca sweet"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Francesca Sweet",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10516,
+   "auction_id": 9999
+  },
+  "espn:517572": {
+   "aliases": [
+    "lauren winfield hill"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Lauren Winfield-Hill",
+   "cricsheet_id": null,
+   "espn_id": "517572",
+   "draft_id": 10518,
+   "auction_id": null
+  },
+  "espn:874277": {
+   "aliases": [
+    "bryony frances smith",
+    "bryony smith"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Bryony Smith",
+   "cricsheet_id": null,
+   "espn_id": "874277",
+   "draft_id": 10519,
+   "auction_id": null
+  },
+  "0475a86b": {
+   "aliases": [
+    "jess jonassen",
+    "jessica louise jonassen",
+    "jl jonassen"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Jess Jonassen",
+   "cricsheet_id": "0475a86b",
+   "espn_id": "374936",
+   "draft_id": 10523,
+   "auction_id": 851
+  },
+  "1ade138e": {
+   "aliases": [
+    "kate cross",
+    "kathryn laura cross",
+    "kl cross"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Kate Cross",
+   "cricsheet_id": "1ade138e",
+   "espn_id": "297085",
+   "draft_id": 10524,
+   "auction_id": 1131
+  },
+  "espn:1120320": {
+   "aliases": [
+    "cassidy mae mccarthy",
+    "cassidy mccarthy"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Cassidy McCarthy",
+   "cricsheet_id": null,
+   "espn_id": "1120320",
+   "draft_id": 10525,
+   "auction_id": null
+  },
+  "cefad9fd": {
+   "aliases": [
+    "hannah baker",
+    "hannah l baker",
+    "hl baker"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Hannah Baker",
+   "cricsheet_id": "cefad9fd",
+   "espn_id": "1184099",
+   "draft_id": 10526,
+   "auction_id": 7919
+  },
+  "slug:chloe-skelton": {
+   "aliases": [
+    "chloe skelton"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Chloe Skelton",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10527,
+   "auction_id": null
+  },
+  "slug:katie-jones": {
+   "aliases": [
+    "katie jones"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Katie Jones",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10528,
+   "auction_id": null
+  },
+  "1d7f8759": {
+   "aliases": [
+    "e windsor",
+    "emily windsor"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Emily Windsor",
+   "cricsheet_id": "1d7f8759",
+   "espn_id": null,
+   "draft_id": 10529,
+   "auction_id": 7992
+  },
+  "slug:claudie-cooper": {
+   "aliases": [
+    "claudie cooper"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Claudie Cooper",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10530,
+   "auction_id": null
+  },
+  "espn:1230752": {
+   "aliases": [
+    "sophia turner"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Sophia Turner",
+   "cricsheet_id": null,
+   "espn_id": "1230752",
+   "draft_id": 10532,
+   "auction_id": 10003
+  },
+  "c2554b59": {
+   "aliases": [
+    "maia bouchier",
+    "me bouchier"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Maia Bouchier",
+   "cricsheet_id": "c2554b59",
+   "espn_id": null,
+   "draft_id": 10534,
+   "auction_id": 2486
+  },
+  "slug:lizelle-lee": {
+   "aliases": [
+    "lizelle lee"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Lizelle Lee",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10536,
+   "auction_id": null
+  },
+  "d6a9af83": {
+   "aliases": [
+    "pa franklin",
+    "phoebe franklin"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Phoebe Franklin",
+   "cricsheet_id": "d6a9af83",
+   "espn_id": null,
+   "draft_id": 10539,
+   "auction_id": 7996
+  },
+  "b34e0c77": {
+   "aliases": [
+    "s glenn",
+    "sarah glenn"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Sarah Glenn",
+   "cricsheet_id": "b34e0c77",
+   "espn_id": null,
+   "draft_id": 10540,
+   "auction_id": 843
+  },
+  "92b94582": {
+   "aliases": [
+    "j grewcock",
+    "jodi grewcock"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Jodi Grewcock",
+   "cricsheet_id": "92b94582",
+   "espn_id": null,
+   "draft_id": 10543,
+   "auction_id": 7964
+  },
+  "slug:ellie-anderson": {
+   "aliases": [
+    "ellie anderson"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Ellie Anderson",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10544,
+   "auction_id": null
+  },
+  "13c19f32": {
+   "aliases": [
+    "naomi dattani",
+    "nd dattani"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Naomi Dattani",
+   "cricsheet_id": "13c19f32",
+   "espn_id": null,
+   "draft_id": 10545,
+   "auction_id": 7968
+  },
+  "slug:rebecca-odgers": {
+   "aliases": [
+    "rebecca odgers"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Rebecca Odgers",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10546,
+   "auction_id": null
+  },
+  "ed2711ea": {
+   "aliases": [
+    "ella mccaughan",
+    "em mccaughan"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Ella McCaughan",
+   "cricsheet_id": "ed2711ea",
+   "espn_id": null,
+   "draft_id": 10549,
+   "auction_id": 8007
+  },
+  "slug:heather-graham": {
+   "aliases": [
+    "heather graham"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Heather Graham",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10553,
+   "auction_id": null
+  },
+  "78fd864b": {
+   "aliases": [
+    "el arlott",
+    "emily arlott"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Emily Arlott",
+   "cricsheet_id": "78fd864b",
+   "espn_id": null,
+   "draft_id": 10555,
+   "auction_id": 3050
+  },
+  "c296dba1": {
+   "aliases": [
+    "sophia smale"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Sophia Smale",
+   "cricsheet_id": "c296dba1",
+   "espn_id": null,
+   "draft_id": 10556,
+   "auction_id": 7893
+  },
+  "e3a93585": {
+   "aliases": [
+    "g potts",
+    "grace potts"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Grace Potts",
+   "cricsheet_id": "e3a93585",
+   "espn_id": null,
+   "draft_id": 10557,
+   "auction_id": 8002
+  },
+  "slug:fi-morris": {
+   "aliases": [
+    "fi morris"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Fi Morris",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10558,
+   "auction_id": null
+  },
+  "slug:abi-norgrove": {
+   "aliases": [
+    "abi norgrove"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Abi Norgrove",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10559,
+   "auction_id": null
+  },
+  "bbe1525d": {
+   "aliases": [
+    "r southby",
+    "rhianna southby"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Rhianna Southby",
+   "cricsheet_id": "bbe1525d",
+   "espn_id": null,
+   "draft_id": 10560,
+   "auction_id": 7952
+  },
+  "slug:grace-thompson": {
+   "aliases": [
+    "grace thompson"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Grace Thompson",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10561,
+   "auction_id": null
+  },
+  "slug:georgia-davis": {
+   "aliases": [
+    "georgia davis"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Georgia Davis",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10562,
+   "auction_id": null
+  },
+  "aefd0567": {
+   "aliases": [
+    "n holland",
+    "niamh holland"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Niamh Holland",
+   "cricsheet_id": "aefd0567",
+   "espn_id": null,
+   "draft_id": 10563,
+   "auction_id": 8041
+  },
+  "slug:marie-kelly": {
+   "aliases": [
+    "marie kelly"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Marie Kelly",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10570,
+   "auction_id": null
+  },
+  "slug:katie-george": {
+   "aliases": [
+    "katie george"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Katie George",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10572,
+   "auction_id": null
+  },
+  "fbd79b9b": {
+   "aliases": [
+    "lf higham",
+    "lucy higham"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Lucy Higham",
+   "cricsheet_id": "fbd79b9b",
+   "espn_id": null,
+   "draft_id": 10573,
+   "auction_id": 7950
+  },
+  "907e5f6c": {
+   "aliases": [
+    "c pavely",
+    "charis pavely"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Charis Pavely",
+   "cricsheet_id": "907e5f6c",
+   "espn_id": null,
+   "draft_id": 10574,
+   "auction_id": 7063
+  },
+  "slug:seren-smale": {
+   "aliases": [
+    "seren smale"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Seren Smale",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10575,
+   "auction_id": null
+  },
+  "11ff23e3": {
+   "aliases": [
+    "j groves",
+    "josephine groves"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Josephine Groves",
+   "cricsheet_id": "11ff23e3",
+   "espn_id": null,
+   "draft_id": 10577,
+   "auction_id": 7955
+  },
+  "slug:liv-barnes": {
+   "aliases": [
+    "liv barnes"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Liv Barnes",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10578,
+   "auction_id": 10007
+  },
+  "slug:trudy-johnson": {
+   "aliases": [
+    "trudy johnson"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Trudy Johnson",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10579,
+   "auction_id": null
+  },
+  "27e003ce": {
+   "aliases": [
+    "meg lanning",
+    "mm lanning"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Meg Lanning",
+   "cricsheet_id": "27e003ce",
+   "espn_id": null,
+   "draft_id": 10581,
+   "auction_id": 848
+  },
+  "7306c48d": {
+   "aliases": [
+    "g scrivens",
+    "grace scrivens"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Grace Scrivens",
+   "cricsheet_id": "7306c48d",
+   "espn_id": null,
+   "draft_id": 10582,
+   "auction_id": 7953
+  },
+  "588360ee": {
+   "aliases": [
+    "paige scholfield",
+    "pj scholfield"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Paige Scholfield",
+   "cricsheet_id": "588360ee",
+   "espn_id": null,
+   "draft_id": 10585,
+   "auction_id": 5937
+  },
+  "cd62f670": {
+   "aliases": [
+    "mady villiers",
+    "mk villiers"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Mady Villiers",
+   "cricsheet_id": "cd62f670",
+   "espn_id": null,
+   "draft_id": 10586,
+   "auction_id": 844
+  },
+  "slug:maitlan-brown": {
+   "aliases": [
+    "maitlan brown"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Maitlan Brown",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10587,
+   "auction_id": null
+  },
+  "2f485713": {
+   "aliases": [
+    "g ballinger",
+    "grace ballinger"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Grace Ballinger",
+   "cricsheet_id": "2f485713",
+   "espn_id": null,
+   "draft_id": 10589,
+   "auction_id": 7951
+  },
+  "459a7b0a": {
+   "aliases": [
+    "r macdonald gay",
+    "ryana macdonald gay"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Ryana MacDonald-Gay",
+   "cricsheet_id": "459a7b0a",
+   "espn_id": null,
+   "draft_id": 10590,
+   "auction_id": 7064
+  },
+  "slug:jo-gardner": {
+   "aliases": [
+    "jo gardner"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Jo Gardner",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10591,
+   "auction_id": null
+  },
+  "5c9d5093": {
+   "aliases": [
+    "r tyson",
+    "rebecca tyson"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Rebecca Tyson",
+   "cricsheet_id": "5c9d5093",
+   "espn_id": null,
+   "draft_id": 10592,
+   "auction_id": 8034
+  },
+  "1ec1998e": {
+   "aliases": [
+    "naj wraith",
+    "natasha wraith"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Natasha Wraith",
+   "cricsheet_id": "1ec1998e",
+   "espn_id": null,
+   "draft_id": 10593,
+   "auction_id": 7954
+  },
+  "fb192f98": {
+   "aliases": [
+    "ba langston",
+    "beth langston"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Beth Langston",
+   "cricsheet_id": "fb192f98",
+   "espn_id": null,
+   "draft_id": 10594,
+   "auction_id": 7997
+  },
+  "slug:mia-rogers": {
+   "aliases": [
+    "mia rogers"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Mia Rogers",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10595,
+   "auction_id": 10000
+  },
+  "b2664905": {
+   "aliases": [
+    "tammy beaumont",
+    "tt beaumont"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Tammy Beaumont",
+   "cricsheet_id": "b2664905",
+   "espn_id": null,
+   "draft_id": 10596,
+   "auction_id": 835
+  },
+  "bfa0fa33": {
+   "aliases": [
+    "d perrin",
+    "davina perrin"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Davina Perrin",
+   "cricsheet_id": "bfa0fa33",
+   "espn_id": null,
+   "draft_id": 10597,
+   "auction_id": 7949
+  },
+  "slug:emma-lamb": {
+   "aliases": [
+    "emma lamb"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Emma Lamb",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10601,
+   "auction_id": null
+  },
+  "slug:meg-austin": {
+   "aliases": [
+    "meg austin"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Meg Austin",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10602,
+   "auction_id": null
+  },
+  "slug:eva-gray": {
+   "aliases": [
+    "eva gray"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Eva Gray",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10607,
+   "auction_id": null
+  },
+  "slug:jemima-spence": {
+   "aliases": [
+    "jemima spence"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Jemima Spence",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10608,
+   "auction_id": null
+  },
+  "c812dfa3": {
+   "aliases": [
+    "ei macgregor",
+    "esmae macgregor"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Esmae MacGregor",
+   "cricsheet_id": "c812dfa3",
+   "espn_id": null,
+   "draft_id": 10609,
+   "auction_id": 8051
+  },
+  "41117b19": {
+   "aliases": [
+    "phoebe brett",
+    "pj brett"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Phoebe Brett",
+   "cricsheet_id": "41117b19",
+   "espn_id": null,
+   "draft_id": 10610,
+   "auction_id": 7989
+  },
+  "slug:mary-taylor": {
+   "aliases": [
+    "mary taylor"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Mary Taylor",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10611,
+   "auction_id": null
+  },
+  "slug:ash-gardner": {
+   "aliases": [
+    "ash gardner"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Ash Gardner",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10615,
+   "auction_id": null
+  },
+  "287ed3a0": {
+   "aliases": [
+    "ga elwiss",
+    "georgia elwiss"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Georgia Elwiss",
+   "cricsheet_id": "287ed3a0",
+   "espn_id": null,
+   "draft_id": 10616,
+   "auction_id": 6241
+  },
+  "3b5a9438": {
+   "aliases": [
+    "bam heath",
+    "bess heath"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Bess Heath",
+   "cricsheet_id": "3b5a9438",
+   "espn_id": null,
+   "draft_id": 10618,
+   "auction_id": 4399
+  },
+  "8f30d191": {
+   "aliases": [
+    "ka levick",
+    "katie levick"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Katie Levick",
+   "cricsheet_id": "8f30d191",
+   "espn_id": null,
+   "draft_id": 10619,
+   "auction_id": 7941
+  },
+  "slug:samantha-bates": {
+   "aliases": [
+    "samantha bates"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Samantha Bates",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10620,
+   "auction_id": null
+  },
+  "slug:eve-jones": {
+   "aliases": [
+    "eve jones"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Eve Jones",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10621,
+   "auction_id": null
+  },
+  "slug:millicent-taylor": {
+   "aliases": [
+    "millicent taylor"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Millicent Taylor",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10622,
+   "auction_id": 9809
+  },
+  "e19307f3": {
+   "aliases": [
+    "sn luff",
+    "sophie luff"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Sophie Luff",
+   "cricsheet_id": "e19307f3",
+   "espn_id": null,
+   "draft_id": 10623,
+   "auction_id": 7900
+  },
+  "7b1f2542": {
+   "aliases": [
+    "georgia adams",
+    "gl adams"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Georgia Adams",
+   "cricsheet_id": "7b1f2542",
+   "espn_id": null,
+   "draft_id": 10624,
+   "auction_id": 7062
+  },
+  "slug:charley-phillips": {
+   "aliases": [
+    "charley phillips"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Charley Phillips",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10625,
+   "auction_id": null
+  },
+  "slug:amu-surenkumar": {
+   "aliases": [
+    "amu surenkumar"
+   ],
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "display": "Amu Surenkumar",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10626,
+   "auction_id": 10008
   }
  }
 }
