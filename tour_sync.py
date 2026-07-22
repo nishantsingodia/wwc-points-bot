@@ -146,6 +146,76 @@ def capi(path, **params):
     return data
 
 
+# ── ESPN series-id resolution (fills tours_entry.espn_series) ────────────────────
+# The points bot pulls the live XI AND (critically) the full fallback scorecard from ESPN,
+# scoped by espn_series. tour-sync historically left it BLANK → no ESPN fallback → franchise-
+# league points never populate (cricsheet lags, cricapi's scorecard is often empty — the
+# 22 Jul Hundred bug). We resolve it here: ESPN search → candidate league ids → VALIDATE each
+# by hitting its dated scoreboard and matching the fixture's teams, so we never write a wrong id.
+# Unresolved → "" (caller flags loud: the verify gate fails + the Tour Ingest Review tab lists it).
+# ESPN blocks non-browser requests, so every call carries a Mozilla UA (mirrors the bot's espn_get).
+ESPN_SITE = "https://site.api.espn.com/apis/site/v2/sports/cricket"
+ESPN_SEARCH = "https://site.web.api.espn.com/apis/common/v3/search"
+
+def _espn_get(url):
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=30) as r:
+            return json.load(r)
+    except Exception:
+        return {}
+
+def _espn_search_league_ids(query):
+    """League ids ESPN's search returns for a query (best-effort — the caller validates each)."""
+    d = _espn_get(f"{ESPN_SEARCH}?limit=15&sport=cricket&query={urllib.parse.quote(query)}")
+    out, seen = [], set()
+    def walk(o):
+        if isinstance(o, dict):
+            if o.get("type") == "league" and o.get("id") and str(o["id"]) not in seen:
+                seen.add(str(o["id"])); out.append(str(o["id"]))
+            for v in o.values():
+                walk(v)
+        elif isinstance(o, list):
+            for v in o:
+                walk(v)
+    walk(d)
+    return out
+
+def resolve_espn_series(tour_name, fixture_teams, fixture_gmt):
+    """Resolve the ESPN series id for a tour, VALIDATED against the dated scoreboard: search ESPN,
+    then for each candidate league id check that its scoreboard on the fixture date carries the
+    fixture's two teams (gender/rebrand-folded via _team_key). Returns the confirmed id, or ""
+    if nothing validates — never a guess. `fixture_teams` = the first real match's 2 canonical
+    teams; `fixture_gmt` = that match's dateTimeGMT."""
+    try:
+        d = datetime.fromisoformat((fixture_gmt or "").replace("Z", "")).strftime("%Y%m%d")
+    except ValueError:
+        return ""
+    want = {_team_key(t) for t in fixture_teams if t}
+    if len(want) < 2:
+        return ""
+    terms, seen_t = [], set()
+    for term in (tour_name,
+                 re.sub(r"\b(competition|20\d\d)\b", "", tour_name, flags=re.I),
+                 " ".join(fixture_teams[:2])):
+        term = re.sub(r"\s+", " ", term or "").strip()
+        if term and term.lower() not in seen_t:
+            seen_t.add(term.lower()); terms.append(term)
+    tried = set()
+    for term in terms:
+        for cid in _espn_search_league_ids(term):
+            if cid in tried:
+                continue
+            tried.add(cid)
+            sb = _espn_get(f"{ESPN_SITE}/{cid}/scoreboard?dates={d}")
+            for e in sb.get("events", []):
+                ev = {_team_key(c.get("team", {}).get("displayName", ""))
+                      for c in e.get("competitions", [{}])[0].get("competitors", [])}
+                if want <= ev:                       # both fixture teams present in this ESPN event
+                    return cid
+    return ""
+
+
 # ── helpers ───────────────────────────────────────────────────────────────────
 def norm(s):
     return re.sub(r"[^a-z ]", "", (s or "").lower()).strip()
@@ -241,7 +311,9 @@ LEAGUE_TEAM_ALIASES = {   # normalized cricapi team name -> normalized canonical
     "manchester originals": "manchester super giants",
 }
 def _team_key(name):
-    n = re.sub(r"\bwomen\b", "", norm(name)).strip()
+    # strip gender qualifiers so cricapi "MI London", ESPN "MI London (Men)"/"(Women)" and
+    # "X Women" all collapse to one key (needed for ESPN event matching + league seed lookup).
+    n = re.sub(r"\b(men|women)\b", "", norm(name)).strip()
     n = re.sub(r"\s+", " ", n)
     return LEAGUE_TEAM_ALIASES.get(n, n)
 
@@ -387,8 +459,17 @@ def gen_tour(series_info, squads_by_matchid, fmt, gender, state, league_squads=N
 
     ends = ml[-1].get("date") or info.get("enddate")
     squads_path = re.sub(r"[^a-z0-9]+", "_", tour_name.lower()).strip("_") + "_squads.json"
+    # Resolve espn_series against the first REAL fixture (canonical teams + its date). Empty ""
+    # if unconfirmed — the verify gate + Tour Ingest Review tab flag it for a manual one-liner.
+    espn_id = ""
+    for m in ml:
+        raw = (m.get("teams") or [None, None])[:2]
+        cc = [canonical(x or "") for x in raw]
+        if len(cc) == 2 and cc[0] and cc[1] and cc[0] != cc[1]:
+            espn_id = resolve_espn_series(tour_name, cc, m.get("dateTimeGMT"))
+            break
     tours_entry = {
-        "cricapi_series": info["id"], "ends": ends, "espn_series": "",  # date-based lineup lookup
+        "cricapi_series": info["id"], "ends": ends, "espn_series": espn_id,
         "gender": gender, "name": tour_name, "squads": squads_path, "tab": tab,
     }
     return {

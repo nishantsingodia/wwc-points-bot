@@ -97,6 +97,25 @@ jobs:
           fi
           echo "applied=$(grep -oP '(?<=::applied::).*' /tmp/sync.out || echo '[]')" >> "$GITHUB_OUTPUT"
 
+      # Finish what tour_sync alone cannot: anchor the new squads to pids (build_registry) and
+      # sync them into the draft roster (backfill_draft_pids), write the "TOUR INGEST REVIEW" tab,
+      # then RUN THE VERIFY GATE. The gate fails this job — BEFORE any commit/deploy — if a tour
+      # would ship with an unresolved espn_series or blank pids (the two silent failures behind the
+      # LPL/Hundred bugs). This is how "add tour -> points -> draft" is *guaranteed* automatic, not
+      # merely hoped: a half-wired tour screams instead of shipping green.
+      - name: Anchor identity + verify gate (Tour Ingest Review)
+        if: github.event.inputs.dry_run != 'true' && steps.gen.outputs.applied != '[]'
+        env:
+          AUCTION_DB: ${{ github.workspace }}/cricket-auction-helper/db/cricket-auction.db
+          AUCTION_SRC: ${{ github.workspace }}/cricket-auction-helper/src/lib/squads
+          DRAFT_RAW: ${{ github.workspace }}/wwc-draft/data/players-raw.json
+          DRAFT_LIB: ${{ github.workspace }}/wwc-draft/lib
+          GSHEET_ID: ${{ secrets.GSHEET_ID }}
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+        run: |
+          pip install -r requirements.txt
+          python3 tour_sync_finalize.py '${{ steps.gen.outputs.applied }}'
+
       # VALIDATION GATE — must pass before anything is committed or deployed.
       - name: Validate draft app
         run: |
@@ -116,7 +135,7 @@ jobs:
           MSG="Auto-ingest tours: ${{ steps.gen.outputs.applied }}"
           git config user.name "tour-sync-bot"
           git config user.email "noreply@anthropic.com"
-          git diff --quiet || { git add tours.json toss_windows.json *_squads.json; git commit -m "$MSG"; git push; }
+          git diff --quiet || { git add tours.json toss_windows.json *_squads.json registry/players.json registry/tours; git commit -m "$MSG"; git push; }
           cd wwc-draft
           git config user.name "tour-sync-bot"
           git config user.email "noreply@anthropic.com"
