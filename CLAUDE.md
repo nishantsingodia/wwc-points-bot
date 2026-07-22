@@ -67,18 +67,32 @@ The bot MUST produce points even when a feed is unreliable. Per-match source cha
   D11 match scorer exists anywhere; "no SR/econ/maiden" is the auction VALUATION engine only). is_fmt
   admits "hundred" match types.
 
-## ⚠️ After tour-sync auto-adds a tour, FINISH the setup — it is NOT fully automatic
-`tour_sync.py` writes the tours.json entry + a squads file but does NOT: set espn_series, anchor
-identity, or backfill the draft. A half-set-up tour either can't compute points (no ESPN) or its
-points can't JOIN the draft (BLANK Player IDs → every player shows "—", H2H totals wrong). This bit me
-on The Hundred (22 Jul). Before treating a tour-sync'd tour as live, do ALL of:
-1. **Set `espn_series`** in tours.json (grab the numeric id from the espncricinfo series URL, e.g.
-   `.../the-hundred-men-s-competition-2026-1521176`). Empty ⇒ NO ESPN fallback ⇒ franchise-league
-   points never populate (cricsheet lags, cricapi scorecard empty).
-2. **`python3 build_registry.py "<exact tours.json name>"`** — anchors squad names → pids. WITHOUT it
-   the CSV emits BLANK Player IDs and the draft (which joins by pid) shows nothing.
-3. **`python3 identity_healthcheck.py "<tour name>"`** — the GATE. Triage fixable-miss/dup blockers
-   (a `fixable-miss` on slug: still JOINS if both sides slug-match, but anchor it properly when safe —
-   never rush a bridge for a namesake: the Dale→Glenn merge is the mistake to avoid).
-4. **`python3 registry/backfill_draft_pids.py`** then **deploy wwc-draft** — so the draft roster
-   carries the SAME pids the sheet now emits. Ship the bot registry push and the draft deploy together.
+## Auto-ingest: the full new-tour pipeline (hardened 22 Jul — was manual, now automatic)
+`tour_sync.py` + `tour_sync_finalize.py` + `.github/workflows/tour-sync.yml` now do the WHOLE
+new-tour setup end-to-end. This used to need a manual rescue and caused the LPL/Hundred "every
+player shows —" bug (a half-wired tour can't compute points without ESPN, and can't JOIN the draft
+with BLANK Player IDs). What now runs automatically:
+- **espn_series** — auto-resolved in `tour_sync.py` (`resolve_espn_series`: ESPN search → VALIDATE
+  each candidate league id against its dated scoreboard by team-match → the confirmed id, never a
+  guess; unresolved ⇒ "" which the gate then rejects). Fixes franchise leagues where cricsheet lags
+  + cricapi's scorecard is empty and ESPN is the only live source.
+- **identity** — `tour_sync_finalize.py` runs `build_registry` → `backfill_draft_pids` so the sheet
+  AND the draft carry the SAME pid (join works even on `slug:` fallbacks — sameness is all that
+  matters). CI has the committed auction DB, so anchoring runs at full quality.
+- **VERIFY GATE** — finalize FAILS the workflow BEFORE any commit/deploy if a new tour has an
+  unresolved `espn_series` OR pid coverage < `SYNC_MIN_PID_COVERAGE` (0.80). The two silent failures
+  can no longer ship green. Advisory (still-joins) `fixable-miss` healthcheck blockers do NOT fail
+  the gate — but never rush a bridge for a namesake (the Dale→Glenn merge is the mistake to avoid).
+- **TOUR INGEST REVIEW** tab (GSheet) — per-tour espn / coverage / health / verdict for a glance.
+
+PREREQUISITE — `TOUR_SYNC_API_KEY` must be a GENUINELY DEDICATED cricapi key (its own free 100/day).
+Discovery needs only ~20 hits/day, but if the key is SHARED with the auction/points pool it gets
+exhausted and discovery fails LOUD ("all N key(s) quota-blocked — NOT reporting '0 tours'") — correct
+(never silently ingest nothing) but it blocks the run. Cron is 00:10 UTC (right after the daily reset)
+for exactly this reason. A shared/exhausted key is the #1 reason a run won't fire.
+
+IF THE GATE FAILS: read the TOUR INGEST REVIEW tab / workflow log. espn UNRESOLVED → set it by hand
+(id from the espncricinfo series URL, e.g. `.../the-hundred-men-s-competition-2026-1521176`) + add a
+`registry/team_aliases.json` entry if cricapi vs ESPN names diverge; low coverage → build_registry
+didn't take (check the squad file / auction DB). Fix, then re-run the workflow (idempotent — skips
+already-ingested tours).
