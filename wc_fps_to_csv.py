@@ -504,10 +504,12 @@ def blank_perf(name):
                 maidens=0, catches=0, stumpings=0, runouts=0, dro=0, played=False,
                 bat_order=0)  # 1-based batting position from the scorecard (0 = unknown/DNB)
 
+_GENDER_QUAL = re.compile(r"\(\s*(?:men|women)\s*\)|\b(?:men|women)\b", re.I)
 def team_key(teams):
-    """Date-independent team identity: canonical franchise names (feed variants folded via the
-    central team-alias map), normalized, with 'women' dropped."""
-    return frozenset(norm(canon_team(t).replace("Women", "").replace("women", "")) for t in teams)
+    """Date-independent team identity: franchise aliases folded (canon_team) and gender
+    qualifiers dropped. ESPN suffixes gender as '(Men)'/'(Women)', cricapi uses the bare name or
+    'X Women', cricsheet varies — all must collapse to one key (fixes The Hundred M/W matching)."""
+    return frozenset(norm(_GENDER_QUAL.sub("", canon_team(t))) for t in teams)
 
 # ---- cricsheet ball-by-ball (mirror of etl_cricsheet.py) -> EXACT dots/maidens/XI ----
 def load_cricsheet_index(dirpath, gender="female"):
@@ -1198,13 +1200,21 @@ def run_tour(tour):
     # (otherwise we'd clear it and write an empty table — wiping good data).
     if info.get("status") != "success" or not matches:
         sys.exit("series_info fetch failed or empty — aborting; sheet left unchanged.")
-    # Fold feed team-name variants to the canonical franchise name up front (central team-alias
-    # map) so EVERY downstream consumer — squad mapping (name2short), match labels, team_key and
-    # cricsheet lookup — sees one consistent name. Without this, cricapi's stale LPL 2026 names
-    # (Marvels/Falcons/Strikers vs squad/ESPN Gallants/Royals/Kaps) silently orphaned those teams.
+    # Normalize every feed team name to the squad's CANONICAL name up front, so all downstream
+    # consumers (name2short squad mapping, match labels, team_key, ESPN/cricsheet lookup) see one
+    # consistent name. Two feed quirks this fixes: (a) franchise renames — cricapi feeds LPL's 2025
+    # names (Marvels/Falcons/Strikers) vs the 2026 squad/ESPN names (Gallants/Royals/Kaps) — folded
+    # via the central team-alias map; (b) gender suffixes — cricapi feeds The Hundred women's teams
+    # as "MI London Women" while the squad is "MI London" — resolved via short_of's 'Women'-stripping.
     for _m in matches:
-        if _m.get("teams"):
-            _m["teams"] = [canon_team(t) for t in _m["teams"]]
+        if not _m.get("teams"):
+            continue
+        fixed = []
+        for t in _m["teams"]:
+            t = canon_team(t)                                   # fold franchise renames
+            sh = short_of(t)                                    # gender-agnostic squad lookup
+            fixed.append(squads[sh]["name"] if sh else t)       # -> squad's canonical name
+        _m["teams"] = fixed
     # Format filter — a tour can mix formats, so we keep only the matches in the
     # running tour's format (CURRENT_FMT: "T20" default, or "ODI"). cricapi sometimes
     # leaves matchType null (seen on ODIs!), so trust matchType when present, else fall
@@ -1216,11 +1226,12 @@ def run_tour(tour):
                 return "odi" in mt
             nm = (m.get("name") or "").lower()
             return "odi" in nm and "t20" not in nm and "test" not in nm
-        # T20 (default): unchanged behaviour.
+        # T20 (default): also admit The Hundred (100-ball) — it uses the same D11 T20 ruleset
+        # (scoringFormatOf maps everything non-ODI to T20), and cricapi labels it variably.
         if mt:
-            return "t20" in mt
+            return "t20" in mt or "hundred" in mt
         nm = (m.get("name") or "").lower()
-        return "t20" in nm and "odi" not in nm and "test" not in nm
+        return ("t20" in nm or "hundred" in nm) and "odi" not in nm and "test" not in nm
     today = date.today()
     def near_today(m):
         for ds in date_variants(m.get("date", "")):
