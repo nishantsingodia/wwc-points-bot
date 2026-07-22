@@ -41,5 +41,44 @@ python3 identity_healthcheck.py "<tour name>"     # exit 1 on blockers
 ## Registry files
 - `registry/players.json` — the global registry (pid-keyed; cricsheet_id, else espn:/slug: fallback).
 - `registry/manual_aliases.json` — hand-curated `{match, add}` spellings the matcher can't link.
+- `registry/team_aliases.json` — TEAM analog of manual_aliases: feed team-name variant → canonical
+  franchise name (canon_team). e.g. cricapi feeds LPL's 2025 names, squads/ESPN use 2026. See below.
+- `registry/frozen_tours.json` — series ids of fully-resolved tours the bot stops polling (quota).
 - `registry/UNMAPPED_<tour>.txt` — per-tour list of no-cricsheet_id squad players (the defect report; triage it).
 - `registry/identity_splits.json` — force wrongly-merged identities apart.
+
+## Live-data source fallbacks (autopilot — the 22 Jul LPL/Hundred saga)
+The bot MUST produce points even when a feed is unreliable. Per-match source chain: cricsheet
+(official, when posted) → ESPN full scorecard → cricapi. Mechanisms in `wc_fps_to_csv.py`:
+- **Completion is time-based, NOT cricapi's `matchEnded` flag.** `is_over(m)` = matchEnded OR
+  (matchStarted AND started > OVER_HRS ago: T20 8h / ODI 12h). cricapi leaves matchEnded=False for
+  DAYS on franchise feeds (LPL, Hundred) — without this a finished match is scored "live" then
+  VANISHES once it ages out of the ±1-day near_today window. `ended`/`live` both use is_over.
+- **ESPN is a FULL scorecard source, not just dots/XI.** `elif espn_perf: perf = api_perf if
+  api_perf else espn_perf`. cricapi's match_scorecard returns "not found" for most franchise-league
+  matches; ESPN (keyless) carries them — so a tour needs its `espn_series` set (see below).
+- **No-data guard:** a match with no scorecard in ANY source is skipped (retried next run), never
+  emitted as a misleading COMPLETED row where everyone scores just the +4 XI bonus.
+- **Central team identity:** `canon_team` (registry/team_aliases.json) + `team_key` strips gender
+  qualifiers `(Men)`/`(Women)`/`Men`/`Women`. Ingestion resolves every feed team name to the squad's
+  canonical name via `canon_team` + `short_of`, so cricapi "MI London Women" → squad "MI London" and
+  ESPN "MI London (Men)" all collapse to one key. Fixes franchise-name + gender-suffix mismatches.
+- **The Hundred scores as T20:** `scoringFormatOf` maps everything non-ODI → T20 (no separate Hundred
+  D11 match scorer exists anywhere; "no SR/econ/maiden" is the auction VALUATION engine only). is_fmt
+  admits "hundred" match types.
+
+## ⚠️ After tour-sync auto-adds a tour, FINISH the setup — it is NOT fully automatic
+`tour_sync.py` writes the tours.json entry + a squads file but does NOT: set espn_series, anchor
+identity, or backfill the draft. A half-set-up tour either can't compute points (no ESPN) or its
+points can't JOIN the draft (BLANK Player IDs → every player shows "—", H2H totals wrong). This bit me
+on The Hundred (22 Jul). Before treating a tour-sync'd tour as live, do ALL of:
+1. **Set `espn_series`** in tours.json (grab the numeric id from the espncricinfo series URL, e.g.
+   `.../the-hundred-men-s-competition-2026-1521176`). Empty ⇒ NO ESPN fallback ⇒ franchise-league
+   points never populate (cricsheet lags, cricapi scorecard empty).
+2. **`python3 build_registry.py "<exact tours.json name>"`** — anchors squad names → pids. WITHOUT it
+   the CSV emits BLANK Player IDs and the draft (which joins by pid) shows nothing.
+3. **`python3 identity_healthcheck.py "<tour name>"`** — the GATE. Triage fixable-miss/dup blockers
+   (a `fixable-miss` on slug: still JOINS if both sides slug-match, but anchor it properly when safe —
+   never rush a bridge for a namesake: the Dale→Glenn merge is the mistake to avoid).
+4. **`python3 registry/backfill_draft_pids.py`** then **deploy wwc-draft** — so the draft roster
+   carries the SAME pids the sheet now emits. Ship the bot registry push and the draft deploy together.
