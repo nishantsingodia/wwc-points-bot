@@ -6,7 +6,8 @@ name: WWC T20 Points
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 */2 * * *"   # every 2 hours (UTC)
+    - cron: "0 */4 * * *"   # every 4 hours (UTC) — halved from 2h to save cricapi budget; the
+                            # 5-min ESPN tick + on-demand button cover freshness between runs
 
 # Push approved recon overrides back to the repo (registry/recon_overrides.json).
 permissions:

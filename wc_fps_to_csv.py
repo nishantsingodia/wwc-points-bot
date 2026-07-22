@@ -32,6 +32,14 @@ FREQUENT = os.environ.get("FREQUENT") == "1"
 # the human is explicitly asking mid-innings. ~1-2 cricapi hits/run.
 ON_DEMAND = os.environ.get("ON_DEMAND") == "1"
 FREQUENT = FREQUENT or ON_DEMAND   # on-demand inherits the light-run behaviour
+# The every-5-min live tick must NEVER spend a cricapi hit — its lineup + live score are on
+# ESPN (keyless), and cricapi's daily budget is precious. In tick mode, api() serves cached
+# cricapi data (any age — a match list / final scorecard doesn't change) and otherwise reports
+# a benign miss so the caller falls back to ESPN; it does NOT call cricapi. Only the full run
+# (every 4h) and the human on-demand button spend cricapi. espn_get() is untouched, so the tick
+# still publishes the announced XI + live points from ESPN. (Human on-demand is NOT cache-only.)
+TICK_CACHE_ONLY = FREQUENT and not ON_DEMAND
+_CRICAPI_HITS = 0   # cricapi live hits spent THIS run — Phase-0 instrumentation (logged + STATUS tab)
 
 def date_variants(d):
     """A date plus ±1 day (ISO strings) — to absorb timezone differences between feeds."""
@@ -419,6 +427,11 @@ def api(path, cache=True, ttl=None, persist=True, **params):
     fresh = os.path.exists(fp) and (ttl is None or (time.time() - os.path.getmtime(fp) < ttl))
     if cache and fresh:
         return json.load(open(fp))
+    # 5-min live tick: never spend a cricapi hit. Serve any cached copy (stale is fine — a match
+    # list / final scorecard doesn't change), else report a miss so the caller falls back to ESPN.
+    if TICK_CACHE_ONLY:
+        return json.load(open(fp)) if os.path.exists(fp) else {
+            "status": "failure", "reason": "live tick: cricapi skipped (cache-only)"}
 
     def is_quota(d):
         r = (d.get("reason") or "").lower()
@@ -459,6 +472,8 @@ def api(path, cache=True, ttl=None, persist=True, **params):
         else:
             break
     if data.get("status") == "success":
+        global _CRICAPI_HITS
+        _CRICAPI_HITS += 1   # a real live hit that spent one cricapi request from the daily budget
         if persist:   # live/in-progress scorecards pass persist=False: never cache a
             json.dump(data, open(fp, "w"))   # mid-match snapshot (would freeze live pts + poison the final read)
         record_quota(data)   # only on a live hit — a cached/stale read spends no quota
@@ -1761,6 +1776,18 @@ def main():
             print(f"!! tour '{t.get('name')}' skipped: {e}", file=sys.stderr)
         except Exception as e:
             print(f"!! tour '{t.get('name')}' error: {e}", file=sys.stderr)
+    # ── Phase-0 quota instrumentation ───────────────────────────────────────────
+    # Log how many cricapi hits THIS run spent + each key's day-cumulative usage (hitsToday/
+    # hitsLimit) as cricapi reported it. Diagnostic goals: (a) a 5-min tick must read 0 hits;
+    # (b) if hitsToday jumps between our runs by MORE than we spent, a 2nd consumer shares the
+    # keys; (c) watching hitsToday across the day reveals the real reset window.
+    _mode = "on-demand" if ON_DEMAND else ("frequent-tick" if FREQUENT else "full")
+    _usage = " ".join(f"#{k+1}={v.get('today','?')}/{v.get('limit','?')}"
+                      for k, v in sorted(API_QUOTA.items()))
+    print(f"[quota] mode={_mode} keys={len(API_KEYS)} cricapi_hits_this_run={_CRICAPI_HITS}"
+          + (f" | key usage: {_usage}" if _usage else " | (no live cricapi hit this run)"),
+          file=sys.stderr)
+
     # Refresh the quota/health snapshot in ALL modes (full, frequent, on-demand) so the
     # draft app's "hits left today" gauge stays current whenever the sheet is touched.
     try:
