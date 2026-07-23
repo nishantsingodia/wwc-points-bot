@@ -339,6 +339,35 @@
       "add": [
         "S Mahmood"
       ]
+    },
+    {
+      "match": "jimmy neesham",
+      "add": [
+        "james neesham",
+        "james douglas sheahan neesham"
+      ],
+      "_note": "ESPN romanizes Jimmy Neesham as 'James' (espn_id 355269)"
+    },
+    {
+      "match": "mohommed shiraz",
+      "add": [
+        "mohamed shiraz"
+      ],
+      "_note": "ESPN spells Mohommed Shiraz as 'Mohamed' (espn_id 801817)"
+    },
+    {
+      "match": "tharindu rathnayake",
+      "add": [
+        "tharindu ratnayake"
+      ],
+      "_note": "ESPN spells Rathnayake without the H (espn_id 950405); anchored by espn_id to the draft's tharindu-rathnayake"
+    },
+    {
+      "match": "milan ratnayake",
+      "add": [
+        "milan rathnayaka"
+      ],
+      "_note": "ESPN spells Milan Ratnayake as 'Rathnayaka' (espn_id 1070229)"
     }
   ]
 }

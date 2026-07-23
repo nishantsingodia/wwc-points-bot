@@ -1,6 +1,6 @@
 {
  "anchor": "cricsheet_id (pid); espn:/slug: fallback when unknown",
- "count": 658,
+ "count": 659,
  "players": {
   "5d2eda89": {
    "aliases": [
@@ -6090,6 +6090,7 @@
   "cdac5a3d": {
    "aliases": [
     "m shiraz",
+    "mohamed shiraz",
     "mohommed shiraz"
    ],
    "tours": [
@@ -6097,7 +6098,7 @@
    ],
    "display": "Mohommed Shiraz",
    "cricsheet_id": "cdac5a3d",
-   "espn_id": null,
+   "espn_id": "801817",
    "draft_id": 10302,
    "auction_id": 8567
   },
@@ -6198,6 +6199,8 @@
   },
   "9219eff0": {
    "aliases": [
+    "james douglas sheahan neesham",
+    "james neesham",
     "jds neesham",
     "jimmy neesham"
    ],
@@ -6206,13 +6209,14 @@
    ],
    "display": "Jimmy Neesham",
    "cricsheet_id": "9219eff0",
-   "espn_id": null,
+   "espn_id": "355269",
    "draft_id": 10310,
    "auction_id": 261
   },
   "slug:milan-ratnayake": {
    "aliases": [
     "kth ratnayake",
+    "milan rathnayaka",
     "milan ratnayake"
    ],
    "tours": [
@@ -6220,7 +6224,7 @@
    ],
    "display": "Milan Ratnayake",
    "cricsheet_id": "4eb02f2e",
-   "espn_id": null,
+   "espn_id": "1070229",
    "draft_id": 10311,
    "auction_id": 8646
   },
@@ -6871,14 +6875,15 @@
   },
   "slug:tharindu-rathnayake": {
    "aliases": [
-    "tharindu rathnayake"
+    "tharindu rathnayake",
+    "tharindu ratnayake"
    ],
    "tours": [
     "Lanka Premier League 2026"
    ],
    "display": "Tharindu Rathnayake",
    "cricsheet_id": null,
-   "espn_id": null,
+   "espn_id": "950405",
    "draft_id": 10361,
    "auction_id": 8730
   },
@@ -9292,6 +9297,19 @@
    "espn_id": null,
    "draft_id": 10626,
    "auction_id": 10008
+  },
+  "espn:1072470": {
+   "aliases": [
+    "shaheen afridi",
+    "shaheen shah afridi"
+   ],
+   "tours": [
+    "Lanka Premier League 2026"
+   ],
+   "display": "Shaheen Shah Afridi",
+   "cricsheet_id": null,
+   "espn_id": "1072470",
+   "draft_id": 10627
   }
  }
 }
