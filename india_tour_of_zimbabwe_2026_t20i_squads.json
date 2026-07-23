@@ -1,0 +1,132 @@
+{
+  "MTZIM": {
+    "name": "Zimbabwe",
+    "players": [
+      [
+        "Sikandar Raza",
+        "BAT"
+      ],
+      [
+        "Brian Bennett",
+        "AR"
+      ],
+      [
+        "Ryan Burl",
+        "AR"
+      ],
+      [
+        "Tanaka Chivanga",
+        "BOWL"
+      ],
+      [
+        "Ben Curran",
+        "BAT"
+      ],
+      [
+        "Brad Evans",
+        "AR"
+      ],
+      [
+        "Innocent Kaia",
+        "BAT"
+      ],
+      [
+        "Wessly Madhevere",
+        "AR"
+      ],
+      [
+        "Tadiwanashe Marumani",
+        "BAT"
+      ],
+      [
+        "Wellington Masakadza",
+        "BOWL"
+      ],
+      [
+        "Blessing Muzarabani",
+        "BOWL"
+      ],
+      [
+        "Dion Myers",
+        "BAT"
+      ],
+      [
+        "Richard Ngarava",
+        "BOWL"
+      ],
+      [
+        "Newman Nyamhuri",
+        "BOWL"
+      ],
+      [
+        "Tafadzwa Tsiga",
+        "BAT"
+      ]
+    ]
+  },
+  "MTIND": {
+    "name": "India",
+    "players": [
+      [
+        "Shreyas Iyer",
+        "BAT"
+      ],
+      [
+        "Tilak Varma",
+        "BAT"
+      ],
+      [
+        "Abhishek Sharma",
+        "BAT"
+      ],
+      [
+        "Ashok Sharma",
+        "BOWL"
+      ],
+      [
+        "Harsh Dubey",
+        "BOWL"
+      ],
+      [
+        "Shivam Dube",
+        "AR"
+      ],
+      [
+        "Ishan Kishan",
+        "BAT"
+      ],
+      [
+        "Prabhsimran Singh",
+        "BAT"
+      ],
+      [
+        "Prince Yadav",
+        "BOWL"
+      ],
+      [
+        "Ravi Bishnoi",
+        "BOWL"
+      ],
+      [
+        "Rinku Singh",
+        "BAT"
+      ],
+      [
+        "Vaibhav Sooryavanshi",
+        "BAT"
+      ],
+      [
+        "Suryansh Shedge",
+        "BAT"
+      ],
+      [
+        "Yash Thakur",
+        "BOWL"
+      ],
+      [
+        "Mayank Yadav",
+        "BOWL"
+      ]
+    ]
+  }
+}

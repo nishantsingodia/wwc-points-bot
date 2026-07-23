@@ -90,5 +90,14 @@
     "name": "The Hundred Women's Competition 2026",
     "squads": "the_hundred_women_s_competition_2026_squads.json",
     "tab": "THE HUNDRED WOMENS 2026 POINTS"
+  },
+  {
+    "cricapi_series": "",
+    "ends": "2026-07-26",
+    "espn_series": "24301",
+    "gender": "male",
+    "name": "India tour of Zimbabwe 2026 (T20I)",
+    "squads": "india_tour_of_zimbabwe_2026_t20i_squads.json",
+    "tab": "ZIM V IND T20I POINTS"
   }
 ]
