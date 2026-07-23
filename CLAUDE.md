@@ -63,9 +63,16 @@ The bot MUST produce points even when a feed is unreliable. Per-match source cha
   qualifiers `(Men)`/`(Women)`/`Men`/`Women`. Ingestion resolves every feed team name to the squad's
   canonical name via `canon_team` + `short_of`, so cricapi "MI London Women" → squad "MI London" and
   ESPN "MI London (Men)" all collapse to one key. Fixes franchise-name + gender-suffix mismatches.
-- **The Hundred scores as T20:** `scoringFormatOf` maps everything non-ODI → T20 (no separate Hundred
-  D11 match scorer exists anywhere; "no SR/econ/maiden" is the auction VALUATION engine only). is_fmt
-  admits "hundred" match types.
+- **The Hundred has its OWN scorer (`_score_hundred`, CURRENT_FMT `HUN`)** — NOT T20. Same core scale
+  as T20 (run+1, four+4, six+6, wicket+30, dot+1, duck −2, fielding, +4 XI) but The Hundred awards
+  **NO strike-rate, NO economy and NO maiden**, and wicket hauls tier from a 2-for (2w+4 / 3w+8 /
+  4w+12 / 5w+16). Mirrors the auction ETL's `compute_fantasy_points_hundred` + the draft's
+  `d11-score.ts` HUN branch. Set via `tours.json` `"format": "HUN"` (`tour_sync` writes it — but
+  note cricapi buckets the Hundred under "T20" for *discovery* only; the SCORING format is HUN).
+  `is_fmt` still admits "hundred" matchTypes on the non-ODI branch (match admission is format-agnostic
+  between T20/HUN — only the scorer differs).
+  ⚠️ Bowler balls: cricapi omits the `overs` field on 100-ball cards, so the ESPN merge backfills
+  bowler `balls` (else the `balls>0` bowling gate zeroes every wicket — the Gleeson 4-for → 4-pts bug).
 
 ## Auto-ingest: the full new-tour pipeline (hardened 22 Jul — was manual, now automatic)
 `tour_sync.py` + `tour_sync_finalize.py` + `.github/workflows/tour-sync.yml` now do the WHOLE
@@ -78,7 +85,11 @@ with BLANK Player IDs). What now runs automatically:
   + cricapi's scorecard is empty and ESPN is the only live source.
 - **identity** — `tour_sync_finalize.py` runs `build_registry` → `backfill_draft_pids` so the sheet
   AND the draft carry the SAME pid (join works even on `slug:` fallbacks — sameness is all that
-  matters). CI has the committed auction DB, so anchoring runs at full quality.
+  matters). The 61MB auction DB is gitignored (absent in CI), so `build_registry.open_pool_con()`
+  falls back to a committed players export (`registry/auction_players.json.gz`, ≈0.2MB) — the
+  `players` table (name→cricsheet_id + country/gender) is the ONLY thing anchoring needs. Regenerate
+  it locally with `python3 registry/export_players_pool.py` whenever the auction player set materially
+  changes, then commit the .gz. This is what lets cricapi auto-tours anchor in CI.
 - **DRAFT LIVE POINTS (added 23 Jul)** — the draft scores a LIVE match's H2H in-app from ESPN
   (`lib/d11-score.ts` + `getLiveMatchPoints`), zero cricapi/bot. Its two prerequisites are now
   auto-wired so a new tour "just works": (1) `apply_to_repos` writes the tour's `espn_series` into
