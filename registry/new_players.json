@@ -119,6 +119,32 @@
         "New Zealand vs West Indies Men's ODI 2026"
       ],
       "source": "new"
+    },
+    {
+      "pid": "slug:vishwa-lahiru",
+      "display": "Vishwa Lahiru",
+      "aliases": [
+        "vishwa lahiru"
+      ],
+      "team": "dambulla sixers",
+      "role": "BOWL",
+      "tours": [
+        "Lanka Premier League 2026"
+      ],
+      "source": "new"
+    },
+    {
+      "pid": "slug:katupulle-gedara-mohamed-shiraz-sahab",
+      "display": "Katupulle Gedara Mohamed Shiraz Sahab",
+      "aliases": [
+        "katupulle gedara mohamed shiraz sahab"
+      ],
+      "team": "",
+      "role": "BOWL",
+      "tours": [
+        "Lanka Premier League 2026"
+      ],
+      "source": "new"
     }
   ]
 }
