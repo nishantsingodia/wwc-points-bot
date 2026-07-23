@@ -75,12 +75,19 @@ DISCOVERY_WINDOW_DAYS = int(os.environ.get("SYNC_WINDOW_DAYS", "4"))
 # quota; cricapi matches substrings and results are de-duped by series id). "hundred"
 # catches both the men's and women's Hundred. Override with SYNC_SEARCH_TERMS=a,b,c to
 # scope a manual run (e.g. SYNC_SEARCH_TERMS=hundred).
-_DEFAULT_SEARCH_TERMS = [
+_LEAGUE_SEARCH_TERMS = [
     "hundred", "indian premier league", "big bash", "pakistan super league",
     "caribbean premier league", "sa20", "international league t20",
     "major league cricket", "lanka premier league", "bangladesh premier league",
     "super smash", "vitality blast", "womens premier league", "wbbl",
 ]
+# ALSO search each major TEAM by name — this is how a pre-live BILATERAL is caught (the gap that
+# missed "India tour of Zimbabwe 2026" starting today: /currentMatches is empty until the first
+# ball, /series page-0 is future-ordered, and only leagues were searched). cricapi ranks
+# "India tour of Zimbabwe" into a search for "india"; in_scope() then reads BOTH teams from the
+# series name and confirms the major-vs-major bilateral. ~12 extra hits/run — the cost of catching
+# a marquee bilateral ~4 days ahead instead of only once it goes live. Dedup is by series id.
+_DEFAULT_SEARCH_TERMS = _LEAGUE_SEARCH_TERMS + sorted(MAJOR_TEAMS)
 SEARCH_TERMS = ([s.strip() for s in os.environ["SYNC_SEARCH_TERMS"].split(",") if s.strip()]
                 if os.environ.get("SYNC_SEARCH_TERMS") else _DEFAULT_SEARCH_TERMS)
 
@@ -299,6 +306,7 @@ def load_state():
     return {
         "matches": dm, "players": dp, "team_codes": tc,
         "existing_series": {t.get("cricapi_series") for t in tours},
+        "existing_espn": {str(t.get("espn_series")) for t in tours if t.get("espn_series")},
         "existing_tabs": {t.get("tab") for t in tours},
         "codes": set(tc.keys()),
         "next_match_num": max((m["matchNum"] for m in dm), default=0) + 1,
@@ -374,6 +382,137 @@ def build_league_squads(seeds, cricapi_teams, gender):
         squads[st["name"]] = {"short": st.get("short") or st["name"][:4].upper(),
                               "players": [[p["name"], p.get("role", "BAT")] for p in st.get("players", [])]}
     return {"canon": canon, "squads": squads} if len(squads) >= 2 else None
+
+
+# ── ESPN-only tour creation (KEYLESS — no cricapi) ──────────────────────────────
+# cricapi is NOT needed to CREATE a tour. ESPN carries all three pieces keylessly: discovery
+# (search), fixtures (scoreboard, single-date), and FULL squads (summary.squads — the pre-match
+# squad, distinct from `rosters` = the announced XI at toss). We build the SAME cricapi-shaped
+# inputs gen_tour already consumes (series_info + injected league_squads) so artifact-building is
+# reused verbatim. cricapi_series is left "" (espn_series = the ESPN league id); points scoring —
+# gated by TOUR CONTROL — can resolve cricapi later or score from cricsheet+ESPN.
+def _espn_role(pos):
+    p = (pos or "").lower()
+    if "wk" in p or "keeper" in p:
+        return "WK"
+    if p.startswith("ar") or "all" in p:
+        return "AR"
+    if p.startswith("bl") or "bowl" in p:
+        return "BOWL"
+    return "BAT"
+
+def _espn_search_leagues(query):
+    """[(league_id, displayName), ...] from ESPN search — name comes straight from the result so
+    discovery needs no extra call to name a candidate."""
+    d = _espn_get(f"{ESPN_SEARCH}?limit=15&sport=cricket&query={urllib.parse.quote(query)}")
+    out, seen = [], set()
+    def walk(o):
+        if isinstance(o, dict):
+            if o.get("type") == "league" and o.get("id") and str(o["id"]) not in seen:
+                seen.add(str(o["id"]))
+                out.append((str(o["id"]), o.get("displayName") or o.get("name") or ""))
+            for v in o.values():
+                walk(v)
+        elif isinstance(o, list):
+            for v in o:
+                walk(v)
+    walk(d)
+    return out
+
+def _espn_event_teams(e):
+    comps = (e.get("competitions") or [{}])[0].get("competitors", [])
+    return [c.get("team", {}).get("displayName", "") for c in comps if c.get("team")]
+
+def _espn_matchlist(lid, now, span_days=25):
+    """Scan the ESPN scoreboard day-by-day (it only accepts a single date) from `now` across a
+    short tour's span → cricapi-shaped matchList + the event ids. Stops after 6 empty days once a
+    match has been seen (a bilateral/short league won't span 25 days). Keyless."""
+    matchlist, event_ids, seen, empty = [], [], False, 0
+    for i in range(span_days):
+        d = (now + timedelta(days=i)).strftime("%Y%m%d")
+        evs = _espn_get(f"{ESPN_SITE}/{lid}/scoreboard?dates={d}").get("events", [])
+        if not evs:
+            if seen and (empty := empty + 1) >= 6:
+                break
+            continue
+        for e in evs:
+            teams = _espn_event_teams(e)
+            if len(teams) != 2:
+                continue
+            seen, empty = True, 0
+            matchlist.append({
+                "id": e.get("id"), "teams": teams, "dateTimeGMT": e.get("date"),
+                "date": (e.get("date") or "")[:10], "matchType": "",
+                "name": e.get("description") or e.get("shortName") or "", "hasSquad": True,
+            })
+            event_ids.append(e.get("id"))
+    return matchlist, event_ids
+
+def _espn_squads(lid, event_id):
+    """Full squads from an ESPN event summary → {espn_team_displayName: [(name, role), ...]}."""
+    sm = _espn_get(f"{ESPN_SITE}/{lid}/summary?event={event_id}")
+    out = {}
+    for sq in (sm.get("squads") or []):
+        team = (sq.get("team") or {}).get("displayName", "")
+        players = [((a.get("displayName") or a.get("fullName") or "").strip(),
+                    _espn_role((a.get("position") or {}).get("abbreviation")))
+                   for a in (sq.get("athletes") or [])]
+        players = [(n, r) for n, r in players if n]
+        if team and players:
+            out[team] = players
+    return out
+
+def espn_discover(now, horizon):
+    """Discover in-scope tours via ESPN search (keyless). Bilaterals are found by searching each
+    major TEAM name (in_scope reads both teams from the series name); leagues by the watchlist.
+    Returns {league_id: name}. This is the cricapi-free replacement for discover()."""
+    hits, floor = {}, now - timedelta(days=2)
+    for term in SEARCH_TERMS:
+        for lid, name in _espn_search_leagues(term):
+            if lid in hits:
+                continue
+            ok, kind = in_scope(name, [])
+            if not ok:
+                continue
+            evs = _espn_get(f"{ESPN_SITE}/{lid}/scoreboard").get("events", [])  # next/current event
+            when = None
+            if evs:
+                try:
+                    when = datetime.fromisoformat((evs[0].get("date") or "").replace("Z", "")).replace(tzinfo=timezone.utc)
+                except ValueError:
+                    pass
+            if when is not None and not (floor <= when <= horizon):
+                continue          # not starting/running in the window
+            hits[lid] = name
+            print(f"  espn/search[{term!r}]: KEEP {name!r} (lid {lid}, {kind}, next={evs[0].get('date','?')[:10] if evs else '?'})", file=sys.stderr)
+    return hits
+
+def espn_build(lid, name, now, horizon, state):
+    """Build a tour ENTIRELY from ESPN → (series_info, gender, league_squads) for gen_tour, or None.
+    No cricapi. cricapi_series stays '' (espn_series = lid)."""
+    matchlist, event_ids = _espn_matchlist(lid, now)
+    def _soon(m):
+        try:
+            return datetime.fromisoformat((m["dateTimeGMT"] or "").replace("Z", "")).replace(tzinfo=timezone.utc) <= horizon
+        except Exception:
+            return True
+    if not matchlist or not any(_soon(m) for m in matchlist):
+        return None
+    sqmap = {}
+    for ev in event_ids:               # first event that has squads posted
+        sqmap = _espn_squads(lid, ev)
+        if sqmap:
+            break
+    if len(sqmap) < 2:
+        print(f"  espn: {name!r} — squads not posted yet (skip; will catch on a later run)", file=sys.stderr)
+        return None
+    gender = "female" if re.search(r"\bwomen\b", name, re.I) else "male"
+    squads = {t: {"short": (re.sub(r"[^A-Za-z]", "", t)[:3] or t[:3]).upper(),
+                  "players": [list(p) for p in players]}
+              for t, players in sqmap.items()}
+    league_squads = {"canon": {t: t for t in sqmap}, "squads": squads}
+    series_info = {"info": {"id": "", "name": name, "espn_id": str(lid)}, "matchList": matchlist}
+    return series_info, gender, league_squads
 
 
 # ── the generator: one (series, format) -> all artifacts ────────────────────────
@@ -499,17 +638,19 @@ def gen_tour(series_info, squads_by_matchid, fmt, gender, state, league_squads=N
 
     ends = ml[-1].get("date") or info.get("enddate")
     squads_path = re.sub(r"[^a-z0-9]+", "_", tour_name.lower()).strip("_") + "_squads.json"
-    # Resolve espn_series against the first REAL fixture (canonical teams + its date). Empty ""
-    # if unconfirmed — the verify gate + Tour Ingest Review tab flag it for a manual one-liner.
-    espn_id = ""
-    for m in ml:
-        raw = (m.get("teams") or [None, None])[:2]
-        cc = [canonical(x or "") for x in raw]
-        if len(cc) == 2 and cc[0] and cc[1] and cc[0] != cc[1]:
-            espn_id = resolve_espn_series(tour_name, cc, m.get("dateTimeGMT"))
-            break
+    # espn_series: if the source already knows it (ESPN-first path passes info["espn_id"]), use it
+    # verbatim. Otherwise (cricapi path) resolve it against the first REAL fixture; "" if unconfirmed
+    # (the verify gate + Tour Ingest Review tab flag it). cricapi_series is "" on the ESPN-only path.
+    espn_id = (info.get("espn_id") or "").strip()
+    if not espn_id:
+        for m in ml:
+            raw = (m.get("teams") or [None, None])[:2]
+            cc = [canonical(x or "") for x in raw]
+            if len(cc) == 2 and cc[0] and cc[1] and cc[0] != cc[1]:
+                espn_id = resolve_espn_series(tour_name, cc, m.get("dateTimeGMT"))
+                break
     tours_entry = {
-        "cricapi_series": info["id"], "ends": ends, "espn_series": espn_id,
+        "cricapi_series": info.get("id", ""), "ends": ends, "espn_series": espn_id,
         "gender": gender, "name": tour_name, "squads": squads_path, "tab": tab,
     }
     return {
@@ -660,6 +801,15 @@ def main():
     ap.add_argument("--emit", help="write generated artifacts to this dir")
     ap.add_argument("--auction-squads", help="JSON from extract_auction_squads.mjs; used as the "
                     "squad source for any discovered league it covers (cricapi has no league squads)")
+    ap.add_argument("--source", choices=["espn", "cricapi"],
+                    default=os.environ.get("SYNC_SOURCE", "cricapi"),
+                    help="AUTO-discovery source. 'cricapi' (default) reliably finds near-term tours; "
+                         "'espn' search is unreliable for near-term bilaterals (buries them behind "
+                         "historical editions) — kept only as a keyless best-effort.")
+    ap.add_argument("--espn-tour", help="KEYLESS add of ONE named tour (no cricapi): resolves the "
+                    "ESPN league id from the name, then builds fixtures + full squads from ESPN. "
+                    "Use when you know the tour (ESPN can't be trusted to DISCOVER it, but nails "
+                    "everything else). e.g. --espn-tour 'India tour of Zimbabwe 2026'")
     args = ap.parse_args()
     state = load_state()
     seeds = json.load(open(args.auction_squads)) if args.auction_squads else []
@@ -679,6 +829,51 @@ def main():
             t = gen_tour(si, sq_by, fmt, gender, state)
             if t:
                 tours.append(t)
+    elif args.espn_tour:
+        # KEYLESS single-tour add (no cricapi): name -> ESPN league id -> fixtures + full squads.
+        # Use when you KNOW the tour — ESPN can't be trusted to auto-discover a near-term bilateral
+        # (its search buries it under 1990s editions), but nails everything once given the id.
+        now = datetime.now(timezone.utc)
+        horizon = now + timedelta(days=45)
+        qn = norm(args.espn_tour)
+        cands = _espn_search_leagues(args.espn_tour)
+        target = (next((c for c in cands if norm(c[1]) == qn), None)
+                  or next((c for c in cands if qn in norm(c[1]) or norm(c[1]) in qn), None)
+                  or (cands[0] if cands else None))
+        if not target:
+            print(f"espn-tour: no ESPN league matched {args.espn_tour!r}", file=sys.stderr)
+        else:
+            lid, name = target
+            print(f"espn-tour: {args.espn_tour!r} -> ESPN league {lid} ({name!r})", file=sys.stderr)
+            built = espn_build(lid, name, now, horizon, state)
+            if built:
+                si, gender, lg = built
+                for fmt in ("ODI", "T20"):
+                    t = gen_tour(si, {}, fmt, gender, state, league_squads=lg)
+                    if t and t["tours_entry"]["tab"] not in state["existing_tabs"]:
+                        tours.append(t)
+                    elif t:
+                        print(f"  skip (tab exists): {t['tours_entry']['tab']}", file=sys.stderr)
+    elif args.source == "espn":
+        # KEYLESS best-effort auto-discovery (unreliable for near-term bilaterals — see --espn-tour).
+        now = datetime.now(timezone.utc)
+        horizon = now + timedelta(days=DISCOVERY_WINDOW_DAYS)
+        found = espn_discover(now, horizon)
+        print(f"espn-discover: {len(found)} in-scope tour(s) in next {DISCOVERY_WINDOW_DAYS}d (keyless)", file=sys.stderr)
+        for lid, name in found.items():
+            if lid in state["existing_espn"]:
+                print(f"  skip (already ingested): {name[:50]}", file=sys.stderr)
+                continue
+            built = espn_build(lid, name, now, horizon, state)
+            if not built:
+                continue
+            si, gender, lg = built
+            for fmt in ("ODI", "T20"):
+                t = gen_tour(si, {}, fmt, gender, state, league_squads=lg)
+                if t and t["tours_entry"]["tab"] not in state["existing_tabs"]:
+                    tours.append(t)
+                elif t:
+                    print(f"  skip (tab exists): {t['tours_entry']['tab']}", file=sys.stderr)
     else:
         now = datetime.now(timezone.utc)
         found = discover(DISCOVERY_WINDOW_DAYS)

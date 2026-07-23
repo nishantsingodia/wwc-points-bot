@@ -121,6 +121,19 @@ jobs:
           pip install -r requirements.txt
           python3 tour_sync_finalize.py "$APPLIED"
 
+      # E2E per-tour visibility → writes the "TOUR STATUS" GSheet tab (Tour/Squads/Draft/Sheet +
+      # the sheet↔draft team-code & pid mapping health). Always runs (even with nothing applied) so
+      # the dashboard reflects current reality. Read-only: no cricapi, never mutates a repo.
+      - name: Tour status dashboard
+        if: github.event.inputs.dry_run != 'true'
+        env:
+          DRAFT_REPO: ${{ github.workspace }}/wwc-draft
+          GSHEET_ID: ${{ secrets.GSHEET_ID }}
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+        run: |
+          pip install -r requirements.txt
+          python3 tour_status.py
+
       # VALIDATION GATE — must pass before anything is committed or deployed.
       - name: Validate draft app
         run: |
