@@ -104,9 +104,11 @@ def main():
     tours = {t["name"]: t for t in json.load(open(os.path.join(BOT, "tours.json")))}
     stamp = os.environ.get("SYNC_STAMP") or datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M")
 
-    # 1. anchor each new tour's identity. ESPN-only tours (cricapi_series="") aren't bot-scored and
-    # their draft LIVE join uses the ESPN name-match path, not the bot registry — AND build_registry
-    # needs the auction DB (absent in CI). So skip it for them; only cricapi-scored tours anchor here.
+    # 1. anchor each new tour's identity. cricapi-scored tours run build_registry here — and it now
+    # anchors in CI via the committed players export (registry/auction_players.json.gz), so they no
+    # longer need the 61MB gitignored auction DB (build_registry.open_pool_con falls back to it).
+    # ESPN-only tours (cricapi_series="") aren't bot-scored and their draft LIVE join uses the ESPN
+    # name-match path (not the bot registry), so skip build_registry for them.
     def _is_espn_only(nm):
         return not (tours.get(nm, {}).get("cricapi_series") or "").strip()
     for name in applied:

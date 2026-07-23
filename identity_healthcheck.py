@@ -35,7 +35,7 @@ import build_registry as br
 def main():
     filt = (sys.argv[1].lower() if len(sys.argv) > 1 else None)
     tours = json.load(open(os.path.join(br.HERE, "tours.json")))
-    con = sqlite3.connect(br.AUCTION_DB); con.row_factory = sqlite3.Row
+    con = br.open_pool_con()   # live auction DB locally; committed players export in CI
     players = br.load_global()
 
     cs_pids = defaultdict(list)
@@ -44,7 +44,15 @@ def main():
             cs_pids[e["cricsheet_id"]].append(pid)
     dups = {cs: pids for cs, pids in cs_pids.items() if len(pids) > 1}
 
-    have_data = {r[0] for r in con.execute("SELECT DISTINCT player_id FROM match_performances")}
+    # match_performances lives ONLY in the full auction DB (not the committed players export used
+    # in CI). When absent, fixable-miss detection (which needs "this record HAS stats") is skipped
+    # — advisory only, so degrade to an empty set rather than crash. build_registry still anchors.
+    try:
+        have_data = {r[0] for r in con.execute("SELECT DISTINCT player_id FROM match_performances")}
+    except Exception as e:
+        print(f"  (no match_performances — fixable-miss detection skipped, advisory only: {e})",
+              file=sys.stderr)
+        have_data = set()
     blockers = 0
 
     for t in tours:

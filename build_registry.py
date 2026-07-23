@@ -202,6 +202,47 @@ def cricapi_cached_names():
                 if n: names.append(n)
     return names
 
+POOL_EXPORT = os.path.join(REG_DIR, "auction_players.json.gz")
+
+def open_pool_con():
+    """A sqlite connection exposing the auction `players` table (id, cricsheet_id, name,
+    full_name, country, gender) — the ONLY thing db_pool needs from the auction DB.
+
+    Prefers the live 61MB auction DB when present + usable (fresh, local dev). In CI that DB
+    is gitignored/absent (the auction repo tracks only db/.gitkeep), so sqlite would open an
+    empty file and `select ... from players` would crash — which is why cricapi auto-tours
+    used to fail to anchor in CI. We fall back to the committed export
+    registry/auction_players.json.gz (0.2MB gzipped; regenerate with
+    registry/export_players_pool.py) loaded into an in-memory DB. So cricapi auto-tours anchor
+    in CI WITHOUT shipping the 61MB DB to a public repo — db_pool stays byte-for-byte unchanged."""
+    if os.path.exists(AUCTION_DB):
+        try:
+            con = sqlite3.connect(AUCTION_DB); con.row_factory = sqlite3.Row
+            con.execute("select id, cricsheet_id, name, full_name, country, gender "
+                        "from players limit 1").fetchone()
+            print(f"players pool: live auction DB ({AUCTION_DB})", file=sys.stderr)
+            return con
+        except Exception as e:
+            print(f"  ⚠ auction DB present but unusable ({e}); using committed export", file=sys.stderr)
+    if not os.path.exists(POOL_EXPORT):
+        raise SystemExit(
+            f"no usable auction DB and no committed export at {POOL_EXPORT}.\n"
+            f"Run (with the auction DB available): python3 registry/export_players_pool.py, "
+            f"then commit registry/auction_players.json.gz.")
+    import gzip
+    with gzip.open(POOL_EXPORT, "rt", encoding="utf-8") as f:
+        rows = json.load(f)
+    con = sqlite3.connect(":memory:"); con.row_factory = sqlite3.Row
+    con.execute("create table players (id, cricsheet_id, name, full_name, country, gender)")
+    con.executemany(
+        "insert into players (id, cricsheet_id, name, full_name, country, gender) values (?,?,?,?,?,?)",
+        [(r.get("id"), r.get("cricsheet_id"), r.get("name"), r.get("full_name"),
+          r.get("country"), r.get("gender")) for r in rows])
+    con.commit()
+    print(f"players pool: committed export {POOL_EXPORT} ({len(rows)} players; no live DB — CI mode)",
+          file=sys.stderr)
+    return con
+
 def db_pool(con, gender):
     rows = [dict(r) for r in con.execute(
         "select id, cricsheet_id, name, full_name, country, gender from players")]
@@ -353,7 +394,7 @@ def build_tour(tour, con, draft_players, bridges, players, idx):
 def main():
     filt = sys.argv[1].lower() if len(sys.argv) > 1 else None
     tours = json.load(open(os.path.join(HERE, "tours.json")))
-    con = sqlite3.connect(AUCTION_DB); con.row_factory = sqlite3.Row
+    con = open_pool_con()   # live auction DB locally; committed export in CI (see open_pool_con)
     draft_players = json.load(open(DRAFT_RAW))
     if isinstance(draft_players, dict): draft_players = draft_players.get("players", [])
     bridges = load_bridges()
