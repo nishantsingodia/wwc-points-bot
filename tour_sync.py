@@ -242,6 +242,12 @@ def resolve_espn_series(tour_name, fixture_teams, fixture_gmt):
 
 
 # ── helpers ───────────────────────────────────────────────────────────────────
+def _clean_tour_name(s):
+    """Drop the format/gender parenthetical gen_tour appends ("(Men T20I)"/"(T20I)"/"(ODI)") so a
+    hand-typed name resolves on ESPN and de-dups against the ingested "<name> (T20I)". Only strips
+    the parenthetical — never real words (a real league name may legitimately contain 'Women')."""
+    return re.sub(r"\s+", " ", re.sub(r"\([^)]*\)", "", s or "")).strip()
+
 def norm(s):
     return re.sub(r"[^a-z ]", "", (s or "").lower()).strip()
 
@@ -517,8 +523,9 @@ def espn_build(lid, name, now, horizon, state):
 def espn_add_named(query, now, horizon, state):
     """Resolve a tour BY NAME on ESPN and build it KEYLESS → [tour dicts] (empty if not found).
     Shared by --espn-tour (one name) and --from-status-sheet (each Column-A name Nishant typed)."""
-    qn = norm(query)
-    cands = _espn_search_leagues(query)
+    clean = _clean_tour_name(query)          # "India tour of Zimbabwe 2026 (Men T20I)" -> "...2026"
+    qn = norm(clean)
+    cands = _espn_search_leagues(clean)
     target = (next((c for c in cands if norm(c[1]) == qn), None)
               or next((c for c in cands if qn in norm(c[1]) or norm(c[1]) in qn), None)
               or (cands[0] if cands else None))
@@ -551,20 +558,26 @@ def status_sheet_new_names(state):
         from google.oauth2.service_account import Credentials
         sh = gspread.authorize(Credentials.from_service_account_info(
             json.loads(creds), scopes=["https://www.googleapis.com/auth/spreadsheets"])).open_by_key(gid)
-        col_a = sh.worksheet("TOUR STATUS").col_values(1)[1:]   # Column A, minus the header
     except Exception as e:
-        print(f"  from-status-sheet: could not read TOUR STATUS Column A: {e}", file=sys.stderr)
+        print(f"  from-status-sheet: sheet open failed: {e}", file=sys.stderr)
         return []
-    existing = [t.get("name", "") for t in json.load(open(f"{BOT}/tours.json"))]
+    # Add a tour by typing its name in Column A of EITHER control tab (Nishant used TOUR CONTROL).
+    col_a = []
+    for tab in ("TOUR CONTROL", "TOUR STATUS"):
+        try:
+            col_a += sh.worksheet(tab).col_values(1)[1:]   # skip the header row
+        except Exception:
+            pass
+    existing = {norm(_clean_tour_name(t.get("name", ""))) for t in json.load(open(f"{BOT}/tours.json"))}
     out, seen = [], set()
     for raw in col_a:
         c = (raw or "").strip()
-        if not c or norm(c) in seen:
+        key = norm(_clean_tour_name(c))          # ignore the (Men T20I)/(ODI) suffix for matching
+        if not key or key in seen:
             continue
-        seen.add(norm(c))
-        # already ingested? tours.json names carry a "(T20I)"/"(ODI)" suffix — fuzzy-contains match.
-        if any(norm(c) in norm(en) or norm(en) in norm(c) for en in existing):
-            continue
+        seen.add(key)
+        if key in existing or any(key in en or en in key for en in existing):
+            continue                              # already ingested
         out.append(c)
     return out
 
