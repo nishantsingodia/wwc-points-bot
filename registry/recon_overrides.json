@@ -502,6 +502,110 @@
       "pid": "slug:matthew-fisher",
       "source": "S2",
       "status": "approved"
+    },
+    {
+      "match_key": "2026-07-22::southern brave|welsh fire",
+      "scope": "player",
+      "pid": "3d284ca3",
+      "field": "r",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-22::southern brave|welsh fire",
+      "scope": "player",
+      "pid": "3d284ca3",
+      "field": "4s",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-22::southern brave|welsh fire",
+      "scope": "player",
+      "pid": "3d284ca3",
+      "field": "6s",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-22::southern brave|welsh fire",
+      "scope": "player",
+      "pid": "espn:1079380",
+      "field": "r",
+      "status": "approved",
+      "source": "S1"
+    },
+    {
+      "match_key": "2026-07-21::mi london|sunrisers leeds",
+      "scope": "player",
+      "pid": "cefad9fd",
+      "field": "w",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-21::mi london|sunrisers leeds",
+      "scope": "player",
+      "pid": "espn:1120320",
+      "field": "w",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-17::galle gallants|jaffna kings",
+      "scope": "player",
+      "pid": "03a83c50",
+      "field": "w",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-18::colombo kaps|galle gallants",
+      "scope": "player",
+      "pid": "ec0b9258",
+      "field": "w",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-18::colombo kaps|galle gallants",
+      "scope": "player",
+      "pid": "d86d276e",
+      "field": "w",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-22::dambulla sixers|galle gallants",
+      "scope": "player",
+      "pid": "slug:marques-ackerman",
+      "field": "r",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-22::dambulla sixers|galle gallants",
+      "scope": "player",
+      "pid": "slug:marques-ackerman",
+      "field": "w",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-22::dambulla sixers|galle gallants",
+      "scope": "player",
+      "pid": "slug:marques-ackerman",
+      "field": "4s",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-22::dambulla sixers|galle gallants",
+      "scope": "player",
+      "pid": "slug:marques-ackerman",
+      "field": "6s",
+      "status": "approved",
+      "source": "S2"
     }
   ]
 }
