@@ -368,6 +368,13 @@
         "milan rathnayaka"
       ],
       "_note": "ESPN spells Milan Ratnayake as 'Rathnayaka' (espn_id 1070229)"
+    },
+    {
+      "match": "milan ratnayake",
+      "add": [
+        "milan priyanath rathnayake"
+      ],
+      "_note": "sheet full-name spelling of Milan Ratnayake (bot couldn't anchor -> blank pid -> draft phantom dup)"
     }
   ]
 }
