@@ -80,9 +80,10 @@ jobs:
       - name: Generate tours
         id: gen
         env:
-          # Dedicated key (used exclusively) so tour-sync never contends with the auction /
-          # points-bot for the shared cricapi quota. Falls back to the shared keys if unset.
-          TOUR_SYNC_API_KEY: ${{ secrets.TOUR_SYNC_API_KEY }}
+          # Per Nishant: tour-sync uses the NORMAL shared cricapi pool (no dedicated key). Discovery
+          # is only ~15-25 hits/day and the TOUR CONTROL gate keeps the points bot from draining the
+          # pool on unapproved tours, so the shared budget has room. (_keys() falls back to the
+          # shared keys when TOUR_SYNC_API_KEY is unset — we deliberately don't pass it.)
           CRICKET_API_KEY: ${{ secrets.CRICKET_API_KEY }}
           CRICKET_API_KEY2: ${{ secrets.CRICKET_API_KEY2 }}
           DRAFT_REPO: ${{ github.workspace }}/wwc-draft

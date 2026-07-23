@@ -328,6 +328,19 @@ def resolve_pid(name, reg_alias):
 LEAGUE_TEAM_ALIASES = {   # normalized cricapi team name -> normalized canonical (rebrands etc.)
     "manchester originals": "manchester super giants",
 }
+# Merge the bot's canonical franchise-rename aliases (registry/team_aliases.json) so tour_sync folds
+# cricapi feed names to the SAME canonical the bot SCORES with. Without this the two alias sources
+# diverge: a rebrand cricapi lags on (e.g. LPL 2025→2026, Manchester Originals→Super Giants) attaches
+# at ingest but the bot's short_of() misses at completion → the sheet label falls back to the raw
+# cricapi name → the draft can't attach → 0 COMPLETED points. One source now = no divergence.
+try:
+    _ta = json.load(open(os.path.join(BOT, "registry", "team_aliases.json"))).get("aliases", {})
+    for _canon, _variants in _ta.items():
+        for _v in _variants:
+            LEAGUE_TEAM_ALIASES.setdefault(norm(_v), norm(_canon))
+except Exception as _e:
+    print(f"  (team_aliases.json merge skipped: {_e})", file=sys.stderr)
+
 def _team_key(name):
     # strip gender qualifiers so cricapi "MI London", ESPN "MI London (Men)"/"(Women)" and
     # "X Women" all collapse to one key (needed for ESPN event matching + league seed lookup).
