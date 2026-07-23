@@ -93,6 +93,7 @@ jobs:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
         run: |
           set -o pipefail   # so a crashed generator fails the step (tee was masking it)
+          pip install -r requirements.txt   # gspread — needed to READ Column A of the TOUR STATUS tab
           # KEYLESS, Column-A-driven: read the tour names Nishant typed in the TOUR STATUS tab and
           # ESPN-add any new ones (name → league id → fixtures → full squads). No cricapi.
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
@@ -130,7 +131,8 @@ jobs:
       # the sheet↔draft team-code & pid mapping health). Always runs (even with nothing applied) so
       # the dashboard reflects current reality. Read-only: no cricapi, never mutates a repo.
       - name: Tour status dashboard
-        if: github.event.inputs.dry_run != 'true'
+        # Runs on dry-runs too, so the TOUR STATUS tab is CREATED/refreshed even before a real
+        # apply — that's the tab Nishant types new tour names into (Column A). Read-only.
         env:
           DRAFT_REPO: ${{ github.workspace }}/wwc-draft
           GSHEET_ID: ${{ secrets.GSHEET_ID }}
