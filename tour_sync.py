@@ -514,6 +514,60 @@ def espn_build(lid, name, now, horizon, state):
     series_info = {"info": {"id": "", "name": name, "espn_id": str(lid)}, "matchList": matchlist}
     return series_info, gender, league_squads
 
+def espn_add_named(query, now, horizon, state):
+    """Resolve a tour BY NAME on ESPN and build it KEYLESS → [tour dicts] (empty if not found).
+    Shared by --espn-tour (one name) and --from-status-sheet (each Column-A name Nishant typed)."""
+    qn = norm(query)
+    cands = _espn_search_leagues(query)
+    target = (next((c for c in cands if norm(c[1]) == qn), None)
+              or next((c for c in cands if qn in norm(c[1]) or norm(c[1]) in qn), None)
+              or (cands[0] if cands else None))
+    if not target:
+        print(f"  espn-add: no ESPN league matched {query!r} — check the name", file=sys.stderr)
+        return []
+    lid, name = target
+    print(f"  espn-add: {query!r} → ESPN league {lid} ({name!r})", file=sys.stderr)
+    built = espn_build(lid, name, now, horizon, state)
+    if not built:
+        return []
+    si, gender, lg = built
+    out = []
+    for fmt in ("ODI", "T20"):
+        t = gen_tour(si, {}, fmt, gender, state, league_squads=lg)
+        if t and t["tours_entry"]["tab"] not in state["existing_tabs"]:
+            out.append(t)
+    return out
+
+def status_sheet_new_names(state):
+    """Read the 'TOUR STATUS' tab's Column A and return the tour names Nishant typed that are NOT
+    yet ingested. This is the 'add a tour = type its name in Column A' input. GSheet-only (no
+    cricapi); returns [] without creds (local)."""
+    gid = os.environ.get("GSHEET_ID", "") or os.environ.get("SYNC_SHEET_ID", "")
+    creds = os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON", "")
+    if not (gid and creds):
+        return []
+    try:
+        import gspread
+        from google.oauth2.service_account import Credentials
+        sh = gspread.authorize(Credentials.from_service_account_info(
+            json.loads(creds), scopes=["https://www.googleapis.com/auth/spreadsheets"])).open_by_key(gid)
+        col_a = sh.worksheet("TOUR STATUS").col_values(1)[1:]   # Column A, minus the header
+    except Exception as e:
+        print(f"  from-status-sheet: could not read TOUR STATUS Column A: {e}", file=sys.stderr)
+        return []
+    existing = [t.get("name", "") for t in json.load(open(f"{BOT}/tours.json"))]
+    out, seen = [], set()
+    for raw in col_a:
+        c = (raw or "").strip()
+        if not c or norm(c) in seen:
+            continue
+        seen.add(norm(c))
+        # already ingested? tours.json names carry a "(T20I)"/"(ODI)" suffix — fuzzy-contains match.
+        if any(norm(c) in norm(en) or norm(en) in norm(c) for en in existing):
+            continue
+        out.append(c)
+    return out
+
 
 # ── the generator: one (series, format) -> all artifacts ────────────────────────
 TBC_NAMES = {"tbc", "tba", "to be confirmed", "to be decided", "winner", ""}
@@ -810,6 +864,10 @@ def main():
                     "ESPN league id from the name, then builds fixtures + full squads from ESPN. "
                     "Use when you know the tour (ESPN can't be trusted to DISCOVER it, but nails "
                     "everything else). e.g. --espn-tour 'India tour of Zimbabwe 2026'")
+    ap.add_argument("--from-status-sheet", action="store_true",
+                    help="KEYLESS: read the tour names Nishant typed in Column A of the 'TOUR STATUS' "
+                         "GSheet tab and ESPN-add any that aren't ingested yet. This is the "
+                         "'add a tour = type its name in the sheet' path.")
     args = ap.parse_args()
     state = load_state()
     seeds = json.load(open(args.auction_squads)) if args.auction_squads else []
@@ -829,31 +887,19 @@ def main():
             t = gen_tour(si, sq_by, fmt, gender, state)
             if t:
                 tours.append(t)
-    elif args.espn_tour:
-        # KEYLESS single-tour add (no cricapi): name -> ESPN league id -> fixtures + full squads.
-        # Use when you KNOW the tour — ESPN can't be trusted to auto-discover a near-term bilateral
-        # (its search buries it under 1990s editions), but nails everything once given the id.
+    elif args.from_status_sheet:
+        # KEYLESS: the tour names Nishant typed in Column A of the TOUR STATUS tab → ESPN-add each.
         now = datetime.now(timezone.utc)
         horizon = now + timedelta(days=45)
-        qn = norm(args.espn_tour)
-        cands = _espn_search_leagues(args.espn_tour)
-        target = (next((c for c in cands if norm(c[1]) == qn), None)
-                  or next((c for c in cands if qn in norm(c[1]) or norm(c[1]) in qn), None)
-                  or (cands[0] if cands else None))
-        if not target:
-            print(f"espn-tour: no ESPN league matched {args.espn_tour!r}", file=sys.stderr)
-        else:
-            lid, name = target
-            print(f"espn-tour: {args.espn_tour!r} -> ESPN league {lid} ({name!r})", file=sys.stderr)
-            built = espn_build(lid, name, now, horizon, state)
-            if built:
-                si, gender, lg = built
-                for fmt in ("ODI", "T20"):
-                    t = gen_tour(si, {}, fmt, gender, state, league_squads=lg)
-                    if t and t["tours_entry"]["tab"] not in state["existing_tabs"]:
-                        tours.append(t)
-                    elif t:
-                        print(f"  skip (tab exists): {t['tours_entry']['tab']}", file=sys.stderr)
+        names = status_sheet_new_names(state)
+        print(f"from-status-sheet: {len(names)} new name(s) in Column A: {names}", file=sys.stderr)
+        for nm in names:
+            tours += espn_add_named(nm, now, horizon, state)
+    elif args.espn_tour:
+        # KEYLESS single-tour add (no cricapi): name -> ESPN league id -> fixtures + full squads.
+        now = datetime.now(timezone.utc)
+        horizon = now + timedelta(days=45)
+        tours += espn_add_named(args.espn_tour, now, horizon, state)
     elif args.source == "espn":
         # KEYLESS best-effort auto-discovery (unreliable for near-term bilaterals — see --espn-tour).
         now = datetime.now(timezone.utc)

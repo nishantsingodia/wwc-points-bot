@@ -178,6 +178,14 @@ def main():
                      squads_cell, dm_cell, dp_cell, "Y" if espn_in_draft else "✗",
                      mirror_cell, tab_cell, team_cell, pid_cell, verdict])
 
+    # ---- Column A is the INPUT: preserve names Nishant typed that aren't ingested yet ----
+    # (the next `tour_sync --from-status-sheet` run ESPN-builds them). Never lose a typed name on the
+    # clear+rewrite; show it as ⏳ pending so the sheet is add-surface AND dashboard in one.
+    for typed in _status_col_a_names():
+        if not any(_norm(typed) in _norm(r[0]) or _norm(r[0]) in _norm(typed) for r in rows):
+            rows.append([typed[:40]] + [""] * (len(header) - 2) +
+                        ["⏳ typed in Column A — builds on next run (or not found on ESPN — recheck name)"])
+
     # ---- print (always) ----
     print(f"\nTOUR STATUS — {len(rows)} tour(s)  (sheet_id={'set' if sid else 'MISSING'})\n")
     widths = [max(len(str(r[i])) for r in ([header] + rows)) for i in range(len(header))]
@@ -190,6 +198,23 @@ def main():
 
     # ---- write TOUR STATUS tab (best-effort) ----
     _write_tab(header, rows)
+
+
+def _status_col_a_names():
+    """Existing Column A entries in the TOUR STATUS tab, so we PRESERVE names typed there that
+    aren't ingested yet. [] without creds (local)."""
+    gid = os.environ.get("GSHEET_ID", "")
+    creds = os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON", "")
+    if not (gid and creds):
+        return []
+    try:
+        import gspread
+        from google.oauth2.service_account import Credentials
+        sh = gspread.authorize(Credentials.from_service_account_info(
+            json.loads(creds), scopes=["https://www.googleapis.com/auth/spreadsheets"])).open_by_key(gid)
+        return [c.strip() for c in sh.worksheet("TOUR STATUS").col_values(1)[1:] if c.strip()]
+    except Exception:
+        return []
 
 
 def _norm_name(s):

@@ -88,13 +88,18 @@ jobs:
           CRICKET_API_KEY2: ${{ secrets.CRICKET_API_KEY2 }}
           DRAFT_REPO: ${{ github.workspace }}/wwc-draft
           SYNC_SHEET_ID: ${{ secrets.GSHEET_ID }}
+          GSHEET_ID: ${{ secrets.GSHEET_ID }}
+          # Needed to READ Column A of the TOUR STATUS tab (the "type a tour name to add it" input).
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
         run: |
-          set -o pipefail   # so a quota-blocked / crashed generator fails the step (tee was masking it)
+          set -o pipefail   # so a crashed generator fails the step (tee was masking it)
+          # KEYLESS, Column-A-driven: read the tour names Nishant typed in the TOUR STATUS tab and
+          # ESPN-add any new ones (name → league id → fixtures → full squads). No cricapi.
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
-            echo "DRY RUN — discovery only, nothing written/committed/deployed"
-            python3 tour_sync.py --dry-run --auction-squads auction_squads.json | tee /tmp/sync.out
+            echo "DRY RUN — read Column A + resolve on ESPN, nothing written/committed/deployed"
+            python3 tour_sync.py --dry-run --from-status-sheet | tee /tmp/sync.out
           else
-            python3 tour_sync.py --apply --auction-squads auction_squads.json | tee /tmp/sync.out
+            python3 tour_sync.py --apply --from-status-sheet | tee /tmp/sync.out
           fi
           echo "applied=$(grep -oP '(?<=::applied::).*' /tmp/sync.out || echo '[]')" >> "$GITHUB_OUTPUT"
 
