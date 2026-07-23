@@ -104,8 +104,15 @@ def main():
     tours = {t["name"]: t for t in json.load(open(os.path.join(BOT, "tours.json")))}
     stamp = os.environ.get("SYNC_STAMP") or datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M")
 
-    # 1. anchor each new tour's identity
+    # 1. anchor each new tour's identity. ESPN-only tours (cricapi_series="") aren't bot-scored and
+    # their draft LIVE join uses the ESPN name-match path, not the bot registry — AND build_registry
+    # needs the auction DB (absent in CI). So skip it for them; only cricapi-scored tours anchor here.
+    def _is_espn_only(nm):
+        return not (tours.get(nm, {}).get("cricapi_series") or "").strip()
     for name in applied:
+        if _is_espn_only(name):
+            print(f"== {name}: ESPN-only — skip build_registry (live join uses ESPN name-match) ==", file=sys.stderr)
+            continue
         print(f"== build_registry: {name} ==", file=sys.stderr)
         run([sys.executable, "build_registry.py", name])
 
@@ -155,16 +162,23 @@ def main():
     for name in applied:
         t = tours.get(name, {})
         espn = (t.get("espn_series") or "").strip()
+        espn_only = _is_espn_only(name)
         squad_path = os.path.join(BOT, t.get("squads", ""))
         cov = pid_coverage(squad_path) if os.path.exists(squad_path) else {"total": 0, "resolved": 0}
         frac = (cov["resolved"] / cov["total"]) if cov["total"] else 0.0
-        hc = run([sys.executable, "identity_healthcheck.py", name])
-        blockers, fixable, unmapped = parse_healthcheck(hc.stdout + hc.stderr)
+        # identity_healthcheck needs the auction DB (absent in CI) → skip for ESPN-only tours.
+        if espn_only:
+            blockers, fixable, unmapped = 0, 0, 0
+        else:
+            hc = run([sys.executable, "identity_healthcheck.py", name])
+            blockers, fixable, unmapped = parse_healthcheck(hc.stdout + hc.stderr)
 
         problems = []
         if not espn:
             problems.append("SET espn_series (auto-resolve failed) — franchise pts won't load")
-        if frac < MIN_COV:
+        # pid coverage gates only cricapi-SCORED tours. An ESPN-only tour's live points resolve by
+        # ESPN name-match (not the bot registry), so 30% "coverage" doesn't mean live points fail.
+        if not espn_only and frac < MIN_COV:
             problems.append(f"pid coverage {frac:.0%} < {MIN_COV:.0%} — anchoring didn't take")
         # GAP-1 safety net: the draft must carry this tour's espn_series in its per-gender list,
         # or getEspnLineup / getLiveMatchPoints can't resolve the event -> no lineups, 0 live pts.
