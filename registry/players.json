@@ -1,6 +1,6 @@
 {
  "anchor": "cricsheet_id (pid); espn:/slug: fallback when unknown",
- "count": 659,
+ "count": 680,
  "players": {
   "5d2eda89": {
    "aliases": [
@@ -4725,7 +4725,8 @@
    ],
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "India tour of Zimbabwe 2026 (T20I)"
    ],
    "display": "Abhishek Sharma",
    "cricsheet_id": "f29185a1",
@@ -4756,7 +4757,8 @@
    ],
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "India tour of Zimbabwe 2026 (T20I)"
    ],
    "display": "Ishan Kishan",
    "cricsheet_id": "752f7486",
@@ -4771,7 +4773,8 @@
    ],
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "India tour of Zimbabwe 2026 (T20I)"
    ],
    "display": "Shreyas Iyer",
    "cricsheet_id": null,
@@ -4785,7 +4788,8 @@
    ],
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "India tour of Zimbabwe 2026 (T20I)"
    ],
    "display": "Tilak Varma",
    "cricsheet_id": "b0482a1d",
@@ -4814,7 +4818,8 @@
    ],
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "India tour of Zimbabwe 2026 (T20I)"
    ],
    "display": "Shivam Dube",
    "cricsheet_id": "a4e37e47",
@@ -4872,11 +4877,12 @@
    ],
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "India tour of Zimbabwe 2026 (T20I)"
    ],
    "display": "Prince Yadav",
    "cricsheet_id": "80b2fb19",
-   "espn_id": null,
+   "espn_id": "1350768",
    "draft_id": 10156,
    "auction_id": 690
   },
@@ -4886,11 +4892,12 @@
    ],
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "India tour of Zimbabwe 2026 (T20I)"
    ],
    "display": "Vaibhav Sooryavanshi",
    "cricsheet_id": null,
-   "espn_id": null,
+   "espn_id": "1408688",
    "draft_id": 10157,
    "auction_id": null
   },
@@ -4900,7 +4907,8 @@
    ],
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "India tour of Zimbabwe 2026 (T20I)"
    ],
    "display": "Suryansh Shedge",
    "cricsheet_id": "970ddd24",
@@ -4928,11 +4936,12 @@
    ],
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "India tour of Zimbabwe 2026 (T20I)"
    ],
    "display": "Ravi Bishnoi",
    "cricsheet_id": "df064e1a",
-   "espn_id": null,
+   "espn_id": "1175441",
    "draft_id": 10160,
    "auction_id": 279
   },
@@ -6216,6 +6225,7 @@
   "slug:milan-ratnayake": {
    "aliases": [
     "kth ratnayake",
+    "milan priyanath rathnayake",
     "milan rathnayaka",
     "milan ratnayake"
    ],
@@ -9310,6 +9320,298 @@
    "cricsheet_id": null,
    "espn_id": "1072470",
    "draft_id": 10627
+  },
+  "espn:299572": {
+   "aliases": [
+    "sikandar raza",
+    "sikandar raza butt"
+   ],
+   "tours": [
+    "India tour of Zimbabwe 2026 (T20I)"
+   ],
+   "display": "Sikandar Raza",
+   "cricsheet_id": null,
+   "espn_id": "299572",
+   "draft_id": 10627,
+   "auction_id": null
+  },
+  "eaa36b2a": {
+   "aliases": [
+    "bj bennett",
+    "brian bennett",
+    "brian john bennett"
+   ],
+   "tours": [
+    "India tour of Zimbabwe 2026 (T20I)"
+   ],
+   "display": "Brian Bennett",
+   "cricsheet_id": "eaa36b2a",
+   "espn_id": "1071484",
+   "draft_id": 10628,
+   "auction_id": 2644
+  },
+  "b08252b8": {
+   "aliases": [
+    "rp burl",
+    "ryan burl",
+    "ryan ponsonby burl"
+   ],
+   "tours": [
+    "India tour of Zimbabwe 2026 (T20I)"
+   ],
+   "display": "Ryan Burl",
+   "cricsheet_id": "b08252b8",
+   "espn_id": "495964",
+   "draft_id": 10629,
+   "auction_id": 1559
+  },
+  "61fb296e": {
+   "aliases": [
+    "tanaka chivanga",
+    "tl chivanga"
+   ],
+   "tours": [
+    "India tour of Zimbabwe 2026 (T20I)"
+   ],
+   "display": "Tanaka Chivanga",
+   "cricsheet_id": "61fb296e",
+   "espn_id": null,
+   "draft_id": 10630,
+   "auction_id": 6093
+  },
+  "1786a21b": {
+   "aliases": [
+    "ben curran",
+    "benjamin jack curran",
+    "bj curran"
+   ],
+   "tours": [
+    "India tour of Zimbabwe 2026 (T20I)"
+   ],
+   "display": "Ben Curran",
+   "cricsheet_id": "1786a21b",
+   "espn_id": "910695",
+   "draft_id": 10631,
+   "auction_id": 8344
+  },
+  "e7e86505": {
+   "aliases": [
+    "b evans",
+    "brad evans"
+   ],
+   "tours": [
+    "India tour of Zimbabwe 2026 (T20I)"
+   ],
+   "display": "Brad Evans",
+   "cricsheet_id": "e7e86505",
+   "espn_id": "696127",
+   "draft_id": 10632,
+   "auction_id": 3412
+  },
+  "slug:innocent-kaia": {
+   "aliases": [
+    "innocent kaia"
+   ],
+   "tours": [
+    "India tour of Zimbabwe 2026 (T20I)"
+   ],
+   "display": "Innocent Kaia",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10633,
+   "auction_id": null
+  },
+  "a879b92c": {
+   "aliases": [
+    "w madhevere",
+    "wessly madhevere",
+    "wessly nyasha madhevere"
+   ],
+   "tours": [
+    "India tour of Zimbabwe 2026 (T20I)"
+   ],
+   "display": "Wessly Madhevere",
+   "cricsheet_id": "a879b92c",
+   "espn_id": "938959",
+   "draft_id": 10634,
+   "auction_id": 2819
+  },
+  "3d5d51a5": {
+   "aliases": [
+    "t marumani",
+    "tadiwanashe marumani"
+   ],
+   "tours": [
+    "India tour of Zimbabwe 2026 (T20I)"
+   ],
+   "display": "Tadiwanashe Marumani",
+   "cricsheet_id": "3d5d51a5",
+   "espn_id": "946507",
+   "draft_id": 10635,
+   "auction_id": 1555
+  },
+  "slug:wellington-masakadza": {
+   "aliases": [
+    "wellington masakadza"
+   ],
+   "tours": [
+    "India tour of Zimbabwe 2026 (T20I)"
+   ],
+   "display": "Wellington Masakadza",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10636,
+   "auction_id": null
+  },
+  "espn:827051": {
+   "aliases": [
+    "blessing muzarabani"
+   ],
+   "tours": [
+    "India tour of Zimbabwe 2026 (T20I)"
+   ],
+   "display": "Blessing Muzarabani",
+   "cricsheet_id": null,
+   "espn_id": "827051",
+   "draft_id": 10637,
+   "auction_id": null
+  },
+  "d96165b5": {
+   "aliases": [
+    "d myers",
+    "dion myers",
+    "dion nephy myers"
+   ],
+   "tours": [
+    "India tour of Zimbabwe 2026 (T20I)"
+   ],
+   "display": "Dion Myers",
+   "cricsheet_id": "d96165b5",
+   "espn_id": "946517",
+   "draft_id": 10638,
+   "auction_id": 3277
+  },
+  "6e3f5a5c": {
+   "aliases": [
+    "r ngarava",
+    "richard ngarava"
+   ],
+   "tours": [
+    "India tour of Zimbabwe 2026 (T20I)"
+   ],
+   "display": "Richard Ngarava",
+   "cricsheet_id": "6e3f5a5c",
+   "espn_id": "806241",
+   "draft_id": 10639,
+   "auction_id": 1564
+  },
+  "943ca0cd": {
+   "aliases": [
+    "newman nyamhuri",
+    "newman takudzwa nyamhuri",
+    "nt nyamhuri"
+   ],
+   "tours": [
+    "India tour of Zimbabwe 2026 (T20I)"
+   ],
+   "display": "Newman Nyamhuri",
+   "cricsheet_id": "943ca0cd",
+   "espn_id": "1409283",
+   "draft_id": 10640,
+   "auction_id": 8345
+  },
+  "slug:tafadzwa-tsiga": {
+   "aliases": [
+    "tafadzwa tsiga"
+   ],
+   "tours": [
+    "India tour of Zimbabwe 2026 (T20I)"
+   ],
+   "display": "Tafadzwa Tsiga",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10641,
+   "auction_id": null
+  },
+  "espn:1299879": {
+   "aliases": [
+    "ashok sharma"
+   ],
+   "tours": [
+    "India tour of Zimbabwe 2026 (T20I)"
+   ],
+   "display": "Ashok Sharma",
+   "cricsheet_id": null,
+   "espn_id": "1299879",
+   "draft_id": 10645,
+   "auction_id": null
+  },
+  "25228673": {
+   "aliases": [
+    "harsh dubey"
+   ],
+   "tours": [
+    "India tour of Zimbabwe 2026 (T20I)"
+   ],
+   "display": "Harsh Dubey",
+   "cricsheet_id": "25228673",
+   "espn_id": null,
+   "draft_id": 10646,
+   "auction_id": 244
+  },
+  "slug:prabhsimran-singh": {
+   "aliases": [
+    "prabhsimran singh"
+   ],
+   "tours": [
+    "India tour of Zimbabwe 2026 (T20I)"
+   ],
+   "display": "Prabhsimran Singh",
+   "cricsheet_id": null,
+   "espn_id": null,
+   "draft_id": 10649,
+   "auction_id": null
+  },
+  "6e974d8f": {
+   "aliases": [
+    "rinku khanchand singh",
+    "rinku singh"
+   ],
+   "tours": [
+    "India tour of Zimbabwe 2026 (T20I)"
+   ],
+   "display": "Rinku Singh",
+   "cricsheet_id": "6e974d8f",
+   "espn_id": "723105",
+   "draft_id": 10652,
+   "auction_id": 43
+  },
+  "4b31f3a3": {
+   "aliases": [
+    "yash thakur"
+   ],
+   "tours": [
+    "India tour of Zimbabwe 2026 (T20I)"
+   ],
+   "display": "Yash Thakur",
+   "cricsheet_id": "4b31f3a3",
+   "espn_id": null,
+   "draft_id": 10655,
+   "auction_id": 314
+  },
+  "espn:1292563": {
+   "aliases": [
+    "mayank prabhu yadav",
+    "mayank yadav"
+   ],
+   "tours": [
+    "India tour of Zimbabwe 2026 (T20I)"
+   ],
+   "display": "Mayank Yadav",
+   "cricsheet_id": null,
+   "espn_id": "1292563",
+   "draft_id": 10656,
+   "auction_id": null
   }
  }
 }

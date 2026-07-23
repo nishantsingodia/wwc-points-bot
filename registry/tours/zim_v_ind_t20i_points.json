@@ -1,0 +1,40 @@
+{
+ "tour": "India tour of Zimbabwe 2026 (T20I)",
+ "slug": "zim_v_ind_t20i_points",
+ "teams": {
+  "MTZIM": [
+   "espn:299572",
+   "eaa36b2a",
+   "b08252b8",
+   "61fb296e",
+   "1786a21b",
+   "e7e86505",
+   "slug:innocent-kaia",
+   "a879b92c",
+   "3d5d51a5",
+   "slug:wellington-masakadza",
+   "espn:827051",
+   "d96165b5",
+   "6e3f5a5c",
+   "943ca0cd",
+   "slug:tafadzwa-tsiga"
+  ],
+  "MTIND": [
+   "espn:642519",
+   "b0482a1d",
+   "f29185a1",
+   "espn:1299879",
+   "25228673",
+   "a4e37e47",
+   "752f7486",
+   "slug:prabhsimran-singh",
+   "80b2fb19",
+   "df064e1a",
+   "6e974d8f",
+   "slug:vaibhav-sooryavanshi",
+   "970ddd24",
+   "4b31f3a3",
+   "espn:1292563"
+  ]
+ }
+}
