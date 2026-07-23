@@ -96,6 +96,50 @@ def test_econ_tiers(perf, wcmod, rc, expected_eco):
     assert wcmod.score(perf(balls=12, runs_conceded=rc, played=True), "BOWL")["eco"] == expected_eco
 
 
+# ── The Hundred (100-ball) — its OWN D11 ruleset (fmt="HUN" -> _score_hundred): same core
+#    scale as T20 but NO strike-rate, NO economy, NO maiden, and wicket hauls tier from a
+#    2-for (2w+4 / 3w+8 / 4w+12 / 5w+16). Mirrors the auction ETL's
+#    compute_fantasy_points_hundred. ────────────────────────────────────────────────────────
+def test_hundred_no_strike_rate(perf, wcmod):
+    # 60 off 20 balls = SR 300 -> T20 would add +6; The Hundred awards no SR points.
+    s = wcmod.score(perf(r=60, b=20, played=True), "BAT", fmt="HUN")
+    assert s["sr"] == 0
+    assert s["bat"] == 60 + 8       # 50-milestone only; no SR bonus
+    assert s["total"] == 68 + 4     # + XI
+
+
+def test_hundred_no_econ_no_maiden(perf, wcmod):
+    # Miserly: 20 balls / 5 runs (econ 1.5) / 1 maiden -> T20 would add econ +6 AND maiden +12.
+    s = wcmod.score(perf(w=1, balls=20, runs_conceded=5, maidens=1, dots=15, played=True), "BOWL", fmt="HUN")
+    assert s["eco"] == 0
+    assert s["bowl"] == 30 + 15     # 1*wkt + 15 dots ; NO maiden, NO haul (1 wkt)
+    assert s["total"] == 45 + 4
+
+
+@pytest.mark.parametrize("w,expected_haul", [(1, 0), (2, 4), (3, 8), (4, 12), (5, 16), (6, 16)])
+def test_hundred_wicket_haul_tiers(perf, wcmod, w, expected_haul):
+    # dots=0 isolates the haul; balls>0 so the bowling block is active; no econ in The Hundred.
+    s = wcmod.score(perf(w=w, balls=20, runs_conceded=40, played=True), "BOWL", fmt="HUN")
+    assert s["eco"] == 0
+    assert s["bowl"] == w * 30 + expected_haul
+
+
+def test_hundred_bowling_gate_needs_balls(perf, wcmod):
+    # cricapi omits balls for the Hundred -> without the ESPN balls-backfill (in the ESPN merge)
+    # a 4-fer scores 0 even under _score_hundred (bowling block is gated on balls>0). This pins
+    # WHY the backfill is still required alongside the HUN ruleset.
+    assert wcmod.score(perf(w=4, dots=9, runs_conceded=25, balls=0, played=True), "BOWL", fmt="HUN")["bowl"] == 0
+
+
+def test_hundred_gleeson_real_case(perf, wcmod):
+    # Richard Gleeson, Hundred Men M1: 4 wkts / 9 dots / 25 conceded in ~20 balls (post-backfill).
+    # Was showing 4 pts (bowling zeroed) then 141 under the wrong T20 haul; correct Hundred = 145.
+    s = wcmod.score(perf(w=4, dots=9, runs_conceded=25, balls=20, played=True), "BOWL", fmt="HUN")
+    assert s["bowl"] == 4 * 30 + 9 + 12   # wkts + dots + 4-wkt haul(12); NO econ
+    assert s["eco"] == 0
+    assert s["total"] == 145              # 141 bowl + 4 XI
+
+
 # ── Fielding ────────────────────────────────────────────────────────────────
 def test_fielding(perf, wcmod):
     assert wcmod.score(perf(catches=2, played=True), "WK")["field"] == 16

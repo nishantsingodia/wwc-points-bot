@@ -80,7 +80,8 @@
     "gender": "male",
     "name": "The Hundred Men's Competition 2026",
     "squads": "the_hundred_men_s_competition_2026_squads.json",
-    "tab": "THE HUNDRED MENS 2026 POINTS"
+    "tab": "THE HUNDRED MENS 2026 POINTS",
+    "format": "HUN"
   },
   {
     "cricapi_series": "99aea2e0-513f-4d4c-b83c-336e456723ae",
@@ -89,7 +90,8 @@
     "gender": "female",
     "name": "The Hundred Women's Competition 2026",
     "squads": "the_hundred_women_s_competition_2026_squads.json",
-    "tab": "THE HUNDRED WOMENS 2026 POINTS"
+    "tab": "THE HUNDRED WOMENS 2026 POINTS",
+    "format": "HUN"
   },
   {
     "cricapi_series": "",

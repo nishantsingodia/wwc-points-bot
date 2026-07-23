@@ -601,6 +601,12 @@ def gen_tour(series_info, squads_by_matchid, fmt, gender, state, league_squads=N
                                                        "players": [[name, role], ...]}}}  # ordered
     """
     info = series_info["info"]
+    # DISCOVERY vs SCORING format split: cricapi buckets The Hundred under "T20" (FMT_BUCKET) so
+    # its fixtures aren't dropped from the ("ODI","T20") discovery loop (the 22 Jul empty-list bug).
+    # But it must be SCORED on its own D11 ruleset (no SR/econ/maiden — see _score_hundred in the
+    # bot), so the format we WRITE into tours.json/matches.json is "HUN". Everything downstream
+    # (bot CURRENT_FMT, draft scoreFormatOf) keys off this written value, not the discovery bucket.
+    score_fmt = "HUN" if "hundred" in (info.get("name") or "").lower() else fmt
     ml = [m for m in series_info["matchList"] if _fmt_of(m) == fmt]
     ml.sort(key=lambda m: m.get("dateTimeGMT") or m.get("date") or "")
     if not ml:
@@ -670,8 +676,9 @@ def gen_tour(series_info, squads_by_matchid, fmt, gender, state, league_squads=N
             "team1": code[c1], "team2": code[c2], "label": label, "date": to_ist_iso(dt),
             # Explicit format so the draft never has to sniff it from the key. Multi-team ODI
             # events (WC/tri-series) take the league key branch which omits the "ODI" tag, so a
-            # key-regex would mis-score them as T20 — this field is authoritative.
-            "format": fmt,
+            # key-regex would mis-score them as T20 — this field is authoritative. "HUN" for The
+            # Hundred (scored on its own ruleset), NOT the "T20" discovery bucket.
+            "format": score_fmt,
         })
         toss.append(to_utc_z(dt))
         state["next_match_num"] += 1
@@ -718,7 +725,8 @@ def gen_tour(series_info, squads_by_matchid, fmt, gender, state, league_squads=N
                 break
     tours_entry = {
         "cricapi_series": info.get("id", ""), "ends": ends, "espn_series": espn_id,
-        "gender": gender, "name": tour_name, "squads": squads_path, "tab": tab,
+        "format": score_fmt, "gender": gender, "name": tour_name,
+        "squads": squads_path, "tab": tab,
     }
     return {
         "tour_name": tour_name, "codes": code,

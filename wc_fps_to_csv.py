@@ -91,6 +91,15 @@ R_ODI = dict(
     wkt=30, lbwb=8, dotGroup=3, dotPts=1, maiden=4, h4=4, h5=8, h6=12,
     catch=8, c3=4, stump=12, dro=12, ro=6, xi=4,
 )
+# ---- Dream11 The Hundred (100-ball) rules — mirror of compute_fantasy_points_hundred in
+# cricket-auction-helper/data/etl_cricsheet.py. Same core scale as T20 (run+1, four+4, six+6,
+# wicket+30, dot+1, duck -2, fielding, +4 XI) but The Hundred awards NO strike-rate, NO economy
+# and NO maiden points, and wicket hauls are tiered from 2w: 2w+4 / 3w+8 / 4w+12 / 5w+16. ----
+R_HUN = dict(
+    perRun=1, b4=4, b6=6, m25=4, m50=8, m75=12, m100=16, duck=-2,
+    wkt=30, lbwb=8, dot=1, h2=4, h3=8, h4=12, h5=16,
+    catch=8, c3=4, stump=12, dro=12, ro=6, xi=4,
+)
 
 def norm(s):
     s = unicodedata.normalize("NFKD", s or "").encode("ascii", "ignore").decode()
@@ -150,7 +159,7 @@ PRIOR_ROLE = {}         # (tour, feed) -> the Role value last seen (preserve use
 ROLE_OVERRIDE = {}      # norm(feed) -> role you set in Needs Review (drives SR/Econ scoring)
 ACK = set()             # norm(feed) the user resolved (Yes/No/New) -> stop re-flagging in Needs Review
 CURRENT_TOUR = ""       # set by run_tour so logged items know which tour they came from
-CURRENT_FMT = "T20"     # set by run_tour from tour["format"] ("T20" | "ODI"); drives score() + match filter
+CURRENT_FMT = "T20"     # set by run_tour from tour["format"] ("T20" | "ODI" | "HUN"); drives score() + match filter
 
 # Identity-anomaly queue (written to the sheet's "Identity Anomalies" tab). These are the
 # OPPOSITE failure from Needs Review: not "this name matched nobody" but "two DIFFERENT players
@@ -821,8 +830,11 @@ def crosscheck(cs, api):
 # ---- D11 scoring (mirror of calculator.ts) ----
 def score(p, role, fmt=None):
     """Dispatch to the format's scorer. fmt defaults to the running tour's CURRENT_FMT."""
-    if (fmt or CURRENT_FMT or "T20").upper() == "ODI":
+    f = (fmt or CURRENT_FMT or "T20").upper()
+    if f == "ODI":
         return _score_odi(p, role)
+    if f == "HUN":
+        return _score_hundred(p, role)
     return _score_t20(p, role)
 
 def _score_t20(p, role):
@@ -866,6 +878,39 @@ def _score_t20(p, role):
     xi = R["xi"] if p["played"] else 0
     total = bat + bowl + field + sr_pts + eco_pts + xi
     return dict(bat=bat, bowl=bowl, field=field, sr=sr_pts, eco=eco_pts, xi=xi, total=total)
+
+def _score_hundred(p, role):
+    """D11 The Hundred (100-ball) scorer — mirror of compute_fantasy_points_hundred in the
+    auction ETL. Same core scale as T20 EXCEPT: NO strike-rate, NO economy and NO maiden
+    points (The Hundred awards none), and wicket hauls tier from a 2-for: 2w+4 / 3w+8 /
+    4w+12 / 5w+16. sr and eco are returned as 0 so the sheet's Pts SR / Pts Econ columns
+    stay present and truthfully read 0 for this format."""
+    R2 = R_HUN
+    bat = bowl = field = 0
+    if p["b"] > 0 or p["r"] > 0:
+        bat += p["r"] * R2["perRun"] + p["4s"] * R2["b4"] + p["6s"] * R2["b6"]
+        if p["r"] >= 100: bat += R2["m100"]
+        elif p["r"] >= 75: bat += R2["m75"]
+        elif p["r"] >= 50: bat += R2["m50"]
+        elif p["r"] >= 25: bat += R2["m25"]
+        # No strike-rate points in The Hundred.
+    # Duck (-2) OUTSIDE the b>0/r>0 gate (a 0-off-0 run-out still counts), as in _score_t20.
+    if p["dismissed"] and p["r"] == 0 and role != "BOWL":
+        bat += R2["duck"]
+    if p["balls"] > 0:
+        bowl += p["w"] * R2["wkt"] + p["lbwb"] * R2["lbwb"] + p["dots"] * R2["dot"]
+        if p["w"] >= 5: bowl += R2["h5"]
+        elif p["w"] >= 4: bowl += R2["h4"]
+        elif p["w"] >= 3: bowl += R2["h3"]
+        elif p["w"] >= 2: bowl += R2["h2"]
+        # No maiden, no economy points in The Hundred.
+    field += p["catches"] * R2["catch"]
+    if p["catches"] >= 3: field += R2["c3"]
+    field += p["stumpings"] * R2["stump"]
+    field += p["dro"] * R2["dro"] + (p["runouts"] - p["dro"]) * R2["ro"]
+    xi = R2["xi"] if p["played"] else 0
+    total = bat + bowl + field + xi
+    return dict(bat=bat, bowl=bowl, field=field, sr=0, eco=0, xi=xi, total=total)
 
 def _score_odi(p, role):
     """D11 ODI scorer (mirror of ODI_RULES / calculateOdiPoints in the app + the ETL).
@@ -1241,8 +1286,9 @@ def run_tour(tour):
                 return "odi" in mt
             nm = (m.get("name") or "").lower()
             return "odi" in nm and "t20" not in nm and "test" not in nm
-        # T20 (default): also admit The Hundred (100-ball) — it uses the same D11 T20 ruleset
-        # (scoringFormatOf maps everything non-ODI to T20), and cricapi labels it variably.
+        # T20 (default) AND The Hundred (CURRENT_FMT "HUN"): both take this non-ODI branch for
+        # MATCH ADMISSION (cricapi labels the Hundred's matchType variably — "hundred" or "t20").
+        # The SCORER still differs — score() routes HUN to _score_hundred (no SR/econ/maiden).
         if mt:
             return "t20" in mt or "hundred" in mt
         nm = (m.get("name") or "").lower()
@@ -1432,6 +1478,14 @@ def run_tour(tour):
                 if base:
                     base["dots"] = e["dots"]                      # exact dots from ESPN
                     base["maidens"] = e.get("maidens", base.get("maidens", 0))  # + maidens (cricapi has none)
+                    # Bowler balls-bowled: cricapi omits the overs field on 100-ball (The Hundred)
+                    # scorecards, so its bowlers arrive with balls=0 — which zeroes the ENTIRE bowling
+                    # block (wkt/dot/maiden/econ are all gated on `balls > 0` in _score_t20). ESPN
+                    # counts deliveries one-by-one (format-agnostic), so backfill from it when cricapi
+                    # supplied none. Guarded on a falsy cricapi count, so standard T20/ODI (where
+                    # cricapi's over-derived balls are authoritative) are untouched.
+                    if not base.get("balls"):
+                        base["balls"] = e.get("balls", 0)
                     if (base.get("r", 0) != e.get("r", 0) or base.get("w", 0) != e.get("w", 0)
                             or base.get("runs_conceded", 0) != e.get("runs_conceded", 0)):
                         xcheck.add(k)                             # cricapi vs ESPN disagree
