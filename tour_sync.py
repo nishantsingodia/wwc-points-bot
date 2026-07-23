@@ -51,7 +51,25 @@ DENY = ["u19", "under-19", "under 19", "unofficial", "development", "emerging",
         "xi ", "2nd xi", "a-team", "academy", "invitation", "warm-up", "warm up",
         "practice", "legends", "masters"]
 # formats we ingest (cricapi matchType); tests/other are skipped
-FMT_BUCKET = {"t20": "T20", "t20i": "T20", "odi": "ODI"}
+FMT_BUCKET = {"t20": "T20", "t20i": "T20", "odi": "ODI",
+              "hundred": "T20", "the hundred": "T20", "100-ball": "T20", "100 ball": "T20"}
+
+def _fmt_of(m):
+    """Bucket a cricapi match to 'T20' or 'ODI', tolerating The Hundred (matchType 'hundred')
+    and the null/variable matchType cricapi emits for franchise leagues — mirrors the bot's
+    is_fmt (wc_fps_to_csv.py) so a Hundred/uncategorized fixture isn't silently dropped (the
+    22 Jul bug: no 'hundred' bucket → empty match list → gen_tour returned None → no ingest)."""
+    mt = (m.get("matchType") or "").lower()
+    if mt in FMT_BUCKET:
+        return FMT_BUCKET[mt]
+    nm = (m.get("name") or "").lower()
+    if "test" in nm:
+        return None
+    if "odi" in nm:
+        return "ODI"
+    if "hundred" in nm or "t20" in nm or "100" in nm:
+        return "T20"
+    return None  # genuinely unknown — caller logs the drop loudly
 DISCOVERY_WINDOW_DAYS = int(os.environ.get("SYNC_WINDOW_DAYS", "4"))
 # Distinct search tokens for /series fixtures-discovery (fewer than MAJOR_LEAGUES to save
 # quota; cricapi matches substrings and results are de-duped by series id). "hundred"
@@ -364,9 +382,14 @@ def gen_tour(series_info, squads_by_matchid, fmt, gender, state, league_squads=N
                                                        "players": [[name, role], ...]}}}  # ordered
     """
     info = series_info["info"]
-    ml = [m for m in series_info["matchList"] if FMT_BUCKET.get((m.get("matchType") or "").lower()) == fmt]
+    ml = [m for m in series_info["matchList"] if _fmt_of(m) == fmt]
     ml.sort(key=lambda m: m.get("dateTimeGMT") or m.get("date") or "")
     if not ml:
+        # Loud drop: an in-scope series yielding zero matches for this format is usually an
+        # unsupported/variable matchType (the Hundred bug) — never silently emit nothing.
+        types = sorted({(m.get("matchType") or "∅") for m in series_info["matchList"]})
+        print(f"  gen_tour: '{info.get('name')}' -> 0 {fmt} matches (cricapi types={types}) — dropped",
+              file=sys.stderr)
         return None
 
     ti = {t["name"]: t.get("shortname") or t["name"][:3].upper()
@@ -426,6 +449,10 @@ def gen_tour(series_info, squads_by_matchid, fmt, gender, state, league_squads=N
         matches.append({
             "matchNum": state["next_match_num"], "key": key, "gender": gl,
             "team1": code[c1], "team2": code[c2], "label": label, "date": to_ist_iso(dt),
+            # Explicit format so the draft never has to sniff it from the key. Multi-team ODI
+            # events (WC/tri-series) take the league key branch which omits the "ODI" tag, so a
+            # key-regex would mis-score them as T20 — this field is authoritative.
+            "format": fmt,
         })
         toss.append(to_utc_z(dt))
         state["next_match_num"] += 1
@@ -572,6 +599,12 @@ def apply_to_repos(tours):
     dp = _load(f"{DRAFT}/data/players-raw.json")
     dc = _load(f"{DRAFT}/data/team-codes.json")
     pt = _load(f"{DRAFT}/data/points-tabs.json")
+    # The draft resolves the ESPN event (live XI + live points) via SERIES_BY_GENDER =
+    # data/espn-series.json. It MUST list the tour's espn_series or getEspnLineup /
+    # getLiveMatchPoints return null → no lineups, 0 live points (the Hundred bug). Keep it
+    # in lockstep with the bot's tours.json espn_series, per gender (W/M).
+    es_path = f"{DRAFT}/data/espn-series.json"
+    es = _load(es_path) if os.path.exists(es_path) else {"W": [], "M": []}
     tj = _load(f"{BOT}/tours.json")
     tw = _load(f"{BOT}/toss_windows.json")
     have_tabs = {t.get("tab") for t in tj}
@@ -586,6 +619,13 @@ def apply_to_repos(tours):
         tj.append(t["tours_entry"])
         tw.extend(t["toss_windows"])
         _dump(f"{BOT}/{t['squads_path']}", t["squads_json"])
+        # Register the tour's ESPN series in the draft (W/M), dedup, only if resolved.
+        espn_id = (t["tours_entry"].get("espn_series") or "").strip()
+        if espn_id:
+            gkey = "W" if t["tours_entry"].get("gender") == "female" else "M"
+            es.setdefault(gkey, [])
+            if espn_id not in es[gkey]:
+                es[gkey].append(espn_id)
         if sheet_id:
             tab = urllib.parse.quote(t["tours_entry"]["tab"])
             pt.append(f"https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={tab}&headers=1")
@@ -594,6 +634,7 @@ def apply_to_repos(tours):
     _dump(f"{DRAFT}/data/players-raw.json", dp)
     _dump(f"{DRAFT}/data/team-codes.json", dc)
     _dump(f"{DRAFT}/data/points-tabs.json", pt)
+    _dump(es_path, es)
     _dump(f"{BOT}/tours.json", tj)
     _dump(f"{BOT}/toss_windows.json", sorted(set(tw)))
     return applied
@@ -658,7 +699,7 @@ def main():
                 print(f"  squads: injected from auction seed ({len(lg['squads'])} teams)", file=sys.stderr)
             else:
                 for m in ml:   # cricapi squads (bilaterals / leagues cricapi actually carries)
-                    if FMT_BUCKET.get((m.get("matchType") or "").lower()) and m.get("hasSquad"):
+                    if _fmt_of(m) and m.get("hasSquad"):
                         r = capi("match_squad", id=m["id"])
                         if r.get("status") == "success":
                             sq_by[m["id"]] = r.get("data", [])

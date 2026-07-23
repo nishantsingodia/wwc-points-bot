@@ -112,17 +112,22 @@ jobs:
           DRAFT_LIB: ${{ github.workspace }}/wwc-draft/lib
           GSHEET_ID: ${{ secrets.GSHEET_ID }}
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          # Pass the applied-tours JSON through the ENV, never shell-interpolated: tour names carry
+          # apostrophes ("The Hundred Men's Competition 2026") that break a single-quoted shell arg
+          # -> finalize would crash and the whole ingest abort before commit/deploy.
+          APPLIED: ${{ steps.gen.outputs.applied }}
         run: |
           pip install -r requirements.txt
-          python3 tour_sync_finalize.py '${{ steps.gen.outputs.applied }}'
+          python3 tour_sync_finalize.py "$APPLIED"
 
       # VALIDATION GATE — must pass before anything is committed or deployed.
       - name: Validate draft app
         run: |
           cd wwc-draft
-          node -e "['data/matches.json','data/players-raw.json','data/team-codes.json','data/points-tabs.json'].forEach(f=>JSON.parse(require('fs').readFileSync(f)))"
+          node -e "['data/matches.json','data/players-raw.json','data/team-codes.json','data/points-tabs.json','data/espn-series.json'].forEach(f=>JSON.parse(require('fs').readFileSync(f)))"
           npm ci
           npx tsc --noEmit
+          npm run check:tours   # loud gate: unknown team codes / a gender with no ESPN series (live points won't resolve)
 
       - name: Validate bot JSON
         run: |
@@ -131,15 +136,17 @@ jobs:
       # Commit + push both repos (only if the generator changed anything).
       - name: Commit + push
         if: steps.gen.outputs.applied != '[]'
+        env:
+          APPLIED: ${{ steps.gen.outputs.applied }}   # via env: JSON quotes/apostrophes never hit the shell
         run: |
-          MSG="Auto-ingest tours: ${{ steps.gen.outputs.applied }}"
+          MSG="Auto-ingest tours: $APPLIED"
           git config user.name "tour-sync-bot"
           git config user.email "noreply@anthropic.com"
           git diff --quiet || { git add tours.json toss_windows.json *_squads.json registry/players.json registry/tours; git commit -m "$MSG"; git push; }
           cd wwc-draft
           git config user.name "tour-sync-bot"
           git config user.email "noreply@anthropic.com"
-          git diff --quiet || { git add data/matches.json data/players-raw.json data/team-codes.json data/points-tabs.json; git commit -m "$MSG"; git push; }
+          git diff --quiet || { git add data/matches.json data/players-raw.json data/team-codes.json data/points-tabs.json data/espn-series.json lib/registry-players.json; git commit -m "$MSG"; git push; }
 
       # Deploy draft to Vercel prod via CLI (project isn't git-connected, so no deploy hook).
       # org/project ids are non-secret identifiers; only VERCEL_TOKEN is a secret.

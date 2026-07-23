@@ -79,10 +79,21 @@ with BLANK Player IDs). What now runs automatically:
 - **identity** — `tour_sync_finalize.py` runs `build_registry` → `backfill_draft_pids` so the sheet
   AND the draft carry the SAME pid (join works even on `slug:` fallbacks — sameness is all that
   matters). CI has the committed auction DB, so anchoring runs at full quality.
+- **DRAFT LIVE POINTS (added 23 Jul)** — the draft scores a LIVE match's H2H in-app from ESPN
+  (`lib/d11-score.ts` + `getLiveMatchPoints`), zero cricapi/bot. Its two prerequisites are now
+  auto-wired so a new tour "just works": (1) `apply_to_repos` writes the tour's `espn_series` into
+  the draft's `data/espn-series.json` per gender (was manual in `lib/espn.ts` → the Hundred showed 0);
+  (2) `tour_sync_finalize` copies `registry/players.json` → draft `lib/registry-players.json` (the
+  mirror `resolveEspnPid` reads for the ESPN→pid join — stale mirror = 0 live points). The draft's own
+  ESPN code is now gender-safe (teamKey strips men+women), resolves by ESPN id → common `displayName`
+  → shared cricket-identity fuzzy fallback, and is format-aware (ODI vs T20/Hundred).
 - **VERIFY GATE** — finalize FAILS the workflow BEFORE any commit/deploy if a new tour has an
-  unresolved `espn_series` OR pid coverage < `SYNC_MIN_PID_COVERAGE` (0.80). The two silent failures
-  can no longer ship green. Advisory (still-joins) `fixable-miss` healthcheck blockers do NOT fail
-  the gate — but never rush a bridge for a namesake (the Dale→Glenn merge is the mistake to avoid).
+  unresolved `espn_series`, pid coverage < `SYNC_MIN_PID_COVERAGE` (0.80), the registry-mirror sync
+  failed, OR the tour's `espn_series` is missing from the draft's `espn-series.json[gender]` (live
+  points wouldn't resolve). The draft build also runs `npm run check:tours` (unknown team codes / a
+  gender with no ESPN series). Every silent-failure mode behind the LPL/Hundred bugs now screams.
+  Advisory (still-joins) `fixable-miss` healthcheck blockers do NOT fail the gate — but never rush a
+  bridge for a namesake (the Dale→Glenn merge is the mistake to avoid).
 - **TOUR INGEST REVIEW** tab (GSheet) — per-tour espn / coverage / health / verdict for a glance.
 
 PREREQUISITE — `TOUR_SYNC_API_KEY` must be a GENUINELY DEDICATED cricapi key (its own free 100/day).

@@ -1740,6 +1740,64 @@ def in_toss_window():
             return True
     return False
 
+TOUR_CONTROL_TAB = "TOUR CONTROL"   # human cricapi gate: only tours marked "yes" here are polled
+
+def sync_tour_control(tours):
+    """Human approval gate for cricapi spend. Maintains the 'TOUR CONTROL' GSheet tab (one row per
+    tour, a 'Poll cricapi?' cell = yes/no) and returns {cricapi_series: decision}. A tour that is
+    NOT 'yes' is skipped ENTIRELY (0 cricapi hits, no sheet write) — so a freshly auto-ingested tour
+    never burns the budget until Nishant approves it. Append-only, so it NEVER clobbers his edits:
+    new tours are added as 'pending'; currently-ACTIVE tours are seeded 'yes' on first creation so
+    live scoring isn't interrupted (flip any to 'no' to discard + save hits). GSheet-only — costs
+    ZERO cricapi. Returns None when the sheet is unavailable (local / no creds) → caller polls all
+    (back-compat). Note: the draft's LIVE ESPN H2H is keyless, so a discarded tour still shows live
+    points in the app for free — the gate only stops the bot's cricapi/sheet points."""
+    sh = open_gsheet()
+    if sh is None:
+        return None
+    header = ["Tour", "Tab", "cricapi_series", "Poll cricapi? (yes/no)", "Notes"]
+    try:
+        ws = sh.worksheet(TOUR_CONTROL_TAB)
+        existing = ws.get_all_values()
+    except Exception:
+        ws, existing = None, []
+    # Preserve every existing row's decision (never rewrite the human's cells).
+    ctrl, seen = {}, set()
+    if existing and len(existing) > 1:
+        hdr = existing[0]
+        si = hdr.index("cricapi_series") if "cricapi_series" in hdr else 2
+        di = next((i for i, h in enumerate(hdr) if h.lower().startswith("poll")), 3)
+        for row in existing[1:]:
+            if len(row) > si and row[si].strip():
+                sid = row[si].strip()
+                ctrl[sid] = (row[di].strip().lower() if len(row) > di else "")
+                seen.add(sid)
+    first_time = ws is None
+    new_rows = []
+    for t in tours:
+        sid = t.get("cricapi_series", "")
+        if not sid or sid in seen:
+            continue
+        dec = "yes" if (first_time and is_active(t)) else "pending"
+        ctrl[sid] = dec
+        new_rows.append([t.get("name", ""), t.get("tab", ""), sid, dec, ""])
+        seen.add(sid)
+    try:
+        if ws is None:
+            ws = sh.add_worksheet(title=TOUR_CONTROL_TAB, rows=max(len(new_rows) + 10, 20), cols=len(header))
+            ws.update(range_name="A1", values=[header] + new_rows, value_input_option="RAW")
+            print(f"created '{TOUR_CONTROL_TAB}' tab ({len(new_rows)} tours; active→yes, rest→pending)", file=sys.stderr)
+        elif new_rows:
+            ws.append_rows(new_rows, value_input_option="RAW")
+            print(f"'{TOUR_CONTROL_TAB}': added {len(new_rows)} new tour(s) as 'pending' (approve to poll)", file=sys.stderr)
+    except Exception as e:
+        print(f"tour control tab: {e}", file=sys.stderr)
+    return ctrl
+
+def _tour_approved(ctrl, series_id):
+    """A tour is polled only if its control cell reads yes/y (case-insensitive)."""
+    return (ctrl.get(series_id) or "").strip().lower() in ("yes", "y")
+
 def main():
     if not KEY:
         sys.exit("Set CRICKET_API_KEY env var.")
@@ -1762,8 +1820,15 @@ def main():
     # live tour last, so the cap could be hit before its series_info was even fetched -> stale).
     tours.sort(key=lambda t: t.get("ends", ""), reverse=True)
     frozen = load_frozen()
+    control = sync_tour_control(tours)   # human cricapi approval gate (None = no creds → poll all)
     print(f"{len(tours)} tour(s): {', '.join(t['name'] for t in tours)}", file=sys.stderr)
     for t in tours:
+        # Human gate FIRST (0 API): skip any tour not marked "yes" in the TOUR CONTROL sheet, so a
+        # discarded / not-yet-approved tour never spends cricapi (nor writes its sheet tab).
+        if control is not None and not _tour_approved(control, t.get("cricapi_series")):
+            print(f"-- {t['name']}: not approved in TOUR CONTROL "
+                  f"(poll={control.get(t.get('cricapi_series')) or 'pending'}) — skipped (0 API)", file=sys.stderr)
+            continue
         if t.get("cricapi_series") in frozen:
             print(f"-- {t['name']}: frozen (fully resolved, cricsheet-official) — skipped (0 API)", file=sys.stderr)
             continue

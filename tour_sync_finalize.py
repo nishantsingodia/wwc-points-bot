@@ -8,12 +8,17 @@ After `tour_sync.py --apply` writes a new tour's tours.json entry + squads + dra
                                       Hundred bug).
   2. backfill_draft_pids.py        — stamp the SAME pids into the draft roster (both sides must
                                       share a pid; slug: vs cricsheet_id is fine if identical).
+  2b. sync registry MIRROR         — copy registry/players.json -> draft lib/registry-players.json,
+                                      the file resolveEspnPid reads for LIVE ESPN scoring/lineups.
+                                      Stale mirror = ESPN players don't resolve -> 0 live points.
   3. identity_healthcheck.py <tour>— advisory triage (fixable-miss/dup); NOT fatal on its own,
                                       because a slug: fixable-miss still JOINS.
   4. Writes a "TOUR INGEST REVIEW" tab to the GSheet — the human-glance surface (best-effort).
   5. VERIFY GATE — exits non-zero (fails the workflow BEFORE commit/deploy) if any tour is unsafe
-     to go live: espn_series UNRESOLVED, or pid coverage below SYNC_MIN_PID_COVERAGE. This is how
-     we *ensure* the two silent-failure modes (blank espn_series, blank pids) can never ship green.
+     to go live: espn_series UNRESOLVED, pid coverage below SYNC_MIN_PID_COVERAGE, the mirror sync
+     failed, or the tour's espn_series is MISSING from the draft's espn-series.json (so live points
+     would never resolve). Guarantees the silent-failure modes behind the LPL/Hundred bugs — blank
+     espn_series, blank pids, stale mirror, unregistered draft series — can never ship green.
 
 Usage: python3 tour_sync_finalize.py '["The Hundred Men\\'s Competition 2026", ...]'
 Env: DRAFT_REPO, GSHEET_ID + GOOGLE_SERVICE_ACCOUNT_JSON (review tab; optional),
@@ -108,8 +113,45 @@ def main():
     print("== backfill_draft_pids ==", file=sys.stderr)
     run([sys.executable, "registry/backfill_draft_pids.py"])
 
+    # 2b. Sync the draft's ESPN-resolver registry MIRROR (lib/registry-players.json). The draft's
+    # resolveEspnPid (live XI + live ESPN points) reads THIS file to map an ESPN player -> our pid;
+    # backfill only stamps players-raw.json. If the mirror stays stale, ESPN's players don't resolve
+    # to roster pids -> 0 live points (the 22 Jul Hundred bug). Copy the freshly-anchored registry.
+    print("== sync draft registry mirror ==", file=sys.stderr)
+    # One canonical repo var; lib/data fall out of it (a local operator who exports only DRAFT_REPO
+    # gets consistent paths — CI still sets DRAFT_LIB/DRAFT_RAW explicitly, which win).
+    draft_repo = os.environ.get("DRAFT_REPO", os.path.expanduser("~/wwc-draft"))
+    draft_lib = os.environ.get("DRAFT_LIB") or os.path.join(draft_repo, "lib")
+    draft_data = (os.path.dirname(os.environ["DRAFT_RAW"]) if os.environ.get("DRAFT_RAW")
+                  else os.path.join(draft_repo, "data"))
+    mirror_ok = True
+    try:
+        import shutil
+        os.makedirs(draft_lib, exist_ok=True)
+        shutil.copyfile(os.path.join(BOT, "registry", "players.json"),
+                        os.path.join(draft_lib, "registry-players.json"))
+        print(f"  synced registry mirror -> {draft_lib}/registry-players.json", file=sys.stderr)
+    except Exception as e:
+        mirror_ok = False
+        print(f"  ⚠ registry mirror sync FAILED: {e}", file=sys.stderr)
+
+    # Draft's per-gender ESPN series list (data/espn-series.json) — apply_to_repos should have
+    # added each tour's series; we ASSERT it below so a miss fails the gate, not prod. Distinguish
+    # "file unreadable" (path/env problem) from "series absent" so the gate message isn't misleading.
+    es_file = os.path.join(draft_data, "espn-series.json")
+    draft_series, series_readable = {}, True
+    try:
+        draft_series = json.load(open(es_file))
+    except Exception as e:
+        series_readable = False
+        print(f"  ⚠ could not read draft espn-series.json at {es_file}: {e}", file=sys.stderr)
+
     # 3. per-tour metrics + advisory healthcheck
     rows, gate_fail = [], []
+    if not mirror_ok:
+        gate_fail.append("registry mirror sync failed — draft can't resolve ESPN players (0 live pts)")
+    if not series_readable:
+        gate_fail.append(f"could not read draft espn-series.json at {es_file} (path/env problem, not a missing series)")
     for name in applied:
         t = tours.get(name, {})
         espn = (t.get("espn_series") or "").strip()
@@ -124,6 +166,11 @@ def main():
             problems.append("SET espn_series (auto-resolve failed) — franchise pts won't load")
         if frac < MIN_COV:
             problems.append(f"pid coverage {frac:.0%} < {MIN_COV:.0%} — anchoring didn't take")
+        # GAP-1 safety net: the draft must carry this tour's espn_series in its per-gender list,
+        # or getEspnLineup / getLiveMatchPoints can't resolve the event -> no lineups, 0 live pts.
+        gkey = "W" if t.get("gender") == "female" else "M"
+        if espn and espn not in (draft_series.get(gkey) or []):
+            problems.append(f"espn_series {espn} MISSING from draft espn-series.json[{gkey}] — live points won't resolve")
         verdict = "REVIEW" if problems else ("OK (has slug fixable-miss)" if fixable else "OK")
         rows.append([name, t.get("tab", ""), espn or "UNRESOLVED",
                      str(cov["total"]), f"{frac:.0%} ({cov['resolved']}/{cov['total']})",
