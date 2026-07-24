@@ -73,6 +73,14 @@ jobs:
           curl -fsSL --retry 3 --retry-delay 5 --max-time 180 -o lpl.zip \
             https://cricsheet.org/downloads/lpl_json.zip
           unzip -o -q lpl.zip "*.json" -d cricsheet
+          # The Hundred (England 100-ball, men's & women's in one archive) — its own archive; the
+          # internationals zip does NOT contain it. Without this the Hundred tours score PROVISIONAL
+          # off ESPN forever (cricsheet L2 reconciliation never fires → no official numbers). The
+          # cricsheet indexer is format-agnostic (gender + date/teams), so these cards resolve with
+          # no code change; the HUN scorer (tours.json format: HUN) scores from the ball-by-ball.
+          curl -fsSL --retry 3 --retry-delay 5 --max-time 180 -o hnd.zip \
+            https://cricsheet.org/downloads/hnd_json.zip
+          unzip -o -q hnd.zip "*.json" -d cricsheet
 
       - name: Compute D11 points and write to Google Sheet(s)
         # Tours are defined in tours.json (each writes its own tab). See TOURS.md.
