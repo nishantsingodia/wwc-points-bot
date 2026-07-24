@@ -145,6 +145,19 @@
         "Lanka Premier League 2026"
       ],
       "source": "new"
+    },
+    {
+      "pid": "9e5f4ad7",
+      "display": "Kayla Reyneke",
+      "aliases": [
+        "kayla reyneke"
+      ],
+      "team": "WTBPH",
+      "role": "BAT",
+      "tours": [
+        "The Hundred Women's Competition 2026"
+      ],
+      "source": "auto"
     }
   ]
 }
