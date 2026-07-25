@@ -266,6 +266,80 @@ def infer_start(tour):
         except Exception: pass
     return (date.fromisoformat(tour["ends"]) - timedelta(days=45)).isoformat()
 
+# ---- cricinfo-id crosswalk + manual bridges (the identity spine) ----
+# The pid is now ci:<cricinfoId> (the ESPNcricinfo id = cricsheet people.csv key_cricinfo:
+# UNIQUE 18253/18253, invariant, offline-verifiable). cricsheet_id is DERIVED from the
+# cricinfo id via the crosswalk, so cs<->ci always point to the SAME person by construction.
+CROSSWALK_PATH = os.path.join(REG_DIR, "crosswalk.json")
+CI_BRIDGES_PATH = os.path.join(REG_DIR, "manual_ci_bridges.json")
+CS2CI, CI_ALT, CI2CS, ALT_OF, PRIMARY, NAME2CI = {}, {}, {}, {}, set(), {}
+
+def load_crosswalk():
+    """registry/crosswalk.json (pure fn of people.csv): cricsheet_id<->cricinfo_id + alternates."""
+    global CS2CI, CI_ALT, CI2CS, ALT_OF, PRIMARY
+    if not os.path.exists(CROSSWALK_PATH):
+        print("  ⚠ crosswalk.json missing — regenerate from people.csv first", file=sys.stderr); return
+    cx = json.load(open(CROSSWALK_PATH))
+    CS2CI = cx.get("cs2ci", {}); CI_ALT = cx.get("ci_alt", {})
+    CI2CS = {ci: cs for cs, ci in CS2CI.items()}          # cricinfo -> cricsheet (reverse; unique)
+    PRIMARY = set(CS2CI.values())
+    ALT_OF = {}
+    for alt, prim in CI_ALT.items(): ALT_OF.setdefault(prim, []).append(alt)
+
+def load_ci_bridges():
+    """registry/manual_ci_bridges.json — human-verified announced-name(norm) -> cricinfo id.
+    Authoritative; the ONLY sanctioned way to assert an identity fuzzy can't (or must not guess)."""
+    global NAME2CI
+    if not os.path.exists(CI_BRIDGES_PATH): return
+    for _pid, b in json.load(open(CI_BRIDGES_PATH)).items():
+        ci = b.get("cricinfo_id")
+        for nm in b.get("names", []):
+            if nm and ci: NAME2CI[nm] = str(ci)
+
+def fold_ci(x):
+    """any cricinfo id (primary OR alternate _2/_3) -> the PRIMARY cricinfo id, else None."""
+    x = str(x) if x else ""
+    return x if x in PRIMARY else CI_ALT.get(x)
+
+def _initials_ok(a, b):
+    """given-name gate for the FUZZY path only: cricsheet-initials match (handles 'Ash'/'A Gardner')
+    OR first-name first-letter equal. REJECTS 'Jo' vs 'A Gardner'. Id-authoritative paths (bridge/
+    exact/ESPN-id) skip this — they don't guess the id from the name."""
+    if cricsheet_match(a, b) or cricsheet_match(b, a): return True
+    ta, tb = norm(a).split(), norm(b).split()
+    return bool(ta and tb and ta[0][0] == tb[0][0])
+
+def resolve_ci(sname, pool_scoped, full_pool, espn_ath, ts_bridges):
+    """Deterministic announced-name -> PRIMARY cricinfo id, or (None, None) if unresolved.
+    NEVER guesses on ambiguity — an ambiguous fuzzy match returns None => the player goes to
+    HOLD/review, not a fabricated pid (the Jo-Gardner-into-Ashleigh class becomes impossible)."""
+    ns = norm(sname)
+    # a) manual human-verified bridge (authoritative)
+    if ns in NAME2CI:
+        ci = fold_ci(NAME2CI[ns]) or NAME2CI[ns]
+        return ci, "bridge"
+    # b) legacy TS bridge (announced -> cricsheet DB spelling) -> cricsheet_id -> ci
+    br = ts_bridges.get(ns)
+    if br:
+        row = next((r for r in full_pool if norm(r.get("name","")) == norm(br) and r.get("cricsheet_id")), None)
+        if row and CS2CI.get(row["cricsheet_id"]): return CS2CI[row["cricsheet_id"]], "ts-bridge"
+    # c) EXACT cricsheet-register name (country/gender-scoped), unique -> ci
+    exact = {CS2CI.get(r["cricsheet_id"]) for r in pool_scoped
+             if norm(r.get("name","")) == ns and r.get("cricsheet_id") and CS2CI.get(r["cricsheet_id"])}
+    if len(exact) == 1: return next(iter(exact)), "exact"
+    # d) FUZZY DB, NULL ON AMBIGUITY (confident gap + given-compatible + initials-ok + unique person)
+    dbm, sc, runner = best_match(sname, pool_scoped, key=lambda r: r.get("name",""))
+    if (dbm and sc >= THRESH and (sc - runner) >= 4 and given_compatible(sname, dbm["name"])
+            and _initials_ok(sname, dbm["name"]) and dbm.get("cricsheet_id")):
+        ci = CS2CI.get(dbm["cricsheet_id"])
+        if ci: return ci, "fuzzy"
+    # e) ESPN roster athlete.id — IS the cricinfo id (id-authoritative; name only LOCATES the athlete)
+    em, esc, _ = best_match(sname, espn_ath, key=lambda a: a["name"])
+    if em and esc >= THRESH and given_compatible(sname, em["name"]):
+        ci = fold_ci(em.get("espn_id"))
+        if ci: return ci, "espn"
+    return None, None
+
 # ---- global registry helpers ----
 def load_global():
     if os.path.exists(GLOBAL_PATH):
@@ -274,14 +348,18 @@ def load_global():
     return {}
 
 def build_index(players):
-    """alias-norm -> pid, espn_id -> pid, cricsheet_id -> pid (for cross-tour reuse)."""
-    by_alias, by_espn, by_cs = {}, {}, {}
+    """alias-norm -> pid, cricinfo_id -> pid, cricsheet_id -> pid (for cross-tour reuse).
+    Also folds every manual_ci_bridge spelling onto its ci: pid so a known name always reuses."""
+    by_alias, by_ci, by_cs = {}, {}, {}
     for pid, e in players.items():
         for a in e.get("aliases", []):
             by_alias.setdefault(a, pid)
-        if e.get("espn_id"): by_espn[str(e["espn_id"])] = pid
-        if e.get("cricsheet_id"): by_cs[e["cricsheet_id"]] = pid
-    return by_alias, by_espn, by_cs
+        if e.get("cricinfo_id"): by_ci.setdefault(str(e["cricinfo_id"]), pid)
+        if e.get("cricsheet_id"): by_cs.setdefault(e["cricsheet_id"], pid)
+    for ns, ci in NAME2CI.items():
+        pid = by_ci.get(str(ci))
+        if pid: by_alias.setdefault(ns, pid)
+    return by_alias, by_ci, by_cs
 
 def squad_players(path):
     raw = json.load(open(path)); out = []
@@ -290,19 +368,18 @@ def squad_players(path):
             out.append((short, v["name"], p[0], p[1]))
     return out
 
-def build_tour(tour, con, draft_players, bridges, players, idx):
-    by_alias, by_espn, by_cs = idx
+def build_tour(tour, con, draft_players, ts_bridges, players, idx):
+    by_alias, by_ci, by_cs = idx
     slug = re.sub(r"[^a-z0-9]+", "_", tour["tab"].lower()).strip("_")
     spath = os.path.join(HERE, tour["squads"]) if tour.get("squads") else None
     if not spath or not os.path.exists(spath):
-        print(f"  -- {tour['name']}: no squad file, skip", file=sys.stderr); return
+        print(f"  -- {tour['name']}: no squad file, skip", file=sys.stderr); return []
     squad = squad_players(spath)
     teams_full = sorted({tf for _, tf, _, _ in squad})
     gender = tour.get("gender", "female")
     pool = db_pool(con, gender)
-    # Scope DB matching by COUNTRY for international tours (kills surname ambiguity:
-    # within "India", "D Sharma" is unique). Franchise tours (MLC) have non-country team
-    # names -> the scoped pool comes back tiny, so we fall back to the full gender pool.
+    # Scope DB matching by COUNTRY for international tours (kills surname ambiguity). Franchise
+    # tours have non-country team names -> the scoped pool is tiny -> fall back to the full pool.
     def norm_country(s): return norm(re.sub(r"(?i)\bwomen\b", "", s or ""))
     pools_by_team = {}
     for tf in teams_full:
@@ -311,41 +388,24 @@ def build_tour(tour, con, draft_players, bridges, players, idx):
         pools_by_team[tf] = scoped if len(scoped) >= 5 else pool
     espn_ath = espn_harvest(tour.get("espn_series", ""), teams_full,
                             date_range(infer_start(tour), tour["ends"])) if tour.get("espn_series") else []
-    capi = [{"n": n} for n in cricapi_cached_names()]
-    membership, unmapped, n_reused = {}, [], 0
+    membership, unmapped, review, n_reused = {}, [], [], 0
 
     for short, tfull, sname, role in squad:
         ns = norm(sname)
-        # ESPN match first (gives espn_id + good aliases regardless of identity route)
-        em, esc, _ = best_match(sname, espn_ath, key=lambda a: a["name"])
-        espn_id = em["espn_id"] if (em and esc >= THRESH and given_compatible(sname, em["name"])) else None
-        # 0) CROSS-TOUR REUSE: already known globally? (the whole point — zero rework)
-        pid = by_alias.get(ns) or (by_espn.get(espn_id) if espn_id else None)
-        cs_id = aid = None; db_name = None
+        # 0) CROSS-TOUR REUSE: already known globally (zero rework, idempotent)
+        pid = by_alias.get(ns)
+        ci = players.get(pid, {}).get("cricinfo_id") if pid else None
         if pid: n_reused += 1
-        # Anchor a cricsheet_id via bridge/DB lookup — for a NEW player (it forms the pid) AND for a
-        # REUSED slug:/espn: entry that STILL lacks one (upgrade it now that a bridge exists; the
-        # Jul-14 build slug-pinned every LPL player before ESPN rosters were live). Reused entries
-        # that already have a cricsheet_id are left untouched (true zero-rework).
-        if not (pid and players.get(pid, {}).get("cricsheet_id")):
-            # 1) bridge (announced -> cricsheet DB spelling) then exact DB lookup
-            br = bridges.get(ns)
-            if br:
-                row = next((r for r in pool if norm(r["name"]) == norm(br)), None)
-                if row: cs_id, aid, db_name = row.get("cricsheet_id"), row.get("id"), row.get("name")
-            # 2) DB fuzzy (improved: handles initials/hyphens), scoped to country
-            if not cs_id:
-                dbm, dbsc, runner = best_match(sname, pools_by_team[tfull], key=lambda r: r["name"])
-                if (dbm and dbsc >= THRESH and (dbsc - runner) >= 4    # confident + unambiguous
-                        and given_compatible(sname, dbm["name"])):    # + same person, not just same surname
-                    cs_id, aid, db_name = dbm.get("cricsheet_id"), dbm.get("id"), dbm.get("name")
+        how = "reuse" if ci else None
+        # resolve a cricinfo id for a NEW player OR a reused entry still lacking one
+        if not ci:
+            ci, how = resolve_ci(sname, pools_by_team[tfull], pool, espn_ath, ts_bridges)
+            if ci: ci = fold_ci(ci) or ci
             if not pid:
-                pid = (by_cs.get(cs_id) if cs_id else None) or cs_id or (f"espn:{espn_id}" if espn_id else f"slug:{ns.replace(' ','-')}")
+                pid = (by_ci.get(str(ci)) if ci else None) or (f"ci:{ci}" if ci else f"uncapped:{ns.replace(' ','-')}")
+        cs_id = CI2CS.get(str(ci)) if ci else None        # DERIVE cricsheet_id from cricinfo id
 
-        # draft display + id. The given_compatible() guard is applied to EVERY fuzzy source
-        # below (draft/ESPN/cricapi) — NOT just to id resolution — so a wrong same-surname
-        # match can never contribute its NAME as an alias and silently re-merge two people
-        # (the bug that re-smeared Kunwarjeet/Tajinder/Shorna on an earlier rebuild).
+        # draft display + id (guarded so a wrong same-surname match can't contribute a name)
         dpool = [p for p in draft_players if p.get("team_code") == short]
         dm, dsc, _ = best_match(sname, dpool or draft_players, key=lambda p: p.get("name", ""))
         dm_ok = bool(dm and dsc >= THRESH and given_compatible(sname, dm.get("name", "")))
@@ -354,42 +414,42 @@ def build_tour(tour, con, draft_players, bridges, players, idx):
 
         e = players.get(pid, {"aliases": [], "tours": []})
         al = set(e.get("aliases", [])); al.add(ns); al.add(norm(display))
-        if db_name: al.add(norm(db_name))
+        em, esc, _ = best_match(sname, espn_ath, key=lambda a: a["name"])
         if em and esc >= THRESH and given_compatible(sname, em["name"]):
-            al.add(norm(em["name"])); al.add(norm(em["display"]))
-        # cricapi spelling
-        cm, csc, _ = best_match(sname, capi, key=lambda x: x["n"])
-        if cm and csc >= THRESH and given_compatible(sname, cm["n"]): al.add(norm(cm["n"]))
+            al.add(norm(em["name"])); al.add(norm(em.get("display", "")))
+        for nm in NAME2CI:                                # fold verified spellings of this ci
+            if ci and NAME2CI[nm] == str(ci): al.add(nm)
         e["display"] = e.get("display") or display
-        e["cricsheet_id"] = e.get("cricsheet_id") or cs_id
-        e["espn_id"] = e.get("espn_id") or espn_id
+        if ci:
+            e["cricinfo_id"] = str(ci)
+            e["cricsheet_id"] = cs_id                     # derived => cs<->ci same person
+            e["espn_id"] = str(ci)
+            if ALT_OF.get(str(ci)): e["cricinfo_alt"] = ALT_OF[str(ci)]
         e["draft_id"] = e.get("draft_id") or draft_id
-        e["auction_id"] = e.get("auction_id") or aid
-        # INVARIANT: every alias belongs to exactly ONE pid. Never claim an alias that is
-        # already owned by a DIFFERENT player — this is the exact, non-heuristic backstop that
-        # stops a fuzzy match re-stealing a split player's name (e.g. Andre's slot grabbing
-        # 'afy fletcher' from Afy, or Sharmin grabbing 'shorna akter' from Shorna) and silently
-        # re-merging them on a rebuild. (given_compatible above stops adding NEW wrong aliases;
-        # this stops re-claiming ones already correctly assigned elsewhere.)
+        e["auction_id"] = e.get("auction_id")
+        # INVARIANT: an alias belongs to exactly ONE pid — never re-claim another player's alias.
         e["aliases"] = sorted(a for a in al if a and by_alias.get(a, pid) == pid)
         if tour["name"] not in e["tours"]: e["tours"].append(tour["name"])
         players[pid] = e
-        # keep indices fresh for same-run reuse
         for a in e["aliases"]: by_alias.setdefault(a, pid)
-        if espn_id: by_espn.setdefault(str(espn_id), pid)
+        if ci: by_ci.setdefault(str(ci), pid)
         if cs_id: by_cs.setdefault(cs_id, pid)
 
         membership.setdefault(short, []).append(pid)
-        if not e["cricsheet_id"]:
-            unmapped.append(f"{short:5} {sname:30} pid={pid}  (no cricsheet_id; espn_id={espn_id})")
+        if not ci:   # HOLD-for-review: no fabricated identity — surface for a human cricinfo id
+            cand = best_match(sname, pools_by_team[tfull], key=lambda r: r.get("name",""))[0] or {}
+            unmapped.append(f"{short:5} {sname:30} pid={pid}  (no cricinfo id -> needs review)")
+            review.append({"player": sname, "team": short, "tour": tour["name"],
+                           "current_pid": pid, "closest_guess": cand.get("name","")})
 
     os.makedirs(os.path.join(REG_DIR, "tours"), exist_ok=True)
     json.dump({"tour": tour["name"], "slug": slug, "teams": membership},
               open(os.path.join(REG_DIR, "tours", f"{slug}.json"), "w"), indent=1, ensure_ascii=False)
     open(os.path.join(REG_DIR, f"UNMAPPED_{slug}.txt"), "w").write(
         "\n".join(unmapped) + ("\n" if unmapped else ""))
-    print(f"  {tour['name']}: {len(squad)} squad slots | reused-from-global {n_reused}"
-          f" | UNMAPPED(no cricsheet_id) {len(unmapped)} | ESPN harvested {len(espn_ath)}", file=sys.stderr)
+    print(f"  {tour['name']}: {len(squad)} slots | reused {n_reused}"
+          f" | NEEDS-REVIEW {len(review)} | ESPN harvested {len(espn_ath)}", file=sys.stderr)
+    return review
 
 def main():
     filt = sys.argv[1].lower() if len(sys.argv) > 1 else None
@@ -397,14 +457,16 @@ def main():
     con = open_pool_con()   # live auction DB locally; committed export in CI (see open_pool_con)
     draft_players = json.load(open(DRAFT_RAW))
     if isinstance(draft_players, dict): draft_players = draft_players.get("players", [])
-    bridges = load_bridges()
+    load_crosswalk(); load_ci_bridges()          # the cricinfo-id spine (people.csv + verified bridges)
+    ts_bridges = load_bridges()
     players = load_global()
     idx = build_index(players)
-    print(f"global registry: {len(players)} players loaded | bridges: {len(bridges)} | "
-          f"draft roster: {len(draft_players)}", file=sys.stderr)
+    print(f"global registry: {len(players)} players | crosswalk {len(CS2CI)} | ci-bridges {len(NAME2CI)} | "
+          f"ts-bridges {len(ts_bridges)} | draft roster {len(draft_players)}", file=sys.stderr)
+    all_review = []
     for t in tours:
         if filt and filt not in t["name"].lower(): continue
-        build_tour(t, con, draft_players, bridges, players, idx)
+        all_review += (build_tour(t, con, draft_players, ts_bridges, players, idx) or [])
     # Merge hand-curated aliases the auto-matcher can't link (reviewed once, permanent).
     by_alias = build_index(players)[0]
     mpath = os.path.join(REG_DIR, "manual_aliases.json")
@@ -419,10 +481,14 @@ def main():
             applied += 1
         print(f"  manual_aliases merged: {applied}", file=sys.stderr)
     os.makedirs(REG_DIR, exist_ok=True)
-    json.dump({"anchor": "cricsheet_id (pid); espn:/slug: fallback when unknown",
+    # unresolved players -> the "Needs Cricinfo ID" review feed (tour_sync_finalize pushes it to the GSheet tab)
+    json.dump(all_review, open(os.path.join(REG_DIR, "needs_cricinfo_pending.json"), "w"),
+              indent=1, ensure_ascii=False)
+    json.dump({"anchor": "cricinfo_id (ci:); cs:/uncapped: fallback; cricsheet_id derived from crosswalk",
                "count": len(players), "players": players},
               open(GLOBAL_PATH, "w"), indent=1, ensure_ascii=False)
-    print(f"GLOBAL registry written: {len(players)} players -> {GLOBAL_PATH}", file=sys.stderr)
+    print(f"GLOBAL registry written: {len(players)} players -> {GLOBAL_PATH} | needs-review {len(all_review)}",
+          file=sys.stderr)
 
 if __name__ == "__main__":
     main()

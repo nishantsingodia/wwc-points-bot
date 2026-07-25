@@ -96,6 +96,48 @@ def write_review_tab(rows, stamp):
         print(f"  (review tab write failed: {e})", file=sys.stderr)
 
 
+def write_needs_cricinfo_tab():
+    """Append players build_registry couldn't auto-resolve (registry/needs_cricinfo_pending.json) to
+    the 'Needs Cricinfo ID' tab in the points sheet, so a human drops in the cricinfo id — which
+    manual_ci_bridges then picks up on the next build (the self-maintaining identity loop). Idempotent:
+    dedupes by current_pid so re-runs never duplicate a row and never clobber an already-filled id.
+    Best-effort — a failure here never breaks the gate."""
+    pending_path = os.path.join(BOT, "registry", "needs_cricinfo_pending.json")
+    try:
+        pending = json.load(open(pending_path)) if os.path.exists(pending_path) else []
+    except Exception:
+        pending = []
+    if not pending:
+        print("  (needs-cricinfo: none pending)", file=sys.stderr); return
+    if not (os.environ.get("GSHEET_ID") and os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON")):
+        print(f"  (needs-cricinfo tab skipped — no GSheet creds; {len(pending)} pending)", file=sys.stderr); return
+    try:
+        import gspread
+        from google.oauth2.service_account import Credentials
+        info = json.loads(os.environ["GOOGLE_SERVICE_ACCOUNT_JSON"])
+        creds = Credentials.from_service_account_info(
+            info, scopes=["https://www.googleapis.com/auth/spreadsheets"])
+        sh = gspread.authorize(creds).open_by_key(os.environ["GSHEET_ID"])
+        header = ["player", "current_pid", "tour", "team", "closest_guess", "cricinfo_id_FILL_HERE"]
+        try:
+            ws = sh.worksheet("Needs Cricinfo ID")
+        except gspread.WorksheetNotFound:
+            ws = sh.add_worksheet(title="Needs Cricinfo ID", rows=200, cols=len(header))
+            ws.update(range_name="A1", values=[header], value_input_option="RAW")
+        existing = ws.get_all_values()
+        have = {(r[1] if len(r) > 1 else "") for r in existing[1:]}   # dedupe by current_pid
+        new_rows = [[p.get("player", ""), p.get("current_pid", ""), p.get("tour", ""),
+                     p.get("team", ""), p.get("closest_guess", ""), ""]
+                    for p in pending if p.get("current_pid") not in have]
+        if new_rows:
+            ws.append_rows(new_rows, value_input_option="RAW")
+            print(f"  Needs Cricinfo ID tab: appended {len(new_rows)} player(s) for review", file=sys.stderr)
+        else:
+            print("  Needs Cricinfo ID tab: nothing new (all pending already listed)", file=sys.stderr)
+    except Exception as e:
+        print(f"  (needs-cricinfo tab write failed: {e})", file=sys.stderr)
+
+
 def main():
     applied = json.loads(sys.argv[1]) if len(sys.argv) > 1 else []
     if not applied:
@@ -195,6 +237,7 @@ def main():
             gate_fail.append(f"{name}: " + "; ".join(problems))
 
     write_review_tab(rows, stamp)
+    write_needs_cricinfo_tab()   # push any unresolved players to the "Needs Cricinfo ID" tab for a human
 
     # 4. VERIFY GATE — the whole point: never ship a tour that will silently show no points.
     print("\n=== TOUR INGEST VERIFY ===", file=sys.stderr)
