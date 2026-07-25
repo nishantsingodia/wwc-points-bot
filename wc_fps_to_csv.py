@@ -837,6 +837,21 @@ def score(p, role, fmt=None):
         return _score_hundred(p, role)
     return _score_t20(p, role)
 
+def _bowled(p):
+    """Did this player bowl? Prefer a known ball count, but fall back to any hard bowling
+    signal. cricapi omits the `overs` field on 100-ball (The Hundred) cards — and can drop it
+    on a feed hiccup in any format — so bowlers can arrive with balls=0. We backfill balls from
+    ESPN (see the merge near L1487), but when THAT also misses (e.g. the bowler's scorecard line
+    didn't name-match), `balls` stays 0. Gating the whole bowling block on `balls > 0` alone then
+    silently zeroes a bowler whose wickets/runs DID come through from cricapi — the recurring
+    "Gleeson 4-for -> 4-pts" / "Usman Tariq 2-for -> 0 bowl pts" bug. A wicket, a conceded run,
+    a dot, an lbw/bowled or a maiden is proof enough that they bowled. The economy/SR sub-blocks
+    keep their own `balls >= N` gates (they divide by balls), so they correctly stay 0 when the
+    ball count is unknown — only the ball-count-independent points (wkt/haul/dot/lbw/maiden) are
+    recovered."""
+    return bool(p["balls"] or p["w"] or p["runs_conceded"] or p["dots"]
+                or p["lbwb"] or p["maidens"])
+
 def _score_t20(p, role):
     bat = bowl = field = sr_pts = eco_pts = 0
     if p["b"] > 0 or p["r"] > 0:
@@ -858,7 +873,7 @@ def _score_t20(p, role):
     # run out for 0 off 0 balls (backing up at the non-striker's end) still gets it.
     if p["dismissed"] and p["r"] == 0 and role != "BOWL":
         bat += R["duck"]
-    if p["balls"] > 0:
+    if _bowled(p):
         bowl += p["w"] * R["wkt"] + p["lbwb"] * R["lbwb"] + p["dots"] * R["dot"] + p["maidens"] * R["maiden"]
         if p["w"] >= 5: bowl += R["h5"]
         elif p["w"] >= 4: bowl += R["h4"]
@@ -897,7 +912,7 @@ def _score_hundred(p, role):
     # Duck (-2) OUTSIDE the b>0/r>0 gate (a 0-off-0 run-out still counts), as in _score_t20.
     if p["dismissed"] and p["r"] == 0 and role != "BOWL":
         bat += R2["duck"]
-    if p["balls"] > 0:
+    if _bowled(p):
         bowl += p["w"] * R2["wkt"] + p["lbwb"] * R2["lbwb"] + p["dots"] * R2["dot"]
         if p["w"] >= 5: bowl += R2["h5"]
         elif p["w"] >= 4: bowl += R2["h4"]
@@ -934,7 +949,7 @@ def _score_odi(p, role):
             elif sr < 30: sr_pts += -6
     if p["dismissed"] and p["r"] == 0 and role != "BOWL":
         bat += R2["duck"]
-    if p["balls"] > 0:
+    if _bowled(p):
         bowl += (p["w"] * R2["wkt"] + p["lbwb"] * R2["lbwb"]
                  + (p["dots"] // R2["dotGroup"]) * R2["dotPts"] + p["maidens"] * R2["maiden"])
         if p["w"] >= 6: bowl += R2["h6"]
