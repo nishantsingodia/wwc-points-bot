@@ -249,6 +249,19 @@
         "Lanka Premier League 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:410765",
+      "display": "Nurul Hasan",
+      "aliases": [
+        "nurul hasan"
+      ],
+      "team": "GG",
+      "role": "BAT",
+      "tours": [
+        "Lanka Premier League 2026"
+      ],
+      "source": "auto"
     }
   ]
 }
