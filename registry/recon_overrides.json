@@ -606,6 +606,118 @@
       "field": "6s",
       "status": "approved",
       "source": "S2"
+    },
+    {
+      "match_key": "2026-07-22::southern brave|welsh fire",
+      "scope": "player",
+      "pid": "ci:669365",
+      "field": "r",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-22::southern brave|welsh fire",
+      "scope": "player",
+      "pid": "ci:669365",
+      "field": "4s",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-22::southern brave|welsh fire",
+      "scope": "player",
+      "pid": "ci:669365",
+      "field": "6s",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-22::southern brave|welsh fire",
+      "scope": "player",
+      "pid": "ci:1079380",
+      "field": "r",
+      "status": "approved",
+      "source": "S1"
+    },
+    {
+      "match_key": "2026-07-23::london spirit|manchester super giants",
+      "scope": "player",
+      "pid": "ci:308251",
+      "field": "w",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-25::southern brave|sunrisers leeds",
+      "scope": "player",
+      "pid": "ci:605661",
+      "field": "r",
+      "status": "approved",
+      "source": "S1"
+    },
+    {
+      "match_key": "2026-07-21::mi london|sunrisers leeds",
+      "scope": "player",
+      "pid": "ci:1184099",
+      "field": "w",
+      "status": "approved",
+      "source": "S1"
+    },
+    {
+      "match_key": "2026-07-22::dambulla sixers|galle gallants",
+      "scope": "player",
+      "pid": "ci:596436",
+      "field": "r",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-22::dambulla sixers|galle gallants",
+      "scope": "player",
+      "pid": "ci:596436",
+      "field": "w",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-22::dambulla sixers|galle gallants",
+      "scope": "player",
+      "pid": "ci:596436",
+      "field": "4s",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-22::dambulla sixers|galle gallants",
+      "scope": "player",
+      "pid": "ci:596436",
+      "field": "6s",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-25::colombo kaps|dambulla sixers",
+      "scope": "player",
+      "pid": "ci:596436",
+      "field": "r",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-25::colombo kaps|dambulla sixers",
+      "scope": "player",
+      "pid": "ci:596436",
+      "field": "4s",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-25::colombo kaps|dambulla sixers",
+      "scope": "player",
+      "pid": "ci:596436",
+      "field": "6s",
+      "status": "approved",
+      "source": "S2"
     }
   ]
 }
