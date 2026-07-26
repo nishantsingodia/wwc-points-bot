@@ -6,45 +6,56 @@ registry** (`registry/players.json`) consumed by the auction (`sync-registry`) a
 
 ## ⛔ Player identity / name-matching — READ before touching it
 This is the cross-project spine (auction + draft + bot all resolve names through the registry).
-Hard-won rules from the LPL 2026 saga (18 Jul):
+**Anchor = the ESPNcricinfo id** (migrated 25 Jul 2026 from cricsheet_id). The id is UNIQUE
+(people.csv `key_cricinfo`, 18253/18253), invariant, and verifiable at cricinfo.com/cricketers/x-<id>.
 
-- **The registry is the single source of truth for identity.** `build_registry.py` anchors every
-  squad name to a stable `cricsheet_id` (pid). Fixes belong here — in `manual_aliases.json` or the
-  bridge sources `load_bridges()` reads (auction `mlc-2026.ts`/`lpl-2026.ts` alias+display maps,
-  draft `DISPLAY_NAME_MAP`) — NOT in a per-app local alias map (those don't propagate).
-  A new tour whose identity file isn't wired into `load_bridges()` silently falls outside the system.
-- **`build_tour` reuse gotcha:** a slug-pinned entry from an earlier (pre-ESPN) build is REUSED and
-  won't re-anchor unless it still lacks a cricsheet_id AND a bridge/DB match now exists (the fix that
-  took LPL from 58→17 unmapped). Re-run: `python3 build_registry.py "<tour name>"` (filter matches
-  `tours.json` name — "lanka premier league", not "lpl").
-- **A fuzzy match is a HYPOTHESIS — `given_compatible` is the same-person gate.** It rejects
-  Dale→Glenn once no bridge forces it. But it CANNOT validate SL initials-forms (Kusal Mendis =
-  BKG Mendis) because local data has no full/common name. Never promote a fuzzy/generated map to the
-  registry unverified — I once bridged "Dale Phillips"→"GD Phillips" and merged Glenn's 274-match
-  record into Dale.
-- **Phantom-duplicate rows break anchoring.** Two identical-name rows (a real one + auction phantoms)
-  make the matcher's `(score - runner) >= 4` tie-breaker reject both → a star stays unanchored
-  (Wanindu/Zahir/Akif/Chameera). Dedup the auction DB, then rebuild.
+- **The registry is the single source of truth for identity.** `build_registry.py` resolves every
+  squad name to a **cricinfo id** and keys the entry `ci:<cricinfoId>`. The `cricsheet_id` is DERIVED
+  from `registry/crosswalk.json` (people.csv-derived cs↔ci) — so cs and ci always point to the SAME
+  person by construction. Fallback ladder: `ci:` → `cs:<cricsheetId>` (in cricsheet, no cricinfo id)
+  → `uncapped:<slug>` (in neither; FLAGGED). In practice everyone has a cricinfo id, so cs:/uncapped:
+  are near-empty.
+- **Fixes go in `registry/manual_ci_bridges.json`** (human-verified announced-name → cricinfo id) —
+  the permanent, authoritative alias source. Also the legacy `load_bridges()` sources (auction
+  `mlc-2026.ts`/`lpl-2026.ts` maps, draft `DISPLAY_NAME_MAP`) are still consulted. NOT a per-app local
+  map (those don't propagate).
+- **`resolve_ci` NEVER guesses on ambiguity.** Cascade: manual bridge → legacy TS bridge → exact
+  people.csv → FUZZY (null-on-ambiguity, via cricket-identity semantics) → ESPN roster athlete.id
+  (= the cricinfo id). An ambiguous fuzzy match resolves to NOTHING → the player goes to HOLD, not a
+  fabricated `slug:`. This is what stops the Jo-Gardner-into-Ashleigh class. `given_compatible` +
+  first-initial gate reject Dale→Glenn; the id is only ever COPIED from the crosswalk, never invented.
+- **`build_tour` is idempotent + safe.** Existing players are REUSED by alias (a rebuild reproduces
+  the same `ci:` set — verified). A NEW/unresolved player is written to `registry/needs_cricinfo_pending.json`
+  → the **"Needs Cricinfo ID"** GSheet tab (see below), where a human drops the id → `manual_ci_bridges`
+  picks it up next build. Re-run: `python3 build_registry.py "<tour name>"`.
+- **Wrong cricsheet anchors happen too** (Milan Ratnayake was fuzzy-matched to KTH Ratnayake). Deriving
+  `cricsheet_id` from the verified cricinfo id (not the fuzzy match) fixes this class. **Phantom-duplicate
+  auction rows** still hurt exact/fuzzy lookups — dedup the auction DB, then rebuild.
 
 ## GATE before any tour goes live (run in all three apps' setup)
 ```
 python3 identity_healthcheck.py "<tour name>"     # exit 1 on blockers
 ```
-- BLOCKER **dup-cricsheet** — one cricsheet_id under >1 pid (merge/split corruption).
-- BLOCKER **fixable-miss** — an exact-name DB record WITH data exists but the squad name is
-  unanchored (add a bridge / dedup phantoms + rebuild).
-- INFO **unmapped** — no record; genuinely uncapped. Triage once.
-- REVIEW **name-mismatch** — anchored SL initials-forms; eyeball for a wrong namesake. NOTE: the
-  wrong-*namesake* class can't be auto-verified locally — a future enhancement is an ESPN
-  `key_cricinfo` full-name cross-ref (people.csv already carries the id).
+- BLOCKER **dup-cricinfo** — one cricinfo id under >1 pid (merge/split corruption).
+- BLOCKER **fixable-miss** — an exact-name DB record WITH data exists but the squad name is unanchored
+  (add a `manual_ci_bridges` entry / dedup phantoms + rebuild).
+- INFO **needs-review** — no offline record; the id exists on cricinfo.com but not yet in our register
+  → it lands in the "Needs Cricinfo ID" tab for a human to fill.
+- REVIEW **name-mismatch** — anchored initials-forms (Kusal Mendis = BKG Mendis); eyeball for a wrong
+  namesake. The cricinfo-id anchor + null-on-ambiguity make silent wrong-namesake merges structurally hard.
 
 ## Registry files
-- `registry/players.json` — the global registry (pid-keyed; cricsheet_id, else espn:/slug: fallback).
+- `registry/players.json` — the global registry (**`ci:<cricinfoId>`-keyed**; `cs:`/`uncapped:` fallback;
+  `cricsheet_id` derived from the crosswalk).
+- `registry/crosswalk.json` — people.csv-derived `cricsheet_id ↔ cricinfo_id` (+ `_2/_3` alternates). The spine.
+- `registry/manual_ci_bridges.json` — human-verified announced-name → cricinfo id (permanent aliases).
+- `registry/needs_cricinfo_pending.json` — players `build_registry` couldn't resolve → pushed to the
+  "Needs Cricinfo ID" GSheet tab by `tour_sync_finalize.write_needs_cricinfo_tab` (self-maintaining review loop).
+- `registry/pid_map.json` — the one-shot migration map (old pid → `ci:`); the draft's `lib/pid-map.json`
+  shim reads a copy so the sheet's pre-migration Player IDs still join.
 - `registry/manual_aliases.json` — hand-curated `{match, add}` spellings the matcher can't link.
-- `registry/team_aliases.json` — TEAM analog of manual_aliases: feed team-name variant → canonical
-  franchise name (canon_team). e.g. cricapi feeds LPL's 2025 names, squads/ESPN use 2026. See below.
+- `registry/team_aliases.json` — TEAM analog: feed team-name variant → canonical franchise name (canon_team).
 - `registry/frozen_tours.json` — series ids of fully-resolved tours the bot stops polling (quota).
-- `registry/UNMAPPED_<tour>.txt` — per-tour list of no-cricsheet_id squad players (the defect report; triage it).
 - `registry/identity_splits.json` — force wrongly-merged identities apart.
 
 ## Live-data source fallbacks (autopilot — the 22 Jul LPL/Hundred saga)
@@ -84,10 +95,10 @@ with BLANK Player IDs). What now runs automatically:
   guess; unresolved ⇒ "" which the gate then rejects). Fixes franchise leagues where cricsheet lags
   + cricapi's scorecard is empty and ESPN is the only live source.
 - **identity** — `tour_sync_finalize.py` runs `build_registry` → `backfill_draft_pids` so the sheet
-  AND the draft carry the SAME pid (join works even on `slug:` fallbacks — sameness is all that
-  matters). The 61MB auction DB is gitignored (absent in CI), so `build_registry.open_pool_con()`
+  AND the draft carry the SAME `ci:` pid (join works even on a `cs:`/`uncapped:` fallback — sameness is
+  all that matters). The 61MB auction DB is gitignored (absent in CI), so `build_registry.open_pool_con()`
   falls back to a committed players export (`registry/auction_players.json.gz`, ≈0.2MB) — the
-  `players` table (name→cricsheet_id + country/gender) is the ONLY thing anchoring needs. Regenerate
+  `players` table (name→cricsheet_id→cricinfo_id via the crosswalk + country/gender) is what anchoring needs. Regenerate
   it locally with `python3 registry/export_players_pool.py` whenever the auction player set materially
   changes, then commit the .gz. This is what lets cricapi auto-tours anchor in CI.
 - **DRAFT LIVE POINTS (added 23 Jul)** — the draft scores a LIVE match's H2H in-app from ESPN

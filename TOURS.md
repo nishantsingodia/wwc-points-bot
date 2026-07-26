@@ -99,10 +99,11 @@ First ODI tour: *Ireland vs West Indies Women's ODI 2026* (3-match women's bilat
 ## Player identity — the global registry (read this before touching name matching)
 
 Players are matched by a **stable identity (`pid`)**, not by fuzzy name. `registry/players.json`
-is ONE global, permanent file (keyed on `cricsheet_id` when known, else `espn:`/`slug:`) listing
-**every feed spelling** of every player. Built by `build_registry.py` from the auction DB
-(`cricsheet_id` + cricsheet initials), ESPN rosters (`espn_id`), cached cricapi, and all the
-repos' historical alias maps. The bot:
+is ONE global, permanent file (keyed on **`ci:<cricinfoId>`**; fallback `cs:`/`uncapped:`; `cricsheet_id`
+derived from `registry/crosswalk.json`) listing **every feed spelling** of every player. Built by
+`build_registry.py` which resolves each name to a cricinfo id (manual bridge → exact people.csv → fuzzy
+null-on-ambiguity → ESPN roster athlete.id, which IS the cricinfo id), never fabricating an identity on
+ambiguity. The bot:
 - resolves each feed/squad name → `pid` **deterministically** (no per-match fuzzy gamble),
   **merging** stats the feed split across two spellings (e.g. cricsheet "DN Wyatt" + "Danni Wyatt");
 - emits a **`Player ID`** column + the canonical name, so the draft joins by id, not name;

@@ -1,5 +1,14 @@
 # Name-Match & Points Issues — Critical Resolution Plan
 
+> ⚠️ **SUPERSEDED (2026-07-25) — historical rationale only.** This doc proposed & delivered the
+> **cricsheet_id-anchored** registry. That registry was since migrated to **cricinfo-id anchoring**
+> (`pid = ci:<cricinfoId>`; `cricsheet_id` derived from `registry/crosswalk.json`; fuzzy matching is
+> null-on-ambiguity and NEVER fabricates a `slug:`; unresolved players → the "Needs Cricinfo ID" GSheet
+> tab). The design *principle* here (one stable-ID registry, resolve identity at setup, points join on
+> Player ID, fuzzy is a fallback) still holds — but wherever this doc says the pid IS a `cricsheet_id`,
+> `espn_id` is harvested from live rosters, or a match MINTS a `slug:`/`espn:`, that is now stale.
+> For the current model see `CLAUDE.md` (Player identity section) + `registry/MIGRATION_OUTCOME_BRIEF.md`.
+
 **Status:** DEPLOYED & live — see the **2026-06-25 update** immediately below for the current state; the original plan + design follow.
 **Scope:** All three projects — `wwc-points-bot` (Python → Google Sheet), `wwc-draft` (Next.js draft), `cricket-auction-helper` (Next.js auction).
 **Author:** Claude, 2026-06-21. Built on first-hand investigation of LIVE sheet data + a cross-repo code audit.

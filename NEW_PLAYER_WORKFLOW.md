@@ -14,10 +14,12 @@ dropped (no row, no flag, points gone)**.
 ## What "New" now does (no code edit, all from the sheet)
 Mark a Needs Review row **"New"** (type the player's real name in *Closest Match*; *Role* drives
 SR/econ):
-1. **Global identity, once:** registers her in `registry/new_players.json` with a stable
-   **`slug:<name>`** pid (or reuses her existing pid if the feed already resolves) + the feed
+1. **Global identity, once:** registers her in `registry/new_players.json` with a provisional
+   **`uncapped:<slug>`** pid (or reuses her existing `ci:` pid if the feed already resolves) + the feed
    spelling as an alias. `load_new_players()` merges this into `ALIAS2PID`/`PID2DISP` at startup —
-   so she resolves in **every** tour, with **no `build_registry` rebuild**.
+   so she resolves in **every** tour, with **no `build_registry` rebuild**. (Post-migration the canonical
+   anchor is the **cricinfo id `ci:`** — the cleaner path for a truly-unresolved player is the
+   **"Needs Cricinfo ID"** sheet tab, where you drop her cricinfo id and `manual_ci_bridges` picks it up.)
 2. **Per-tour membership:** the entry's `team` + `tours` are injected into that tour's squad in
    `run_tour` → she's scored + emitted.
 3. **Draftable automatically:** once the bot emits her points row, the draft app's existing
@@ -28,7 +30,8 @@ SR/econ):
 
 Identity is **tour-agnostic** (one pid, reused everywhere); **membership is per-tour**. A later
 `build_registry.py` run folds `new_players.json` into the canonical `players.json` and upgrades the
-`slug:` to her real `cricsheet_id`.
+provisional `uncapped:` to her real **`ci:<cricinfoId>`** (with `cricsheet_id` derived from the crosswalk)
+once she's resolvable.
 
 ## The silent-drop fix — AUTO-ADD (with guards + audit)
 `find_silent_drops()` detects a played feed player who resolves to a pid but holds no squad slot.
