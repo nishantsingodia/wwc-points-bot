@@ -223,6 +223,19 @@
         "The Hundred Men's Competition 2026"
       ],
       "source": "new"
+    },
+    {
+      "pid": "ci:211855",
+      "display": "Liam Dawson",
+      "aliases": [
+        "kiran carlson"
+      ],
+      "team": "London Spirit",
+      "role": "BAT",
+      "tours": [
+        "The Hundred Men's Competition 2026"
+      ],
+      "source": "new"
     }
   ]
 }
