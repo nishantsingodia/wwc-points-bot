@@ -258,5 +258,26 @@
       ]
     }
   ],
-  "acks": []
+  "acks": [
+    {
+      "type": "false merge",
+      "pid": "ci:308251",
+      "answer": "No"
+    },
+    {
+      "type": "false merge",
+      "pid": "ci:517572",
+      "answer": "No"
+    },
+    {
+      "type": "duplicate id",
+      "pid": "ci:858809",
+      "answer": "No"
+    },
+    {
+      "type": "duplicate id",
+      "pid": "ci:784375",
+      "answer": "No"
+    }
+  ]
 }

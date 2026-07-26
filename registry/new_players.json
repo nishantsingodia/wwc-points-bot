@@ -184,6 +184,45 @@
         "The Hundred Men's Competition 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "slug:sean-dickson",
+      "display": "Sean Dickson",
+      "aliases": [
+        "sean dickson"
+      ],
+      "team": "Birmingham Phoenix",
+      "role": "BAT",
+      "tours": [
+        "The Hundred Men's Competition 2026"
+      ],
+      "source": "new"
+    },
+    {
+      "pid": "slug:calvin-harrison",
+      "display": "Calvin Harrison",
+      "aliases": [
+        "calvin harrison"
+      ],
+      "team": "Trent Rockets",
+      "role": "BAT",
+      "tours": [
+        "The Hundred Men's Competition 2026"
+      ],
+      "source": "new"
+    },
+    {
+      "pid": "slug:matthew-revis",
+      "display": "Matthew Revis",
+      "aliases": [
+        "matthew revis"
+      ],
+      "team": "Sunrisers Leeds",
+      "role": "BAT",
+      "tours": [
+        "The Hundred Men's Competition 2026"
+      ],
+      "source": "new"
     }
   ]
 }
