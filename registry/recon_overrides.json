@@ -718,6 +718,54 @@
       "field": "6s",
       "status": "approved",
       "source": "S2"
+    },
+    {
+      "match_key": "2026-07-21::mi london|sunrisers leeds",
+      "scope": "player",
+      "pid": "ci:1120320",
+      "field": "w",
+      "status": "approved",
+      "source": "S1"
+    },
+    {
+      "match_key": "2026-07-25::mi london|welsh fire",
+      "scope": "player",
+      "pid": "ci:715351",
+      "field": "r",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-25::mi london|welsh fire",
+      "scope": "player",
+      "pid": "ci:715351",
+      "field": "4s",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-17::galle gallants|jaffna kings",
+      "scope": "player",
+      "pid": "ci:1153149",
+      "field": "w",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-18::colombo kaps|galle gallants",
+      "scope": "player",
+      "pid": "ci:1282475",
+      "field": "w",
+      "status": "approved",
+      "source": "S1"
+    },
+    {
+      "match_key": "2026-07-18::colombo kaps|galle gallants",
+      "scope": "player",
+      "pid": "ci:1282476",
+      "field": "w",
+      "status": "approved",
+      "source": "S1"
     }
   ]
 }
