@@ -766,6 +766,86 @@
       "field": "w",
       "status": "approved",
       "source": "S1"
+    },
+    {
+      "match_key": "2026-07-26::london spirit|trent rockets",
+      "scope": "player",
+      "pid": "ci:1340525",
+      "field": "r",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-26::london spirit|trent rockets",
+      "scope": "player",
+      "pid": "ci:1340525",
+      "field": "w",
+      "status": "approved",
+      "source": "S1"
+    },
+    {
+      "match_key": "2026-07-26::london spirit|trent rockets",
+      "scope": "player",
+      "pid": "ci:939249",
+      "field": "r",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-26::london spirit|trent rockets",
+      "scope": "player",
+      "pid": "ci:939249",
+      "field": "4s",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-26::london spirit|trent rockets",
+      "scope": "player",
+      "pid": "ci:939249",
+      "field": "6s",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-26::london spirit|trent rockets",
+      "scope": "player",
+      "pid": "ci:652939",
+      "field": "r",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-26::london spirit|trent rockets",
+      "scope": "player",
+      "pid": "ci:652939",
+      "field": "6s",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-26::london spirit|trent rockets",
+      "scope": "player",
+      "pid": "ci:537440",
+      "field": "w",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-26::jaffna kings|kandy royals",
+      "scope": "player",
+      "pid": "ci:1072470",
+      "field": "r",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-07-26::jaffna kings|kandy royals",
+      "scope": "player",
+      "pid": "ci:1072470",
+      "field": "6s",
+      "status": "approved",
+      "source": "S2"
     }
   ]
 }
