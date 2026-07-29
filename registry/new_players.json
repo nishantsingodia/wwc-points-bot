@@ -301,6 +301,19 @@
         "Lanka Premier League 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:299572",
+      "display": "Sikandar Raza",
+      "aliases": [
+        "sikandar raza"
+      ],
+      "team": "DS",
+      "role": "AR",
+      "tours": [
+        "Lanka Premier League 2026"
+      ],
+      "source": "auto"
     }
   ]
 }
