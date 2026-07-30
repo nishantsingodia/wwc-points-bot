@@ -112,18 +112,46 @@ def norm(s):
 # player resolved in one tour is resolved in all future tours with zero rework.
 def load_registry():
     path = os.path.join(os.path.dirname(__file__), "registry", "players.json")
-    alias2pid, pid2disp = {}, {}
+    alias2pid, pid2disp, cs2pid = {}, {}, {}
     try:
         players = json.load(open(path)).get("players", {})
     except Exception:
-        return alias2pid, pid2disp
+        return alias2pid, pid2disp, cs2pid
     for pid, e in players.items():
         pid2disp[pid] = e.get("display") or pid
         for a in e.get("aliases", []):
             alias2pid.setdefault(a, pid)
-    return alias2pid, pid2disp
+        # cricsheet person id -> pid. The registry DERIVES cricsheet_id from the verified
+        # cricinfo id via the crosswalk, so this index is id-anchored, never fuzzy.
+        cs = e.get("cricsheet_id")
+        if cs:
+            cs2pid.setdefault(str(cs), pid)
+    return alias2pid, pid2disp, cs2pid
 
-ALIAS2PID, PID2DISP = load_registry()
+ALIAS2PID, PID2DISP, CS2PID = load_registry()
+
+def load_crosswalk():
+    """people.csv-derived cricsheet_id -> cricinfo_id. Used to make an UNRESOLVABLE official-card
+    row actionable: we may not know the player, but we can name the exact cricinfo id to bridge,
+    so the fix is one paste instead of a research task. Never used to invent identity."""
+    path = os.path.join(os.path.dirname(__file__), "registry", "crosswalk.json")
+    try:
+        return json.load(open(path)).get("cs2ci", {}) or {}
+    except Exception:
+        return {}
+
+CS2CI = load_crosswalk()
+
+def cricinfo_hint(v):
+    """'cricinfo 1100812 — espncricinfo.com/cricketers/x-1100812' for an unresolved cricsheet row.
+    Two different Hundred Women's players are BOTH written 'E Jones' by cricsheet (cs 971cb321 =
+    Eve Jones, cs 4cf60e73 = cricinfo 1100812, a different person). A name-based matcher merges
+    them silently; the id tells them apart and tells you precisely who is missing."""
+    cs = (v or {}).get("cs_id")
+    ci = CS2CI.get(str(cs)) if cs else None
+    if not ci:
+        return f"cricsheet id {cs}" if cs else "no cricsheet id"
+    return f"cricinfo {ci} — espncricinfo.com/cricketers/x-{ci} (cricsheet {cs})"
 
 def load_team_aliases():
     """Central franchise-name identity — the TEAM analog of the player registry/manual_aliases.
@@ -246,6 +274,37 @@ def resolve_pid(name):
     """Deterministic identity lookup: feed/squad name -> stable pid (or None)."""
     return ALIAS2PID.get(norm(name))
 
+# Names a cricsheet file resolved BY ID whose spelling the registry didn't know yet. Learned
+# from an authoritative id (never a guess), applied in-memory this run and persisted so the
+# spelling is known to every app that reads the registry. See CRICSHEET_LEARNED_PATH.
+CS_LEARNED = {}         # norm(cricsheet name) -> pid  (new this run)
+
+def resolve_perf_pid(v):
+    """Identity for ONE feed perf entry, id-first.
+
+    Cricsheet writes players in initials form ('PWH de Silva' for Wanindu Hasaranga) and
+    every cricsheet file carries its own `info.registry.people` name -> cricsheet person id
+    map. Our registry stores each player's cricsheet_id (DERIVED from the verified cricinfo
+    id), so a cricsheet row can be resolved by ID — deterministic, no fuzzy, no namesake
+    risk. This is what stops the 'Hasaranga scored 0 once cricsheet landed' class: his squad
+    row and his official-card row now land on the SAME pid instead of one zeroing and the
+    other emitting as an unjoinable blank-pid orphan.
+
+    Falls back to the name lookup for non-cricsheet feeds (cricapi/ESPN carry no cs id)."""
+    cs = v.get("cs_id") if isinstance(v, dict) else None
+    if cs:
+        pid = CS2PID.get(str(cs))
+        if pid:
+            nn = norm(v.get("name", ""))
+            # Teach the registry this spelling (id-anchored) so name lookups work too.
+            if nn and nn not in ALIAS2PID:
+                ALIAS2PID[nn] = pid
+                CS_LEARNED[nn] = pid
+                print(f"  cricsheet-id alias learned: '{v.get('name')}' -> {pid} "
+                      f"({PID2DISP.get(pid, pid)}) via cricsheet id {cs}", file=sys.stderr)
+            return pid
+    return resolve_pid(v.get("name", "") if isinstance(v, dict) else "")
+
 def _cricsheet_match(a, b):
     """True if `b` is a cricsheet-style initials name of `a` (e.g. 'Danni Wyatt' <-> 'DN Wyatt')."""
     s, d = norm(a).split(), norm(b).split()
@@ -323,7 +382,7 @@ def match_squad_to_perf(team_players, pool):
     # 1) index feed entries by pid, merging split spellings of the same player
     pid_pool, unresolved, pid_names = {}, {}, {}
     for k, v in pool.items():
-        pid = resolve_pid(v.get("name", k))
+        pid = resolve_perf_pid(v) or resolve_pid(v.get("name", k))
         if pid:
             pid_pool[pid] = merge_perf(pid_pool.get(pid), v)
             pid_names.setdefault(pid, []).append(v.get("name", k))   # track who folded into each pid
@@ -560,10 +619,17 @@ def load_cricsheet_index(dirpath, gender="female"):
 def parse_cricsheet(path):
     d = json.load(open(path)); info = d["info"]
     perf = {}
+    # cricsheet's OWN name -> person-id registry, carried in every match file. Stamped onto
+    # each perf entry so identity resolves by ID (resolve_perf_pid) instead of by the
+    # initials-form spelling, which the alias table can't be expected to enumerate.
+    people = info.get("registry", {}).get("people", {}) or {}
     def get(n):
         k = norm(n)
         if k not in perf:
             perf[k] = blank_perf(n)
+            cs = people.get(n)
+            if cs:
+                perf[k]["cs_id"] = str(cs)
         return perf[k]
     for tname, plist in info.get("players", {}).items():   # known playing XI -> +4 each
         for n in plist:
@@ -1090,14 +1156,44 @@ def recon_gaps(a, b, fields, sep="/"):
             out.append(f"{RECON_LABEL.get(f, f)} {av}{sep}{bv}")
     return "; ".join(out)
 
+def points_gap(a, b, role, sep="→"):
+    """BACKSTOP: did the SCORED TOTAL move, whatever fields did it?
+
+    recon_gaps only compares an enumerated field list, so a change in a field nobody thought
+    to list slips through as '✓ complete' while the points on screen quietly change — balls
+    faced and balls bowled aren't in RECON_L2 yet they drive the SR and economy components
+    (LPL: Dickwella 69 -> 63, flagged clean). Comparing the total closes the class for good:
+    any future field we forget is still caught, because points are what a contest settles on."""
+    if not a or not b:
+        return ""
+    try:
+        pa = score(a, role)["total"]
+        pb = score(b, role)["total"]
+    except Exception as e:
+        # LOUD, not silent: a backstop that quietly switches itself off is worse than none —
+        # it would report "✓ complete" on exactly the matches it failed to check.
+        print(f"!! points backstop could not score a perf dict ({e}) — "
+              f"treating as UNVERIFIED for this player", file=sys.stderr)
+        return "pts ?→? (backstop failed — unverified)"
+    return f"pts {pa}{sep}{pb}" if pa != pb else ""
+
 def _by_pid(perf):
-    """Index a perf dict by stable pid (first spelling wins on a pid collision)."""
+    """Index a perf dict by stable pid (first spelling wins on a pid collision). id-first, so
+    a cricsheet initials-form row keys on the SAME pid as its squad/cricapi spelling."""
     out = {}
     for v in perf.values():
-        pid = resolve_pid(v.get("name", ""))
+        pid = resolve_perf_pid(v)
         if pid and pid not in out:
             out[pid] = v
     return out
+
+def unresolved_official(cs_perf):
+    """Official-card (cricsheet) entries that resolve to NO pid. A blank pid on the OFFICIAL
+    card is an identity failure by definition: the draft joins by pid and refuses to fuzzy-fall
+    back for a pid'd player, so these points can never reach a contest — they emit as an
+    orphan row and the squad row they belong to silently reads 0. Never let this be quiet."""
+    return [v for v in cs_perf.values()
+            if v.get("played") and not resolve_perf_pid(v)]
 
 # ── Recon Review: human-in-the-loop reconciliation of feed disagreements ─────
 # When cricapi and ESPN disagree (L1) or cricsheet revises an already-scored match
@@ -1146,11 +1242,31 @@ def compute_l1_gaps(capi_pid, espn_pid):
             gaps[pid] = "; ".join(parts)
     return gaps
 
-def classify_match_status(cs_path, espn_present, l1_gaps, unresolved, l2_dirty):
+def identity_break(prov_pid, cs_pid, cs_orphans):
+    """The failure the L2 gate used to be BLIND to.
+
+    `l2_pairs` only iterates pids present in cricsheet, so a player whose official-card
+    spelling didn't resolve produces no pair, no flag and no review row — his squad row just
+    reads 0 and the match completes clean. That is exactly how Hasaranga's 114-point captain
+    innings (LPL Match 6, 21 Jul) became a 0 on a match badged COMPLETED with no flag.
+
+    Returns (zeroed_pids, orphan_names): squad players who PLAYED in the provisional cut but
+    are absent from the official card, and official-card rows that resolve to no pid. Either
+    on its own is suspicious; together they are almost certainly the same person."""
+    zeroed = sorted(pid for pid, v in prov_pid.items()
+                    if v.get("played") and pid not in cs_pid)
+    orphans = sorted((v.get("name") or "") for v in cs_orphans)
+    return zeroed, orphans
+
+def classify_match_status(cs_path, espn_present, l1_gaps, unresolved, l2_dirty, id_break=False):
     """Per-match status the draft app reads. Decisions: ANY unresolved L1 gap holds LIVE;
     L1-clean auto-COMPLETED; single-feed COMPLETED but FLAGGED; cricsheet official COMPLETED
-    unless it revises a reconciled value (then FLAGGED, pending approval)."""
+    unless it revises a reconciled value (then FLAGGED, pending approval). An unresolved
+    identity on the official card FLAGS too — points that can't join a contest are never
+    'complete', however clean every compared field looks."""
     if cs_path:
+        if id_break:
+            return ("COMPLETED_FLAGGED", "⚠ identity unresolved on official card")
         return ("COMPLETED_FLAGGED", "⚠ official revision pending") if l2_dirty else ("COMPLETED", "")
     if not espn_present:
         return ("COMPLETED_FLAGGED", "⚠ unverified — single feed")
@@ -1516,9 +1632,16 @@ def run_tour(tour):
         l1_gaps = compute_l1_gaps(capi_pid, espn_pid)
         perf_by_pid = {}   # pid -> the SAME perf dict objects emit() scores, so overrides stick
         for (sh_, nm_), dd in assigned.items():
-            pp = resolve_pid(nm_) or resolve_pid(dd.get("name", "")) or ""
+            pp = resolve_pid(nm_) or resolve_perf_pid(dd) or ""
             if pp and pp not in perf_by_pid:
                 perf_by_pid[pp] = dd
+        # Role per pid, so the points backstop can re-score both sides consistently (role drives
+        # the SR/econ penalties — scoring one side as a different role would fake a delta).
+        role_by_pid = {}
+        for short_, name_, role_ in team_players:
+            pp = resolve_pid(name_)
+            if pp and pp not in role_by_pid:
+                role_by_pid[pp] = role_ if role_ != "?" else (ROLE_OVERRIDE.get(norm(name_)) or "?")
         applied = apply_recon_overrides(perf_by_pid, capi_pid, espn_pid, l1_gaps, mk, RECON_OVERRIDES)
         unresolved = {pid: g for pid, g in l1_gaps.items() if pid not in applied}
         # L2 baseline = the L1-RECONCILED provisional cut (raw cricapi+ESPN with the approved L1
@@ -1530,8 +1653,17 @@ def run_tour(tour):
         if cs_pid:
             for pid in cs_pid:
                 g = recon_gaps(recon_prov.get(pid), cs_pid[pid], RECON_L2, sep="→")
+                if not g:
+                    # Nothing in the compared field list moved — but did the SCORED TOTAL?
+                    g = points_gap(recon_prov.get(pid), cs_pid[pid],
+                                   role_by_pid.get(pid, "?") or "?")
                 if g:
                     l2_pairs[pid] = g
+        # IDENTITY BREAK on the official card (previously invisible to this gate entirely).
+        cs_orphans = unresolved_official(cs_perf) if cs_path else []
+        id_zeroed, id_orphans = (identity_break(recon_prov, cs_pid, cs_orphans)
+                                 if cs_path else ([], []))
+        id_break = bool(cs_orphans) or bool(id_zeroed)
         l2_appr = l2_approved_pids(mk, RECON_OVERRIDES)
         # L2 HOLD (decision 3): until the official revision is APPROVED (source S2), keep showing
         # the last-approved (L1-reconciled) value. Deliberately inverts the usual "cricsheet
@@ -1545,10 +1677,30 @@ def run_tour(tour):
                             pv = recon_prov[pid].get(field)
                             if pv is not None:
                                 dd[field] = pv
+        # IDENTITY HOLD: a squad player who PLAYED in the provisional cut but is missing from the
+        # official card, while that card carries an unresolvable row, is an identity failure — NOT
+        # a 0. Hold the provisional value (same discipline as the L2 hold) rather than zeroing a
+        # settled score on a name-match miss, and flag it for a human to link.
+        id_held = set()
+        if cs_path and id_zeroed and cs_orphans:
+            for pid in id_zeroed:
+                if l2_appr.get(pid) == "S2":
+                    continue          # human confirmed the official card: 0 is genuine
+                dd = perf_by_pid.get(pid)
+                if dd is not None and pid in recon_prov:
+                    for field in RECON_L2 + ["b", "balls", "played", "bat_order", "dismissal"]:
+                        pv = recon_prov[pid].get(field)
+                        if pv is not None:
+                            dd[field] = pv
+                    id_held.add(pid)
         l2_dirty = any(l2_appr.get(pid) != "S2" for pid in l2_pairs)
-        match_status, recon_flag = classify_match_status(cs_path, bool(espn_perf), l1_gaps, unresolved, l2_dirty)
+        match_status, recon_flag = classify_match_status(cs_path, bool(espn_perf), l1_gaps,
+                                                        unresolved, l2_dirty, id_break=id_break)
         # Per-player markers so the draft UI can flag WHICH players aren't reconciled yet.
         player_recon = player_recon_markers(unresolved, l2_pairs, l2_appr)
+        for pid in id_zeroed:
+            if l2_appr.get(pid) != "S2":
+                player_recon[pid] = "⛔ identity unresolved"
         # LIVE (in-progress): the whole match is provisional-live — force the status, and skip
         # recon gating/queueing + per-player noise (mid-match cricapi↔ESPN gaps settle by end).
         if is_live:
@@ -1563,6 +1715,34 @@ def run_tour(tour):
                 RECON_REVIEW.append({"match_key": mk, "tour": CURRENT_TOUR, "match": label,
                                      "date": mdate, "pid": pid, "full": PID2DISP.get(pid, pid),
                                      "param": "L2", "s1": g, "s2": "official cricsheet", "tier": "l2"})
+        # IDENTITY rows: one per player the official card lost, with the unmatched official
+        # spellings as the evidence to link. Answering S2 accepts the official card (a genuine
+        # non-selection -> 0 stands); the permanent fix is a registry alias/bridge, which is why
+        # the orphan names are printed verbatim.
+        if cs_path and not is_live:
+            for pid in id_zeroed:
+                if l2_appr.get(pid) == "S2" or (mk, pid, "ID") in RECON_ACK:
+                    continue
+                held = " · value HELD" if pid in id_held else ""
+                RECON_REVIEW.append({
+                    "match_key": mk, "tour": CURRENT_TOUR, "match": label, "date": mdate,
+                    "pid": pid, "full": PID2DISP.get(pid, pid), "param": "ID",
+                    "s1": f"played provisionally, absent from official card{held}",
+                    "s2": ("unmatched official rows: " + ", ".join(id_orphans)) if id_orphans
+                          else "official card has no such player",
+                    "tier": "id"})
+            # An unresolvable official row is worth flagging even when no squad player was lost:
+            # its points cannot join ANY contest (the draft joins by pid, never fuzzy for a
+            # pid'd player), so they are silently outside the game.
+            for v in cs_orphans:
+                nm = v.get("name") or ""
+                if (mk, nm, "ID-ORPHAN") in RECON_ACK:
+                    continue
+                RECON_REVIEW.append({
+                    "match_key": mk, "tour": CURRENT_TOUR, "match": label, "date": mdate,
+                    "pid": "", "full": nm, "param": "ID-ORPHAN",
+                    "s1": "official-card row resolves to NO player id — points cannot reach a contest",
+                    "s2": cricinfo_hint(v), "tier": "id"})
 
         def emit(short, name, role, d, in_squad):
             src = status
@@ -1583,10 +1763,18 @@ def run_tour(tour):
             #     Value reads 'was→corrected' (provisional → official) so the revision is obvious.
             if cs_pid:
                 if pid in cs_pid:
-                    l2 = recon_gaps(prov_pid.get(pid), cs_pid[pid], RECON_L2, sep="→")
+                    # Baseline is the L1-RECONCILED cut, matching the gate. (This used to read
+                    # raw prov_pid, so the column could shout "revised" on a value your own
+                    # approved L1 override had already corrected — column contradicting gate.)
+                    l2 = l2_pairs.get(pid) or recon_gaps(recon_prov.get(pid), cs_pid[pid],
+                                                         RECON_L2, sep="→")
                     l2_col = ("⚠ revised: " + l2) if l2 else "✓ complete"
-                elif pid in prov_pid and prov_pid[pid].get("played"):
-                    l2_col = "⚠ revised: not in official XI"
+                elif pid in recon_prov and recon_prov[pid].get("played"):
+                    # Distinguish a genuine non-selection from a name-match failure: an
+                    # unmatched official row in the same match means it's identity, not benching.
+                    l2_col = ("⛔ identity unresolved — unmatched on official card"
+                              if pid in id_zeroed and id_orphans else
+                              "⚠ revised: not in official XI")
                 else:
                     l2_col = "✓ complete"
             else:
@@ -1607,10 +1795,18 @@ def run_tour(tour):
                              s["bat"], s["bowl"], s["field"], s["sr"], s["eco"], s["xi"],
                              s["total"], src, in_squad, d.get("bat_order") or "",
                              l1_col, l2_col, match_status, recon_flag, player_recon.get(pid, "")])
+                if match_status in ("COMPLETED", "COMPLETED_FLAGGED"):
+                    record_settlement(mk, CURRENT_TOUR, label, mdate, short, pid, full,
+                                      s["total"], match_status, src)
             else:
                 rows.append([label, mdate, short, pid, full, role, "N"] + [""] * 22 +
                             [src, in_squad, "", l1_col, l2_col, match_status, recon_flag,
                              player_recon.get(pid, "")])
+                # Freeze non-players at 0 too: a contest scored them 0, so a later run that
+                # gives them points is just as much a change from the settled state.
+                if match_status in ("COMPLETED", "COMPLETED_FLAGGED"):
+                    record_settlement(mk, CURRENT_TOUR, label, mdate, short, pid, full,
+                                      0, match_status, src)
 
         for short, name, role in team_players:
             emit(short, name, role, assigned.get((short, name)), "Y")
@@ -1876,7 +2072,8 @@ def main():
     # No-code manual fixes (no-op locally / without creds): load the persistent alias store,
     # then apply any rows you marked 'Yes' in Needs Review. Then process tours; finally persist
     # new aliases and republish the review queue.
-    global RECON_OVERRIDES
+    global RECON_OVERRIDES, SETTLEMENTS
+    SETTLEMENTS = _load_settlements()   # the frozen "before"; only ever added to
     load_sheet_aliases()
     load_new_players()             # merge sheet-added players' identity into the registry (before reads)
     read_review_confirmations()    # 'New' registers a player into NEW_PLAYERS_DATA (+ identity)
@@ -1928,12 +2125,21 @@ def main():
         write_status_tab("on-demand" if ON_DEMAND else ("frequent" if FREQUENT else "full"))
     except Exception as e:
         print(f"status tab: {e}", file=sys.stderr)
+    # The settled baseline is frozen in EVERY mode (a match can first go COMPLETED on any run,
+    # including an on-demand one — miss that moment and its "before" is gone for good).
+    if SETTLE_NEW:
+        print(f"[settlement] froze {SETTLE_NEW} new baseline row(s) "
+              f"({len(SETTLEMENTS)} total)", file=sys.stderr)
+        save_settlements()
+    if CS_LEARNED:
+        _save_cricsheet_learned()
     if not FREQUENT:
         sync_player_aliases()   # persist auto + confirmed aliases into the Player Aliases store
         _save_new_players(NEW_PLAYERS_DATA)   # persist New + auto-added players (workflow commits it)
         write_review_tab()      # publish remaining unmatched players (closest-match + Yes/No)
         write_anomaly_tab()     # publish detected merges/dupes + the audit of past splits (Yes/No)
         write_recon_tab()       # publish L1/L2 feed disagreements to approve (pick Correct Value)
+        write_settlement_tab()  # publish the frozen settled baseline the draft app diffs against
 
 _GSHEET = None
 def open_gsheet():
@@ -1991,6 +2197,63 @@ SPLITS_PATH = os.path.join(os.path.dirname(__file__), "registry", "identity_spli
 RECON_TAB = "Recon Review"          # bot-written: cricapi/ESPN (L1) + cricsheet (L2) disagreements to approve
 OVERRIDES_PATH = os.path.join(os.path.dirname(__file__), "registry", "recon_overrides.json")
 NEW_PLAYERS_PATH = os.path.join(os.path.dirname(__file__), "registry", "new_players.json")
+# ── Settlement snapshot (the missing "before") ────────────────────────────────
+# The sheet is REWRITTEN in place every run, so the numbers a contest was actually settled on
+# survive nowhere: L2 recon compares cricsheet against a LIVE RE-COMPUTATION of the provisional
+# cut, not against what was on screen when money changed hands. Anything that moves points
+# without cricsheet's involvement — a scorer fix (the Hundred bowler-balls bug: Gleeson 4 -> 145),
+# an ESPN backfill, a registry change — is therefore invisible to reconciliation by construction.
+# This file is the fix: the FIRST time a match is published as COMPLETED/COMPLETED_FLAGGED we
+# record every player's points, and never overwrite it. WRITE-ONCE is the whole point — a
+# baseline you can revise is not a baseline.
+SETTLEMENT_PATH = os.path.join(os.path.dirname(__file__), "registry", "settlement_snapshots.json")
+SETTLEMENT_TAB = "SETTLEMENT AUDIT"    # bot-written: the frozen settled baseline the draft app diffs against
+CRICSHEET_LEARNED_PATH = os.path.join(os.path.dirname(__file__), "registry",
+                                      "cricsheet_learned_aliases.json")
+SETTLEMENTS = {}        # (match_key, pid) -> frozen record, loaded once + only ever added to
+SETTLE_NEW = 0          # how many rows this run froze (for the log)
+
+def _load_settlements():
+    try:
+        data = json.load(open(SETTLEMENT_PATH))
+    except Exception:
+        return {}
+    out = {}
+    for r in data.get("settlements", []):
+        out[(r.get("match_key", ""), r.get("pid", ""))] = r
+    return out
+
+def save_settlements():
+    """Persist the frozen baseline. Only ever grows — CI commits it like recon_overrides."""
+    try:
+        rows = sorted(SETTLEMENTS.values(), key=lambda r: (r.get("date", ""), r.get("match_key", ""),
+                                                          r.get("full", "")))
+        json.dump({"note": "WRITE-ONCE settlement baseline: each player's points the FIRST time "
+                           "their match was published COMPLETED/COMPLETED_FLAGGED. Never edited "
+                           "or overwritten — it is the record of what a contest was settled on, "
+                           "which the draft app diffs the live sheet against. 'provenance' is "
+                           "'live' when frozen by a normal run, 'seed' when reconstructed from a "
+                           "pre-cricsheet run for a match that completed before this existed.",
+                   "settlements": rows},
+                  open(SETTLEMENT_PATH, "w"), indent=1, ensure_ascii=False)
+    except Exception as e:
+        print(f"could not update settlement_snapshots.json: {e}", file=sys.stderr)
+
+def record_settlement(match_key, tour, label, mdate, team, pid, full, points, status, source):
+    """Freeze one player's settled points. WRITE-ONCE per (match_key, pid): a later run that
+    re-scores the match (cricsheet posting, an approved revision, a scorer fix) must NOT touch
+    this — the delta between it and the live sheet is exactly what the audit surface shows."""
+    global SETTLE_NEW
+    if not pid or (match_key, pid) in SETTLEMENTS:
+        return
+    SETTLEMENTS[(match_key, pid)] = {
+        "match_key": match_key, "tour": tour, "match": label, "date": mdate, "team": team,
+        "pid": pid, "full": full, "points": points, "status": status, "source": source,
+        "frozen_at": _today_iso(), "provenance": "live"}
+    SETTLE_NEW += 1
+
+def _today_iso():
+    return datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
 def load_sheet_aliases():
     """Read the 'Player Aliases' tab (Feed Name | Correct Player | Source) and merge it into the
@@ -2166,7 +2429,7 @@ def find_silent_drops(perf, assigned, team_players):
     set (otherwise lost: not assigned, and not a no-pid `leftover`). Returns [(pid, perf)]."""
     claimed = set()
     for d in assigned.values():
-        p = resolve_pid(d.get("name", ""))
+        p = resolve_perf_pid(d)
         if p:
             claimed.add(p)
     for (_, n, _) in team_players:
@@ -2177,7 +2440,7 @@ def find_silent_drops(perf, assigned, team_players):
     for k, v in perf.items():
         if not v.get("played"):
             continue
-        p = resolve_pid(v.get("name", k))
+        p = resolve_perf_pid(v)
         if p and p not in claimed and p not in seen:
             seen.add(p)
             out.append((p, v))
@@ -2207,6 +2470,16 @@ def _approval_to_override(match_key, pid, param, correct, manual):
     if param == "L2":                   # accept official (S2) or keep provisional (S1)
         return {"match_key": match_key, "scope": "l2", "pid": pid,
                 "source": ("S2" if src == "S2" else "S1"), "status": "approved"}
+    if param == "ID":
+        # Identity break. S2 = "the official card is right, he genuinely didn't feature" -> the 0
+        # stands and the hold is released. S1 = keep the held provisional value while the registry
+        # alias is added. Same 'l2' scope, so the existing hold/approval plumbing applies.
+        return {"match_key": match_key, "scope": "l2", "pid": pid,
+                "source": ("S2" if src == "S2" else "S1"), "status": "approved"}
+    if param == "ID-ORPHAN":
+        # Informational only: the real fix is a registry alias/bridge, not a per-match override.
+        # Answering just acknowledges it so the row stops reappearing.
+        return None
     field = LABEL2FIELD.get(param, param)   # player-level: a single stat field
     o = {"match_key": match_key, "scope": "player", "pid": pid, "field": field, "status": "approved"}
     if src == "MANUAL":
@@ -2444,6 +2717,56 @@ def write_anomaly_tab():
     except Exception as e:
         print(f"could not write '{ANOMALY_TAB}' tab: {e}", file=sys.stderr)
 
+def _save_cricsheet_learned():
+    """Persist spellings learned from cricsheet person ids. Not a guess store — every entry was
+    resolved by ID, so it is safe to treat as permanent. Committed by the workflow like the other
+    registry side-files; build_registry can fold these into aliases on its next run."""
+    try:
+        try:
+            data = json.load(open(CRICSHEET_LEARNED_PATH))
+        except Exception:
+            data = {"note": "Feed spellings resolved via a cricsheet person id (info.registry.people) "
+                            "whose name the alias table didn't know. ID-anchored, never fuzzy — this "
+                            "is how cricsheet's initials form ('PWH de Silva') stays joined to the "
+                            "announced name ('Wanindu Hasaranga').", "aliases": {}}
+        data.setdefault("aliases", {}).update(
+            {n: {"pid": p, "display": PID2DISP.get(p, p)} for n, p in CS_LEARNED.items()})
+        json.dump(data, open(CRICSHEET_LEARNED_PATH, "w"), indent=1, ensure_ascii=False)
+        print(f"[identity] learned {len(CS_LEARNED)} cricsheet spelling(s) by id", file=sys.stderr)
+    except Exception as e:
+        print(f"could not update cricsheet_learned_aliases.json: {e}", file=sys.stderr)
+
+def write_settlement_tab():
+    """Publish the frozen settled baseline so the draft app can diff the live sheet against it.
+
+    Read-only for humans — there is no 'Correct Value' column, deliberately. Anything editable
+    isn't a settlement record. The app joins on Match Key + Player ID and renders the delta."""
+    sh = open_gsheet()
+    if sh is None:
+        return
+    import gspread
+    header = ["Match Key", "Tour", "Match", "Date", "Team", "Player ID", "Full Name",
+              "Settled Points", "Settled Status", "Settled Source", "Frozen At", "Provenance"]
+    rows = [[r.get("match_key", ""), r.get("tour", ""), r.get("match", ""), r.get("date", ""),
+             r.get("team", ""), r.get("pid", ""), r.get("full", ""), r.get("points", ""),
+             r.get("status", ""), r.get("source", ""), r.get("frozen_at", ""),
+             r.get("provenance", "live")]
+            for r in sorted(SETTLEMENTS.values(),
+                            key=lambda x: (x.get("date", ""), x.get("match_key", ""), x.get("full", "")))]
+    if not rows:
+        rows = [["—", "no settled matches recorded yet", "", "", "", "", "", "", "", "", "", ""]]
+    try:
+        try:
+            ws = sh.worksheet(SETTLEMENT_TAB)
+        except gspread.WorksheetNotFound:
+            ws = sh.add_worksheet(title=SETTLEMENT_TAB, rows=len(rows) + 50, cols=len(header) + 1)
+        ws.clear()
+        ws.update(range_name="A1", values=[header] + rows, value_input_option="RAW")
+        ws.freeze(rows=1)
+        print(f"'{SETTLEMENT_TAB}': {len(rows)} frozen baseline row(s)", file=sys.stderr)
+    except Exception as e:
+        print(f"settlement tab: {e}", file=sys.stderr)
+
 def write_recon_tab():
     """Publish OPEN Recon Review items: one row per (player, differing field) you haven't
     resolved yet. Pick 'Correct Value' (S1 / S2 / Manual) and the row DROPS next run — the
@@ -2456,7 +2779,8 @@ def write_recon_tab():
     header = ["Tour", "Match", "Date", "Player ID", "Full Name", "Param",
               "Source 1 (cricapi)", "Source 2 (ESPN)", "Correct Value", "Manual Value",
               "Status", "Match Key"]
-    status_text = {"player": "⚠ pick a value", "l2": "official revision — approve to apply"}
+    status_text = {"player": "⚠ pick a value", "l2": "official revision — approve to apply",
+                   "id": "⛔ IDENTITY — fix the registry alias, or S2 to accept the official card"}
     seen, rows = set(), []
     for r in RECON_REVIEW:
         key = (r["match_key"], r.get("pid", ""), r.get("param", ""))

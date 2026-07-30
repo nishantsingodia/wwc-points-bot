@@ -6,3 +6,7 @@ __pycache__/
 *.pyc
 registry/UNMAPPED_*.txt
 registry/UNMATCHED_*.log
+# ...but the settlement evidence IS tracked: these CSVs are the ONLY surviving record of the
+# pre-cricsheet numbers LPL/Hundred contests were settled on (seed_settlements.py rebuilds the
+# write-once baseline from them). Losing them means losing the ability to prove what changed.
+!registry/settlement_evidence/*.csv

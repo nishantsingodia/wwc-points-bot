@@ -44,6 +44,22 @@ def main():
             cs_pids[e["cricsheet_id"]].append(pid)
     dups = {cs: pids for cs, pids in cs_pids.items() if len(pids) > 1}
 
+    # SPLIT IDENTITY — the mirror image of dup-cricsheet, and previously unchecked.
+    # dup-cricsheet catches "one person's cricsheet id under many pids". This catches the opposite:
+    # ONE PERSON spread across several pids. It matters because the draft stamps a single pid per
+    # player, so whichever entry it picked is the only one that joins — the other's rows silently
+    # score 0 or land on the wrong player.
+    # Found via draft_id (the draft's own player key): two registry entries sharing one draft_id
+    # are, by the draft's own definition, one player. Real case: Dale Phillips held BOTH ci:902447
+    # (cricsheet DN Phillips — the LPL player) and ci:823509 (which also carried "gd phillips",
+    # Glenn Phillips' initials form), both tagged draft_id 10341.
+    draft_pids = defaultdict(list)
+    for pid, e in players.items():
+        d = e.get("draft_id")
+        if d:
+            draft_pids[d].append(pid)
+    split_ids = {d: pids for d, pids in draft_pids.items() if len(pids) > 1}
+
     # match_performances lives ONLY in the full auction DB (not the committed players export used
     # in CI). When absent, fixable-miss detection (which needs "this record HAS stats") is skipped
     # — advisory only, so degrade to an empty set rather than crash. build_registry still anchors.
@@ -104,6 +120,20 @@ def main():
         for cs, pids in dups.items():
             print(f"  BLOCKER dup-cricsheet: {cs} under {pids}")
         blockers += len(dups)
+
+    if split_ids:
+        print("\n=== GLOBAL — split identity: one draft player under >1 registry pid ===")
+        print("  The draft stamps ONE pid per player, so only one of these ever joins the sheet;")
+        print("  the other's rows score 0 or attach to the wrong person. Decide which cricinfo id")
+        print("  is correct (check cricsheet's initials form for the tour), then merge/split in the")
+        print("  registry — do NOT leave both live.")
+        for d, pids in sorted(split_ids.items()):
+            for pid in pids:
+                e = players[pid]
+                print(f"  BLOCKER split-identity: draft_id {d} -> {pid:14} "
+                      f"{e.get('display', '?'):24} cs={e.get('cricsheet_id')} "
+                      f"aliases={e.get('aliases')}")
+        blockers += len(split_ids)
 
     print(f"\n{'FAIL' if blockers else 'PASS'}: {blockers} blocker(s). (review/unmapped are human-triage, not blockers)")
     sys.exit(1 if blockers else 0)

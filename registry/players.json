@@ -6429,6 +6429,7 @@
   },
   "ci:1282477": {
    "aliases": [
+    "t mathew",
     "traveen mathews"
    ],
    "tours": [
@@ -6714,10 +6715,10 @@
   },
   "ci:1070229": {
    "aliases": [
-    "kth ratnayake",
     "milan priyanath rathnayake",
     "milan rathnayaka",
-    "milan ratnayake"
+    "milan ratnayake",
+    "rmmp rathnayake"
    ],
    "tours": [
     "Lanka Premier League 2026"
@@ -6957,6 +6958,7 @@
   },
   "ci:784379": {
    "aliases": [
+    "pwh de silva",
     "wanindu hasaranga"
    ],
    "tours": [
@@ -7168,8 +7170,6 @@
   },
   "ci:823509": {
    "aliases": [
-    "dale nathan phillips",
-    "dale phillips",
     "gd phillips"
    ],
    "tours": [
@@ -7179,7 +7179,7 @@
    "cricsheet_id": "9a46c4e5",
    "espn_id": "823509",
    "display": "Dale Phillips",
-   "draft_id": 10341,
+   "draft_id": null,
    "auction_id": 402
   },
   "ci:1329936": {
@@ -7437,6 +7437,7 @@
   },
   "ci:950405": {
    "aliases": [
+    "kth ratnayake",
     "tharindu rathnayake",
     "tharindu ratnayake"
    ],
@@ -7720,6 +7721,7 @@
   },
   "ci:902447": {
    "aliases": [
+    "dale nathan phillips",
     "dale phillips"
    ],
    "tours": [
@@ -10042,7 +10044,7 @@
    "cricsheet_id": "45a7e761",
    "espn_id": "1072470",
    "display": "Shaheen Shah Afridi",
-   "draft_id": 10627,
+   "draft_id": 10657,
    "auction_id": null
   },
   "ci:299572": {

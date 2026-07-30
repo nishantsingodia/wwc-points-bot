@@ -32,6 +32,23 @@ This is the cross-project spine (auction + draft + bot all resolve names through
   `cricsheet_id` from the verified cricinfo id (not the fuzzy match) fixes this class. **Phantom-duplicate
   auction rows** still hurt exact/fuzzy lookups — dedup the auction DB, then rebuild.
 
+## Settled results can move — the settlement baseline (added 29 Jul 2026)
+The points sheet is REWRITTEN in place every run, and L2 recon compares cricsheet against a LIVE
+re-computation of the provisional cut — NOT against what was on screen when money was settled. So a
+scorer fix / ESPN backfill / registry change moves settled numbers invisibly to reconciliation.
+- `registry/settlement_snapshots.json` + the **`SETTLEMENT AUDIT`** sheet tab = **WRITE-ONCE** record
+  of each player's points the first time their match published COMPLETED. Never edit it; the draft
+  app diffs the live sheet against it (`/audit`, results "Audit" tab, lobby Completed badge).
+- **cricsheet rows resolve by ID, not name** (`resolve_perf_pid` + `CS2PID`). cricsheet writes
+  initials form (`PWH de Silva` = Wanindu Hasaranga) — name matching zeroed him on two matches the
+  app badged COMPLETED with no flag. Two different "E Jones" exist in the Hundred Women's data; only
+  ids tell them apart.
+- An unresolved official-card identity now HOLDS the provisional value + flags
+  (`⚠ identity unresolved on official card`) instead of silently scoring 0.
+- `points_gap()` compares the scored TOTAL as a backstop, so a change in a field not listed in
+  `RECON_L2` (balls faced/bowled → SR/econ) can't read as "✓ complete".
+- Full post-mortem + the Hasaranga/Tharindu/Dale-Phillips cases: `RECON_REVIEW_WORKFLOW.md`.
+
 ## GATE before any tour goes live (run in all three apps' setup)
 ```
 python3 identity_healthcheck.py "<tour name>"     # exit 1 on blockers

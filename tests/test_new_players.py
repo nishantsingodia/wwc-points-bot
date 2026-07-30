@@ -51,14 +51,20 @@ def test_find_silent_drops_ignores_no_pid(wcmod):
 
 # ── register_new_player: identity + membership, deduped/merged ──────────────
 def test_register_new_player_builds_record_and_resolves(wcmod):
-    e = wcmod.register_new_player(pid="slug:jane-maguire", display="Jane Maguire", feed="J Maguire",
-                                  team="IRE", role="BOWL", tour="Women's T20 WC 2026", source="new")
-    assert e["pid"] == "slug:jane-maguire" and e["display"] == "Jane Maguire"
-    assert "j maguire" in e["aliases"] and e["team"] == "IRE" and e["role"] == "BOWL"
+    # Deliberately a name the registry CANNOT already know. The original version used Jane
+    # Maguire, who has since been properly registered (ci:1229018) — so the test started
+    # asserting that a real player's anchor gets overwritten by a slug, which is the opposite
+    # of what we want. The mechanism under test is registration, not registry contents.
+    assert wcmod.resolve_pid("Zzq Testperson") is None
+    e = wcmod.register_new_player(pid="slug:zzq-testperson", display="Zzq Testperson",
+                                  feed="Z Testperson", team="IRE", role="BOWL",
+                                  tour="Women's T20 WC 2026", source="new")
+    assert e["pid"] == "slug:zzq-testperson" and e["display"] == "Zzq Testperson"
+    assert "z testperson" in e["aliases"] and e["team"] == "IRE" and e["role"] == "BOWL"
     assert e["tours"] == ["Women's T20 WC 2026"] and e["source"] == "new"
-    # identity reflected immediately so she resolves THIS run (feed spelling AND display)
-    assert wcmod.resolve_pid("J Maguire") == "slug:jane-maguire"
-    assert wcmod.resolve_pid("Jane Maguire") == "slug:jane-maguire"
+    # identity reflected immediately so they resolve THIS run (feed spelling AND display)
+    assert wcmod.resolve_pid("Z Testperson") == "slug:zzq-testperson"
+    assert wcmod.resolve_pid("Zzq Testperson") == "slug:zzq-testperson"
 
 
 def test_register_new_player_merges_by_pid(wcmod):
@@ -97,7 +103,11 @@ def test_jane_maguire_new_flow(wcmod):
 def test_new_reuses_existing_identity(wcmod, monkeypatch):
     # Finn Allen is already in the registry; marking a new spelling of him "New" must reuse his
     # real pid (link the alias) — NOT mint slug:finn-allen and split him in two.
-    assert wcmod.resolve_pid("Finn Allen") == "bf74b130"
+    # Read his pid from the registry rather than hardcoding it: the anchor migrated once already
+    # (cricsheet hash -> "ci:<cricinfoId>", 25 Jul) and pinning a literal only re-breaks this test
+    # on the next migration. What matters is that the SAME identity is reused, not its spelling.
+    finn = wcmod.resolve_pid("Finn Allen")
+    assert finn, "Finn Allen must be in the registry for this regression to mean anything"
     gs = types.ModuleType("gspread")
     gs.WorksheetNotFound = type("WorksheetNotFound", (Exception,), {})
     monkeypatch.setitem(sys.modules, "gspread", gs)
@@ -108,4 +118,5 @@ def test_new_reuses_existing_identity(wcmod, monkeypatch):
                             "WS", (), {"get_all_values": lambda s: rows})()})())
     wcmod.read_review_confirmations()
     entry = next(e for e in wcmod.NEW_PLAYERS_DATA["players"] if "fin allen" in e.get("aliases", []))
-    assert entry["pid"] == "bf74b130"                              # reused Finn's identity, no duplicate slug
+    assert entry["pid"] == finn                                    # reused Finn's identity, no duplicate slug
+    assert not entry["pid"].startswith("slug:")                    # never minted a parallel identity

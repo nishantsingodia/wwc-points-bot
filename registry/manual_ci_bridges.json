@@ -507,13 +507,35 @@
  "ci:1070229": {
   "cricinfo_id": "1070229",
   "names": [
-   "milan ratnayake"
+   "milan ratnayake",
+   "rmmp rathnayake"
   ]
  },
  "ci:950405": {
   "cricinfo_id": "950405",
   "names": [
+   "kth ratnayake",
    "tharindu rathnayake"
+  ]
+ },
+ "ci:784379": {
+  "cricinfo_id": "784379",
+  "names": [
+   "pwh de silva"
+  ]
+ },
+ "ci:1282477": {
+  "cricinfo_id": "1282477",
+  "names": [
+   "t mathew"
+  ]
+ },
+ "ci:902447": {
+  "cricinfo_id": "902447",
+  "names": [
+   "dale nathan phillips",
+   "dale phillips",
+   "dn phillips"
   ]
  }
 }

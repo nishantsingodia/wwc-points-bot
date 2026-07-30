@@ -124,11 +124,16 @@ def test_hundred_wicket_haul_tiers(perf, wcmod, w, expected_haul):
     assert s["bowl"] == w * 30 + expected_haul
 
 
-def test_hundred_bowling_gate_needs_balls(perf, wcmod):
-    # cricapi omits balls for the Hundred -> without the ESPN balls-backfill (in the ESPN merge)
-    # a 4-fer scores 0 even under _score_hundred (bowling block is gated on balls>0). This pins
-    # WHY the backfill is still required alongside the HUN ruleset.
-    assert wcmod.score(perf(w=4, dots=9, runs_conceded=25, balls=0, played=True), "BOWL", fmt="HUN")["bowl"] == 0
+def test_hundred_bowling_survives_missing_ball_count(perf, wcmod):
+    # cricapi omits `overs` on 100-ball cards, so a bowler can arrive with balls=0 even after the
+    # ESPN backfill (if his scorecard line didn't name-match). Gating the bowling block on balls>0
+    # ALONE silently zeroed him — the "Gleeson 4-for -> 4-pts" bug. `_bowled()` now accepts any
+    # hard bowling signal, so the ball-count-INDEPENDENT points survive...
+    s = wcmod.score(perf(w=4, dots=9, runs_conceded=25, balls=0, played=True), "BOWL", fmt="HUN")
+    assert s["bowl"] == 4 * 30 + 9 + 12        # wkts + dots + 4-wkt haul; recovered, not zeroed
+    # ...while anything that DIVIDES by balls correctly stays 0 rather than inventing a rate.
+    assert s["eco"] == 0
+    assert wcmod._bowled(perf(w=0, dots=0, runs_conceded=0, balls=0, played=True)) is False
 
 
 def test_hundred_gleeson_real_case(perf, wcmod):

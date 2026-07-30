@@ -17,11 +17,26 @@ def norm(s):
 
 reg = json.load(open(os.path.join(HERE, "players.json")))["players"]
 alias2pid, draftid2pid = {}, {}
+_by_draft = {}
 for pid, e in reg.items():
     for a in e.get("aliases", []):
         alias2pid.setdefault(a, pid)
     if e.get("draft_id") is not None:
-        draftid2pid[e["draft_id"]] = pid
+        _by_draft.setdefault(e["draft_id"], []).append(pid)
+
+# AMBIGUITY GUARD. draft_id takes PRIORITY over the name lookup below, so a registry draft_id
+# that is stale or shared silently stamps the WRONG identity onto a draft player — and the draft
+# then scores someone else's points under that slot. Found live: ci:1072470 (Shaheen Shah Afridi)
+# carried draft_id 10627, which is SIKANDAR RAZA in the draft (Shaheen is 10657); one run of this
+# script would have given Sikandar's slot Shaheen's pid. When a draft_id maps to more than one
+# registry entry we trust NOTHING and fall through to the name — never a coin flip on identity.
+for did, pids in _by_draft.items():
+    if len(pids) == 1:
+        draftid2pid[did] = pids[0]
+    else:
+        print(f"  SKIP draft_id {did}: claimed by {len(pids)} registry entries "
+              f"({', '.join(pids)}) — ambiguous, falling back to name. "
+              f"Fix with identity_healthcheck.py (split-identity blocker).")
 
 raw = json.load(open(DRAFT_RAW))
 players = raw if isinstance(raw, list) else raw.get("players", raw)
