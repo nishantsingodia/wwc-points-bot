@@ -314,6 +314,19 @@
         "Lanka Premier League 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:1124282",
+      "display": "Josh Philippe",
+      "aliases": [
+        "jr philippe"
+      ],
+      "team": "MTMILO",
+      "role": "BAT",
+      "tours": [
+        "The Hundred Men's Competition 2026"
+      ],
+      "source": "auto"
     }
   ]
 }
