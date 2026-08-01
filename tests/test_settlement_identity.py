@@ -158,6 +158,17 @@ def test_hasaranga_and_mathews_aliases_are_permanent(wcmod):
     assert wcmod.resolve_pid("RMMP Rathnayake") == wcmod.resolve_pid("Milan Ratnayake")
 
 
+def test_cricinfo_hint_makes_the_gap_fillable(wcmod, monkeypatch):
+    """An identity gap is only actionable if it names the id to fill. The hint is derived from the
+    people.csv crosswalk (cricsheet id -> cricinfo id), never guessed from the spelling."""
+    monkeypatch.setitem(wcmod.CS2CI, "f655d740", "859899")
+    h = wcmod.cricinfo_hint({"name": "CG Harrison", "cs_id": "f655d740"})
+    assert "859899" in h and "cricketers/x-859899" in h
+    # unknown id -> say so plainly rather than inventing one
+    assert "zzzz" in wcmod.cricinfo_hint({"name": "X", "cs_id": "zzzz"})
+    assert wcmod.cricinfo_hint({"name": "X"}) == "no cricsheet id"
+
+
 def test_unresolved_official_flags_blank_pid_rows(wcmod, monkeypatch):
     monkeypatch.setitem(wcmod.ALIAS2PID, "known player", "ci:9")
     cs_perf = {"known player": {"name": "Known Player", "played": True},

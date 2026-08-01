@@ -211,6 +211,11 @@ RECON_REVIEW = []       # rows to publish: {match_key, tour, match, date, pid, f
 PRIOR_RECON = {}        # (match_key, pid, param) -> the user's "Correct Value" so far (preserved)
 PRIOR_MANUAL = {}       # (match_key, pid, param) -> the user's "Manual Value" so far (preserved)
 RECON_ACK = set()       # (match_key, pid, param) approved + applied -> stop re-flagging
+# Identity gaps found while SCORING (an official-card row we can't resolve, or a squad player
+# still on a slug:/uncapped: pid). These go to the "Needs Cricinfo ID" tab — the same
+# self-maintaining loop build_registry uses — NOT to Recon Review, whose S1/S2 dropdown asks a
+# value question that makes no sense for "who is this player?".
+NEEDS_CRICINFO = []     # {player, current_pid, tour, team, closest_guess}
 RECON_OVERRIDES = {}    # match_key -> [approved override dicts] (loaded once in main, before tours)
 
 def guess_role(p):
@@ -1635,6 +1640,11 @@ def run_tour(tour):
             pp = resolve_pid(nm_) or resolve_perf_pid(dd) or ""
             if pp and pp not in perf_by_pid:
                 perf_by_pid[pp] = dd
+        assigned_team_of = {}
+        for (sh_, nm_), _dd in assigned.items():
+            pp = resolve_pid(nm_)
+            if pp and pp not in assigned_team_of:
+                assigned_team_of[pp] = sh_
         # Role per pid, so the points backstop can re-score both sides consistently (role drives
         # the SR/econ penalties — scoring one side as a different role would fake a delta).
         role_by_pid = {}
@@ -1715,34 +1725,49 @@ def run_tour(tour):
                 RECON_REVIEW.append({"match_key": mk, "tour": CURRENT_TOUR, "match": label,
                                      "date": mdate, "pid": pid, "full": PID2DISP.get(pid, pid),
                                      "param": "L2", "s1": g, "s2": "official cricsheet", "tier": "l2"})
-        # IDENTITY rows: one per player the official card lost, with the unmatched official
-        # spellings as the evidence to link. Answering S2 accepts the official card (a genuine
-        # non-selection -> 0 stands); the permanent fix is a registry alias/bridge, which is why
-        # the orphan names are printed verbatim.
+        # IDENTITY. Two DIFFERENT questions, so they go to two different tabs — routing them by
+        # what the human is actually being asked:
+        #
+        #   "Did he really not play?"      -> Recon Review. A VALUE decision, S1/S2 fits.
+        #   "Who is this player?"          -> Needs Cricinfo ID. An IDENTITY gap; an S1/S2
+        #                                     dropdown is meaningless there, and this tab is the
+        #                                     established self-maintaining loop (drop the id ->
+        #                                     manual_ci_bridges picks it up on the next build).
+        #
+        # Discriminator: a squad player already anchored to a real `ci:` pid can only be a
+        # selection question. One still sitting on a slug:/uncapped: pid has no cricinfo id at
+        # all — that IS the identity gap, and belongs with the orphan that matches him.
         if cs_path and not is_live:
             for pid in id_zeroed:
                 if l2_appr.get(pid) == "S2" or (mk, pid, "ID") in RECON_ACK:
                     continue
+                disp = PID2DISP.get(pid, pid)
+                if not pid.startswith("ci:"):
+                    NEEDS_CRICINFO.append({
+                        "player": disp, "current_pid": pid, "tour": CURRENT_TOUR,
+                        "team": (assigned_team_of.get(pid) or ""),
+                        "closest_guess": ("official card: " + ", ".join(
+                            f"{v.get('name')} [{cricinfo_hint(v)}]" for v in cs_orphans)
+                            if cs_orphans else f"no cricinfo id yet ({label}, {mdate})")})
+                    continue
                 held = " · value HELD" if pid in id_held else ""
                 RECON_REVIEW.append({
                     "match_key": mk, "tour": CURRENT_TOUR, "match": label, "date": mdate,
-                    "pid": pid, "full": PID2DISP.get(pid, pid), "param": "ID",
+                    "pid": pid, "full": disp, "param": "ID",
                     "s1": f"played provisionally, absent from official card{held}",
-                    "s2": ("unmatched official rows: " + ", ".join(id_orphans)) if id_orphans
-                          else "official card has no such player",
+                    "s2": ("S2 = accept the official card (he did not feature, 0 stands); "
+                           "S1 = keep the held value"),
                     "tier": "id"})
-            # An unresolvable official row is worth flagging even when no squad player was lost:
-            # its points cannot join ANY contest (the draft joins by pid, never fuzzy for a
-            # pid'd player), so they are silently outside the game.
+            # An unresolvable official row is an identity gap by definition: its points cannot
+            # join ANY contest (the draft joins by pid and never fuzzy-falls-back for a pid'd
+            # player), so they sit silently outside the game. Straight to Needs Cricinfo ID, with
+            # the crosswalk-derived cricinfo id so filling it in is a copy, not a research task.
             for v in cs_orphans:
                 nm = v.get("name") or ""
-                if (mk, nm, "ID-ORPHAN") in RECON_ACK:
-                    continue
-                RECON_REVIEW.append({
-                    "match_key": mk, "tour": CURRENT_TOUR, "match": label, "date": mdate,
-                    "pid": "", "full": nm, "param": "ID-ORPHAN",
-                    "s1": "official-card row resolves to NO player id — points cannot reach a contest",
-                    "s2": cricinfo_hint(v), "tier": "id"})
+                NEEDS_CRICINFO.append({
+                    "player": nm, "current_pid": f"cs:{v.get('cs_id') or nm}",
+                    "tour": CURRENT_TOUR, "team": canon_team(v.get("team", "")) or "",
+                    "closest_guess": f"{cricinfo_hint(v)} · official card only ({label}, {mdate})"})
 
         def emit(short, name, role, d, in_squad):
             src = status
@@ -2139,6 +2164,7 @@ def main():
         write_review_tab()      # publish remaining unmatched players (closest-match + Yes/No)
         write_anomaly_tab()     # publish detected merges/dupes + the audit of past splits (Yes/No)
         write_recon_tab()       # publish L1/L2 feed disagreements to approve (pick Correct Value)
+        write_needs_cricinfo_tab()  # identity gaps -> the SAME tab build_registry uses (drop the id)
         write_settlement_tab()  # publish the frozen settled baseline the draft app diffs against
 
 _GSHEET = None
@@ -2735,6 +2761,51 @@ def _save_cricsheet_learned():
         print(f"[identity] learned {len(CS_LEARNED)} cricsheet spelling(s) by id", file=sys.stderr)
     except Exception as e:
         print(f"could not update cricsheet_learned_aliases.json: {e}", file=sys.stderr)
+
+NEEDS_CRICINFO_TAB = "Needs Cricinfo ID"
+
+def write_needs_cricinfo_tab():
+    """Push identity gaps found while scoring into the SAME 'Needs Cricinfo ID' tab that
+    build_registry/tour_sync_finalize use — one place, one habit: drop the cricinfo id in the last
+    column and `manual_ci_bridges` picks it up on the next build.
+
+    Appends only (dedupe by current_pid), so a filled-in id is never clobbered and a re-run never
+    duplicates a row. Deliberately does NOT touch registry/needs_cricinfo_pending.json — that file
+    is rewritten wholesale by build_registry, and two writers would clobber each other."""
+    if not NEEDS_CRICINFO:
+        return
+    sh = open_gsheet()
+    if sh is None:
+        print(f"  (needs-cricinfo tab skipped — no creds; {len(NEEDS_CRICINFO)} pending)", file=sys.stderr)
+        return
+    import gspread
+    header = ["player", "current_pid", "tour", "team", "closest_guess", "cricinfo_id_FILL_HERE"]
+    try:
+        try:
+            ws = sh.worksheet(NEEDS_CRICINFO_TAB)
+            existing = ws.get_all_values()
+        except gspread.WorksheetNotFound:
+            ws = sh.add_worksheet(title=NEEDS_CRICINFO_TAB, rows=200, cols=len(header))
+            ws.update(range_name="A1", values=[header], value_input_option="RAW")
+            existing = [header]
+        have = {(r[1] if len(r) > 1 else "") for r in existing[1:]}
+        seen, rows = set(), []
+        for e in NEEDS_CRICINFO:
+            key = e.get("current_pid", "")
+            if not key or key in have or key in seen:
+                continue
+            seen.add(key)
+            rows.append([e.get("player", ""), key, e.get("tour", ""), e.get("team", ""),
+                         e.get("closest_guess", ""), ""])
+        if rows:
+            ws.append_rows(rows, value_input_option="RAW")
+            print(f"'{NEEDS_CRICINFO_TAB}': appended {len(rows)} identity gap(s) for a human to fill",
+                  file=sys.stderr)
+        else:
+            print(f"'{NEEDS_CRICINFO_TAB}': nothing new ({len(NEEDS_CRICINFO)} already listed)",
+                  file=sys.stderr)
+    except Exception as e:
+        print(f"needs-cricinfo tab: {e}", file=sys.stderr)
 
 def write_settlement_tab():
     """Publish the frozen settled baseline so the draft app can diff the live sheet against it.
