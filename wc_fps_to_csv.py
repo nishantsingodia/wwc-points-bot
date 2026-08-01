@@ -2130,6 +2130,7 @@ def main():
     read_anomaly_confirmations()   # record Yes/No on identity anomalies (read-only on live identity)
     read_recon_approvals()         # record recon 'Correct Value' answers -> recon_overrides.json
     read_needs_cricinfo()          # consume filled cricinfo ids -> manual_ci_bridges.json
+    promote_new_players()          # ...and APPLY them: slug:/uncapped: -> ci: (closes the loop)
     RECON_OVERRIDES = overrides_by_match(_load_overrides())  # index approved overrides for run_tour
     tours = load_tours()
     # Process still-running tours FIRST (latest `ends` first) so a live tour never starves on
@@ -2791,6 +2792,72 @@ def _save_cricsheet_learned():
 NEEDS_CRICINFO_TAB = "Needs Cricinfo ID"
 CI_BRIDGES_PATH = os.path.join(os.path.dirname(__file__), "registry", "manual_ci_bridges.json")
 
+def promote_new_players():
+    """Upgrade sheet-added players from a placeholder `slug:` pid to their real `ci:` id.
+
+    WHY THIS HAS TO EXIST. Identity lives in two stores that never met:
+      · registry/players.json  — built by build_registry from the SQUAD files, `ci:`-anchored.
+      · registry/new_players.json — written at RUNTIME when a player turns up who is in no squad
+        (Needs Review "New", or an auto-added silent drop). `slugify()` mints `slug:<name>`.
+    `build_registry.py` contains zero references to new_players.json, so a `slug:` minted here was
+    never revisited — filling the player's cricinfo id into the Needs Cricinfo ID tab produced a
+    bridge that build_registry applied to squad names only, and the slug survived forever. That is
+    why Calvin Harrison, Sean Dickson, Matthew Revis, Andrew Tye and Saif Zaib stayed on slug pids
+    while their official-card rows sat unjoinable beside them.
+
+    Promotes ONLY on a human-asserted bridge (an id someone typed into the tab). Deliberately does
+    NOT promote by matching the global registry's aliases: that path can merge two people silently,
+    which is the failure this whole exercise exists to stop."""
+    try:
+        bridges = json.load(open(CI_BRIDGES_PATH))
+    except Exception:
+        return 0
+    name2ci = {}
+    for key, e in bridges.items():
+        cid = str(e.get("cricinfo_id") or key.split(":", 1)[-1])
+        for n in e.get("names", []):
+            name2ci.setdefault(n, cid)
+    changed = 0
+    for e in NEW_PLAYERS_DATA.get("players", []):
+        pid = e.get("pid", "")
+        if not pid.startswith(("slug:", "uncapped:")):
+            continue
+        cands = {name2ci[n] for n in
+                 [norm(e.get("display", ""))] + [norm(a) for a in e.get("aliases", [])]
+                 if n in name2ci}
+        if len(cands) != 1:
+            if len(cands) > 1:      # two ids claim this player — never guess between them
+                print(f"  promote: {e.get('display')!r} matches {len(cands)} cricinfo ids "
+                      f"{sorted(cands)} — left on {pid} for a human", file=sys.stderr)
+            continue
+        new_pid = f"ci:{cands.pop()}"
+        print(f"  promote: {e.get('display'):24} {pid} -> {new_pid}", file=sys.stderr)
+        e["pid"] = new_pid
+        ALIAS2PID[norm(e.get("display", ""))] = new_pid
+        for a in e.get("aliases", []):
+            ALIAS2PID[norm(a)] = new_pid
+        PID2DISP[new_pid] = e.get("display") or new_pid
+        changed += 1
+    if changed:
+        _save_new_players(NEW_PLAYERS_DATA)
+        print(f"[identity] promoted {changed} sheet-added player(s) off placeholder pids",
+              file=sys.stderr)
+    # Anything still on a placeholder has no id yet — put it in front of a human. This is what
+    # makes the loop self-closing: mint slug -> row appears in the tab -> id filled -> promoted.
+    # Without it a slug is invisible until it happens to break a scorecard.
+    stale = [e for e in NEW_PLAYERS_DATA.get("players", [])
+             if e.get("pid", "").startswith(("slug:", "uncapped:"))]
+    for e in stale:
+        NEEDS_CRICINFO.append({
+            "player": e.get("display", ""), "current_pid": e["pid"],
+            "tour": (e.get("tours") or [""])[0], "team": e.get("team", ""),
+            "closest_guess": "sheet-added player, still on a placeholder id — "
+                             "fill the cricinfo id to anchor them permanently"})
+    if stale:
+        print(f"[identity] {len(stale)} player(s) still on placeholder pids -> "
+              f"'{NEEDS_CRICINFO_TAB}'", file=sys.stderr)
+    return changed
+
 def read_needs_cricinfo():
     """Consume the ids a human filled into 'Needs Cricinfo ID' -> registry/manual_ci_bridges.json.
 
@@ -2856,6 +2923,21 @@ def read_needs_cricinfo():
             continue
         # Refuse a silent merge into someone who is already anchored to this id under a name that
         # isn't plausibly the same person.
+        # REVERSE guard: the name you are bridging may ALREADY resolve to somebody else. That is
+        # how "Kiran Carlson" ended up bound to Liam Dawson (ci:211855) — same team, so the Needs
+        # Review "New" flow's closest-match linked them and every Carlson row scored as Dawson.
+        # Filling in Carlson's real id would otherwise leave BOTH mappings live.
+        prior = resolve_pid(player)
+        if prior and prior != f"ci:{cid}" and not same_person_plausible(PID2DISP.get(prior, ""), player):
+            ANOMALIES.append({
+                "tour": CURRENT_TOUR or "(needs-cricinfo)", "kind": "false_merge",
+                "pid": prior, "display": PID2DISP.get(prior, prior),
+                "context": NEEDS_CRICINFO_TAB, "names": [player, PID2DISP.get(prior, "")],
+                "finding": f"{player!r} is being bridged to cricinfo {cid}, but it currently "
+                           f"resolves to {PID2DISP.get(prior)!r} ({prior}) — one of the two is a "
+                           f"smear; the old alias must be removed or the points stay misattributed"})
+            print(f"  needs-cricinfo: {player!r} already resolves to {prior} "
+                  f"({PID2DISP.get(prior)!r}) — flagged, bridge still recorded", file=sys.stderr)
         owner = known_ci.get(cid)
         if owner and not same_person_plausible(owner[1].get("display", ""), player):
             ANOMALIES.append({
@@ -2869,7 +2951,12 @@ def read_needs_cricinfo():
             continue
         key = f"ci:{cid}"
         e = bridges.setdefault(key, {"cricinfo_id": cid, "names": []})
-        for nm in (norm(player), norm(cur_pid.split(":", 1)[-1].replace("-", " "))):
+        # Only a slug:/uncapped: pid carries a real NAME to recover ("slug:calvin-harrison" ->
+        # "calvin harrison"). A cs: pid carries a cricsheet HASH, which is not a name and must
+        # never be registered as an alias.
+        extra = (norm(cur_pid.split(":", 1)[-1].replace("-", " "))
+                 if cur_pid.startswith(("slug:", "uncapped:")) else "")
+        for nm in (norm(player), extra):
             if nm and nm not in e["names"]:
                 e["names"].append(nm); added += 1
         e["names"] = sorted(set(e["names"]))

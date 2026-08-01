@@ -176,3 +176,53 @@ def test_unresolved_official_flags_blank_pid_rows(wcmod, monkeypatch):
                "did not play": {"name": "Did Not Play", "played": False}}
     out = wcmod.unresolved_official(cs_perf)
     assert [v["name"] for v in out] == ["Q Unknown"]     # played + unresolvable only
+
+
+# ── 6. The identity loop actually closes (the "why isn't this automatic?" gap) ──
+def test_promote_new_players_applies_a_filled_bridge(wcmod, monkeypatch, tmp_path):
+    """A sheet-added player is minted with a placeholder `slug:` pid, and build_registry never
+    looks at new_players.json — so before this, filling their cricinfo id changed nothing and the
+    slug survived forever. Promotion is what turns a filled id into a real anchor."""
+    bridges = tmp_path / "b.json"
+    bridges.write_text('{"ci:859899": {"cricinfo_id": "859899", '
+                       '"names": ["calvin harrison", "cg harrison"]}}')
+    monkeypatch.setattr(wcmod, "CI_BRIDGES_PATH", str(bridges))
+    monkeypatch.setattr(wcmod, "NEW_PLAYERS_PATH", str(tmp_path / "np.json"))
+    monkeypatch.setattr(wcmod, "NEW_PLAYERS_DATA", {"players": [
+        {"pid": "slug:calvin-harrison", "display": "Calvin Harrison",
+         "aliases": ["calvin harrison"], "team": "TR", "tours": ["T"], "source": "new"}]})
+    monkeypatch.setattr(wcmod, "NEEDS_CRICINFO", [])
+    assert wcmod.promote_new_players() == 1
+    assert wcmod.NEW_PLAYERS_DATA["players"][0]["pid"] == "ci:859899"
+    assert wcmod.resolve_pid("Calvin Harrison") == "ci:859899"
+    assert wcmod.NEEDS_CRICINFO == []          # resolved -> nothing left to ask
+
+
+def test_promote_never_guesses_between_two_ids(wcmod, monkeypatch, tmp_path):
+    """Two bridges claiming one player is ambiguous. Leave the placeholder and say so — picking
+    one would fuse two people, which is the exact failure this work exists to prevent."""
+    bridges = tmp_path / "b.json"
+    bridges.write_text('{"ci:1": {"cricinfo_id": "1", "names": ["x player"]},'
+                       ' "ci:2": {"cricinfo_id": "2", "names": ["x alias"]}}')
+    monkeypatch.setattr(wcmod, "CI_BRIDGES_PATH", str(bridges))
+    monkeypatch.setattr(wcmod, "NEW_PLAYERS_PATH", str(tmp_path / "np.json"))
+    monkeypatch.setattr(wcmod, "NEW_PLAYERS_DATA", {"players": [
+        {"pid": "slug:x-player", "display": "X Player", "aliases": ["x alias"],
+         "team": "T", "tours": ["T"], "source": "new"}]})
+    monkeypatch.setattr(wcmod, "NEEDS_CRICINFO", [])
+    assert wcmod.promote_new_players() == 0
+    assert wcmod.NEW_PLAYERS_DATA["players"][0]["pid"] == "slug:x-player"
+
+
+def test_unpromoted_placeholders_are_surfaced_for_a_human(wcmod, monkeypatch, tmp_path):
+    """A placeholder with no bridge must reach the Needs Cricinfo ID tab, or it stays invisible
+    until it silently breaks a scorecard."""
+    b = tmp_path / "b.json"; b.write_text("{}")
+    monkeypatch.setattr(wcmod, "CI_BRIDGES_PATH", str(b))
+    monkeypatch.setattr(wcmod, "NEW_PLAYERS_PATH", str(tmp_path / "np.json"))
+    monkeypatch.setattr(wcmod, "NEW_PLAYERS_DATA", {"players": [
+        {"pid": "slug:nobody", "display": "Nobody", "aliases": [], "team": "T",
+         "tours": ["Tour X"], "source": "new"}]})
+    monkeypatch.setattr(wcmod, "NEEDS_CRICINFO", [])
+    wcmod.promote_new_players()
+    assert [r["current_pid"] for r in wcmod.NEEDS_CRICINFO] == ["slug:nobody"]

@@ -186,10 +186,11 @@
       "source": "auto"
     },
     {
-      "pid": "slug:sean-dickson",
+      "pid": "ci:688141",
       "display": "Sean Dickson",
       "aliases": [
-        "sean dickson"
+        "sean dickson",
+        "sr dickson"
       ],
       "team": "Birmingham Phoenix",
       "role": "BAT",
@@ -199,10 +200,11 @@
       "source": "new"
     },
     {
-      "pid": "slug:calvin-harrison",
+      "pid": "ci:859899",
       "display": "Calvin Harrison",
       "aliases": [
-        "calvin harrison"
+        "calvin harrison",
+        "cg harrison"
       ],
       "team": "Trent Rockets",
       "role": "BAT",
@@ -212,10 +214,11 @@
       "source": "new"
     },
     {
-      "pid": "slug:matthew-revis",
+      "pid": "ci:1150021",
       "display": "Matthew Revis",
       "aliases": [
-        "matthew revis"
+        "matthew revis",
+        "ml revis"
       ],
       "team": "Sunrisers Leeds",
       "role": "BAT",
@@ -227,9 +230,7 @@
     {
       "pid": "ci:211855",
       "display": "Liam Dawson",
-      "aliases": [
-        "kiran carlson"
-      ],
+      "aliases": [],
       "team": "London Spirit",
       "role": "BAT",
       "tours": [
@@ -264,9 +265,10 @@
       "source": "auto"
     },
     {
-      "pid": "slug:andrew-tye",
+      "pid": "ci:459508",
       "display": "Andrew Tye",
       "aliases": [
+        "aj tye",
         "andrew tye"
       ],
       "team": "London Spirit",
@@ -277,9 +279,10 @@
       "source": "new"
     },
     {
-      "pid": "slug:saif-zaib",
+      "pid": "ci:663613",
       "display": "Saif Zaib",
       "aliases": [
+        "sa zaib",
         "saif zaib"
       ],
       "team": "Southern Brave",
@@ -351,6 +354,20 @@
       "role": "BAT",
       "tours": [
         "The Hundred Women's Competition 2026"
+      ],
+      "source": "new"
+    },
+    {
+      "pid": "ci:737833",
+      "display": "Kiran Carlson",
+      "aliases": [
+        "kiran carlson",
+        "ks carlson"
+      ],
+      "team": "London Spirit",
+      "role": "BAT",
+      "tours": [
+        "The Hundred Men's Competition 2026"
       ],
       "source": "new"
     }
