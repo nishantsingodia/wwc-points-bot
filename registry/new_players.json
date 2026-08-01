@@ -340,6 +340,19 @@
         "Lanka Premier League 2026"
       ],
       "source": "new"
+    },
+    {
+      "pid": "ci:469879",
+      "display": "Georgia Adams",
+      "aliases": [
+        "qaasim adams"
+      ],
+      "team": "Trent Rockets Women",
+      "role": "BAT",
+      "tours": [
+        "The Hundred Women's Competition 2026"
+      ],
+      "source": "new"
     }
   ]
 }
