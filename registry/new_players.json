@@ -2,7 +2,7 @@
   "note": "Sheet-driven NEW players (the no-code path for a player the squad list is missing). Each entry is a GLOBAL, tour-agnostic identity (pid + display + feed-spelling aliases) PLUS the tours/team it's a member of. read_review_confirmations adds entries when you mark a Needs Review row 'New'; match_squad_to_perf adds them (source:'auto') when a globally-known player plays a tour they're not squad-listed for (the silent-drop fix). The bot loads this at startup (merges identity into the registry) and injects membership into each tour's squad — so it works WITHOUT a build_registry rebuild. pid is reused if the feed already resolves, else a slug:<name> (upgradeable to a cricsheet_id by a later build_registry run). Committed back to git by the workflow so it persists. source: 'new' (you marked New) | 'auto' (silent-drop auto-add).",
   "players": [
     {
-      "pid": "slug:jane-maguire",
+      "pid": "ci:1229018",
       "display": "Jane Maguire",
       "aliases": [
         "j maguire"
@@ -16,7 +16,7 @@
       "source": "new"
     },
     {
-      "pid": "slug:fabian-allen",
+      "pid": "ci:670013",
       "display": "Fabian Allen",
       "aliases": [
         "fa allen"
@@ -29,7 +29,7 @@
       "source": "new"
     },
     {
-      "pid": "slug:dian-forrester",
+      "pid": "ci:696471",
       "display": "Dian Forrester",
       "aliases": [
         "dian forrester"
@@ -42,7 +42,7 @@
       "source": "new"
     },
     {
-      "pid": "slug:anirudh-immanuel",
+      "pid": "ci:1539667",
       "display": "Anirudh Immanuel",
       "aliases": [
         "anirudh immanuel"
@@ -55,7 +55,7 @@
       "source": "new"
     },
     {
-      "pid": "slug:shakib-al-hasan",
+      "pid": "ci:56143",
       "display": "Shakib Al Hasan",
       "aliases": [
         "shakib al hasan"
@@ -68,7 +68,7 @@
       "source": "new"
     },
     {
-      "pid": "slug:l-pope",
+      "pid": "ci:1076721",
       "display": "L Pope",
       "aliases": [
         "l pope"
@@ -81,7 +81,7 @@
       "source": "new"
     },
     {
-      "pid": "slug:aakarshit-gomel",
+      "pid": "ci:474782",
       "display": "Aakarshit Gomel",
       "aliases": [
         "aakarshit gomel"
@@ -94,7 +94,7 @@
       "source": "new"
     },
     {
-      "pid": "slug:ehsan-adil",
+      "pid": "ci:547092",
       "display": "Ehsan Adil",
       "aliases": [
         "ehsan adil"
@@ -107,7 +107,7 @@
       "source": "new"
     },
     {
-      "pid": "slug:khary-pierre",
+      "pid": "ci:581160",
       "display": "Khary Pierre",
       "aliases": [
         "k pierre",
@@ -121,7 +121,7 @@
       "source": "new"
     },
     {
-      "pid": "slug:vishwa-lahiru",
+      "pid": "ci:1364327",
       "display": "Vishwa Lahiru",
       "aliases": [
         "vishwa lahiru"
@@ -332,7 +332,7 @@
       "source": "auto"
     },
     {
-      "pid": "slug:sonal-dinusha",
+      "pid": "ci:1153148",
       "display": "Sonal Dinusha",
       "aliases": [
         "gs dinusha"
