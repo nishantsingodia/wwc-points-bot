@@ -976,6 +976,166 @@
       "field": "6s",
       "status": "approved",
       "source": "S2"
+    },
+    {
+      "match_key": "2026-07-21::mi london|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:517572",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-21::mi london|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:1120320",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-21::mi london|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:1184099",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-22::southern brave|welsh fire",
+      "scope": "l2",
+      "pid": "ci:874293",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-25::southern brave|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:1184176",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-25::mi london|welsh fire",
+      "scope": "l2",
+      "pid": "ci:874293",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-25::mi london|welsh fire",
+      "scope": "l2",
+      "pid": "ci:715351",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-26::london spirit|trent rockets",
+      "scope": "l2",
+      "pid": "ci:381258",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-26::london spirit|trent rockets",
+      "scope": "l2",
+      "pid": "ci:858809",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-26::london spirit|trent rockets",
+      "scope": "l2",
+      "pid": "ci:469879",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-26::london spirit|trent rockets",
+      "scope": "l2",
+      "pid": "ci:916037",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-26::london spirit|trent rockets",
+      "scope": "l2",
+      "pid": "ci:418423",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-26::london spirit|trent rockets",
+      "scope": "l2",
+      "pid": "ci:537440",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-26::london spirit|trent rockets",
+      "scope": "l2",
+      "pid": "ci:939249",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-28::manchester super giants|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:374936",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-29::trent rockets|welsh fire",
+      "scope": "l2",
+      "pid": "ci:515905",
+      "source": "S1",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-01::birmingham phoenix|welsh fire",
+      "scope": "player",
+      "pid": "ci:1215360",
+      "field": "w",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-08-01::birmingham phoenix|welsh fire",
+      "scope": "player",
+      "pid": "ci:1187120",
+      "field": "r",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-08-01::birmingham phoenix|welsh fire",
+      "scope": "player",
+      "pid": "ci:1187120",
+      "field": "4s",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-08-01::birmingham phoenix|welsh fire",
+      "scope": "player",
+      "pid": "ci:275487",
+      "field": "r",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-08-01::birmingham phoenix|welsh fire",
+      "scope": "player",
+      "pid": "ci:275487",
+      "field": "4s",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-08-01::birmingham phoenix|welsh fire",
+      "scope": "player",
+      "pid": "ci:275487",
+      "field": "6s",
+      "status": "approved",
+      "source": "S2"
     }
   ]
 }
