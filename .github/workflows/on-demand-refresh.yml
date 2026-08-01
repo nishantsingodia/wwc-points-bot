@@ -11,6 +11,11 @@ name: On-Demand Live Refresh
 on:
   workflow_dispatch:
 
+# The refresh now COMMITS the decisions it consumed (recon picks, filled cricinfo ids), so it
+# needs write access — previously it only ever read/wrote the sheet.
+permissions:
+  contents: write
+
 # Don't let taps pile up — one refresh at a time (the app also rejects a tap while running).
 concurrency:
   group: on-demand-refresh
@@ -54,3 +59,23 @@ jobs:
           CRICSHEET_DIR: cricsheet
           WC_CACHE_DIR: api_cache
         run: python wc_fps_to_csv.py
+
+      # The Refresh button is a DECISION-CONSUMING run: it reads your Recon Review picks and any
+      # cricinfo ids you filled into "Needs Cricinfo ID". Without this step those writes died with
+      # the runner, so pressing Refresh appeared to work (the sheet updated) while the ledgers that
+      # make the decision STICK were silently thrown away.
+      - name: Persist sheet decisions to git
+        if: always()
+        run: |
+          LEDGERS="registry/recon_overrides.json registry/new_players.json registry/identity_splits.json registry/frozen_tours.json registry/settlement_snapshots.json registry/cricsheet_learned_aliases.json registry/manual_ci_bridges.json"
+          if [ -n "$(git status --porcelain $LEDGERS)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            for f in $LEDGERS; do [ -f "$f" ] && git add "$f"; done
+            git commit -m "chore: persist on-demand sheet decisions [skip ci]"
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || true
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+            echo "Persisted on-demand decisions."
+          else
+            echo "Nothing to persist."
+          fi

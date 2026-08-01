@@ -2129,6 +2129,7 @@ def main():
     read_review_confirmations()    # 'New' registers a player into NEW_PLAYERS_DATA (+ identity)
     read_anomaly_confirmations()   # record Yes/No on identity anomalies (read-only on live identity)
     read_recon_approvals()         # record recon 'Correct Value' answers -> recon_overrides.json
+    read_needs_cricinfo()          # consume filled cricinfo ids -> manual_ci_bridges.json
     RECON_OVERRIDES = overrides_by_match(_load_overrides())  # index approved overrides for run_tour
     tours = load_tours()
     # Process still-running tours FIRST (latest `ends` first) so a live tour never starves on
@@ -2788,6 +2789,98 @@ def _save_cricsheet_learned():
         print(f"could not update cricsheet_learned_aliases.json: {e}", file=sys.stderr)
 
 NEEDS_CRICINFO_TAB = "Needs Cricinfo ID"
+CI_BRIDGES_PATH = os.path.join(os.path.dirname(__file__), "registry", "manual_ci_bridges.json")
+
+def read_needs_cricinfo():
+    """Consume the ids a human filled into 'Needs Cricinfo ID' -> registry/manual_ci_bridges.json.
+
+    THE MISSING HALF. The tab was only ever WRITTEN — build_registry pushed unresolved players to
+    it and `tour_sync_finalize` appended more, but nothing anywhere read `cricinfo_id_FILL_HERE`
+    back. So filling it in did precisely nothing, and the "self-maintaining identity loop" in the
+    docs was self-maintaining in one direction only.
+
+    A filled id is a HUMAN identity assertion, which is the gate — but we still refuse the two ways
+    it can be wrong:
+      · a non-numeric id (typo / pasted URL) is rejected, never written;
+      · an id already held by a DIFFERENT-looking player is NOT silently merged. That is the
+        Dale->Glenn class: one keystroke would fuse two people permanently. It goes to Identity
+        Anomalies for a Yes/No instead.
+    Bridges are recorded, not applied mid-run: `build_registry` re-anchors properly on the next
+    build (which is also what re-stamps the draft's pids), so identity never changes underfoot
+    while a run is scoring."""
+    sh = open_gsheet()
+    if sh is None:
+        return 0
+    import gspread
+    try:
+        ws = sh.worksheet(NEEDS_CRICINFO_TAB)
+        rows = ws.get_all_values()
+    except gspread.WorksheetNotFound:
+        return 0
+    except Exception as e:
+        print(f"needs-cricinfo read: {e}", file=sys.stderr)
+        return 0
+    if len(rows) < 2:
+        return 0
+    hdr = [h.strip() for h in rows[0]]
+    def col(name, default=-1):
+        return hdr.index(name) if name in hdr else default
+    ci_i, pl_i, pid_i = col("cricinfo_id_FILL_HERE"), col("player"), col("current_pid")
+    if ci_i < 0 or pl_i < 0:
+        return 0
+    try:
+        bridges = json.load(open(CI_BRIDGES_PATH))
+    except Exception:
+        bridges = {}
+    # cricinfo id -> (pid, entry) for the merge guard below.
+    known_ci = {}
+    try:
+        _reg = json.load(open(os.path.join(os.path.dirname(__file__), "registry", "players.json")))
+        for _pid, _e in _reg.get("players", {}).items():
+            _c = _e.get("cricinfo_id")
+            if _c:
+                known_ci.setdefault(str(_c), (_pid, _e))
+    except Exception:
+        pass
+    added = 0
+    for r in rows[1:]:
+        raw = (r[ci_i].strip() if len(r) > ci_i else "")
+        player = (r[pl_i].strip() if len(r) > pl_i else "")
+        cur_pid = (r[pid_i].strip() if pid_i >= 0 and len(r) > pid_i else "")
+        if not raw or not player:
+            continue
+        cid = re.sub(r"\D", "", raw)          # tolerate a pasted profile URL
+        if not cid:
+            print(f"  needs-cricinfo: '{raw}' for {player!r} is not a cricinfo id — ignored",
+                  file=sys.stderr)
+            continue
+        # Refuse a silent merge into someone who is already anchored to this id under a name that
+        # isn't plausibly the same person.
+        owner = known_ci.get(cid)
+        if owner and not same_person_plausible(owner[1].get("display", ""), player):
+            ANOMALIES.append({
+                "tour": CURRENT_TOUR or "(needs-cricinfo)", "kind": "false_merge",
+                "pid": owner[0], "display": owner[1].get("display", ""),
+                "context": NEEDS_CRICINFO_TAB, "names": [player, owner[1].get("display", "")],
+                "finding": f"cricinfo {cid} was filled in for {player!r} but is already "
+                           f"{owner[1].get('display')!r} — refusing to merge two people on one id"})
+            print(f"  needs-cricinfo: REFUSED {player!r} -> ci:{cid} (already "
+                  f"{owner[1].get('display')!r}) — sent to Identity Anomalies", file=sys.stderr)
+            continue
+        key = f"ci:{cid}"
+        e = bridges.setdefault(key, {"cricinfo_id": cid, "names": []})
+        for nm in (norm(player), norm(cur_pid.split(":", 1)[-1].replace("-", " "))):
+            if nm and nm not in e["names"]:
+                e["names"].append(nm); added += 1
+        e["names"] = sorted(set(e["names"]))
+    if added:
+        try:
+            json.dump(bridges, open(CI_BRIDGES_PATH, "w"), indent=1, ensure_ascii=False)
+            print(f"[identity] recorded {added} name(s) into manual_ci_bridges.json from "
+                  f"'{NEEDS_CRICINFO_TAB}' — run build_registry to apply", file=sys.stderr)
+        except Exception as e:
+            print(f"could not write manual_ci_bridges.json: {e}", file=sys.stderr)
+    return added
 
 def write_needs_cricinfo_tab():
     """Push identity gaps found while scoring into the SAME 'Needs Cricinfo ID' tab that

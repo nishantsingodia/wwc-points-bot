@@ -101,14 +101,14 @@ jobs:
           # Yes/No -> identity_splits.json; fully-completed tours -> frozen_tours.json, which stops
           # cricapi polling for finished tournaments); commit them so they survive the ephemeral
           # runner (and the answered sheet rows can be dropped without the answer re-surfacing).
-          LEDGERS="registry/recon_overrides.json registry/new_players.json registry/identity_splits.json registry/frozen_tours.json"
+          LEDGERS="registry/recon_overrides.json registry/new_players.json registry/identity_splits.json registry/frozen_tours.json registry/settlement_snapshots.json registry/cricsheet_learned_aliases.json registry/manual_ci_bridges.json"
           if [ -n "$(git status --porcelain $LEDGERS)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             # add only ledgers that exist — a not-yet-created file (e.g. frozen_tours.json before
             # the first freeze) must NOT `git add`-fatal (exit 128) and fail the whole run
             for f in $LEDGERS; do [ -f "$f" ] && git add "$f"; done
-            git commit -m "chore: persist recon overrides + new players + anomaly acks [skip ci]"
+            git commit -m "chore: persist sheet decisions + settlement baseline + identity bridges [skip ci]"
             git push origin "HEAD:${GITHUB_REF_NAME}"
             echo "Persisted sheet decisions."
           else
