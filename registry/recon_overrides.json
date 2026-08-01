@@ -846,6 +846,136 @@
       "field": "6s",
       "status": "approved",
       "source": "S2"
+    },
+    {
+      "match_key": "2026-07-21::mi london|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:211748",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-22::southern brave|welsh fire",
+      "scope": "l2",
+      "pid": "ci:772061",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-23::london spirit|manchester super giants",
+      "scope": "l2",
+      "pid": "ci:1070665",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-23::london spirit|manchester super giants",
+      "scope": "l2",
+      "pid": "ci:308251",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-24::birmingham phoenix|trent rockets",
+      "scope": "l2",
+      "pid": "ci:1099224",
+      "source": "S1",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-24::birmingham phoenix|trent rockets",
+      "scope": "l2",
+      "pid": "ci:859899",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-25::southern brave|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:1150021",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-26::london spirit|trent rockets",
+      "scope": "l2",
+      "pid": "ci:459508",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-26::london spirit|trent rockets",
+      "scope": "l2",
+      "pid": "ci:859899",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-27::mi london|southern brave",
+      "scope": "l2",
+      "pid": "ci:897549",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-27::mi london|southern brave",
+      "scope": "l2",
+      "pid": "ci:296597",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-28::manchester super giants|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:1150021",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-28::manchester super giants|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:578769",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-29::london spirit|mi london",
+      "scope": "l2",
+      "pid": "ci:308251",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-29::london spirit|mi london",
+      "scope": "l2",
+      "pid": "ci:459508",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-01::birmingham phoenix|welsh fire",
+      "scope": "player",
+      "pid": "ci:669365",
+      "field": "r",
+      "status": "approved",
+      "value": 46,
+      "source": "Manual"
+    },
+    {
+      "match_key": "2026-08-01::birmingham phoenix|welsh fire",
+      "scope": "player",
+      "pid": "ci:669365",
+      "field": "4s",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-08-01::birmingham phoenix|welsh fire",
+      "scope": "player",
+      "pid": "ci:669365",
+      "field": "6s",
+      "status": "approved",
+      "source": "S2"
     }
   ]
 }
