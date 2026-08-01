@@ -226,3 +226,23 @@ def test_unpromoted_placeholders_are_surfaced_for_a_human(wcmod, monkeypatch, tm
     monkeypatch.setattr(wcmod, "NEEDS_CRICINFO", [])
     wcmod.promote_new_players()
     assert [r["current_pid"] for r in wcmod.NEEDS_CRICINFO] == ["slug:nobody"]
+
+
+# ── 7. The merge guard must admit full-form names without admitting namesakes ──
+import pytest as _pytest
+
+@_pytest.mark.parametrize("a,b,expected", [
+    # Sri Lankan full form: village/family prefix first, announced name buried mid-string.
+    # cricsheet says 'M Shiraz' = cricinfo 801817 = 'Mohommed Shiraz' — a correct human answer
+    # that the first-token check refused until long_form_plausible existed.
+    ("Mohommed Shiraz", "Katupulle Gedara Mohamed Shiraz Sahab", True),
+    ("Kusal Mendis", "Balapuwaduge Kusal Gimhan Mendis", True),
+    # ...but a shared surname alone is NOT enough. These are the merges that cost real points.
+    ("Dale Phillips", "Glenn Phillips", False),
+    ("Tharindu Rathnayake", "Milan Priyanath Rathnayake", False),
+    ("Liam Dawson", "Kiran Carlson", False),
+    ("Wanindu Hasaranga", "PWH de Silva", False),
+])
+def test_long_form_plausible(wcmod, a, b, expected):
+    assert wcmod.long_form_plausible(a, b) is expected
+    assert wcmod.long_form_plausible(b, a) is expected      # symmetric

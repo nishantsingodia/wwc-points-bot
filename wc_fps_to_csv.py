@@ -335,6 +335,28 @@ def same_person_plausible(a, b):
         return True
     return ga.startswith(gb) or gb.startswith(ga)
 
+def long_form_plausible(a, b):
+    """Is one name the FULL-FORM version of the other? ('Mohommed Shiraz' vs 'Katupulle Gedara
+    Mohamed Shiraz Sahab' — the same LPL bowler, cricsheet 'M Shiraz', cricinfo 801817.)
+
+    `same_person_plausible` compares first tokens, so a Sri Lankan full name — village/family
+    prefix first, announced name buried in the middle — reads as a different person and a correct
+    human answer gets refused. This is the narrow widening: the SHORT name's tokens must be
+    substantially present in the LONG one, and the long one must actually look like a full form
+    (4+ tokens) unless every short token matches. 0.80 admits mohommed/mohamed, a real spelling drift.
+
+    Stays strict where it matters: 'Dale Phillips' vs 'Glenn Phillips' shares only the surname and
+    neither is 4+ tokens -> still False, so the merge that started all this is still refused."""
+    ta, tb = norm(a).split(), norm(b).split()
+    if not ta or not tb:
+        return False
+    short, long_ = (ta, tb) if len(ta) <= len(tb) else (tb, ta)
+    hits = sum(1 for s in short
+               if any(s == l or SequenceMatcher(None, s, l).ratio() >= 0.80 for l in long_))
+    if hits == len(short):
+        return True
+    return len(long_) >= 4 and hits >= 2
+
 JUNK_NAMES = {"player not found", "sub", "substitute", "not available"}
 def is_junk(name):
     n = norm(name)
@@ -2928,7 +2950,10 @@ def read_needs_cricinfo():
         # Review "New" flow's closest-match linked them and every Carlson row scored as Dawson.
         # Filling in Carlson's real id would otherwise leave BOTH mappings live.
         prior = resolve_pid(player)
-        if prior and prior != f"ci:{cid}" and not same_person_plausible(PID2DISP.get(prior, ""), player):
+        _prior_disp = PID2DISP.get(prior, "") if prior else ""
+        if (prior and prior != f"ci:{cid}"
+                and not same_person_plausible(_prior_disp, player)
+                and not long_form_plausible(_prior_disp, player)):
             ANOMALIES.append({
                 "tour": CURRENT_TOUR or "(needs-cricinfo)", "kind": "false_merge",
                 "pid": prior, "display": PID2DISP.get(prior, prior),
@@ -2939,7 +2964,8 @@ def read_needs_cricinfo():
             print(f"  needs-cricinfo: {player!r} already resolves to {prior} "
                   f"({PID2DISP.get(prior)!r}) — flagged, bridge still recorded", file=sys.stderr)
         owner = known_ci.get(cid)
-        if owner and not same_person_plausible(owner[1].get("display", ""), player):
+        if (owner and not same_person_plausible(owner[1].get("display", ""), player)
+                and not long_form_plausible(owner[1].get("display", ""), player)):
             ANOMALIES.append({
                 "tour": CURRENT_TOUR or "(needs-cricinfo)", "kind": "false_merge",
                 "pid": owner[0], "display": owner[1].get("display", ""),
