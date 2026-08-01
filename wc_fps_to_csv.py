@@ -1355,7 +1355,7 @@ def player_recon_markers(unresolved, l2_pairs, l2_appr):
     an unapproved cricsheet (L2) revision. Resolution-aware: an approved player isn't marked."""
     out = {pid: "⏳ unreconciled" for pid in unresolved}
     for pid in l2_pairs:
-        if l2_appr.get(pid) != "S2":
+        if pid not in l2_appr:          # ANSWERED (S1 or S2) = decided; only silence is pending
             out[pid] = "⚠ official revision"
     return out
 
@@ -1725,7 +1725,7 @@ def run_tour(tour):
                         if pv is not None:
                             dd[field] = pv
                     id_held.add(pid)
-        l2_dirty = any(l2_appr.get(pid) != "S2" for pid in l2_pairs)
+        l2_dirty = any(pid not in l2_appr for pid in l2_pairs)
         match_status, recon_flag = classify_match_status(cs_path, bool(espn_perf), l1_gaps,
                                                         unresolved, l2_dirty, id_break=id_break)
         # Per-player markers so the draft UI can flag WHICH players aren't reconciled yet.

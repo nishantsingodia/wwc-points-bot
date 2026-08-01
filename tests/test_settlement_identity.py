@@ -246,3 +246,13 @@ import pytest as _pytest
 def test_long_form_plausible(wcmod, a, b, expected):
     assert wcmod.long_form_plausible(a, b) is expected
     assert wcmod.long_form_plausible(b, a) is expected      # symmetric
+
+
+def test_s1_is_a_decision_not_an_open_item(wcmod):
+    """Choosing S1 means 'I saw cricsheet's revision and rejected it' — the value is held, but the
+    match must stop nagging. Treating S1 as unresolved left it COMPLETED_FLAGGED with no way to
+    clear it, which teaches you to ignore the flag."""
+    l2_pairs = {"p1": "ct 0→1"}
+    assert wcmod.player_recon_markers({}, l2_pairs, {"p1": "S1"}) == {}   # decided
+    assert wcmod.player_recon_markers({}, l2_pairs, {"p1": "S2"}) == {}   # decided
+    assert wcmod.player_recon_markers({}, l2_pairs, {}) == {"p1": "⚠ official revision"}
