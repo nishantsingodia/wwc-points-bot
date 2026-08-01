@@ -109,6 +109,12 @@ jobs:
             # the first freeze) must NOT `git add`-fatal (exit 128) and fail the whole run
             for f in $LEDGERS; do [ -f "$f" ] && git add "$f"; done
             git commit -m "chore: persist sheet decisions + settlement baseline + identity bridges [skip ci]"
+            # Rebase before pushing: a run can overlap a human push (or the on-demand job), and a
+            # rejected push here fails the WHOLE workflow AFTER the sheet was already written —
+            # so the approvals it just consumed (and dropped from the Recon Review tab) would be
+            # gone. The tab rewrite is not transactional with this commit, so losing it is real
+            # data loss, not a retryable no-op.
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || true
             git push origin "HEAD:${GITHUB_REF_NAME}"
             echo "Persisted sheet decisions."
           else
