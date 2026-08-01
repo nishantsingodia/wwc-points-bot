@@ -2662,7 +2662,7 @@ def read_recon_approvals():
     have = {(o.get("match_key"), o.get("pid"), o.get("field"), o.get("scope"))
             for o in data.get("overrides", [])}
     cell = lambda r, i: (r[i].strip() if i is not None and i < len(r) else "")
-    added = 0
+    added = registered = 0
     for r in rows[1:]:
         mk, pid, param, correct = cell(r, ki), cell(r, pi), cell(r, pm), cell(r, ci)
         manual = cell(r, mi)
@@ -2931,7 +2931,7 @@ def read_needs_cricinfo():
                 known_ci.setdefault(str(_c), (_pid, _e))
     except Exception:
         pass
-    added = 0
+    added = registered = 0
     for r in rows[1:]:
         raw = (r[ci_i].strip() if len(r) > ci_i else "")
         player = (r[pl_i].strip() if len(r) > pl_i else "")
@@ -2976,6 +2976,18 @@ def read_needs_cricinfo():
                   f"{owner[1].get('display')!r}) — sent to Identity Anomalies", file=sys.stderr)
             continue
         key = f"ci:{cid}"
+        # An official-card-only row (current_pid "cs:<hash>") belongs to nobody: no squad slot, no
+        # new_players entry. A bridge alone can't help them — build_registry only anchors squad
+        # names, and promote_new_players only re-pids existing entries — so their points stayed
+        # unjoinable even after you filled the id (KNA Bandara). Give them an entry to be anchored
+        # ON, so the loop closes for every row type, not just squad-adjacent ones.
+        if cur_pid.startswith("cs:") and not any(
+                x.get("pid") == key for x in NEW_PLAYERS_DATA.get("players", [])):
+            register_new_player(pid=key, display=player, feed=player, team="",
+                                role="?", tour=CURRENT_TOUR or "", source="needs-cricinfo")
+            registered += 1
+            print(f"  needs-cricinfo: registered {player!r} as {key} "
+                  f"(was official-card-only, in no squad)", file=sys.stderr)
         e = bridges.setdefault(key, {"cricinfo_id": cid, "names": []})
         # Only a slug:/uncapped: pid carries a real NAME to recover ("slug:calvin-harrison" ->
         # "calvin harrison"). A cs: pid carries a cricsheet HASH, which is not a name and must
@@ -2986,6 +2998,8 @@ def read_needs_cricinfo():
             if nm and nm not in e["names"]:
                 e["names"].append(nm); added += 1
         e["names"] = sorted(set(e["names"]))
+    if registered:
+        _save_new_players(NEW_PLAYERS_DATA)
     if added:
         try:
             json.dump(bridges, open(CI_BRIDGES_PATH, "w"), indent=1, ensure_ascii=False)
