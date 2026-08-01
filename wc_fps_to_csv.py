@@ -1724,7 +1724,9 @@ def run_tour(tour):
             if l2_appr.get(pid) != "S2" and (mk, pid, "L2") not in RECON_ACK:
                 RECON_REVIEW.append({"match_key": mk, "tour": CURRENT_TOUR, "match": label,
                                      "date": mdate, "pid": pid, "full": PID2DISP.get(pid, pid),
-                                     "param": "L2", "s1": g, "s2": "official cricsheet", "tier": "l2"})
+                                     "param": "L2", "s1": g,
+                                     "s2": "S2 = take cricsheet's number · S1 = keep what was settled",
+                                     "tier": "l2"})
         # IDENTITY. Two DIFFERENT questions, so they go to two different tabs — routing them by
         # what the human is actually being asked:
         #
@@ -1738,17 +1740,38 @@ def run_tour(tour):
         # selection question. One still sitting on a slug:/uncapped: pid has no cricinfo id at
         # all — that IS the identity gap, and belongs with the orphan that matches him.
         if cs_path and not is_live:
+            # Pair each unresolved squad player with the official-card row that is almost certainly
+            # the same person, so the human fills ONE id instead of the same number twice (once for
+            # "Matthew Revis", once for "ML Revis"). Surname evidence first, then a strict
+            # one-left/one-left fallback — never a guess when two of either remain.
+            unpaired = [pid for pid in id_zeroed if not pid.startswith("ci:")]
+            paired, taken = {}, set()
+            for pid in unpaired:
+                sn = norm(PID2DISP.get(pid, pid)).split()[-1:] or [""]
+                hits = [v for v in cs_orphans if v.get("name") and v["name"] not in taken
+                        and norm(v["name"]).split()[-1:] == sn]
+                if len(hits) == 1:
+                    paired[pid] = hits[0]; taken.add(hits[0]["name"])
+            leftover_p = [p for p in unpaired if p not in paired]
+            leftover_o = [v for v in cs_orphans if v.get("name") not in taken]
+            if len(leftover_p) == 1 and len(leftover_o) == 1:
+                paired[leftover_p[0]] = leftover_o[0]; taken.add(leftover_o[0]["name"])
+
             for pid in id_zeroed:
                 if l2_appr.get(pid) == "S2" or (mk, pid, "ID") in RECON_ACK:
                     continue
                 disp = PID2DISP.get(pid, pid)
                 if not pid.startswith("ci:"):
+                    mate = paired.get(pid)
                     NEEDS_CRICINFO.append({
                         "player": disp, "current_pid": pid, "tour": CURRENT_TOUR,
                         "team": (assigned_team_of.get(pid) or ""),
-                        "closest_guess": ("official card: " + ", ".join(
-                            f"{v.get('name')} [{cricinfo_hint(v)}]" for v in cs_orphans)
-                            if cs_orphans else f"no cricinfo id yet ({label}, {mdate})")})
+                        "closest_guess": (
+                            f"official card calls him '{mate.get('name')}' — {cricinfo_hint(mate)}"
+                            if mate else
+                            ("candidates: " + ", ".join(
+                                f"{v.get('name')} [{cricinfo_hint(v)}]" for v in cs_orphans)
+                             if cs_orphans else f"no cricinfo id yet ({label}, {mdate})"))})
                     continue
                 held = " · value HELD" if pid in id_held else ""
                 RECON_REVIEW.append({
@@ -1764,6 +1787,8 @@ def run_tour(tour):
             # the crosswalk-derived cricinfo id so filling it in is a copy, not a research task.
             for v in cs_orphans:
                 nm = v.get("name") or ""
+                if nm in taken:
+                    continue    # already listed under the squad player it belongs to — one row, one id
                 NEEDS_CRICINFO.append({
                     "player": nm, "current_pid": f"cs:{v.get('cs_id') or nm}",
                     "tour": CURRENT_TOUR, "team": canon_team(v.get("team", "")) or "",
@@ -2848,8 +2873,9 @@ def write_recon_tab():
         return
     import gspread
     header = ["Tour", "Match", "Date", "Player ID", "Full Name", "Param",
-              "Source 1 (cricapi)", "Source 2 (ESPN)", "Correct Value", "Manual Value",
-              "Status", "Match Key"]
+              "S1 = cricapi (L1) / held provisional (L2)",
+              "S2 = ESPN (L1) / OFFICIAL cricsheet (L2)",
+              "Correct Value", "Manual Value", "Status", "Match Key"]
     status_text = {"player": "⚠ pick a value", "l2": "official revision — approve to apply",
                    "id": "⛔ IDENTITY — fix the registry alias, or S2 to accept the official card"}
     seen, rows = set(), []
