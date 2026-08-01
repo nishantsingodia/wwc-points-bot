@@ -383,6 +383,45 @@
         "Lanka Premier League 2026"
       ],
       "source": "needs-cricinfo"
+    },
+    {
+      "pid": "slug:thomas-fraser-rogers",
+      "display": "Thomas Fraser Rogers",
+      "aliases": [
+        "thomas fraser rogers"
+      ],
+      "team": "Galle Gallants",
+      "role": "BAT",
+      "tours": [
+        "Lanka Premier League 2026"
+      ],
+      "source": "new"
+    },
+    {
+      "pid": "slug:ripon-mondol",
+      "display": "Ripon Mondol",
+      "aliases": [
+        "ripon mondol"
+      ],
+      "team": "Colombo Kaps",
+      "role": "BOWL",
+      "tours": [
+        "Lanka Premier League 2026"
+      ],
+      "source": "new"
+    },
+    {
+      "pid": "ci:437316",
+      "display": "Dasun Shanaka",
+      "aliases": [
+        "ashen bandara"
+      ],
+      "team": "Colombo Kaps",
+      "role": "BAT",
+      "tours": [
+        "Lanka Premier League 2026"
+      ],
+      "source": "new"
     }
   ]
 }
