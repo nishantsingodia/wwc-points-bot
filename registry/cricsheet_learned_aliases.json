@@ -1,0 +1,29 @@
+{
+ "note": "Feed spellings resolved via a cricsheet person id (info.registry.people) whose name the alias table didn't know. ID-anchored, never fuzzy — this is how cricsheet's initials form ('PWH de Silva') stays joined to the announced name ('Wanindu Hasaranga').",
+ "aliases": {
+  "cp wood": {
+   "pid": "ci:310525",
+   "display": "Chris Wood"
+  },
+  "t kohler cadmore": {
+   "pid": "ci:470633",
+   "display": "Tom Kohler-Cadmore"
+  },
+  "aht donald": {
+   "pid": "ci:562281",
+   "display": "Aneurin Donald"
+  },
+  "la patterson white": {
+   "pid": "ci:1023361",
+   "display": "Liam Patterson-White"
+  },
+  "j gardner": {
+   "pid": "ci:877447",
+   "display": "Jo Gardner"
+  },
+  "p maneesha": {
+   "pid": "ci:1439495",
+   "display": "Praveen Manisha"
+  }
+ }
+}
