@@ -385,7 +385,7 @@
       "source": "needs-cricinfo"
     },
     {
-      "pid": "slug:thomas-fraser-rogers",
+      "pid": "ci:1137283",
       "display": "Thomas Fraser Rogers",
       "aliases": [
         "thomas fraser rogers"
@@ -398,7 +398,7 @@
       "source": "new"
     },
     {
-      "pid": "slug:ripon-mondol",
+      "pid": "ci:1276980",
       "display": "Ripon Mondol",
       "aliases": [
         "ripon mondol"
@@ -440,6 +440,7 @@
       "pid": "ci:1150585",
       "display": "Orla Prendergast",
       "aliases": [
+        "o prendergast",
         "orla prendergast"
       ],
       "team": "WTSBR",
@@ -448,6 +449,43 @@
         "The Hundred Women's Competition 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:1329699",
+      "display": "Khawaja Nafay",
+      "aliases": [
+        "khawaja nafay"
+      ],
+      "team": "Jaffna Kings",
+      "role": "BAT",
+      "tours": [
+        "Lanka Premier League 2026"
+      ],
+      "source": "new"
+    },
+    {
+      "pid": "ci:926629",
+      "display": "Hasan Mahmud",
+      "aliases": [
+        "iftikhar ahmed"
+      ],
+      "team": "",
+      "role": "BAT",
+      "tours": [
+        "Lanka Premier League 2026"
+      ],
+      "source": "new"
+    },
+    {
+      "pid": "ci:1329699",
+      "display": "Khawaja Nafay",
+      "aliases": [
+        "khawaja nafay"
+      ],
+      "team": "",
+      "role": "?",
+      "tours": [],
+      "source": "needs-cricinfo"
     }
   ]
 }
