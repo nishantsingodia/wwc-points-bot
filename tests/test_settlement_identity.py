@@ -256,3 +256,65 @@ def test_s1_is_a_decision_not_an_open_item(wcmod):
     assert wcmod.player_recon_markers({}, l2_pairs, {"p1": "S1"}) == {}   # decided
     assert wcmod.player_recon_markers({}, l2_pairs, {"p1": "S2"}) == {}   # decided
     assert wcmod.player_recon_markers({}, l2_pairs, {}) == {"p1": "⚠ official revision"}
+
+
+# ── Field-level settlement baseline (Phase 1.3) ─────────────────────────────
+# The points-only record could not serve as the L2 baseline — you cannot diff a field against an
+# int — which is exactly why L2 fell back to RECOMPUTING the provisional cut, and that
+# recomputation invented the phantom `dots 0→N` revisions and wrote them over settled points.
+import pytest
+
+
+@pytest.fixture(autouse=True)
+def _clean_settlements(wcmod):
+    saved = dict(wcmod.SETTLEMENTS)
+    wcmod.SETTLEMENTS.clear()
+    yield
+    wcmod.SETTLEMENTS.clear()
+    wcmod.SETTLEMENTS.update(saved)
+
+
+def test_settlement_freezes_reconciled_fields(wcmod, perf):
+    d = perf("A", r=56, b=38, played=True, balls=24, dots=9, runs_conceded=30, w=2, **{"4s": 8})
+    wcmod.record_settlement("MK", "T", "M1", "2026-08-07", "DS", "ci:1", "A",
+                            118, "COMPLETED", "src", perf=d,
+                            field_sources={"r": "S2", "w": "Manual"})
+    base = wcmod.settled_baseline("MK", "ci:1")
+    assert base["r"] == 56 and base["dots"] == 9 and base["w"] == 2
+    assert base["b"] == 38 and base["balls"] == 24        # SR/econ inputs, or the total can move
+    rec = wcmod.SETTLEMENTS[("MK", "ci:1")]
+    assert rec["field_sources"] == {"r": "S2", "w": "Manual"}
+    assert rec["points"] == 118
+
+
+def test_settlement_is_still_write_once(wcmod, perf):
+    a = perf("A", r=56, played=True)
+    wcmod.record_settlement("MK", "T", "M1", "d", "DS", "ci:1", "A", 60, "COMPLETED", "s", perf=a)
+    b = perf("A", r=999, played=True)
+    wcmod.record_settlement("MK", "T", "M1", "d", "DS", "ci:1", "A", 999, "COMPLETED", "s", perf=b)
+    assert wcmod.settled_baseline("MK", "ci:1")["r"] == 56    # first write wins, forever
+    assert wcmod.SETTLEMENTS[("MK", "ci:1")]["points"] == 60
+
+
+def test_legacy_points_only_row_has_no_field_baseline(wcmod):
+    # Rows frozen before field-level freezing must stay valid for the total-level audit.
+    wcmod.record_settlement("MK", "T", "M1", "d", "DS", "ci:1", "A", 60, "COMPLETED", "s")
+    assert wcmod.settled_baseline("MK", "ci:1") is None
+    assert wcmod.SETTLEMENTS[("MK", "ci:1")]["points"] == 60
+
+
+def test_settled_baseline_absent_for_unknown_player(wcmod):
+    assert wcmod.settled_baseline("nope", "ci:999") is None
+
+
+def test_override_sources_are_captured(wcmod, perf):
+    p = perf("A", r=38, b=26, played=True, **{"4s": 5})
+    capi = {"x": {"r": 38, "w": 0, "4s": 5, "6s": 0}}
+    espn = {"x": {"r": 57, "w": 0, "4s": 8, "6s": 0}}
+    l1 = wcmod.compute_l1_gaps(capi, espn)
+    idx = {"M": [{"match_key": "M", "scope": "player", "pid": "x", "field": "r",
+                  "source": "S2", "status": "approved"}]}
+    srcs = {}
+    wcmod.apply_recon_overrides({"x": p}, capi, espn, l1, "M", idx, sources_out=srcs)
+    assert p["r"] == 57
+    assert srcs == {"x": {"r": "S2"}}

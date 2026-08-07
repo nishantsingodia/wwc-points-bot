@@ -1466,36 +1466,46 @@ def _resolve_override_value(o, capi_pid, espn_pid):
         return (espn_pid.get(o.get("pid"), {}) or {}).get(o.get("field"), o.get("value"))
     return o.get("value")  # Manual
 
-def apply_recon_overrides(perf_by_pid, capi_pid, espn_pid, l1_gaps, match_key, overrides_idx):
+def apply_recon_overrides(perf_by_pid, capi_pid, espn_pid, l1_gaps, match_key, overrides_idx,
+                          sources_out=None):
     """Mutate L1 perf dicts in `perf_by_pid` (keyed by pid) per APPROVED overrides for this
     match. A match-level seed ('use S1/S2 for the whole match') expands to every differing
     player's RECON_L1 fields; player-level overrides overlay (win) on the same (pid, field).
-    Re-scoring after this recomputes all derived bonuses. Returns the resolved pids."""
+    Re-scoring after this recomputes all derived bonuses. Returns the resolved pids.
+
+    `sources_out`, if given, is filled with {pid: {field: 'S1'|'S2'|'Manual'}} — WHICH source each
+    override came from. That provenance is frozen alongside the settled value so the record
+    explains itself: an audit can show not just what a player settled on but why. Passed as an
+    out-param rather than a second return value so existing callers and tests keep working."""
     ovs = overrides_idx.get(match_key, [])
     if not ovs:
         return set()
-    resolved = {}  # (pid, field) -> value
+    resolved = {}  # (pid, field) -> (value, source)
     for o in ovs:  # match-level seeds first
         if o.get("scope") == "match":
-            feed = capi_pid if o.get("source") == "S1" else espn_pid if o.get("source") == "S2" else None
+            src = o.get("source")
+            feed = capi_pid if src == "S1" else espn_pid if src == "S2" else None
             if feed is None:
                 continue
             for pid in l1_gaps:
                 f = feed.get(pid)
                 if f:
                     for field in RECON_L1:
-                        resolved[(pid, field)] = f.get(field, 0)
+                        resolved[(pid, field)] = (f.get(field, 0), src)
     for o in ovs:  # player-level overlays win over seeds
         if o.get("scope") == "player":
             pid, field = o.get("pid"), o.get("field")
             if pid and field:
-                resolved[(pid, field)] = _resolve_override_value(o, capi_pid, espn_pid)
+                resolved[(pid, field)] = (_resolve_override_value(o, capi_pid, espn_pid),
+                                          o.get("source"))
     applied = set()
-    for (pid, field), val in resolved.items():
+    for (pid, field), (val, src) in resolved.items():
         d = perf_by_pid.get(pid)
         if d is not None and val is not None:
             d[field] = val
             applied.add(pid)
+            if sources_out is not None:
+                sources_out.setdefault(pid, {})[field] = src
     return applied
 
 def l2_approved_pids(match_key, overrides_idx):
@@ -1816,7 +1826,9 @@ def run_tour(tour):
             pp = resolve_pid(name_)
             if pp and pp not in role_by_pid:
                 role_by_pid[pp] = role_ if role_ != "?" else (ROLE_OVERRIDE.get(norm(name_)) or "?")
-        applied = apply_recon_overrides(perf_by_pid, capi_pid, espn_pid, l1_gaps, mk, RECON_OVERRIDES)
+        override_sources = {}   # pid -> {field: 'S1'|'S2'|'Manual'}, frozen with the settled row
+        applied = apply_recon_overrides(perf_by_pid, capi_pid, espn_pid, l1_gaps, mk,
+                                        RECON_OVERRIDES, sources_out=override_sources)
         unresolved = {pid: g for pid, g in l1_gaps.items() if pid not in applied}
         # L2 baseline = the L1-RECONCILED provisional cut (raw cricapi+ESPN with the approved L1
         # override applied) — exactly what people saw. Comparing cricsheet against THIS (not raw
@@ -2017,7 +2029,8 @@ def run_tour(tour):
                              l1_col, l2_col, match_status, recon_flag, player_recon.get(pid, "")])
                 if match_status in ("COMPLETED", "COMPLETED_FLAGGED"):
                     record_settlement(mk, CURRENT_TOUR, label, mdate, short, pid, full,
-                                      s["total"], match_status, src)
+                                      s["total"], match_status, src,
+                                      perf=d, field_sources=override_sources.get(pid))
             else:
                 rows.append([label, mdate, short, pid, full, role, "N"] + [""] * 22 +
                             [src, in_squad, "", l1_col, l2_col, match_status, recon_flag,
@@ -2026,7 +2039,9 @@ def run_tour(tour):
                 # gives them points is just as much a change from the settled state.
                 if match_status in ("COMPLETED", "COMPLETED_FLAGGED"):
                     record_settlement(mk, CURRENT_TOUR, label, mdate, short, pid, full,
-                                      0, match_status, src)
+                                      0, match_status, src,
+                                      perf={"played": False},
+                                      field_sources=override_sources.get(pid))
 
         for short, name, role in team_players:
             emit(short, name, role, assigned.get((short, name)), "Y")
@@ -2463,18 +2478,49 @@ def save_settlements():
     except Exception as e:
         print(f"could not update settlement_snapshots.json: {e}", file=sys.stderr)
 
-def record_settlement(match_key, tour, label, mdate, team, pid, full, points, status, source):
-    """Freeze one player's settled points. WRITE-ONCE per (match_key, pid): a later run that
+# The reconciled-L1 fields the frozen record carries. RECON_L2 is what L2 compares, plus the
+# inputs that drive derived bonuses (SR needs `b`, econ needs `balls`) — a baseline missing those
+# would let a match "reconcile clean" while the scored total moved, which is the hole points_gap()
+# was written to cover.
+SETTLED_FIELDS = RECON_L2 + ["b", "balls", "played", "bat_order", "dismissal"]
+
+def record_settlement(match_key, tour, label, mdate, team, pid, full, points, status, source,
+                      perf=None, field_sources=None):
+    """Freeze one player's settled state. WRITE-ONCE per (match_key, pid): a later run that
     re-scores the match (cricsheet posting, an approved revision, a scorer fix) must NOT touch
-    this — the delta between it and the live sheet is exactly what the audit surface shows."""
+    this — the delta between it and the live sheet is exactly what the audit surface shows.
+
+    Stores the reconciled-L1 PERF, not just the total. The points-only record could not serve as
+    the L2 baseline (you cannot diff a field against an int), which is exactly why L2 fell back to
+    RECOMPUTING the provisional cut on every run — and that recomputation is what invented the
+    phantom `dots 0→N` revisions and then wrote them over settled points. With the fields frozen
+    here, L2 reads the baseline instead of rebuilding it.
+
+    `field_sources` records WHICH source each overridden field came from (S1 cricapi / S2 ESPN /
+    Manual), so the record explains itself: an audit can show not just what the settled number was
+    but why. Fields with no entry were never disputed.
+
+    Back-compat: legacy rows have no `fields` key. They stay valid for the total-level audit; the
+    field-level baseline is simply unavailable for them (see the re-seed in RECON_DEV_PLAN)."""
     global SETTLE_NEW
     if not pid or (match_key, pid) in SETTLEMENTS:
         return
-    SETTLEMENTS[(match_key, pid)] = {
+    rec = {
         "match_key": match_key, "tour": tour, "match": label, "date": mdate, "team": team,
         "pid": pid, "full": full, "points": points, "status": status, "source": source,
         "frozen_at": _today_iso(), "provenance": "live"}
+    if perf is not None:
+        rec["fields"] = {f: perf.get(f) for f in SETTLED_FIELDS if perf.get(f) is not None}
+        if field_sources:
+            rec["field_sources"] = dict(field_sources)
+    SETTLEMENTS[(match_key, pid)] = rec
     SETTLE_NEW += 1
+
+def settled_baseline(match_key, pid):
+    """The frozen reconciled-L1 perf for one player, or None if this row predates field-level
+    freezing. THIS is what L2 must compare cricsheet against — never a recomputation."""
+    rec = SETTLEMENTS.get((match_key, pid))
+    return (rec or {}).get("fields")
 
 def _today_iso():
     return datetime.now(timezone.utc).strftime("%Y-%m-%d")
