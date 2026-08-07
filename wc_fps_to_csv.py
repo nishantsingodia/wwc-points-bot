@@ -1428,6 +1428,34 @@ def identity_break(prov_pid, cs_pid, cs_orphans):
     orphans = sorted((v.get("name") or "") for v in cs_orphans)
     return zeroed, orphans
 
+# Fields NO second live feed can validate: only ESPN supplies them during the provisional window
+# (cricapi carries neither), so there is no value-vs-value comparison to make at L1. They are
+# ACCEPTED at L1 and first validated at L2, when cricsheet posts. Absence is a different matter —
+# a bowler who bowled with no dots source is unconsumed data and holds the match LIVE.
+RECON_L1_SINGLE = ["dots", "maidens"]
+
+def classify_recon_state(cs_path, unresolved, unsourced, l2_pairs, l2_appr):
+    """The recon axis, orthogonal to Match Status.
+
+      L1_OPEN    — feeds disagree, or data is unconsumed. Match is LIVE; base points not yet frozen.
+      L1_DONE    — L1 reconciled and everything consumed. Base points FROZEN. cricsheet not in yet.
+      L2_PENDING — cricsheet posted and differs from the frozen baseline on ≥1 unapproved player.
+      L2_DONE    — cricsheet posted and agrees, or every difference has been approved.
+
+    Deliberately NOT folded into Match Status: a match is COMPLETED the moment L1 is done and stays
+    COMPLETED forever, while L2 moves underneath it on its own timeline. One column cannot carry
+    two independent lifecycles — trying to is what produced a COMPLETED_FLAGGED that meant
+    'unverified single feed' OR 'official revision pending' OR 'identity unresolved' OR 'L2 open',
+    with no way for the app to tell which."""
+    if unresolved or unsourced:
+        return "L1_OPEN"
+    if not cs_path:
+        return "L1_DONE"
+    return "L2_PENDING" if any(pid not in l2_appr for pid in l2_pairs) else "L2_DONE"
+
+RECON_STATE_LABEL = {"L1_OPEN": "⏳ L1 recon open", "L1_DONE": "✅ L1 recon done",
+                     "L2_PENDING": "🔵 L2 recon pending", "L2_DONE": "✅ L2 recon done"}
+
 def classify_match_status(cs_path, espn_present, l1_gaps, unresolved, l2_dirty, id_break=False,
                           unsourced=()):
     """Per-match status the draft app reads.
@@ -1663,7 +1691,12 @@ def run_tour(tour):
             "Catches", "Stumpings", "Run Outs",
             "Pts Bat", "Pts Bowl", "Pts Field", "Pts SR", "Pts Econ", "Pts XI",
             "Fantasy Points", "Source", "In Squad List", "Bat Order",
-            "L1 Recon", "L2 Recon", "Match Status", "Recon Flag", "Player Recon"]
+            "L1 Recon", "L2 Recon", "Match Status", "Recon Flag", "Player Recon",
+            # Recon State is the SECOND axis, independent of Match Status. A match can be
+            # COMPLETED while L2 is still open; encoding both in one column is what made
+            # COMPLETED_FLAGGED mean four different things. Points Delta is the settled-vs-live
+            # movement for this player — 0/blank when nothing moved.
+            "Recon State", "Points Delta"]
     rows = []
     n_cs = n_espn = n_api = 0
     _key = lambda x: x.get("dateTimeGMT", x.get("date", ""))
@@ -1910,6 +1943,8 @@ def run_tour(tour):
         match_status, recon_flag = classify_match_status(cs_path, bool(espn_perf), l1_gaps,
                                                         unresolved, l2_dirty, id_break=id_break,
                                                         unsourced=emit_unsourced)
+        recon_state = classify_recon_state(cs_path, unresolved, emit_unsourced, l2_pairs, l2_appr)
+        recon_state_col = RECON_STATE_LABEL.get(recon_state, recon_state)
         # Per-player markers so the draft UI can flag WHICH players aren't reconciled yet.
         player_recon = player_recon_markers(unresolved, l2_pairs, l2_appr)
         # Name the players the gate is holding for, so the hold is actionable rather than mysterious.
@@ -1924,6 +1959,7 @@ def run_tour(tour):
         # recon gating/queueing + per-player noise (mid-match cricapi↔ESPN gaps settle by end).
         if is_live:
             match_status, recon_flag, player_recon = "LIVE", "🔴 in progress", {}
+            recon_state, recon_state_col = "L1_OPEN", "🔴 in progress"
         # Queue review rows for UNRESOLVED gaps (skip ones already approved+acked).
         if unresolved and not cs_path and not is_live:
             new_rows = build_recon_rows(mk, label, mdate, CURRENT_TOUR, unresolved, capi_pid, espn_pid)
@@ -2053,7 +2089,8 @@ def run_tour(tour):
                              d["catches"], d["stumpings"], d["runouts"],
                              s["bat"], s["bowl"], s["field"], s["sr"], s["eco"], s["xi"],
                              s["total"], src, in_squad, d.get("bat_order") or "",
-                             l1_col, l2_col, match_status, recon_flag, player_recon.get(pid, "")])
+                             l1_col, l2_col, match_status, recon_flag, player_recon.get(pid, ""),
+                             recon_state_col, _points_delta(mk, pid, s["total"])])
                 if match_status in ("COMPLETED", "COMPLETED_FLAGGED"):
                     record_settlement(mk, CURRENT_TOUR, label, mdate, short, pid, full,
                                       s["total"], match_status, src,
@@ -2061,7 +2098,8 @@ def run_tour(tour):
             else:
                 rows.append([label, mdate, short, pid, full, role, "N"] + [""] * 22 +
                             [src, in_squad, "", l1_col, l2_col, match_status, recon_flag,
-                             player_recon.get(pid, "")])
+                             player_recon.get(pid, ""), recon_state_col,
+                             _points_delta(mk, pid, 0)])
                 # Freeze non-players at 0 too: a contest scored them 0, so a later run that
                 # gives them points is just as much a change from the settled state.
                 if match_status in ("COMPLETED", "COMPLETED_FLAGGED"):
@@ -2135,7 +2173,7 @@ def run_tour(tour):
             pid = resolve_pid(name) or ""
             full = PID2DISP.get(pid, name) if pid else name
             rows.append([label, mdate, short, pid, full, role, played] + [""] * 22 +
-                        [src, "Y", "", "", "", "SCHEDULED", "", ""])
+                        [src, "Y", "", "", "", "SCHEDULED", "", "", "", ""])
         tmap = {}
         try:
             tmap = espn_team_map(ev)
@@ -2146,7 +2184,7 @@ def run_tour(tour):
             pid = resolve_pid(d["name"]) or ""
             full = PID2DISP.get(pid, d["name"]) if pid else d["name"]
             rows.append([label, mdate, short_of(tfull) or "?", pid, full, "?", "Y"] + [""] * 22 +
-                        [src, "N", "", "", "", "SCHEDULED", "", ""])
+                        [src, "N", "", "", "", "SCHEDULED", "", "", "", ""])
         n_toss += 1
     if n_toss:
         print(f"toss XI written for {n_toss} not-ended match(es)", file=sys.stderr)
@@ -2542,6 +2580,22 @@ def record_settlement(match_key, tour, label, mdate, team, pid, full, points, st
             rec["field_sources"] = dict(field_sources)
     SETTLEMENTS[(match_key, pid)] = rec
     SETTLE_NEW += 1
+
+def _points_delta(match_key, pid, live_total):
+    """How far this player's CURRENT points have moved from what was SETTLED, or "" if nothing
+    moved / nothing was settled yet.
+
+    Signed on purpose: '-8' and '+141' are different stories. Gleeson settled at 4 and now reads
+    145; a bare 'changed' flag would have made that indistinguishable from a 1-point rounding
+    drift, which is how it went unnoticed for a fortnight."""
+    rec = SETTLEMENTS.get((match_key, pid))
+    if not rec:
+        return ""
+    try:
+        d = int(live_total) - int(rec.get("points") or 0)
+    except (TypeError, ValueError):
+        return ""
+    return f"{d:+d}" if d else ""
 
 def settled_baseline(match_key, pid):
     """The frozen reconciled-L1 perf for one player, or None if this row predates field-level

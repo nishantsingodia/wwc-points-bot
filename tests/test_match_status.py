@@ -406,3 +406,60 @@ def test_l1_does_not_flag_everyone_when_espn_has_no_coverage(wcmod):
     # ...also when ESPN returns bare placeholders rather than nothing
     placeholders = {k: {"r": 0, "b": 0, "balls": 0, "w": 0, "4s": 0, "6s": 0} for k in capi}
     assert wcmod.compute_l1_gaps(capi, placeholders) == {}
+
+
+# ── Recon State: the second axis (Phase 1.1) ────────────────────────────────
+def test_recon_state_l1_open_when_gaps_unresolved(wcmod):
+    assert wcmod.classify_recon_state(False, {"p": "runs 1/2"}, set(), {}, {}) == "L1_OPEN"
+
+
+def test_recon_state_l1_open_when_data_unconsumed(wcmod):
+    # feeds agree, but a bowler had no dots source -> not done, whatever L1 says
+    assert wcmod.classify_recon_state(False, {}, {("DS", "X")}, {}, {}) == "L1_OPEN"
+
+
+def test_recon_state_l1_done_before_cricsheet(wcmod):
+    assert wcmod.classify_recon_state(False, {}, set(), {}, {}) == "L1_DONE"
+
+
+def test_recon_state_l2_pending_on_unapproved_difference(wcmod):
+    assert wcmod.classify_recon_state(True, {}, set(), {"ci:1": "dots 9→8"}, {}) == "L2_PENDING"
+
+
+def test_recon_state_l2_done_when_approved(wcmod):
+    assert wcmod.classify_recon_state(True, {}, set(), {"ci:1": "x"}, {"ci:1": "S2"}) == "L2_DONE"
+
+
+def test_recon_state_l2_done_when_cricsheet_agrees(wcmod):
+    assert wcmod.classify_recon_state(True, {}, set(), {}, {}) == "L2_DONE"
+
+
+def test_recon_state_is_independent_of_match_status(wcmod):
+    """The whole point of the second axis: COMPLETED and L2_PENDING coexist.
+
+    One column cannot carry two lifecycles — trying to is what made COMPLETED_FLAGGED mean
+    'unverified single feed' OR 'official revision pending' OR 'identity unresolved', with no way
+    for the app to tell which."""
+    l2 = {"ci:1": "dots 9→8"}
+    assert wcmod.classify_recon_state(True, {}, set(), l2, {}) == "L2_PENDING"
+    assert wcmod.classify_match_status(True, True, {}, {}, True)[0] == "COMPLETED_FLAGGED"
+    # ...and an L1-open match is LIVE on BOTH axes
+    assert wcmod.classify_recon_state(False, {"p": "g"}, set(), {}, {}) == "L1_OPEN"
+    assert wcmod.classify_match_status(False, True, {"p": "g"}, {"p": "g"}, False)[0] == "LIVE"
+
+
+def test_every_recon_state_has_a_label(wcmod):
+    for st in ("L1_OPEN", "L1_DONE", "L2_PENDING", "L2_DONE"):
+        assert st in wcmod.RECON_STATE_LABEL and wcmod.RECON_STATE_LABEL[st]
+
+
+# ── Points delta ────────────────────────────────────────────────────────────
+def test_points_delta_signed_and_blank_when_unmoved(wcmod, perf):
+    wcmod.SETTLEMENTS[("MKD", "ci:9")] = {"points": 80}
+    try:
+        assert wcmod._points_delta("MKD", "ci:9", 72) == "-8"
+        assert wcmod._points_delta("MKD", "ci:9", 145) == "+65"
+        assert wcmod._points_delta("MKD", "ci:9", 80) == ""      # unmoved -> quiet
+        assert wcmod._points_delta("MKD", "ci:nobody", 50) == ""  # never settled -> quiet
+    finally:
+        wcmod.SETTLEMENTS.pop(("MKD", "ci:9"), None)
