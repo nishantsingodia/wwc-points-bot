@@ -8,7 +8,7 @@ Actions (no laptop needed) — on a schedule *and* from a button inside the Shee
 - **Cricsheet** (ball-by-ball) is the authoritative source → exact dots, maidens,
   run-outs, +4 in-XI. It posts internationals ~1–3 days after the match.
 - **cricapi** gives live coverage for matches cricsheet hasn't posted yet
-  (`Source` column says `cricapi (dots pending)`; **dots stay blank** until
+  (`Source` column says `cricapi (dots pending)`; **dots come from ESPN in the live cut** (cricapi has none) and are confirmed by cricsheet at L2; they stay blank only when NO source supplied them, never
   cricsheet confirms — never a fake 0).
 - When both exist, overlapping stats are **cross-checked** and any disagreement is
   flagged in the `Source` column.

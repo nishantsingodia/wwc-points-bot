@@ -1,8 +1,54 @@
 # wwc-points-bot — Working Notes
 
-D11 fantasy-points feed → auto-updating Google Sheet (GitHub Actions + service account;
-cricsheet + cricapi cross-checked, dots only from cricsheet). Also produces the **shared player
-registry** (`registry/players.json`) consumed by the auction (`sync-registry`) and the draft.
+D11 fantasy-points feed → auto-updating Google Sheet (GitHub Actions + service account). THREE
+feeds: **cricapi** (base card) + **ESPN** (full scorecard; the only LIVE source of `dots`/`maidens` — cricsheet supplies them too, at L2)
+cross-checked at L1, then **cricsheet** (official) reconciling at L2. Also produces the **shared
+player registry** (`registry/players.json`) consumed by the auction (`sync-registry`) and the draft.
+
+## ⛔ RECON — the owner-locked model (7 Aug 2026). Authoritative; do NOT re-derive it.
+**`Match Status` and `Recon State` are two INDEPENDENT axes.** Never encode recon progress inside
+the status — that is what made `COMPLETED_FLAGGED` mean four different things.
+```
+LIVE       any data unconsumed  |  any L1 gap unresolved → stay LIVE + a NAMED row in the Recon tab
+           L1 done AND all consumed → COMPLETED, "L1 recon done"   ⇒⇒ BASE POINTS FREEZE HERE ⇐⇐
+COMPLETED  (never returns to LIVE)   cricsheet not posted yet      → "L1 recon done"
+           cricsheet posted, diffs open → "L2 recon pending"  |  all clear → "L2 recon done"
+```
+- **The L2 baseline is THE RECONCILED L1 VALUE** — exactly what was published and frozen as base
+  points after ALL approved L1 overrides were applied. An approval may be S1 (cricapi), S2 (ESPN) or
+  Manual, so the baseline can come from EITHER feed or from a hand-typed number. It is **NOT**
+  "ESPN's value", NOT cricapi's, NOT a value recomputed from raw feeds on a later run.
+  ⇒ **READ the baseline from the frozen record; never recompute the provisional cut.** That
+  recomputation is the root cause of the phantom `dots 0→N` review rows that corrupted settled points.
+- **Single-source fields = `dots` + `maidens`, ESPN ONLY** (cricapi supplies neither; cricsheet
+  supplies both). No second number at L1 ⇒ **no L1 comparison**; ESPN's value is accepted and does
+  NOT block COMPLETED. ESPN's value ABSENT for a bowler who bowled = unconsumed data ⇒ stays LIVE.
+  L2 reconciles these against the reconciled-L1 baseline above.
+- **Nothing goes unconsumed.** Data the bot can't attribute, or a player it can't fully score ⇒ match
+  stays LIVE + a NAMED row in the Recon tab. No silent zeros, no dropped players. Corollary: a
+  single-feed (cricapi-only, no ESPN) match has no dots ⇒ unconsumed ⇒ **LIVE**. This SUPERSEDES the
+  old "COMPLETED but FLAGGED" decision, which `classify_match_status` still returns
+  (`wc_fps_to_csv.py:1418`).
+- **Identity NEVER appears in the Recon tab.** Recon answers "which value is right?"; identity
+  answers "who is this?" → the **"Needs Cricinfo ID"** tab. No new tab is needed: ESPN's `athlete.id`
+  IS the cricinfo id (`build_registry.py:336`), so "Needs ESPN PID" and "Needs Cricinfo ID" are the
+  same tab. Discriminator — use ESPN as the third feed instead of asking the human: ESPN saw him play
+  this match ⇒ he played, cricsheet just spells him differently ⇒ IDENTITY failure ⇒ Needs Cricinfo
+  ID, HOLD his provisional value. ESPN didn't see him either ⇒ he genuinely didn't play ⇒ score DNP,
+  not an anomaly.
+- **Neither feed is "better" — do NOT flip the base to ESPN.** Measured against cricsheet ground
+  truth, 57 disputed fields / 42 player-matches:
+
+  | field | winner | right |
+  |---|---|---|
+  | runs | **cricapi** | 24/32 (75%) |
+  | wkts | **cricapi** | 7/11 (64%) |
+  | 4s | ESPN | 5/7 (71%) |
+  | 6s | ESPN | 6/6 (100%) |
+  | **overall** | **cricapi** | **33/56 (59%)** |
+
+  In fantasy points (what settles money) it's near a coin flip: cricapi 444 FP of error vs ESPN 312;
+  catastrophes ≥30 FP are 7 v 7. The owner's own L1 adjudications: **30/30 correct** vs cricsheet.
 
 ## ⛔ Player identity / name-matching — READ before touching it
 This is the cross-project spine (auction + draft + bot all resolve names through the registry).
@@ -32,22 +78,29 @@ This is the cross-project spine (auction + draft + bot all resolve names through
   `cricsheet_id` from the verified cricinfo id (not the fuzzy match) fixes this class. **Phantom-duplicate
   auction rows** still hurt exact/fuzzy lookups — dedup the auction DB, then rebuild.
 
-## Settled results can move — the settlement baseline (added 29 Jul 2026)
-The points sheet is REWRITTEN in place every run, and L2 recon compares cricsheet against a LIVE
-re-computation of the provisional cut — NOT against what was on screen when money was settled. So a
-scorer fix / ESPN backfill / registry change moves settled numbers invisibly to reconciliation.
+## Settled results can move — the settlement baseline (29 Jul 2026)
+The points sheet is REWRITTEN in place every run. Legacy behaviour: L2 recon compared cricsheet
+against a LIVE re-computation of the provisional cut — NOT against what was on screen when money was
+settled — so a scorer fix / ESPN backfill / registry change moved settled numbers invisibly to
+reconciliation. **Per the locked spec above that recomputation IS the bug**: base points freeze at
+L1-done and the L2 baseline must be READ from the frozen record.
 - `registry/settlement_snapshots.json` + the **`SETTLEMENT AUDIT`** sheet tab = **WRITE-ONCE** record
   of each player's points the first time their match published COMPLETED. Never edit it; the draft
-  app diffs the live sheet against it (`/audit`, results "Audit" tab, lobby Completed badge).
+  app diffs the live sheet against it (`/audit`, results "Audit" tab, lobby Completed badge). It
+  currently fires on any COMPLETED/`COMPLETED_FLAGGED` publish (`wc_fps_to_csv.py:2394`); the locked
+  freeze point is the **L1-done transition** — this is the store the L2 baseline must be read from.
 - **cricsheet rows resolve by ID, not name** (`resolve_perf_pid` + `CS2PID`). cricsheet writes
   initials form (`PWH de Silva` = Wanindu Hasaranga) — name matching zeroed him on two matches the
   app badged COMPLETED with no flag. Two different "E Jones" exist in the Hundred Women's data; only
   ids tell them apart.
 - An unresolved official-card identity now HOLDS the provisional value + flags
-  (`⚠ identity unresolved on official card`) instead of silently scoring 0.
+  (`⚠ identity unresolved on official card`) instead of silently scoring 0 — and routes to the
+  **"Needs Cricinfo ID"** tab, never the Recon tab (rule E above).
 - `points_gap()` compares the scored TOTAL as a backstop, so a change in a field not listed in
   `RECON_L2` (balls faced/bowled → SR/econ) can't read as "✓ complete".
 - Full post-mortem + the Hasaranga/Tharindu/Dale-Phillips cases: `RECON_REVIEW_WORKFLOW.md`.
+  Verified-but-unfixed recon defects (`xcheck` never read; `L1_RUN_TOL=1` hiding 7 pts/row; dead `espn_dots()`;
+  ESPN playbyplay `limit=600` with no pagination): `RECON_DEV_PLAN.md`. Don't rediscover them.
 
 ## GATE before any tour goes live (run in all three apps' setup)
 ```
