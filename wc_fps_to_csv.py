@@ -1835,16 +1835,36 @@ def run_tour(tour):
         # cricapi) keeps an official figure that confirms an approved correction silent, and flags
         # only a genuine change from the shown value.
         recon_prov = reconciled_provisional(prov_pid, capi_pid, espn_pid, l1_gaps, mk, RECON_OVERRIDES)
+        # THE L2 BASELINE. Read the FROZEN reconciled-L1 record; only fall back to a recomputation
+        # for rows settled before field-level freezing existed.
+        #
+        # The baseline is what was published and frozen as base points AFTER the approved L1
+        # overrides — which may be S1 (cricapi), S2 (ESPN) or a hand-typed Manual number. Reading
+        # it, rather than rebuilding it, is the whole fix: a recomputation cannot know what was
+        # shown, so it invented `dots 0→N` revisions for values that were already correct, and the
+        # hold below then wrote those fabrications over cricsheet's exact figures.
+        n_legacy = 0
+        def _l2_baseline(pid):
+            nonlocal n_legacy
+            frozen = settled_baseline(mk, pid)
+            if frozen is not None:
+                return frozen
+            n_legacy += 1
+            return recon_prov.get(pid)
         l2_pairs = {}
         if cs_pid:
             for pid in cs_pid:
-                g = recon_gaps(recon_prov.get(pid), cs_pid[pid], RECON_L2, sep="→")
+                base = _l2_baseline(pid)
+                g = recon_gaps(base, cs_pid[pid], RECON_L2, sep="→")
                 if not g:
                     # Nothing in the compared field list moved — but did the SCORED TOTAL?
-                    g = points_gap(recon_prov.get(pid), cs_pid[pid],
-                                   role_by_pid.get(pid, "?") or "?")
+                    g = points_gap(base, cs_pid[pid], role_by_pid.get(pid, "?") or "?")
                 if g:
                     l2_pairs[pid] = g
+        if n_legacy:
+            print(f"  {label}: {n_legacy} player(s) settled before field-level freezing — L2 "
+                  f"compared against a RECOMPUTED baseline for them, not the frozen one",
+                  file=sys.stderr)
         # IDENTITY BREAK on the official card (previously invisible to this gate entirely).
         cs_orphans = unresolved_official(cs_perf) if cs_path else []
         id_zeroed, id_orphans = (identity_break(recon_prov, cs_pid, cs_orphans)
@@ -1854,13 +1874,19 @@ def run_tour(tour):
         # L2 HOLD (decision 3): until the official revision is APPROVED (source S2), keep showing
         # the last-approved (L1-reconciled) value. Deliberately inverts the usual "cricsheet
         # overrides everything" rule — we never silently revise a result the user already saw.
+        # It MUST hold the same baseline it compared against — the frozen reconciled-L1 value.
+        # Holding a recomputation is what corrupted settled points: the recompute fabricated a 0,
+        # the fabricated 0 created the gap, and the gap then imposed the fabricated 0 over
+        # cricsheet's exact figure. Self-fulfilling. Reading the frozen record breaks that loop,
+        # because the value being held is by construction the one that was published.
         if cs_path and l2_pairs:
             for pid in l2_pairs:
-                if l2_appr.get(pid) != "S2" and pid in recon_prov:
+                base = _l2_baseline(pid)
+                if l2_appr.get(pid) != "S2" and base:
                     dd = perf_by_pid.get(pid)
                     if dd is not None:
                         for field in RECON_L2:
-                            pv = recon_prov[pid].get(field)
+                            pv = base.get(field)
                             if pv is not None:
                                 dd[field] = pv
         # IDENTITY HOLD: a squad player who PLAYED in the provisional cut but is missing from the
@@ -1873,9 +1899,10 @@ def run_tour(tour):
                 if l2_appr.get(pid) == "S2":
                     continue          # human confirmed the official card: 0 is genuine
                 dd = perf_by_pid.get(pid)
-                if dd is not None and pid in recon_prov:
-                    for field in RECON_L2 + ["b", "balls", "played", "bat_order", "dismissal"]:
-                        pv = recon_prov[pid].get(field)
+                base = _l2_baseline(pid)
+                if dd is not None and base:
+                    for field in SETTLED_FIELDS:
+                        pv = base.get(field)
                         if pv is not None:
                             dd[field] = pv
                     id_held.add(pid)

@@ -318,3 +318,51 @@ def test_override_sources_are_captured(wcmod, perf):
     wcmod.apply_recon_overrides({"x": p}, capi, espn, l1, "M", idx, sources_out=srcs)
     assert p["r"] == 57
     assert srcs == {"x": {"r": "S2"}}
+
+
+# ── L2 reads the frozen baseline (Phase 1.4) ────────────────────────────────
+def test_frozen_baseline_makes_l2_silent_where_recompute_lied(wcmod, perf):
+    """The phantom `dots 0→N` regression, at the level the fix actually lives.
+
+    The published row carried dots=9 (ESPN, accepted at L1 — nothing else supplies dots).
+    cricsheet later confirms 9. Comparing against the FROZEN value is silent, which is correct.
+    Comparing against a recomputation that lost the ESPN row yields 'dots 0→9' — a revision of a
+    number that was never on screen, which the hold then wrote over cricsheet's correct figure."""
+    published = perf("Bowler", played=True, balls=24, runs_conceded=30, w=2, dots=9)
+    wcmod.record_settlement("MK", "T", "M1", "d", "DS", "ci:1", "Bowler",
+                            96, "COMPLETED", "cricapi + ESPN dots/XI", perf=published)
+    official = dict(published)                       # cricsheet agrees
+
+    frozen = wcmod.settled_baseline("MK", "ci:1")
+    assert wcmod.recon_gaps(frozen, official, wcmod.RECON_L2, sep="→") == ""     # silent ✓
+
+    broken_recompute = dict(published); broken_recompute["dots"] = 0             # lost ESPN row
+    assert "dots 0→9" in wcmod.recon_gaps(broken_recompute, official,
+                                          wcmod.RECON_L2, sep="→")               # the old bug
+
+
+def test_frozen_baseline_preserves_a_manual_approval(wcmod, perf):
+    """Why the baseline is the RECONCILED value, not any feed's raw value.
+
+    The owner typed 50 by hand (neither cricapi's 38 nor ESPN's 57). If L2 compared against
+    'ESPN's value' the approval would be silently discarded and 50→57 would surface as a bogus
+    revision every run."""
+    published = perf("Bat", played=True, r=50, b=30, **{"4s": 8})
+    wcmod.record_settlement("MK", "T", "M1", "d", "DS", "ci:2", "Bat",
+                            70, "COMPLETED", "src", perf=published,
+                            field_sources={"r": "Manual"})
+    frozen = wcmod.settled_baseline("MK", "ci:2")
+    assert frozen["r"] == 50
+    assert wcmod.SETTLEMENTS[("MK", "ci:2")]["field_sources"]["r"] == "Manual"
+    official = dict(published)
+    assert wcmod.recon_gaps(frozen, official, wcmod.RECON_L2, sep="→") == ""
+
+
+def test_frozen_baseline_still_flags_a_genuine_revision(wcmod, perf):
+    # The gate must not go blind — a real cricsheet correction still surfaces.
+    published = perf("Bowler", played=True, balls=24, runs_conceded=30, w=2, dots=9)
+    wcmod.record_settlement("MK", "T", "M1", "d", "DS", "ci:3", "Bowler",
+                            96, "COMPLETED", "src", perf=published)
+    official = dict(published); official["w"] = 3
+    g = wcmod.recon_gaps(wcmod.settled_baseline("MK", "ci:3"), official, wcmod.RECON_L2, sep="→")
+    assert "wkts 2→3" in g
