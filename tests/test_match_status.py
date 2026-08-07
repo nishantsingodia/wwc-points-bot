@@ -238,3 +238,117 @@ def test_match30_live_then_completed(perf, wcmod):
     assert wcmod.classify_match_status(False, True, l1, unresolved, False) == ("COMPLETED", "")
     assert wcmod.score(pbp["cha"], "BOWL")["total"] == 73
     assert wcmod.score(pbp["per"], "AR")["total"] == 118
+
+
+# ── Completeness gate: absence of a source is NOT a zero ────────────────────
+# Regression for the LPL M2/M4 class — bowlers published COMPLETED with dots=0 because cricapi
+# carries no dots, the ESPN row never matched, and L1 only compares r/w/4s/6s so nothing objected.
+def test_unsourced_bowler_holds_live(wcmod):
+    st, flag = wcmod.classify_match_status(False, True, {}, {}, False, unsourced={("DS", "X")})
+    assert st == "LIVE"
+    assert "without a dot-ball source" in flag
+
+
+def test_unsourced_beats_single_feed_flag(wcmod):
+    # cricapi-only match: previously COMPLETED_FLAGGED. Nobody supplied dots, so it must HOLD.
+    st, _ = wcmod.classify_match_status(False, False, {}, {}, False, unsourced={("DS", "X")})
+    assert st == "LIVE"
+
+
+def test_no_unsourced_leaves_gate_unchanged(wcmod):
+    assert wcmod.classify_match_status(False, True, {}, {}, False, unsourced=()) == ("COMPLETED", "")
+
+
+def test_cricsheet_path_never_unsourced(wcmod):
+    # cricsheet carries every field, so a stale unsourced set must not hold an official card.
+    assert wcmod.classify_match_status(True, True, {}, {}, False, unsourced={("DS", "X")})[0] \
+        == "COMPLETED"
+
+
+# ── merge_espn_into: one merge implementation, and it reports what it could not source ──
+def test_merge_reports_bowler_with_no_espn_row(wcmod, perf):
+    assigned = {("DS", "A"): perf("A", balls=24, runs_conceded=30, played=True),
+                ("DS", "B"): perf("B", balls=24, runs_conceded=20, played=True)}
+    espn = {("DS", "B"): perf("B", balls=24, runs_conceded=20, dots=9, played=True)}
+    xcheck, unsourced = wcmod.merge_espn_into(assigned, espn)
+    assert unsourced == {("DS", "A")}                  # 4 overs, no ESPN row -> NOT a genuine 0
+    assert assigned[("DS", "B")]["dots"] == 9          # matched bowler still gets his dots
+    assert xcheck == set()
+
+
+def test_merge_ignores_non_bowlers(wcmod, perf):
+    # a batter with no ESPN row has no ESPN-only field at stake -> not 'unsourced'
+    assigned = {("DS", "A"): perf("A", r=40, b=30, played=True)}
+    _, unsourced = wcmod.merge_espn_into(assigned, {})
+    assert unsourced == set()
+
+
+# ── build_provisional_cut: the baseline must be built by the SAME matcher as emit ──
+def test_baseline_recovers_dots_via_squad_matcher(wcmod):
+    """The phantom `dots 0→N` regression.
+
+    ESPN spells him 'Shaheen Afridi', the squad says 'Shaheen Shah Afridi'. The old strict id-only
+    index lost the ESPN row and kept cricapi's dots=0, so cricsheet's real 6 read as an official
+    revision of a value that was never on screen. The squad-anchored matcher finds him."""
+    team_players = [("DS", "Shaheen Shah Afridi", "BOWL")]
+    api = {"shaheen shah afridi": wcmod.blank_perf("Shaheen Shah Afridi")}
+    api["shaheen shah afridi"].update(balls=18, runs_conceded=24, w=1, played=True)
+    espn = {"shaheen afridi": wcmod.blank_perf("Shaheen Afridi")}
+    espn["shaheen afridi"].update(balls=18, runs_conceded=24, w=1, dots=6, played=True)
+
+    prov, unsourced = wcmod.build_provisional_cut(team_players, api, espn)
+    pid = wcmod.resolve_pid("Shaheen Shah Afridi")
+    assert prov[pid]["dots"] == 6      # was 0 under the old id-only index -> phantom revision
+    assert unsourced == set()
+    # and L2 against the official card is now correctly SILENT
+    cs = dict(prov[pid])
+    assert wcmod.recon_gaps(prov[pid], cs, wcmod.RECON_L2, sep="→") == ""
+
+
+def test_baseline_flags_bowler_with_no_espn_row_at_all(wcmod):
+    team_players = [("DS", "Nuwan Thushara", "BOWL")]
+    api = {"nuwan thushara": wcmod.blank_perf("Nuwan Thushara")}
+    api["nuwan thushara"].update(balls=24, runs_conceded=30, w=2, played=True)
+    prov, unsourced = wcmod.build_provisional_cut(team_players, api, {})
+    assert unsourced == {wcmod.resolve_pid("Nuwan Thushara")}
+
+
+def test_baseline_matcher_is_quiet(wcmod):
+    """Rebuilding the baseline must not re-report anomalies the emit path already reported."""
+    before = len(wcmod.ANOMALIES), len(wcmod.REVIEW), len(wcmod.AUTO_ALIASES)
+    team_players = [("DS", "Nuwan Thushara", "BOWL")]
+    api = {"someone entirely unknown": wcmod.blank_perf("Someone Entirely Unknown")}
+    api["someone entirely unknown"].update(balls=24, played=True)
+    wcmod.build_provisional_cut(team_players, api, {})
+    assert (len(wcmod.ANOMALIES), len(wcmod.REVIEW), len(wcmod.AUTO_ALIASES)) == before
+
+
+# ── Orphan guard: a pid-keyed approval must never rot silently ──────────────
+# 83 of 131 stored approvals were found dead after the 25 Jul `ci:` migration — they stopped
+# applying, so the L2 baseline fell back to raw cricapi and the same row reappeared every run.
+def test_orphaned_override_is_shouted(wcmod, capsys):
+    data = {"overrides": [
+        {"match_key": "A", "scope": "player", "pid": "deadbeef", "field": "r",
+         "source": "S2", "status": "approved"},
+    ]}
+    wcmod.overrides_by_match(data, known_pids={"ci:12345"})
+    assert "RECON OVERRIDES ORPHANED" in capsys.readouterr().err
+
+
+def test_known_pid_is_silent(wcmod, capsys):
+    data = {"overrides": [
+        {"match_key": "A", "scope": "player", "pid": "ci:12345", "field": "r",
+         "source": "S2", "status": "approved"},
+    ]}
+    wcmod.overrides_by_match(data, known_pids={"ci:12345"})
+    assert "ORPHANED" not in capsys.readouterr().err
+
+
+def test_guard_is_opt_in_and_never_drops_overrides(wcmod):
+    data = {"overrides": [
+        {"match_key": "A", "scope": "player", "pid": "deadbeef", "field": "r",
+         "source": "S2", "status": "approved"},
+    ]}
+    # no known_pids -> legacy behaviour, and an orphan is still INDEXED (warn, never silently drop)
+    assert len(wcmod.overrides_by_match(data)["A"]) == 1
+    assert len(wcmod.overrides_by_match(data, known_pids={"ci:1"})["A"]) == 1

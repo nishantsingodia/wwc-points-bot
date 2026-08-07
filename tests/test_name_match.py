@@ -31,3 +31,39 @@ def test_same_person_plausible_true_cases(wcmod):
 def test_same_person_plausible_rejects_surname_smear(wcmod):
     # The bug that once merged two different "...Singh" players -> must stay False.
     assert wcmod.same_person_plausible("Tajinder Singh", "Kunwarjeet Singh") is False
+
+
+# ── ESPN id anchor: the ESPN half of the id-first identity work ─────────────
+# ESPN athlete.id IS the cricinfo id (build_registry.py:336). parse_espn used to keep only
+# fullName, so an ESPN row could only be found by NAME — and a spelling the alias table didn't
+# know took its dots/maidens down with it, silently, as 0 (cricapi supplies neither).
+def test_espn_id_resolves_where_name_cannot(wcmod):
+    known = wcmod.resolve_pid("Mohommed Shiraz")
+    assert known and known.startswith("ci:")
+    unknown_spelling = "Zzz Unknown Spelling Of Shiraz"
+    assert wcmod.resolve_pid(unknown_spelling) is None      # name alone: hopeless
+    row = wcmod.blank_perf(unknown_spelling, espn_id=known.split(":")[1])
+    assert wcmod.resolve_perf_pid(row) == known             # id alone: exact
+
+
+def test_espn_id_ignored_when_not_in_registry(wcmod):
+    # A bogus id must NOT fabricate a pid — it falls through to the name path (which may also fail).
+    row = wcmod.blank_perf("Totally Unknown Person", espn_id="999999999")
+    assert wcmod.resolve_perf_pid(row) is None
+
+
+def test_blank_perf_espn_id_defaults_empty(wcmod):
+    p = wcmod.blank_perf("X")
+    assert p["espn_id"] == ""
+    assert wcmod.resolve_perf_pid(p) is None                # no id, unknown name -> no guess
+
+
+def test_cs_id_still_wins_over_espn_id(wcmod):
+    # cricsheet is the official card; its id must remain the primary anchor.
+    cs_pid = next(iter(wcmod.CS2PID.items()), None)
+    if not cs_pid:
+        return
+    cs, pid = cs_pid
+    row = wcmod.blank_perf("Some Name", espn_id="999999999")
+    row["cs_id"] = cs
+    assert wcmod.resolve_perf_pid(row) == pid

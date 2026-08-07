@@ -308,6 +308,22 @@ def resolve_perf_pid(v):
                 print(f"  cricsheet-id alias learned: '{v.get('name')}' -> {pid} "
                       f"({PID2DISP.get(pid, pid)}) via cricsheet id {cs}", file=sys.stderr)
             return pid
+    # ESPN athlete.id IS the cricinfo id (build_registry.py:336), so `ci:<athlete.id>` is a DIRECT
+    # registry key — no lookup table, no fuzzy, no namesake risk. This is the ESPN half of the same
+    # id-anchoring that fixed cricsheet: without it an ESPN row could only ever be found by name,
+    # and a spelling the alias table didn't know took its dots/maidens down with it (silently, as
+    # 0 — cricapi carries neither, so nothing else could supply them).
+    eid = v.get("espn_id") if isinstance(v, dict) else None
+    if eid:
+        pid = f"ci:{str(eid).strip()}"
+        if pid in PID2DISP:
+            nn = norm(v.get("name", ""))
+            if nn and nn not in ALIAS2PID:
+                ALIAS2PID[nn] = pid
+                CS_LEARNED[nn] = pid
+                print(f"  espn-id alias learned: '{v.get('name')}' -> {pid} "
+                      f"({PID2DISP.get(pid, pid)}) via espn athlete id {eid}", file=sys.stderr)
+            return pid
     return resolve_pid(v.get("name", "") if isinstance(v, dict) else "")
 
 def _cricsheet_match(a, b):
@@ -396,8 +412,14 @@ ALIAS = {
     "gsnfg jayasuriya": "shehan jayasuriya",
 }
 
-def match_squad_to_perf(team_players, pool):
+def match_squad_to_perf(team_players, pool, quiet=False):
     """team_players: [(short,name,role)]; pool: {normname: perf}.
+
+    `quiet=True` suppresses every global side effect (ANOMALIES / UNMATCHED_LOG / AUTO_ALIASES /
+    REVIEW) so the RECON path can re-run the identical matcher to reconstruct a baseline without
+    double-reporting anomalies the emit path already reported. Matching behaviour is unchanged —
+    that is the whole point: the baseline must be built by the SAME matcher that produced the
+    published number, or it invents differences that never happened (the `dots 0→N` class).
     Identity-first matching: resolve every feed entry and every squad player to a stable
     registry pid and match on that (deterministic, no threshold, no surname collisions).
     Feed entries sharing a pid are MERGED (fixes stats split across two spellings). Only
@@ -423,7 +445,7 @@ def match_squad_to_perf(team_players, pool):
         uniq = sorted({norm(n) for n in names if n})
         if len(uniq) > 1:
             incompatible = any(not same_person_plausible(uniq[0], n) for n in uniq[1:])
-            if incompatible:
+            if incompatible and not quiet:
                 ANOMALIES.append({"tour": CURRENT_TOUR, "kind": "false_merge", "pid": pid,
                                   "display": PID2DISP.get(pid, pid), "context": CURRENT_TOUR,
                                   "names": [n for n in names if n],
@@ -466,12 +488,13 @@ def match_squad_to_perf(team_players, pool):
             assigned[(short, name)] = unresolved[uk]
             used_sq.add((short, name)); used_uk.add(uk)
             feed_nm = unresolved[uk].get("name", uk)
-            UNMATCHED_LOG.add(f"AUTO   feed '{feed_nm}' -> squad '{name}' (score {sc:.0f})")
-            # High-confidence fuzzy hit: auto-promote to the Player Aliases store (no user action).
-            AUTO_ALIASES.append((feed_nm, name))
+            if not quiet:
+                UNMATCHED_LOG.add(f"AUTO   feed '{feed_nm}' -> squad '{name}' (score {sc:.0f})")
+                # High-confidence fuzzy hit: auto-promote to the Player Aliases store (no user action).
+                AUTO_ALIASES.append((feed_nm, name))
     leftover = {k: v for k, v in unresolved.items() if k not in used_uk}
     for k, v in leftover.items():
-        if v.get("played"):
+        if v.get("played") and not quiet:
             feed_nm = v.get("name", k)
             guess, gsc = closest_squad(feed_nm, team_players)
             guess = guess if gsc >= 55 else ""   # blank if no plausible squad player (genuine non-squad)
@@ -608,9 +631,12 @@ def load_squads():
             teams[cur]["players"].append((mp.group(1), mp.group(2)))
     return teams
 
-def blank_perf(name):
-    return dict(name=name, team="", r=0, b=0, **{"4s": 0, "6s": 0}, dismissed=False,
-                dismissal="", balls=0, runs_conceded=0, w=0, lbwb=0, dots=0,
+def blank_perf(name, espn_id=""):
+    # `espn_id` is ESPN's athlete.id, which IS the cricinfo id (build_registry.py:336) — carrying it
+    # lets an ESPN row resolve by ID exactly like a cricsheet row resolves by cs_id, instead of by
+    # name. Name matching on the ESPN side is what silently lost dots/maidens.
+    return dict(name=name, team="", espn_id=str(espn_id or ""), r=0, b=0, **{"4s": 0, "6s": 0},
+                dismissed=False, dismissal="", balls=0, runs_conceded=0, w=0, lbwb=0, dots=0,
                 maidens=0, catches=0, stumpings=0, runouts=0, dro=0, played=False,
                 bat_order=0)  # 1-based batting position from the scorecard (0 = unknown/DNB)
 
@@ -762,7 +788,8 @@ def espn_dots(event_id):
             continue
         k = norm(name)
         if k not in out:
-            out[k] = {"name": name, "dots": 0}
+            out[k] = {"name": name, "dots": 0,
+                      "espn_id": str(ath.get("id", "") or "")}
         desc = (it.get("playType", {}).get("description") or "").lower()
         if "wide" in desc or "no ball" in desc or "no-ball" in desc:
             continue  # illegal delivery: not a dot
@@ -810,7 +837,7 @@ def espn_xi(event_id, fresh=False):
             a = p.get("athlete", {})
             nm = a.get("fullName") or a.get("displayName")
             if nm and (p.get("starter") or p.get("subbedIn")):
-                out[norm(nm)] = {"name": nm}
+                out[norm(nm)] = {"name": nm, "espn_id": str(a.get("id", "") or "")}
     return out
 
 def parse_espn(event_id, fresh=False):
@@ -823,10 +850,13 @@ def parse_espn(event_id, fresh=False):
     pbp = espn_get("playbyplay", cache=not fresh, event=event_id, limit=600)
     items = pbp.get("commentary", {}).get("items", [])
     perf, overs, super_over = {}, {}, False
-    def get(n):
+    def get(n, aid=""):
+        # Key by norm(name) for the pool contract, but CARRY athlete.id so the row resolves by id.
         k = norm(n)
         if k not in perf:
-            perf[k] = blank_perf(n)
+            perf[k] = blank_perf(n, espn_id=aid)
+        elif aid and not perf[k].get("espn_id"):
+            perf[k]["espn_id"] = str(aid)
         return perf[k]
     for it in items:
         per = it.get("period")
@@ -834,8 +864,10 @@ def parse_espn(event_id, fresh=False):
             super_over = True
             continue
         desc = (it.get("playType", {}).get("description") or "").lower()
-        bw = (it.get("bowler", {}).get("athlete") or {}).get("fullName")
-        bt = (it.get("batsman", {}).get("athlete") or {}).get("fullName")
+        _bwa = (it.get("bowler", {}).get("athlete") or {})
+        _bta = (it.get("batsman", {}).get("athlete") or {})
+        bw, bw_id = _bwa.get("fullName"), _bwa.get("id", "")
+        bt, bt_id = _bta.get("fullName"), _bta.get("id", "")
         try:
             sv = int(it.get("scoreValue", 0) or 0)
         except (TypeError, ValueError):
@@ -843,7 +875,7 @@ def parse_espn(event_id, fresh=False):
         is_wide = desc == "wide"
         legal = not is_wide and "no ball" not in desc
         if bt:
-            pb = get(bt); pb["played"] = True
+            pb = get(bt, bt_id); pb["played"] = True
             if not is_wide:
                 pb["b"] += 1
             if desc in ("run", "four", "six"):
@@ -853,7 +885,7 @@ def parse_espn(event_id, fresh=False):
             elif desc == "six":
                 pb["6s"] += 1
         if bw:
-            pw = get(bw); pw["played"] = True
+            pw = get(bw, bw_id); pw["played"] = True
             # Runs charged to the bowler exclude byes/leg-byes (drives economy, maidens, dots).
             bcharged = 0 if desc in ("bye", "leg bye") else sv
             if legal:
@@ -870,18 +902,19 @@ def parse_espn(event_id, fresh=False):
         if dis.get("dismissal"):
             typ = (dis.get("type") or "").lower()
             if bt:
-                pb = get(bt); pb["dismissed"] = True; pb["dismissal"] = it.get("shortText", typ)
+                pb = get(bt, bt_id); pb["dismissed"] = True; pb["dismissal"] = it.get("shortText", typ)
             # Robust exclusion: ESPN emits variants like "retired not out (hurt)" that an exact
             # tuple misses (that bug wrongly credited De Lange a 3rd wicket). Match by prefix.
             not_bowler_wkt = (typ == "run out" or typ.startswith("retired")
                               or "obstruct" in typ or typ == "hit wicket")
             if bw and not not_bowler_wkt:
-                pw = get(bw); pw["w"] += 1
+                pw = get(bw, bw_id); pw["w"] += 1
                 if typ in ("bowled", "lbw", "leg before wicket"):   # ESPN spells lbw out
                     pw["lbwb"] += 1
             elif bw and typ == "hit wicket":   # bowler's wicket (no lbw/bowled bonus)
                 get(bw)["w"] += 1
-            fld = (dis.get("fielder", {}).get("athlete") or {}).get("fullName")
+            _fla = (dis.get("fielder", {}).get("athlete") or {})
+            fld, fld_id = _fla.get("fullName"), _fla.get("id", "")
             if typ == "caught and bowled" or (typ == "caught" and fld and norm(fld) == norm(bw or "")):
                 if bw: get(bw)["catches"] += 1     # caught off own bowling — credit the catch
             elif typ == "caught" and fld and norm(fld) != norm(bw or ""):
@@ -1214,6 +1247,80 @@ def _by_pid(perf):
             out[pid] = v
     return out
 
+# Fields NO live feed but ESPN supplies. cricapi carries neither, so when an ESPN row is missing
+# these stay at blank_perf's 0 — indistinguishable from a genuine zero. Everything that went wrong
+# in the LPL M2/M4 class traces back to that one collapse.
+ESPN_ONLY_FIELDS = ("dots", "maidens")
+
+def merge_espn_into(assigned, espn_assigned):
+    """Merge ESPN's ball-by-ball extras onto a cricapi-assigned scorecard, IN PLACE.
+
+    SINGLE implementation, deliberately: the emit path and the recon baseline both call this, so
+    the published number and the number L2 compares against cannot drift apart. Two independent
+    merge/match paths is exactly what produced the phantom `dots 0→N` review rows — the emit path
+    found the bowler via the squad-anchored fuzzy fallback, the baseline rebuilt him with a strict
+    id-only index, missed, and reported correctly-scored dots as an official revision.
+
+    Returns (xcheck, unsourced): xcheck = keys where cricapi and ESPN disagree on runs/wkts/conc;
+    unsourced = keys with deliveries bowled but NO ESPN row, i.e. scored on an ASSUMED zero for
+    dots+maidens rather than a measured one."""
+    xcheck, unsourced = set(), set()
+    for k, base in assigned.items():
+        if base and base.get("balls") and k not in espn_assigned:
+            unsourced.add(k)
+    for k, e in espn_assigned.items():
+        base = assigned.get(k)
+        if base:
+            base["dots"] = e["dots"]                      # exact dots from ESPN
+            base["maidens"] = e.get("maidens", base.get("maidens", 0))  # + maidens (cricapi has none)
+            # Bowler balls-bowled: cricapi omits the overs field on 100-ball (The Hundred)
+            # scorecards, so its bowlers arrive with balls=0 — which zeroes the ENTIRE bowling
+            # block (wkt/dot/maiden/econ are all gated on `balls > 0` in _score_t20). ESPN
+            # counts deliveries one-by-one (format-agnostic), so backfill from it when cricapi
+            # supplied none. Guarded on a falsy cricapi count, so standard T20/ODI (where
+            # cricapi's over-derived balls are authoritative) are untouched.
+            if not base.get("balls"):
+                base["balls"] = e.get("balls", 0)
+            if (base.get("r", 0) != e.get("r", 0) or base.get("w", 0) != e.get("w", 0)
+                    or base.get("runs_conceded", 0) != e.get("runs_conceded", 0)):
+                xcheck.add(k)                             # cricapi vs ESPN disagree
+        elif e.get("played"):
+            np = blank_perf(e["name"]); np["played"] = True
+            np["dots"] = e.get("dots", 0); np["maidens"] = e.get("maidens", 0)
+            assigned[k] = np                              # in XI, no cricapi line -> +4
+    return xcheck, unsourced
+
+def build_provisional_cut(team_players, api_perf, espn_perf):
+    """Reconstruct the provisional cut (cricapi scorecard + ESPN dots/maidens) EXACTLY as the emit
+    path builds it, keyed by pid. Used as the L2 baseline so 'what cricsheet revised' is measured
+    against what was genuinely published — never against a value the reconstruction failed to find.
+
+    Runs the SAME squad-anchored matcher as emit (quiet, so anomalies aren't double-reported), so a
+    bowler emit resolved via fuzzy fallback resolves here too. The old code indexed ESPN with a bare
+    id-only lookup, lost every row whose spelling wasn't in the alias table, and silently kept
+    cricapi's 0 for dots — cricapi has no dots at all.
+
+    Returns (prov_by_pid, unsourced_pids)."""
+    capi_assigned = match_squad_to_perf(team_players, api_perf, quiet=True)[0] if api_perf else {}
+    prov = {k: dict(v) for k, v in capi_assigned.items() if v}
+    unsourced = set()
+    if espn_perf:
+        espn_assigned = match_squad_to_perf(team_players, espn_perf, quiet=True)[0]
+        _, unsourced = merge_espn_into(prov, {k: v for k, v in espn_assigned.items() if v})
+    else:
+        # No ESPN at all: every bowler's dots/maidens are an assumption, not a measurement.
+        unsourced = {k for k, v in prov.items() if v and v.get("balls")}
+    by_pid, unsourced_pids = {}, set()
+    for (short, name), v in prov.items():
+        pid = resolve_pid(name) or resolve_perf_pid(v)
+        if not pid:
+            continue
+        if pid not in by_pid:
+            by_pid[pid] = v
+        if (short, name) in unsourced:
+            unsourced_pids.add(pid)
+    return by_pid, unsourced_pids
+
 def unresolved_official(cs_perf):
     """Official-card (cricsheet) entries that resolve to NO pid. A blank pid on the OFFICIAL
     card is an identity failure by definition: the draft joins by pid and refuses to fuzzy-fall
@@ -1285,16 +1392,28 @@ def identity_break(prov_pid, cs_pid, cs_orphans):
     orphans = sorted((v.get("name") or "") for v in cs_orphans)
     return zeroed, orphans
 
-def classify_match_status(cs_path, espn_present, l1_gaps, unresolved, l2_dirty, id_break=False):
-    """Per-match status the draft app reads. Decisions: ANY unresolved L1 gap holds LIVE;
-    L1-clean auto-COMPLETED; single-feed COMPLETED but FLAGGED; cricsheet official COMPLETED
-    unless it revises a reconciled value (then FLAGGED, pending approval). An unresolved
-    identity on the official card FLAGS too — points that can't join a contest are never
-    'complete', however clean every compared field looks."""
+def classify_match_status(cs_path, espn_present, l1_gaps, unresolved, l2_dirty, id_break=False,
+                          unsourced=()):
+    """Per-match status the draft app reads.
+
+    The gate asks ONE question: can every player's score be fully accounted for? Not 'did two
+    feeds agree on four fields?' — that narrower question is what let LPL M2/M4 publish COMPLETED
+    with bowlers scored on dots=0 (cricapi carries no dots; the ESPN row never matched; L1 compares
+    only r/w/4s/6s so both feeds 'agreed' and it sailed through clean). A field nobody thought to
+    compare is not a field that was verified.
+
+    `unsourced` = players whose scored total rests on a field NO available feed supplied. Absence
+    of a source is NOT a zero, and must never publish as final."""
     if cs_path:
         if id_break:
             return ("COMPLETED_FLAGGED", "⚠ identity unresolved on official card")
         return ("COMPLETED_FLAGGED", "⚠ official revision pending") if l2_dirty else ("COMPLETED", "")
+    # UNSOURCED beats every other non-cricsheet verdict: an unresolved L1 gap is 'two feeds
+    # disagree, pick one'; an unsourced field is 'nobody measured this and we scored it as 0'.
+    # The second is strictly worse — there is no value to pick, and nothing downstream will notice.
+    if unsourced:
+        n = len(unsourced)
+        return ("LIVE", f"⏳ {n} player{'' if n == 1 else 's'} scored without a dot-ball source")
     if not espn_present:
         return ("COMPLETED_FLAGGED", "⚠ unverified — single feed")
     if unresolved:
@@ -1574,18 +1693,12 @@ def run_tour(tour):
             n_api += 1; dots_final = False
             status = "cricapi · limited (no dots/XI — ESPN unavailable) · ⏳ provisional (awaiting cricsheet)"
 
-        # Per-pid views of each raw source for reconciliation. `prov_pid` reconstructs the
-        # provisional cut (cricapi scorecard + ESPN dots/maidens) so L2 compares cricsheet
-        # against exactly what the provisional rows would have scored.
+        # Per-pid views of each RAW source, for L1 (cricapi vs ESPN, feed-against-feed).
+        # NOTE: `_by_pid` is a strict id-only index and is correct HERE — L1 compares two raw
+        # feeds. It is NOT correct for rebuilding the provisional cut; that needs the same
+        # squad-anchored matcher emit used (see build_provisional_cut, called below once
+        # `team_players` exists).
         capi_pid, espn_pid, cs_pid = _by_pid(api_perf), _by_pid(espn_perf), _by_pid(cs_perf)
-        prov_pid = {}
-        for pid in set(capi_pid) | set(espn_pid):
-            c, e = capi_pid.get(pid, {}), espn_pid.get(pid, {})
-            base = dict(c) if c else dict(e)
-            if e:
-                base["dots"] = e.get("dots", 0)
-                base["maidens"] = e.get("maidens", base.get("maidens", 0))
-            prov_pid[pid] = base
 
         team_players = []
         for tname in teams:
@@ -1629,28 +1742,21 @@ def run_tour(tour):
         # exact and must NOT be overwritten by ESPN (ESPN is then recon-only).
         xcheck = set()
         espn_assigned = {}
+        emit_unsourced = set()
         if espn_perf and not cs_path:
             espn_assigned = match_squad_to_perf(team_players, espn_perf)[0]
-            for k, e in espn_assigned.items():
-                base = assigned.get(k)
-                if base:
-                    base["dots"] = e["dots"]                      # exact dots from ESPN
-                    base["maidens"] = e.get("maidens", base.get("maidens", 0))  # + maidens (cricapi has none)
-                    # Bowler balls-bowled: cricapi omits the overs field on 100-ball (The Hundred)
-                    # scorecards, so its bowlers arrive with balls=0 — which zeroes the ENTIRE bowling
-                    # block (wkt/dot/maiden/econ are all gated on `balls > 0` in _score_t20). ESPN
-                    # counts deliveries one-by-one (format-agnostic), so backfill from it when cricapi
-                    # supplied none. Guarded on a falsy cricapi count, so standard T20/ODI (where
-                    # cricapi's over-derived balls are authoritative) are untouched.
-                    if not base.get("balls"):
-                        base["balls"] = e.get("balls", 0)
-                    if (base.get("r", 0) != e.get("r", 0) or base.get("w", 0) != e.get("w", 0)
-                            or base.get("runs_conceded", 0) != e.get("runs_conceded", 0)):
-                        xcheck.add(k)                             # cricapi vs ESPN disagree
-                elif e.get("played"):
-                    np = blank_perf(e["name"]); np["played"] = True
-                    np["dots"] = e.get("dots", 0); np["maidens"] = e.get("maidens", 0)
-                    assigned[k] = np                              # in XI, no cricapi line -> +4
+            xcheck, emit_unsourced = merge_espn_into(
+                assigned, {k: v for k, v in espn_assigned.items() if v})
+        elif not cs_path:
+            # No ESPN scorecard at all -> nothing supplies dots/maidens. Every bowler is scored on
+            # an ASSUMED zero for both; record it so the gate can refuse to call this COMPLETED.
+            emit_unsourced = {k for k, v in assigned.items() if v and v.get("balls")}
+
+        # The provisional cut, rebuilt with the SAME matcher emit uses (see build_provisional_cut).
+        # On a cricsheet run `assigned` already holds official figures, so the baseline has to be
+        # reconstructed from the raw cricapi+ESPN feeds — but via the squad-anchored matcher, not
+        # the strict id index that produced the phantom `dots 0→N` rows.
+        prov_pid, prov_unsourced = build_provisional_cut(team_players, api_perf, espn_perf)
 
         # ── Recon Review + match status (human-in-the-loop reconciliation) ───────
         # Compute per-match status BEFORE emit (emit closes over it). ANY unresolved L1 gap
@@ -1727,9 +1833,15 @@ def run_tour(tour):
                     id_held.add(pid)
         l2_dirty = any(pid not in l2_appr for pid in l2_pairs)
         match_status, recon_flag = classify_match_status(cs_path, bool(espn_perf), l1_gaps,
-                                                        unresolved, l2_dirty, id_break=id_break)
+                                                        unresolved, l2_dirty, id_break=id_break,
+                                                        unsourced=emit_unsourced)
         # Per-player markers so the draft UI can flag WHICH players aren't reconciled yet.
         player_recon = player_recon_markers(unresolved, l2_pairs, l2_appr)
+        # Name the players the gate is holding for, so the hold is actionable rather than mysterious.
+        for (sh_, nm_) in emit_unsourced:
+            pp = resolve_pid(nm_)
+            if pp:
+                player_recon[pp] = "⛔ no dot-ball source"
         for pid in id_zeroed:
             if l2_appr.get(pid) != "S2":
                 player_recon[pid] = "⛔ identity unresolved"
@@ -2153,7 +2265,8 @@ def main():
     read_recon_approvals()         # record recon 'Correct Value' answers -> recon_overrides.json
     read_needs_cricinfo()          # consume filled cricinfo ids -> manual_ci_bridges.json
     promote_new_players()          # ...and APPLY them: slug:/uncapped: -> ci: (closes the loop)
-    RECON_OVERRIDES = overrides_by_match(_load_overrides())  # index approved overrides for run_tour
+    # PID2DISP is the live registry's pid set — an approval keyed outside it is orphaned (see guard).
+    RECON_OVERRIDES = overrides_by_match(_load_overrides(), known_pids=set(PID2DISP))
     tours = load_tours()
     # Process still-running tours FIRST (latest `ends` first) so a live tour never starves on
     # the cricapi daily budget behind already-finished ones (tours.json order otherwise put the
@@ -2521,12 +2634,30 @@ def find_silent_drops(perf, assigned, team_players):
             out.append((p, v))
     return out
 
-def overrides_by_match(data):
-    """Index APPROVED overrides by match_key -> [override dicts] for O(1) apply."""
+def overrides_by_match(data, known_pids=None):
+    """Index APPROVED overrides by match_key -> [override dicts] for O(1) apply.
+
+    ORPHAN GUARD (added 7 Aug 2026 after 83 of 131 approvals were found dead): overrides are keyed
+    by pid, so an identity migration silently invalidates every stored approval it doesn't re-key.
+    The failure is invisible and permanent — the approval stops applying, the L2 baseline falls back
+    to raw cricapi, and the SAME review row reappears every single run no matter how many times it
+    is answered. That is what the 25 Jul `ci:` migration did to this file. Never let it be quiet:
+    an approval on a pid the registry doesn't know is SHOUTED, not skipped."""
     idx = {}
+    orphans = []
     for o in data.get("overrides", []):
         if o.get("status") == "approved" and o.get("match_key"):
+            pid = o.get("pid")
+            if known_pids is not None and pid and pid not in known_pids:
+                orphans.append(pid)
             idx.setdefault(o["match_key"], []).append(o)
+    if orphans:
+        uniq = sorted(set(orphans))
+        print(f"⛔ RECON OVERRIDES ORPHANED: {len(orphans)} approved override(s) on "
+              f"{len(uniq)} pid(s) the registry no longer knows — these approvals are NOT being "
+              f"applied and their review rows will reappear every run. Re-key "
+              f"registry/recon_overrides.json (registry/pid_map.json maps old->new): "
+              f"{', '.join(uniq[:10])}{' …' if len(uniq) > 10 else ''}", file=sys.stderr)
     return idx
 
 def _approval_to_override(match_key, pid, param, correct, manual):
