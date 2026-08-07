@@ -1285,9 +1285,17 @@ def merge_espn_into(assigned, espn_assigned):
                     or base.get("runs_conceded", 0) != e.get("runs_conceded", 0)):
                 xcheck.add(k)                             # cricapi vs ESPN disagree
         elif e.get("played"):
-            np = blank_perf(e["name"]); np["played"] = True
-            np["dots"] = e.get("dots", 0); np["maidens"] = e.get("maidens", 0)
-            assigned[k] = np                              # in XI, no cricapi line -> +4
+            # cricapi has no line for this player, but ESPN does. The old code copied ONLY
+            # dots+maidens off a FULL ESPN record and dropped the rest — runs, balls, wickets,
+            # boundaries, fielding, all binned — so he scored the bare +4 XI bonus and nothing
+            # else. Measured on a real case: published 4 pts against 110 actually earned.
+            # The comment below used to read "in XI, no cricapi line -> +4", which was the
+            # intent when ESPN was a dots-only side-source; ESPN is a FULL scorecard source now
+            # (see the source-priority note in run_tour), so discarding it is throwing away data
+            # we hold. Rule: nothing goes unconsumed.
+            np = dict(e); np["played"] = True
+            np.setdefault("dots", 0); np.setdefault("maidens", 0)
+            assigned[k] = np
     return xcheck, unsourced
 
 def build_provisional_cut(team_players, api_perf, espn_perf):
@@ -1355,25 +1363,53 @@ def match_key_of(mdate, teams):
     'Match N' label. Mirrors the draft app's teams+date join."""
     return f"{mdate}::" + "|".join(sorted(team_key(teams)))
 
+def _perf_has_activity(p):
+    """Did this feed actually observe the player DO anything? Balls faced/bowled, runs, wickets or
+    boundaries. Distinguishes a real performance from a bare '+4 in-XI' placeholder row."""
+    return any((p or {}).get(k, 0) for k in ("b", "balls", "r", "w", "4s", "6s"))
+
 def _espn_has_ballbyball(e):
     """ESPN with no balls faced/bowled and no runs/wkts/boundaries is a '+4 in-XI' placeholder
     (ESPN lacks ball-by-ball for this match), NOT an observed 0. Without this guard, a match
     ESPN never ball-tracked would falsely flag EVERY player as cricapi-vs-0."""
-    return any(e.get(k, 0) for k in ("b", "balls", "r", "w", "4s", "6s"))
+    return _perf_has_activity(e)
 
 def compute_l1_gaps(capi_pid, espn_pid):
-    """{pid: gap_string} for pids in BOTH feeds with a MATERIAL RECON_L1 disagreement (a 1-run
-    blip is ignored; wickets/boundaries always count — see _l1_field_material). Players ESPN has
-    no ball-by-ball for are skipped (nothing to cross-check)."""
+    """{pid: gap_string} for a MATERIAL RECON_L1 disagreement between the two live feeds (a 1-run
+    blip is ignored; wickets/boundaries always count — see _l1_field_material).
+
+    Iterates the UNION of both feeds, not just cricapi's keys. Iterating `capi_pid` alone meant a
+    player cricapi never listed produced no gap, no flag and no review row — he was scored off
+    ESPN's row (or off nothing) and the match published COMPLETED with no one the wiser. A player
+    ONE feed has and the other doesn't is exactly the case a two-feed reconciliation exists to
+    surface, so it is reported as a gap rather than skipped in silence.
+
+    Still skipped: a pid ESPN has no ball-by-ball for (all-zero placeholder) when cricapi DOES
+    have him — there is genuinely nothing to cross-check there, and flagging it would fire on
+    every player of every match ESPN hasn't ball-tracked."""
+    # Is ESPN covering this match AT ALL? If it isn't, a missing ESPN row carries no information
+    # about any individual player, and flagging one per player would bury the tab in a wall of
+    # noise for what is really ONE match-level fact ("no ESPN feed"). That whole-match case is the
+    # gate's job (no dots supplied -> unconsumed -> LIVE), not this function's.
+    espn_covers_match = any(_espn_has_ballbyball(v) for v in espn_pid.values())
     gaps = {}
-    for pid in capi_pid:
-        if pid not in espn_pid or not _espn_has_ballbyball(espn_pid[pid]):
-            continue
-        c, e = capi_pid[pid], espn_pid[pid]
-        parts = [f"{RECON_LABEL.get(f, f)} {c.get(f, 0) or 0}/{e.get(f, 0) or 0}"
-                 for f in RECON_L1 if _l1_field_material(f, c.get(f, 0) or 0, e.get(f, 0) or 0)]
-        if parts:
-            gaps[pid] = "; ".join(parts)
+    for pid in set(capi_pid) | set(espn_pid):
+        c, e = capi_pid.get(pid), espn_pid.get(pid)
+        if c is not None and e is not None:
+            if not _espn_has_ballbyball(e):
+                continue                      # ESPN blank for this player — nothing to compare
+            parts = [f"{RECON_LABEL.get(f, f)} {c.get(f, 0) or 0}/{e.get(f, 0) or 0}"
+                     for f in RECON_L1 if _l1_field_material(f, c.get(f, 0) or 0, e.get(f, 0) or 0)]
+            if parts:
+                gaps[pid] = "; ".join(parts)
+        elif e is not None and _espn_has_ballbyball(e):
+            # ESPN tracked a real performance cricapi never listed. NOT a silent zero — this is
+            # the class that published 4 pts against 110 earned.
+            gaps[pid] = "present in ESPN only (cricapi has no line)"
+        elif c is not None and _perf_has_activity(c) and espn_covers_match:
+            # cricapi saw a performance ESPN missed, on a match ESPN otherwise covers — so the
+            # absence is about THIS player, not about the feed. The reverse blind spot.
+            gaps[pid] = "present in cricapi only (ESPN has no line)"
     return gaps
 
 def identity_break(prov_pid, cs_pid, cs_orphans):

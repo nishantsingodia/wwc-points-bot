@@ -352,3 +352,57 @@ def test_guard_is_opt_in_and_never_drops_overrides(wcmod):
     # no known_pids -> legacy behaviour, and an orphan is still INDEXED (warn, never silently drop)
     assert len(wcmod.overrides_by_match(data)["A"]) == 1
     assert len(wcmod.overrides_by_match(data, known_pids={"ci:1"})["A"]) == 1
+
+
+# ── Rule: nothing goes unconsumed ───────────────────────────────────────────
+def test_espn_only_player_keeps_full_record(wcmod, perf):
+    """The 4-vs-110 regression.
+
+    cricapi had no line for him; ESPN had a full one. The old code copied ONLY dots+maidens onto a
+    fresh blank_perf and binned the rest, so he scored the bare +4 XI bonus. ESPN is a FULL
+    scorecard source, not a dots side-channel."""
+    espn_row = perf("Big Innings", r=88, b=44, played=True, catches=1, **{"4s": 9, "6s": 4})
+    assigned = {}
+    wcmod.merge_espn_into(assigned, {("DS", "Big Innings"): espn_row})
+    got = assigned[("DS", "Big Innings")]
+    assert got["r"] == 88 and got["b"] == 44 and got["4s"] == 9 and got["6s"] == 4
+    assert got["catches"] == 1 and got["played"] is True
+    # and it must actually SCORE, not collect the XI bonus alone
+    assert wcmod.score(got, "BAT")["total"] > 100
+
+
+def test_espn_only_bare_xi_player_still_gets_xi_only(wcmod, perf):
+    # A genuine in-XI player who never batted or bowled must NOT be inflated — only +4.
+    espn_row = perf("Did Not Bat", played=True)
+    assigned = {}
+    wcmod.merge_espn_into(assigned, {("DS", "Did Not Bat"): espn_row})
+    assert wcmod.score(assigned[("DS", "Did Not Bat")], "BAT")["total"] == wcmod.R["xi"]
+
+
+def test_l1_flags_espn_only_player(wcmod, perf):
+    capi = {"a": {"r": 40, "b": 30, "w": 0, "4s": 4, "6s": 0}}
+    espn = {"a": {"r": 40, "b": 30, "w": 0, "4s": 4, "6s": 0},
+            "ghost": {"r": 62, "b": 31, "w": 0, "4s": 6, "6s": 2}}
+    gaps = wcmod.compute_l1_gaps(capi, espn)
+    assert "ghost" in gaps and "ESPN only" in gaps["ghost"]
+    assert "a" not in gaps                       # feeds agree on him
+
+
+def test_l1_flags_cricapi_only_player_when_espn_covers_match(wcmod):
+    capi = {"a": {"r": 40, "b": 30, "w": 0, "4s": 4, "6s": 0},
+            "missing": {"r": 55, "b": 33, "w": 0, "4s": 5, "6s": 1}}
+    espn = {"a": {"r": 40, "b": 30, "w": 0, "4s": 4, "6s": 0}}
+    gaps = wcmod.compute_l1_gaps(capi, espn)
+    assert "missing" in gaps and "cricapi only" in gaps["missing"]
+
+
+def test_l1_does_not_flag_everyone_when_espn_has_no_coverage(wcmod):
+    """Noise guard. ESPN absent for the WHOLE match is one match-level fact (handled by the gate),
+    not N per-player rows — that would bury the Recon tab."""
+    capi = {"a": {"r": 40, "b": 30, "w": 0, "4s": 4, "6s": 0},
+            "b": {"r": 12, "b": 9, "w": 0, "4s": 1, "6s": 0},
+            "c": {"r": 0, "b": 0, "balls": 24, "w": 2, "4s": 0, "6s": 0}}
+    assert wcmod.compute_l1_gaps(capi, {}) == {}
+    # ...also when ESPN returns bare placeholders rather than nothing
+    placeholders = {k: {"r": 0, "b": 0, "balls": 0, "w": 0, "4s": 0, "6s": 0} for k in capi}
+    assert wcmod.compute_l1_gaps(capi, placeholders) == {}
