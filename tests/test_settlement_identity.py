@@ -366,3 +366,25 @@ def test_frozen_baseline_still_flags_a_genuine_revision(wcmod, perf):
     official = dict(published); official["w"] = 3
     g = wcmod.recon_gaps(wcmod.settled_baseline("MK", "ci:3"), official, wcmod.RECON_L2, sep="→")
     assert "wkts 2→3" in g
+
+
+# ── 8. A feed with NO data is not a disagreement ─────────────────────────────
+def test_cricapi_stub_card_is_not_381_disagreements(wcmod):
+    """cricapi returns a STUB for franchise leagues: every player listed, every stat zero. Read as
+    observed zeros it becomes one 'disagreement' per player per field — 381 rows across 12
+    Hundred/LPL matches asking a human to arbitrate 'runs 0/34'. The ESPN side already had this
+    guard; cricapi never did. One feed having nothing is a MATCH-level fact."""
+    def perf(**kw):
+        p = wcmod.blank_perf(kw.pop("name", "X")); p.update(played=True, **kw); return p
+    capi = {"p1": perf(name="Sean Dickson"), "p2": perf(name="Joe Clarke")}       # all-zero stub
+    espn = {"p1": perf(name="Sean Dickson", r=34, b=20, **{"4s": 3}),
+            "p2": perf(name="Joe Clarke", r=25, b=18, **{"4s": 3})}
+    assert wcmod.compute_l1_gaps(capi, espn) == {}
+
+    # ...but a REAL cricapi card that disagrees must still be flagged — the guard must not become
+    # a blanket mute. A duck off 2 balls is activity, not a stub.
+    capi_real = {"p1": perf(name="Sean Dickson", r=30, b=20, **{"4s": 3})}
+    espn_real = {"p1": perf(name="Sean Dickson", r=34, b=20, **{"4s": 3})}
+    assert "p1" in wcmod.compute_l1_gaps(capi_real, espn_real)
+    duck = {"p1": perf(name="D Uck", r=0, b=2)}
+    assert wcmod._perf_has_activity(duck["p1"]) is True

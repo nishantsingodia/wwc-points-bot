@@ -1409,17 +1409,28 @@ def compute_l1_gaps(capi_pid, espn_pid):
     # noise for what is really ONE match-level fact ("no ESPN feed"). That whole-match case is the
     # gate's job (no dots supplied -> unconsumed -> LIVE), not this function's.
     espn_covers_match = any(_espn_has_ballbyball(v) for v in espn_pid.values())
+    # ...and the EXACT SAME question about cricapi, which was never asked. cricapi returns a STUB
+    # scorecard for franchise leagues (players listed, every stat zero — documented in CLAUDE.md
+    # as "match_scorecard returns 'not found' for most franchise-league matches"). Without this,
+    # a stub reads as an observed 0 and every player becomes a "disagreement": 381 rows of
+    # "Sean Dickson runs 0/34" for a human to arbitrate, on 12 Hundred/LPL matches where cricapi
+    # simply had no data. One feed having nothing is a MATCH-level fact, not 381 player facts.
+    capi_covers_match = any(_perf_has_activity(v) for v in capi_pid.values())
     gaps = {}
     for pid in set(capi_pid) | set(espn_pid):
         c, e = capi_pid.get(pid), espn_pid.get(pid)
+        if not capi_covers_match:
+            continue                          # cricapi has no data for this match at all
         if c is not None and e is not None:
             if not _espn_has_ballbyball(e):
                 continue                      # ESPN blank for this player — nothing to compare
+            if not _perf_has_activity(c):
+                continue                      # cricapi blank for this player — the mirror case
             parts = [f"{RECON_LABEL.get(f, f)} {c.get(f, 0) or 0}/{e.get(f, 0) or 0}"
                      for f in RECON_L1 if _l1_field_material(f, c.get(f, 0) or 0, e.get(f, 0) or 0)]
             if parts:
                 gaps[pid] = "; ".join(parts)
-        elif e is not None and _espn_has_ballbyball(e):
+        elif e is not None and _espn_has_ballbyball(e) and capi_covers_match:
             # ESPN tracked a real performance cricapi never listed. NOT a silent zero — this is
             # the class that published 4 pts against 110 earned.
             gaps[pid] = "present in ESPN only (cricapi has no line)"
