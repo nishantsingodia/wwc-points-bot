@@ -50,6 +50,11 @@ MAJOR_LEAGUES = [
 DENY = ["u19", "under-19", "under 19", "unofficial", "development", "emerging",
         "xi ", "2nd xi", "a-team", "academy", "invitation", "warm-up", "warm up",
         "practice", "legends", "masters"]
+# Event summaries scanned for squads when building a tour from ESPN. One summary yields only the
+# 2 teams in that match, so an N-team league needs several; capped so a long league can't fan out
+# into a hundred calls (7 franchises are covered in ~4-6 events).
+MAX_SQUAD_EVENTS = 25
+
 # formats we ingest (cricapi matchType); tests/other are skipped
 FMT_BUCKET = {"t20": "T20", "t20i": "T20", "odi": "ODI",
               "hundred": "T20", "the hundred": "T20", "100-ball": "T20", "100 ball": "T20"}
@@ -429,34 +434,64 @@ def _espn_event_teams(e):
     comps = (e.get("competitions") or [{}])[0].get("competitors", [])
     return [c.get("team", {}).get("displayName", "") for c in comps if c.get("team")]
 
-def _espn_matchlist(lid, now, span_days=60):
-    """Scan the ESPN scoreboard day-by-day (it only accepts a single date) from `now` across the
-    tour's span → cricapi-shaped matchList + the event ids. Stops after 6 empty days once a match
-    has been seen, so a bilateral still costs only ~its own length in calls. Keyless.
+def _espn_event_fmt(e):
+    """ESPN states a match's format outright on the competition: class.eventType ('T20'/'ODI'/
+    'TEST'). Read it instead of leaving matchType blank — _fmt_of's name-sniffing fallback only
+    works for bilaterals, whose description carries '1st T20I'. A franchise league's description
+    is '4th Match', so a blank matchType buckets to None and gen_tour drops the ENTIRE fixture
+    list (CPL 2026 ingested as 0 matches)."""
+    comps = e.get("competitions") or [{}]
+    cls = comps[0].get("class") or {}
+    return (cls.get("eventType") or cls.get("generalClassCard") or "").strip().lower()
 
-    span_days must cover the WHOLE season: `apply_to_repos` skips a tour whose tab already exists,
-    so the fixture list written at ingest is never extended by a later run. At 25 it truncated CPL
-    (41 days, 11 Aug–20 Sep 2026) to its first 22 matches, silently dropping the playoffs."""
-    matchlist, event_ids, seen, empty = [], [], False, 0
-    for i in range(span_days):
-        d = (now + timedelta(days=i)).strftime("%Y%m%d")
-        evs = _espn_get(f"{ESPN_SITE}/{lid}/scoreboard?dates={d}").get("events", [])
-        if not evs:
-            if seen and (empty := empty + 1) >= 6:
-                break
+def _espn_scan_day(lid, day, matchlist, event_ids):
+    """Append one date's ESPN fixtures → cricapi-shaped rows. Returns True if any were added."""
+    evs = _espn_get(f"{ESPN_SITE}/{lid}/scoreboard?dates={day}").get("events", [])
+    hit = False
+    for e in evs:
+        teams = _espn_event_teams(e)
+        if len(teams) != 2:
             continue
-        for e in evs:
-            teams = _espn_event_teams(e)
-            if len(teams) != 2:
-                continue
+        hit = True
+        matchlist.append({
+            "id": e.get("id"), "teams": teams, "dateTimeGMT": e.get("date"),
+            "date": (e.get("date") or "")[:10], "matchType": _espn_event_fmt(e),
+            "name": e.get("description") or e.get("shortName") or "", "hasSquad": True,
+        })
+        event_ids.append(e.get("id"))
+    return hit
+
+def _espn_matchlist(lid, now, span_days=60, back_days=30):
+    """Scan the ESPN scoreboard day-by-day (it only accepts a single date) around `now` across the
+    tour's span → cricapi-shaped matchList + the event ids, date-ordered. Keyless.
+
+    The window must cover the WHOLE season in BOTH directions, because `apply_to_repos` skips a
+    tour whose tab already exists — the fixture list written at ingest is never extended or
+    backfilled by a later run:
+      * forward (`span_days`): at 25 this truncated CPL 2026 (41 days) to its first 22 matches,
+        dropping the playoffs. Stops after 6 empty days once a match has been seen, so a short
+        bilateral still costs only ~its own length in calls.
+      * backward (`back_days`): the scan used to start at `now`, so a tour added MID-SEASON lost
+        every match already played (CPL 2026 was ingested on day 4, silently missing matches 1-3).
+        Stops after 6 consecutive empty days unconditionally — a tour that hasn't started yet has
+        nothing behind it, so this costs 6 calls in the common "added a few days early" case, and
+        the gap between seasons stops it from reaching last year's edition of the same league id.
+    """
+    matchlist, event_ids = [], []
+    empty = 0
+    for i in range(1, back_days + 1):
+        if _espn_scan_day(lid, (now - timedelta(days=i)).strftime("%Y%m%d"), matchlist, event_ids):
+            empty = 0
+        elif (empty := empty + 1) >= 6:
+            break
+    seen, empty = bool(matchlist), 0
+    for i in range(span_days):
+        if _espn_scan_day(lid, (now + timedelta(days=i)).strftime("%Y%m%d"), matchlist, event_ids):
             seen, empty = True, 0
-            matchlist.append({
-                "id": e.get("id"), "teams": teams, "dateTimeGMT": e.get("date"),
-                "date": (e.get("date") or "")[:10], "matchType": "",
-                "name": e.get("description") or e.get("shortName") or "", "hasSquad": True,
-            })
-            event_ids.append(e.get("id"))
-    return matchlist, event_ids
+        elif seen and (empty := empty + 1) >= 6:
+            break
+    order = sorted(range(len(matchlist)), key=lambda k: matchlist[k]["dateTimeGMT"] or "")
+    return [matchlist[k] for k in order], [event_ids[k] for k in order]
 
 def _espn_squads(lid, event_id):
     """Full squads from an ESPN event summary → {espn_team_displayName: [(name, role), ...]}."""
@@ -508,19 +543,38 @@ def espn_build(lid, name, now, horizon, state):
             return True
     if not matchlist or not any(_soon(m) for m in matchlist):
         return None
+    # Squads live on the EVENT summary, so one event only ever yields the 2 teams playing it.
+    # Merge across events until every team in the fixture list is covered — stopping at the first
+    # event with squads collapses an N-team league into a 2-team bilateral (CPL 2026 ingested as
+    # "JAM v BAR", 2 of 7 franchises, 2 of 39 matches).
+    want = {t for m in matchlist for t in m["teams"]}
     sqmap = {}
-    for ev in event_ids:               # first event that has squads posted
-        sqmap = _espn_squads(lid, ev)
-        if sqmap:
+    for ev in event_ids[:MAX_SQUAD_EVENTS]:
+        for team, players in _espn_squads(lid, ev).items():
+            sqmap.setdefault(team, players)
+        if want <= set(sqmap):
             break
     if len(sqmap) < 2:
         print(f"  espn: {name!r} — squads not posted yet (skip; will catch on a later run)", file=sys.stderr)
         return None
+    if missing := want - set(sqmap):
+        # Not fatal: gen_tour's canonical() drops an unmapped team, so those fixtures fall out.
+        # Loud, because it silently shrinks the tour.
+        print(f"  espn: {name!r} — no squad posted for {len(missing)} team(s): "
+              f"{', '.join(sorted(missing))} — their matches will be dropped", file=sys.stderr)
     gender = "female" if re.search(r"\bwomen\b", name, re.I) else "male"
     squads = {t: {"short": (re.sub(r"[^A-Za-z]", "", t)[:3] or t[:3]).upper(),
                   "players": [list(p) for p in players]}
               for t, players in sqmap.items()}
     league_squads = {"canon": {t: t for t in sqmap}, "squads": squads}
+    # ESPN's LEAGUE name is season-less ("Caribbean Premier League"), but gen_tour derives the tour
+    # name AND the sheet tab from it — so next season would mint the same tab, and apply_to_repos
+    # skips a tab that already exists (the 2027 edition would silently never ingest). Stamp the
+    # season year the fixtures actually fall in, matching the cricapi path ("Lanka Premier League 2026").
+    if not re.search(r"\b(19|20)\d{2}\b", name):
+        years = [m["date"][:4] for m in matchlist if (m.get("date") or "")[:4].isdigit()]
+        if years:
+            name = f"{name} {max(set(years), key=years.count)}"
     series_info = {"info": {"id": "", "name": name, "espn_id": str(lid)}, "matchList": matchlist}
     return series_info, gender, league_squads
 
