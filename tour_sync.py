@@ -584,6 +584,13 @@ def espn_add_named(query, now, horizon, state):
     clean = _clean_tour_name(query)          # "India tour of Zimbabwe 2026 (Men T20I)" -> "...2026"
     qn = norm(clean)
     cands = _espn_search_leagues(clean)
+    if not cands and (bare := re.sub(r"\s*\b(19|20)\d{2}\b", "", clean).strip()) != clean:
+        # A season-less league ("Caribbean Premier League") is a ZERO-result search once a year is
+        # appended, and writing the year is the natural instinct when typing a tour into Column A.
+        # norm() already strips digits so the matching below is year-agnostic — only the ESPN query
+        # itself chokes on it. Retry bare rather than reporting "no ESPN league matched".
+        print(f"  espn-add: no hit for {clean!r} — retrying as {bare!r}", file=sys.stderr)
+        cands = _espn_search_leagues(bare)
     target = (next((c for c in cands if norm(c[1]) == qn), None)
               or next((c for c in cands if qn in norm(c[1]) or norm(c[1]) in qn), None)
               or (cands[0] if cands else None))
