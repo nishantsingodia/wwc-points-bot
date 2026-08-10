@@ -661,12 +661,14 @@
  "ci:1137283": {
   "cricinfo_id": "1137283",
   "names": [
+   "tf rogers",
    "thomas fraser rogers"
   ]
  },
  "ci:1276980": {
   "cricinfo_id": "1276980",
   "names": [
+   "r mondol",
    "ripon mondol"
   ]
  },
@@ -674,6 +676,18 @@
   "cricinfo_id": "1329699",
   "names": [
    "khawaja nafay"
+  ]
+ },
+ "ci:1430324": {
+  "cricinfo_id": "1430324",
+  "names": [
+   "j moores"
+  ]
+ },
+ "ci:639080": {
+  "cricinfo_id": "639080",
+  "names": [
+   "md fisher"
   ]
  }
 }
