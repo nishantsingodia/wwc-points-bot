@@ -38,6 +38,10 @@ AUCTION_SRC = os.environ.get("AUCTION_SRC", "/Users/nishant-singodia/cricket-auc
 DRAFT_LIB = os.environ.get("DRAFT_LIB", "/Users/nishant-singodia/wwc-draft/lib")
 CACHE = os.environ.get("WC_CACHE_DIR", "/tmp/wc_api_cache")
 ESPN_BASE = "https://site.api.espn.com/apis/site/v2/sports/cricket"
+# ESPN's WAF 403s browser-impersonating User-Agents ("Mozilla/5.0"); curl's, urllib's default
+# and an honest bot UA all pass. A 403 here silently costs roster-derived cricinfo ids (the
+# ESPN athlete.id IS the cricinfo id), pushing resolvable players into "Needs Cricinfo ID".
+ESPN_UA = "wwc-points-bot/1.0 (+https://github.com/nishantsingodia/wwc-points-bot)"
 REG_DIR = os.path.join(HERE, "registry")
 GLOBAL_PATH = os.path.join(REG_DIR, "players.json")
 THRESH = 84.0
@@ -160,7 +164,7 @@ def espn_get(series, path, **params):
         except Exception: pass
     url = f"{ESPN_BASE}/{series}/{path}?{qs}"
     try:
-        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        req = urllib.request.Request(url, headers={"User-Agent": ESPN_UA})
         with urllib.request.urlopen(req, timeout=30) as r:
             data = json.load(r)
     except Exception:

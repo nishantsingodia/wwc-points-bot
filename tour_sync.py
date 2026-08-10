@@ -183,16 +183,28 @@ def capi(path, **params):
 # 22 Jul Hundred bug). We resolve it here: ESPN search → candidate league ids → VALIDATE each
 # by hitting its dated scoreboard and matching the fixture's teams, so we never write a wrong id.
 # Unresolved → "" (caller flags loud: the verify gate fails + the Tour Ingest Review tab lists it).
-# ESPN blocks non-browser requests, so every call carries a Mozilla UA (mirrors the bot's espn_get).
 ESPN_SITE = "https://site.api.espn.com/apis/site/v2/sports/cricket"
 ESPN_SEARCH = "https://site.web.api.espn.com/apis/common/v3/search"
+# site.api.espn.com's WAF 403s browser-impersonating User-Agents — a bare "Mozilla/5.0" is
+# rejected while curl's, urllib's default and an honest bot UA all pass (site.web.api, the search
+# host, accepts anything, which is why tour discovery kept working while every scoreboard/summary
+# call silently returned {}). Identify ourselves properly; do NOT put "Mozilla" back.
+ESPN_UA = "wwc-points-bot/1.0 (+https://github.com/nishantsingodia/wwc-points-bot)"
+
+_ESPN_FAILED = set()
 
 def _espn_get(url):
     try:
-        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        req = urllib.request.Request(url, headers={"User-Agent": ESPN_UA})
         with urllib.request.urlopen(req, timeout=30) as r:
             return json.load(r)
-    except Exception:
+    except Exception as e:
+        # Report each distinct failure ONCE. A silently-empty {} is how the 403 below went
+        # unnoticed: the scoreboard scan returned no fixtures and the tour just "didn't exist".
+        key = f"{type(e).__name__}:{getattr(e, 'code', '')}"
+        if key not in _ESPN_FAILED:
+            _ESPN_FAILED.add(key)
+            print(f"  espn: fetch failed ({e}) — e.g. {url[:110]}", file=sys.stderr)
         return {}
 
 def _espn_search_league_ids(query):

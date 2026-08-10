@@ -75,6 +75,11 @@ GSHEET_TAB = os.environ.get("GSHEET_TAB", "WWC T20 POINTS").strip()
 # ESPN = free ball-by-ball source for completed matches -> exact bowler dot-balls
 # (cricsheet is exact too but lags days; ESPN is available right after a match).
 ESPN_BASE = "https://site.api.espn.com/apis/site/v2/sports/cricket"
+# ESPN's WAF 403s browser-impersonating User-Agents: a bare "Mozilla/5.0" is rejected while curl's,
+# urllib's default and an honest bot UA all pass. espn_get() swallows the error and returns {}, so
+# this presented as "ESPN has no data" — i.e. NO dots, NO maidens, NO announced XI and no ESPN
+# scorecard fallback, the single-source fields per the recon model. Do NOT put "Mozilla" back.
+ESPN_UA = "wwc-points-bot/1.0 (+https://github.com/nishantsingodia/wwc-points-bot)"
 ESPN_SERIES = os.environ.get("ESPN_SERIES_ID", "1483859").strip()  # ICC Women's T20 WC 2026
 
 # ---- Dream11 T20 rules (mirror of T20_RULES in rules.ts) ----
@@ -746,6 +751,17 @@ def parse_cricsheet(path):
                 get(over_bowler)["maidens"] += 1
     return perf, info.get("teams", [])
 
+_ESPN_FAILED = set()
+
+def _espn_warn_once(exc, url):
+    """Report each distinct ESPN transport failure ONCE. espn_get returns {} on error, which is
+    indistinguishable from 'ESPN has no data for this match' — that is how a blanket 403 hid as a
+    quiet loss of dots/maidens/XI across every tour."""
+    key = f"{type(exc).__name__}:{getattr(exc, 'code', '')}"
+    if key not in _ESPN_FAILED:
+        _ESPN_FAILED.add(key)
+        print(f"  espn: fetch failed ({exc}) — e.g. {url[:110]}", file=sys.stderr)
+
 def espn_get(path, cache=True, **params):
     os.makedirs(CACHE, exist_ok=True)
     qs = "&".join(f"{k}={v}" for k, v in params.items())
@@ -755,10 +771,11 @@ def espn_get(path, cache=True, **params):
         return json.load(open(fp))
     url = f"{ESPN_BASE}/{ESPN_SERIES}/{path}?{qs}"
     try:
-        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        req = urllib.request.Request(url, headers={"User-Agent": ESPN_UA})
         with urllib.request.urlopen(req, timeout=30) as r:
             data = json.load(r)
-    except Exception:
+    except Exception as e:
+        _espn_warn_once(e, url)
         return {}
     json.dump(data, open(fp, "w"))
     time.sleep(0.3)
