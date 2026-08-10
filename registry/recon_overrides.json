@@ -5985,6 +5985,692 @@
       "pid": "ci:379887",
       "source": "S2",
       "status": "approved"
+    },
+    {
+      "match_key": "2026-08-04::london spirit|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:1150021",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-04::london spirit|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:596417",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-04::london spirit|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:1027781",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-04::london spirit|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:826915",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-04::london spirit|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:461632",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-04::london spirit|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:734459",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-04::london spirit|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:1231590",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-04::london spirit|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:308251",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-04::london spirit|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:510530",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-04::london spirit|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:459508",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-04::london spirit|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:450860",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-04::london spirit|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:379504",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::manchester super giants|welsh fire",
+      "scope": "l2",
+      "pid": "ci:605575",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::manchester super giants|welsh fire",
+      "scope": "l2",
+      "pid": "ci:959767",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::manchester super giants|welsh fire",
+      "scope": "l2",
+      "pid": "ci:696401",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::manchester super giants|welsh fire",
+      "scope": "l2",
+      "pid": "ci:247235",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::manchester super giants|welsh fire",
+      "scope": "l2",
+      "pid": "ci:493773",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::manchester super giants|welsh fire",
+      "scope": "l2",
+      "pid": "ci:772061",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::manchester super giants|welsh fire",
+      "scope": "l2",
+      "pid": "ci:909225",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::manchester super giants|welsh fire",
+      "scope": "l2",
+      "pid": "ci:211855",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::manchester super giants|welsh fire",
+      "scope": "l2",
+      "pid": "ci:1126982",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::manchester super giants|welsh fire",
+      "scope": "l2",
+      "pid": "ci:1182529",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::manchester super giants|welsh fire",
+      "scope": "l2",
+      "pid": "ci:857975",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::manchester super giants|welsh fire",
+      "scope": "l2",
+      "pid": "ci:1191192",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::birmingham phoenix|trent rockets",
+      "scope": "l2",
+      "pid": "ci:1263691",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::birmingham phoenix|trent rockets",
+      "scope": "l2",
+      "pid": "ci:679567",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::birmingham phoenix|trent rockets",
+      "scope": "l2",
+      "pid": "ci:310525",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::birmingham phoenix|trent rockets",
+      "scope": "l2",
+      "pid": "ci:643885",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::birmingham phoenix|trent rockets",
+      "scope": "l2",
+      "pid": "ci:1333415",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::birmingham phoenix|trent rockets",
+      "scope": "l2",
+      "pid": "ci:892749",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::birmingham phoenix|trent rockets",
+      "scope": "l2",
+      "pid": "ci:502714",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::birmingham phoenix|trent rockets",
+      "scope": "l2",
+      "pid": "ci:362201",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::birmingham phoenix|trent rockets",
+      "scope": "l2",
+      "pid": "ci:464626",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::birmingham phoenix|trent rockets",
+      "scope": "l2",
+      "pid": "ci:859899",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::birmingham phoenix|trent rockets",
+      "scope": "l2",
+      "pid": "ci:506612",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::birmingham phoenix|trent rockets",
+      "scope": "l2",
+      "pid": "ci:290948",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-04::london spirit|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:351836",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-04::london spirit|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:939249",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-04::london spirit|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:1039421",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-04::london spirit|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:879369",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-04::london spirit|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:1095834",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-04::london spirit|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:1071705",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-04::london spirit|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:886203",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-04::london spirit|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:597811",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-04::london spirit|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:374936",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-04::london spirit|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:297085",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-04::london spirit|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:1120320",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-04::london spirit|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:1184099",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::manchester super giants|welsh fire",
+      "scope": "l2",
+      "pid": "ci:874173",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::manchester super giants|welsh fire",
+      "scope": "l2",
+      "pid": "ci:914675",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::manchester super giants|welsh fire",
+      "scope": "l2",
+      "pid": "ci:1061621",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::manchester super giants|welsh fire",
+      "scope": "l2",
+      "pid": "ci:878039",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::manchester super giants|welsh fire",
+      "scope": "l2",
+      "pid": "ci:1187119",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::manchester super giants|welsh fire",
+      "scope": "l2",
+      "pid": "ci:1230762",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::manchester super giants|welsh fire",
+      "scope": "l2",
+      "pid": "ci:874219",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::manchester super giants|welsh fire",
+      "scope": "l2",
+      "pid": "ci:946057",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::manchester super giants|welsh fire",
+      "scope": "l2",
+      "pid": "ci:1150585",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::manchester super giants|welsh fire",
+      "scope": "l2",
+      "pid": "ci:546629",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::manchester super giants|welsh fire",
+      "scope": "l2",
+      "pid": "ci:1314806",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::manchester super giants|welsh fire",
+      "scope": "l2",
+      "pid": "ci:1146043",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::birmingham phoenix|trent rockets",
+      "scope": "l2",
+      "pid": "ci:1187120",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::birmingham phoenix|trent rockets",
+      "scope": "l2",
+      "pid": "ci:1144886",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::birmingham phoenix|trent rockets",
+      "scope": "l2",
+      "pid": "ci:944393",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::birmingham phoenix|trent rockets",
+      "scope": "l2",
+      "pid": "ci:517577",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::birmingham phoenix|trent rockets",
+      "scope": "l2",
+      "pid": "ci:1146129",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::birmingham phoenix|trent rockets",
+      "scope": "l2",
+      "pid": "ci:858809",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::birmingham phoenix|trent rockets",
+      "scope": "l2",
+      "pid": "ci:469879",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::birmingham phoenix|trent rockets",
+      "scope": "l2",
+      "pid": "ci:418423",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::birmingham phoenix|trent rockets",
+      "scope": "l2",
+      "pid": "ci:297036",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::birmingham phoenix|trent rockets",
+      "scope": "l2",
+      "pid": "ci:1482630",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::birmingham phoenix|trent rockets",
+      "scope": "l2",
+      "pid": "ci:537440",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-01::colombo kaps|galle gallants",
+      "scope": "l2",
+      "pid": "ci:437316",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::galle gallants|jaffna kings",
+      "scope": "l2",
+      "pid": "ci:793007",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::galle gallants|jaffna kings",
+      "scope": "l2",
+      "pid": "ci:56143",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::galle gallants|jaffna kings",
+      "scope": "l2",
+      "pid": "ci:1152427",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::galle gallants|jaffna kings",
+      "scope": "l2",
+      "pid": "ci:379887",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::galle gallants|jaffna kings",
+      "scope": "l2",
+      "pid": "ci:1282477",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::galle gallants|jaffna kings",
+      "scope": "l2",
+      "pid": "ci:801817",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::galle gallants|jaffna kings",
+      "scope": "l2",
+      "pid": "ci:1306214",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::galle gallants|jaffna kings",
+      "scope": "l2",
+      "pid": "ci:784367",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::galle gallants|jaffna kings",
+      "scope": "l2",
+      "pid": "ci:437316",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::galle gallants|jaffna kings",
+      "scope": "l2",
+      "pid": "ci:348148",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::galle gallants|jaffna kings",
+      "scope": "l2",
+      "pid": "ci:950405",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::galle gallants|jaffna kings",
+      "scope": "l2",
+      "pid": "ci:1175296",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::galle gallants|jaffna kings",
+      "scope": "l2",
+      "pid": "ci:1203669",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::galle gallants|jaffna kings",
+      "scope": "l2",
+      "pid": "ci:1137283",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::colombo kaps|kandy royals",
+      "scope": "l2",
+      "pid": "ci:1203995",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::colombo kaps|kandy royals",
+      "scope": "l2",
+      "pid": "ci:355269",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::colombo kaps|kandy royals",
+      "scope": "l2",
+      "pid": "ci:1282475",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::colombo kaps|kandy royals",
+      "scope": "l2",
+      "pid": "ci:1070229",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::colombo kaps|kandy royals",
+      "scope": "l2",
+      "pid": "ci:1282476",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::colombo kaps|kandy royals",
+      "scope": "l2",
+      "pid": "ci:974109",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::colombo kaps|kandy royals",
+      "scope": "l2",
+      "pid": "ci:629080",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::colombo kaps|kandy royals",
+      "scope": "l2",
+      "pid": "ci:712219",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::colombo kaps|kandy royals",
+      "scope": "l2",
+      "pid": "ci:784379",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::colombo kaps|kandy royals",
+      "scope": "l2",
+      "pid": "ci:1072470",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::colombo kaps|kandy royals",
+      "scope": "l2",
+      "pid": "ci:1364328",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-05::colombo kaps|kandy royals",
+      "scope": "l2",
+      "pid": "ci:955235",
+      "source": "S2",
+      "status": "approved"
     }
   ]
 }
