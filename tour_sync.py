@@ -23,7 +23,7 @@ Usage:
   python3 tour_sync.py --dry-run --from-saved DIR # transform saved cricapi JSON (no quota)
   python3 tour_sync.py --emit OUTDIR              # write generated artifacts to OUTDIR (still no repo writes)
 """
-import argparse, json, os, re, sys, urllib.request, urllib.parse
+import argparse, json, os, re, sys, time, urllib.error, urllib.request, urllib.parse
 from datetime import datetime, timedelta, timezone
 
 DRAFT = os.environ.get("DRAFT_REPO", os.path.expanduser("~/wwc-draft"))
@@ -193,19 +193,31 @@ ESPN_UA = "wwc-points-bot/1.0 (+https://github.com/nishantsingodia/wwc-points-bo
 
 _ESPN_FAILED = set()
 
-def _espn_get(url):
-    try:
-        req = urllib.request.Request(url, headers={"User-Agent": ESPN_UA})
-        with urllib.request.urlopen(req, timeout=30) as r:
-            return json.load(r)
-    except Exception as e:
-        # Report each distinct failure ONCE. A silently-empty {} is how the 403 below went
-        # unnoticed: the scoreboard scan returned no fixtures and the tour just "didn't exist".
-        key = f"{type(e).__name__}:{getattr(e, 'code', '')}"
-        if key not in _ESPN_FAILED:
-            _ESPN_FAILED.add(key)
-            print(f"  espn: fetch failed ({e}) — e.g. {url[:110]}", file=sys.stderr)
-        return {}
+def _espn_get(url, tries=3):
+    """GET + parse an ESPN endpoint, retrying transient failures (5xx / network).
+
+    The retry matters more here than the usual "it'll pass next run": a tour's fixture list is
+    written ONCE at ingest and apply_to_repos never extends it, so a single 502 mid-scan drops
+    that day's match permanently. One did — CI built 34 matches where a clean scan builds 35."""
+    for i in range(tries):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": ESPN_UA})
+            with urllib.request.urlopen(req, timeout=30) as r:
+                return json.load(r)
+        except Exception as e:
+            transient = not isinstance(e, urllib.error.HTTPError) or e.code >= 500
+            if transient and i < tries - 1:
+                time.sleep(1.5 * (i + 1))
+                continue
+            # Report each distinct failure ONCE. A silently-empty {} is how the 403 went
+            # unnoticed: the scoreboard scan found no fixtures and the tour just "didn't exist".
+            key = f"{type(e).__name__}:{getattr(e, 'code', '')}"
+            if key not in _ESPN_FAILED:
+                _ESPN_FAILED.add(key)
+                print(f"  espn: fetch failed after {i + 1} tr{'y' if i == 0 else 'ies'} "
+                      f"({e}) — e.g. {url[:110]}", file=sys.stderr)
+            return {}
+    return {}
 
 def _espn_search_league_ids(query):
     """League ids ESPN's search returns for a query (best-effort — the caller validates each)."""
