@@ -388,3 +388,27 @@ def test_cricapi_stub_card_is_not_381_disagreements(wcmod):
     assert "p1" in wcmod.compute_l1_gaps(capi_real, espn_real)
     duck = {"p1": perf(name="D Uck", r=0, b=2)}
     assert wcmod._perf_has_activity(duck["p1"]) is True
+
+
+# ── 9. COMPLETED must never return to LIVE ───────────────────────────────────
+def test_a_settled_match_is_never_un_published(wcmod):
+    """The spec says COMPLETED never returns to LIVE, but nothing enforced it — status was
+    recomputed from scratch each run, so a newly-appearing gap silently retracted a settled
+    result. On 7-9 Aug that un-published 12 Hundred/LPL matches (410 frozen baseline rows) days
+    after they were settled: results vanished from the app and the recon tab filled with hundreds
+    of rows for matches nobody thought were open.
+
+    A new gap on a settled match is worth FLAGGING. It is never worth retracting the result."""
+    args = dict(cs_path=None, espn_present=True, l1_gaps={"p": "x"}, unresolved={"p": "x"},
+                l2_dirty=False)
+    # never published before -> LIVE is right, there is nothing to protect
+    assert wcmod.classify_match_status(**args)[0] == "LIVE"
+    # already published -> flag it, do NOT retract
+    st, flag = wcmod.classify_match_status(**args, already_completed=True)
+    assert st == "COMPLETED_FLAGGED" and "pending recon approval" in flag
+
+    # same for the unsourced branch, which is the stricter of the two
+    u = dict(cs_path=None, espn_present=True, l1_gaps={}, unresolved={}, l2_dirty=False,
+             unsourced=("p1",))
+    assert wcmod.classify_match_status(**u)[0] == "LIVE"
+    assert wcmod.classify_match_status(**u, already_completed=True)[0] == "COMPLETED_FLAGGED"

@@ -1485,7 +1485,7 @@ RECON_STATE_LABEL = {"L1_OPEN": "⏳ L1 recon open", "L1_DONE": "✅ L1 recon do
                      "L2_PENDING": "🔵 L2 recon pending", "L2_DONE": "✅ L2 recon done"}
 
 def classify_match_status(cs_path, espn_present, l1_gaps, unresolved, l2_dirty, id_break=False,
-                          unsourced=()):
+                          unsourced=(), already_completed=False):
     """Per-match status the draft app reads.
 
     The gate asks ONE question: can every player's score be fully accounted for? Not 'did two
@@ -1495,7 +1495,15 @@ def classify_match_status(cs_path, espn_present, l1_gaps, unresolved, l2_dirty, 
     compare is not a field that was verified.
 
     `unsourced` = players whose scored total rests on a field NO available feed supplied. Absence
-    of a source is NOT a zero, and must never publish as final."""
+    of a source is NOT a zero, and must never publish as final.
+
+    `already_completed` = this match has a frozen settlement baseline, i.e. it HAS published as
+    COMPLETED before. The spec says COMPLETED never returns to LIVE, but nothing enforced it: the
+    status was recomputed from scratch every run, so any newly-appearing gap silently un-published
+    a settled match. On 7-9 Aug it un-published 12 Hundred/LPL matches (410 frozen baseline rows)
+    days after they were settled — results vanished from the app and the recon tab filled with
+    hundreds of rows for matches nobody thought were open. A new gap on a settled match is worth
+    FLAGGING, never worth retracting the result."""
     if cs_path:
         if id_break:
             return ("COMPLETED_FLAGGED", "⚠ identity unresolved on official card")
@@ -1505,12 +1513,16 @@ def classify_match_status(cs_path, espn_present, l1_gaps, unresolved, l2_dirty, 
     # The second is strictly worse — there is no value to pick, and nothing downstream will notice.
     if unsourced:
         n = len(unsourced)
-        return ("LIVE", f"⏳ {n} player{'' if n == 1 else 's'} scored without a dot-ball source")
+        msg = f"{n} player{'' if n == 1 else 's'} scored without a dot-ball source"
+        return (("COMPLETED_FLAGGED", "⚠ " + msg) if already_completed
+                else ("LIVE", "⏳ " + msg))
     if not espn_present:
         return ("COMPLETED_FLAGGED", "⚠ unverified — single feed")
     if unresolved:
         n = len(unresolved)
-        return ("LIVE", f"⏳ pending recon approval ({n} player{'' if n == 1 else 's'})")
+        msg = f"pending recon approval ({n} player{'' if n == 1 else 's'})"
+        return (("COMPLETED_FLAGGED", "⚠ " + msg) if already_completed
+                else ("LIVE", "⏳ " + msg))
     return ("COMPLETED", "")
 
 def _resolve_override_value(o, capi_pid, espn_pid):
@@ -1968,9 +1980,14 @@ def run_tour(tour):
                             dd[field] = pv
                     id_held.add(pid)
         l2_dirty = any(pid not in l2_appr for pid in l2_pairs)
+        # The write-once settlement baseline doubles as the "has this ever published as
+        # COMPLETED?" record — which is exactly the ratchet the spec's "COMPLETED never returns to
+        # LIVE" needs, and it costs nothing extra because the rows are already loaded.
+        already_completed = any(k[0] == mk for k in SETTLEMENTS)
         match_status, recon_flag = classify_match_status(cs_path, bool(espn_perf), l1_gaps,
                                                         unresolved, l2_dirty, id_break=id_break,
-                                                        unsourced=emit_unsourced)
+                                                        unsourced=emit_unsourced,
+                                                        already_completed=already_completed)
         recon_state = classify_recon_state(cs_path, unresolved, emit_unsourced, l2_pairs, l2_appr)
         recon_state_col = RECON_STATE_LABEL.get(recon_state, recon_state)
         # Per-player markers so the draft UI can flag WHICH players aren't reconciled yet.
