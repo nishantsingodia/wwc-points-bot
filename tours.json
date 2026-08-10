@@ -101,5 +101,15 @@
     "name": "India tour of Zimbabwe 2026 (T20I)",
     "squads": "india_tour_of_zimbabwe_2026_t20i_squads.json",
     "tab": "ZIM V IND T20I POINTS"
+  },
+  {
+    "cricapi_series": "",
+    "ends": "2026-09-20",
+    "espn_series": "8623",
+    "format": "T20",
+    "gender": "male",
+    "name": "Caribbean Premier League 2026",
+    "squads": "caribbean_premier_league_2026_squads.json",
+    "tab": "CARIBBEAN PREMIER LEAGUE 2026 POINTS"
   }
 ]

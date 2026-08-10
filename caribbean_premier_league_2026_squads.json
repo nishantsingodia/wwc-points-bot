@@ -1,0 +1,545 @@
+{
+  "MTANT": {
+    "name": "Antigua and Barbuda Falcons",
+    "players": [
+      [
+        "Moeen Ali",
+        "BAT"
+      ],
+      [
+        "Fabian Allen",
+        "BOWL"
+      ],
+      [
+        "Rahkeem Cornwall",
+        "AR"
+      ],
+      [
+        "Karima Gore",
+        "BOWL"
+      ],
+      [
+        "Jahmar Hamilton",
+        "BAT"
+      ],
+      [
+        "Joshua James",
+        "BOWL"
+      ],
+      [
+        "Amir Jangoo",
+        "BAT"
+      ],
+      [
+        "Jayden Seales",
+        "BOWL"
+      ],
+      [
+        "Alzarri Joseph",
+        "BOWL"
+      ],
+      [
+        "Evin Lewis",
+        "BAT"
+      ],
+      [
+        "Anderson Mahase",
+        "BOWL"
+      ],
+      [
+        "Milind Kumar",
+        "AR"
+      ],
+      [
+        "Kusal Perera",
+        "BAT"
+      ],
+      [
+        "Anderson Phillip",
+        "BOWL"
+      ],
+      [
+        "Tim Robinson",
+        "BAT"
+      ],
+      [
+        "Shadab Khan",
+        "AR"
+      ],
+      [
+        "Shamar Springer",
+        "AR"
+      ],
+      [
+        "Sufyan Moqim",
+        "BOWL"
+      ],
+      [
+        "Tajinder Singh",
+        "AR"
+      ],
+      [
+        "Usama Mir",
+        "BOWL"
+      ]
+    ]
+  },
+  "MTJAM": {
+    "name": "Jamaica Kingsmen",
+    "players": [
+      [
+        "Rovman Powell",
+        "BAT"
+      ],
+      [
+        "Jediah Blades",
+        "BOWL"
+      ],
+      [
+        "Keacy Carty",
+        "BAT"
+      ],
+      [
+        "Hassan Khan",
+        "AR"
+      ],
+      [
+        "Reeza Hendricks",
+        "BAT"
+      ],
+      [
+        "Hunain Shah",
+        "BOWL"
+      ],
+      [
+        "Vitel Lawes",
+        "BOWL"
+      ],
+      [
+        "Maaz Sadaqat",
+        "BAT"
+      ],
+      [
+        "Kirk McKenzie",
+        "BAT"
+      ],
+      [
+        "Romaine Morris",
+        "BAT"
+      ],
+      [
+        "Shaqkere Parris",
+        "BAT"
+      ],
+      [
+        "Keemo Paul",
+        "AR"
+      ],
+      [
+        "Kelvin Pitman",
+        "BOWL"
+      ],
+      [
+        "Jeavor Royal",
+        "BOWL"
+      ],
+      [
+        "Andre Russell",
+        "AR"
+      ],
+      [
+        "Saim Ayub",
+        "AR"
+      ],
+      [
+        "Shayan Jahangir",
+        "BAT"
+      ],
+      [
+        "Odean Smith",
+        "BOWL"
+      ],
+      [
+        "Tayyab Arif",
+        "BAT"
+      ],
+      [
+        "Usman Khan",
+        "BAT"
+      ]
+    ]
+  },
+  "MTSTK": {
+    "name": "St Kitts and Nevis Patriots",
+    "players": [
+      [
+        "Jason Holder",
+        "BOWL"
+      ],
+      [
+        "Alick Athanaze",
+        "BAT"
+      ],
+      [
+        "Navin Bidaisee",
+        "BAT"
+      ],
+      [
+        "Johnson Charles",
+        "BAT"
+      ],
+      [
+        "Nikhil Chaudhary",
+        "BAT"
+      ],
+      [
+        "Andre Fletcher",
+        "BAT"
+      ],
+      [
+        "Wanindu Hasaranga",
+        "AR"
+      ],
+      [
+        "Jeremiah Louis",
+        "BOWL"
+      ],
+      [
+        "Mikyle Louis",
+        "BAT"
+      ],
+      [
+        "Obed McCoy",
+        "BOWL"
+      ],
+      [
+        "Kyle Mayers",
+        "BAT"
+      ],
+      [
+        "Micah McKenzie",
+        "BOWL"
+      ],
+      [
+        "Naseem Shah",
+        "BOWL"
+      ],
+      [
+        "Ashmead Nedd",
+        "BOWL"
+      ],
+      [
+        "Saurabh Netravalkar",
+        "BOWL"
+      ],
+      [
+        "Dasun Shanaka",
+        "AR"
+      ],
+      [
+        "Waqar Salamkheil",
+        "BOWL"
+      ],
+      [
+        "Kevin Wickham",
+        "BAT"
+      ]
+    ]
+  },
+  "MTTRI": {
+    "name": "Trinbago Knight Riders",
+    "players": [
+      [
+        "Nicholas Pooran",
+        "BAT"
+      ],
+      [
+        "Matthew Breetzke",
+        "BAT"
+      ],
+      [
+        "Joshua Da Silva",
+        "BAT"
+      ],
+      [
+        "Amshi de Silva",
+        "AR"
+      ],
+      [
+        "Dominic Drakes",
+        "BOWL"
+      ],
+      [
+        "Nathan Edward",
+        "BOWL"
+      ],
+      [
+        "Jyd Goolie",
+        "BAT"
+      ],
+      [
+        "Justin Greaves",
+        "AR"
+      ],
+      [
+        "Alex Hales",
+        "BAT"
+      ],
+      [
+        "Terrance Hinds",
+        "BOWL"
+      ],
+      [
+        "Akeal Hosein",
+        "BOWL"
+      ],
+      [
+        "Colin Munro",
+        "BAT"
+      ],
+      [
+        "Sunil Narine",
+        "BOWL"
+      ],
+      [
+        "Kieron Pollard",
+        "BAT"
+      ],
+      [
+        "Dexter Sween",
+        "BAT"
+      ],
+      [
+        "Abdul-Raheem Toppin",
+        "BOWL"
+      ],
+      [
+        "Matthew Tromp",
+        "AR"
+      ],
+      [
+        "Usman Tariq",
+        "BOWL"
+      ]
+    ]
+  },
+  "MTSTL": {
+    "name": "St Lucia Kings",
+    "players": [
+      [
+        "Roston Chase",
+        "AR"
+      ],
+      [
+        "Jewel Andrew",
+        "BAT"
+      ],
+      [
+        "Charith Asalanka",
+        "BAT"
+      ],
+      [
+        "Ackeem Auguste",
+        "BAT"
+      ],
+      [
+        "Joshua Bishop",
+        "BOWL"
+      ],
+      [
+        "McKenny Clarke",
+        "BOWL"
+      ],
+      [
+        "Matthew Forde",
+        "BOWL"
+      ],
+      [
+        "Keon Gaston",
+        "BOWL"
+      ],
+      [
+        "Amari Goodridge",
+        "AR"
+      ],
+      [
+        "Andries Gous",
+        "BAT"
+      ],
+      [
+        "Johann Jeremiah",
+        "BAT"
+      ],
+      [
+        "Damion Joachim",
+        "BAT"
+      ],
+      [
+        "Darren Nedd",
+        "AR"
+      ],
+      [
+        "Noor Ahmad",
+        "BOWL"
+      ],
+      [
+        "Kamil Pooran",
+        "BAT"
+      ],
+      [
+        "Tim Seifert",
+        "BAT"
+      ],
+      [
+        "Maheesh Theekshana",
+        "BOWL"
+      ],
+      [
+        "Shadley van Schalkwyk",
+        "AR"
+      ]
+    ]
+  },
+  "MTBAR": {
+    "name": "Barbados Tridents",
+    "players": [
+      [
+        "Chris Green",
+        "BOWL"
+      ],
+      [
+        "Kadeem Alleyne",
+        "AR"
+      ],
+      [
+        "Zachary Carter",
+        "BAT"
+      ],
+      [
+        "Quinton de Kock",
+        "BAT"
+      ],
+      [
+        "Shadrack Descarte",
+        "AR"
+      ],
+      [
+        "Kofi James",
+        "BAT"
+      ],
+      [
+        "Brandon King",
+        "BAT"
+      ],
+      [
+        "Johann Layne",
+        "BOWL"
+      ],
+      [
+        "George Linde",
+        "AR"
+      ],
+      [
+        "Zishan Motara",
+        "BOWL"
+      ],
+      [
+        "Gudakesh Motie",
+        "BOWL"
+      ],
+      [
+        "Mujeeb Ur Rahman",
+        "BOWL"
+      ],
+      [
+        "Jakeem Pollard",
+        "BOWL"
+      ],
+      [
+        "Sherfane Rutherford",
+        "BAT"
+      ],
+      [
+        "Daniel Sams",
+        "AR"
+      ],
+      [
+        "Ramon Simmonds",
+        "BOWL"
+      ]
+    ]
+  },
+  "MTGUY": {
+    "name": "Guyana Amazon Warriors",
+    "players": [
+      [
+        "Imran Tahir",
+        "BOWL"
+      ],
+      [
+        "Ronaldo Alimohamed",
+        "BOWL"
+      ],
+      [
+        "Mavendra Dindyal",
+        "BAT"
+      ],
+      [
+        "Shimron Hetmyer",
+        "BAT"
+      ],
+      [
+        "Shai Hope",
+        "BAT"
+      ],
+      [
+        "Shamar Joseph",
+        "BOWL"
+      ],
+      [
+        "Mohammad Nabi",
+        "AR"
+      ],
+      [
+        "Matthew Nandu",
+        "BAT"
+      ],
+      [
+        "Veerasammy Permaul",
+        "BOWL"
+      ],
+      [
+        "Glenn Phillips",
+        "AR"
+      ],
+      [
+        "Khary Pierre",
+        "AR"
+      ],
+      [
+        "Dwaine Pretorius",
+        "BOWL"
+      ],
+      [
+        "Rahmanullah Gurbaz",
+        "BAT"
+      ],
+      [
+        "Quentin Sampson",
+        "BAT"
+      ],
+      [
+        "Romario Shepherd",
+        "BOWL"
+      ],
+      [
+        "Isai Thorne",
+        "BOWL"
+      ],
+      [
+        "Jonathan van Lange",
+        "AR"
+      ]
+    ]
+  }
+}
