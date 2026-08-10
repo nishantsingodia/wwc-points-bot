@@ -429,10 +429,14 @@ def _espn_event_teams(e):
     comps = (e.get("competitions") or [{}])[0].get("competitors", [])
     return [c.get("team", {}).get("displayName", "") for c in comps if c.get("team")]
 
-def _espn_matchlist(lid, now, span_days=25):
-    """Scan the ESPN scoreboard day-by-day (it only accepts a single date) from `now` across a
-    short tour's span → cricapi-shaped matchList + the event ids. Stops after 6 empty days once a
-    match has been seen (a bilateral/short league won't span 25 days). Keyless."""
+def _espn_matchlist(lid, now, span_days=60):
+    """Scan the ESPN scoreboard day-by-day (it only accepts a single date) from `now` across the
+    tour's span → cricapi-shaped matchList + the event ids. Stops after 6 empty days once a match
+    has been seen, so a bilateral still costs only ~its own length in calls. Keyless.
+
+    span_days must cover the WHOLE season: `apply_to_repos` skips a tour whose tab already exists,
+    so the fixture list written at ingest is never extended by a later run. At 25 it truncated CPL
+    (41 days, 11 Aug–20 Sep 2026) to its first 22 matches, silently dropping the playoffs."""
     matchlist, event_ids, seen, empty = [], [], False, 0
     for i in range(span_days):
         d = (now + timedelta(days=i)).strftime("%Y%m%d")
