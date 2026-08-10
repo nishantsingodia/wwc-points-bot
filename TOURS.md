@@ -3,6 +3,24 @@
 This bot can track **multiple tournaments at once** — each one writes its own tab in
 the Google Sheet, all from the single 2-hourly run. Tours are listed in **`tours.json`**.
 
+> ## Two ways in — pick deliberately
+>
+> **A. Type the name in Column A of the `TOUR CONTROL` tab** (no code, no cricapi). The daily
+> Tour Sync workflow (00:10 UTC, or `gh workflow run tour-sync.yml -f dry_run=false`) resolves it
+> on ESPN, builds fixtures + full squads, commits both repos and deploys the draft.
+> **The catch: the tour lands with `cricapi_series: ""`, so THIS BOT WILL NOT SCORE IT** — no
+> points tab, and no TOUR CONTROL approval row is created for a blank series id. The draft app
+> works fully (live H2H is scored in-app from ESPN, keyless). Use this when you want the tour
+> *draftable*; it is not enough for settled/official points.
+>
+> **B. The manual flow below** (cricapi series id → real points tab). Needed for money-settling
+> points, the SETTLEMENT AUDIT, and cricsheet L2 reconciliation.
+>
+> To upgrade an A-tour to a B-tour, add its `cricapi_series` to its existing `tours.json` entry
+> and flip its new TOUR CONTROL row to `yes`. See the CLAUDE.md section "The KEYLESS ESPN tour
+> path" for the full behaviour + gotchas (write-once fixture list, dropped TBA playoffs, the
+> season-less ESPN league name).
+
 ## The flow — when Nishant says *"add &lt;tour&gt;'s points"*
 
 **All Claude needs from you is the tournament name** (plus squads only if it's for an

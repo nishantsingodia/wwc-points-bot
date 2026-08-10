@@ -199,3 +199,46 @@ IF THE GATE FAILS: read the TOUR INGEST REVIEW tab / workflow log. espn UNRESOLV
 `registry/team_aliases.json` entry if cricapi vs ESPN names diverge; low coverage → build_registry
 didn't take (check the squad file / auction DB). Fix, then re-run the workflow (idempotent — skips
 already-ingested tours).
+
+## ⛔ NEVER send a browser User-Agent to ESPN (found 10 Aug 2026, cost a day of debugging)
+`site.api.espn.com` **403s browser-impersonating User-Agents**: `Mozilla/5.0` → 403, a full Chrome
+UA → 403, `curl/8.7.1` → 200, urllib's default → 200, an honest bot UA (`ESPN_UA`) → 200. Every
+fetcher swallows the error and returns `{}`/`null`, so a blanket 403 is **indistinguishable from
+"ESPN has no data"** — nothing goes red. It was live in `wc_fps_to_csv.espn_get` (dots + maidens,
+the single-source fields; announced XI; the full-scorecard fallback that carries franchise
+leagues), `build_registry` (roster `athlete.id` IS the cricinfo id → resolvable players pushed to
+"Needs Cricinfo ID"), `tour_sync`, and the draft's `lib/espn.ts` (XI + the whole live H2H scorer).
+Symptom in the log: `sources: N cricsheet(official), 0 cricapi+ESPN, 0 cricapi-only`.
+`site.web.api.espn.com` (SEARCH) accepts anything, so tour *discovery* keeps working while every
+fixture/scorecard call comes back empty — a very misleading combination. Both Python fetchers now
+warn-once on a distinct transport failure. **Do NOT put "Mozilla" back**, and when ESPN data goes
+quietly missing check the UA + status code BEFORE cricapi quota / cricsheet lag / identity.
+
+## The KEYLESS ESPN tour path (Column A of TOUR CONTROL) — what it does and does NOT do
+Typing a tour name in **Column A of `TOUR CONTROL` (or `TOUR STATUS`)** is the no-code way to add a
+tour: `tour_sync.py --from-status-sheet` reads both tabs, skips names already in `tours.json`, and
+ESPN-adds the rest (name → league id → fixtures → full squads), keyless. Hardened 10 Aug 2026 when
+CPL 2026 became the **first franchise league** through it (every prior league — MLC, LPL, Hundred —
+came via cricapi; only 2-team bilaterals had used this path), which exposed four silent failures:
+- **Format**: `_fmt_of` name-sniffs when `matchType` is blank, which the ESPN path left blank. A
+  bilateral survives ("3rd T20I"); a league's "4th Match" does not → every fixture bucketed to
+  `None` and gen_tour dropped the whole list. Now read from `competitions[0].class.eventType`.
+- **Squads** hang off the EVENT summary, so one event yields only the 2 teams playing it — stopping
+  at the first event collapsed 7 franchises into a 2-team bilateral. Now merged across events.
+- **Look-back**: the scan started at `now`, losing every already-played match on a mid-season add.
+  Now scans backwards too (6-empty-day stop).
+- **Write-once**: `apply_to_repos` skips a tour whose `tab` already exists, so the fixture list is
+  **never extended or backfilled**. Hence the 60-day forward window, the back-scan, and the retry
+  on transient 5xx — one 502 mid-scan permanently costs that day's match (it did: 34 vs 35).
+Two consequences worth knowing before promising anything:
+- **An ESPN-added tour has `cricapi_series: ""` → the bot does NOT score it.** No points tab is
+  written, and `sync_tour_control` creates no TOUR CONTROL row for a blank series id, so there is
+  nothing to approve. The DRAFT still works (live H2H is scored in-app from ESPN, keyless). The
+  verify gate deliberately waives the 0.80 pid-coverage rule for these (CPL passed at cov=41%).
+  Sheet/settled points require a cricapi series id added to `tours.json` by hand.
+- **TBA knockout fixtures are dropped by design** and, per write-once above, never backfilled —
+  playoffs must be hand-added once the qualifiers are known.
+Naming: ESPN league names are season-less ("Caribbean Premier League"), and a year appended to the
+search query returns ZERO results — `espn_add_named` now retries without it, so "Caribbean Premier
+League (CPL) 2026" in Column A resolves fine. `espn_series` for these is the site-API **league** id
+(8623), not the 7-digit series id (1534175); ESPN's scoreboard endpoint accepts either.
