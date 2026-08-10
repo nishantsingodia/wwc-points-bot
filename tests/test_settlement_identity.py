@@ -412,3 +412,31 @@ def test_a_settled_match_is_never_un_published(wcmod):
              unsourced=("p1",))
     assert wcmod.classify_match_status(**u)[0] == "LIVE"
     assert wcmod.classify_match_status(**u, already_completed=True)[0] == "COMPLETED_FLAGGED"
+
+
+# ── 10. An empty cricapi card is not a final card ────────────────────────────
+def test_empty_scorecard_is_evicted_not_frozen(wcmod, monkeypatch, tmp_path):
+    """api() persists on status=="success", but cricapi answers SUCCESS with an EMPTY scorecard
+    for franchise leagues it hasn't populated. Once matchEnded flips, that blank is cached as the
+    immutable final and cricapi is never asked again — the Hundred had real cricapi cards in July
+    and none from 7 Aug for exactly this reason. We froze a blank and stopped listening."""
+    monkeypatch.setattr(wcmod, "CACHE", str(tmp_path))
+    fp = wcmod._cache_file("match_scorecard", {"id": "m1"})
+    open(fp, "w").write('{"status":"success","data":{}}')
+    assert wcmod.evict_empty_scorecard("m1") is True
+    import os
+    assert not os.path.exists(fp)                 # gone -> next run re-asks
+    assert wcmod.evict_empty_scorecard("m1") is False   # idempotent, no crash when absent
+
+
+def test_single_feed_is_flagged_whichever_feed_is_missing(wcmod):
+    """'ESPN absent' was flagged 'unverified — single feed'; 'cricapi absent' published as plain
+    COMPLETED, indistinguishable from a two-feed-agreed match. Same one-sided-guard disease. A
+    single-sourced number must never look verified."""
+    base = dict(cs_path=None, l1_gaps={}, unresolved={}, l2_dirty=False)
+    st, flag = wcmod.classify_match_status(espn_present=False, capi_present=True, **base)
+    assert st == "COMPLETED_FLAGGED" and "cricapi only" in flag
+    st, flag = wcmod.classify_match_status(espn_present=True, capi_present=False, **base)
+    assert st == "COMPLETED_FLAGGED" and "ESPN only" in flag
+    # both present and clean -> genuinely COMPLETED
+    assert wcmod.classify_match_status(espn_present=True, capi_present=True, **base) == ("COMPLETED", "")

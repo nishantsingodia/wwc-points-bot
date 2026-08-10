@@ -533,6 +533,33 @@ def best_team(name, team_map):
             best_sc, best = sc, tfull
     return best if best_sc >= 84 else ""
 
+def _cache_file(path, params):
+    """Where api() persists this request. Exposed so a caller that can SEE the response is not
+    final can evict it (see evict_empty_scorecard)."""
+    qs = "&".join(f"{k}={v}" for k, v in params.items())
+    key = re.sub(r"[^a-z0-9]", "_", f"{path}_{qs}".lower())
+    return os.path.join(CACHE, key + ".json")
+
+def evict_empty_scorecard(mid):
+    """Delete a cached cricapi scorecard that carries NO performance data.
+
+    api() persists on `status == "success"`, but cricapi answers SUCCESS with an empty scorecard
+    for franchise leagues it hasn't populated yet. Once `matchEnded` flips, that blank is cached
+    as the immutable final and re-read forever — cricapi is never asked again even after it fills
+    the card in. The Hundred had real cricapi cards in July and none from 7 Aug for exactly this
+    reason: we froze a blank and stopped listening.
+
+    An empty card is not a final card. Evict it so the next run re-asks, which restores the
+    two-feed cross-check instead of silently running single-source off ESPN."""
+    try:
+        fp = _cache_file("match_scorecard", {"id": mid})
+        if os.path.exists(fp):
+            os.remove(fp)
+            return True
+    except Exception as e:
+        print(f"  (could not evict empty scorecard cache for {mid}: {e})", file=sys.stderr)
+    return False
+
 def api(path, cache=True, ttl=None, persist=True, **params):
     """GET with optional caching. Scorecards are cached (immutable once ended);
     series_info is NOT cached in the full run (so re-runs detect newly-completed matches),
@@ -544,9 +571,7 @@ def api(path, cache=True, ttl=None, persist=True, **params):
     brand-new match is scored one cycle late — far better than freezing the whole sheet
     (the old behaviour aborted the tour, so a cricapi blip left the sheet stale anyway)."""
     os.makedirs(CACHE, exist_ok=True)
-    qs = "&".join(f"{k}={v}" for k, v in params.items())
-    key = re.sub(r"[^a-z0-9]", "_", f"{path}_{qs}".lower())
-    fp = os.path.join(CACHE, key + ".json")
+    fp = _cache_file(path, params)
     fresh = os.path.exists(fp) and (ttl is None or (time.time() - os.path.getmtime(fp) < ttl))
     if cache and fresh:
         return json.load(open(fp))
@@ -1124,6 +1149,7 @@ def parse_match(mid, live=False):
     match, fetch FRESH and don't persist — the scorecard is still changing, so a cached snapshot
     would freeze live points, and persisting it would poison the final read once the match ends."""
     d = api("match_scorecard", id=mid, cache=not live, persist=not live)
+    _mid_for_evict = mid
     perf = {}   # norm name -> dict
     def get(n):
         k = norm(n)
@@ -1205,6 +1231,13 @@ def parse_match(mid, live=False):
             pl["catches"] += ct.get("catch", 0) or 0
             pl["stumpings"] += ct.get("stumped", 0) or 0
             # run-outs come from dismissal-text parsing (direct vs assisted), not here
+    # A card with nobody who batted, bowled or fielded is cricapi saying "I don't have this yet",
+    # not "nothing happened". api() already persisted it (status was "success"), so drop that file
+    # or the blank becomes the permanent answer and cricapi is never asked again.
+    if not live and not any(_perf_has_activity(v) for v in perf.values()):
+        if evict_empty_scorecard(_mid_for_evict):
+            print(f"  cricapi returned an EMPTY scorecard for match {_mid_for_evict} — "
+                  f"evicted from cache so it is re-fetched (not frozen as final)", file=sys.stderr)
     return perf
 
 # ── Reconciliation (two-stage audit trail) ──────────────────────────────────
@@ -1485,7 +1518,7 @@ RECON_STATE_LABEL = {"L1_OPEN": "⏳ L1 recon open", "L1_DONE": "✅ L1 recon do
                      "L2_PENDING": "🔵 L2 recon pending", "L2_DONE": "✅ L2 recon done"}
 
 def classify_match_status(cs_path, espn_present, l1_gaps, unresolved, l2_dirty, id_break=False,
-                          unsourced=(), already_completed=False):
+                          unsourced=(), already_completed=False, capi_present=True):
     """Per-match status the draft app reads.
 
     The gate asks ONE question: can every player's score be fully accounted for? Not 'did two
@@ -1517,7 +1550,9 @@ def classify_match_status(cs_path, espn_present, l1_gaps, unresolved, l2_dirty, 
         return (("COMPLETED_FLAGGED", "⚠ " + msg) if already_completed
                 else ("LIVE", "⏳ " + msg))
     if not espn_present:
-        return ("COMPLETED_FLAGGED", "⚠ unverified — single feed")
+        return ("COMPLETED_FLAGGED", "⚠ unverified — single feed (cricapi only)")
+    if not capi_present:
+        return ("COMPLETED_FLAGGED", "⚠ unverified — single feed (ESPN only, cricapi had no card)")
     if unresolved:
         n = len(unresolved)
         msg = f"pending recon approval ({n} player{'' if n == 1 else 's'})"
@@ -1987,7 +2022,8 @@ def run_tour(tour):
         match_status, recon_flag = classify_match_status(cs_path, bool(espn_perf), l1_gaps,
                                                         unresolved, l2_dirty, id_break=id_break,
                                                         unsourced=emit_unsourced,
-                                                        already_completed=already_completed)
+                                                        already_completed=already_completed,
+                                                        capi_present=bool(capi_pid))
         recon_state = classify_recon_state(cs_path, unresolved, emit_unsourced, l2_pairs, l2_appr)
         recon_state_col = RECON_STATE_LABEL.get(recon_state, recon_state)
         # Per-player markers so the draft UI can flag WHICH players aren't reconciled yet.
