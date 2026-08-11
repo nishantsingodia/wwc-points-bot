@@ -81,6 +81,13 @@ jobs:
           curl -fsSL --retry 3 --retry-delay 5 --max-time 180 -o hnd.zip \
             https://cricsheet.org/downloads/hnd_json.zip
           unzip -o -q hnd.zip "*.json" -d cricsheet
+          # Caribbean Premier League — its own archive, same reasoning as MLC/LPL above. Wired in
+          # ahead of CPL being scored: the tour is currently ESPN-only (cricapi_series ""), so the
+          # bot skips it entirely; once its cricapi series id is set this is what makes the
+          # official L2 reconciliation fire instead of it riding ESPN-provisional forever.
+          curl -fsSL --retry 3 --retry-delay 5 --max-time 180 -o cpl.zip \
+            https://cricsheet.org/downloads/cpl_json.zip
+          unzip -o -q cpl.zip "*.json" -d cricsheet
 
       - name: Compute D11 points and write to Google Sheet(s)
         # Tours are defined in tours.json (each writes its own tab). See TOURS.md.
