@@ -467,3 +467,42 @@ def test_api_builds_a_url_with_its_params(wcmod, monkeypatch, tmp_path):
     assert d.get("status") == "success"
     assert "series_info" in seen["url"] and "id=abc123" in seen["url"]
     assert "apikey=TESTKEY" in seen["url"]
+
+
+# ── 12. ESPN run-outs: read them from `summary`, not `playbyplay` ────────────
+def test_espn_runouts_parses_fielders_from_summary(wcmod, monkeypatch):
+    """playbyplay's dismissal.fielder is ALWAYS empty for a run out, and neither shortText nor
+    text names the fielders — measured over 24 LPL events: 19 run-out items, 0 with a fielder, 0
+    parseable. Caught worked (214/214), so the gap was invisible: run-outs scored ZERO for
+    everyone, ~1.1/match at 6 pts assisted / 12 direct. Verified after the fix against cricsheet
+    over 18 LPL matches: 20 v 20, agreement 18/18.
+
+    `summary` carries it structured, and is already fetched under the same cache key."""
+    payload = {"rosters": [{"roster": [
+        {"linescores": [{"statistics": {"batting": {"outDetails": {
+            "dismissalCard": "run out",
+            "fielders": [{"athlete": {"id": "704693", "fullName": "Lahiru Udara"}},
+                         {"athlete": {"id": "955235", "fullName": "Nuwan Thushara"}}]}}}}]},
+        {"linescores": [{"statistics": {"batting": {"outDetails": {
+            "dismissalCard": "run out",
+            "fielders": [{"athlete": {"id": "999", "fullName": "Solo Fielder"}}]}}}}]},
+        {"linescores": [{"statistics": {"batting": {"outDetails": {
+            "dismissalCard": "caught",       # must be ignored — caught is handled elsewhere
+            "fielders": [{"athlete": {"id": "111", "fullName": "Someone Else"}}]}}}}]},
+    ]}]}
+    monkeypatch.setattr(wcmod, "espn_get", lambda *a, **k: payload)
+    outs = wcmod.espn_runouts("evt")
+    assert len(outs) == 2                                  # the caught row is not a run out
+    assert [n for n, _ in outs[0]["fielders"]] == ["Lahiru Udara", "Nuwan Thushara"]
+    assert outs[0]["fielders"][0][1] == "704693"           # athlete.id IS the cricinfo id
+    assert len(outs[1]["fielders"]) == 1                   # -> scores dro (direct hit)
+
+
+def test_espn_runouts_tolerates_a_missing_fielder_block(wcmod, monkeypatch):
+    """A run out with no fielder block must yield nothing rather than a phantom credit."""
+    monkeypatch.setattr(wcmod, "espn_get", lambda *a, **k: {"rosters": [{"roster": [
+        {"linescores": [{"statistics": {"batting": {"outDetails": {
+            "dismissalCard": "run out", "fielders": []}}}}]}]}]})
+    assert wcmod.espn_runouts("evt") == []
+    monkeypatch.setattr(wcmod, "espn_get", lambda *a, **k: {})
+    assert wcmod.espn_runouts("evt") == []

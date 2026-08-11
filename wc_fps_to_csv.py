@@ -870,6 +870,43 @@ def espn_team_map(event_id, fresh=False):
                 out[norm(nm)] = tn
     return out
 
+def espn_runouts(event_id, fresh=False):
+    """Run-out dismissals WITH their fielders, from the ESPN `summary` payload.
+
+    WHY THIS EXISTS: `playbyplay` — which parse_espn reads for every other dismissal — carries a
+    `dismissal.fielder` that is ALWAYS EMPTY for a run out, and its `shortText`/`text` never name
+    the fielders either ("B Fernando run out 21 (15m 13b...)"). Measured over 24 LPL events: 19
+    run-out items, 0 with a fielder, 0 with a parseable name. Caught worked (214/214), so the gap
+    was invisible — run-outs simply scored zero for everyone, ~1.1 per match at 6 pts (assisted)
+    or 12 (direct).
+
+    `summary` has it, structured, at rosters[].roster[].linescores[].statistics.batting.outDetails,
+    and `summary` is ALREADY FETCHED in the same run under the same cache key (espn_xi/
+    espn_team_map). So this costs no extra request.
+
+    Verified against cricsheet over 22 LPL matches: 17 run-outs vs 17, agreement 22/22, fielder
+    sets exact on all 17 including 2-man assists and substitutes, and direct-vs-assisted
+    (len(fielders)==1) correct 17/17. Format-agnostic — also verified on the Hundred.
+
+    Returns [{"fielders": [(name, espn_id), ...]}] per run out; athlete.id IS the cricinfo id."""
+    d = espn_get("summary", cache=not fresh, event=event_id)
+    outs = []
+    for team in d.get("rosters", []) or []:
+        for p in team.get("roster", []) or []:
+            for ls in p.get("linescores", []) or []:
+                det = (((ls.get("statistics") or {}).get("batting") or {}).get("outDetails")) or {}
+                if (det.get("dismissalCard") or "").strip().lower() != "run out":
+                    continue
+                fl = []
+                for f in det.get("fielders", []) or []:
+                    a = f.get("athlete") or {}
+                    nm = a.get("fullName") or a.get("displayName")
+                    if nm:
+                        fl.append((nm, str(a.get("id") or "")))
+                if fl:
+                    outs.append({"fielders": fl})
+    return outs
+
 def espn_xi(event_id, fresh=False):
     """Playing XI (incl. subs that came on) from ESPN summary -> for the +4 in-XI bonus,
     even for players who didn't bat/bowl/field (e.g. a captain who wasn't needed)."""
@@ -964,18 +1001,24 @@ def parse_espn(event_id, fresh=False):
                 get(fld)["catches"] += 1
             elif typ == "stumped" and fld:
                 get(fld)["stumpings"] += 1
-            elif typ == "run out":
-                m = re.search(r"run out \(([^)]*)\)", it.get("shortText", "") or "", re.I)
-                names = ([re.sub(r"(sub\b|†|\[|\])", "", x).strip() for x in m.group(1).split("/")]
-                         if m else ([fld] if fld else []))
-                names = [n for n in names if n]
-                for n in names:
-                    rp = get(n); rp["runouts"] += 1
-                    if len(names) == 1:
-                        rp["dro"] += 1
+            # NOTE: run outs are deliberately NOT credited here. playbyplay's dismissal.fielder is
+            # always empty for a run out and neither shortText nor text names the fielders, so any
+            # attempt from this payload silently credits nobody. They are applied below from the
+            # `summary` payload instead (espn_runouts), which carries them structured.
     for o in overs.values():
         if o["legal"] == 6 and o["runs"] == 0 and o["bowler"]:
             get(o["bowler"])["maidens"] += 1
+    # Run outs from `summary` (see espn_runouts): playbyplay cannot supply the fielders.
+    for ro in espn_runouts(event_id, fresh):
+        names = ro["fielders"]
+        for nm, eid in names:
+            rp = get(nm)
+            if eid and not rp.get("espn_id"):
+                rp["espn_id"] = eid          # athlete.id IS the cricinfo id
+            rp["runouts"] += 1
+            if len(names) == 1:
+                rp["dro"] += 1               # unassisted -> direct-hit bonus
+
     for k, e in espn_xi(event_id, fresh).items():   # +4 in-XI even for players with no stat line
         if k not in perf:
             perf[k] = blank_perf(e["name"])
