@@ -571,6 +571,7 @@ def api(path, cache=True, ttl=None, persist=True, **params):
     brand-new match is scored one cycle late — far better than freezing the whole sheet
     (the old behaviour aborted the tour, so a cricapi blip left the sheet stale anyway)."""
     os.makedirs(CACHE, exist_ok=True)
+    qs = "&".join(f"{k}={v}" for k, v in params.items())   # also used to build the URL below
     fp = _cache_file(path, params)
     fresh = os.path.exists(fp) and (ttl is None or (time.time() - os.path.getmtime(fp) < ttl))
     if cache and fresh:
@@ -2475,6 +2476,7 @@ def main():
     # PID2DISP is the live registry's pid set — an approval keyed outside it is orphaned (see guard).
     RECON_OVERRIDES = overrides_by_match(_load_overrides(), known_pids=set(PID2DISP))
     tours = load_tours()
+    tours_ok, tours_failed = 0, []
     # Process still-running tours FIRST (latest `ends` first) so a live tour never starves on
     # the cricapi daily budget behind already-finished ones (tours.json order otherwise put the
     # live tour last, so the cap could be hit before its series_info was even fetched -> stale).
@@ -2497,10 +2499,15 @@ def main():
             continue
         try:
             run_tour(t)
+            tours_ok += 1
         except SystemExit as e:           # one tour aborting must not kill the others
             print(f"!! tour '{t.get('name')}' skipped: {e}", file=sys.stderr)
+            tours_failed.append((t.get("name"), f"skipped: {e}"))
         except Exception as e:
+            import traceback
             print(f"!! tour '{t.get('name')}' error: {e}", file=sys.stderr)
+            traceback.print_exc()
+            tours_failed.append((t.get("name"), repr(e)))
     # ── Phase-0 quota instrumentation ───────────────────────────────────────────
     # Log how many cricapi hits THIS run spent + each key's day-cumulative usage (hitsToday/
     # hitsLimit) as cricapi reported it. Diagnostic goals: (a) a 5-min tick must read 0 hits;
@@ -2509,6 +2516,10 @@ def main():
     _mode = "on-demand" if ON_DEMAND else ("frequent-tick" if FREQUENT else "full")
     _usage = " ".join(f"#{k+1}={v.get('today','?')}/{v.get('limit','?')}"
                       for k, v in sorted(API_QUOTA.items()))
+    if tours_failed:
+        print(f"!! {len(tours_failed)} tour(s) FAILED to process "
+              f"({tours_ok} ok): " + "; ".join(f"{n}: {e}" for n, e in tours_failed),
+              file=sys.stderr)
     print(f"[quota] mode={_mode} keys={len(API_KEYS)} cricapi_hits_this_run={_CRICAPI_HITS}"
           + (f" | key usage: {_usage}" if _usage else " | (no live cricapi hit this run)"),
           file=sys.stderr)
@@ -2535,6 +2546,15 @@ def main():
         write_recon_tab()       # publish L1/L2 feed disagreements to approve (pick Correct Value)
         write_needs_cricinfo_tab()  # identity gaps -> the SAME tab build_registry uses (drop the id)
         write_settlement_tab()  # publish the frozen settled baseline the draft app diffs against
+
+    # FAIL THE RUN if any tour didn't process. Placed last so every sheet/ledger write above still
+    # happens (the tours that DID work must still publish, and the persist step is `if: always()`).
+    # Until now a per-tour exception was caught, logged and forgotten, and the workflow exited 0 —
+    # so "all three live tours crashed" looked exactly like "a healthy run" on the Actions page. A
+    # NameError in api() hid there for an hour while the sheet silently went stale.
+    if tours_failed:
+        sys.exit(f"{len(tours_failed)} tour(s) failed to process: "
+                 + "; ".join(n for n, _ in tours_failed))
 
 _GSHEET = None
 def open_gsheet():

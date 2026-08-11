@@ -440,3 +440,30 @@ def test_single_feed_is_flagged_whichever_feed_is_missing(wcmod):
     assert st == "COMPLETED_FLAGGED" and "ESPN only" in flag
     # both present and clean -> genuinely COMPLETED
     assert wcmod.classify_match_status(espn_present=True, capi_present=True, **base) == ("COMPLETED", "")
+
+
+# ── 11. api() must actually be able to build a URL ───────────────────────────
+def test_api_builds_a_url_with_its_params(wcmod, monkeypatch, tmp_path):
+    """A refactor that extracted the cache path deleted the line building `qs` — which api() still
+    used for the URL. Every cricapi call raised NameError for an hour, run_tour caught it per-tour,
+    and the workflow reported SUCCESS while all three live tours did nothing. No existing test
+    touched api(), because none of them make a request.
+
+    This one does, with urlopen faked: it fails loudly if the URL can't be assembled."""
+    import io, urllib.request
+    monkeypatch.setattr(wcmod, "CACHE", str(tmp_path))
+    monkeypatch.setattr(wcmod, "API_KEYS", ["TESTKEY"])
+    monkeypatch.setattr(wcmod, "_key_idx", 0)
+    monkeypatch.setattr(wcmod, "TICK_CACHE_ONLY", False)
+    seen = {}
+
+    class _Resp:
+        def __enter__(self): return io.BytesIO(b'{"status":"success","data":[]}')
+        def __exit__(self, *a): return False
+
+    monkeypatch.setattr(urllib.request, "urlopen",
+                        lambda url, timeout=None: (seen.__setitem__("url", url), _Resp())[1])
+    d = wcmod.api("series_info", cache=False, persist=False, id="abc123")
+    assert d.get("status") == "success"
+    assert "series_info" in seen["url"] and "id=abc123" in seen["url"]
+    assert "apikey=TESTKEY" in seen["url"]
