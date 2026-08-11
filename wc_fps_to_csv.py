@@ -1788,7 +1788,17 @@ def run_tour(tour):
         # overrides either source.
         fetch_fresh = is_live or not m.get("matchEnded")
         try:
+            if not m.get("id"):
+                # cricapi listed the fixture but gave no match id, so no scorecard can ever be
+                # requested for it. Silent until now: api_perf just came back {} and the match
+                # quietly ran single-source off ESPN. Say it out loud — "cricapi has no data" and
+                # "we never asked cricapi" are different problems with different fixes.
+                print(f"  {label}: cricapi listed this fixture with NO match id — "
+                      f"no scorecard can be fetched; running single-source", file=sys.stderr)
             api_perf = {k: v for k, v in parse_match(m["id"], live=fetch_fresh).items() if v["played"]} if m.get("id") else {}
+            if m.get("id") and not api_perf:
+                print(f"  {label}: cricapi id {m['id']} returned NO player data "
+                      f"(fresh={fetch_fresh})", file=sys.stderr)
         except Exception:
             api_perf = {}
 
