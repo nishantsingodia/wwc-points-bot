@@ -744,8 +744,14 @@ def parse_cricsheet(path):
                 pb = get(dl["batter"]); pb["played"] = True
                 if not is_wide: pb["b"] += 1
                 pb["r"] += rb
-                if rb == 4: pb["4s"] += 1
-                elif rb == 6: pb["6s"] += 1
+                # cricsheet marks all-run 4s/6s and overthrows with `non_boundary: true`. Counting
+                # them as boundaries inflates GROUND TRUTH — which is worse than an ordinary bug:
+                # it invents an L2 recon row against a correct ESPN value, and answering S2 there
+                # moves a SETTLED number in the wrong direction. 5 occurrences across the 141 LPL
+                # files; the only remaining ESPN-vs-cricsheet diff was exactly this, with ESPN right.
+                if not dl.get("runs", {}).get("non_boundary"):
+                    if rb == 4: pb["4s"] += 1
+                    elif rb == 6: pb["6s"] += 1
                 pw = get(dl["bowler"]); pw["played"] = True
                 pw["runs_conceded"] += bcharged
                 if legald:
@@ -927,8 +933,39 @@ def parse_espn(event_id, fresh=False):
     fresh=True bypasses the cache — used for PROVISIONAL (no-cricsheet) matches whose ESPN
     data is still settling, so a stale mid-match snapshot can't freeze an incomplete XI
     (the bug that dropped Shubham Ranjane, an in-XI player who didn't bat/bowl)."""
-    pbp = espn_get("playbyplay", cache=not fresh, event=event_id, limit=600)
-    items = pbp.get("commentary", {}).get("items", [])
+    # PAGINATE. limit=600 silently truncates: an ODI innings has ~605 deliveries, so NZ-WI event
+    # 1538624 returned items=600 of count=605 with pageCount=2 — the last 5 balls of the innings
+    # vanished, with no error. T20 fits in one page, which is why this hid. The server caps
+    # pageSize at 1000, so a bigger limit is not a fix; loop the pages.
+    items, _page, _seen_pages = [], 1, set()
+    while True:
+        pbp = espn_get("playbyplay", cache=not fresh, event=event_id, limit=1000, page=_page)
+        com = pbp.get("commentary", {}) or {}
+        items += com.get("items", []) or []
+        try:
+            npages = int(com.get("pageCount") or 1)
+        except (TypeError, ValueError):
+            npages = 1
+        _seen_pages.add(_page)
+        if _page >= npages or _page >= 10 or npages in (0, None):
+            break
+        _page += 1
+    # DEDUP. ESPN emits byte-identical duplicate commentary items (ev 1537345: 259 items, 255
+    # unique ids). Re-counting a delivery inflated dots, balls, runs and boundaries — Kamil
+    # Mishara read 49 off 22 with 7 fours against cricsheet's 44 off 19 with 6 (+9 FP, the single
+    # largest error in the set). Keep the first occurrence of each id.
+    _seen, _uniq = set(), []
+    for _it in items:
+        _iid = _it.get("id")
+        if _iid is not None:
+            if _iid in _seen:
+                continue
+            _seen.add(_iid)
+        _uniq.append(_it)
+    if len(_uniq) != len(items):
+        print(f"  espn {event_id}: dropped {len(items) - len(_uniq)} duplicate commentary item(s)",
+              file=sys.stderr)
+    items = _uniq
     perf, overs, super_over = {}, {}, False
     def get(n, aid=""):
         # Key by norm(name) for the pool contract, but CARRY athlete.id so the row resolves by id.
@@ -953,13 +990,19 @@ def parse_espn(event_id, fresh=False):
         except (TypeError, ValueError):
             sv = 0
         is_wide = desc == "wide"
-        legal = not is_wide and "no ball" not in desc
+        # ESPN labels a no-ball by its OUTCOME ("bye" / "leg bye" / "four" / "run"), putting the
+        # no-ball only in shortText — so `"no ball" not in desc` counted 19 of them as legal balls
+        # across 22 LPL matches, inflating bowler balls (wrong econ/SR denominators) and, because
+        # scoreValue INCLUDES the no-ball penalty, the batter's runs by +1 each.
+        _short = (it.get("shortText") or "") + " " + (it.get("text") or "")
+        is_nb = ("no ball" in desc) or bool(re.search(r"\(?no[- ]?ball\)?", _short, re.I))
+        legal = not is_wide and not is_nb
         if bt:
             pb = get(bt, bt_id); pb["played"] = True
             if not is_wide:
                 pb["b"] += 1
             if desc in ("run", "four", "six"):
-                pb["r"] += sv
+                pb["r"] += (sv - 1) if is_nb else sv   # strip the no-ball penalty off the batter
             if desc == "four":
                 pb["4s"] += 1
             elif desc == "six":
@@ -967,7 +1010,9 @@ def parse_espn(event_id, fresh=False):
         if bw:
             pw = get(bw, bw_id); pw["played"] = True
             # Runs charged to the bowler exclude byes/leg-byes (drives economy, maidens, dots).
-            bcharged = 0 if desc in ("bye", "leg bye") else sv
+            # Byes/leg-byes are the keeper's leak, not the bowler's — EXCEPT the no-ball penalty
+            # itself, which is always charged to the bowler.
+            bcharged = (1 if is_nb else 0) if desc in ("bye", "leg bye") else sv
             if legal:
                 pw["balls"] += 1
             pw["runs_conceded"] += bcharged
