@@ -11,6 +11,15 @@ on:
     - cron: "*/5 * * * *"
 
 # Don't pile up ticks if one run is slow.
+# The tick runs the FULL run_tour once past the toss gate, so it can be the run that first
+# publishes a match COMPLETED — which FREEZES its write-once settlement baseline. Without a
+# commit step that baseline died with the runner, and the next full run (up to 4h later, after
+# ESPN backfills) froze the POST-backfill number instead. /audit then reports delta 0 and the
+# pre-settle checklist passes, asserting "provably unchanged" for a number that did change.
+# The documented size of that provisional->backfill swing is Gleeson 4 -> 145 FP.
+permissions:
+  contents: write
+
 concurrency:
   group: live-lineup
   cancel-in-progress: false
@@ -52,3 +61,19 @@ jobs:
           CRICSHEET_DIR: cricsheet
           WC_CACHE_DIR: api_cache
         run: python wc_fps_to_csv.py
+
+      - name: Persist sheet decisions to git
+        if: always()
+        run: |
+          LEDGERS="registry/recon_overrides.json registry/new_players.json registry/identity_splits.json registry/frozen_tours.json registry/settlement_snapshots.json registry/cricsheet_learned_aliases.json registry/manual_ci_bridges.json"
+          if [ -n "$(git status --porcelain $LEDGERS)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            for f in $LEDGERS; do [ -f "$f" ] && git add "$f"; done
+            git commit -m "chore: persist live-tick sheet decisions [skip ci]"
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || true
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+            echo "Persisted live-tick decisions."
+          else
+            echo "Nothing to persist."
+          fi

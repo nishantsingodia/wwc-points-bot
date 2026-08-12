@@ -944,9 +944,19 @@ def apply_to_repos(tours):
             es.setdefault(gkey, [])
             if espn_id not in es[gkey]:
                 es[gkey].append(espn_id)
-        if sheet_id:
+        # Only register a points tab the bot will actually WRITE. A tour with no cricapi_series
+        # is skipped by wc_fps_to_csv.main(), so its tab never gets created — and gviz answers an
+        # unknown sheet name with HTTP 200 carrying the FIRST SHEET of the spreadsheet (verified:
+        # ?sheet=ZZZ_BOGUS returns byte-identical bytes to ?sheet=CPL...POINTS). The draft then
+        # merges that unrelated board into its points pool on every request. The espn_series twin
+        # three lines above was already guarded; this one was not.
+        if sheet_id and (t["tours_entry"].get("cricapi_series") or "").strip():
             tab = urllib.parse.quote(t["tours_entry"]["tab"])
             pt.append(f"https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={tab}&headers=1")
+        elif sheet_id:
+            print(f"  points tab NOT registered for {t['tour_name']}: no cricapi_series, so the "
+                  f"bot will never write it (an unknown gviz tab silently returns another sheet)",
+                  file=sys.stderr)
         applied.append(t["tour_name"])
     _dump(f"{DRAFT}/data/matches.json", dm)
     _dump(f"{DRAFT}/data/players-raw.json", dp)
