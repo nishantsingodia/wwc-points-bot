@@ -506,3 +506,36 @@ def test_espn_runouts_tolerates_a_missing_fielder_block(wcmod, monkeypatch):
     assert wcmod.espn_runouts("evt") == []
     monkeypatch.setattr(wcmod, "espn_get", lambda *a, **k: {})
     assert wcmod.espn_runouts("evt") == []
+
+
+# ── 13. A partial ESPN fetch must never be scored ────────────────────────────
+def test_parse_espn_refuses_a_failed_page(wcmod, monkeypatch):
+    """espn_get returns {} on ANY failure (502, timeout, WAF). Before this guard the pagination
+    loop simply appended nothing and ended, producing a TRUNCATED innings that scored as complete.
+    Measured live: the Hundred Women's sample came back 197 balls / 221 runs / 80 dots short of
+    cricsheet — every field down ~14% — purely because one event 502'd. Wrong, silent, and it
+    looks complete. Returning an empty perf makes the caller treat ESPN as unavailable, so the
+    match retries instead of publishing."""
+    monkeypatch.setattr(wcmod, "espn_get", lambda *a, **k: {})
+    assert wcmod.parse_espn("evt") == ({}, False)
+
+
+def test_parse_espn_refuses_a_short_page_count(wcmod, monkeypatch):
+    """ESPN reports `count`; if we assembled fewer deliveries than that, pages went missing."""
+    payload = {"commentary": {"pageCount": 1, "count": 250,
+                              "items": [{"id": i} for i in range(100)]}}
+    monkeypatch.setattr(wcmod, "espn_get", lambda *a, **k: payload)
+    monkeypatch.setattr(wcmod, "espn_xi", lambda *a, **k: {})
+    monkeypatch.setattr(wcmod, "espn_runouts", lambda *a, **k: [])
+    assert wcmod.parse_espn("evt") == ({}, False)
+
+
+def test_parse_espn_accepts_a_complete_fetch(wcmod, monkeypatch):
+    """The guard must not fire on a healthy response, or every match becomes unsourced."""
+    payload = {"commentary": {"pageCount": 1, "count": 2,
+                              "items": [{"id": 1}, {"id": 2}]}}
+    monkeypatch.setattr(wcmod, "espn_get", lambda *a, **k: payload)
+    monkeypatch.setattr(wcmod, "espn_xi", lambda *a, **k: {})
+    monkeypatch.setattr(wcmod, "espn_runouts", lambda *a, **k: [])
+    perf, _ = wcmod.parse_espn("evt")
+    assert isinstance(perf, dict)          # scored, not refused

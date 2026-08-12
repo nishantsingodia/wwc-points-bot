@@ -937,19 +937,40 @@ def parse_espn(event_id, fresh=False):
     # 1538624 returned items=600 of count=605 with pageCount=2 — the last 5 balls of the innings
     # vanished, with no error. T20 fits in one page, which is why this hid. The server caps
     # pageSize at 1000, so a bigger limit is not a fix; loop the pages.
-    items, _page, _seen_pages = [], 1, set()
+    # A PARTIAL fetch must NEVER be scored. espn_get returns {} on any failure (502, timeout,
+    # WAF), so a page that fails silently contributed nothing and the loop just ended — producing
+    # a truncated innings that scores as if complete. Measured: the Hundred Women's sample came
+    # back 197 balls / 221 runs / 80 dots SHORT of cricsheet, every field down ~14%, purely
+    # because one event 502'd mid-sweep. On the feed we are about to make primary, that is the
+    # most dangerous failure mode there is — it is wrong, it is silent, and it looks complete.
+    # So: any failed page, or fewer items than ESPN's own `count`, aborts the whole match. An
+    # empty perf makes the caller treat ESPN as unavailable (the existing no-data guard skips the
+    # match and retries next run) rather than publishing a truncated scorecard.
+    items, _page, _expected = [], 1, None
     while True:
         pbp = espn_get("playbyplay", cache=not fresh, event=event_id, limit=1000, page=_page)
-        com = pbp.get("commentary", {}) or {}
+        com = (pbp.get("commentary") or {}) if isinstance(pbp, dict) else {}
+        if not pbp or "commentary" not in (pbp or {}):
+            print(f"  espn {event_id}: playbyplay page {_page} FAILED — refusing to score a "
+                  f"partial scorecard (match will retry next run)", file=sys.stderr)
+            return {}, False
         items += com.get("items", []) or []
         try:
             npages = int(com.get("pageCount") or 1)
         except (TypeError, ValueError):
             npages = 1
-        _seen_pages.add(_page)
+        if _expected is None:
+            try:
+                _expected = int(com.get("count")) if com.get("count") is not None else None
+            except (TypeError, ValueError):
+                _expected = None
         if _page >= npages or _page >= 10 or npages in (0, None):
             break
         _page += 1
+    if _expected is not None and len(items) < _expected:
+        print(f"  espn {event_id}: got {len(items)} of {_expected} deliveries — truncated, "
+              f"refusing to score (match will retry next run)", file=sys.stderr)
+        return {}, False
     # DEDUP. ESPN emits byte-identical duplicate commentary items (ev 1537345: 259 items, 255
     # unique ids). Re-counting a delivery inflated dots, balls, runs and boundaries — Kamil
     # Mishara read 49 off 22 with 7 fours against cricsheet's 44 off 19 with 6 (+9 FP, the single
