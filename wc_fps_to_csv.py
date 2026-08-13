@@ -1812,7 +1812,10 @@ def merge_espn_into(assigned, espn_assigned):
     dots+maidens rather than a measured one."""
     xcheck, unsourced = set(), set()
     for k, base in assigned.items():
-        if base and base.get("balls") and k not in espn_assigned:
+        # `_bowled`, not `balls` — see the twin guard below. A Hundred bowler arrives with
+        # balls=0 (cricapi omits `overs` on 100-ball cards), so a balls-keyed test is DEAD on
+        # exactly the format where it matters most.
+        if base and _bowled(base) and k not in espn_assigned:
             unsourced.add(k)
     for k, e in espn_assigned.items():
         base = assigned.get(k)
@@ -2820,7 +2823,14 @@ def run_tour(tour):
         elif not cs_path:
             # No ESPN scorecard at all -> nothing supplies dots/maidens. Every bowler is scored on
             # an ASSUMED zero for both; record it so the gate can refuse to call this COMPLETED.
-            emit_unsourced = {k for k, v in assigned.items() if v and v.get("balls")}
+            # `_bowled`, not `balls`. cricapi omits `overs` on 100-ball cards, so EVERY Hundred
+            # bowler arrives with balls=0 and this guard was structurally dead on exactly the
+            # format+outage combination that froze 279 settlement rows on 4-5 Aug (+617 FP against
+            # cricsheet) — a WRITE-ONCE freeze, so those baselines can never be corrected in place.
+            # `_bowled` is the predicate the SCORER itself uses, so the guard and the score can no
+            # longer disagree about whether a man bowled. Widening only: a bowler with balls>0
+            # still trips it. Safe against KeyError — every perf comes from blank_perf.
+            emit_unsourced = {k for k, v in assigned.items() if v and _bowled(v)}
 
         # The provisional cut, rebuilt with the SAME matcher emit uses (see build_provisional_cut).
         # On a cricsheet run `assigned` already holds official figures, so the baseline has to be
