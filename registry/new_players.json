@@ -511,6 +511,45 @@
       "role": "?",
       "tours": [],
       "source": "needs-cricinfo"
+    },
+    {
+      "pid": "ci:1275938",
+      "display": "Rivaldo A Clarke",
+      "aliases": [
+        "rivaldo a clarke"
+      ],
+      "team": "MTBAR",
+      "role": "BAT",
+      "tours": [
+        "Caribbean Premier League 2026"
+      ],
+      "source": "auto"
+    },
+    {
+      "pid": "ci:1209188",
+      "display": "Kevlon Alston Anderson",
+      "aliases": [
+        "kevlon alston anderson"
+      ],
+      "team": "MTBAR",
+      "role": "BAT",
+      "tours": [
+        "Caribbean Premier League 2026"
+      ],
+      "source": "auto"
+    },
+    {
+      "pid": "ci:1164537",
+      "display": "Charli Rae Knott",
+      "aliases": [
+        "charli rae knott"
+      ],
+      "team": "WTSBR",
+      "role": "BAT",
+      "tours": [
+        "The Hundred Women's Competition 2026"
+      ],
+      "source": "auto"
     }
   ]
 }
