@@ -1346,12 +1346,22 @@ def parse_espn(event_id, fresh=False):
                 get(bw)["w"] += 1
             _fla = (dis.get("fielder", {}).get("athlete") or {})
             fld, fld_id = _fla.get("fullName"), _fla.get("id", "")
+            # CARRY fld_id. It was extracted on the line above and then never read ANYWHERE —
+            # `grep fld_id` returned exactly one hit, the assignment. So a catcher/stumper was
+            # created by NAME, the one resolution route this project forbids. It is present on
+            # 603/603 caught-or-stumped dismissals in the cached corpus, and invisible for 595 of
+            # them only because the fielder also batted, bowled or sat in the XI and picked up an
+            # id there. The 8 it is NOT invisible for are SUBSTITUTE fielders — absent from
+            # rosters, never at the crease, never with the ball — and 4 of those have no pid at
+            # all, reaching the right human purely on a name-similarity score. One is decided by a
+            # 95-vs-90 margin between two Fernandos in the same Jaffna Kings squad, while ESPN was
+            # handing us 1074333 the whole time. That is the Dale-into-Glenn class, on a live tour.
             if typ == "caught and bowled" or (typ == "caught" and fld and norm(fld) == norm(bw or "")):
-                if bw: get(bw)["catches"] += 1     # caught off own bowling — credit the catch
+                if bw: get(bw, bw_id)["catches"] += 1   # caught off own bowling — credit the catch
             elif typ == "caught" and fld and norm(fld) != norm(bw or ""):
-                get(fld)["catches"] += 1
+                get(fld, fld_id)["catches"] += 1
             elif typ == "stumped" and fld:
-                get(fld)["stumpings"] += 1
+                get(fld, fld_id)["stumpings"] += 1
             # NOTE: run outs are deliberately NOT credited here. playbyplay's dismissal.fielder is
             # always empty for a run out and neither shortText nor text names the fielders, so any
             # attempt from this payload silently credits nobody. They are applied below from the
@@ -2802,8 +2812,41 @@ def run_tour(tour):
                 continue  # genuinely un-attributable — the leftover pass still emits him for review
             disp = PID2DISP.get(pid, v.get("name", "")) or v.get("name", "")
             role = guess_role(v)
+            # DEDUP ON THE EMIT KEY. emit() iterates team_players and looks up
+            # assigned[(short, name)], so a REPEATED (es, disp) tuple emits the SAME perf TWICE —
+            # once under the squad role, once under guess_role — as two rows scored DIFFERENTLY.
+            # Neither existing guard can see it: find_silent_drops builds `claimed` from
+            # resolve_pid(squad name), so a squad player whose NAME the registry cannot resolve is
+            # in neither claimed set even though her slot is about to be emitted; and the
+            # duplicate-pid detector below folds team_players names into a SET, so two identical
+            # names collapse to one before it ever looks.
+            # LIVE ON THE SHEET: ci:1229018 in "Match 1 — OIRE v OWI" scored 2 (BOWL) and -1 (AR,
+            # which takes the ODI duck the BOWL role is exempt from) — the same performance, two
+            # roles, two numbers. Five different app reductions then disagreed about which to show.
+            slot = (es, disp)
+            if any(sh == es and nm == disp for sh, nm, _ in team_players):
+                if not assigned.get(slot):
+                    assigned[slot] = v          # fill the EXISTING slot; never append a second
+                    register_new_player(pid=pid, display=disp, feed=v.get("name", ""), team=es,
+                                        role=role, tour=CURRENT_TOUR, source="auto")
+                    print(f"AUTO-ADD (filled existing slot): {disp} (pid {pid}) — the squad row "
+                          f"was unmatched; filled it instead of appending a duplicate.",
+                          file=sys.stderr)
+                else:
+                    # The slot already holds a DIFFERENT perf: two humans share this display name
+                    # in this match. Never clobber (that destroys the other performance) and never
+                    # quietly emit a second row — shout, and let a human link the identity.
+                    ANOMALIES.append({"tour": CURRENT_TOUR, "kind": "duplicate_slot", "pid": pid,
+                                      "display": disp, "context": label,
+                                      "names": [disp, v.get("name", "")],
+                                      "finding": f"a second player resolving to {pid} claims the "
+                                                 f"slot ({es}, {disp}) already held by another "
+                                                 f"perf — auto-add SKIPPED, link the identity"})
+                    print(f"!! AUTO-ADD CONFLICT: ({es}, {disp}) already holds a different perf; "
+                          f"{pid} not added — see ANOMALIES.", file=sys.stderr)
+                continue
             team_players.append((es, disp, role))
-            assigned[(es, disp)] = v
+            assigned[slot] = v
             register_new_player(pid=pid, display=disp, feed=v.get("name", ""), team=es,
                                 role=role, tour=CURRENT_TOUR, source="auto")
             print(f"AUTO-ADD: {disp} (pid {pid}) played {GSHEET_TAB} but was in no squad slot "
