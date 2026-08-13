@@ -62,3 +62,22 @@ for p in players:
         p["pid"] = pid; hit += 1
 json.dump(raw, open(DRAFT_RAW, "w"), indent=2, ensure_ascii=False)
 print(f"backfilled pid into {hit}/{len(players)} draft players -> {DRAFT_RAW}")
+
+# SYNC THE MIRROR IN THE SAME BREATH. lib/registry-players.json is what the draft's resolveEspnPid
+# reads to map an ESPN athlete -> pid. tour_sync_finalize copies it, but ONLY during tour ingest —
+# so every MANUAL `build_registry.py` run left the mirror behind while players-raw.json moved ahead.
+# That split is not cosmetic: matchPlayerInXI is pid-authoritative, so a player the mirror cannot
+# resolve is judged NOT PLAYING, BACKUP_INTELLIGENCE substitutes him out, and the frozen XI shrinks —
+# which is how a CPL contest came to show 5 players against 7 and score 286 v 645 instead of ~604
+# v 791. Backfilling the seed without the mirror is exactly half the job, so do both here.
+_mirror = os.path.join(os.path.dirname(DRAFT_RAW), "..", "lib", "registry-players.json")
+_mirror = os.path.normpath(_mirror)
+try:
+    src = os.path.join(HERE, "players.json")
+    with open(src) as _f:
+        _blob = _f.read()
+    with open(_mirror, "w") as _f:
+        _f.write(_blob)
+    print(f"synced registry mirror -> {_mirror}")
+except Exception as _e:
+    print(f"  ⚠ registry mirror NOT synced ({_e}) — the draft may judge players not-in-XI")
