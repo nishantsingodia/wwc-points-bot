@@ -2450,12 +2450,22 @@ def espn_match_list(tour, squad_team_names):
         return hits
 
     # backwards from the anchor until the competition demonstrably hasn't started
+    # Bound the scan by the tour's KNOWN span when we have one. Without this the back-scan walks up
+    # to 150 uncached days per tour at a rate limit — minutes of pure network before a single match
+    # is scored, four times over. `starts` is honoured when tours.json carries it; otherwise the
+    # empty-day stop still applies.
+    try:
+        floor_d = date.fromisoformat(tour.get("starts") or "")
+    except ValueError:
+        floor_d = None
     d = min(today, end_d)
     for _ in range(ESPN_LIST_MAX_BACK):
         empty_run = 0 if scan(d) else empty_run + 1
         if empty_run >= ESPN_LIST_BACK_STOP:
             break
         d -= timedelta(days=1)
+        if floor_d and d < floor_d:
+            break
     # and forwards for upcoming fixtures
     d = min(today, end_d) + timedelta(days=1)
     stop = min(today + timedelta(days=ESPN_LIST_FORWARD), end_d)
@@ -2513,7 +2523,24 @@ def run_tour(tour):
     # so the every-5-min ticks don't spend the cricapi daily budget.
     # On-demand fetches series_info FRESH (a human is asking mid-match — detect the just-started
     # game); the every-5-min tick still caches 2h to protect the cricapi daily budget.
-    if WC_SERIES:
+    # MATCH LIST SOURCE. cricapi is needed for the list ONLY while it is still the second witness.
+    # Once a tour names a cricbuzz_series, Cricbuzz is the witness and ESPN is the scorecard, so a
+    # cricapi key buys nothing — yet a blank/expired key still aborted the whole tour at the
+    # series_info guard below ("series_info fetch failed or empty"), taking LPL and both Hundred
+    # competitions down with it even though every match was fully available from ESPN + Cricbuzz.
+    # Prefer ESPN's list for those, and fall back to cricapi only if ESPN yields nothing.
+    _cb_witness = bool((tour.get("cricbuzz_series") or "").strip())
+    if _cb_witness and ESPN_SERIES:
+        matches = espn_match_list(tour, [v["name"] for v in squads.values()])
+        if matches:
+            print(f"  match list: {len(matches)} fixture(s) from ESPN series {ESPN_SERIES} "
+                  f"(cricbuzz is the witness — cricapi not consulted)", file=sys.stderr)
+        else:
+            print(f"  match list: ESPN series {ESPN_SERIES} returned no fixtures — "
+                  f"falling back to cricapi", file=sys.stderr)
+    else:
+        matches = []
+    if not matches and WC_SERIES:
         info = api("series_info", cache=(FREQUENT and not ON_DEMAND),
                    ttl=(7200 if FREQUENT else None), id=WC_SERIES)
         matches = info.get("data", {}).get("matchList", [])
@@ -2521,7 +2548,7 @@ def run_tour(tour):
         # (otherwise we'd clear it and write an empty table — wiping good data).
         if info.get("status") != "success" or not matches:
             sys.exit("series_info fetch failed or empty — aborting; sheet left unchanged.")
-    else:
+    elif not matches:
         # ESPN-only tour: the fixture list comes from the league scoreboard instead.
         matches = espn_match_list(tour, [v["name"] for v in squads.values()])
         # Same guard, same reason — an empty list must never be allowed to blank a written tab.

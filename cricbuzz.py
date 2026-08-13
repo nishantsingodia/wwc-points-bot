@@ -803,11 +803,18 @@ def parse_match(match_id, fresh=False):
 # silently lost their second witness — reported as "no unique cricbuzz match", which reads like
 # Cricbuzz lacking the fixture rather than a spelling difference.
 _WORD_FOLD = {"saint": "st", "and": "", "&": ""}
+# Gender qualifiers ESPN carries and Cricbuzz does not: "MI London (Men)" vs "MI London". Dropping
+# them cannot cross genders, because a Cricbuzz SERIES is already gender-specific (the Hundred is
+# 11493 men / 11504 women), so the two never share a fixture list. Without this the Hundred Men's
+# paired 0 of 31 completed matches while the Women's paired 31 of 32 — a difference caused purely
+# by which side spells the qualifier, and reported as "no unique cricbuzz match" either way.
+_GENDER_TOK = frozenset(("men", "mens", "women", "womens"))
 
 def _slug(s):
     s = unicodedata.normalize("NFKD", s or "").encode("ascii", "ignore").decode()
     s = re.sub(r"\s+", " ", re.sub(r"[^a-z0-9]+", " ", s.lower())).strip()
-    return " ".join(w for w in (_WORD_FOLD.get(t, t) for t in s.split()) if w)
+    return " ".join(w for w in (_WORD_FOLD.get(t, t) for t in s.split())
+                    if w and w not in _GENDER_TOK)
 
 
 # Words that carry no discriminating power in either our tour names or Cricbuzz's slugs.
