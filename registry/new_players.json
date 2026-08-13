@@ -309,7 +309,8 @@
       "pid": "ci:299572",
       "display": "Sikandar Raza",
       "aliases": [
-        "sikandar raza"
+        "sikandar raza",
+        "sikandar raza butt"
       ],
       "team": "DS",
       "role": "AR",
@@ -492,7 +493,8 @@
       "pid": "ci:1430324",
       "display": "J Moores",
       "aliases": [
-        "j moores"
+        "j moores",
+        "joseph henry alan moores"
       ],
       "team": "",
       "role": "?",
@@ -548,6 +550,97 @@
       "role": "BAT",
       "tours": [
         "The Hundred Women's Competition 2026"
+      ],
+      "source": "auto"
+    },
+    {
+      "pid": "ci:512907",
+      "display": "Thomas George Helm",
+      "aliases": [
+        "thomas george helm"
+      ],
+      "team": "MTBPH",
+      "role": "AR",
+      "tours": [
+        "The Hundred Men's Competition 2026"
+      ],
+      "source": "auto"
+    },
+    {
+      "pid": "ci:297482",
+      "display": "Ben William Sanderson",
+      "aliases": [
+        "ben william sanderson"
+      ],
+      "team": "MTTRR",
+      "role": "BOWL",
+      "tours": [
+        "The Hundred Men's Competition 2026"
+      ],
+      "source": "auto"
+    },
+    {
+      "pid": "ci:326968",
+      "display": "Michael Bracewell",
+      "aliases": [
+        "michael gordon bracewell"
+      ],
+      "team": "MTMSG",
+      "role": "AR",
+      "tours": [
+        "The Hundred Men's Competition 2026"
+      ],
+      "source": "auto"
+    },
+    {
+      "pid": "ci:301648",
+      "display": "Jordan Clark",
+      "aliases": [
+        "jordan clark"
+      ],
+      "team": "MTWLF",
+      "role": "BOWL",
+      "tours": [
+        "The Hundred Men's Competition 2026"
+      ],
+      "source": "auto"
+    },
+    {
+      "pid": "ci:748793",
+      "display": "Joe James Weatherley",
+      "aliases": [
+        "joe james weatherley"
+      ],
+      "team": "MTBPH",
+      "role": "BAT",
+      "tours": [
+        "The Hundred Men's Competition 2026"
+      ],
+      "source": "auto"
+    },
+    {
+      "pid": "ci:1143809",
+      "display": "Henry Thomas Crocombe",
+      "aliases": [
+        "henry thomas crocombe"
+      ],
+      "team": "MTLSP",
+      "role": "BOWL",
+      "tours": [
+        "The Hundred Men's Competition 2026"
+      ],
+      "source": "auto"
+    },
+    {
+      "pid": "ci:1488180",
+      "display": "Manny Lumsden",
+      "aliases": [
+        "manny lumsden"
+      ],
+      "team": "MTSBR",
+      "role": "BOWL",
+      "tours": [
+        "The Hundred Men's Competition 2026"
       ],
       "source": "auto"
     }
