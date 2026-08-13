@@ -944,19 +944,26 @@ def apply_to_repos(tours):
             es.setdefault(gkey, [])
             if espn_id not in es[gkey]:
                 es[gkey].append(espn_id)
-        # Only register a points tab the bot will actually WRITE. A tour with no cricapi_series
-        # is skipped by wc_fps_to_csv.main(), so its tab never gets created — and gviz answers an
-        # unknown sheet name with HTTP 200 carrying the FIRST SHEET of the spreadsheet (verified:
-        # ?sheet=ZZZ_BOGUS returns byte-identical bytes to ?sheet=CPL...POINTS). The draft then
-        # merges that unrelated board into its points pool on every request. The espn_series twin
-        # three lines above was already guarded; this one was not.
-        if sheet_id and (t["tours_entry"].get("cricapi_series") or "").strip():
+        # Only register a points tab the bot will actually WRITE. Registering one it won't is not
+        # merely useless: gviz answers an UNKNOWN sheet name with HTTP 200 carrying the FIRST SHEET
+        # of the spreadsheet (verified — ?sheet=ZZZ_BOGUS returned byte-identical bytes to
+        # ?sheet=CPL...POINTS), so the draft merges an unrelated board into its points pool on
+        # every request. It once served a WWC auction-budget board as CPL points.
+        #
+        # ⚠ The CONDITION here was "has a cricapi_series", which was correct only while a tour
+        # without one went unscored. Since 13 Aug 2026 an ESPN-only tour IS scored
+        # (espn_match_list + the TOUR CONTROL gate skip), so that test would have permanently
+        # withheld CPL's tab: the bot would compute and publish every CPL point and the draft would
+        # never read one of them. The real question is "will the bot write this tab", and the bot
+        # writes a tab for any tour it can source a scorecard for — cricapi OR ESPN.
+        if sheet_id and ((t["tours_entry"].get("cricapi_series") or "").strip()
+                         or (t["tours_entry"].get("espn_series") or "").strip()):
             tab = urllib.parse.quote(t["tours_entry"]["tab"])
             pt.append(f"https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={tab}&headers=1")
         elif sheet_id:
-            print(f"  points tab NOT registered for {t['tour_name']}: no cricapi_series, so the "
-                  f"bot will never write it (an unknown gviz tab silently returns another sheet)",
-                  file=sys.stderr)
+            print(f"  points tab NOT registered for {t['tour_name']}: neither a cricapi_series nor "
+                  f"an espn_series, so the bot can source no scorecard and will never write the tab "
+                  f"(an unknown gviz tab silently returns another sheet)", file=sys.stderr)
         applied.append(t["tour_name"])
     _dump(f"{DRAFT}/data/matches.json", dm)
     _dump(f"{DRAFT}/data/players-raw.json", dp)
