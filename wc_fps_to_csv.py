@@ -2392,6 +2392,10 @@ def cb_match_perf(mdate, teams, espn_perf, fresh=False):
 # reads the same keys. The one deliberate omission is `id` — the CRICAPI match id — which we do not
 # have and must not invent; the scoring loop already guards `if m.get("id")` and falls through to
 # the ESPN scorecard, which is exactly the intended single-source behaviour.
+# Our format code -> the matchType token is_fmt matches on. They are NOT the same vocabulary:
+# is_fmt looks for "t20"/"hundred"/"odi" substrings, so "HUN" would match nothing.
+_FMT_MATCHTYPE = {"HUN": "hundred", "T20": "t20", "ODI": "odi", "TEST": "test"}
+
 ESPN_LIST_BACK_STOP = 8      # consecutive empty days that end the backward scan
 ESPN_LIST_MAX_BACK  = 150    # hard cap on how far back we look
 ESPN_LIST_FORWARD   = 14     # days ahead to list upcoming fixtures (for the announced-XI pass)
@@ -2415,8 +2419,14 @@ def _espn_event_to_match(e):
         # word in it. Result: not one Women's match was admitted — 0 of 34 "completed" — while the
         # Men's ran fine. Falling back to the TOUR'S OWN declared format is not a guess: tours.json
         # says what this competition is, and every event inside that series is that format.
+        # ⚠ Emit the token is_fmt actually SPEAKS. CURRENT_FMT for the Hundred is "HUN", and
+        # is_fmt tests for "t20" or "hundred" — neither is a substring of "hun", so a raw
+        # lowercase of the format silently rejected EVERY match: the Women's series reported
+        # "0/34 completed" and wrote an empty tab, while the Men's survived only because ESPN
+        # happens to set eventType="T20" there. _FMT_MATCHTYPE keeps the two vocabularies aligned.
         "matchType": (((comp.get("class") or {}).get("eventType") or "").lower()
-                      or (CURRENT_FMT or "").lower()),
+                      or _FMT_MATCHTYPE.get((CURRENT_FMT or "").upper(),
+                                            (CURRENT_FMT or "").lower())),
         "teams": teams,
         "date": dt[:10],
         "dateTimeGMT": dt,
