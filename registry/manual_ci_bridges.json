@@ -1,792 +1,821 @@
 {
- "ci:1427057": {
-  "cricinfo_id": "1427057",
-  "names": [
-   "tilly corteen coleman"
-  ]
- },
- "ci:631609": {
-  "cricinfo_id": "631609",
-  "names": [
-   "sugandika dasanayaka",
-   "bmsm kumari",
-   "dasanayaka mudiyanselage sugandika manel kumari",
-   "sugandika kumari"
-  ]
- },
- "ci:535868": {
-  "cricinfo_id": "535868",
-  "names": [
-   "sharmin akter supta",
-   "sharmin akhter",
-   "sharmin akhter supta"
-  ]
- },
- "ci:1205142": {
-  "cricinfo_id": "1205142",
-  "names": [
-   "shanjida akther maghla",
-   "sanjida akter meghla",
-   "shanjida akter meghla"
-  ]
- },
- "ci:1403162": {
-  "cricinfo_id": "1403162",
-  "names": [
-   "agni chopra"
-  ]
- },
- "ci:1441622": {
-  "cricinfo_id": "1441622",
-  "names": [
-   "joshua tromp"
-  ]
- },
- "ci:1441681": {
-  "cricinfo_id": "1441681",
-  "names": [
-   "ayan desai"
-  ]
- },
- "ci:1332610": {
-  "cricinfo_id": "1332610",
-  "names": [
-   "olivia bell"
-  ]
- },
- "ci:348129": {
-  "cricinfo_id": "348129",
-  "names": [
-   "nitish kumar"
-  ]
- },
- "ci:1195662": {
-  "cricinfo_id": "1195662",
-  "names": [
-   "gavin hoey"
-  ]
- },
- "ci:1231590": {
-  "cricinfo_id": "1231590",
-  "names": [
-   "james coles"
-  ]
- },
- "ci:1462402": {
-  "cricinfo_id": "1462402",
-  "names": [
-   "kugathas mathulan"
-  ]
- },
- "ci:1439495": {
-  "cricinfo_id": "1439495",
-  "names": [
-   "praveen manisha"
-  ]
- },
- "ci:1437704": {
-  "cricinfo_id": "1437704",
-  "names": [
-   "uri koththigoda"
-  ]
- },
- "ci:298438": {
-  "cricinfo_id": "298438",
-  "names": [
-   "jason roy"
-  ]
- },
- "ci:550235": {
-  "cricinfo_id": "550235",
-  "names": [
-   "tom curran"
-  ]
- },
- "ci:887207": {
-  "cricinfo_id": "887207",
-  "names": [
-   "ollie pope"
-  ]
- },
- "ci:789729": {
-  "cricinfo_id": "789729",
-  "names": [
-   "callum parkinson"
-  ]
- },
- "ci:1396331": {
-  "cricinfo_id": "1396331",
-  "names": [
-   "ollie sykes"
-  ]
- },
- "ci:578769": {
-  "cricinfo_id": "578769",
-  "names": [
-   "ed barnard"
-  ]
- },
- "ci:211748": {
-  "cricinfo_id": "211748",
-  "names": [
-   "benny howell"
-  ]
- },
- "ci:1027781": {
-  "cricinfo_id": "1027781",
-  "names": [
-   "matthew potts"
-  ]
- },
- "ci:1023361": {
-  "cricinfo_id": "1023361",
-  "names": [
-   "liam patterson white"
-  ]
- },
- "ci:1264775": {
-  "cricinfo_id": "1264775",
-  "names": [
-   "tom lawes"
-  ]
- },
- "ci:1096092": {
-  "cricinfo_id": "1096092",
-  "names": [
-   "jamie smith"
-  ]
- },
- "ci:595978": {
-  "cricinfo_id": "595978",
-  "names": [
-   "tristan stubbs"
-  ]
- },
- "ci:321777": {
-  "cricinfo_id": "321777",
-  "names": [
-   "david miller"
-  ]
- },
- "ci:1379431": {
-  "cricinfo_id": "1379431",
-  "names": [
-   "thomas rew"
-  ]
- },
- "ci:1434859": {
-  "cricinfo_id": "1434859",
-  "names": [
-   "caleb falconer"
-  ]
- },
- "ci:303669": {
-  "cricinfo_id": "303669",
-  "names": [
-   "joe root"
-  ]
- },
- "ci:470633": {
-  "cricinfo_id": "470633",
-  "names": [
-   "tom kohler cadmore"
-  ]
- },
- "ci:1200126": {
-  "cricinfo_id": "1200126",
-  "names": [
-   "ben kellaway"
-  ]
- },
- "ci:772061": {
-  "cricinfo_id": "772061",
-  "names": [
-   "sam cook"
-  ]
- },
- "ci:1152986": {
-  "cricinfo_id": "1152986",
-  "names": [
-   "jafer chohan"
-  ]
- },
- "ci:1195664": {
-  "cricinfo_id": "1195664",
-  "names": [
-   "asa tribe"
-  ]
- },
- "ci:510530": {
-  "cricinfo_id": "510530",
-  "names": [
-   "jamie overton"
-  ]
- },
- "ci:459257": {
-  "cricinfo_id": "459257",
-  "names": [
-   "tymal mills"
-  ]
- },
- "ci:1184436": {
-  "cricinfo_id": "1184436",
-  "names": [
-   "james rew"
-  ]
- },
- "ci:595739": {
-  "cricinfo_id": "595739",
-  "names": [
-   "leus du plooy"
-  ]
- },
- "ci:1126982": {
-  "cricinfo_id": "1126982",
-  "names": [
-   "gus atkinson"
-  ]
- },
- "ci:1150772": {
-  "cricinfo_id": "1150772",
-  "names": [
-   "tom hartley"
-  ]
- },
- "ci:788101": {
-  "cricinfo_id": "788101",
-  "names": [
-   "tom moores"
-  ]
- },
- "ci:571911": {
-  "cricinfo_id": "571911",
-  "names": [
-   "joe clarke"
-  ]
- },
- "ci:256956": {
-  "cricinfo_id": "256956",
-  "names": [
-   "laurie evans"
-  ]
- },
- "ci:1104697": {
-  "cricinfo_id": "1104697",
-  "names": [
-   "scott currie"
-  ]
- },
- "ci:766809": {
-  "cricinfo_id": "766809",
-  "names": [
-   "jordan thompson"
-  ]
- },
- "ci:310525": {
-  "cricinfo_id": "310525",
-  "names": [
-   "chris wood"
-  ]
- },
- "ci:1150964": {
-  "cricinfo_id": "1150964",
-  "names": [
-   "ethan brookes"
-  ]
- },
- "ci:464626": {
-  "cricinfo_id": "464626",
-  "names": [
-   "craig overton"
-  ]
- },
- "ci:506612": {
-  "cricinfo_id": "506612",
-  "names": [
-   "matt henry"
-  ]
- },
- "ci:290948": {
-  "cricinfo_id": "290948",
-  "names": [
-   "mohammad amir"
-  ]
- },
- "ci:562281": {
-  "cricinfo_id": "562281",
-  "names": [
-   "aneurin donald"
-  ]
- },
- "ci:1000791": {
-  "cricinfo_id": "1000791",
-  "names": [
-   "brad currie"
-  ]
- },
- "ci:1185628": {
-  "cricinfo_id": "1185628",
-  "names": [
-   "kalea moore"
-  ]
- },
- "ci:1374645": {
-  "cricinfo_id": "1374645",
-  "names": [
-   "katie jones"
-  ]
- },
- "ci:1370329": {
-  "cricinfo_id": "1370329",
-  "names": [
-   "claudie cooper"
-  ]
- },
- "ci:483484": {
-  "cricinfo_id": "483484",
-  "names": [
-   "lizelle lee"
-  ]
- },
- "ci:1185631": {
-  "cricinfo_id": "1185631",
-  "names": [
-   "ellie anderson"
-  ]
- },
- "ci:546629": {
-  "cricinfo_id": "546629",
-  "names": [
-   "heather graham"
-  ]
- },
- "ci:580662": {
-  "cricinfo_id": "580662",
-  "names": [
-   "fi morris"
-  ]
- },
- "ci:1469034": {
-  "cricinfo_id": "1469034",
-  "names": [
-   "grace thompson"
-  ]
- },
- "ci:885781": {
-  "cricinfo_id": "885781",
-  "names": [
-   "georgia davis"
-  ]
- },
- "ci:652939": {
-  "cricinfo_id": "652939",
-  "names": [
-   "marie kelly"
-  ]
- },
- "ci:879369": {
-  "cricinfo_id": "879369",
-  "names": [
-   "katie george"
-  ]
- },
- "ci:1277198": {
-  "cricinfo_id": "1277198",
-  "names": [
-   "seren smale"
-  ]
- },
- "ci:1486611": {
-  "cricinfo_id": "1486611",
-  "names": [
-   "liv barnes"
-  ]
- },
- "ci:1469035": {
-  "cricinfo_id": "1469035",
-  "names": [
-   "trudy johnson"
-  ]
- },
- "ci:1061621": {
-  "cricinfo_id": "1061621",
-  "names": [
-   "maitlan brown"
-  ]
- },
- "ci:1184028": {
-  "cricinfo_id": "1184028",
-  "names": [
-   "mia rogers"
-  ]
- },
- "ci:749957": {
-  "cricinfo_id": "749957",
-  "names": [
-   "emma lamb"
-  ]
- },
- "ci:1184985": {
-  "cricinfo_id": "1184985",
-  "names": [
-   "meg austin"
-  ]
- },
- "ci:1008089": {
-  "cricinfo_id": "1008089",
-  "names": [
-   "eva gray"
-  ]
- },
- "ci:1335840": {
-  "cricinfo_id": "1335840",
-  "names": [
-   "mary taylor"
-  ]
- },
- "ci:858807": {
-  "cricinfo_id": "858807",
-  "names": [
-   "eve jones"
-  ]
- },
- "ci:1486314": {
-  "cricinfo_id": "1486314",
-  "names": [
-   "millicent taylor"
-  ]
- },
- "ci:1482630": {
-  "cricinfo_id": "1482630",
-  "names": [
-   "charley phillips"
-  ]
- },
- "ci:465327": {
-  "cricinfo_id": "465327",
-  "names": [
-   "innocent kaia"
-  ]
- },
- "ci:571703": {
-  "cricinfo_id": "571703",
-  "names": [
-   "wellington masakadza"
-  ]
- },
- "ci:1161024": {
-  "cricinfo_id": "1161024",
-  "names": [
-   "prabhsimran singh"
-  ]
- },
- "ci:877447": {
-  "cricinfo_id": "877447",
-  "names": [
-   "jo gardner"
-  ]
- },
- "ci:793463": {
-  "cricinfo_id": "793463",
-  "names": [
-   "rashid khan"
-  ]
- },
- "ci:712219": {
-  "cricinfo_id": "712219",
-  "names": [
-   "zahir khan"
-  ]
- },
- "ci:537440": {
-  "cricinfo_id": "537440",
-  "names": [
-   "samantha bates"
-  ]
- },
- "ci:1070229": {
-  "cricinfo_id": "1070229",
-  "names": [
-   "milan ratnayake",
-   "rmmp rathnayake"
-  ]
- },
- "ci:950405": {
-  "cricinfo_id": "950405",
-  "names": [
-   "kth ratnayake",
-   "tharindu rathnayake"
-  ]
- },
- "ci:784379": {
-  "cricinfo_id": "784379",
-  "names": [
-   "pwh de silva"
-  ]
- },
- "ci:1282477": {
-  "cricinfo_id": "1282477",
-  "names": [
-   "t mathew"
-  ]
- },
- "ci:902447": {
-  "cricinfo_id": "902447",
-  "names": [
-   "dale nathan phillips",
-   "dale phillips",
-   "dn phillips"
-  ]
- },
- "ci:737833": {
-  "cricinfo_id": "737833",
-  "names": [
-   "ks carlson"
-  ]
- },
- "ci:859899": {
-  "cricinfo_id": "859899",
-  "names": [
-   "calvin harrison",
-   "cg harrison"
-  ]
- },
- "ci:688141": {
-  "cricinfo_id": "688141",
-  "names": [
-   "sean dickson",
-   "sr dickson"
-  ]
- },
- "ci:1150021": {
-  "cricinfo_id": "1150021",
-  "names": [
-   "matthew revis",
-   "ml revis"
-  ]
- },
- "ci:459508": {
-  "cricinfo_id": "459508",
-  "names": [
-   "aj tye",
-   "andrew tye"
-  ]
- },
- "ci:663613": {
-  "cricinfo_id": "663613",
-  "names": [
-   "sa zaib",
-   "saif zaib"
-  ]
- },
- "ci:958691": {
-  "cricinfo_id": "958691",
-  "names": [
-   "kna bandara"
-  ]
- },
- "ci:801817": {
-  "cricinfo_id": "801817",
-  "names": [
-   "katupulle gedara mohamed shiraz sahab",
-   "m shiraz"
-  ]
- },
- "ci:1229018": {
-  "cricinfo_id": "1229018",
-  "names": [
-   "jane maguire"
-  ]
- },
- "ci:670013": {
-  "cricinfo_id": "670013",
-  "names": [
-   "fabian allen"
-  ]
- },
- "ci:696471": {
-  "cricinfo_id": "696471",
-  "names": [
-   "dian forrester"
-  ]
- },
- "ci:1539667": {
-  "cricinfo_id": "1539667",
-  "names": [
-   "anirudh immanuel"
-  ]
- },
- "ci:56143": {
-  "cricinfo_id": "56143",
-  "names": [
-   "shakib al hasan"
-  ]
- },
- "ci:1076721": {
-  "cricinfo_id": "1076721",
-  "names": [
-   "l pope"
-  ]
- },
- "ci:474782": {
-  "cricinfo_id": "474782",
-  "names": [
-   "aakarshit gomel"
-  ]
- },
- "ci:547092": {
-  "cricinfo_id": "547092",
-  "names": [
-   "ehsan adil"
-  ]
- },
- "ci:581160": {
-  "cricinfo_id": "581160",
-  "names": [
-   "khary pierre"
-  ]
- },
- "ci:1364327": {
-  "cricinfo_id": "1364327",
-  "names": [
-   "vishwa lahiru"
-  ]
- },
- "ci:1153148": {
-  "cricinfo_id": "1153148",
-  "names": [
-   "sonal dinusha"
-  ]
- },
- "ci:1137283": {
-  "cricinfo_id": "1137283",
-  "names": [
-   "tf rogers",
-   "thomas fraser rogers"
-  ]
- },
- "ci:1276980": {
-  "cricinfo_id": "1276980",
-  "names": [
-   "r mondol",
-   "ripon mondol"
-  ]
- },
- "ci:1329699": {
-  "cricinfo_id": "1329699",
-  "names": [
-   "khawaja nafay"
-  ]
- },
- "ci:1430324": {
-  "cricinfo_id": "1430324",
-  "names": [
-   "j moores"
-  ]
- },
- "ci:639080": {
-  "cricinfo_id": "639080",
-  "names": [
-   "md fisher"
-  ]
- },
- "ci:253802": {
-  "cricinfo_id": "253802",
-  "names": [
-   "v kohli",
-   "virat kohli"
-  ]
- },
- "ci:34102": {
-  "cricinfo_id": "34102",
-  "names": [
-   "rg sharma",
-   "rohit sharma"
-  ]
- },
- "ci:1070173": {
-  "cricinfo_id": "1070173",
-  "names": [
-   "shubman gill"
-  ]
- },
- "ci:422108": {
-  "cricinfo_id": "422108",
-  "names": [
-   "kl rahul"
-  ]
- },
- "ci:559235": {
-  "cricinfo_id": "559235",
-  "names": [
-   "kuldeep yadav"
-  ]
- },
- "ci:625383": {
-  "cricinfo_id": "625383",
-  "names": [
-   "jasprit bumrah",
-   "jj bumrah"
-  ]
- },
- "ci:1287033": {
-  "cricinfo_id": "1287033",
-  "names": [
-   "gurnoor brar"
-  ]
- },
- "ci:1275938": {
-  "cricinfo_id": "1275938",
-  "names": [
-   "rivaldo a clarke"
-  ]
- },
- "ci:1209188": {
-  "cricinfo_id": "1209188",
-  "names": [
-   "kevlon alston anderson"
-  ]
- },
- "ci:512907": {
-  "cricinfo_id": "512907",
-  "names": [
-   "thomas george helm"
-  ]
- },
- "ci:297482": {
-  "cricinfo_id": "297482",
-  "names": [
-   "ben william sanderson"
-  ]
- },
- "ci:301648": {
-  "cricinfo_id": "301648",
-  "names": [
-   "jordan clark"
-  ]
- },
- "ci:748793": {
-  "cricinfo_id": "748793",
-  "names": [
-   "joe james weatherley"
-  ]
- },
- "ci:1143809": {
-  "cricinfo_id": "1143809",
-  "names": [
-   "henry thomas crocombe"
-  ]
- },
- "ci:1488180": {
-  "cricinfo_id": "1488180",
-  "names": [
-   "manny lumsden"
-  ]
- },
- "ci:1164537": {
-  "cricinfo_id": "1164537",
-  "names": [
-   "charli rae knott"
-  ]
- }
+  "ci:1000791": {
+    "cricinfo_id": "1000791",
+    "names": [
+      "brad currie"
+    ]
+  },
+  "ci:1008089": {
+    "cricinfo_id": "1008089",
+    "names": [
+      "eva gray"
+    ]
+  },
+  "ci:1023361": {
+    "cricinfo_id": "1023361",
+    "names": [
+      "liam patterson white"
+    ]
+  },
+  "ci:1027781": {
+    "cricinfo_id": "1027781",
+    "names": [
+      "matthew potts"
+    ]
+  },
+  "ci:1061621": {
+    "cricinfo_id": "1061621",
+    "names": [
+      "maitlan brown"
+    ]
+  },
+  "ci:1070173": {
+    "cricinfo_id": "1070173",
+    "names": [
+      "shubman gill"
+    ]
+  },
+  "ci:1070229": {
+    "cricinfo_id": "1070229",
+    "names": [
+      "milan ratnayake",
+      "rmmp rathnayake"
+    ]
+  },
+  "ci:1076721": {
+    "cricinfo_id": "1076721",
+    "names": [
+      "l pope"
+    ]
+  },
+  "ci:1096092": {
+    "cricinfo_id": "1096092",
+    "names": [
+      "jamie smith"
+    ]
+  },
+  "ci:1104697": {
+    "cricinfo_id": "1104697",
+    "names": [
+      "scott currie"
+    ]
+  },
+  "ci:1108828": {
+    "cricinfo_id": "1108828",
+    "names": [
+      "darren nedd"
+    ],
+    "source": "ESPN athlete.id from a CPL match this player appeared in; the scorer had already bound this ESPN row to this squad slot and was scoring him from it, so recording the id encodes an identity we had already acted on rather than a new guess"
+  },
+  "ci:1126982": {
+    "cricinfo_id": "1126982",
+    "names": [
+      "gus atkinson"
+    ]
+  },
+  "ci:1137283": {
+    "cricinfo_id": "1137283",
+    "names": [
+      "tf rogers",
+      "thomas fraser rogers"
+    ]
+  },
+  "ci:1143809": {
+    "cricinfo_id": "1143809",
+    "names": [
+      "henry thomas crocombe"
+    ]
+  },
+  "ci:1150021": {
+    "cricinfo_id": "1150021",
+    "names": [
+      "matthew revis",
+      "ml revis"
+    ]
+  },
+  "ci:1150772": {
+    "cricinfo_id": "1150772",
+    "names": [
+      "tom hartley"
+    ]
+  },
+  "ci:1150964": {
+    "cricinfo_id": "1150964",
+    "names": [
+      "ethan brookes"
+    ]
+  },
+  "ci:1152986": {
+    "cricinfo_id": "1152986",
+    "names": [
+      "jafer chohan"
+    ]
+  },
+  "ci:1153148": {
+    "cricinfo_id": "1153148",
+    "names": [
+      "sonal dinusha"
+    ]
+  },
+  "ci:1161024": {
+    "cricinfo_id": "1161024",
+    "names": [
+      "prabhsimran singh"
+    ]
+  },
+  "ci:1164537": {
+    "cricinfo_id": "1164537",
+    "names": [
+      "charli rae knott"
+    ]
+  },
+  "ci:1184028": {
+    "cricinfo_id": "1184028",
+    "names": [
+      "mia rogers"
+    ]
+  },
+  "ci:1184436": {
+    "cricinfo_id": "1184436",
+    "names": [
+      "james rew"
+    ]
+  },
+  "ci:1184985": {
+    "cricinfo_id": "1184985",
+    "names": [
+      "meg austin"
+    ]
+  },
+  "ci:1185628": {
+    "cricinfo_id": "1185628",
+    "names": [
+      "kalea moore"
+    ]
+  },
+  "ci:1185631": {
+    "cricinfo_id": "1185631",
+    "names": [
+      "ellie anderson"
+    ]
+  },
+  "ci:1195662": {
+    "cricinfo_id": "1195662",
+    "names": [
+      "gavin hoey"
+    ]
+  },
+  "ci:1195664": {
+    "cricinfo_id": "1195664",
+    "names": [
+      "asa tribe"
+    ]
+  },
+  "ci:1199306": {
+    "cricinfo_id": "1199306",
+    "names": [
+      "dexter sween"
+    ],
+    "source": "ESPN athlete.id from a CPL match this player appeared in; the scorer had already bound this ESPN row to this squad slot and was scoring him from it, so recording the id encodes an identity we had already acted on rather than a new guess"
+  },
+  "ci:1200126": {
+    "cricinfo_id": "1200126",
+    "names": [
+      "ben kellaway"
+    ]
+  },
+  "ci:1205142": {
+    "cricinfo_id": "1205142",
+    "names": [
+      "shanjida akther maghla",
+      "sanjida akter meghla",
+      "shanjida akter meghla"
+    ]
+  },
+  "ci:1209188": {
+    "cricinfo_id": "1209188",
+    "names": [
+      "kevlon alston anderson"
+    ]
+  },
+  "ci:1229018": {
+    "cricinfo_id": "1229018",
+    "names": [
+      "jane maguire"
+    ]
+  },
+  "ci:1231590": {
+    "cricinfo_id": "1231590",
+    "names": [
+      "james coles"
+    ]
+  },
+  "ci:1264775": {
+    "cricinfo_id": "1264775",
+    "names": [
+      "tom lawes"
+    ]
+  },
+  "ci:1275938": {
+    "cricinfo_id": "1275938",
+    "names": [
+      "rivaldo a clarke"
+    ]
+  },
+  "ci:1276980": {
+    "cricinfo_id": "1276980",
+    "names": [
+      "r mondol",
+      "ripon mondol"
+    ]
+  },
+  "ci:1277198": {
+    "cricinfo_id": "1277198",
+    "names": [
+      "seren smale"
+    ]
+  },
+  "ci:1282477": {
+    "cricinfo_id": "1282477",
+    "names": [
+      "t mathew"
+    ]
+  },
+  "ci:1287033": {
+    "cricinfo_id": "1287033",
+    "names": [
+      "gurnoor brar"
+    ]
+  },
+  "ci:1329699": {
+    "cricinfo_id": "1329699",
+    "names": [
+      "khawaja nafay"
+    ]
+  },
+  "ci:1332610": {
+    "cricinfo_id": "1332610",
+    "names": [
+      "olivia bell"
+    ]
+  },
+  "ci:1335840": {
+    "cricinfo_id": "1335840",
+    "names": [
+      "mary taylor"
+    ]
+  },
+  "ci:1364327": {
+    "cricinfo_id": "1364327",
+    "names": [
+      "vishwa lahiru"
+    ]
+  },
+  "ci:1370329": {
+    "cricinfo_id": "1370329",
+    "names": [
+      "claudie cooper"
+    ]
+  },
+  "ci:1374645": {
+    "cricinfo_id": "1374645",
+    "names": [
+      "katie jones"
+    ]
+  },
+  "ci:1379431": {
+    "cricinfo_id": "1379431",
+    "names": [
+      "thomas rew"
+    ]
+  },
+  "ci:1396331": {
+    "cricinfo_id": "1396331",
+    "names": [
+      "ollie sykes"
+    ]
+  },
+  "ci:1403162": {
+    "cricinfo_id": "1403162",
+    "names": [
+      "agni chopra"
+    ]
+  },
+  "ci:1427057": {
+    "cricinfo_id": "1427057",
+    "names": [
+      "tilly corteen coleman"
+    ]
+  },
+  "ci:1430324": {
+    "cricinfo_id": "1430324",
+    "names": [
+      "j moores"
+    ]
+  },
+  "ci:1434859": {
+    "cricinfo_id": "1434859",
+    "names": [
+      "caleb falconer"
+    ]
+  },
+  "ci:1437704": {
+    "cricinfo_id": "1437704",
+    "names": [
+      "uri koththigoda"
+    ]
+  },
+  "ci:1439495": {
+    "cricinfo_id": "1439495",
+    "names": [
+      "praveen manisha"
+    ]
+  },
+  "ci:1441622": {
+    "cricinfo_id": "1441622",
+    "names": [
+      "joshua tromp"
+    ]
+  },
+  "ci:1441681": {
+    "cricinfo_id": "1441681",
+    "names": [
+      "ayan desai"
+    ]
+  },
+  "ci:1462402": {
+    "cricinfo_id": "1462402",
+    "names": [
+      "kugathas mathulan"
+    ]
+  },
+  "ci:1469034": {
+    "cricinfo_id": "1469034",
+    "names": [
+      "grace thompson"
+    ]
+  },
+  "ci:1469035": {
+    "cricinfo_id": "1469035",
+    "names": [
+      "trudy johnson"
+    ]
+  },
+  "ci:1482630": {
+    "cricinfo_id": "1482630",
+    "names": [
+      "charley phillips"
+    ]
+  },
+  "ci:1486314": {
+    "cricinfo_id": "1486314",
+    "names": [
+      "millicent taylor"
+    ]
+  },
+  "ci:1486611": {
+    "cricinfo_id": "1486611",
+    "names": [
+      "liv barnes"
+    ]
+  },
+  "ci:1488180": {
+    "cricinfo_id": "1488180",
+    "names": [
+      "manny lumsden"
+    ]
+  },
+  "ci:1500753": {
+    "cricinfo_id": "1500753",
+    "names": [
+      "zachary carter",
+      "zachary nathan carter"
+    ],
+    "source": "ESPN athlete.id from a CPL match this player appeared in; the scorer had already bound this ESPN row to this squad slot and was scoring him from it, so recording the id encodes an identity we had already acted on rather than a new guess"
+  },
+  "ci:1539667": {
+    "cricinfo_id": "1539667",
+    "names": [
+      "anirudh immanuel"
+    ]
+  },
+  "ci:211748": {
+    "cricinfo_id": "211748",
+    "names": [
+      "benny howell"
+    ]
+  },
+  "ci:253802": {
+    "cricinfo_id": "253802",
+    "names": [
+      "v kohli",
+      "virat kohli"
+    ]
+  },
+  "ci:256956": {
+    "cricinfo_id": "256956",
+    "names": [
+      "laurie evans"
+    ]
+  },
+  "ci:290948": {
+    "cricinfo_id": "290948",
+    "names": [
+      "mohammad amir"
+    ]
+  },
+  "ci:297482": {
+    "cricinfo_id": "297482",
+    "names": [
+      "ben william sanderson"
+    ]
+  },
+  "ci:298438": {
+    "cricinfo_id": "298438",
+    "names": [
+      "jason roy"
+    ]
+  },
+  "ci:301648": {
+    "cricinfo_id": "301648",
+    "names": [
+      "jordan clark"
+    ]
+  },
+  "ci:303669": {
+    "cricinfo_id": "303669",
+    "names": [
+      "joe root"
+    ]
+  },
+  "ci:310525": {
+    "cricinfo_id": "310525",
+    "names": [
+      "chris wood"
+    ]
+  },
+  "ci:321777": {
+    "cricinfo_id": "321777",
+    "names": [
+      "david miller"
+    ]
+  },
+  "ci:34102": {
+    "cricinfo_id": "34102",
+    "names": [
+      "rg sharma",
+      "rohit sharma"
+    ]
+  },
+  "ci:348129": {
+    "cricinfo_id": "348129",
+    "names": [
+      "nitish kumar"
+    ]
+  },
+  "ci:422108": {
+    "cricinfo_id": "422108",
+    "names": [
+      "kl rahul"
+    ]
+  },
+  "ci:459257": {
+    "cricinfo_id": "459257",
+    "names": [
+      "tymal mills"
+    ]
+  },
+  "ci:459508": {
+    "cricinfo_id": "459508",
+    "names": [
+      "aj tye",
+      "andrew tye"
+    ]
+  },
+  "ci:464626": {
+    "cricinfo_id": "464626",
+    "names": [
+      "craig overton"
+    ]
+  },
+  "ci:465327": {
+    "cricinfo_id": "465327",
+    "names": [
+      "innocent kaia"
+    ]
+  },
+  "ci:470633": {
+    "cricinfo_id": "470633",
+    "names": [
+      "tom kohler cadmore"
+    ]
+  },
+  "ci:474782": {
+    "cricinfo_id": "474782",
+    "names": [
+      "aakarshit gomel"
+    ]
+  },
+  "ci:483484": {
+    "cricinfo_id": "483484",
+    "names": [
+      "lizelle lee"
+    ]
+  },
+  "ci:506612": {
+    "cricinfo_id": "506612",
+    "names": [
+      "matt henry"
+    ]
+  },
+  "ci:510530": {
+    "cricinfo_id": "510530",
+    "names": [
+      "jamie overton"
+    ]
+  },
+  "ci:512907": {
+    "cricinfo_id": "512907",
+    "names": [
+      "thomas george helm"
+    ]
+  },
+  "ci:535868": {
+    "cricinfo_id": "535868",
+    "names": [
+      "sharmin akter supta",
+      "sharmin akhter",
+      "sharmin akhter supta"
+    ]
+  },
+  "ci:537440": {
+    "cricinfo_id": "537440",
+    "names": [
+      "samantha bates"
+    ]
+  },
+  "ci:546629": {
+    "cricinfo_id": "546629",
+    "names": [
+      "heather graham"
+    ]
+  },
+  "ci:547092": {
+    "cricinfo_id": "547092",
+    "names": [
+      "ehsan adil"
+    ]
+  },
+  "ci:550235": {
+    "cricinfo_id": "550235",
+    "names": [
+      "tom curran"
+    ]
+  },
+  "ci:556531": {
+    "cricinfo_id": "556531",
+    "names": [
+      "kamil pooran"
+    ],
+    "source": "ESPN athlete.id from a CPL match this player appeared in; the scorer had already bound this ESPN row to this squad slot and was scoring him from it, so recording the id encodes an identity we had already acted on rather than a new guess"
+  },
+  "ci:559235": {
+    "cricinfo_id": "559235",
+    "names": [
+      "kuldeep yadav"
+    ]
+  },
+  "ci:56143": {
+    "cricinfo_id": "56143",
+    "names": [
+      "shakib al hasan"
+    ]
+  },
+  "ci:562281": {
+    "cricinfo_id": "562281",
+    "names": [
+      "aneurin donald"
+    ]
+  },
+  "ci:571703": {
+    "cricinfo_id": "571703",
+    "names": [
+      "wellington masakadza"
+    ]
+  },
+  "ci:571911": {
+    "cricinfo_id": "571911",
+    "names": [
+      "joe clarke"
+    ]
+  },
+  "ci:578769": {
+    "cricinfo_id": "578769",
+    "names": [
+      "ed barnard"
+    ]
+  },
+  "ci:580662": {
+    "cricinfo_id": "580662",
+    "names": [
+      "fi morris"
+    ]
+  },
+  "ci:581160": {
+    "cricinfo_id": "581160",
+    "names": [
+      "khary pierre"
+    ]
+  },
+  "ci:595739": {
+    "cricinfo_id": "595739",
+    "names": [
+      "leus du plooy"
+    ]
+  },
+  "ci:595978": {
+    "cricinfo_id": "595978",
+    "names": [
+      "tristan stubbs"
+    ]
+  },
+  "ci:625383": {
+    "cricinfo_id": "625383",
+    "names": [
+      "jasprit bumrah",
+      "jj bumrah"
+    ]
+  },
+  "ci:631609": {
+    "cricinfo_id": "631609",
+    "names": [
+      "sugandika dasanayaka",
+      "bmsm kumari",
+      "dasanayaka mudiyanselage sugandika manel kumari",
+      "sugandika kumari"
+    ]
+  },
+  "ci:639080": {
+    "cricinfo_id": "639080",
+    "names": [
+      "md fisher"
+    ]
+  },
+  "ci:652939": {
+    "cricinfo_id": "652939",
+    "names": [
+      "marie kelly"
+    ]
+  },
+  "ci:663613": {
+    "cricinfo_id": "663613",
+    "names": [
+      "sa zaib",
+      "saif zaib"
+    ]
+  },
+  "ci:670013": {
+    "cricinfo_id": "670013",
+    "names": [
+      "fabian allen"
+    ]
+  },
+  "ci:688141": {
+    "cricinfo_id": "688141",
+    "names": [
+      "sean dickson",
+      "sr dickson"
+    ]
+  },
+  "ci:696471": {
+    "cricinfo_id": "696471",
+    "names": [
+      "dian forrester"
+    ]
+  },
+  "ci:712219": {
+    "cricinfo_id": "712219",
+    "names": [
+      "zahir khan"
+    ]
+  },
+  "ci:737833": {
+    "cricinfo_id": "737833",
+    "names": [
+      "ks carlson"
+    ]
+  },
+  "ci:748793": {
+    "cricinfo_id": "748793",
+    "names": [
+      "joe james weatherley"
+    ]
+  },
+  "ci:749957": {
+    "cricinfo_id": "749957",
+    "names": [
+      "emma lamb"
+    ]
+  },
+  "ci:766809": {
+    "cricinfo_id": "766809",
+    "names": [
+      "jordan thompson"
+    ]
+  },
+  "ci:772061": {
+    "cricinfo_id": "772061",
+    "names": [
+      "sam cook"
+    ]
+  },
+  "ci:784379": {
+    "cricinfo_id": "784379",
+    "names": [
+      "pwh de silva"
+    ]
+  },
+  "ci:788101": {
+    "cricinfo_id": "788101",
+    "names": [
+      "tom moores"
+    ]
+  },
+  "ci:789729": {
+    "cricinfo_id": "789729",
+    "names": [
+      "callum parkinson"
+    ]
+  },
+  "ci:793463": {
+    "cricinfo_id": "793463",
+    "names": [
+      "rashid khan"
+    ]
+  },
+  "ci:801817": {
+    "cricinfo_id": "801817",
+    "names": [
+      "katupulle gedara mohamed shiraz sahab",
+      "m shiraz"
+    ]
+  },
+  "ci:858807": {
+    "cricinfo_id": "858807",
+    "names": [
+      "eve jones"
+    ]
+  },
+  "ci:859899": {
+    "cricinfo_id": "859899",
+    "names": [
+      "calvin harrison",
+      "cg harrison"
+    ]
+  },
+  "ci:877447": {
+    "cricinfo_id": "877447",
+    "names": [
+      "jo gardner"
+    ]
+  },
+  "ci:879369": {
+    "cricinfo_id": "879369",
+    "names": [
+      "katie george"
+    ]
+  },
+  "ci:885781": {
+    "cricinfo_id": "885781",
+    "names": [
+      "georgia davis"
+    ]
+  },
+  "ci:887207": {
+    "cricinfo_id": "887207",
+    "names": [
+      "ollie pope"
+    ]
+  },
+  "ci:902447": {
+    "cricinfo_id": "902447",
+    "names": [
+      "dale nathan phillips",
+      "dale phillips",
+      "dn phillips"
+    ]
+  },
+  "ci:950405": {
+    "cricinfo_id": "950405",
+    "names": [
+      "kth ratnayake",
+      "tharindu rathnayake"
+    ]
+  },
+  "ci:958691": {
+    "cricinfo_id": "958691",
+    "names": [
+      "kna bandara"
+    ]
+  }
 }

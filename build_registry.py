@@ -372,6 +372,9 @@ def squad_players(path):
             out.append((short, v["name"], p[0], p[1]))
     return out
 
+PROMOTED = {}   # placeholder pid -> promoted ci: pid, this run
+
+
 def build_tour(tour, con, draft_players, ts_bridges, players, idx):
     by_alias, by_ci, by_cs = idx
     slug = re.sub(r"[^a-z0-9]+", "_", tour["tab"].lower()).strip("_")
@@ -394,6 +397,7 @@ def build_tour(tour, con, draft_players, ts_bridges, players, idx):
                             date_range(infer_start(tour), tour["ends"])) if tour.get("espn_series") else []
     membership, unmapped, review, n_reused = {}, [], [], 0
 
+
     for short, tfull, sname, role in squad:
         ns = norm(sname)
         # 0) CROSS-TOUR REUSE: already known globally (zero rework, idempotent)
@@ -407,6 +411,46 @@ def build_tour(tour, con, draft_players, ts_bridges, players, idx):
             if ci: ci = fold_ci(ci) or ci
             if not pid:
                 pid = (by_ci.get(str(ci)) if ci else None) or (f"ci:{ci}" if ci else f"uncapped:{ns.replace(' ','-')}")
+        # PROMOTE A PLACEHOLDER ONCE ITS CRICINFO ID IS KNOWN — however that id arrived.
+        # This deliberately sits OUTSIDE the `if not ci` branch above. The entries that most need
+        # promoting are exactly the ones that skip it: reuse finds an existing record that ALREADY
+        # carries the right cricinfo_id and is still KEYED `uncapped:`, so `ci` is truthy,
+        # resolve_ci never runs, and the pid stays a placeholder build after build. Live: 
+        # uncapped:darren-nedd holding cricinfo_id 1108828 — the id and the key disagreeing inside
+        # one record. A debutant's first appearance gives ESPN's athlete.id (which IS the cricinfo
+        # id), so without this the promotion could never happen at all.
+        # Only a PLACEHOLDER is re-keyed; a real ci: pid is never touched. If the id already belongs
+        # to a known pid we adopt THAT one rather than minting a second, so promoting can never
+        # split one human across two pids.
+        if ci and pid and pid.split(":", 1)[0] in ("uncapped", "slug", "cs"):
+            # by_ci maps cricinfo_id -> pid across the EXISTING registry, which still contains
+            # this very placeholder — so it hands back the same `uncapped:` key and the promotion
+            # silently no-ops. Adopt an existing pid only when it is itself a real ci: key.
+            _known = by_ci.get(str(ci))
+            new_pid = _known if (_known or "").startswith("ci:") else f"ci:{ci}"
+            if new_pid != pid:
+                # MIGRATE the record; do not merely re-point the key. Writing the new pid while
+                # leaving the placeholder in `players` produces ONE HUMAN UNDER TWO PIDS — the
+                # split-identity blocker identity_healthcheck exists to catch, and it caught this
+                # exact mistake on the first attempt (draft_id 10746 under both uncapped:darren-nedd
+                # and ci:1108828). Carry the old record's aliases/tours/draft_id across, letting any
+                # already-present real entry win on conflicts, then DROP the placeholder.
+                if pid in players:
+                    _old = players.pop(pid)
+                    _new = players.setdefault(new_pid, {})
+                    for _k, _v in _old.items():
+                        if _k == "aliases":
+                            _new["aliases"] = sorted(set(_new.get("aliases", [])) | set(_v or []))
+                        elif _k == "tours":
+                            _new["tours"] = sorted(set(_new.get("tours", [])) | set(_v or []))
+                        elif not _new.get(_k):
+                            _new[_k] = _v
+                    by_ci[str(ci)] = new_pid
+                    for _a in _new.get("aliases", []):
+                        by_alias[_a] = new_pid
+                PROMOTED[pid] = new_pid
+                print(f"  PROMOTE {pid} -> {new_pid}  ({sname})", file=sys.stderr)
+                pid = new_pid
         cs_id = CI2CS.get(str(ci)) if ci else None        # DERIVE cricsheet_id from cricinfo id
 
         # draft display + id (guarded so a wrong same-surname match can't contribute a name)
@@ -491,6 +535,23 @@ def main():
     json.dump({"anchor": "cricinfo_id (ci:); cs:/uncapped: fallback; cricsheet_id derived from crosswalk",
                "count": len(players), "players": players},
               open(GLOBAL_PATH, "w"), indent=1, ensure_ascii=False)
+    # PERSIST PROMOTIONS INTO pid_map.json. A promotion re-keys a player, and points rows already
+    # published under the old placeholder would stop joining — the draft reads this same map through
+    # its lib/pid-map.json shim, which is exactly how the 25 Jul ci: migration kept historical rows
+    # joinable. Skipping this is how player-photos.json sat orphaned for four days.
+    if PROMOTED:
+        pm_path = os.path.join(REG_DIR, "pid_map.json")
+        try:
+            pm = json.load(open(pm_path))
+        except Exception:
+            pm = {}
+        added = 0
+        for old_pid, new_pid in PROMOTED.items():
+            if pm.get(old_pid) != new_pid:
+                pm[old_pid] = new_pid; added += 1
+        json.dump(pm, open(pm_path, "w"), indent=1, ensure_ascii=False, sort_keys=True)
+        print(f"  pid_map: +{added} promotion(s) recorded so already-published rows still join",
+              file=sys.stderr)
     print(f"GLOBAL registry written: {len(players)} players -> {GLOBAL_PATH} | needs-review {len(all_review)}",
           file=sys.stderr)
 

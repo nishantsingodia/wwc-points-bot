@@ -84,13 +84,6 @@
   "closest_guess": "N Edward"
  },
  {
-  "player": "Dexter Sween",
-  "team": "MTTRI",
-  "tour": "Caribbean Premier League 2026",
-  "current_pid": "uncapped:dexter-sween",
-  "closest_guess": "Dexter Sween"
- },
- {
   "player": "Abdul-Raheem Toppin",
   "team": "MTTRI",
   "tour": "Caribbean Premier League 2026",
@@ -110,27 +103,6 @@
   "tour": "Caribbean Premier League 2026",
   "current_pid": "uncapped:damion-joachim",
   "closest_guess": "Damion Joachim"
- },
- {
-  "player": "Darren Nedd",
-  "team": "MTSTL",
-  "tour": "Caribbean Premier League 2026",
-  "current_pid": "uncapped:darren-nedd",
-  "closest_guess": "Darron Nedd"
- },
- {
-  "player": "Kamil Pooran",
-  "team": "MTSTL",
-  "tour": "Caribbean Premier League 2026",
-  "current_pid": "uncapped:kamil-pooran",
-  "closest_guess": "Kamil Pooran"
- },
- {
-  "player": "Zachary Carter",
-  "team": "MTBAR",
-  "tour": "Caribbean Premier League 2026",
-  "current_pid": "uncapped:zachary-carter",
-  "closest_guess": "Zachary Carter"
  },
  {
   "player": "Kofi James",

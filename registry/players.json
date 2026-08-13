@@ -11112,17 +11112,6 @@
    "draft_id": 10725,
    "auction_id": null
   },
-  "uncapped:dexter-sween": {
-   "aliases": [
-    "dexter sween"
-   ],
-   "tours": [
-    "Caribbean Premier League 2026"
-   ],
-   "display": "Dexter Sween",
-   "draft_id": 10730,
-   "auction_id": null
-  },
   "uncapped:abdul-raheem-toppin": {
    "aliases": [
     "abdul raheem toppin"
@@ -11226,28 +11215,6 @@
    "draft_id": 10745,
    "auction_id": null
   },
-  "uncapped:darren-nedd": {
-   "aliases": [
-    "darren nedd"
-   ],
-   "tours": [
-    "Caribbean Premier League 2026"
-   ],
-   "display": "Darren Nedd",
-   "draft_id": 10746,
-   "auction_id": null
-  },
-  "uncapped:kamil-pooran": {
-   "aliases": [
-    "kamil pooran"
-   ],
-   "tours": [
-    "Caribbean Premier League 2026"
-   ],
-   "display": "Kamil Pooran",
-   "draft_id": 10748,
-   "auction_id": null
-  },
   "ci:787073": {
    "aliases": [
     "chris green",
@@ -11275,18 +11242,6 @@
    "cricsheet_id": "6b07035d",
    "espn_id": "1264431",
    "draft_id": 10753,
-   "auction_id": null
-  },
-  "uncapped:zachary-carter": {
-   "aliases": [
-    "zachary carter",
-    "zachary nathan carter"
-   ],
-   "tours": [
-    "Caribbean Premier League 2026"
-   ],
-   "display": "Zachary Carter",
-   "draft_id": 10754,
    "auction_id": null
   },
   "ci:1342699": {
@@ -11559,6 +11514,63 @@
    ],
    "display": "Jonathan van Lange",
    "draft_id": 10784,
+   "auction_id": null
+  },
+  "ci:1199306": {
+   "aliases": [
+    "dexter sween"
+   ],
+   "tours": [
+    "Caribbean Premier League 2026"
+   ],
+   "display": "Dexter Sween",
+   "cricinfo_id": "1199306",
+   "cricsheet_id": null,
+   "espn_id": "1199306",
+   "draft_id": 10730,
+   "auction_id": null
+  },
+  "ci:1108828": {
+   "aliases": [
+    "darren nedd"
+   ],
+   "tours": [
+    "Caribbean Premier League 2026"
+   ],
+   "display": "Darren Nedd",
+   "cricinfo_id": "1108828",
+   "cricsheet_id": null,
+   "espn_id": "1108828",
+   "draft_id": 10746,
+   "auction_id": null
+  },
+  "ci:556531": {
+   "aliases": [
+    "kamil pooran"
+   ],
+   "tours": [
+    "Caribbean Premier League 2026"
+   ],
+   "display": "Kamil Pooran",
+   "cricinfo_id": "556531",
+   "cricsheet_id": null,
+   "espn_id": "556531",
+   "draft_id": 10748,
+   "auction_id": null
+  },
+  "ci:1500753": {
+   "aliases": [
+    "zachary carter",
+    "zachary nathan carter"
+   ],
+   "tours": [
+    "Caribbean Premier League 2026"
+   ],
+   "display": "Zachary Carter",
+   "cricinfo_id": "1500753",
+   "cricsheet_id": null,
+   "espn_id": "1500753",
+   "draft_id": 10754,
    "auction_id": null
   }
  }
