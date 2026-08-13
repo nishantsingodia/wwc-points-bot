@@ -6037,6 +6037,23 @@
   },
   {
    "match_key": "2026-07-22::southern brave|welsh fire",
+   "tour": "The Hundred Women's Competition 2026",
+   "match": "Match 2 — WTSBR v WTWLF",
+   "date": "2026-07-22",
+   "team": "WTSBR",
+   "pid": "ci:1164537",
+   "full": "Charli Rae Knott",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-07-22::southern brave|welsh fire",
    "tour": "The Hundred Men's Competition 2026",
    "match": "Match 2 — MTSBR v MTWLF",
    "date": "2026-07-22",
@@ -12231,6 +12248,23 @@
    "tour": "The Hundred Women's Competition 2026",
    "match": "Match 5 — WTSUNL v WTSBR",
    "date": "2026-07-25",
+   "team": "WTSBR",
+   "pid": "ci:1164537",
+   "full": "Charli Rae Knott",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-07-25::southern brave|sunrisers leeds",
+   "tour": "The Hundred Women's Competition 2026",
+   "match": "Match 5 — WTSUNL v WTSBR",
+   "date": "2026-07-25",
    "team": "WTSUNL",
    "pid": "ci:1146032",
    "full": "Chloe Skelton",
@@ -15781,6 +15815,23 @@
    "source": "cricsheet · official",
    "frozen_at": "2026-07-29",
    "provenance": "unknown"
+  },
+  {
+   "match_key": "2026-07-27::mi london|southern brave",
+   "tour": "The Hundred Women's Competition 2026",
+   "match": "Match 9 — WTSBR v WTMILO",
+   "date": "2026-07-27",
+   "team": "WTSBR",
+   "pid": "ci:1164537",
+   "full": "Charli Rae Knott",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
   },
   {
    "match_key": "2026-07-27::mi london|southern brave",
@@ -21359,6 +21410,23 @@
   },
   {
    "match_key": "2026-07-30::birmingham phoenix|southern brave",
+   "tour": "The Hundred Women's Competition 2026",
+   "match": "Match 13 — WTSBR v WTBPH",
+   "date": "2026-07-30",
+   "team": "WTSBR",
+   "pid": "ci:1164537",
+   "full": "Charli Rae Knott",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-07-30::birmingham phoenix|southern brave",
    "tour": "The Hundred Men's Competition 2026",
    "match": "Match 13 — MTSBR v MTBPH",
    "date": "2026-07-30",
@@ -25383,6 +25451,23 @@
    "tour": "The Hundred Women's Competition 2026",
    "match": "Match 16 — WTLSP v WTSBR",
    "date": "2026-08-01",
+   "team": "WTSBR",
+   "pid": "ci:1164537",
+   "full": "Charli Rae Knott",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-01::london spirit|southern brave",
+   "tour": "The Hundred Women's Competition 2026",
+   "match": "Match 16 — WTLSP v WTSBR",
+   "date": "2026-08-01",
    "team": "WTLSP",
    "pid": "ci:1039421",
    "full": "Charlie Dean",
@@ -28639,6 +28724,23 @@
    "source": "cricapi + ESPN dots/XI · ⏳ provisional (dots unverified, awaiting cricsheet)",
    "frozen_at": "2026-08-04",
    "provenance": "live"
+  },
+  {
+   "match_key": "2026-08-03::southern brave|welsh fire",
+   "tour": "The Hundred Women's Competition 2026",
+   "match": "Match 19 — WTWLF v WTSBR",
+   "date": "2026-08-03",
+   "team": "WTSBR",
+   "pid": "ci:1164537",
+   "full": "Charli Rae Knott",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
   },
   {
    "match_key": "2026-08-03::southern brave|welsh fire",
