@@ -72,6 +72,11 @@ _BALLS_PER_OVER = {"HUN": 10}
 # Cricbuzz wicketCode -> the cricsheet/wc_fps_to_csv dismissal vocabulary. Verified: all six codes
 # that occur in our data map cleanly, and dismissal type matched cricsheet 48/48.
 CB_WICKET_CODE = {
+    # Cricbuzz spells retired hurt RETD_HURT; unknown codes are passed through lowercased, which
+    # would have produced the non-vocabulary "retd_hurt" downstream. Retired hurt is NOT a
+    # dismissal and earns the bowler nothing — same rule as ESPN's "retired not out".
+    "RETD_HURT": "retired hurt",
+    "RETIRED_HURT": "retired hurt",
     "BOWLED": "bowled",
     "CAUGHT": "caught",
     "CAUGHTBOWLED": "caught and bowled",
@@ -791,9 +796,18 @@ def parse_match(match_id, fresh=False):
 #             PROPOSAL. Resolve once, have a human confirm it, store it — exactly how espn_series
 #             is handled in tours.json. Never auto-adopt.
 # ---------------------------------------------------------------------------------------------
+# Feed-specific spellings of the SAME word. Not fuzzy matching — these are naming conventions that
+# differ between providers, so folding them is exact-matching after normalization, not guessing.
+# Found live: ESPN writes "St Lucia Kings", Cricbuzz writes "Saint Lucia Kings". resolve_match_id
+# requires the team set to be a subset, so those two never met and 2 of 5 completed CPL matches
+# silently lost their second witness — reported as "no unique cricbuzz match", which reads like
+# Cricbuzz lacking the fixture rather than a spelling difference.
+_WORD_FOLD = {"saint": "st", "and": "", "&": ""}
+
 def _slug(s):
     s = unicodedata.normalize("NFKD", s or "").encode("ascii", "ignore").decode()
-    return re.sub(r"\s+", " ", re.sub(r"[^a-z0-9]+", " ", s.lower())).strip()
+    s = re.sub(r"\s+", " ", re.sub(r"[^a-z0-9]+", " ", s.lower())).strip()
+    return " ".join(w for w in (_WORD_FOLD.get(t, t) for t in s.split()) if w)
 
 
 # Words that carry no discriminating power in either our tour names or Cricbuzz's slugs.
