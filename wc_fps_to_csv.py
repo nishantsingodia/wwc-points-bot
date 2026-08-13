@@ -1772,6 +1772,33 @@ def recon_gaps(a, b, fields, sep="/"):
             out.append(f"{RECON_LABEL.get(f, f)} {av or 0}{sep}{bv or 0}")
     return "; ".join(out)
 
+# Fields score() INDEXES. If a frozen baseline is missing one of these we cannot re-score it, and
+# defaulting it to 0 is not a harmless shortcut: absent `lbwb` understates the baseline by 8 points
+# per bowled/lbw wicket and absent `dro` mis-splits a run-out (12 vs 6), which would MANUFACTURE an
+# L2 gap on a settled match. Say "unverified" instead of inventing a number.
+_SCORING_CRITICAL = ("r", "b", "4s", "6s", "balls", "runs_conceded", "w", "lbwb", "dots",
+                     "maidens", "catches", "stumpings", "runouts", "dro", "dismissed", "played")
+
+
+def _hydrate_baseline(frozen):
+    """A frozen `fields` dict widened to a full perf shape, or (None, missing) if it cannot be.
+
+    Baselines are frozen with whatever SETTLED_FIELDS held AT THE TIME, so older rows genuinely
+    lack keys the scorer now indexes — `dismissed` was added today because it drives the duck, and
+    freezing only the dismissal TEXT was the same written-but-never-read asymmetry. Handing such a
+    row to score() raises KeyError, which the backstop caught and reported as
+    "pts ?→? (backstop failed — unverified)" with no clue which field was to blame.
+    """
+    if not frozen:
+        return None, ()
+    missing = tuple(k for k in _SCORING_CRITICAL if k not in frozen)
+    if missing:
+        return None, missing
+    p = blank_perf(frozen.get("name", ""))
+    p.update(frozen)
+    return p, ()
+
+
 def points_gap(a, b, role, sep="→"):
     """BACKSTOP: did the SCORED TOTAL move, whatever fields did it?
 
@@ -1785,6 +1812,14 @@ def points_gap(a, b, role, sep="→"):
     try:
         pa = score(a, role)["total"]
         pb = score(b, role)["total"]
+    except KeyError as e:
+        # A key the scorer indexes is absent — almost always a baseline frozen before that field
+        # joined SETTLED_FIELDS. Name the field: "backstop failed" told nobody what to fix.
+        _miss = _hydrate_baseline(a)[1] or _hydrate_baseline(b)[1] or (str(e).strip("'"),)
+        print(f"!! points backstop: baseline predates {'/'.join(_miss)} — cannot re-score it, so "
+              f"the TOTAL is unverified for this player (fields listed above are still compared)",
+              file=sys.stderr)
+        return f"pts ?{sep}? (baseline predates {'/'.join(_miss)} — total unverified)"
     except Exception as e:
         # LOUD, not silent: a backstop that quietly switches itself off is worse than none —
         # it would report "✓ complete" on exactly the matches it failed to check.
