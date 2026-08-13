@@ -17,6 +17,21 @@ def norm(s):
 
 reg = json.load(open(os.path.join(HERE, "players.json")))["players"]
 alias2pid, draftid2pid = {}, {}
+
+# manual_ci_bridges is a HUMAN-VERIFIED name -> cricinfo id mapping, so it is at least as
+# authoritative as anything in players.json. It was not consulted here, which meant a bridged
+# player whose TOUR was never registered still got no pid: the India ODI leg (OIND) exists in the
+# draft but not in tours.json, so Rohit Sharma, Shubman Gill, Virat Kohli, KL Rahul, Kuldeep Yadav,
+# Jasprit Bumrah and Gurnoor Brar shipped on placeholder slug: pids and would have settled at ZERO
+# (the draft refuses to fuzzy-fall-back for a pid'd player). Reading bridges here means a verified
+# id ALWAYS reaches the draft, whether or not its tour has been wired up.
+try:
+    for _k, _e in json.load(open(os.path.join(HERE, "manual_ci_bridges.json"))).items():
+        _cid = str(_e.get("cricinfo_id") or _k.split(":", 1)[-1])
+        for _n in _e.get("names", []):
+            alias2pid.setdefault(_n, f"ci:{_cid}")
+except Exception as _e:
+    print(f"  (manual_ci_bridges unreadable: {_e})")
 _by_draft = {}
 for pid, e in reg.items():
     for a in e.get("aliases", []):

@@ -329,7 +329,39 @@ def resolve_perf_pid(v):
                 print(f"  espn-id alias learned: '{v.get('name')}' -> {pid} "
                       f"({PID2DISP.get(pid, pid)}) via espn athlete id {eid}", file=sys.stderr)
             return pid
-    return resolve_pid(v.get("name", "") if isinstance(v, dict) else "")
+    by_name = resolve_pid(v.get("name", "") if isinstance(v, dict) else "")
+    if by_name or not eid:
+        # NEVER let an ESPN id override a pid the registry already holds for this name. If the
+        # squad carries him as a placeholder (uncapped:/cs:) and we minted ci:<athlete.id> here,
+        # the SAME person would exist under two pids — the points row on one, the draft row on the
+        # other — and the draft would score him zero. That is the split-identity blocker
+        # identity_healthcheck exists to catch; don't manufacture one. Promoting a placeholder to
+        # its cricinfo id is build_registry's job, from a human-asserted bridge.
+        return by_name
+    # A player in the match who is in NO squad and NO registry entry — a mid-tournament signing or
+    # an injury replacement. Until now this returned None and the row published with a BLANK Player
+    # ID: unjoinable by the draft, and invisible to every pid-keyed check. But ESPN has already told
+    # us exactly who he is — athlete.id IS the cricinfo id — so the identity is not in doubt and
+    # guessing plays no part. Mint the id-anchored pid, and surface him for a human to fold into the
+    # squad. Live: Rivaldo A Clarke (ci:1275938) and Kevlon Alston Anderson (ci:1209188), both in
+    # Barbados' XI for CPL ev 1534182 and in no squad list we hold.
+    eid_s = str(eid).strip()
+    if not eid_s.isdigit() or eid_s == "0":
+        # A cricinfo id is a positive integer. Anything else is not an id we can anchor on, so
+        # fall back rather than mint something shaped like a pid but meaning nothing.
+        return by_name
+    pid = f"ci:{eid_s}"
+    nm = v.get("name", "")
+    if norm(nm) not in ALIAS2PID:
+        ALIAS2PID[norm(nm)] = pid
+        NEEDS_CRICINFO.append({
+            "player": nm, "current_pid": pid, "tour": CURRENT_TOUR, "team": v.get("team", "?"),
+            "closest_guess": f"NOT IN ANY SQUAD — id is ESPN's own athlete.id, verify at "
+                             f"espncricinfo.com/cricketers/x-{eid} then add him to the squad",
+        })
+        print(f"  new player not in any squad: '{nm}' -> {pid} (ESPN athlete id, id-anchored) "
+              f"— listed in '{NEEDS_CRICINFO_TAB}' for squad follow-up", file=sys.stderr)
+    return pid
 
 def _cricsheet_match(a, b):
     """True if `b` is a cricsheet-style initials name of `a` (e.g. 'Danni Wyatt' <-> 'DN Wyatt')."""
@@ -926,6 +958,29 @@ def espn_xi(event_id, fresh=False):
                 out[norm(nm)] = {"name": nm, "espn_id": str(a.get("id", "") or "")}
     return out
 
+def espn_expected_balls(event_id, fresh=False):
+    """Legal deliveries ESPN's SCORECARD says were bowled — an independent expectation.
+
+    The point is that this comes from a DIFFERENT endpoint and a DIFFERENT field family than the
+    ball-by-ball, so it cannot be wrong in the same way at the same time. `summary` is already
+    fetched this run under the same cache key (espn_xi / espn_runouts), so it costs no request.
+
+    Per-bowler `overallLhb.balls + overallRhb.balls` (balls to left- and right-handers) sums to the
+    innings length: verified 236 v 236 on CPL ev 1534183, the match that exposed the need for it.
+    Returns 0 when the scorecard has no bowling figures — the check is then simply unavailable."""
+    d = espn_get("summary", cache=not fresh, event=event_id)
+    tot = 0
+    for team in d.get("rosters", []) or []:
+        for p in team.get("roster", []) or []:
+            for ls in p.get("linescores", []) or []:
+                bw = ((ls.get("statistics") or {}).get("bowling")) or {}
+                for side in ("overallLhb", "overallRhb"):
+                    try:
+                        tot += int((bw.get(side) or {}).get("balls") or 0)
+                    except (TypeError, ValueError):
+                        pass
+    return tot
+
 def parse_espn(event_id, fresh=False):
     """Full scorecard from ESPN ball-by-ball (cricinfo) — exact dots/maidens/fielding,
     plus the XI from the summary. Super-over deliveries (period>2) are excluded
@@ -935,8 +990,23 @@ def parse_espn(event_id, fresh=False):
     (the bug that dropped Shubham Ranjane, an in-XI player who didn't bat/bowl)."""
     # PAGINATE. limit=600 silently truncates: an ODI innings has ~605 deliveries, so NZ-WI event
     # 1538624 returned items=600 of count=605 with pageCount=2 — the last 5 balls of the innings
-    # vanished, with no error. T20 fits in one page, which is why this hid. The server caps
-    # pageSize at 1000, so a bigger limit is not a fix; loop the pages.
+    # vanished, with no error. T20 fits in one page, which is why this hid.
+    #
+    # ⛔ ESPN CAN RETURN AN EMPTY-BUT-WELL-FORMED CARD. Observed live on CPL ev 1534183: a 200 whose
+    # body was {"commentary": {"count": 1, "pageCount": 1, "items": [<the pre-match "Hello and
+    # welcome back, folks!" preamble>]}} — for a match ESPN's own scoreboard called Final. Every
+    # count-based guard below passes it (1 item of a self-reported 1), so the match scored with all
+    # 22 players Played=Y, every stat 0 and a bare +4 XI bonus. With settlement recording live that
+    # is what would FREEZE as the money baseline.
+    #
+    # It is INTERMITTENT, not a limit threshold. It first appeared at limit=1000 while limit=600/500
+    # returned the real 236 items, which looked like a page-size cap — but a re-probe of the SAME
+    # events minutes later returned 256/236 correctly at limit=1000, and limit=100 had 502'd in the
+    # same window. So the trigger is ESPN-side flakiness, and ANY limit can hit it. Do not "fix" it
+    # by tuning this number and do not trust a low limit to prevent it.
+    # The real defence is the scorecard ball-count cross-check after the parse loop — a different
+    # endpoint and field family, so it cannot go blank in the same breath. 500 is kept only because
+    # it is a verified-good page size that pages safely on a ~605-ball ODI innings.
     # A PARTIAL fetch must NEVER be scored. espn_get returns {} on any failure (502, timeout,
     # WAF), so a page that fails silently contributed nothing and the loop just ended — producing
     # a truncated innings that scores as if complete. Measured: the Hundred Women's sample came
@@ -948,7 +1018,7 @@ def parse_espn(event_id, fresh=False):
     # match and retries next run) rather than publishing a truncated scorecard.
     items, _page, _expected = [], 1, None
     while True:
-        pbp = espn_get("playbyplay", cache=not fresh, event=event_id, limit=1000, page=_page)
+        pbp = espn_get("playbyplay", cache=not fresh, event=event_id, limit=500, page=_page)
         com = (pbp.get("commentary") or {}) if isinstance(pbp, dict) else {}
         if not pbp or "commentary" not in (pbp or {}):
             print(f"  espn {event_id}: playbyplay page {_page} FAILED — refusing to score a "
@@ -996,20 +1066,10 @@ def parse_espn(event_id, fresh=False):
         elif aid and not perf[k].get("espn_id"):
             perf[k]["espn_id"] = str(aid)
         return perf[k]
+    _deliveries = 0  # EVERY delivery seen, extras and super-over INCLUDED — see the balls check
     for it in items:
         per = it.get("period")
-        if per and per > 2:
-            super_over = True
-            continue
         desc = (it.get("playType", {}).get("description") or "").lower()
-        _bwa = (it.get("bowler", {}).get("athlete") or {})
-        _bta = (it.get("batsman", {}).get("athlete") or {})
-        bw, bw_id = _bwa.get("fullName"), _bwa.get("id", "")
-        bt, bt_id = _bta.get("fullName"), _bta.get("id", "")
-        try:
-            sv = int(it.get("scoreValue", 0) or 0)
-        except (TypeError, ValueError):
-            sv = 0
         is_wide = desc == "wide"
         # ESPN labels a no-ball by its OUTCOME ("bye" / "leg bye" / "four" / "run"), putting the
         # no-ball only in shortText — so `"no ball" not in desc` counted 19 of them as legal balls
@@ -1018,6 +1078,28 @@ def parse_espn(event_id, fresh=False):
         _short = (it.get("shortText") or "") + " " + (it.get("text") or "")
         is_nb = ("no ball" in desc) or bool(re.search(r"\(?no[- ]?ball\)?", _short, re.I))
         legal = not is_wide and not is_nb
+        _bwa = (it.get("bowler", {}).get("athlete") or {})
+        _bta = (it.get("batsman", {}).get("athlete") or {})
+        bw, bw_id = _bwa.get("fullName"), _bwa.get("id", "")
+        bt, bt_id = _bta.get("fullName"), _bta.get("id", "")
+        # Counted BEFORE the super-over skip so it is comparable to the scorecard's ball total,
+        # which has no way to exclude the super over either. Scoring still excludes it (D11 awards
+        # no super-over points) — this counter exists ONLY to verify we fetched the whole match.
+        # Requires a named bowler, so non-delivery commentary (the "Hello and welcome" preamble
+        # that limit=1000 returns INSTEAD of the innings) is not miscounted as a ball. Counts
+        # EVERY delivery, wides and no-balls included, because that is what the scorecard's ball
+        # total counts — measured exact on CPL ev 1534183 (226 legal + 10 wide = 236 = scorecard)
+        # and ev 1534179 (240 + 16 = 256 = scorecard). Deliberately NOT filtered by `legal`: a
+        # completeness check must not depend on the extras-parsing it exists to validate.
+        if bw:
+            _deliveries += 1
+        if per and per > 2:
+            super_over = True
+            continue
+        try:
+            sv = int(it.get("scoreValue", 0) or 0)
+        except (TypeError, ValueError):
+            sv = 0
         if bt:
             pb = get(bt, bt_id); pb["played"] = True
             if not is_wide:
@@ -1071,6 +1153,24 @@ def parse_espn(event_id, fresh=False):
             # always empty for a run out and neither shortText nor text names the fielders, so any
             # attempt from this payload silently credits nobody. They are applied below from the
             # `summary` payload instead (espn_runouts), which carries them structured.
+    # ⛔ COMPLETENESS, CROSS-CHECKED — do not trust the ball-by-ball's own account of itself.
+    # The guard above compares items against `count`, but `count` is written by the same code path
+    # that writes the items, so a degraded response is self-consistent and passes: at limit=1000
+    # ESPN returned count=1 with one preamble item and CPL ev 1534183 scored as a completed match
+    # in which all 22 players did nothing. So verify against the SCORECARD's ball total instead —
+    # a different endpoint, a different field family, and unable to fail in the same way.
+    _exp_balls = espn_expected_balls(event_id, fresh)
+    if _exp_balls and _deliveries < _exp_balls:
+        print(f"  espn {event_id}: ball-by-ball has {_deliveries} deliveries but the "
+              f"scorecard says {_exp_balls} — INCOMPLETE, refusing to score "
+              f"(match will retry next run)", file=sys.stderr)
+        return {}, False
+    if not _exp_balls:
+        # Not fatal (a card with no bowling figures is legitimately unverifiable), but it means
+        # this match published WITHOUT the cross-check — say so rather than implying it passed.
+        print(f"  espn {event_id}: scorecard carries no bowling figures — ball-count cross-check "
+              f"UNAVAILABLE for this match", file=sys.stderr)
+
     for o in overs.values():
         if o["legal"] == 6 and o["runs"] == 0 and o["bowler"]:
             get(o["bowler"])["maidens"] += 1
@@ -1087,7 +1187,15 @@ def parse_espn(event_id, fresh=False):
 
     for k, e in espn_xi(event_id, fresh).items():   # +4 in-XI even for players with no stat line
         if k not in perf:
-            perf[k] = blank_perf(e["name"])
+            # CARRY THE ID. espn_xi already returns athlete.id (which IS the cricinfo id) and this
+            # path threw it away, so a player who appeared ONLY in the XI — never batted, bowled or
+            # fielded — arrived with espn_id="" and could be resolved by NAME alone. That is the one
+            # resolution route this project forbids, and when the name is unknown the row publishes
+            # with a BLANK Player ID and can never join the draft. Live example: Kevlon Alston
+            # Anderson, CPL ev 1534182, in the XI for Barbados but absent from our squad list.
+            perf[k] = blank_perf(e["name"], espn_id=e.get("espn_id", ""))
+        elif e.get("espn_id") and not perf[k].get("espn_id"):
+            perf[k]["espn_id"] = str(e["espn_id"])
         perf[k]["played"] = True
     return perf, super_over
 
@@ -1764,6 +1872,91 @@ def build_recon_rows(match_key, label, mdate, tour, unresolved, capi_pid, espn_p
                              "s1": cv, "s2": ev, "tier": "player"})
     return rows
 
+# ── ESPN-derived match list (a tour with NO cricapi series) ───────────────────────────────
+# The match LIST has always come from cricapi's series_info, so a tour without a cricapi series id
+# aborted at the series_info guard and scored NOTHING — no tab, no points, silently. That is not a
+# hypothetical: CPL 2026 came in through the keyless ESPN path (`cricapi_series: ""`), its first
+# match was played on 7 Aug 2026, and the draft has been offering all 35 fixtures as draftable
+# contests the whole time. The scorecards were always reachable — ESPN carries the league in full —
+# it was only the LIST of matches that had a single hard-wired source.
+#
+# So build the list from ESPN too. The rest of run_tour is unchanged: the shape returned here is the
+# cricapi matchList shape, and every consumer (is_fmt / near_today / is_over / the pending-XI pass)
+# reads the same keys. The one deliberate omission is `id` — the CRICAPI match id — which we do not
+# have and must not invent; the scoring loop already guards `if m.get("id")` and falls through to
+# the ESPN scorecard, which is exactly the intended single-source behaviour.
+ESPN_LIST_BACK_STOP = 8      # consecutive empty days that end the backward scan
+ESPN_LIST_MAX_BACK  = 150    # hard cap on how far back we look
+ESPN_LIST_FORWARD   = 14     # days ahead to list upcoming fixtures (for the announced-XI pass)
+
+def _espn_event_to_match(e):
+    """One ESPN scoreboard event -> one cricapi-matchList-shaped dict (minus the cricapi id)."""
+    comp = (e.get("competitions") or [{}])[0]
+    teams = [c.get("team", {}).get("displayName", "") for c in comp.get("competitors", [])]
+    if len(teams) != 2 or not all(teams):
+        return None
+    state = (((e.get("status") or {}).get("type") or {}).get("state") or "").lower()
+    dt = e.get("date") or ""
+    return {
+        "name": e.get("name") or " v ".join(teams),
+        # class.eventType ("T20"/"ODI") is the reliable format field. The event NAME of a league
+        # fixture is just "Team A v Team B" with no format in it, so the name-sniff fallback in
+        # is_fmt() would reject every match — this is why tour_sync had to read eventType too.
+        "matchType": ((comp.get("class") or {}).get("eventType") or "").lower(),
+        "teams": teams,
+        "date": dt[:10],
+        "dateTimeGMT": dt,
+        # ESPN's state is a genuine improvement on cricapi's matchEnded, which sat False for DAYS on
+        # LPL/Hundred. "post" means ESPN has called the result.
+        "matchStarted": state in ("in", "post"),
+        "matchEnded": state == "post",
+        "espn_event": e.get("id"),
+    }
+
+def espn_match_list(tour, squad_team_names):
+    """Scan the ESPN league scoreboard day by day and return this tour's fixtures."""
+    if not ESPN_SERIES:
+        return []
+    today = date.today()
+    try:
+        end_d = date.fromisoformat(tour.get("ends") or "")
+    except ValueError:
+        end_d = today + timedelta(days=ESPN_LIST_FORWARD)
+    want = team_key(squad_team_names)
+    out, empty_run = {}, 0
+
+    def scan(d):
+        # Past days are immutable, so cache them; today/tomorrow must be fresh or a live match's
+        # state would be frozen at whatever it was the first time we looked (the same reason
+        # espn_event_id passes cache=False).
+        fresh = d >= today - timedelta(days=1)
+        sb = espn_get("scoreboard", cache=not fresh, dates=d.strftime("%Y%m%d"))
+        hits = 0
+        for e in sb.get("events", []):
+            m = _espn_event_to_match(e)
+            # A league id can carry more than the squad we hold (e.g. a women's edition under the
+            # same competition). Admit only fixtures between teams we actually have a squad for.
+            if not m or not (team_key(m["teams"]) & want):
+                continue
+            out[e.get("id") or f"{m['date']}|{m['name']}"] = m
+            hits += 1
+        return hits
+
+    # backwards from the anchor until the competition demonstrably hasn't started
+    d = min(today, end_d)
+    for _ in range(ESPN_LIST_MAX_BACK):
+        empty_run = 0 if scan(d) else empty_run + 1
+        if empty_run >= ESPN_LIST_BACK_STOP:
+            break
+        d -= timedelta(days=1)
+    # and forwards for upcoming fixtures
+    d = min(today, end_d) + timedelta(days=1)
+    stop = min(today + timedelta(days=ESPN_LIST_FORWARD), end_d)
+    while d <= stop:
+        scan(d)
+        d += timedelta(days=1)
+    return sorted(out.values(), key=lambda m: (m.get("dateTimeGMT") or "", m.get("name") or ""))
+
 def run_tour(tour):
     """Process ONE tour (its own cricapi+ESPN series + squad list) and write its tab."""
     global WC_SERIES, ESPN_SERIES, SQUADS_JSON, GSHEET_TAB, CURRENT_TOUR, CURRENT_FMT
@@ -1789,13 +1982,23 @@ def run_tour(tour):
     # so the every-5-min ticks don't spend the cricapi daily budget.
     # On-demand fetches series_info FRESH (a human is asking mid-match — detect the just-started
     # game); the every-5-min tick still caches 2h to protect the cricapi daily budget.
-    info = api("series_info", cache=(FREQUENT and not ON_DEMAND),
-               ttl=(7200 if FREQUENT else None), id=WC_SERIES)
-    matches = info.get("data", {}).get("matchList", [])
-    # Guard: if cricapi failed/returned nothing, ABORT before touching the sheet
-    # (otherwise we'd clear it and write an empty table — wiping good data).
-    if info.get("status") != "success" or not matches:
-        sys.exit("series_info fetch failed or empty — aborting; sheet left unchanged.")
+    if WC_SERIES:
+        info = api("series_info", cache=(FREQUENT and not ON_DEMAND),
+                   ttl=(7200 if FREQUENT else None), id=WC_SERIES)
+        matches = info.get("data", {}).get("matchList", [])
+        # Guard: if cricapi failed/returned nothing, ABORT before touching the sheet
+        # (otherwise we'd clear it and write an empty table — wiping good data).
+        if info.get("status") != "success" or not matches:
+            sys.exit("series_info fetch failed or empty — aborting; sheet left unchanged.")
+    else:
+        # ESPN-only tour: the fixture list comes from the league scoreboard instead.
+        matches = espn_match_list(tour, [v["name"] for v in squads.values()])
+        # Same guard, same reason — an empty list must never be allowed to blank a written tab.
+        if not matches:
+            sys.exit(f"no ESPN fixtures found for series {ESPN_SERIES or '(unset)'} — "
+                     f"aborting; sheet left unchanged.")
+        print(f"  match list: {len(matches)} fixture(s) from ESPN series {ESPN_SERIES} "
+              f"(no cricapi series — single-source tour)", file=sys.stderr)
     # Normalize every feed team name to the squad's CANONICAL name up front, so all downstream
     # consumers (name2short squad mapping, match labels, team_key, ESPN/cricsheet lookup) see one
     # consistent name. Two feed quirks this fixes: (a) franchise renames — cricapi feeds LPL's 2025
@@ -1898,11 +2101,12 @@ def run_tour(tour):
         # overrides either source.
         fetch_fresh = is_live or not m.get("matchEnded")
         try:
-            if not m.get("id"):
+            if not m.get("id") and WC_SERIES:
                 # cricapi listed the fixture but gave no match id, so no scorecard can ever be
                 # requested for it. Silent until now: api_perf just came back {} and the match
                 # quietly ran single-source off ESPN. Say it out loud — "cricapi has no data" and
                 # "we never asked cricapi" are different problems with different fixes.
+                # (On an ESPN-only tour there is no cricapi id BY DESIGN — not a defect, so no noise.)
                 print(f"  {label}: cricapi listed this fixture with NO match id — "
                       f"no scorecard can be fetched; running single-source", file=sys.stderr)
             api_perf = {k: v for k, v in parse_match(m["id"], live=fetch_fresh).items() if v["played"]} if m.get("id") else {}
@@ -1998,9 +2202,18 @@ def run_tour(tour):
         # Guard (i) played; (ii) pid not already claimed (find_silent_drops ensures this) -> one
         # slot, no double-count. The false-merge detector in match_squad_to_perf stays on.
         for pid, v in find_silent_drops(perf, assigned, team_players):
-            es = short_of(v.get("team", "")) or ""
+            # Attribute the team the SAME way the leftover emit below does. Reading only
+            # v["team"] made this whole auto-add dead code on any ESPN-sourced tour: parse_espn
+            # never sets `team` on a perf entry (blank_perf defaults it to ""), so `es` was always
+            # "" and every silent drop hit the `continue`. The comment called a blank feed team
+            # "rare" — on the feed we are making primary it is universal. ESPN's own roster map is
+            # the authority here, with the same best_team fallback the leftover path uses.
+            tfull = (team_map.get(norm(v.get("name", "")))
+                     or best_team(v.get("name", ""), team_map)
+                     or v.get("team", ""))
+            es = short_of(tfull) or ""
             if es not in match_shorts:
-                continue  # can't safely attribute to a team — leave it (rare; blank feed team)
+                continue  # genuinely un-attributable — the leftover pass still emits him for review
             disp = PID2DISP.get(pid, v.get("name", "")) or v.get("name", "")
             role = guess_role(v)
             team_players.append((es, disp, role))
@@ -2596,11 +2809,17 @@ def main():
     for t in tours:
         # Human gate FIRST (0 API): skip any tour not marked "yes" in the TOUR CONTROL sheet, so a
         # discarded / not-yet-approved tour never spends cricapi (nor writes its sheet tab).
-        if control is not None and not _tour_approved(control, t.get("cricapi_series")):
+        # The gate exists to ration the cricapi DAILY QUOTA, so it applies only to tours that
+        # actually spend it. An ESPN-only tour has a blank cricapi_series, which meant
+        # sync_tour_control wrote it no row (nothing to approve) and _tour_approved("") then read
+        # "pending" FOREVER — a permanently un-approvable tour, skipped on every single run and
+        # never scored. Blank series id => zero cricapi spend => nothing for a human to ration.
+        espn_only = not (t.get("cricapi_series") or "").strip()
+        if control is not None and not espn_only and not _tour_approved(control, t.get("cricapi_series")):
             print(f"-- {t['name']}: not approved in TOUR CONTROL "
                   f"(poll={control.get(t.get('cricapi_series')) or 'pending'}) — skipped (0 API)", file=sys.stderr)
             continue
-        if t.get("cricapi_series") in frozen:
+        if not espn_only and t.get("cricapi_series") in frozen:
             print(f"-- {t['name']}: frozen (fully resolved, cricsheet-official) — skipped (0 API)", file=sys.stderr)
             continue
         if not is_active(t):

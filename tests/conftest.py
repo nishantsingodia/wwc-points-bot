@@ -27,3 +27,22 @@ def perf():
         p.update(over)
         return p
     return _make
+
+
+@pytest.fixture(autouse=True)
+def _isolate_learned_identity():
+    """Undo the identity a test taught the module.
+
+    resolve_perf_pid LEARNS: an id-anchored resolution writes the feed spelling into the global
+    ALIAS2PID so later rows in the same run (a cricapi row for the same person, say) resolve too.
+    That is right in production and wrong across tests — one test minting a pid for
+    "Totally Unknown Person" made a test in ANOTHER file see that name as known, and it failed
+    with a resolution it never asked for. Snapshot and restore, so test order cannot matter.
+    """
+    alias = dict(wc.ALIAS2PID)
+    learned = dict(wc.CS_LEARNED)
+    needs = list(wc.NEEDS_CRICINFO)
+    yield
+    wc.ALIAS2PID.clear(); wc.ALIAS2PID.update(alias)
+    wc.CS_LEARNED.clear(); wc.CS_LEARNED.update(learned)
+    wc.NEEDS_CRICINFO[:] = needs

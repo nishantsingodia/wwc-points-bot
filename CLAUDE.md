@@ -214,6 +214,40 @@ fixture/scorecard call comes back empty — a very misleading combination. Both 
 warn-once on a distinct transport failure. **Do NOT put "Mozilla" back**, and when ESPN data goes
 quietly missing check the UA + status code BEFORE cricapi quota / cricsheet lag / identity.
 
+## ⛔ ESPN can serve an EMPTY scorecard that looks complete (found 13 Aug 2026)
+`playbyplay` intermittently returns HTTP 200 whose whole body is
+`{"commentary": {"count": 1, "pageCount": 1, "items": [<the pre-match "Hello and welcome back"
+preamble>]}}` — for a match ESPN's own scoreboard calls Final. It is INTERNALLY CONSISTENT, so
+every guard that compares items against ESPN's self-reported `count` passes it, and the match
+scores with all 22 players `Played=Y`, every stat 0 and a bare +4 XI bonus. With settlement
+recording live that is what FREEZES as the money baseline. Seen on CPL ev 1534183.
+- **It is NOT a page-size threshold.** It first showed at `limit=1000` while 600/500/300 returned
+  the real 236 items — but a re-probe of the same events minutes later was fine at 1000, and
+  `limit=100` had 502'd in the same window. It is ESPN-side flakiness: any limit can hit it. Do not
+  "fix" it by tuning the limit.
+- **The defence is `espn_expected_balls()`** — the SCORECARD's per-bowler
+  `overallLhb.balls + overallRhb.balls`, a different endpoint and field family, so it cannot go
+  blank in the same breath. `parse_espn` refuses the match if the ball-by-ball is short of it.
+  That total counts wides and no-balls (226 legal + 10 wides = 236 on ev 1534183), so the check
+  counts EVERY delivery — deliberately not filtered by `legal`, since a completeness check must not
+  depend on the extras-parsing it exists to validate. Pinned by `tests/test_espn_completeness.py`.
+- Swept `settlement_snapshots.json` (3119 rows / 87 settled matches) for the signature: **0 hits.**
+  No settled money was affected — CPL was the only exposed tour and it was not being scored at all.
+
+## New player who is in NO squad — resolved by id, never by name (13 Aug 2026)
+A mid-tournament signing or injury replacement appears in the XI but in no squad list. He used to
+publish with a **blank Player ID**: unjoinable by the draft, invisible to every pid-keyed check.
+Now `resolve_perf_pid` mints `ci:<athlete.id>` — derived, not guessed, since ESPN's athlete.id IS
+the cricinfo id — and queues him to **"Needs Cricinfo ID"** with his cricinfo URL for a human to
+fold into the squad. Two guards matter: the id must be a positive integer (else fall through), and
+**a name that already resolves keeps its existing pid** — minting `ci:` over an `uncapped:`/`cs:`
+placeholder would put one person under two pids, which is the split-identity blocker.
+Live: Rivaldo A Clarke (ci:1275938), Kevlon Alston Anderson (ci:1209188), CPL ev 1534182.
+Two supporting fixes: `espn_xi` now carries `espn_id` into `blank_perf` (it was discarded, so an
+XI-only player could only ever be found by name), and the SILENT-DROP auto-add now attributes the
+team via ESPN's roster map + `best_team` instead of `v["team"]` — `parse_espn` never sets `team`,
+so on any ESPN-sourced tour that whole auto-add was dead code and every silent drop hit `continue`.
+
 ## The KEYLESS ESPN tour path (Column A of TOUR CONTROL) — what it does and does NOT do
 Typing a tour name in **Column A of `TOUR CONTROL` (or `TOUR STATUS`)** is the no-code way to add a
 tour: `tour_sync.py --from-status-sheet` reads both tabs, skips names already in `tours.json`, and
@@ -231,11 +265,18 @@ came via cricapi; only 2-team bilaterals had used this path), which exposed four
   **never extended or backfilled**. Hence the 60-day forward window, the back-scan, and the retry
   on transient 5xx — one 502 mid-scan permanently costs that day's match (it did: 34 vs 35).
 Two consequences worth knowing before promising anything:
-- **An ESPN-added tour has `cricapi_series: ""` → the bot does NOT score it.** No points tab is
-  written, and `sync_tour_control` creates no TOUR CONTROL row for a blank series id, so there is
-  nothing to approve. The DRAFT still works (live H2H is scored in-app from ESPN, keyless). The
-  verify gate deliberately waives the 0.80 pid-coverage rule for these (CPL passed at cov=41%).
-  Sheet/settled points require a cricapi series id added to `tours.json` by hand.
+- ~~**An ESPN-added tour has `cricapi_series: ""` → the bot does NOT score it.**~~ **FIXED 13 Aug
+  2026 — an ESPN-only tour is now scored like any other.** What used to happen: the match LIST came
+  only from cricapi's `series_info`, so a blank series id aborted at the series_info guard; and
+  `_tour_approved("")` read "pending" forever because `sync_tour_control` writes no TOUR CONTROL row
+  for a blank id, making the tour permanently un-approvable. CPL 2026 was live from 7 Aug with 35
+  fixtures draftable and scored NOTHING. Now: `espn_match_list()` builds the fixture list from the
+  league scoreboard (same shape as a cricapi matchList, minus the cricapi `id` — the scoring loop
+  already guards `if m.get("id")` and falls through to the ESPN scorecard), and the TOUR CONTROL
+  gate is skipped for a blank series id because that gate exists to ration the cricapi QUOTA, which
+  such a tour does not spend. `tour_sync_finalize` no longer exempts these tours from
+  `build_registry` / `identity_healthcheck` / the 0.80 pid-coverage gate either — the draft's
+  COMPLETED join is pid-based for EVERY tour, so a tour shipping on placeholder pids settles at ZERO.
 - **TBA knockout fixtures are dropped by design** and, per write-once above, never backfilled —
   playoffs must be hand-added once the qualifiers are known.
 Naming: ESPN league names are season-less ("Caribbean Premier League"), and a year appended to the

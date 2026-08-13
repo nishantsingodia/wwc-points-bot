@@ -149,14 +149,20 @@ def main():
     # 1. anchor each new tour's identity. cricapi-scored tours run build_registry here — and it now
     # anchors in CI via the committed players export (registry/auction_players.json.gz), so they no
     # longer need the 61MB gitignored auction DB (build_registry.open_pool_con falls back to it).
-    # ESPN-only tours (cricapi_series="") aren't bot-scored and their draft LIVE join uses the ESPN
-    # name-match path (not the bot registry), so skip build_registry for them.
+    # EVERY tour is anchored, including ESPN-only ones.
+    # The old rule skipped build_registry when cricapi_series was "", reasoning that such a tour
+    # "isn't bot-scored and its draft LIVE join uses ESPN name-match". Both halves were wrong in
+    # consequence: the draft's COMPLETED join is pid-based for EVERY tour, so a tour that ships on
+    # placeholder slug: pids can never match a points row and settles at ZERO — permanently, with
+    # no name fallback (lookupPlayerPoints refuses to fuzzy-fall-back for a pid'd player).
+    # It shipped 82 such players: the whole CPL squad set plus Rohit Sharma, Shubman Gill, Virat
+    # Kohli, KL Rahul, Kuldeep Yadav and Jasprit Bumrah on the India ODI tour.
+    # And "not bot-scored TODAY" is not a durable reason: once cricapi leaves, ESPN-only is the
+    # DEFAULT for every tour. build_registry anchors fine from ESPN rosters — athlete.id IS the
+    # cricinfo id — so there was never a technical need to skip it.
     def _is_espn_only(nm):
         return not (tours.get(nm, {}).get("cricapi_series") or "").strip()
     for name in applied:
-        if _is_espn_only(name):
-            print(f"== {name}: ESPN-only — skip build_registry (live join uses ESPN name-match) ==", file=sys.stderr)
-            continue
         print(f"== build_registry: {name} ==", file=sys.stderr)
         run([sys.executable, "build_registry.py", name])
 
@@ -210,19 +216,19 @@ def main():
         squad_path = os.path.join(BOT, t.get("squads", ""))
         cov = pid_coverage(squad_path) if os.path.exists(squad_path) else {"total": 0, "resolved": 0}
         frac = (cov["resolved"] / cov["total"]) if cov["total"] else 0.0
-        # identity_healthcheck needs the auction DB (absent in CI) → skip for ESPN-only tours.
-        if espn_only:
-            blockers, fixable, unmapped = 0, 0, 0
-        else:
-            hc = run([sys.executable, "identity_healthcheck.py", name])
-            blockers, fixable, unmapped = parse_healthcheck(hc.stdout + hc.stderr)
+        # Run the healthcheck for EVERY tour. It was previously hard-zeroed for ESPN-only tours,
+        # which reported "0 blockers" for a tour nobody had checked — a clean bill of health as an
+        # artefact of not looking.
+        hc = run([sys.executable, "identity_healthcheck.py", name])
+        blockers, fixable, unmapped = parse_healthcheck(hc.stdout + hc.stderr)
 
         problems = []
         if not espn:
             problems.append("SET espn_series (auto-resolve failed) — franchise pts won't load")
-        # pid coverage gates only cricapi-SCORED tours. An ESPN-only tour's live points resolve by
-        # ESPN name-match (not the bot registry), so 30% "coverage" doesn't mean live points fail.
-        if not espn_only and frac < MIN_COV:
+        # pid coverage gates EVERY tour. The old exemption for ESPN-only tours is what let CPL ship
+        # with 75 unanchored players: live points may resolve by ESPN name-match, but the COMPLETED
+        # join — the one that settles money — is pid-based for every tour without exception.
+        if frac < MIN_COV:
             problems.append(f"pid coverage {frac:.0%} < {MIN_COV:.0%} — anchoring didn't take")
         # GAP-1 safety net: the draft must carry this tour's espn_series in its per-gender list,
         # or getEspnLineup / getLiveMatchPoints can't resolve the event -> no lineups, 0 live pts.

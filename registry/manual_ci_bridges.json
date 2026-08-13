@@ -689,5 +689,50 @@
   "names": [
    "md fisher"
   ]
+ },
+ "ci:253802": {
+  "cricinfo_id": "253802",
+  "names": [
+   "v kohli",
+   "virat kohli"
+  ]
+ },
+ "ci:34102": {
+  "cricinfo_id": "34102",
+  "names": [
+   "rg sharma",
+   "rohit sharma"
+  ]
+ },
+ "ci:1070173": {
+  "cricinfo_id": "1070173",
+  "names": [
+   "shubman gill"
+  ]
+ },
+ "ci:422108": {
+  "cricinfo_id": "422108",
+  "names": [
+   "kl rahul"
+  ]
+ },
+ "ci:559235": {
+  "cricinfo_id": "559235",
+  "names": [
+   "kuldeep yadav"
+  ]
+ },
+ "ci:625383": {
+  "cricinfo_id": "625383",
+  "names": [
+   "jasprit bumrah",
+   "jj bumrah"
+  ]
+ },
+ "ci:1287033": {
+  "cricinfo_id": "1287033",
+  "names": [
+   "gurnoor brar"
+  ]
  }
 }
