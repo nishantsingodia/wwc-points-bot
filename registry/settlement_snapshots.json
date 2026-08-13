@@ -6366,6 +6366,23 @@
    "match": "Match 2 — MTSBR v MTWLF",
    "date": "2026-07-22",
    "team": "MTWLF",
+   "pid": "ci:301648",
+   "full": "Jordan Clark",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-07-22::southern brave|welsh fire",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 2 — MTSBR v MTWLF",
+   "date": "2026-07-22",
+   "team": "MTWLF",
    "pid": "ci:1112537",
    "full": "Jordan Cox",
    "points": 10,
@@ -6471,6 +6488,23 @@
    "source": "cricsheet · official",
    "frozen_at": "2026-07-29",
    "provenance": "unknown"
+  },
+  {
+   "match_key": "2026-07-22::southern brave|welsh fire",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 2 — MTSBR v MTWLF",
+   "date": "2026-07-22",
+   "team": "MTSBR",
+   "pid": "ci:1488180",
+   "full": "Manny Lumsden",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
   },
   {
    "match_key": "2026-07-22::southern brave|welsh fire",
@@ -8410,6 +8444,23 @@
    "match": "Match 3 — MTLSP v MTMSG",
    "date": "2026-07-23",
    "team": "MTLSP",
+   "pid": "ci:1143809",
+   "full": "Henry Thomas Crocombe",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (21 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-07-23::london spirit|manchester super giants",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 3 — MTLSP v MTMSG",
+   "date": "2026-07-23",
+   "team": "MTLSP",
    "pid": "ci:1231590",
    "full": "James Coles",
    "points": 45,
@@ -8767,6 +8818,23 @@
    "source": "cricsheet · official",
    "frozen_at": "2026-07-29",
    "provenance": "unknown"
+  },
+  {
+   "match_key": "2026-07-23::london spirit|manchester super giants",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 3 — MTLSP v MTMSG",
+   "date": "2026-07-23",
+   "team": "MTMSG",
+   "pid": "ci:326968",
+   "full": "Michael Bracewell",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (21 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
   },
   {
    "match_key": "2026-07-23::london spirit|manchester super giants",
@@ -9148,6 +9216,23 @@
   },
   {
    "match_key": "2026-07-24::birmingham phoenix|trent rockets",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 4 — MTBPH v MTTRR",
+   "date": "2026-07-24",
+   "team": "MTTRR",
+   "pid": "ci:297482",
+   "full": "Ben William Sanderson",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-07-24::birmingham phoenix|trent rockets",
    "tour": "The Hundred Women's Competition 2026",
    "match": "Match 4 — WTBPH v WTTRR",
    "date": "2026-07-24",
@@ -9495,6 +9580,23 @@
    "source": "cricsheet · official",
    "frozen_at": "2026-07-29",
    "provenance": "unknown"
+  },
+  {
+   "match_key": "2026-07-24::birmingham phoenix|trent rockets",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 4 — MTBPH v MTTRR",
+   "date": "2026-07-24",
+   "team": "MTBPH",
+   "pid": "ci:748793",
+   "full": "Joe James Weatherley",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
   },
   {
    "match_key": "2026-07-24::birmingham phoenix|trent rockets",
@@ -9901,6 +10003,23 @@
    "source": "cricsheet · official",
    "frozen_at": "2026-07-29",
    "provenance": "unknown"
+  },
+  {
+   "match_key": "2026-07-24::birmingham phoenix|trent rockets",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 4 — MTBPH v MTTRR",
+   "date": "2026-07-24",
+   "team": "MTBPH",
+   "pid": "ci:512907",
+   "full": "Thomas George Helm",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
   },
   {
    "match_key": "2026-07-24::birmingham phoenix|trent rockets",
@@ -11644,6 +11763,23 @@
    "match": "Match 6 — MTWLF v MTMILO",
    "date": "2026-07-25",
    "team": "MTWLF",
+   "pid": "ci:301648",
+   "full": "Jordan Clark",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (21 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-07-25::mi london|welsh fire",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 6 — MTWLF v MTMILO",
+   "date": "2026-07-25",
+   "team": "MTWLF",
    "pid": "ci:1112537",
    "full": "Jordan Cox",
    "points": 39,
@@ -12686,6 +12822,23 @@
    "match": "Match 5 — MTSUNL v MTSBR",
    "date": "2026-07-25",
    "team": "MTSBR",
+   "pid": "ci:1488180",
+   "full": "Manny Lumsden",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-07-25::southern brave|sunrisers leeds",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 5 — MTSUNL v MTSBR",
+   "date": "2026-07-25",
+   "team": "MTSBR",
    "pid": "ci:325012",
    "full": "Marcus Stoinis",
    "points": 102,
@@ -13218,6 +13371,23 @@
    "match": "Match 7 — MTMSG v MTBPH",
    "date": "2026-07-26",
    "team": "MTBPH",
+   "pid": "ci:748793",
+   "full": "Joe James Weatherley",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-07-26::birmingham phoenix|manchester super giants",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 7 — MTMSG v MTBPH",
+   "date": "2026-07-26",
+   "team": "MTBPH",
    "pid": "ci:766809",
    "full": "Jordan Thompson",
    "points": 0,
@@ -13309,6 +13479,23 @@
    "source": "cricsheet · official",
    "frozen_at": "2026-07-29",
    "provenance": "unknown"
+  },
+  {
+   "match_key": "2026-07-26::birmingham phoenix|manchester super giants",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 7 — MTMSG v MTBPH",
+   "date": "2026-07-26",
+   "team": "MTMSG",
+   "pid": "ci:326968",
+   "full": "Michael Bracewell",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
   },
   {
    "match_key": "2026-07-26::birmingham phoenix|manchester super giants",
@@ -13463,6 +13650,23 @@
    "source": "cricsheet · official",
    "frozen_at": "2026-07-29",
    "provenance": "unknown"
+  },
+  {
+   "match_key": "2026-07-26::birmingham phoenix|manchester super giants",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 7 — MTMSG v MTBPH",
+   "date": "2026-07-26",
+   "team": "MTBPH",
+   "pid": "ci:512907",
+   "full": "Thomas George Helm",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
   },
   {
    "match_key": "2026-07-26::birmingham phoenix|manchester super giants",
@@ -14922,6 +15126,23 @@
   },
   {
    "match_key": "2026-07-26::london spirit|trent rockets",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 8 — MTTRR v MTLSP",
+   "date": "2026-07-26",
+   "team": "MTTRR",
+   "pid": "ci:297482",
+   "full": "Ben William Sanderson",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "cricsheet · official · cricbuzz cross-checked (21 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-07-26::london spirit|trent rockets",
    "tour": "The Hundred Women's Competition 2026",
    "match": "Match 8 — WTTRR v WTLSP",
    "date": "2026-07-26",
@@ -15199,6 +15420,23 @@
    "source": "cricsheet · official",
    "frozen_at": "2026-07-29",
    "provenance": "unknown"
+  },
+  {
+   "match_key": "2026-07-26::london spirit|trent rockets",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 8 — MTTRR v MTLSP",
+   "date": "2026-07-26",
+   "team": "MTLSP",
+   "pid": "ci:1143809",
+   "full": "Henry Thomas Crocombe",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "cricsheet · official · cricbuzz cross-checked (21 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
   },
   {
    "match_key": "2026-07-26::london spirit|trent rockets",
@@ -16238,6 +16476,23 @@
    "source": "cricsheet · official",
    "frozen_at": "2026-07-29",
    "provenance": "unknown"
+  },
+  {
+   "match_key": "2026-07-27::mi london|southern brave",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 9 — MTSBR v MTMILO",
+   "date": "2026-07-27",
+   "team": "MTSBR",
+   "pid": "ci:1488180",
+   "full": "Manny Lumsden",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (21 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
   },
   {
    "match_key": "2026-07-27::mi london|southern brave",
@@ -17890,6 +18145,23 @@
    "source": "cricsheet · official",
    "frozen_at": "2026-07-29",
    "provenance": "unknown"
+  },
+  {
+   "match_key": "2026-07-28::manchester super giants|sunrisers leeds",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 10 — MTSUNL v MTMSG",
+   "date": "2026-07-28",
+   "team": "MTMSG",
+   "pid": "ci:326968",
+   "full": "Michael Bracewell",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (23 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
   },
   {
    "match_key": "2026-07-28::manchester super giants|sunrisers leeds",
@@ -19825,6 +20097,23 @@
   },
   {
    "match_key": "2026-07-29::london spirit|mi london",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 12 — MTMILO v MTLSP",
+   "date": "2026-07-29",
+   "team": "MTLSP",
+   "pid": "ci:1143809",
+   "full": "Henry Thomas Crocombe",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "cricsheet · official · cricbuzz cross-checked (20 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-07-29::london spirit|mi london",
    "tour": "The Hundred Women's Competition 2026",
    "match": "Match 12 — WTMILO v WTLSP",
    "date": "2026-07-29",
@@ -20525,6 +20814,23 @@
   },
   {
    "match_key": "2026-07-29::trent rockets|welsh fire",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 11 — MTWLF v MTTRR",
+   "date": "2026-07-29",
+   "team": "MTTRR",
+   "pid": "ci:297482",
+   "full": "Ben William Sanderson",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-07-29::trent rockets|welsh fire",
    "tour": "The Hundred Women's Competition 2026",
    "match": "Match 11 — WTWLF v WTTRR",
    "date": "2026-07-29",
@@ -20886,6 +21192,23 @@
    "source": "cricsheet · official",
    "frozen_at": "2026-08-01",
    "provenance": "live"
+  },
+  {
+   "match_key": "2026-07-29::trent rockets|welsh fire",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 11 — MTWLF v MTTRR",
+   "date": "2026-07-29",
+   "team": "MTWLF",
+   "pid": "ci:301648",
+   "full": "Jordan Clark",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
   },
   {
    "match_key": "2026-07-29::trent rockets|welsh fire",
@@ -21710,6 +22033,23 @@
    "tour": "The Hundred Men's Competition 2026",
    "match": "Match 13 — MTSBR v MTBPH",
    "date": "2026-07-30",
+   "team": "MTBPH",
+   "pid": "ci:748793",
+   "full": "Joe James Weatherley",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-07-30::birmingham phoenix|southern brave",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 13 — MTSBR v MTBPH",
+   "date": "2026-07-30",
    "team": "MTSBR",
    "pid": "ci:669855",
    "full": "Jofra Archer",
@@ -21872,6 +22212,23 @@
    "source": "cricapi + ESPN dots/XI · ⏳ provisional (dots unverified, awaiting cricsheet)",
    "frozen_at": "2026-08-01",
    "provenance": "live"
+  },
+  {
+   "match_key": "2026-07-30::birmingham phoenix|southern brave",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 13 — MTSBR v MTBPH",
+   "date": "2026-07-30",
+   "team": "MTSBR",
+   "pid": "ci:1488180",
+   "full": "Manny Lumsden",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
   },
   {
    "match_key": "2026-07-30::birmingham phoenix|southern brave",
@@ -22194,6 +22551,23 @@
    "source": "cricapi + ESPN dots/XI · ⏳ provisional (dots unverified, awaiting cricsheet)",
    "frozen_at": "2026-08-01",
    "provenance": "live"
+  },
+  {
+   "match_key": "2026-07-30::birmingham phoenix|southern brave",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 13 — MTSBR v MTBPH",
+   "date": "2026-07-30",
+   "team": "MTBPH",
+   "pid": "ci:512907",
+   "full": "Thomas George Helm",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
   },
   {
    "match_key": "2026-07-30::birmingham phoenix|southern brave",
@@ -22953,6 +23327,23 @@
   },
   {
    "match_key": "2026-07-31::manchester super giants|trent rockets",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 14 — MTMSG v MTTRR",
+   "date": "2026-07-31",
+   "team": "MTTRR",
+   "pid": "ci:297482",
+   "full": "Ben William Sanderson",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-07-31::manchester super giants|trent rockets",
    "tour": "The Hundred Women's Competition 2026",
    "match": "Match 14 — WTMSG v WTTRR",
    "date": "2026-07-31",
@@ -23440,6 +23831,23 @@
    "source": "cricapi + ESPN dots/XI · ⏳ provisional (dots unverified, awaiting cricsheet)",
    "frozen_at": "2026-08-01",
    "provenance": "live"
+  },
+  {
+   "match_key": "2026-07-31::manchester super giants|trent rockets",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 14 — MTMSG v MTTRR",
+   "date": "2026-07-31",
+   "team": "MTMSG",
+   "pid": "ci:326968",
+   "full": "Michael Bracewell",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
   },
   {
    "match_key": "2026-07-31::manchester super giants|trent rockets",
@@ -24216,6 +24624,23 @@
    "tour": "The Hundred Men's Competition 2026",
    "match": "Match 15 — MTBPH v MTWLF",
    "date": "2026-08-01",
+   "team": "MTBPH",
+   "pid": "ci:748793",
+   "full": "Joe James Weatherley",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-01::birmingham phoenix|welsh fire",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 15 — MTBPH v MTWLF",
+   "date": "2026-08-01",
    "team": "MTWLF",
    "pid": "ci:303669",
    "full": "Joe Root",
@@ -24224,6 +24649,23 @@
    "source": "cricapi + ESPN dots/XI · ⏳ provisional (dots unverified, awaiting cricsheet)",
    "frozen_at": "2026-08-01",
    "provenance": "live"
+  },
+  {
+   "match_key": "2026-08-01::birmingham phoenix|welsh fire",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 15 — MTBPH v MTWLF",
+   "date": "2026-08-01",
+   "team": "MTWLF",
+   "pid": "ci:301648",
+   "full": "Jordan Clark",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
   },
   {
    "match_key": "2026-08-01::birmingham phoenix|welsh fire",
@@ -24619,6 +25061,23 @@
    "source": "cricapi + ESPN dots/XI · ⏳ provisional (dots unverified, awaiting cricsheet)",
    "frozen_at": "2026-08-01",
    "provenance": "live"
+  },
+  {
+   "match_key": "2026-08-01::birmingham phoenix|welsh fire",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 15 — MTBPH v MTWLF",
+   "date": "2026-08-01",
+   "team": "MTBPH",
+   "pid": "ci:512907",
+   "full": "Thomas George Helm",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
   },
   {
    "match_key": "2026-08-01::birmingham phoenix|welsh fire",
@@ -25605,6 +26064,23 @@
   },
   {
    "match_key": "2026-08-01::london spirit|southern brave",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 16 — MTLSP v MTSBR",
+   "date": "2026-08-01",
+   "team": "MTLSP",
+   "pid": "ci:1143809",
+   "full": "Henry Thomas Crocombe",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (21 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-01::london spirit|southern brave",
    "tour": "The Hundred Women's Competition 2026",
    "match": "Match 16 — WTLSP v WTSBR",
    "date": "2026-08-01",
@@ -25924,6 +26400,23 @@
    "source": "cricapi + ESPN dots/XI · ⏳ provisional (dots unverified, awaiting cricsheet)",
    "frozen_at": "2026-08-01",
    "provenance": "live"
+  },
+  {
+   "match_key": "2026-08-01::london spirit|southern brave",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 16 — MTLSP v MTSBR",
+   "date": "2026-08-01",
+   "team": "MTSBR",
+   "pid": "ci:1488180",
+   "full": "Manny Lumsden",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (21 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
   },
   {
    "match_key": "2026-08-01::london spirit|southern brave",
@@ -27369,6 +27862,23 @@
   },
   {
    "match_key": "2026-08-02::manchester super giants|mi london",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 18 — MTMILO v MTMSG",
+   "date": "2026-08-02",
+   "team": "MTMSG",
+   "pid": "ci:326968",
+   "full": "Michael Bracewell",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (21 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-02::manchester super giants|mi london",
    "tour": "The Hundred Women's Competition 2026",
    "match": "Match 18 — WTMILO v WTMSG",
    "date": "2026-08-02",
@@ -27842,6 +28352,23 @@
    "source": "cricapi + ESPN dots/XI · ⏳ provisional (dots unverified, awaiting cricsheet)",
    "frozen_at": "2026-08-02",
    "provenance": "live"
+  },
+  {
+   "match_key": "2026-08-02::sunrisers leeds|trent rockets",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 17 — MTTRR v MTSUNL",
+   "date": "2026-08-02",
+   "team": "MTTRR",
+   "pid": "ci:297482",
+   "full": "Ben William Sanderson",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
   },
   {
    "match_key": "2026-08-02::sunrisers leeds|trent rockets",
@@ -29056,6 +29583,23 @@
    "match": "Match 19 — MTWLF v MTSBR",
    "date": "2026-08-03",
    "team": "MTWLF",
+   "pid": "ci:301648",
+   "full": "Jordan Clark",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-03::southern brave|welsh fire",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 19 — MTWLF v MTSBR",
+   "date": "2026-08-03",
+   "team": "MTWLF",
    "pid": "ci:1112537",
    "full": "Jordan Cox",
    "points": 10,
@@ -29161,6 +29705,23 @@
    "source": "cricapi + ESPN dots/XI · ⏳ provisional (dots unverified, awaiting cricsheet)",
    "frozen_at": "2026-08-04",
    "provenance": "live"
+  },
+  {
+   "match_key": "2026-08-03::southern brave|welsh fire",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 19 — MTWLF v MTSBR",
+   "date": "2026-08-03",
+   "team": "MTSBR",
+   "pid": "ci:1488180",
+   "full": "Manny Lumsden",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
   },
   {
    "match_key": "2026-08-03::southern brave|welsh fire",
@@ -30564,6 +31125,23 @@
   },
   {
    "match_key": "2026-08-05::birmingham phoenix|trent rockets",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 21 — MTTRR v MTBPH",
+   "date": "2026-08-05",
+   "team": "MTTRR",
+   "pid": "ci:297482",
+   "full": "Ben William Sanderson",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-05::birmingham phoenix|trent rockets",
    "tour": "The Hundred Women's Competition 2026",
    "match": "Match 22 — WTTRR v WTBPH",
    "date": "2026-08-05",
@@ -30897,6 +31475,23 @@
    "source": "cricapi · limited (no dots/XI — ESPN unavailable) · ⏳ provisional (awaiting cricsheet)",
    "frozen_at": "2026-08-05",
    "provenance": "live"
+  },
+  {
+   "match_key": "2026-08-05::birmingham phoenix|trent rockets",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 21 — MTTRR v MTBPH",
+   "date": "2026-08-05",
+   "team": "MTBPH",
+   "pid": "ci:748793",
+   "full": "Joe James Weatherley",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
   },
   {
    "match_key": "2026-08-05::birmingham phoenix|trent rockets",
@@ -31289,6 +31884,23 @@
    "source": "cricapi · limited (no dots/XI — ESPN unavailable) · ⏳ provisional (awaiting cricsheet)",
    "frozen_at": "2026-08-05",
    "provenance": "live"
+  },
+  {
+   "match_key": "2026-08-05::birmingham phoenix|trent rockets",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 21 — MTTRR v MTBPH",
+   "date": "2026-08-05",
+   "team": "MTBPH",
+   "pid": "ci:512907",
+   "full": "Thomas George Helm",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
   },
   {
    "match_key": "2026-08-05::birmingham phoenix|trent rockets",
@@ -32945,6 +33557,23 @@
   {
    "match_key": "2026-08-05::manchester super giants|welsh fire",
    "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 20 — MTMSG v MTWLF",
+   "date": "2026-08-05",
+   "team": "MTWLF",
+   "pid": "ci:301648",
+   "full": "Jordan Clark",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-05::manchester super giants|welsh fire",
+   "tour": "The Hundred Men's Competition 2026",
    "match": "Match 21 — MTMSG v MTWLF",
    "date": "2026-08-05",
    "team": "MTWLF",
@@ -33137,6 +33766,23 @@
    "source": "cricapi · limited (no dots/XI — ESPN unavailable) · ⏳ provisional (awaiting cricsheet)",
    "frozen_at": "2026-08-05",
    "provenance": "live"
+  },
+  {
+   "match_key": "2026-08-05::manchester super giants|welsh fire",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 20 — MTMSG v MTWLF",
+   "date": "2026-08-05",
+   "team": "MTMSG",
+   "pid": "ci:326968",
+   "full": "Michael Bracewell",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
   },
   {
    "match_key": "2026-08-05::manchester super giants|welsh fire",
@@ -33809,6 +34455,23 @@
    "source": "cricsheet · official",
    "frozen_at": "2026-08-07",
    "provenance": "live"
+  },
+  {
+   "match_key": "2026-08-06::london spirit|mi london",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 22 — MTLSP v MTMILO",
+   "date": "2026-08-06",
+   "team": "MTLSP",
+   "pid": "ci:1143809",
+   "full": "Henry Thomas Crocombe",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "cricsheet · official · cricbuzz cross-checked (20 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
   },
   {
    "match_key": "2026-08-06::london spirit|mi london",
@@ -36326,6 +36989,23 @@
     "played": true,
     "bat_order": 0,
     "dismissal": "Abrar Ahmed to Clarke, OUT"
+   }
+  },
+  {
+   "match_key": "2026-08-07::birmingham phoenix|sunrisers leeds",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 23 — MTBPH v MTSUNL",
+   "date": "2026-08-07",
+   "team": "MTBPH",
+   "pid": "ci:748793",
+   "full": "Joe James Weatherley",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "ESPN scorecard (cricapi empty) · ⏳ provisional (dots unverified, awaiting cricsheet) · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
@@ -40264,6 +40944,23 @@
     "played": true,
     "bat_order": 0,
     "dismissal": ""
+   }
+  },
+  {
+   "match_key": "2026-08-08::manchester super giants|southern brave",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 25 — MTSBR v MTMSG",
+   "date": "2026-08-08",
+   "team": "MTSBR",
+   "pid": "ci:1488180",
+   "full": "Manny Lumsden",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "ESPN scorecard (cricapi empty) · ⏳ provisional (dots unverified, awaiting cricsheet) · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
