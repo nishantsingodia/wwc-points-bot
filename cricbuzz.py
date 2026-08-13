@@ -810,11 +810,40 @@ _WORD_FOLD = {"saint": "st", "and": "", "&": ""}
 # by which side spells the qualifier, and reported as "no unique cricbuzz match" either way.
 _GENDER_TOK = frozenset(("men", "mens", "women", "womens"))
 
-def _slug(s):
+# The SHARED team registry — registry/team_aliases.json, the team analog of manual_ci_bridges.
+# Consulted here so a REBRANDED franchise still pairs: LPL 2026 renamed Galle Marvels -> Galle
+# Gallants, Kandy Falcons -> Kandy Royals, Colombo Strikers -> Colombo Kaps, and feeds disagree
+# about which era they are in. Generic string folds cannot fix a rebrand — only the curated map can,
+# and keeping it in ONE place is why it exists (a local copy in this module would drift the moment
+# someone adds a variant to the registry).
+_TEAM_CANON = None
+
+def _team_canon():
+    global _TEAM_CANON
+    if _TEAM_CANON is None:
+        _TEAM_CANON = {}
+        try:
+            _p = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                              "registry", "team_aliases.json")
+            for canon, variants in (json.load(open(_p)).get("aliases") or {}).items():
+                for v in list(variants) + [canon]:
+                    _TEAM_CANON[_bare_slug(v)] = _bare_slug(canon)
+        except Exception:
+            _TEAM_CANON = {}
+    return _TEAM_CANON
+
+
+def _bare_slug(s):
+    """Normalization only — no alias lookup (used to KEY the alias map, so it cannot recurse)."""
     s = unicodedata.normalize("NFKD", s or "").encode("ascii", "ignore").decode()
     s = re.sub(r"\s+", " ", re.sub(r"[^a-z0-9]+", " ", s.lower())).strip()
     return " ".join(w for w in (_WORD_FOLD.get(t, t) for t in s.split())
                     if w and w not in _GENDER_TOK)
+
+
+def _slug(s):
+    b = _bare_slug(s)
+    return _team_canon().get(b, b)
 
 
 # Words that carry no discriminating power in either our tour names or Cricbuzz's slugs.

@@ -2409,7 +2409,14 @@ def _espn_event_to_match(e):
         # class.eventType ("T20"/"ODI") is the reliable format field. The event NAME of a league
         # fixture is just "Team A v Team B" with no format in it, so the name-sniff fallback in
         # is_fmt() would reject every match — this is why tour_sync had to read eventType too.
-        "matchType": ((comp.get("class") or {}).get("eventType") or "").lower(),
+        # class.eventType is the reliable format field — WHEN ESPN SETS IT. It is BLANK on the
+        # Hundred Women's series (1521193) while the Men's (1521176) reports "T20", so is_fmt fell
+        # through to sniffing the event NAME, and a league fixture is just "A v B" with no format
+        # word in it. Result: not one Women's match was admitted — 0 of 34 "completed" — while the
+        # Men's ran fine. Falling back to the TOUR'S OWN declared format is not a guess: tours.json
+        # says what this competition is, and every event inside that series is that format.
+        "matchType": (((comp.get("class") or {}).get("eventType") or "").lower()
+                      or (CURRENT_FMT or "").lower()),
         "teams": teams,
         "date": dt[:10],
         "dateTimeGMT": dt,
@@ -2514,7 +2521,13 @@ def run_tour(tour):
     # map normalized full team name -> short code (plus a "Women"-stripped variant,
     # since feeds vary between "Sri Lanka" and "Sri Lanka Women")
     name2short = {norm(v["name"]): k for k, v in squads.items()}
-    strip_women = lambda s: norm(re.sub(r"(?i)\bwomen\b", "", s or ""))
+    # Strip EITHER gender qualifier, not just "Women". This stripped only "women" — a mirror
+    # omission that cost the entire Hundred Men's competition: cricapi fed men's teams unsuffixed
+    # ("London Spirit") so nothing ever exercised the men's side, but ESPN feeds "London Spirit
+    # (Men)", so once the match list came from ESPN every men's team resolved to NO squad code and
+    # the tour wrote ZERO rows — after scoring all 32 matches and bridging 21-22 players in each.
+    # _GENDER_QUAL is the same pattern team_key already uses, so the two can no longer disagree.
+    strip_women = lambda s: norm(_GENDER_QUAL.sub("", s or ""))
     name2short_stripped = {strip_women(v["name"]): k for k, v in squads.items()}
     def short_of(team_full):
         return name2short.get(norm(team_full)) or name2short_stripped.get(strip_women(team_full))
