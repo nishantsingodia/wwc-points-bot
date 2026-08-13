@@ -3127,7 +3127,9 @@
    "espn_id": "990031",
    "display": "Towhid Hridoy",
    "draft_id": 10021,
-   "auction_id": 1532
+   "auction_id": 1532,
+   "cricbuzz_id": "13223",
+   "cricbuzz_tier": 2
   },
   "ci:1161044": {
    "aliases": [
@@ -3290,7 +3292,9 @@
    "espn_id": "410765",
    "display": "Nurul Hasan",
    "draft_id": 10032,
-   "auction_id": 2973
+   "auction_id": 2973,
+   "cricbuzz_id": "8534",
+   "cricbuzz_tier": 1
   },
   "ci:605661": {
    "aliases": [
@@ -4524,7 +4528,9 @@
    "espn_id": "437316",
    "display": "Dasun Shanaka",
    "draft_id": 10116,
-   "auction_id": 7269
+   "auction_id": 7269,
+   "cricbuzz_id": "8422",
+   "cricbuzz_tier": 7
   },
   "ci:698143": {
    "aliases": [
@@ -4991,7 +4997,9 @@
    "espn_id": "300628",
    "display": "Dinesh Chandimal",
    "draft_id": 10144,
-   "auction_id": 2051
+   "auction_id": 2051,
+   "cricbuzz_id": "6245",
+   "cricbuzz_tier": 5
   },
   "ci:1489419": {
    "aliases": [
@@ -6380,7 +6388,9 @@
    "espn_id": "784369",
    "display": "Avishka Fernando",
    "draft_id": 10284,
-   "auction_id": 1386
+   "auction_id": 1386,
+   "cricbuzz_id": "10939",
+   "cricbuzz_tier": 6
   },
   "ci:1075863": {
    "aliases": [
@@ -6395,7 +6405,9 @@
    "espn_id": "1075863",
    "display": "Kamil Mishara",
    "draft_id": 10285,
-   "auction_id": 2468
+   "auction_id": 2468,
+   "cricbuzz_id": "13886",
+   "cricbuzz_tier": 6
   },
   "ci:921509": {
    "aliases": [
@@ -6409,7 +6421,9 @@
    "espn_id": "921509",
    "display": "Ibrahim Zadran",
    "draft_id": 10286,
-   "auction_id": 8650
+   "auction_id": 8650,
+   "cricbuzz_id": "12173",
+   "cricbuzz_tier": 5
   },
   "ci:342619": {
    "aliases": [
@@ -6424,7 +6438,9 @@
    "espn_id": "342619",
    "display": "Bhanuka Rajapaksa",
    "draft_id": 10287,
-   "auction_id": 548
+   "auction_id": 548,
+   "cricbuzz_id": "7869",
+   "cricbuzz_tier": 5
   },
   "ci:56143": {
    "aliases": [
@@ -6438,7 +6454,9 @@
    "espn_id": "56143",
    "display": "Shakib Al Hasan",
    "draft_id": 10288,
-   "auction_id": 290
+   "auction_id": 290,
+   "cricbuzz_id": "544",
+   "cricbuzz_tier": 5
   },
   "ci:1152427": {
    "aliases": [
@@ -6454,7 +6472,9 @@
    "espn_id": "1152427",
    "display": "Dunith Wellalage",
    "draft_id": 10289,
-   "auction_id": 2470
+   "auction_id": 2470,
+   "cricbuzz_id": "14251",
+   "cricbuzz_tier": 6
   },
   "ci:1186658": {
    "aliases": [
@@ -6469,7 +6489,9 @@
    "espn_id": "1186658",
    "display": "Chamindu Wickramasinghe",
    "draft_id": 10290,
-   "auction_id": 774
+   "auction_id": 774,
+   "cricbuzz_id": "15116",
+   "cricbuzz_tier": 6
   },
   "ci:1282477": {
    "aliases": [
@@ -6484,7 +6506,9 @@
    "espn_id": "1282477",
    "display": "Traveen Mathews",
    "draft_id": 10291,
-   "auction_id": 8712
+   "auction_id": 8712,
+   "cricbuzz_id": "22661",
+   "cricbuzz_tier": 6
   },
   "ci:221140": {
    "aliases": [
@@ -6499,7 +6523,9 @@
    "espn_id": "221140",
    "display": "David Wiese",
    "draft_id": 10293,
-   "auction_id": 45
+   "auction_id": 45,
+   "cricbuzz_id": "8589",
+   "cricbuzz_tier": 5
   },
   "ci:1462402": {
    "aliases": [
@@ -6528,7 +6554,9 @@
    "espn_id": "793007",
    "display": "Dilshan Madushanka",
    "draft_id": 10295,
-   "auction_id": 2253
+   "auction_id": 2253,
+   "cricbuzz_id": "15067",
+   "cricbuzz_tier": 6
   },
   "ci:1126045": {
    "aliases": [
@@ -6574,7 +6602,9 @@
    "espn_id": "32966",
    "display": "Piyush Chawla",
    "draft_id": 10298,
-   "auction_id": 120
+   "auction_id": 120,
+   "cricbuzz_id": "466",
+   "cricbuzz_tier": 2
   },
   "ci:384525": {
    "aliases": [
@@ -6588,7 +6618,9 @@
    "espn_id": "384525",
    "display": "Zahoor Khan",
    "draft_id": 10299,
-   "auction_id": 1145
+   "auction_id": 1145,
+   "cricbuzz_id": "12247",
+   "cricbuzz_tier": 1
   },
   "ci:379887": {
    "aliases": [
@@ -6604,7 +6636,9 @@
    "espn_id": "379887",
    "display": "Lizaad Williams",
    "draft_id": 10300,
-   "auction_id": 718
+   "auction_id": 718,
+   "cricbuzz_id": "8531",
+   "cricbuzz_tier": 4
   },
   "ci:1074333": {
    "aliases": [
@@ -6619,7 +6653,9 @@
    "espn_id": "1074333",
    "display": "Nuwanidu Fernando",
    "draft_id": 10301,
-   "auction_id": 8715
+   "auction_id": 8715,
+   "cricbuzz_id": "13187",
+   "cricbuzz_tier": 2
   },
   "ci:801817": {
    "aliases": [
@@ -6635,7 +6671,9 @@
    "espn_id": "801817",
    "display": "Mohommed Shiraz",
    "draft_id": 10302,
-   "auction_id": 8567
+   "auction_id": 8567,
+   "cricbuzz_id": "14574",
+   "cricbuzz_tier": 3
   },
   "ci:1439495": {
    "aliases": [
@@ -6663,7 +6701,9 @@
    "espn_id": "1393938",
    "display": "Sharujan Shanmuganathan",
    "draft_id": 10304,
-   "auction_id": 8717
+   "auction_id": 8717,
+   "cricbuzz_id": "52754",
+   "cricbuzz_tier": 3
   },
   "ci:629074": {
    "aliases": [
@@ -6678,7 +6718,9 @@
    "espn_id": "629074",
    "display": "Kusal Mendis",
    "draft_id": 10305,
-   "auction_id": 660
+   "auction_id": 660,
+   "cricbuzz_id": "9494",
+   "cricbuzz_tier": 2
   },
   "ci:629076": {
    "aliases": [
@@ -6693,7 +6735,9 @@
    "espn_id": "629076",
    "display": "Sadeera Samarawickrama",
    "draft_id": 10306,
-   "auction_id": 1388
+   "auction_id": 1388,
+   "cricbuzz_id": "9495",
+   "cricbuzz_tier": 7
   },
   "ci:784373": {
    "aliases": [
@@ -6707,7 +6751,9 @@
    "espn_id": "784373",
    "display": "Kamindu Mendis",
    "draft_id": 10307,
-   "auction_id": 563
+   "auction_id": 563,
+   "cricbuzz_id": "10940",
+   "cricbuzz_tier": 7
   },
   "ci:603410": {
    "aliases": [
@@ -6723,7 +6769,9 @@
    "espn_id": "603410",
    "display": "Ben McDermott",
    "draft_id": 10308,
-   "auction_id": 2975
+   "auction_id": 2975,
+   "cricbuzz_id": "9453",
+   "cricbuzz_tier": 7
   },
   "ci:681681": {
    "aliases": [
@@ -6738,7 +6786,9 @@
    "espn_id": "681681",
    "display": "Janith Liyanage",
    "draft_id": 10309,
-   "auction_id": 3185
+   "auction_id": 3185,
+   "cricbuzz_id": "13694",
+   "cricbuzz_tier": 6
   },
   "ci:355269": {
    "aliases": [
@@ -6755,7 +6805,9 @@
    "espn_id": "355269",
    "display": "Jimmy Neesham",
    "draft_id": 10310,
-   "auction_id": 261
+   "auction_id": 261,
+   "cricbuzz_id": "8983",
+   "cricbuzz_tier": 6
   },
   "ci:1070229": {
    "aliases": [
@@ -6772,7 +6824,9 @@
    "espn_id": "1070229",
    "display": "Milan Ratnayake",
    "draft_id": 10311,
-   "auction_id": 8646
+   "auction_id": 8646,
+   "cricbuzz_id": "39678",
+   "cricbuzz_tier": 3
   },
   "ci:926629": {
    "aliases": [
@@ -6786,7 +6840,9 @@
    "espn_id": "926629",
    "display": "Hasan Mahmud",
    "draft_id": 10312,
-   "auction_id": 3751
+   "auction_id": 3751,
+   "cricbuzz_id": "13226",
+   "cricbuzz_tier": 3
   },
   "ci:370040": {
    "aliases": [
@@ -6816,7 +6872,9 @@
    "espn_id": "974109",
    "display": "Mujeeb Ur Rahman",
    "draft_id": 10314,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "12071",
+   "cricbuzz_tier": 6
   },
   "ci:629080": {
    "aliases": [
@@ -6831,7 +6889,9 @@
    "espn_id": "629080",
    "display": "Binura Fernando",
    "draft_id": 10315,
-   "auction_id": 8718
+   "auction_id": 8718,
+   "cricbuzz_id": "9498",
+   "cricbuzz_tier": 3
   },
   "ci:596097": {
    "aliases": [
@@ -6847,7 +6907,9 @@
    "espn_id": "596097",
    "display": "Rubin Hermann",
    "draft_id": 10316,
-   "auction_id": 5026
+   "auction_id": 5026,
+   "cricbuzz_id": "14797",
+   "cricbuzz_tier": 6
   },
   "ci:794713": {
    "aliases": [
@@ -6877,7 +6939,9 @@
    "espn_id": "1203995",
    "display": "Shahnawaz Dahani",
    "draft_id": 10318,
-   "auction_id": 2022
+   "auction_id": 2022,
+   "cricbuzz_id": "18847",
+   "cricbuzz_tier": 4
   },
   "ci:931015": {
    "aliases": [
@@ -6893,7 +6957,9 @@
    "espn_id": "931015",
    "display": "Thanuka Dabare",
    "draft_id": 10319,
-   "auction_id": 8621
+   "auction_id": 8621,
+   "cricbuzz_id": "35747",
+   "cricbuzz_tier": 1
   },
   "ci:1210287": {
    "aliases": [
@@ -6909,7 +6975,9 @@
    "espn_id": "1210287",
    "display": "Movin Subasingha",
    "draft_id": 10320,
-   "auction_id": 8622
+   "auction_id": 8622,
+   "cricbuzz_id": "35663",
+   "cricbuzz_tier": 1
   },
   "ci:1282476": {
    "aliases": [
@@ -6925,7 +6993,9 @@
    "espn_id": "1282476",
    "display": "Wanuja Sahan",
    "draft_id": 10321,
-   "auction_id": 8637
+   "auction_id": 8637,
+   "cricbuzz_id": "22656",
+   "cricbuzz_tier": 5
   },
   "ci:954003": {
    "aliases": [
@@ -6954,7 +7024,9 @@
    "espn_id": "1282475",
    "display": "Malsha Tharupathi",
    "draft_id": 10323,
-   "auction_id": 8647
+   "auction_id": 8647,
+   "cricbuzz_id": "22666",
+   "cricbuzz_tier": 5
   },
   "ci:1161050": {
    "aliases": [
@@ -6968,7 +7040,9 @@
    "espn_id": "1161050",
    "display": "Sediqullah Atal",
    "draft_id": 10324,
-   "auction_id": 707
+   "auction_id": 707,
+   "cricbuzz_id": "14204",
+   "cricbuzz_tier": 2
   },
   "ci:1364325": {
    "aliases": [
@@ -6984,7 +7058,9 @@
    "espn_id": "1364325",
    "display": "Vishen Halambage",
    "draft_id": 10325,
-   "auction_id": 8720
+   "auction_id": 8720,
+   "cricbuzz_id": "52771",
+   "cricbuzz_tier": 2
   },
   "ci:300631": {
    "aliases": [
@@ -7000,7 +7076,9 @@
    "espn_id": "300631",
    "display": "Kusal Perera",
    "draft_id": 10326,
-   "auction_id": 682
+   "auction_id": 682,
+   "cricbuzz_id": "8116",
+   "cricbuzz_tier": 6
   },
   "ci:784379": {
    "aliases": [
@@ -7016,7 +7094,9 @@
    "espn_id": "784379",
    "display": "Wanindu Hasaranga",
    "draft_id": 10327,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "10926",
+   "cricbuzz_tier": 6
   },
   "ci:49764": {
    "aliases": [
@@ -7032,7 +7112,9 @@
    "espn_id": "49764",
    "display": "Angelo Mathews",
    "draft_id": 10328,
-   "auction_id": 297
+   "auction_id": 297,
+   "cricbuzz_id": "1629",
+   "cricbuzz_tier": 6
   },
   "ci:477021": {
    "aliases": [
@@ -7047,7 +7129,9 @@
    "espn_id": "477021",
    "display": "Vijay Shankar",
    "draft_id": 10329,
-   "auction_id": 405
+   "auction_id": 405,
+   "cricbuzz_id": "8204",
+   "cricbuzz_tier": 6
   },
   "ci:8917": {
    "aliases": [
@@ -7064,7 +7148,9 @@
    "espn_id": "8917",
    "display": "Moeen Ali",
    "draft_id": 10330,
-   "auction_id": 32
+   "auction_id": 32,
+   "cricbuzz_id": "6692",
+   "cricbuzz_tier": 5
   },
   "ci:1253695": {
    "aliases": [
@@ -7078,7 +7164,9 @@
    "espn_id": "1253695",
    "display": "Pawan Sandesh",
    "draft_id": 10331,
-   "auction_id": 8721
+   "auction_id": 8721,
+   "cricbuzz_id": "1468866",
+   "cricbuzz_tier": 1
   },
   "ci:826901": {
    "aliases": [
@@ -7111,7 +7199,9 @@
    "espn_id": "786925",
    "display": "Asitha Fernando",
    "draft_id": 10333,
-   "auction_id": 8722
+   "auction_id": 8722,
+   "cricbuzz_id": "10938",
+   "cricbuzz_tier": 6
   },
   "ci:1364328": {
    "aliases": [
@@ -7126,7 +7216,9 @@
    "espn_id": "1364328",
    "display": "Garuka Sanketh",
    "draft_id": 10334,
-   "auction_id": 8658
+   "auction_id": 8658,
+   "cricbuzz_id": "52768",
+   "cricbuzz_tier": 3
   },
   "ci:955235": {
    "aliases": [
@@ -7141,7 +7233,9 @@
    "espn_id": "955235",
    "display": "Nuwan Thushara",
    "draft_id": 10335,
-   "auction_id": 321
+   "auction_id": 321,
+   "cricbuzz_id": "18509",
+   "cricbuzz_tier": 6
   },
   "ci:712219": {
    "aliases": [
@@ -7186,7 +7280,9 @@
    "espn_id": "704693",
    "display": "Lahiru Udara",
    "draft_id": 10338,
-   "auction_id": 8724
+   "auction_id": 8724,
+   "cricbuzz_id": "15586",
+   "cricbuzz_tier": 6
   },
   "ci:721041": {
    "aliases": [
@@ -7201,7 +7297,9 @@
    "espn_id": "721041",
    "display": "Dushan Hemantha",
    "draft_id": 10339,
-   "auction_id": 2471
+   "auction_id": 2471,
+   "cricbuzz_id": "35640",
+   "cricbuzz_tier": 6
   },
   "ci:985497": {
    "aliases": [
@@ -7216,7 +7314,9 @@
    "espn_id": "985497",
    "display": "Muditha Lakshan",
    "draft_id": 10340,
-   "auction_id": 8663
+   "auction_id": 8663,
+   "cricbuzz_id": "13955",
+   "cricbuzz_tier": 1
   },
   "ci:823509": {
    "aliases": [
@@ -7274,7 +7374,9 @@
    "espn_id": "1027867",
    "display": "Lasith Croospulle",
    "draft_id": 10344,
-   "auction_id": 7768
+   "auction_id": 7768,
+   "cricbuzz_id": "12130",
+   "cricbuzz_tier": 3
   },
   "ci:326637": {
    "aliases": [
@@ -7290,7 +7392,9 @@
    "espn_id": "326637",
    "display": "Chris Lynn",
    "draft_id": 10345,
-   "auction_id": 358
+   "auction_id": 358,
+   "cricbuzz_id": "7752",
+   "cricbuzz_tier": 1
   },
   "ci:784367": {
    "aliases": [
@@ -7306,7 +7410,9 @@
    "espn_id": "784367",
    "display": "Charith Asalanka",
    "draft_id": 10347,
-   "auction_id": 772
+   "auction_id": 772,
+   "cricbuzz_id": "10934",
+   "cricbuzz_tier": 7
   },
   "ci:348148": {
    "aliases": [
@@ -7320,7 +7426,9 @@
    "espn_id": "348148",
    "display": "Mohammad Nawaz",
    "draft_id": 10348,
-   "auction_id": 2020
+   "auction_id": 2020,
+   "cricbuzz_id": "8367",
+   "cricbuzz_tier": 7
   },
   "ci:623695": {
    "aliases": [
@@ -7335,7 +7443,9 @@
    "espn_id": "623695",
    "display": "Chamika Karunaratne",
    "draft_id": 10350,
-   "auction_id": 1390
+   "auction_id": 1390,
+   "cricbuzz_id": "9500",
+   "cricbuzz_tier": 7
   },
   "ci:1364326": {
    "aliases": [
@@ -7349,7 +7459,9 @@
    "espn_id": "1364326",
    "display": "Dinura Kalupahana",
    "draft_id": 10351,
-   "auction_id": 8726
+   "auction_id": 8726,
+   "cricbuzz_id": "52757",
+   "cricbuzz_tier": 4
   },
   "ci:826689": {
    "aliases": [
@@ -7364,7 +7476,9 @@
    "espn_id": "826689",
    "display": "Pramod Madushan",
    "draft_id": 10352,
-   "auction_id": 8727
+   "auction_id": 8727,
+   "cricbuzz_id": "13679",
+   "cricbuzz_tier": 1
   },
   "ci:1306214": {
    "aliases": [
@@ -7379,7 +7493,9 @@
    "espn_id": "1306214",
    "display": "Eshan Malinga",
    "draft_id": 10353,
-   "auction_id": 243
+   "auction_id": 243,
+   "cricbuzz_id": "46926",
+   "cricbuzz_tier": 6
   },
   "ci:1153149": {
    "aliases": [
@@ -7394,7 +7510,9 @@
    "espn_id": "1153149",
    "display": "Vijayakanth Viyaskanth",
    "draft_id": 10354,
-   "auction_id": 582
+   "auction_id": 582,
+   "cricbuzz_id": "13931",
+   "cricbuzz_tier": 5
   },
   "ci:629063": {
    "aliases": [
@@ -7409,7 +7527,9 @@
    "espn_id": "629063",
    "display": "Mehidy Hasan Miraz",
    "draft_id": 10355,
-   "auction_id": 4331
+   "auction_id": 4331,
+   "cricbuzz_id": "11081",
+   "cricbuzz_tier": 5
   },
   "ci:772361": {
    "aliases": [
@@ -7425,7 +7545,9 @@
    "espn_id": "772361",
    "display": "Sam Harper",
    "draft_id": 10356,
-   "auction_id": 8728
+   "auction_id": 8728,
+   "cricbuzz_id": "10979",
+   "cricbuzz_tier": 7
   },
   "ci:633660": {
    "aliases": [
@@ -7453,7 +7575,9 @@
    "espn_id": "1203669",
    "display": "Akif Javed",
    "draft_id": 10358,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "15751",
+   "cricbuzz_tier": 7
   },
   "ci:499594": {
    "aliases": [
@@ -7484,7 +7608,9 @@
    "espn_id": "693975",
    "display": "Sahan Arachchige",
    "draft_id": 10360,
-   "auction_id": 8471
+   "auction_id": 8471,
+   "cricbuzz_id": "14022",
+   "cricbuzz_tier": 6
   },
   "ci:950405": {
    "aliases": [
@@ -7500,7 +7626,9 @@
    "espn_id": "950405",
    "display": "Tharindu Rathnayake",
    "draft_id": 10361,
-   "auction_id": 8730
+   "auction_id": 8730,
+   "cricbuzz_id": "18515",
+   "cricbuzz_tier": 4
   },
   "ci:1175296": {
    "aliases": [
@@ -7515,7 +7643,9 @@
    "espn_id": "1175296",
    "display": "Sachindu Colombage",
    "draft_id": 10362,
-   "auction_id": 8635
+   "auction_id": 8635,
+   "cricbuzz_id": "15667",
+   "cricbuzz_tier": 2
   },
   "ci:1437704": {
    "aliases": [
@@ -7543,7 +7673,9 @@
    "espn_id": "647785",
    "display": "Sahibzada Farhan",
    "draft_id": 10364,
-   "auction_id": 2800
+   "auction_id": 2800,
+   "cricbuzz_id": "13625",
+   "cricbuzz_tier": 5
   },
   "ci:429754": {
    "aliases": [
@@ -7558,7 +7690,9 @@
    "espn_id": "429754",
    "display": "Niroshan Dickwella",
    "draft_id": 10365,
-   "auction_id": 2089
+   "auction_id": 2089,
+   "cricbuzz_id": "7884",
+   "cricbuzz_tier": 6
   },
   "ci:269280": {
    "aliases": [
@@ -7575,7 +7709,9 @@
    "espn_id": "269280",
    "display": "Reeza Hendricks",
    "draft_id": 10366,
-   "auction_id": 779
+   "auction_id": 779,
+   "cricbuzz_id": "9491",
+   "cricbuzz_tier": 6
   },
   "ci:1171180": {
    "aliases": [
@@ -7590,7 +7726,9 @@
    "espn_id": "1171180",
    "display": "Pavan Rathnayake",
    "draft_id": 10368,
-   "auction_id": 2469
+   "auction_id": 2469,
+   "cricbuzz_id": "15081",
+   "cricbuzz_tier": 6
   },
   "ci:596436": {
    "aliases": [
@@ -7606,7 +7744,9 @@
    "espn_id": "596436",
    "display": "Marques Ackerman",
    "draft_id": 10369,
-   "auction_id": 8732
+   "auction_id": 8732,
+   "cricbuzz_id": "12188",
+   "cricbuzz_tier": 6
   },
   "ci:629084": {
    "aliases": [
@@ -7621,7 +7761,9 @@
    "espn_id": "629084",
    "display": "Ramesh Mendis",
    "draft_id": 10370,
-   "auction_id": 773
+   "auction_id": 773,
+   "cricbuzz_id": "9502",
+   "cricbuzz_tier": 3
   },
   "ci:1379076": {
    "aliases": [
@@ -7652,7 +7794,9 @@
    "espn_id": "1138316",
    "display": "Maheesh Theekshana",
    "draft_id": 10372,
-   "auction_id": 36
+   "auction_id": 36,
+   "cricbuzz_id": "18504",
+   "cricbuzz_tier": 6
   },
   "ci:574178": {
    "aliases": [
@@ -7667,7 +7811,9 @@
    "espn_id": "574178",
    "display": "Akila Dananjaya",
    "draft_id": 10373,
-   "auction_id": 746
+   "auction_id": 746,
+   "cricbuzz_id": "8483",
+   "cricbuzz_tier": 2
   },
   "ci:552152": {
    "aliases": [
@@ -7681,7 +7827,9 @@
    "espn_id": "552152",
    "display": "Dushmantha Chameera",
    "draft_id": 10374,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "8393",
+   "cricbuzz_tier": 6
   },
   "ci:352048": {
    "aliases": [
@@ -7695,7 +7843,9 @@
    "espn_id": "352048",
    "display": "Gulbadin Naib",
    "draft_id": 10375,
-   "auction_id": 527
+   "auction_id": 527,
+   "cricbuzz_id": "8030",
+   "cricbuzz_tier": 6
   },
   "ci:1185538": {
    "aliases": [
@@ -7709,7 +7859,9 @@
    "espn_id": "1185538",
    "display": "Mohammad Wasim",
    "draft_id": 10376,
-   "auction_id": 2021
+   "auction_id": 2021,
+   "cricbuzz_id": "15040",
+   "cricbuzz_tier": 3
   },
   "ci:974175": {
    "aliases": [
@@ -7723,7 +7875,9 @@
    "espn_id": "974175",
    "display": "Fazalhaq Farooqi",
    "draft_id": 10378,
-   "auction_id": 367
+   "auction_id": 367,
+   "cricbuzz_id": "14282",
+   "cricbuzz_tier": 3
   },
   "ci:792519": {
    "aliases": [
@@ -7738,7 +7892,9 @@
    "espn_id": "792519",
    "display": "Dhananjaya Lakshan",
    "draft_id": 10379,
-   "auction_id": 8543
+   "auction_id": 8543,
+   "cricbuzz_id": "13186",
+   "cricbuzz_tier": 2
   },
   "ci:727399": {
    "aliases": [
@@ -7753,7 +7909,9 @@
    "espn_id": "727399",
    "display": "Sachitha Jayatilake",
    "draft_id": 10380,
-   "auction_id": 8734
+   "auction_id": 8734,
+   "cricbuzz_id": "21826",
+   "cricbuzz_tier": 1
   },
   "ci:784375": {
    "aliases": [
@@ -7785,7 +7943,9 @@
    "espn_id": "902447",
    "display": "Dale Phillips",
    "draft_id": 10341,
-   "auction_id": 9812
+   "auction_id": 9812,
+   "cricbuzz_id": "11176",
+   "cricbuzz_tier": 6
   },
   "ci:298438": {
    "aliases": [
@@ -10100,7 +10260,9 @@
    "espn_id": "1072470",
    "display": "Shaheen Shah Afridi",
    "draft_id": 10657,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "12160",
+   "cricbuzz_tier": 4
   },
   "ci:299572": {
    "aliases": [

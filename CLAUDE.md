@@ -4,6 +4,9 @@ D11 fantasy-points feed → auto-updating Google Sheet (GitHub Actions + service
 feeds: **cricapi** (base card) + **ESPN** (full scorecard; the only LIVE source of `dots`/`maidens` — cricsheet supplies them too, at L2)
 cross-checked at L1, then **cricsheet** (official) reconciling at L2. Also produces the **shared
 player registry** (`registry/players.json`) consumed by the auction (`sync-registry`) and the draft.
+**Cricbuzz** (13 Aug 2026) can replace cricapi as the L1 second witness per tour — see
+"Cricbuzz as the L1 second witness" below. cricapi's code is untouched and is still the witness on
+every tour that doesn't opt in.
 
 ## ⛔ RECON — the owner-locked model (7 Aug 2026). Authoritative; do NOT re-derive it.
 **`Match Status` and `Recon State` are two INDEPENDENT axes.** Never encode recon progress inside
@@ -233,6 +236,96 @@ recording live that is what FREEZES as the money baseline. Seen on CPL ev 153418
   depend on the extras-parsing it exists to validate. Pinned by `tests/test_espn_completeness.py`.
 - Swept `settlement_snapshots.json` (3119 rows / 87 settled matches) for the signature: **0 hits.**
   No settled money was affected — CPL was the only exposed tour and it was not being scored at all.
+
+## Cricbuzz as the L1 second witness (13 Aug 2026) — per-tour, fail-safe, identity-gated
+`cricapi` is a poor second witness on the franchise leagues: it returns a stub card (every stat 0),
+and the only fields it and ESPN both carry are `r/w/4s/6s`, so `dots`/`maidens` had NO validator at
+L1 at all. Cricbuzz carries the whole card. **MEASURED** over the two LPL matches with cached
+payloads (cb157138/ev1537349, cb157061/ev1537342), 48 player-rows joined by the DERIVED bridge:
+**48/48 agree on all 14 fields** — `r b 4s 6s w balls runs_conceded dots maidens catches stumpings
+runouts dro lbwb` (`RECON_L1_CB`). A real second opinion on ten fields that had none, with **0**
+Recon rows generated. Same machinery throughout: `compute_l1_gaps` / `build_recon_rows` /
+`apply_recon_overrides` / S1-S2-Manual / `recon_overrides.json`, just widened and re-pointed.
+- **Turn it on per tour**: `"cricbuzz_series": "<id>"` in `tours.json` (LPL 12316, CPL 12123,
+  Hundred 11493 men / 11504 women). Absent ⇒ cricapi stays the witness and behaviour is
+  byte-identical to before. **Nothing is enabled today** — deliberately, see the S1 warning below.
+- **FAIL SAFE, always.** Module missing, series unset, match id not uniquely resolvable, HTTP
+  204/403/timeout, unreadable card, empty bridge ⇒ `cb_match_perf` returns **None** (never `{}` —
+  that would read as "Cricbuzz saw nobody play"), the tour scores off ESPN exactly as today, and the
+  row says `⚠ unverified — single feed (ESPN only, cricbuzz had no card)` plus a Source-column note.
+  Cricbuzz can only ever ADD a cross-check; it can never take a match away.
+- **⛔ THE JOIN IS TO THE PID ESPN'S OWN ROW GOT — not `ci:<bridged id>`.** They are different keys
+  and assuming otherwise manufactured a phantom Recon row on the first real match pair: ESPN
+  athlete.id **1364327** (V Lahiru, LPL ev1537342) resolves to **ci:784375**, because 1364327 is not
+  a registry key and the registry carries that spelling under a different cricinfo id — people.csv
+  has BOTH (`784375 CBRLS Kumara`, `1364327 V Lahiru`). Keying Cricbuzz on `ci:<id>` put one human
+  under two pids and the union in `compute_l1_gaps` reported him as "present in cricbuzz only" — an
+  IDENTITY artifact posted to the VALUE tab. The chain is now pure id→id: cricbuzz id → (derived
+  bridge) → cricinfo id → ESPN's `athlete.id` → the pid ESPN's row already carries. **A duplicate
+  cricinfo id is an identity question and stays one** (Needs Cricinfo ID), never a value row.
+- **Identity comes ONLY from `registry/cricbuzz_bridge.json`** — derived from performance
+  fingerprints + the dismissal join, never names, tier = number of distinct confirming matches
+  (≥1 cross-check, ≥2 before a CB-only field may CREATE points). The bot READS it; deriving is
+  `python3 registry/cricbuzz_bridge.py --derive` out of band, so a scoring run can never mutate
+  identity while it publishes points. Unbridged CB players never enter the witness view.
+- **Cold start is real and by design**: coverage is 0% entering a season's first two matches, 48%
+  at match 3, 88–100% from match 4 (measured over 16 LPL matches). Zero bridged ⇒ "cannot witness"
+  ⇒ single-feed flag. Because of that, **"ESPN has a row and Cricbuzz doesn't" is NOT reported** when
+  the witness is Cricbuzz — it is dominated by "not bridged yet", and 22 unanswerable rows a match
+  is exactly the flood rule E exists to prevent. The mirror ("Cricbuzz saw a performance ESPN
+  missed") IS reported: that is the class that published 4 pts against 110 earned.
+- **⛔ ABSENCE ≠ ZERO.** Cricbuzz writes `None`, never 0, for a field it could not establish —
+  `maidens` on The Hundred is hard-ignored (a verbatim copy of `dots` on 13/13 bowlers, ~816
+  fabricated points), `dots` when its completeness gate fails, `balls` when a bowler row has neither
+  balls nor overs. `_l1_field_material` / `_l1_pair_gaps` / `recon_gaps` all SKIP a `None`, and the
+  whole-match "use S1" seed refuses to write one — otherwise an owner's own approval would zero a
+  real ESPN figure. A missing KEY still defaults to 0 (blank_perf guarantees every key).
+- **⚠ S1 IS POSITIONAL.** `recon_overrides.json` records `"S1"`, not which feed S1 was. Flipping
+  `cricbuzz_series` on a tour that already has approved S1 overrides retroactively changes what they
+  resolve to (10 such rows exist today, on MLC/Hundred/LPL matches). `run_tour` SHOUTS this at tour
+  start; the Recon tab's S1 header names both feeds and a Cricbuzz row stamps the feed into its own
+  S1 cell. Treat the flip as an owner decision about money, not a config tweak.
+- **`build_registry.py` ERASES `cricbuzz_id`/`cricbuzz_tier` from `players.json`** (it rewrites the
+  file wholesale). `cricbuzz_bridge.json` is the durable store, players.json only its mirror —
+  `tour_sync_finalize` now re-runs `--apply` after `build_registry` (idempotent, no network).
+- **The two hosts' User-Agents are OPPOSITE and must never be unified.** ESPN genuinely 403s a
+  browser UA. Cricbuzz does **not** require one: measured 13 Aug 2026 on
+  `/live-cricket-scorecard/157138/x`, browser UA / bot UA / no UA header all returned 200 and
+  byte-identical 609293 B. The browser UA in `cricbuzz.py` is defensive only; the load-bearing rule
+  is directional (never pass it to an ESPN fetcher, never "tidy" `ESPN_UA` into it), and
+  `tests/test_cricbuzz_l1.py` pins that `ESPN_UA` is identical in every module that carries it.
+
+## ⛔ A refused ESPN card is HELD, named, and CUT OFF (13 Aug 2026)
+The ball-count gate above returns `{}` on refusal — indistinguishable from "ESPN has no data", so on
+an ESPN-only tour the match fell through the no-data guard, `continue`d, and was **absent from the
+sheet entirely**: retried forever, no cutoff, one line of stderr inside a **green** workflow run.
+- **How often does it fire? Essentially never, and that is the design input.** Bounded cache-only
+  sweep of 123 playbyplay bodies / 71 distinct events / 6 series / T20+ODI+HUN: `deliveries −
+  scorecard_balls` is **0 on 71/71 events**, 0 over-counts, 0 unverifiable cards. So a fire is never
+  routine noise — which is why the answer is "hold it and make a human decide", not "tolerate a
+  margin". (The Hundred Women's match that is one delivery short of cricsheet is short in BOTH ESPN
+  feeds, so delta = 0 and the gate is correctly silent: this gate measures FETCH completeness against
+  ESPN's own self-report, not truth. The residual HUN-W error is a different defect.)
+- **`ESPN_HOLDS[event]`** records why (`page_fetch_failed` / `short_of_self_count` /
+  `short_vs_scorecard`, got, expected). A good parse **releases** it — without that a healed match
+  stays red forever, the written-but-never-cleared mirror of the bug the gate exists for.
+- **The cutoff is the MATCH clock, not a retry counter**: `OVER_HRS_MAX(12) + ESPN_HOLD_GRACE_H(6)`
+  = 18h after scheduled start. Deliberately not a persisted counter — that lives in a file the
+  workflow must commit, and a failed commit would silently reset the budget so the escalation never
+  arrives. Inside the budget it is a quiet `⏳ retrying`; past it, a **named `ESPN CARD` row** in the
+  Recon tab (`pid = espn:<eventId>`, whole-match, not a player) and the run **exits non-zero**.
+  A LIVE match NEVER escalates: `parse_espn` fetches playbyplay first and the scorecard after, so
+  mid-innings the scorecard is legitimately a ball or two ahead — a fetch-ordering race, not a defect.
+  An unparseable start time never escalates either (an unknown clock is not an expired one).
+- **A held match is forced back to LIVE** so base points cannot freeze on a card we refused — unless
+  it has already published COMPLETED, where the ratchet wins and it is flagged instead.
+- The only way a short card publishes is the owner answering **S2** on that one row
+  (`scope: espn_card` in `recon_overrides.json`), and it then publishes **permanently flagged**
+  (`⚠ ESPN card SHORT (200/236) — scored anyway, approved`). There is no "score it anyway after N
+  tries": that is the one option that can put a wrong number in front of money with nobody deciding.
+- Side fix: `overrides_by_match`'s orphan guard now skips `*` and `espn:*` pids. `*` (the ALL-L1
+  whole-match seed) was already latent — every match-level seed would have been shouted as an
+  orphaned pid; it has never fired only because the ledger holds 0 match-scope rows.
 
 ## New player who is in NO squad — resolved by id, never by name (13 Aug 2026)
 A mid-tournament signing or injury replacement appears in the XI but in no squad list. He used to

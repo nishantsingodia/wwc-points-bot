@@ -1,0 +1,1279 @@
+{
+"cb_match_id":"157138",
+"espn_event_id":"1537349",
+"date":"2026-08-01",
+"cb_score_card":[
+{
+"matchId":157138,
+"inningsId":1,
+"batTeamDetails":{
+"batTeamName":"Galle Gallants",
+"batsmenData":{
+"bat_1":{
+"batId":10979,
+"batName":"Sam Harper",
+"runs":28,
+"balls":16,
+"fours":4,
+"sixes":1,
+"outDesc":"b Wanuja Sahan",
+"wicketCode":"BOWLED",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":22656,
+"dots":6
+},
+"bat_2":{
+"batId":23186,
+"batName":"Thomas Fraser Rogers",
+"runs":4,
+"balls":2,
+"fours":1,
+"sixes":0,
+"outDesc":"lbw b Mujeeb Ur Rahman",
+"wicketCode":"LBW",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":12071,
+"dots":1
+},
+"bat_3":{
+"batId":10934,
+"batName":"Charith Asalanka",
+"runs":58,
+"balls":37,
+"fours":7,
+"sixes":2,
+"outDesc":"c Janith Liyanage b Milan Rathnayake",
+"wicketCode":"CAUGHT",
+"fielderId1":13694,
+"fielderId2":0,
+"bowlerId":39678,
+"dots":11
+},
+"bat_4":{
+"batId":52757,
+"batName":"Dinura Kalupahana",
+"runs":20,
+"balls":21,
+"fours":0,
+"sixes":2,
+"outDesc":"b Malsha Tharupathi",
+"wicketCode":"BOWLED",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":22666,
+"dots":13
+},
+"bat_5":{
+"batId":9500,
+"batName":"Chamika Karunaratne",
+"runs":2,
+"balls":3,
+"fours":0,
+"sixes":0,
+"outDesc":"c and b James Neesham",
+"wicketCode":"CAUGHTBOWLED",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":8983,
+"dots":2
+},
+"bat_6":{
+"batId":14022,
+"batName":"Sahan Arachchige",
+"runs":43,
+"balls":29,
+"fours":4,
+"sixes":2,
+"outDesc":"st Sadeera Samarawickrama b Wanuja Sahan",
+"wicketCode":"STUMPED",
+"fielderId1":9495,
+"fielderId2":0,
+"bowlerId":22656,
+"dots":11
+},
+"bat_7":{
+"batId":8422,
+"batName":"Dasun Shanaka",
+"runs":21,
+"balls":8,
+"fours":1,
+"sixes":2,
+"outDesc":"not out",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":2
+},
+"bat_8":{
+"batId":8367,
+"batName":"Mohammad Nawaz",
+"runs":7,
+"balls":4,
+"fours":0,
+"sixes":1,
+"outDesc":"not out",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":2
+},
+"bat_9":{
+"batId":18515,
+"batName":"Tharindu Ratnayake",
+"runs":0,
+"balls":0,
+"fours":0,
+"sixes":0,
+"outDesc":"",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":0
+},
+"bat_10":{
+"batId":15751,
+"batName":"Akif Javed",
+"runs":0,
+"balls":0,
+"fours":0,
+"sixes":0,
+"outDesc":"",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":0
+},
+"bat_11":{
+"batId":15667,
+"batName":"Sachindu Colombage",
+"runs":0,
+"balls":0,
+"fours":0,
+"sixes":0,
+"outDesc":"",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":0
+}
+}
+},
+"bowlTeamDetails":{
+"bowlTeamName":"Colombo Kaps",
+"bowlersData":{
+"bowl_1":{
+"bowlerId":12071,
+"bowlName":"Mujeeb Ur Rahman",
+"overs":4,
+"balls":24,
+"runs":37,
+"wickets":1,
+"maidens":0,
+"dots":0,
+"wides":0,
+"no_balls":0
+},
+"bowl_2":{
+"bowlerId":22786,
+"bowlName":"Ripon Mondol",
+"overs":2,
+"balls":12,
+"runs":34,
+"wickets":0,
+"maidens":0,
+"dots":0,
+"wides":0,
+"no_balls":0
+},
+"bowl_3":{
+"bowlerId":22656,
+"bowlName":"Wanuja Sahan",
+"overs":3,
+"balls":18,
+"runs":28,
+"wickets":2,
+"maidens":0,
+"dots":0,
+"wides":1,
+"no_balls":0
+},
+"bowl_4":{
+"bowlerId":39678,
+"bowlName":"Milan Priyanath Rathnayake",
+"overs":2,
+"balls":12,
+"runs":14,
+"wickets":1,
+"maidens":0,
+"dots":0,
+"wides":0,
+"no_balls":0
+},
+"bowl_5":{
+"bowlerId":8983,
+"bowlName":"James Neesham",
+"overs":4,
+"balls":24,
+"runs":35,
+"wickets":1,
+"maidens":0,
+"dots":0,
+"wides":5,
+"no_balls":0
+},
+"bowl_6":{
+"bowlerId":22666,
+"bowlName":"Malsha Tharupathi",
+"overs":2,
+"balls":12,
+"runs":16,
+"wickets":1,
+"maidens":0,
+"dots":0,
+"wides":0,
+"no_balls":0
+},
+"bowl_7":{
+"bowlerId":10940,
+"bowlName":"Kamindu Mendis",
+"overs":3,
+"balls":18,
+"runs":27,
+"wickets":0,
+"maidens":0,
+"dots":0,
+"wides":2,
+"no_balls":0
+}
+}
+}
+},
+{
+"matchId":157138,
+"inningsId":2,
+"batTeamDetails":{
+"batTeamName":"Colombo Kaps",
+"batsmenData":{
+"bat_1":{
+"batId":14797,
+"batName":"Rubin Hermann",
+"runs":5,
+"balls":6,
+"fours":1,
+"sixes":0,
+"outDesc":"c Tharindu Ratnayake b Akif Javed",
+"wicketCode":"CAUGHT",
+"fielderId1":18515,
+"fielderId2":0,
+"bowlerId":15751,
+"dots":4
+},
+"bat_2":{
+"batId":9495,
+"batName":"Sadeera Samarawickrama",
+"runs":37,
+"balls":19,
+"fours":5,
+"sixes":2,
+"outDesc":"c Eshan Malinga b Mohammad Nawaz",
+"wicketCode":"CAUGHT",
+"fielderId1":46926,
+"fielderId2":0,
+"bowlerId":8367,
+"dots":7
+},
+"bat_3":{
+"batId":9453,
+"batName":"Ben McDermott",
+"runs":38,
+"balls":28,
+"fours":4,
+"sixes":1,
+"outDesc":"c Thomas Rogers b Colombage",
+"wicketCode":"CAUGHT",
+"fielderId1":23186,
+"fielderId2":0,
+"bowlerId":15667,
+"dots":10
+},
+"bat_4":{
+"batId":10940,
+"batName":"Kamindu Mendis",
+"runs":1,
+"balls":2,
+"fours":0,
+"sixes":0,
+"outDesc":"lbw b Mohammad Nawaz",
+"wicketCode":"LBW",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":8367,
+"dots":1
+},
+"bat_5":{
+"batId":12127,
+"batName":"Ashen Bandara",
+"runs":3,
+"balls":4,
+"fours":0,
+"sixes":0,
+"outDesc":"st Sam Harper b Mohammad Nawaz",
+"wicketCode":"STUMPED",
+"fielderId1":10979,
+"fielderId2":0,
+"bowlerId":8367,
+"dots":1
+},
+"bat_6":{
+"batId":8983,
+"batName":"James Neesham",
+"runs":20,
+"balls":15,
+"fours":2,
+"sixes":1,
+"outDesc":"c Thomas Rogers b Eshan Malinga",
+"wicketCode":"CAUGHT",
+"fielderId1":23186,
+"fielderId2":0,
+"bowlerId":46926,
+"dots":6
+},
+"bat_7":{
+"batId":13694,
+"batName":"Janith Liyanage",
+"runs":5,
+"balls":3,
+"fours":1,
+"sixes":0,
+"outDesc":"lbw b Tharindu Ratnayake",
+"wicketCode":"LBW",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":18515,
+"dots":1
+},
+"bat_8":{
+"batId":22666,
+"batName":"Malsha Tharupathi",
+"runs":36,
+"balls":15,
+"fours":3,
+"sixes":3,
+"outDesc":"c and b Eshan Malinga",
+"wicketCode":"CAUGHTBOWLED",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":46926,
+"dots":4
+},
+"bat_9":{
+"batId":39678,
+"batName":"Milan Priyanath Rathnayake",
+"runs":21,
+"balls":19,
+"fours":1,
+"sixes":1,
+"outDesc":"c Chamika Karunaratne b Akif Javed",
+"wicketCode":"CAUGHT",
+"fielderId1":9500,
+"fielderId2":0,
+"bowlerId":15751,
+"dots":8
+},
+"bat_10":{
+"batId":22656,
+"batName":"Wanuja Sahan",
+"runs":1,
+"balls":3,
+"fours":0,
+"sixes":0,
+"outDesc":"not out",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":2
+},
+"bat_11":{
+"batId":22786,
+"batName":"Ripon Mondol",
+"runs":5,
+"balls":4,
+"fours":1,
+"sixes":0,
+"outDesc":"run out (Tharindu Ratnayake/Eshan Malinga)",
+"wicketCode":"RUNOUT",
+"fielderId1":18515,
+"fielderId2":46926,
+"bowlerId":0,
+"dots":2
+},
+"bat_12":{
+"batId":12071,
+"batName":"Mujeeb Ur Rahman",
+"runs":0,
+"balls":0,
+"fours":0,
+"sixes":0,
+"outDesc":"",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":0
+}
+}
+},
+"bowlTeamDetails":{
+"bowlTeamName":"Galle Gallants",
+"bowlersData":{
+"bowl_1":{
+"bowlerId":18515,
+"bowlName":"Tharindu Ratnayake",
+"overs":4,
+"balls":24,
+"runs":37,
+"wickets":1,
+"maidens":0,
+"dots":0,
+"wides":1,
+"no_balls":0
+},
+"bowl_2":{
+"bowlerId":15751,
+"bowlName":"Akif Javed",
+"overs":4,
+"balls":24,
+"runs":42,
+"wickets":2,
+"maidens":0,
+"dots":0,
+"wides":2,
+"no_balls":0
+},
+"bowl_3":{
+"bowlerId":8367,
+"bowlName":"Mohammad Nawaz",
+"overs":4,
+"balls":24,
+"runs":24,
+"wickets":3,
+"maidens":0,
+"dots":0,
+"wides":2,
+"no_balls":0
+},
+"bowl_4":{
+"bowlerId":46926,
+"bowlName":"Eshan Malinga",
+"overs":3.4,
+"balls":22,
+"runs":43,
+"wickets":2,
+"maidens":0,
+"dots":0,
+"wides":2,
+"no_balls":0
+},
+"bowl_5":{
+"bowlerId":15667,
+"bowlName":"Sachindu Colombage",
+"overs":4,
+"balls":24,
+"runs":34,
+"wickets":1,
+"maidens":0,
+"dots":0,
+"wides":1,
+"no_balls":0
+}
+}
+}
+}
+],
+"espn_pbp":{
+"commentary":{
+"items":[
+{
+"batsman":{
+"athlete":{
+"id":"348148",
+"displayName":"Mohammad Nawaz"
+},
+"totalRuns":7,
+"faced":4,
+"fours":0,
+"sixes":1
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"355269",
+"displayName":"James Neesham"
+},
+"totalRuns":20,
+"faced":15,
+"fours":2,
+"sixes":1
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"437316",
+"displayName":"Dasun Shanaka"
+},
+"totalRuns":21,
+"faced":8,
+"fours":1,
+"sixes":2
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"596097",
+"displayName":"Rubin Hermann"
+},
+"totalRuns":5,
+"faced":6,
+"fours":1,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"603410",
+"displayName":"Ben McDermott"
+},
+"totalRuns":38,
+"faced":28,
+"fours":4,
+"sixes":1
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"623695",
+"displayName":"Chamika Karunaratne"
+},
+"totalRuns":2,
+"faced":3,
+"fours":0,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"629076",
+"displayName":"Sadeera Samarawickrama"
+},
+"totalRuns":37,
+"faced":19,
+"fours":5,
+"sixes":2
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"681681",
+"displayName":"Janith Liyanage"
+},
+"totalRuns":5,
+"faced":3,
+"fours":1,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"693975",
+"displayName":"Sahan Arachchige"
+},
+"totalRuns":43,
+"faced":29,
+"fours":4,
+"sixes":2
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"772361",
+"displayName":"Sam Harper"
+},
+"totalRuns":28,
+"faced":16,
+"fours":4,
+"sixes":1
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"784367",
+"displayName":"Charith Asalanka"
+},
+"totalRuns":58,
+"faced":37,
+"fours":7,
+"sixes":2
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"784373",
+"displayName":"Kamindu Mendis"
+},
+"totalRuns":1,
+"faced":2,
+"fours":0,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"958691",
+"displayName":"Ashen Bandara"
+},
+"totalRuns":3,
+"faced":4,
+"fours":0,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"1070229",
+"displayName":"Milan Rathnayaka"
+},
+"totalRuns":21,
+"faced":19,
+"fours":1,
+"sixes":1
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"1137283",
+"displayName":"Thomas Rogers"
+},
+"totalRuns":4,
+"faced":2,
+"fours":1,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"1276980",
+"displayName":"Ripon Mondol"
+},
+"totalRuns":5,
+"faced":4,
+"fours":1,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"1282475",
+"displayName":"Malsha Tharupathi"
+},
+"totalRuns":36,
+"faced":15,
+"fours":3,
+"sixes":3
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"1282476",
+"displayName":"Wanuja Sahan"
+},
+"totalRuns":1,
+"faced":3,
+"fours":0,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"1364326",
+"displayName":"Dinura Kalupahana"
+},
+"totalRuns":20,
+"faced":21,
+"fours":0,
+"sixes":2
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"348148",
+"displayName":"Mohammad Nawaz"
+},
+"balls":24,
+"conceded":24,
+"wickets":3,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"355269",
+"displayName":"James Neesham"
+},
+"balls":24,
+"conceded":35,
+"wickets":1,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"784373",
+"displayName":"Kamindu Mendis"
+},
+"balls":18,
+"conceded":27,
+"wickets":0,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"950405",
+"displayName":"Tharindu Ratnayake"
+},
+"balls":24,
+"conceded":37,
+"wickets":1,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"974109",
+"displayName":"Mujeeb Ur Rahman"
+},
+"balls":24,
+"conceded":37,
+"wickets":1,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"1070229",
+"displayName":"Milan Rathnayaka"
+},
+"balls":12,
+"conceded":14,
+"wickets":1,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"1175296",
+"displayName":"Sachindu Colombage"
+},
+"balls":24,
+"conceded":34,
+"wickets":1,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"1203669",
+"displayName":"Akif Javed"
+},
+"balls":24,
+"conceded":42,
+"wickets":2,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"1276980",
+"displayName":"Ripon Mondol"
+},
+"balls":12,
+"conceded":34,
+"wickets":0,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"1282475",
+"displayName":"Malsha Tharupathi"
+},
+"balls":12,
+"conceded":16,
+"wickets":1,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"1282476",
+"displayName":"Wanuja Sahan"
+},
+"balls":18,
+"conceded":28,
+"wickets":2,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"1306214",
+"displayName":"Eshan Malinga"
+},
+"balls":22,
+"conceded":43,
+"wickets":2,
+"maidens":0
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"leg before wicket",
+"text":"TF Rogers lbw b Mujeeb Ur Rahman 4 (4m 2b 1x4 0x6) SR: 200",
+"batsman":{
+"athlete":{
+"id":"1137283",
+"displayName":"Thomas Rogers"
+}
+},
+"bowler":{
+"athlete":{
+"id":"974109",
+"displayName":"Mujeeb Ur Rahman"
+}
+},
+"fielder":{
+"athlete":{
+"id":null,
+"displayName":null
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"bowled",
+"text":"SB Harper  b Sahan 28 (16m 16b 4x4 1x6) SR: 175",
+"batsman":{
+"athlete":{
+"id":"772361",
+"displayName":"Sam Harper"
+}
+},
+"bowler":{
+"athlete":{
+"id":"1282476",
+"displayName":"Wanuja Sahan"
+}
+},
+"fielder":{
+"athlete":{
+"id":null,
+"displayName":null
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"bowled",
+"text":"D Kalupahana  b Tharupathi 20 (25m 21b 0x4 2x6) SR: 95.23",
+"batsman":{
+"athlete":{
+"id":"1364326",
+"displayName":"Dinura Kalupahana"
+}
+},
+"bowler":{
+"athlete":{
+"id":"1282475",
+"displayName":"Malsha Tharupathi"
+}
+},
+"fielder":{
+"athlete":{
+"id":null,
+"displayName":null
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"C Karunaratne c &amp; b Neesham 2 (7m 3b 0x4 0x6) SR: 66.66",
+"batsman":{
+"athlete":{
+"id":"623695",
+"displayName":"Chamika Karunaratne"
+}
+},
+"bowler":{
+"athlete":{
+"id":"355269",
+"displayName":"James Neesham"
+}
+},
+"fielder":{
+"athlete":{
+"id":"355269",
+"displayName":"James Neesham"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"stumped",
+"text":"SSD Arachchige st &dagger;Samarawickrama b Sahan 43 (27m 29b 4x4 2x6) SR: 148.27",
+"batsman":{
+"athlete":{
+"id":"693975",
+"displayName":"Sahan Arachchige"
+}
+},
+"bowler":{
+"athlete":{
+"id":"1282476",
+"displayName":"Wanuja Sahan"
+}
+},
+"fielder":{
+"athlete":{
+"id":"629076",
+"displayName":"Sadeera Samarawickrama"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"KIC Asalanka c Liyanage b Rathnayaka 58 (76m 37b 7x4 2x6) SR: 156.75",
+"batsman":{
+"athlete":{
+"id":"784367",
+"displayName":"Charith Asalanka"
+}
+},
+"bowler":{
+"athlete":{
+"id":"1070229",
+"displayName":"Milan Rathnayaka"
+}
+},
+"fielder":{
+"athlete":{
+"id":"681681",
+"displayName":"Janith Liyanage"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"RA Hermann c Ratnayake b Akif Javed 5 (7m 6b 1x4 0x6) SR: 83.33",
+"batsman":{
+"athlete":{
+"id":"596097",
+"displayName":"Rubin Hermann"
+}
+},
+"bowler":{
+"athlete":{
+"id":"1203669",
+"displayName":"Akif Javed"
+}
+},
+"fielder":{
+"athlete":{
+"id":"950405",
+"displayName":"Tharindu Ratnayake"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"S Samarawickrama c Malinga b Mohammad Nawaz 37 (30m 19b 5x4 2x6) SR: 194.73",
+"batsman":{
+"athlete":{
+"id":"629076",
+"displayName":"Sadeera Samarawickrama"
+}
+},
+"bowler":{
+"athlete":{
+"id":"348148",
+"displayName":"Mohammad Nawaz"
+}
+},
+"fielder":{
+"athlete":{
+"id":"1306214",
+"displayName":"Eshan Malinga"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"leg before wicket",
+"text":"PHKD Mendis lbw b Mohammad Nawaz 1 (2m 2b 0x4 0x6) SR: 50",
+"batsman":{
+"athlete":{
+"id":"784373",
+"displayName":"Kamindu Mendis"
+}
+},
+"bowler":{
+"athlete":{
+"id":"348148",
+"displayName":"Mohammad Nawaz"
+}
+},
+"fielder":{
+"athlete":{
+"id":null,
+"displayName":null
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"stumped",
+"text":"KNA Bandara st &dagger;Harper b Mohammad Nawaz 3 (6m 4b 0x4 0x6) SR: 75",
+"batsman":{
+"athlete":{
+"id":"958691",
+"displayName":"Ashen Bandara"
+}
+},
+"bowler":{
+"athlete":{
+"id":"348148",
+"displayName":"Mohammad Nawaz"
+}
+},
+"fielder":{
+"athlete":{
+"id":"772361",
+"displayName":"Sam Harper"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"BR McDermott c Rogers b Colombage 38 (43m 28b 4x4 1x6) SR: 135.71",
+"batsman":{
+"athlete":{
+"id":"603410",
+"displayName":"Ben McDermott"
+}
+},
+"bowler":{
+"athlete":{
+"id":"1175296",
+"displayName":"Sachindu Colombage"
+}
+},
+"fielder":{
+"athlete":{
+"id":"1137283",
+"displayName":"Thomas Rogers"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"leg before wicket",
+"text":"J Liyanage lbw b Ratnayake 5 (5m 3b 1x4 0x6) SR: 166.66",
+"batsman":{
+"athlete":{
+"id":"681681",
+"displayName":"Janith Liyanage"
+}
+},
+"bowler":{
+"athlete":{
+"id":"950405",
+"displayName":"Tharindu Ratnayake"
+}
+},
+"fielder":{
+"athlete":{
+"id":null,
+"displayName":null
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"JDS Neesham c Rogers b Malinga 20 (24m 15b 2x4 1x6) SR: 133.33",
+"batsman":{
+"athlete":{
+"id":"355269",
+"displayName":"James Neesham"
+}
+},
+"bowler":{
+"athlete":{
+"id":"1306214",
+"displayName":"Eshan Malinga"
+}
+},
+"fielder":{
+"athlete":{
+"id":"1137283",
+"displayName":"Thomas Rogers"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"M Tharupathi c &amp; b Malinga 36 (29m 15b 3x4 3x6) SR: 240",
+"batsman":{
+"athlete":{
+"id":"1282475",
+"displayName":"Malsha Tharupathi"
+}
+},
+"bowler":{
+"athlete":{
+"id":"1306214",
+"displayName":"Eshan Malinga"
+}
+},
+"fielder":{
+"athlete":{
+"id":"1306214",
+"displayName":"Eshan Malinga"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"RMMP Rathnayaka c Karunaratne b Akif Javed 21 (28m 19b 1x4 1x6) SR: 110.52",
+"batsman":{
+"athlete":{
+"id":"1070229",
+"displayName":"Milan Rathnayaka"
+}
+},
+"bowler":{
+"athlete":{
+"id":"1203669",
+"displayName":"Akif Javed"
+}
+},
+"fielder":{
+"athlete":{
+"id":"623695",
+"displayName":"Chamika Karunaratne"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"run out",
+"text":"R Mondol run out 5 (5m 4b 1x4 0x6) SR: 125",
+"batsman":{
+"athlete":{
+"id":"1276980",
+"displayName":"Ripon Mondol"
+}
+},
+"bowler":{
+"athlete":{
+"id":"1306214",
+"displayName":"Eshan Malinga"
+}
+},
+"fielder":{
+"athlete":{
+"id":null,
+"displayName":null
+}
+}
+}
+}
+]
+}
+}
+}

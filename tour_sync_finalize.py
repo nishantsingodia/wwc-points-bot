@@ -166,6 +166,19 @@ def main():
         print(f"== build_registry: {name} ==", file=sys.stderr)
         run([sys.executable, "build_registry.py", name])
 
+    # 1b. RE-MIRROR the Cricbuzz bridge. build_registry rewrites registry/players.json WHOLESALE,
+    # which ERASES the `cricbuzz_id`/`cricbuzz_tier` fields cricbuzz_bridge writes there — the
+    # store (registry/cricbuzz_bridge.json) is durable, players.json is only its mirror. Without
+    # this line the mirror silently empties after every tour sync and stays empty, which is the
+    # written-but-never-restored variant of this repo's favourite bug. Idempotent, no network, and
+    # non-fatal: the bot reads the STORE, not the mirror, so a failure here costs the mirror only.
+    if applied:
+        print("== cricbuzz bridge --apply (re-mirror after build_registry) ==", file=sys.stderr)
+        if run([sys.executable, "registry/cricbuzz_bridge.py", "--apply"]).returncode:
+            print("  ⚠ cricbuzz bridge re-mirror FAILED — registry/players.json carries no "
+                  "cricbuzz_id fields until it is re-run. Not fatal: the bot reads the store.",
+                  file=sys.stderr)
+
     # 2. sync the draft roster to the (now-updated) registry — one pass covers all tours
     print("== backfill_draft_pids ==", file=sys.stderr)
     run([sys.executable, "registry/backfill_draft_pids.py"])

@@ -1,0 +1,1242 @@
+{
+"cb_match_id":"156988",
+"espn_event_id":"1537335",
+"date":"2026-07-19",
+"cb_score_card":[
+{
+"matchId":156988,
+"inningsId":1,
+"batTeamDetails":{
+"batTeamName":"Kandy Falcons",
+"batsmenData":{
+"bat_1":{
+"batId":8116,
+"batName":"Kusal Perera",
+"runs":11,
+"balls":6,
+"fours":2,
+"sixes":0,
+"outDesc":"lbw b Binura Fernando",
+"wicketCode":"LBW",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":9498,
+"dots":1
+},
+"bat_2":{
+"batId":15586,
+"batName":"Lahiru Udara",
+"runs":53,
+"balls":36,
+"fours":8,
+"sixes":1,
+"outDesc":"lbw b James Neesham",
+"wicketCode":"LBW",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":8983,
+"dots":13
+},
+"bat_3":{
+"batId":14204,
+"batName":"Sediqullah Atal",
+"runs":1,
+"balls":3,
+"fours":0,
+"sixes":0,
+"outDesc":"c Sadeera Samarawickrama b Hasan Mahmud",
+"wicketCode":"CAUGHT",
+"fielderId1":9495,
+"fielderId2":0,
+"bowlerId":13226,
+"dots":2
+},
+"bat_4":{
+"batId":11176,
+"batName":"Dale Phillips",
+"runs":1,
+"balls":2,
+"fours":0,
+"sixes":0,
+"outDesc":"lbw b Hasan Mahmud",
+"wicketCode":"LBW",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":13226,
+"dots":1
+},
+"bat_5":{
+"batId":1629,
+"batName":"Angelo Mathews",
+"runs":45,
+"balls":41,
+"fours":2,
+"sixes":2,
+"outDesc":"c Wanuja Sahan b James Neesham",
+"wicketCode":"CAUGHT",
+"fielderId1":22656,
+"fielderId2":0,
+"bowlerId":8983,
+"dots":14
+},
+"bat_6":{
+"batId":6692,
+"batName":"Moeen Ali",
+"runs":41,
+"balls":17,
+"fours":1,
+"sixes":4,
+"outDesc":"c Rubin Hermann b Binura Fernando",
+"wicketCode":"CAUGHT",
+"fielderId1":14797,
+"fielderId2":0,
+"bowlerId":9498,
+"dots":1
+},
+"bat_7":{
+"batId":8204,
+"batName":"Vijay Shankar",
+"runs":15,
+"balls":9,
+"fours":1,
+"sixes":1,
+"outDesc":"c Hasan Mahmud b Binura Fernando",
+"wicketCode":"CAUGHT",
+"fielderId1":13226,
+"fielderId2":0,
+"bowlerId":9498,
+"dots":2
+},
+"bat_8":{
+"batId":10926,
+"batName":"Wanindu Hasaranga",
+"runs":1,
+"balls":2,
+"fours":0,
+"sixes":0,
+"outDesc":"b Hasan Mahmud",
+"wicketCode":"BOWLED",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":13226,
+"dots":1
+},
+"bat_9":{
+"batId":35640,
+"batName":"Dushan Hemantha",
+"runs":4,
+"balls":2,
+"fours":1,
+"sixes":0,
+"outDesc":"run out (Hasan Mahmud)",
+"wicketCode":"RUNOUT",
+"fielderId1":13226,
+"fielderId2":0,
+"bowlerId":0,
+"dots":1
+},
+"bat_10":{
+"batId":52768,
+"batName":"Garuka Sanketh",
+"runs":1,
+"balls":2,
+"fours":0,
+"sixes":0,
+"outDesc":"c Kusal Mendis b Binura Fernando",
+"wicketCode":"CAUGHT",
+"fielderId1":9494,
+"fielderId2":0,
+"bowlerId":9498,
+"dots":1
+},
+"bat_11":{
+"batId":18509,
+"batName":"Nuwan Thushara",
+"runs":1,
+"balls":1,
+"fours":0,
+"sixes":0,
+"outDesc":"not out",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":0
+}
+}
+},
+"bowlTeamDetails":{
+"bowlTeamName":"Colombo Kaps",
+"bowlersData":{
+"bowl_1":{
+"bowlerId":9498,
+"bowlName":"Binura Fernando",
+"overs":4,
+"balls":24,
+"runs":45,
+"wickets":4,
+"maidens":0,
+"dots":0,
+"wides":1,
+"no_balls":0
+},
+"bowl_2":{
+"bowlerId":13226,
+"bowlName":"Hasan Mahmud",
+"overs":4,
+"balls":24,
+"runs":31,
+"wickets":3,
+"maidens":0,
+"dots":0,
+"wides":0,
+"no_balls":1
+},
+"bowl_3":{
+"bowlerId":22656,
+"bowlName":"Wanuja Sahan",
+"overs":3,
+"balls":18,
+"runs":19,
+"wickets":0,
+"maidens":0,
+"dots":0,
+"wides":0,
+"no_balls":0
+},
+"bowl_4":{
+"bowlerId":22666,
+"bowlName":"Malsha Tharupathi",
+"overs":1,
+"balls":6,
+"runs":5,
+"wickets":0,
+"maidens":0,
+"dots":0,
+"wides":0,
+"no_balls":0
+},
+"bowl_5":{
+"bowlerId":8983,
+"bowlName":"James Neesham",
+"overs":4,
+"balls":24,
+"runs":42,
+"wickets":2,
+"maidens":0,
+"dots":0,
+"wides":1,
+"no_balls":0
+},
+"bowl_6":{
+"bowlerId":12071,
+"bowlName":"Mujeeb Ur Rahman",
+"overs":4,
+"balls":24,
+"runs":35,
+"wickets":0,
+"maidens":0,
+"dots":0,
+"wides":0,
+"no_balls":0
+}
+}
+}
+},
+{
+"matchId":156988,
+"inningsId":2,
+"batTeamDetails":{
+"batTeamName":"Colombo Kaps",
+"batsmenData":{
+"bat_1":{
+"batId":14797,
+"batName":"Rubin Hermann",
+"runs":1,
+"balls":7,
+"fours":0,
+"sixes":0,
+"outDesc":"b Nuwan Thushara",
+"wicketCode":"BOWLED",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":18509,
+"dots":6
+},
+"bat_2":{
+"batId":9494,
+"batName":"Kusal Mendis",
+"runs":2,
+"balls":4,
+"fours":0,
+"sixes":0,
+"outDesc":"retd hurt",
+"wicketCode":"RETD_HURT",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":2
+},
+"bat_3":{
+"batId":9495,
+"batName":"Sadeera Samarawickrama",
+"runs":3,
+"balls":4,
+"fours":0,
+"sixes":0,
+"outDesc":"c Wanindu Hasaranga b Mathews",
+"wicketCode":"CAUGHT",
+"fielderId1":10926,
+"fielderId2":0,
+"bowlerId":1629,
+"dots":1
+},
+"bat_4":{
+"batId":10940,
+"batName":"Kamindu Mendis",
+"runs":26,
+"balls":23,
+"fours":2,
+"sixes":1,
+"outDesc":"c Lahiru Udara b Wanindu Hasaranga",
+"wicketCode":"CAUGHT",
+"fielderId1":15586,
+"fielderId2":0,
+"bowlerId":10926,
+"dots":9
+},
+"bat_5":{
+"batId":9453,
+"batName":"Ben McDermott",
+"runs":22,
+"balls":14,
+"fours":2,
+"sixes":1,
+"outDesc":"c Garuka Sanketh b Wanindu Hasaranga",
+"wicketCode":"CAUGHT",
+"fielderId1":52768,
+"fielderId2":0,
+"bowlerId":10926,
+"dots":4
+},
+"bat_6":{
+"batId":13694,
+"batName":"Janith Liyanage",
+"runs":53,
+"balls":32,
+"fours":6,
+"sixes":1,
+"outDesc":"not out",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":3
+},
+"bat_7":{
+"batId":8983,
+"batName":"James Neesham",
+"runs":48,
+"balls":36,
+"fours":5,
+"sixes":2,
+"outDesc":"not out",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":16
+},
+"bat_8":{
+"batId":22656,
+"batName":"Wanuja Sahan",
+"runs":0,
+"balls":0,
+"fours":0,
+"sixes":0,
+"outDesc":"",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":0
+},
+"bat_9":{
+"batId":9498,
+"batName":"Binura Fernando",
+"runs":0,
+"balls":0,
+"fours":0,
+"sixes":0,
+"outDesc":"",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":0
+},
+"bat_10":{
+"batId":22666,
+"batName":"Malsha Tharupathi",
+"runs":0,
+"balls":0,
+"fours":0,
+"sixes":0,
+"outDesc":"",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":0
+},
+"bat_11":{
+"batId":12071,
+"batName":"Mujeeb Ur Rahman",
+"runs":0,
+"balls":0,
+"fours":0,
+"sixes":0,
+"outDesc":"",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":0
+},
+"bat_12":{
+"batId":13226,
+"batName":"Hasan Mahmud",
+"runs":0,
+"balls":0,
+"fours":0,
+"sixes":0,
+"outDesc":"",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":0
+}
+}
+},
+"bowlTeamDetails":{
+"bowlTeamName":"Kandy Falcons",
+"bowlersData":{
+"bowl_1":{
+"bowlerId":1629,
+"bowlName":"Angelo Mathews",
+"overs":3,
+"balls":18,
+"runs":21,
+"wickets":1,
+"maidens":0,
+"dots":0,
+"wides":0,
+"no_balls":0
+},
+"bowl_2":{
+"bowlerId":18509,
+"bowlName":"Nuwan Thushara",
+"overs":4,
+"balls":24,
+"runs":22,
+"wickets":1,
+"maidens":0,
+"dots":0,
+"wides":6,
+"no_balls":0
+},
+"bowl_3":{
+"bowlerId":6692,
+"bowlName":"Moeen Ali",
+"overs":4,
+"balls":24,
+"runs":29,
+"wickets":0,
+"maidens":0,
+"dots":0,
+"wides":0,
+"no_balls":0
+},
+"bowl_4":{
+"bowlerId":10926,
+"bowlName":"Wanindu Hasaranga",
+"overs":4,
+"balls":24,
+"runs":29,
+"wickets":2,
+"maidens":0,
+"dots":0,
+"wides":0,
+"no_balls":0
+},
+"bowl_5":{
+"bowlerId":52768,
+"bowlName":"Garuka Sanketh",
+"overs":2.4,
+"balls":16,
+"runs":51,
+"wickets":0,
+"maidens":0,
+"dots":0,
+"wides":5,
+"no_balls":2
+},
+"bowl_6":{
+"bowlerId":10938,
+"bowlName":"Asitha Fernando",
+"overs":2,
+"balls":12,
+"runs":17,
+"wickets":0,
+"maidens":0,
+"dots":0,
+"wides":1,
+"no_balls":0
+}
+}
+}
+}
+],
+"espn_pbp":{
+"commentary":{
+"items":[
+{
+"batsman":{
+"athlete":{
+"id":"8917",
+"displayName":"Moeen Ali"
+},
+"totalRuns":41,
+"faced":17,
+"fours":1,
+"sixes":4
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"49764",
+"displayName":"Angelo Mathews"
+},
+"totalRuns":45,
+"faced":41,
+"fours":2,
+"sixes":2
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"300631",
+"displayName":"Kusal Perera"
+},
+"totalRuns":11,
+"faced":6,
+"fours":2,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"355269",
+"displayName":"James Neesham"
+},
+"totalRuns":48,
+"faced":36,
+"fours":5,
+"sixes":2
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"477021",
+"displayName":"Vijay Shankar"
+},
+"totalRuns":15,
+"faced":9,
+"fours":1,
+"sixes":1
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"596097",
+"displayName":"Rubin Hermann"
+},
+"totalRuns":1,
+"faced":7,
+"fours":0,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"603410",
+"displayName":"Ben McDermott"
+},
+"totalRuns":22,
+"faced":14,
+"fours":2,
+"sixes":1
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"629074",
+"displayName":"Kusal Mendis"
+},
+"totalRuns":2,
+"faced":4,
+"fours":0,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"629076",
+"displayName":"Sadeera Samarawickrama"
+},
+"totalRuns":3,
+"faced":4,
+"fours":0,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"681681",
+"displayName":"Janith Liyanage"
+},
+"totalRuns":53,
+"faced":32,
+"fours":6,
+"sixes":1
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"704693",
+"displayName":"Lahiru Igalagamage"
+},
+"totalRuns":53,
+"faced":36,
+"fours":8,
+"sixes":1
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"721041",
+"displayName":"Dushan Hemantha"
+},
+"totalRuns":4,
+"faced":2,
+"fours":1,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"784373",
+"displayName":"Kamindu Mendis"
+},
+"totalRuns":26,
+"faced":23,
+"fours":2,
+"sixes":1
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"784379",
+"displayName":"Wanindu Hasaranga"
+},
+"totalRuns":1,
+"faced":2,
+"fours":0,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"902447",
+"displayName":"Dale Phillips"
+},
+"totalRuns":1,
+"faced":2,
+"fours":0,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"955235",
+"displayName":"Nuwan Thushara"
+},
+"totalRuns":1,
+"faced":1,
+"fours":0,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"1161050",
+"displayName":"Sediqullah Atal"
+},
+"totalRuns":1,
+"faced":3,
+"fours":0,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"1364328",
+"displayName":"Garuka Sanketh"
+},
+"totalRuns":1,
+"faced":2,
+"fours":0,
+"sixes":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"8917",
+"displayName":"Moeen Ali"
+},
+"balls":24,
+"conceded":29,
+"wickets":0,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"49764",
+"displayName":"Angelo Mathews"
+},
+"balls":18,
+"conceded":21,
+"wickets":1,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"355269",
+"displayName":"James Neesham"
+},
+"balls":24,
+"conceded":42,
+"wickets":2,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"629080",
+"displayName":"Binura Fernando"
+},
+"balls":24,
+"conceded":45,
+"wickets":4,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"784379",
+"displayName":"Wanindu Hasaranga"
+},
+"balls":24,
+"conceded":29,
+"wickets":2,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"786925",
+"displayName":"Asitha Fernando"
+},
+"balls":12,
+"conceded":17,
+"wickets":0,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"926629",
+"displayName":"Hasan Mahmud"
+},
+"balls":24,
+"conceded":31,
+"wickets":3,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"955235",
+"displayName":"Nuwan Thushara"
+},
+"balls":24,
+"conceded":22,
+"wickets":1,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"974109",
+"displayName":"Mujeeb Ur Rahman"
+},
+"balls":24,
+"conceded":35,
+"wickets":0,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"1282475",
+"displayName":"Malsha Tharupathi"
+},
+"balls":6,
+"conceded":5,
+"wickets":0,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"1282476",
+"displayName":"Wanuja Sahan"
+},
+"balls":18,
+"conceded":19,
+"wickets":0,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"1364328",
+"displayName":"Garuka Sanketh"
+},
+"balls":16,
+"conceded":51,
+"wickets":0,
+"maidens":0
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"leg before wicket",
+"text":"MDKJ Perera lbw b Fernando 11 (12m 6b 2x4 0x6) SR: 183.33",
+"batsman":{
+"athlete":{
+"id":"300631",
+"displayName":"Kusal Perera"
+}
+},
+"bowler":{
+"athlete":{
+"id":"629080",
+"displayName":"Binura Fernando"
+}
+},
+"fielder":{
+"athlete":{
+"id":null,
+"displayName":null
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"Sediqullah Atal c Samarawickrama b Hasan Mahmud 1 (3m 3b 0x4 0x6) SR: 33.33",
+"batsman":{
+"athlete":{
+"id":"1161050",
+"displayName":"Sediqullah Atal"
+}
+},
+"bowler":{
+"athlete":{
+"id":"926629",
+"displayName":"Hasan Mahmud"
+}
+},
+"fielder":{
+"athlete":{
+"id":"629076",
+"displayName":"Sadeera Samarawickrama"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"leg before wicket",
+"text":"DN Phillips lbw b Hasan Mahmud 1 (4m 2b 0x4 0x6) SR: 50",
+"batsman":{
+"athlete":{
+"id":"902447",
+"displayName":"Dale Phillips"
+}
+},
+"bowler":{
+"athlete":{
+"id":"926629",
+"displayName":"Hasan Mahmud"
+}
+},
+"fielder":{
+"athlete":{
+"id":null,
+"displayName":null
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"leg before wicket",
+"text":"LU Igalagamage lbw b Neesham 53 (50m 36b 8x4 1x6) SR: 147.22",
+"batsman":{
+"athlete":{
+"id":"704693",
+"displayName":"Lahiru Igalagamage"
+}
+},
+"bowler":{
+"athlete":{
+"id":"355269",
+"displayName":"James Neesham"
+}
+},
+"fielder":{
+"athlete":{
+"id":null,
+"displayName":null
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"MM Ali c Hermann b Fernando 41 (38m 17b 1x4 4x6) SR: 241.17",
+"batsman":{
+"athlete":{
+"id":"8917",
+"displayName":"Moeen Ali"
+}
+},
+"bowler":{
+"athlete":{
+"id":"629080",
+"displayName":"Binura Fernando"
+}
+},
+"fielder":{
+"athlete":{
+"id":"596097",
+"displayName":"Rubin Hermann"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"AD Mathews c Sahan b Neesham 45 (66m 41b 2x4 2x6) SR: 109.75",
+"batsman":{
+"athlete":{
+"id":"49764",
+"displayName":"Angelo Mathews"
+}
+},
+"bowler":{
+"athlete":{
+"id":"355269",
+"displayName":"James Neesham"
+}
+},
+"fielder":{
+"athlete":{
+"id":"1282476",
+"displayName":"Wanuja Sahan"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"bowled",
+"text":"PW Hasaranga  b Hasan Mahmud 1 (5m 2b 0x4 0x6) SR: 50",
+"batsman":{
+"athlete":{
+"id":"784379",
+"displayName":"Wanindu Hasaranga"
+}
+},
+"bowler":{
+"athlete":{
+"id":"926629",
+"displayName":"Hasan Mahmud"
+}
+},
+"fielder":{
+"athlete":{
+"id":null,
+"displayName":null
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"V Shankar c Hasan Mahmud b Fernando 15 (16m 9b 1x4 1x6) SR: 166.66",
+"batsman":{
+"athlete":{
+"id":"477021",
+"displayName":"Vijay Shankar"
+}
+},
+"bowler":{
+"athlete":{
+"id":"629080",
+"displayName":"Binura Fernando"
+}
+},
+"fielder":{
+"athlete":{
+"id":"926629",
+"displayName":"Hasan Mahmud"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"run out",
+"text":"MADI Hemantha run out 4 (4m 2b 1x4 0x6) SR: 200",
+"batsman":{
+"athlete":{
+"id":"721041",
+"displayName":"Dushan Hemantha"
+}
+},
+"bowler":{
+"athlete":{
+"id":"629080",
+"displayName":"Binura Fernando"
+}
+},
+"fielder":{
+"athlete":{
+"id":null,
+"displayName":null
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"G Sanketh c &dagger;BKG Mendis b Fernando 1 (4m 2b 0x4 0x6) SR: 50",
+"batsman":{
+"athlete":{
+"id":"1364328",
+"displayName":"Garuka Sanketh"
+}
+},
+"bowler":{
+"athlete":{
+"id":"629080",
+"displayName":"Binura Fernando"
+}
+},
+"fielder":{
+"athlete":{
+"id":"629074",
+"displayName":"Kusal Mendis"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"bowled",
+"text":"RA Hermann  b Thushara 1 (11m 7b 0x4 0x6) SR: 14.28",
+"batsman":{
+"athlete":{
+"id":"596097",
+"displayName":"Rubin Hermann"
+}
+},
+"bowler":{
+"athlete":{
+"id":"955235",
+"displayName":"Nuwan Thushara"
+}
+},
+"fielder":{
+"athlete":{
+"id":null,
+"displayName":null
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"retired not out (hurt)",
+"text":"BKG Mendis retired hurt 2 (14m 4b 0x4 0x6) SR: 50",
+"batsman":{
+"athlete":{
+"id":"629074",
+"displayName":"Kusal Mendis"
+}
+},
+"bowler":{
+"athlete":{
+"id":"955235",
+"displayName":"Nuwan Thushara"
+}
+},
+"fielder":{
+"athlete":{
+"id":null,
+"displayName":null
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"S Samarawickrama c Hasaranga b Mathews 3 (6m 4b 0x4 0x6) SR: 75",
+"batsman":{
+"athlete":{
+"id":"629076",
+"displayName":"Sadeera Samarawickrama"
+}
+},
+"bowler":{
+"athlete":{
+"id":"49764",
+"displayName":"Angelo Mathews"
+}
+},
+"fielder":{
+"athlete":{
+"id":"784379",
+"displayName":"Wanindu Hasaranga"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"BR McDermott c sub (Pawan Sandesh) b Hasaranga 22 (22m 14b 2x4 1x6) SR: 157.14",
+"batsman":{
+"athlete":{
+"id":"603410",
+"displayName":"Ben McDermott"
+}
+},
+"bowler":{
+"athlete":{
+"id":"784379",
+"displayName":"Wanindu Hasaranga"
+}
+},
+"fielder":{
+"athlete":{
+"id":"1253695",
+"displayName":"Pawan Sandesh"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"PHKD Mendis c &dagger;Igalagamage b Hasaranga 26 (37m 23b 2x4 1x6) SR: 113.04",
+"batsman":{
+"athlete":{
+"id":"784373",
+"displayName":"Kamindu Mendis"
+}
+},
+"bowler":{
+"athlete":{
+"id":"784379",
+"displayName":"Wanindu Hasaranga"
+}
+},
+"fielder":{
+"athlete":{
+"id":"704693",
+"displayName":"Lahiru Igalagamage"
+}
+}
+}
+}
+]
+}
+}
+}

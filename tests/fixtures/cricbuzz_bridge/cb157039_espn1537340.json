@@ -1,0 +1,1304 @@
+{
+"cb_match_id":"157039",
+"espn_event_id":"1537340",
+"date":"2026-07-23",
+"cb_score_card":[
+{
+"matchId":157039,
+"inningsId":1,
+"batTeamDetails":{
+"batTeamName":"Galle Gallants",
+"batsmenData":{
+"bat_1":{
+"batId":10979,
+"batName":"Sam Harper",
+"runs":3,
+"balls":7,
+"fours":0,
+"sixes":0,
+"outDesc":"b Dunith Wellalage",
+"wicketCode":"BOWLED",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":14251,
+"dots":4
+},
+"bat_2":{
+"batId":7752,
+"batName":"Chris Lynn",
+"runs":46,
+"balls":22,
+"fours":3,
+"sixes":4,
+"outDesc":"c Avishka Fernando b Lizaad Williams",
+"wicketCode":"CAUGHT",
+"fielderId1":10939,
+"fielderId2":0,
+"bowlerId":8531,
+"dots":6
+},
+"bat_3":{
+"batId":10934,
+"batName":"Charith Asalanka",
+"runs":6,
+"balls":5,
+"fours":0,
+"sixes":1,
+"outDesc":"c Kamil Mishara b Mohamed Shiraz",
+"wicketCode":"CAUGHT",
+"fielderId1":13886,
+"fielderId2":0,
+"bowlerId":14574,
+"dots":4
+},
+"bat_4":{
+"batId":9500,
+"batName":"Chamika Karunaratne",
+"runs":9,
+"balls":11,
+"fours":2,
+"sixes":0,
+"outDesc":"c Kamil Mishara b Lizaad Williams",
+"wicketCode":"CAUGHT",
+"fielderId1":13886,
+"fielderId2":0,
+"bowlerId":8531,
+"dots":8
+},
+"bat_5":{
+"batId":14022,
+"batName":"Sahan Arachchige",
+"runs":63,
+"balls":36,
+"fours":4,
+"sixes":3,
+"outDesc":"run out (Traveen Mathew/Kamil Mishara)",
+"wicketCode":"RUNOUT",
+"fielderId1":22661,
+"fielderId2":13886,
+"bowlerId":0,
+"dots":4
+},
+"bat_6":{
+"batId":8422,
+"batName":"Dasun Shanaka",
+"runs":12,
+"balls":10,
+"fours":0,
+"sixes":1,
+"outDesc":"c Ibrahim Zadran b Shakib Al Hasan",
+"wicketCode":"CAUGHT",
+"fielderId1":12173,
+"fielderId2":0,
+"bowlerId":544,
+"dots":3
+},
+"bat_7":{
+"batId":52757,
+"batName":"Dinura Kalupahana",
+"runs":10,
+"balls":11,
+"fours":1,
+"sixes":0,
+"outDesc":"c Ibrahim Zadran b Dilshan Madushanka",
+"wicketCode":"CAUGHT",
+"fielderId1":12173,
+"fielderId2":0,
+"bowlerId":15067,
+"dots":4
+},
+"bat_8":{
+"batId":8367,
+"batName":"Mohammad Nawaz",
+"runs":27,
+"balls":16,
+"fours":2,
+"sixes":2,
+"outDesc":"c Kamil Mishara b Dilshan Madushanka",
+"wicketCode":"CAUGHT",
+"fielderId1":13886,
+"fielderId2":0,
+"bowlerId":15067,
+"dots":5
+},
+"bat_9":{
+"batId":13931,
+"batName":"Vijayakanth Viyaskanth",
+"runs":6,
+"balls":2,
+"fours":0,
+"sixes":1,
+"outDesc":"not out",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":1
+},
+"bat_10":{
+"batId":18515,
+"batName":"Tharindu Ratnayake",
+"runs":0,
+"balls":0,
+"fours":0,
+"sixes":0,
+"outDesc":"",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":0
+},
+"bat_11":{
+"batId":15751,
+"batName":"Akif Javed",
+"runs":0,
+"balls":0,
+"fours":0,
+"sixes":0,
+"outDesc":"",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":0
+}
+}
+},
+"bowlTeamDetails":{
+"bowlTeamName":"Jaffna Kings",
+"bowlersData":{
+"bowl_1":{
+"bowlerId":14574,
+"bowlName":"Mohamed Shiraz",
+"overs":3,
+"balls":18,
+"runs":23,
+"wickets":1,
+"maidens":0,
+"dots":0,
+"wides":0,
+"no_balls":0
+},
+"bowl_2":{
+"bowlerId":14251,
+"bowlName":"Dunith Wellalage",
+"overs":3,
+"balls":18,
+"runs":13,
+"wickets":1,
+"maidens":0,
+"dots":0,
+"wides":0,
+"no_balls":0
+},
+"bowl_3":{
+"bowlerId":544,
+"bowlName":"Shakib Al Hasan",
+"overs":3,
+"balls":18,
+"runs":27,
+"wickets":1,
+"maidens":0,
+"dots":0,
+"wides":0,
+"no_balls":0
+},
+"bowl_4":{
+"bowlerId":15067,
+"bowlName":"Dilshan Madushanka",
+"overs":4,
+"balls":24,
+"runs":35,
+"wickets":2,
+"maidens":0,
+"dots":0,
+"wides":3,
+"no_balls":0
+},
+"bowl_5":{
+"bowlerId":8531,
+"bowlName":"Lizaad Williams",
+"overs":4,
+"balls":24,
+"runs":37,
+"wickets":2,
+"maidens":0,
+"dots":0,
+"wides":2,
+"no_balls":0
+},
+"bowl_6":{
+"bowlerId":22661,
+"bowlName":"Traveen Mathew",
+"overs":3,
+"balls":18,
+"runs":54,
+"wickets":0,
+"maidens":0,
+"dots":0,
+"wides":2,
+"no_balls":0
+}
+}
+}
+},
+{
+"matchId":157039,
+"inningsId":2,
+"batTeamDetails":{
+"batTeamName":"Jaffna Kings",
+"batsmenData":{
+"bat_1":{
+"batId":13886,
+"batName":"Kamil Mishara",
+"runs":15,
+"balls":8,
+"fours":3,
+"sixes":0,
+"outDesc":"c Dasun Shanaka b Tharindu Ratnayake",
+"wicketCode":"CAUGHT",
+"fielderId1":8422,
+"fielderId2":0,
+"bowlerId":18515,
+"dots":2
+},
+"bat_2":{
+"batId":10939,
+"batName":"Avishka Fernando",
+"runs":6,
+"balls":3,
+"fours":0,
+"sixes":1,
+"outDesc":"c Eshan Malinga b Dasun Shanaka",
+"wicketCode":"CAUGHT",
+"fielderId1":46926,
+"fielderId2":0,
+"bowlerId":8422,
+"dots":2
+},
+"bat_3":{
+"batId":12173,
+"batName":"Ibrahim Zadran",
+"runs":11,
+"balls":14,
+"fours":1,
+"sixes":0,
+"outDesc":"c Chamika Karunaratne b Eshan Malinga",
+"wicketCode":"CAUGHT",
+"fielderId1":9500,
+"fielderId2":0,
+"bowlerId":46926,
+"dots":6
+},
+"bat_4":{
+"batId":544,
+"batName":"Shakib Al Hasan",
+"runs":0,
+"balls":1,
+"fours":0,
+"sixes":0,
+"outDesc":"b Tharindu Ratnayake",
+"wicketCode":"BOWLED",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":18515,
+"dots":1
+},
+"bat_5":{
+"batId":7869,
+"batName":"Bhanuka Rajapaksa",
+"runs":8,
+"balls":4,
+"fours":2,
+"sixes":0,
+"outDesc":"c V Viyaskanth b Akif Javed",
+"wicketCode":"CAUGHT",
+"fielderId1":13931,
+"fielderId2":0,
+"bowlerId":15751,
+"dots":2
+},
+"bat_6":{
+"batId":8589,
+"batName":"David Wiese",
+"runs":22,
+"balls":20,
+"fours":3,
+"sixes":0,
+"outDesc":"c (sub)Mehidy Hasan Miraz b Tharindu Ratnayake",
+"wicketCode":"CAUGHT",
+"fielderId1":11081,
+"fielderId2":0,
+"bowlerId":18515,
+"dots":9
+},
+"bat_7":{
+"batId":14251,
+"batName":"Dunith Wellalage",
+"runs":56,
+"balls":39,
+"fours":4,
+"sixes":4,
+"outDesc":"c Akif Javed b V Viyaskanth",
+"wicketCode":"CAUGHT",
+"fielderId1":15751,
+"fielderId2":0,
+"bowlerId":13931,
+"dots":16
+},
+"bat_8":{
+"batId":15116,
+"batName":"Chamindu Wickramasinghe",
+"runs":6,
+"balls":8,
+"fours":0,
+"sixes":0,
+"outDesc":"c Tharindu Ratnayake b Eshan Malinga",
+"wicketCode":"CAUGHT",
+"fielderId1":18515,
+"fielderId2":0,
+"bowlerId":46926,
+"dots":3
+},
+"bat_9":{
+"batId":22661,
+"batName":"Traveen Mathew",
+"runs":0,
+"balls":1,
+"fours":0,
+"sixes":0,
+"outDesc":"b Eshan Malinga",
+"wicketCode":"BOWLED",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":46926,
+"dots":1
+},
+"bat_10":{
+"batId":15067,
+"batName":"Dilshan Madushanka",
+"runs":4,
+"balls":11,
+"fours":1,
+"sixes":0,
+"outDesc":"not out",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":10
+},
+"bat_11":{
+"batId":8531,
+"batName":"Lizaad Williams",
+"runs":0,
+"balls":0,
+"fours":0,
+"sixes":0,
+"outDesc":"retd out",
+"wicketCode":"RETD_OUT",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":0
+},
+"bat_12":{
+"batId":14574,
+"batName":"Mohamed Shiraz",
+"runs":0,
+"balls":0,
+"fours":0,
+"sixes":0,
+"outDesc":"",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":0
+}
+}
+},
+"bowlTeamDetails":{
+"bowlTeamName":"Galle Gallants",
+"bowlersData":{
+"bowl_1":{
+"bowlerId":8422,
+"bowlName":"Dasun Shanaka",
+"overs":2,
+"balls":12,
+"runs":21,
+"wickets":1,
+"maidens":0,
+"dots":0,
+"wides":0,
+"no_balls":0
+},
+"bowl_2":{
+"bowlerId":9500,
+"bowlName":"Chamika Karunaratne",
+"overs":2,
+"balls":12,
+"runs":26,
+"wickets":0,
+"maidens":0,
+"dots":0,
+"wides":0,
+"no_balls":0
+},
+"bowl_3":{
+"bowlerId":18515,
+"bowlName":"Tharindu Ratnayake",
+"overs":4,
+"balls":24,
+"runs":19,
+"wickets":3,
+"maidens":0,
+"dots":0,
+"wides":0,
+"no_balls":0
+},
+"bowl_4":{
+"bowlerId":15751,
+"bowlName":"Akif Javed",
+"overs":4,
+"balls":24,
+"runs":22,
+"wickets":1,
+"maidens":0,
+"dots":0,
+"wides":1,
+"no_balls":2
+},
+"bowl_5":{
+"bowlerId":46926,
+"bowlName":"Eshan Malinga",
+"overs":3,
+"balls":18,
+"runs":13,
+"wickets":3,
+"maidens":0,
+"dots":0,
+"wides":2,
+"no_balls":0
+},
+"bowl_6":{
+"bowlerId":13931,
+"bowlName":"Vijayakanth Viyaskanth",
+"overs":2.5,
+"balls":17,
+"runs":32,
+"wickets":1,
+"maidens":0,
+"dots":0,
+"wides":0,
+"no_balls":0
+}
+}
+}
+}
+],
+"espn_pbp":{
+"commentary":{
+"items":[
+{
+"batsman":{
+"athlete":{
+"id":"56143",
+"displayName":"Shakib Al Hasan"
+},
+"totalRuns":0,
+"faced":1,
+"fours":0,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"221140",
+"displayName":"David Wiese"
+},
+"totalRuns":22,
+"faced":20,
+"fours":3,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"326637",
+"displayName":"Chris Lynn"
+},
+"totalRuns":46,
+"faced":22,
+"fours":3,
+"sixes":4
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"342619",
+"displayName":"Bhanuka Rajapaksa"
+},
+"totalRuns":8,
+"faced":4,
+"fours":2,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"348148",
+"displayName":"Mohammad Nawaz"
+},
+"totalRuns":27,
+"faced":16,
+"fours":2,
+"sixes":2
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"437316",
+"displayName":"Dasun Shanaka"
+},
+"totalRuns":12,
+"faced":10,
+"fours":0,
+"sixes":1
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"623695",
+"displayName":"Chamika Karunaratne"
+},
+"totalRuns":9,
+"faced":11,
+"fours":2,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"693975",
+"displayName":"Sahan Arachchige"
+},
+"totalRuns":63,
+"faced":36,
+"fours":4,
+"sixes":3
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"772361",
+"displayName":"Sam Harper"
+},
+"totalRuns":3,
+"faced":7,
+"fours":0,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"784367",
+"displayName":"Charith Asalanka"
+},
+"totalRuns":6,
+"faced":5,
+"fours":0,
+"sixes":1
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"784369",
+"displayName":"Avishka Fernando"
+},
+"totalRuns":6,
+"faced":3,
+"fours":0,
+"sixes":1
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"793007",
+"displayName":"Dilshan Madushanka"
+},
+"totalRuns":4,
+"faced":11,
+"fours":1,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"921509",
+"displayName":"Ibrahim Zadran"
+},
+"totalRuns":11,
+"faced":14,
+"fours":1,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"1075863",
+"displayName":"Kamil Mishara"
+},
+"totalRuns":15,
+"faced":8,
+"fours":3,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"1152427",
+"displayName":"Dunith Wellalage"
+},
+"totalRuns":56,
+"faced":39,
+"fours":4,
+"sixes":4
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"1153149",
+"displayName":"Vijayakanth Viyaskanth"
+},
+"totalRuns":6,
+"faced":2,
+"fours":0,
+"sixes":1
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"1186658",
+"displayName":"Chamindu Wickramasinghe"
+},
+"totalRuns":6,
+"faced":8,
+"fours":0,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"1282477",
+"displayName":"Traveen Mathew"
+},
+"totalRuns":0,
+"faced":1,
+"fours":0,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"1364326",
+"displayName":"Dinura Kalupahana"
+},
+"totalRuns":10,
+"faced":11,
+"fours":1,
+"sixes":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"56143",
+"displayName":"Shakib Al Hasan"
+},
+"balls":18,
+"conceded":27,
+"wickets":1,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"379887",
+"displayName":"Lizaad Williams"
+},
+"balls":24,
+"conceded":37,
+"wickets":2,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"437316",
+"displayName":"Dasun Shanaka"
+},
+"balls":12,
+"conceded":21,
+"wickets":1,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"623695",
+"displayName":"Chamika Karunaratne"
+},
+"balls":12,
+"conceded":26,
+"wickets":0,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"793007",
+"displayName":"Dilshan Madushanka"
+},
+"balls":24,
+"conceded":35,
+"wickets":2,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"801817",
+"displayName":"Mohamed Shiraz"
+},
+"balls":18,
+"conceded":23,
+"wickets":1,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"950405",
+"displayName":"Tharindu Ratnayake"
+},
+"balls":24,
+"conceded":19,
+"wickets":3,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"1152427",
+"displayName":"Dunith Wellalage"
+},
+"balls":18,
+"conceded":13,
+"wickets":1,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"1153149",
+"displayName":"Vijayakanth Viyaskanth"
+},
+"balls":17,
+"conceded":32,
+"wickets":1,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"1203669",
+"displayName":"Akif Javed"
+},
+"balls":24,
+"conceded":22,
+"wickets":1,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"1282477",
+"displayName":"Traveen Mathew"
+},
+"balls":18,
+"conceded":54,
+"wickets":0,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"1306214",
+"displayName":"Eshan Malinga"
+},
+"balls":18,
+"conceded":13,
+"wickets":3,
+"maidens":0
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"bowled",
+"text":"SB Harper  b Wellalage 3 (7m 7b 0x4 0x6) SR: 42.85",
+"batsman":{
+"athlete":{
+"id":"772361",
+"displayName":"Sam Harper"
+}
+},
+"bowler":{
+"athlete":{
+"id":"1152427",
+"displayName":"Dunith Wellalage"
+}
+},
+"fielder":{
+"athlete":{
+"id":null,
+"displayName":null
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"KIC Asalanka c &dagger;Mishara b Shiraz 6 (3m 5b 0x4 1x6) SR: 120",
+"batsman":{
+"athlete":{
+"id":"784367",
+"displayName":"Charith Asalanka"
+}
+},
+"bowler":{
+"athlete":{
+"id":"801817",
+"displayName":"Mohamed Shiraz"
+}
+},
+"fielder":{
+"athlete":{
+"id":"1075863",
+"displayName":"Kamil Mishara"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"CA Lynn c Fernando b Williams 46 (31m 22b 3x4 4x6) SR: 209.09",
+"batsman":{
+"athlete":{
+"id":"326637",
+"displayName":"Chris Lynn"
+}
+},
+"bowler":{
+"athlete":{
+"id":"379887",
+"displayName":"Lizaad Williams"
+}
+},
+"fielder":{
+"athlete":{
+"id":"784369",
+"displayName":"Avishka Fernando"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"C Karunaratne c &dagger;Mishara b Williams 9 (24m 11b 2x4 0x6) SR: 81.81",
+"batsman":{
+"athlete":{
+"id":"623695",
+"displayName":"Chamika Karunaratne"
+}
+},
+"bowler":{
+"athlete":{
+"id":"379887",
+"displayName":"Lizaad Williams"
+}
+},
+"fielder":{
+"athlete":{
+"id":"1075863",
+"displayName":"Kamil Mishara"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"MD Shanaka c Ibrahim Zadran b Shakib Al Hasan 12 (12m 10b 0x4 1x6) SR: 120",
+"batsman":{
+"athlete":{
+"id":"437316",
+"displayName":"Dasun Shanaka"
+}
+},
+"bowler":{
+"athlete":{
+"id":"56143",
+"displayName":"Shakib Al Hasan"
+}
+},
+"fielder":{
+"athlete":{
+"id":"921509",
+"displayName":"Ibrahim Zadran"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"D Kalupahana c Ibrahim Zadran b Madushanka 10 (13m 11b 1x4 0x6) SR: 90.9",
+"batsman":{
+"athlete":{
+"id":"1364326",
+"displayName":"Dinura Kalupahana"
+}
+},
+"bowler":{
+"athlete":{
+"id":"793007",
+"displayName":"Dilshan Madushanka"
+}
+},
+"fielder":{
+"athlete":{
+"id":"921509",
+"displayName":"Ibrahim Zadran"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"Mohammad Nawaz (3) c &dagger;Mishara b Madushanka 27 (19m 16b 2x4 2x6) SR: 168.75",
+"batsman":{
+"athlete":{
+"id":"348148",
+"displayName":"Mohammad Nawaz"
+}
+},
+"bowler":{
+"athlete":{
+"id":"793007",
+"displayName":"Dilshan Madushanka"
+}
+},
+"fielder":{
+"athlete":{
+"id":"1075863",
+"displayName":"Kamil Mishara"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"run out",
+"text":"SSD Arachchige run out 63 (69m 36b 4x4 3x6) SR: 175",
+"batsman":{
+"athlete":{
+"id":"693975",
+"displayName":"Sahan Arachchige"
+}
+},
+"bowler":{
+"athlete":{
+"id":"793007",
+"displayName":"Dilshan Madushanka"
+}
+},
+"fielder":{
+"athlete":{
+"id":null,
+"displayName":null
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"WIA Fernando c Malinga b Shanaka 6 (3m 3b 0x4 1x6) SR: 200",
+"batsman":{
+"athlete":{
+"id":"784369",
+"displayName":"Avishka Fernando"
+}
+},
+"bowler":{
+"athlete":{
+"id":"437316",
+"displayName":"Dasun Shanaka"
+}
+},
+"fielder":{
+"athlete":{
+"id":"1306214",
+"displayName":"Eshan Malinga"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"K Mishara c Shanaka b Ratnayake 15 (11m 8b 3x4 0x6) SR: 187.5",
+"batsman":{
+"athlete":{
+"id":"1075863",
+"displayName":"Kamil Mishara"
+}
+},
+"bowler":{
+"athlete":{
+"id":"950405",
+"displayName":"Tharindu Ratnayake"
+}
+},
+"fielder":{
+"athlete":{
+"id":"437316",
+"displayName":"Dasun Shanaka"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"bowled",
+"text":"Shakib Al Hasan  b Ratnayake 0 (1m 1b 0x4 0x6) SR: 0",
+"batsman":{
+"athlete":{
+"id":"56143",
+"displayName":"Shakib Al Hasan"
+}
+},
+"bowler":{
+"athlete":{
+"id":"950405",
+"displayName":"Tharindu Ratnayake"
+}
+},
+"fielder":{
+"athlete":{
+"id":null,
+"displayName":null
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"PBB Rajapaksa c Viyaskanth b Akif Javed 8 (6m 4b 2x4 0x6) SR: 200",
+"batsman":{
+"athlete":{
+"id":"342619",
+"displayName":"Bhanuka Rajapaksa"
+}
+},
+"bowler":{
+"athlete":{
+"id":"1203669",
+"displayName":"Akif Javed"
+}
+},
+"fielder":{
+"athlete":{
+"id":"1153149",
+"displayName":"Vijayakanth Viyaskanth"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"Ibrahim Zadran c Karunaratne b Malinga 11 (30m 14b 1x4 0x6) SR: 78.57",
+"batsman":{
+"athlete":{
+"id":"921509",
+"displayName":"Ibrahim Zadran"
+}
+},
+"bowler":{
+"athlete":{
+"id":"1306214",
+"displayName":"Eshan Malinga"
+}
+},
+"fielder":{
+"athlete":{
+"id":"623695",
+"displayName":"Chamika Karunaratne"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"D Wiese c sub (Mehidy Hasan Miraz) b Ratnayake 22 (32m 20b 3x4 0x6) SR: 110",
+"batsman":{
+"athlete":{
+"id":"221140",
+"displayName":"David Wiese"
+}
+},
+"bowler":{
+"athlete":{
+"id":"950405",
+"displayName":"Tharindu Ratnayake"
+}
+},
+"fielder":{
+"athlete":{
+"id":"629063",
+"displayName":"Mehidy Hasan Miraz"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"C Wickramasinghe c Ratnayake b Malinga 6 (9m 8b 0x4 0x6) SR: 75",
+"batsman":{
+"athlete":{
+"id":"1186658",
+"displayName":"Chamindu Wickramasinghe"
+}
+},
+"bowler":{
+"athlete":{
+"id":"1306214",
+"displayName":"Eshan Malinga"
+}
+},
+"fielder":{
+"athlete":{
+"id":"950405",
+"displayName":"Tharindu Ratnayake"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"bowled",
+"text":"T Mathew  b Malinga 0 (3m 1b 0x4 0x6) SR: 0",
+"batsman":{
+"athlete":{
+"id":"1282477",
+"displayName":"Traveen Mathew"
+}
+},
+"bowler":{
+"athlete":{
+"id":"1306214",
+"displayName":"Eshan Malinga"
+}
+},
+"fielder":{
+"athlete":{
+"id":null,
+"displayName":null
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"DN Wellalage c Akif Javed b Viyaskanth 56 (56m 39b 4x4 4x6) SR: 143.58",
+"batsman":{
+"athlete":{
+"id":"1152427",
+"displayName":"Dunith Wellalage"
+}
+},
+"bowler":{
+"athlete":{
+"id":"1153149",
+"displayName":"Vijayakanth Viyaskanth"
+}
+},
+"fielder":{
+"athlete":{
+"id":"1203669",
+"displayName":"Akif Javed"
+}
+}
+}
+}
+]
+}
+}
+}
