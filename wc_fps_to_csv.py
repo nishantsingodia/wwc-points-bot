@@ -926,6 +926,24 @@ def espn_get(path, cache=True, **params):
     except Exception as e:
         _espn_warn_once(e, url)
         return {}
+    # ⛔ NEVER PERSIST AN EMPTY SCOREBOARD. A transport failure returns {} above and is not cached,
+    # but ESPN also answers with a well-formed 200 carrying "events": [] — and THAT is
+    # indistinguishable from "no matches were played that day", so it used to be cached forever.
+    # Past dates are cached permanently (fresh is only today/yesterday), so ONE transient empty
+    # response permanently erased a fixture. Live consequence: the Hundred Men's 2026-08-04
+    # (Sunrisers Leeds v London Spirit, ESPN event 1521250) vanished from the sheet — the tab's
+    # dates jump 08-03 -> 08-05 — while registry/settlement_snapshots.json still holds 65 rows and
+    # 2195 FP for it, and draft contest YVDHLS sits on it with both selections frozen, one side
+    # worth 902.5 pts, every player reading "—". The data was never gone: a fresh fetch returns the
+    # event, and parse_espn scores it 211/211 with no hold. Only the cached emptiness was.
+    # Re-fetching a genuinely empty day is cheap now that the back-scan is floored by tours.json
+    # "starts", and getting a real day back is worth far more than the request it costs.
+    if path == "scoreboard" and not (data.get("events") or []):
+        print(f"  espn: scoreboard {params.get('dates','?')} returned NO events — not caching it "
+              f"(an empty day and a bad moment look identical; caching would make it permanent)",
+              file=sys.stderr)
+        time.sleep(0.3)
+        return data
     json.dump(data, open(fp, "w"))
     time.sleep(0.3)
     return data
@@ -3143,7 +3161,21 @@ def run_tour(tour):
         # The write-once settlement baseline doubles as the "has this ever published as
         # COMPLETED?" record — which is exactly the ratchet the spec's "COMPLETED never returns to
         # LIVE" needs, and it costs nothing extra because the rows are already loaded.
-        already_completed = any(k[0] == mk for k in SETTLEMENTS)
+        # TOUR-SCOPED. match_key is date::teamA|teamB with the gender qualifier stripped, so the
+        # Hundred's same-day men's/women's double-headers between the same franchises COLLIDE:
+        # measured 31 of 31 Women's keys also carry Men's rows — e.g.
+        # 2026-08-04::london spirit|sunrisers leeds holds 33 Men's rows AND 32 Women's under one key.
+        # An unscoped `any(k[0] == mk)` therefore answered "yes, already completed" for a Women's
+        # match off the MEN'S result, and tours.json lists Men's first, so from run 2 onward every
+        # Hundred Women's fixture read already_completed=True. That silently disables the LIVE arm
+        # of classify_match_status on 60 of 92 live matches: a match with an unattributed player, or
+        # a HELD ESPN card, could never go LIVE — it returned COMPLETED_FLAGGED, which the draft
+        # treats as done, so the contest settled with the performance simply missing.
+        # Scoping on the `tour` already stored on every settlement record (verified present on all
+        # 3380) fixes it WITHOUT touching match_key — so nothing is re-keyed, no settled row is
+        # orphaned, and the draft (which never reads this key at all) is unaffected.
+        already_completed = any(k[0] == mk and v.get("tour") == CURRENT_TOUR
+                                for k, v in SETTLEMENTS.items())
         match_status, recon_flag = classify_match_status(cs_path, bool(espn_perf), l1_gaps,
                                                         unresolved, l2_dirty, id_break=id_break,
                                                         unsourced=emit_unsourced,
@@ -3930,7 +3962,20 @@ def save_settlements():
 # points backstop returns "backstop failed — unverified" for every one of them. Fixing that means
 # changing how the baseline is rehydrated (default the missing keys), which moves L2 output on
 # settled matches — an owner call, not a side effect of a parser fix.
-SETTLED_FIELDS = RECON_L2 + ["b", "balls", "played", "bat_order", "dismissal", "dismissed"]
+# EVERY FIELD score() INDEXES MUST BE FROZEN. `lbwb` (the +8 bowled/lbw bonus) and `dro` (which
+# splits a run-out 12 vs 6) were scored correctly on every published number but were NEVER COPIED
+# into the snapshot — the mirror image of this project's usual bug: read, but never written.
+# Consequence: settled_baseline() handed score() a dict missing keys it indexes, so the points
+# backstop could not re-score the baseline and could not answer "has this number moved since we
+# settled?" — ~867 rows carry a review flag nobody can resolve and ~20 matches sit at L2_PENDING
+# permanently. Points were never wrong; the AUDIT of them was blind.
+# Rows frozen from here carry both. Rows frozen BEFORE this still lack them and are left alone
+# deliberately: zero-filling an old baseline would understate it by 8 per bowled/lbw wicket and
+# mis-split every run-out, MANUFACTURING an L2 gap on a match that settled correctly and inviting
+# someone to "correct" a right number. _hydrate_baseline names the missing fields instead, so those
+# rows read honestly unverifiable rather than silently wrong.
+SETTLED_FIELDS = RECON_L2 + ["b", "balls", "played", "bat_order", "dismissal", "dismissed",
+                             "lbwb", "dro"]
 
 def record_settlement(match_key, tour, label, mdate, team, pid, full, points, status, source,
                       perf=None, field_sources=None):
@@ -4779,19 +4824,97 @@ def read_needs_cricinfo():
             print(f"could not write manual_ci_bridges.json: {e}", file=sys.stderr)
     return added
 
+PENDING_CI_PATH = os.path.join(os.path.dirname(__file__), "registry", "needs_cricinfo_pending.json")
+
+def pending_registry_gaps():
+    """build_registry's unresolved-squad-name snapshot, READ-ONLY, as 'Needs Cricinfo ID' rows.
+
+    WHAT WENT WRONG (measured 14 Aug 2026). TWO functions write that tab and neither knew the
+    other's input. `tour_sync_finalize.write_needs_cricinfo_tab()` pushes
+    registry/needs_cricinfo_pending.json and runs ONLY on tour INGEST; the writer below pushes
+    RUNTIME discoveries and its docstring said it "deliberately does NOT touch
+    needs_cricinfo_pending.json". The stated concern was real but was about WRITING that file —
+    build_registry rewrites it wholesale, so a second writer would clobber it. It was implemented
+    as never READING it either: one guard applied a direction too wide, and the file became
+    write-once-read-never on every path except a tour ingest that had already happened. Cost:
+    23 CPL squad names sat in the file since ingest while the live tab showed 52 rows, 8 of them
+    CPL and every one of those 8 from the runtime path (2 minted `ci:`, 6 `cb:` cricbuzz-bridge).
+    Nobody was ever asked about the 23.
+
+    This still never writes the file — build_registry keeps sole ownership. Two suppressions, both
+    resting on POSITIVE evidence (never on an absence, which is how a queue goes silent):
+      · ANSWERED — a filled-in id is recorded by `read_needs_cricinfo` into manual_ci_bridges.json,
+        NOT back into the pending file (build_registry only rewrites that on the next build). So an
+        answered player stays in the snapshot for days; without this check he is re-asked on every
+        run from the moment his row is deleted from the tab.
+      · ALREADY ANCHORED — the name now resolves through the live registry to a real pid
+        (not slug:/uncapped:/cs:). Exact alias lookup in the registry's own index, no fuzzy match:
+        if points are already being attributed to that pid, asking for the id again is noise.
+    An unreadable bridges file or an empty registry FAILS OPEN (surface the row) — an absence must
+    not read as "already handled"."""
+    try:
+        pending = json.load(open(PENDING_CI_PATH))
+    except FileNotFoundError:
+        return []
+    except Exception as e:
+        print(f"needs-cricinfo: pending file unreadable ({e}) — "
+              f"registry gaps NOT surfaced this run", file=sys.stderr)
+        return []
+    if not isinstance(pending, list):
+        return []
+    try:
+        answered = {n for e in json.load(open(CI_BRIDGES_PATH)).values()
+                    for n in (e.get("names") or [])}
+    except Exception:
+        answered = set()          # FAIL OPEN — see docstring
+    rows, skipped = [], 0
+    for p in pending:
+        pid = str(p.get("current_pid") or "").strip()
+        name = str(p.get("player") or "").strip()
+        if not pid or not name:
+            continue
+        # A slug:/uncapped: pid carries a recoverable NAME ("uncapped:odean-smith" -> "odean
+        # smith"); a cs: pid carries a cricsheet HASH, which is not a name (read_needs_cricinfo
+        # draws the same line when it records aliases).
+        slug_name = (norm(pid.split(":", 1)[-1].replace("-", " "))
+                     if pid.startswith(("slug:", "uncapped:")) else "")
+        if answered & {norm(name), slug_name} - {""}:
+            skipped += 1
+            continue
+        anchored = ALIAS2PID.get(norm(name))
+        if anchored and not anchored.startswith(("slug:", "uncapped:", "cs:")):
+            skipped += 1
+            continue
+        rows.append({"player": name, "current_pid": pid, "tour": p.get("tour", ""),
+                     "team": p.get("team", ""),
+                     "closest_guess": (f"squad name build_registry could not anchor"
+                                       + (f" · closest offline record: {p['closest_guess']}"
+                                          if p.get("closest_guess") else ""))})
+    if rows or skipped:
+        print(f"[identity] registry pending file: {len(rows)} unresolved squad name(s) to surface"
+              + (f", {skipped} already answered/anchored" if skipped else ""), file=sys.stderr)
+    return rows
+
 def write_needs_cricinfo_tab():
-    """Push identity gaps found while scoring into the SAME 'Needs Cricinfo ID' tab that
-    build_registry/tour_sync_finalize use — one place, one habit: drop the cricinfo id in the last
-    column and `manual_ci_bridges` picks it up on the next build.
+    """Push identity gaps into the SAME 'Needs Cricinfo ID' tab build_registry/tour_sync_finalize
+    use — one place, one habit: drop the cricinfo id in the last column and `manual_ci_bridges`
+    picks it up on the next build.
+
+    TWO SOURCES since 14 Aug 2026: gaps found while SCORING (NEEDS_CRICINFO) plus build_registry's
+    pending file (`pending_registry_gaps`, read-only — see there for the 23 that never reached a
+    human). Runtime rows go first so they win the dedupe: they carry live per-match context
+    ("official card only (Match 3 …)") that the ingest-time snapshot cannot.
 
     Appends only (dedupe by current_pid), so a filled-in id is never clobbered and a re-run never
-    duplicates a row. Deliberately does NOT touch registry/needs_cricinfo_pending.json — that file
-    is rewritten wholesale by build_registry, and two writers would clobber each other."""
-    if not NEEDS_CRICINFO:
+    duplicates a row. `tour_sync_finalize`'s twin is append-only against the same key, so the two
+    writers cannot clobber each other on the TAB either — whichever runs first appends, the other
+    sees the row present and skips."""
+    queue = list(NEEDS_CRICINFO) + pending_registry_gaps()
+    if not queue:
         return
     sh = open_gsheet()
     if sh is None:
-        print(f"  (needs-cricinfo tab skipped — no creds; {len(NEEDS_CRICINFO)} pending)", file=sys.stderr)
+        print(f"  (needs-cricinfo tab skipped — no creds; {len(queue)} pending)", file=sys.stderr)
         return
     import gspread
     header = ["player", "current_pid", "tour", "team", "closest_guess", "cricinfo_id_FILL_HERE"]
@@ -4803,21 +4926,35 @@ def write_needs_cricinfo_tab():
             ws = sh.add_worksheet(title=NEEDS_CRICINFO_TAB, rows=200, cols=len(header))
             ws.update(range_name="A1", values=[header], value_input_option="RAW")
             existing = [header]
-        have = {(r[1] if len(r) > 1 else "") for r in existing[1:]}
-        seen, rows = set(), []
-        for e in NEEDS_CRICINFO:
-            key = e.get("current_pid", "")
+        # Dedupe key resolved BY HEADER NAME. `read_needs_cricinfo` reads its columns by name while
+        # this writer read column index 1 blind — so a human inserting one column ahead of
+        # current_pid would make every existing row unrecognisable and re-append all 52, including
+        # the 45 that already carry a filled-in id. Same tab, two column conventions, one of them
+        # silent.
+        hdr = [h.strip() for h in (existing[0] if existing else header)]
+        pid_i = hdr.index("current_pid") if "current_pid" in hdr else -1
+        if pid_i < 0:
+            print(f"'{NEEDS_CRICINFO_TAB}': no 'current_pid' column in the header — refusing to "
+                  f"append ({len(queue)} gap(s) held). A dedupe key we cannot read cannot promise "
+                  f"no duplicates, and duplicating an answered row loses the answer.",
+                  file=sys.stderr)
+            return
+        have = {(r[pid_i].strip() if len(r) > pid_i else "") for r in existing[1:]}
+        seen, rows, from_pending = set(), [], 0
+        for i, e in enumerate(queue):
+            key = str(e.get("current_pid") or "").strip()
             if not key or key in have or key in seen:
                 continue
             seen.add(key)
+            from_pending += (i >= len(NEEDS_CRICINFO))
             rows.append([e.get("player", ""), key, e.get("tour", ""), e.get("team", ""),
                          e.get("closest_guess", ""), ""])
         if rows:
             ws.append_rows(rows, value_input_option="RAW")
-            print(f"'{NEEDS_CRICINFO_TAB}': appended {len(rows)} identity gap(s) for a human to fill",
-                  file=sys.stderr)
+            print(f"'{NEEDS_CRICINFO_TAB}': appended {len(rows)} identity gap(s) for a human to "
+                  f"fill ({from_pending} from the registry's pending file)", file=sys.stderr)
         else:
-            print(f"'{NEEDS_CRICINFO_TAB}': nothing new ({len(NEEDS_CRICINFO)} already listed)",
+            print(f"'{NEEDS_CRICINFO_TAB}': nothing new ({len(queue)} already listed)",
                   file=sys.stderr)
     except Exception as e:
         print(f"needs-cricinfo tab: {e}", file=sys.stderr)
