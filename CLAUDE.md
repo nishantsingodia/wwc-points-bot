@@ -341,6 +341,62 @@ XI-only player could only ever be found by name), and the SILENT-DROP auto-add n
 team via ESPN's roster map + `best_team` instead of `v["team"]` — `parse_espn` never sets `team`,
 so on any ESPN-sourced tour that whole auto-add was dead code and every silent drop hit `continue`.
 
+## ⛔ Un-attributable performances — the check pid-minting disarmed (14 Aug 2026)
+Minting `ci:<athlete.id>` above had a cost nobody priced: the review surface for a player who
+lands in **no squad slot** went dark. The old surface was the `leftover` emit — feed rows the
+matcher resolved to NO pid, published with team `?` / `In Squad List = N`. A minted pid means a
+row is never a no-pid leftover, so on an ESPN-sourced tour `unresolved` is empty ⇒ `leftover` is
+empty ⇒ **that emit is dead code**. MEASURED: `In Squad List = Y` on **2228/2228** rows across the
+Hundred M/W + CPL tabs, zero N; the same tab carried 9 `?` review rows on 11 Aug. It looked like a
+win only because a separate bug (`short_of` stripping "women" but not "men") was fixed the same
+week. The one surviving path, the auto-add, ends in `if es not in match_shorts: continue` — a bare
+drop, with a comment claiming the leftover pass would still show him. It does not. **Reproduced:
+a 77-run / 3-wicket performance published as 0 rows, 0 review entries, 0 log lines, and the match
+still went COMPLETED.**
+- **`find_unattributed(perf, assigned, team_players, leftover)`** re-arms it from the FAR END of
+  the pipeline: not "did the auto-add fall through?" but "which PLAYED feed rows are in neither
+  `assigned` (under a key `emit` actually visits) nor `leftover`?" Outcome-shaped on purpose — a
+  cause-shaped check dies again the next time someone adds a new way to fall out. Matches on **pid
+  AND normalised name** (`merge_perf` returns a NEW dict when two spellings fold into one pid, so
+  an `id()` diff would report a merged player as dropped), and re-applies the `is_junk` filter
+  (`Player Not Found`/`sub` are excluded from the pool by design and would otherwise block
+  every match).
+- **The match is HELD.** `classify_match_status(unattributed=…)` is tested FIRST, ahead of even
+  the `cs_path` branch: cricsheet posting cannot un-drop a player the pipeline never attributed,
+  so letting that early return swallow it recreates the silence. LIVE, or `COMPLETED_FLAGGED` if
+  the match already published (the ratchet still wins). `classify_recon_state` → `L1_OPEN`.
+- **The row is published but NOT SCORED.** `emit(..., attributed=False)`: real stats, `Played=Y`,
+  team `?`, `In Squad List = N`, and every points cell **BLANK, never 0** — a 0 there is an
+  absence wearing the clothes of a value. `record_settlement` is skipped, so an unattributed
+  performance can never enter the WRITE-ONCE money baseline.
+- **It surfaces in "Needs Review", NOT the Recon tab.** Recon answers "which of two numbers is
+  right?" (S1/S2/Manual); Needs Cricinfo ID answers "who is this?" (type an id). This is neither —
+  identity is certain (athlete.id IS the cricinfo id) and there is no second number, only a missing
+  row. The open question is *which side was he on*, whose answer is a **team code**, and Needs
+  Review is the tab that takes one: answer `New` with the Team column filled → `register_new_player`
+  → `new_players.json` → the injection loop picks him up next run. The match-level obligation is met
+  regardless: the gate holds the match and the **Recon Flag NAMES him on every row**, so it is not
+  possible to miss by watching the wrong tab. (If you want it in the Recon tab instead, that is a
+  one-line move — but an S1/S2 dropdown cannot answer "which team".)
+- **ACK cannot silence it.** `open_review_items()` keeps an `unattributed` row even when ACKed:
+  ACK is answered against a NAME, this row is open against a MATCH being held. Otherwise a `New`
+  answer carrying a still-unresolvable team would delete the only actionable row while the match
+  stayed LIVE forever with nothing to click.
+- **`In Squad List` means PROVENANCE now**, not "did we have a squad" — the old meaning could only
+  ever say Y, because the auto-add PERSISTS every feed-discovered player into `new_players.json`
+  and the next run re-injects him as an ordinary squad member. `Y` = the announced squad file ·
+  `auto` = only the feed ever put him on this side · `new` = a human typed him into Needs Review ·
+  `N` = on no list anywhere (the unattributed review row). No consumer reads the column (grep: the
+  draft app never mentions it), so only the values changed — header and position are untouched.
+- Regression (same-day rehearsal, gsheet/settlements stubbed): **CPL 226 rows / 6 matches and the
+  Hundred Men's 1008 rows / 31 matches are byte-identical before vs after except the 3 CPL cells
+  that are now honestly `auto`** (Rivaldo Clarke, Kevlon Anderson, Dale Phillips). Total FP
+  unchanged, every completed team-side still 11 `Played=Y`. Exposure on the live tours today is
+  **0** — which is the design input: a fire is never routine noise, so the answer is "hold it and
+  make a human decide", not "tolerate it". Pinned by `tests/test_unattributed.py` (16 tests,
+  all 16 fail on the pre-change file), including an end-to-end `run_tour` pair — one un-attributable
+  man, one attributable — so the test can report clean as well as dirty.
+
 ## The KEYLESS ESPN tour path (Column A of TOUR CONTROL) — what it does and does NOT do
 Typing a tour name in **Column A of `TOUR CONTROL` (or `TOUR STATUS`)** is the no-code way to add a
 tour: `tour_sync.py --from-status-sheet` reads both tabs, skips names already in `tours.json`, and

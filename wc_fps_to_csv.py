@@ -2088,7 +2088,7 @@ def identity_break(prov_pid, cs_pid, cs_orphans):
 # a bowler who bowled with no dots source is unconsumed data and holds the match LIVE.
 RECON_L1_SINGLE = ["dots", "maidens"]
 
-def classify_recon_state(cs_path, unresolved, unsourced, l2_pairs, l2_appr):
+def classify_recon_state(cs_path, unresolved, unsourced, l2_pairs, l2_appr, unattributed=()):
     """The recon axis, orthogonal to Match Status.
 
       L1_OPEN    — feeds disagree, or data is unconsumed. Match is LIVE; base points not yet frozen.
@@ -2100,8 +2100,12 @@ def classify_recon_state(cs_path, unresolved, unsourced, l2_pairs, l2_appr):
     COMPLETED forever, while L2 moves underneath it on its own timeline. One column cannot carry
     two independent lifecycles — trying to is what produced a COMPLETED_FLAGGED that meant
     'unverified single feed' OR 'official revision pending' OR 'identity unresolved' OR 'L2 open',
-    with no way for the app to tell which."""
-    if unresolved or unsourced:
+    with no way for the app to tell which.
+
+    `unattributed` = played performances that landed on no squad slot at all (find_unattributed).
+    They are unconsumed data in the most literal sense — not a disputed value, an ABSENT row — so
+    they open L1 exactly like `unsourced` does."""
+    if unresolved or unsourced or unattributed:
         return "L1_OPEN"
     if not cs_path:
         return "L1_DONE"
@@ -2112,7 +2116,7 @@ RECON_STATE_LABEL = {"L1_OPEN": "⏳ L1 recon open", "L1_DONE": "✅ L1 recon do
 
 def classify_match_status(cs_path, espn_present, l1_gaps, unresolved, l2_dirty, id_break=False,
                           unsourced=(), already_completed=False, capi_present=True,
-                          witness="cricapi"):
+                          witness="cricapi", unattributed=()):
     """Per-match status the draft app reads.
 
     The gate asks ONE question: can every player's score be fully accounted for? Not 'did two
@@ -2130,7 +2134,18 @@ def classify_match_status(cs_path, espn_present, l1_gaps, unresolved, l2_dirty, 
     a settled match. On 7-9 Aug it un-published 12 Hundred/LPL matches (410 frozen baseline rows)
     days after they were settled — results vanished from the app and the recon tab filled with
     hundreds of rows for matches nobody thought were open. A new gap on a settled match is worth
-    FLAGGING, never worth retracting the result."""
+    FLAGGING, never worth retracting the result.
+
+    `unattributed` = played performances that reached the end of the pipeline on no squad slot
+    (find_unattributed). It is tested FIRST, ahead of even the cricsheet branch, because it is not
+    a question about which of two numbers is right — it is a row that is NOT IN THE SHEET. cricsheet
+    posting cannot un-drop a player the pipeline never attributed to a side, so letting the
+    `cs_path` early return swallow it would recreate the exact silence this check exists to end."""
+    if unattributed:
+        n = len(unattributed)
+        msg = f"{n} performance{'' if n == 1 else 's'} not attributed to a team"
+        return (("COMPLETED_FLAGGED", "⚠ " + msg) if already_completed
+                else ("LIVE", "⏳ " + msg))
     if cs_path:
         if id_break:
             return ("COMPLETED_FLAGGED", "⚠ identity unresolved on official card")
@@ -2864,6 +2879,17 @@ def run_tour(tour):
             short = name2short.get(norm(tname))
             if short:
                 team_players += [(short, n, r) for n, r in squads[short]["players"]]
+        # WHERE EACH SLOT CAME FROM -> the 'In Squad List' column. That column read "Y" on
+        # 2228/2228 rows across the three ESPN-sourced tabs (14 Aug 2026) and therefore carried no
+        # information at all: its only "N" producer was the `leftover` emit, which the pid-minting
+        # change killed, while the auto-add below PERSISTS every feed-discovered player into
+        # new_players.json — so the loop just above re-injects him as an ordinary squad member on
+        # the very next run and he reads "Y" forever after. A column that cannot say no is not a
+        # check. It now records the slot's PROVENANCE, which is the thing a human actually wants to
+        # know when a name looks wrong: 'Y' = the announced squad file, 'new' = a human typed him
+        # into Needs Review, 'auto' = only the feed ever said he was on this side, 'N' = he is on
+        # no list anywhere (the un-attributable review row, which is not scored).
+        slot_src = {}
         # Inject sheet-driven NEW players (marked "New" or auto-added on a past run) who belong to
         # this match's teams + tour — so they're scored without a build_registry rebuild.
         match_shorts = {name2short.get(norm(t)) for t in teams} - {None}
@@ -2875,6 +2901,7 @@ def run_tour(tour):
             if es in match_shorts and norm(e.get("display", "")) not in have_names:
                 team_players.append((es, e["display"], e.get("role") or "?"))
                 have_names.add(norm(e["display"]))
+                slot_src[(es, norm(e["display"]))] = e.get("source") or "new"
         assigned, leftover, ambiguous = match_squad_to_perf(team_players, perf)
 
         # SILENT-DROP AUTO-ADD: a globally-known player who PLAYED but is in no squad slot would
@@ -2894,7 +2921,12 @@ def run_tour(tour):
                      or v.get("team", ""))
             es = short_of(tfull) or ""
             if es not in match_shorts:
-                continue  # genuinely un-attributable — the leftover pass still emits him for review
+                # Genuinely un-attributable. This `continue` used to say "the leftover pass still
+                # emits him for review" — it does not, and has not since resolve_perf_pid started
+                # minting ci:<athlete.id> (a minted pid means he is never a no-pid leftover). No
+                # row, no review entry, no log line. find_unattributed below now catches exactly
+                # this, from the far end of the pipeline, so the drop cannot be silent again.
+                continue
             disp = PID2DISP.get(pid, v.get("name", "")) or v.get("name", "")
             role = guess_role(v)
             # DEDUP ON THE EMIT KEY. emit() iterates team_players and looks up
@@ -2932,10 +2964,47 @@ def run_tour(tour):
                 continue
             team_players.append((es, disp, role))
             assigned[slot] = v
+            slot_src[(es, norm(disp))] = "auto"
             register_new_player(pid=pid, display=disp, feed=v.get("name", ""), team=es,
                                 role=role, tour=CURRENT_TOUR, source="auto")
             print(f"AUTO-ADD: {disp} (pid {pid}) played {GSHEET_TAB} but was in no squad slot "
                   f"-> added to {es} this run + persisted.", file=sys.stderr)
+
+        # ── THE RE-ARMED CHECK. Measured from the far end of the pipeline, after every path that
+        # can place a performance on a row has had its turn (squad match, fuzzy fallback, sheet-
+        # driven New players, the auto-add). Anything still here is a played performance that will
+        # appear NOWHERE, which is the one outcome this project treats as unacceptable regardless of
+        # cause: "Nothing goes unconsumed — no silent zeros, no dropped players."
+        #
+        # WHERE IT SURFACES, and why not the Recon tab. Recon Review answers "which of these two
+        # numbers is right?" (S1/S2/Manual); Needs Cricinfo ID answers "who is this?" (type an id).
+        # This is neither. Identity is not in doubt — ESPN's athlete.id IS the cricinfo id, so we
+        # know exactly who he is; and there is no second number to choose between, only a row that
+        # does not exist. The open question is "WHICH SIDE was he on?", and the answer to that is a
+        # team code — which the 'Needs Review' tab already takes (it has a Team column, and
+        # answering 'New' runs register_new_player with it, writing new_players.json, which the
+        # injection loop above reads on the next run). Routing it to Recon would hand the owner an
+        # S1/S2 dropdown for a question neither S1 nor S2 can answer — the same argument this file
+        # already makes when it keeps identity out of the Recon tab.
+        # The match-level obligation is met separately and unconditionally: the gate holds the
+        # match (LIVE, or FLAGGED if it has already published — the ratchet still wins), and the
+        # flag NAMES the player, so nobody has to be watching the right tab to notice.
+        unattributed = find_unattributed(perf, assigned, team_players, leftover)
+        for _pid, _v in unattributed:
+            _nm = _v.get("name", "")
+            _seen_team = (team_map.get(norm(_nm)) or best_team(_nm, team_map)
+                          or _v.get("team", "") or "")
+            REVIEW.append({"tour": CURRENT_TOUR, "team": _seen_team or "?", "feed": _nm,
+                           "kind": "review", "role": guess_role(_v),
+                           "suggestion": PID2DISP.get(_pid, "") if _pid else "",
+                           # ACK must not silence this one — see write_review_tab.
+                           "unattributed": True})
+            UNMATCHED_LOG.add(f"UNATTRIBUTED feed '{_nm}' pid {_pid or '(none)'} — played "
+                              f"{label}, roster team {_seen_team or '(none)'} matches neither "
+                              f"{sorted(match_shorts)}")
+            print(f"⛔ UNATTRIBUTED: '{_nm}' (pid {_pid or 'none'}) played {label} but could not be "
+                  f"attributed to either side (roster team {_seen_team or '(none)'!r}) — NOT scored; "
+                  f"match held, listed in '{REVIEW_TAB}'", file=sys.stderr)
 
         # Merge ESPN (squad-level): inject dot-balls, credit +4 in-XI to players cricapi
         # didn't list, and cross-check runs/wickets — disagreements flagged for review.
@@ -3080,8 +3149,10 @@ def run_tour(tour):
                                                         unsourced=emit_unsourced,
                                                         already_completed=already_completed,
                                                         capi_present=bool(wit_pid),
-                                                        witness=witness)
-        recon_state = classify_recon_state(cs_path, unresolved, emit_unsourced, l2_pairs, l2_appr)
+                                                        witness=witness,
+                                                        unattributed=unattributed)
+        recon_state = classify_recon_state(cs_path, unresolved, emit_unsourced, l2_pairs, l2_appr,
+                                           unattributed=unattributed)
         recon_state_col = RECON_STATE_LABEL.get(recon_state, recon_state)
         # Per-player markers so the draft UI can flag WHICH players aren't reconciled yet.
         player_recon = player_recon_markers(unresolved, l2_pairs, l2_appr)
@@ -3093,6 +3164,17 @@ def run_tour(tour):
         for pid in id_zeroed:
             if l2_appr.get(pid) != "S2":
                 player_recon[pid] = "⛔ identity unresolved"
+        # NAME the un-attributable players on the match flag. A count alone ("1 performance not
+        # attributed to a team") sends the reader looking for a scoring bug; the name plus the team
+        # string the roster actually gave is the whole diagnosis, and it is on EVERY row of the
+        # match so it cannot be missed by looking at the wrong player.
+        if unattributed:
+            _names = ", ".join((PID2DISP.get(p) or v.get("name", "") or p or "?")
+                               for p, v in unattributed)
+            recon_flag += f" ({_names}) — answer in '{REVIEW_TAB}'"
+            for _pid, _v in unattributed:
+                if _pid:
+                    player_recon[_pid] = "⛔ unattributed — no team, not scored"
         # NAME the hold on the match itself. Without this the flag reads "N players scored without
         # a dot-ball source" — true, but it sends the reader hunting a dots bug when the actual
         # cause is that ESPN's whole card was refused as incomplete. A held match is also forced
@@ -3194,8 +3276,18 @@ def run_tour(tour):
                     "tour": CURRENT_TOUR, "team": canon_team(v.get("team", "")) or "",
                     "closest_guess": f"{cricinfo_hint(v)} · official card only ({label}, {mdate})"})
 
-        def emit(short, name, role, d, in_squad):
+        def emit(short, name, role, d, in_squad, attributed=True):
+            """`attributed=False` = a played performance we could not put on either side.
+
+            It is published — silence is the bug being fixed — but it is NOT SCORED and it must not
+            read like a row that was. Every points cell is left BLANK rather than 0: a 0 there is
+            an absence wearing the clothes of a value, which is the exact class of defect this file
+            keeps paying for. The raw stats stay so a human can see what is at stake, `Played` stays
+            Y because he did play, and `record_settlement` is skipped — a performance nobody has
+            attributed must never enter the WRITE-ONCE money baseline."""
             src = status
+            if not attributed:
+                src += " · ⛔ UNATTRIBUTED (no team) — NOT SCORED"
             # Resolve identity: stable Player ID + canonical display name (so the row shows
             # ONE consistent name regardless of which feed/spelling supplied the stats, and
             # the draft can join by id instead of fuzzy-matching the name).
@@ -3234,7 +3326,9 @@ def run_tour(tour):
                 # Unknown-role leftovers: use the role you set in Needs Review if any, else a
                 # best-guess from their stats (never a bare "?"). Role drives SR/Econ penalties.
                 role_out = role if role != "?" else (ROLE_OVERRIDE.get(norm(name)) or guess_role(d))
-                s = score(d, role_out)
+                s = score(d, role_out) if attributed else {k: "" for k in
+                                                           ("bat", "bowl", "field", "sr", "eco",
+                                                            "xi", "total")}
                 sr = round(d["r"] / d["b"] * 100, 1) if d["b"] else ""
                 econ = round(d["runs_conceded"] / (d["balls"] / 6), 2) if d["balls"] else ""
                 dots_out = d["dots"] if dots_final else ""  # never fill dots from a no-dots source
@@ -3246,8 +3340,9 @@ def run_tour(tour):
                              s["bat"], s["bowl"], s["field"], s["sr"], s["eco"], s["xi"],
                              s["total"], src, in_squad, d.get("bat_order") or "",
                              l1_col, l2_col, match_status, recon_flag, player_recon.get(pid, ""),
-                             recon_state_col, _points_delta(mk, pid, s["total"])])
-                if match_status in ("COMPLETED", "COMPLETED_FLAGGED"):
+                             recon_state_col,
+                             _points_delta(mk, pid, s["total"]) if attributed else ""])
+                if attributed and match_status in ("COMPLETED", "COMPLETED_FLAGGED"):
                     record_settlement(mk, CURRENT_TOUR, label, mdate, short, pid, full,
                                       s["total"], match_status, src,
                                       perf=d, field_sources=override_sources.get(pid))
@@ -3265,13 +3360,24 @@ def run_tour(tour):
                                       field_sources=override_sources.get(pid))
 
         for short, name, role in team_players:
-            emit(short, name, role, assigned.get((short, name)), "Y")
+            emit(short, name, role, assigned.get((short, name)),
+                 slot_src.get((short, norm(name)), "Y"))
         # players who featured but matched no squad name -> show for manual review,
         # attributing their team (ESPN roster first, then the parsed team) so it's never a bare "?".
+        # NOTE this loop is empty on any tour whose rows carry an ESPN athlete.id: such a row gets a
+        # minted `ci:` pid, so it is never a no-pid leftover. It is kept for the cricapi-only /
+        # cricsheet-only paths, where a row genuinely can have no id — the un-attributable case it
+        # used to cover is now handled by find_unattributed below.
         for d in leftover.values():
             tfull = team_map.get(norm(d["name"])) or best_team(d["name"], team_map) or d.get("team", "")
             short = short_of(tfull) or "?"
             emit(short, d["name"], "?", d, "N")
+        # THE UN-ATTRIBUTABLE PERFORMANCES. Published, named, and visibly not scored (see emit's
+        # `attributed` docstring). Team is "?" because we genuinely do not know it — and "?" is
+        # inert downstream: the draft groups a match's rows by team pair, so a "?" row joins no
+        # contest and cannot move money while the question is open.
+        for _pid, _v in unattributed:
+            emit("?", _v.get("name", ""), "?", _v, "N", attributed=False)
         # DUPLICATE-PID detector: two distinct squad/feed rows resolving to one pid IN THIS MATCH
         # (the original "two Wyatt rows" symptom). Surface for a Yes/No instead of letting one
         # player silently shadow another. Distinct names only (same name twice is just the feed).
@@ -3662,6 +3768,23 @@ def main():
               f"{(h.get('hours') or 0):.0f}h after start. NOT scored, NOT settled, NOT published. "
               f"Answer its 'ESPN CARD' row in the '{RECON_TAB}' tab "
               f"(S2 = score the short card anyway and flag it · S1 = keep holding).",
+              file=sys.stderr)
+    # ── Performances nobody could attribute to a team ────────────────────────────────────────
+    # Summarised HERE because the per-match line is buried in thousands of lines of tour log, and
+    # each of these is a match sitting on hold: results hidden in the app, nothing settling. It
+    # does NOT fail the run — deliberately. `unsourced` and `unresolved` hold a match the same way
+    # and do not, because the hold IS the enforcement and the repair is a squad edit, not a
+    # run-blocking decision. (The ESPN-card gate exits non-zero only because for that match
+    # NOTHING publishes at all and there is a binary S1/S2 answer waiting.)
+    # Deduped on (tour, feed) the same way the tab is: the same man un-attributable in three
+    # matches of one tour is ONE thing to fix, not three lines of noise.
+    _unattr = dedup_review([r for r in REVIEW if r.get("unattributed")])
+    if _unattr:
+        print(f"⛔ {len(_unattr)} performance(s) could not be attributed to a team — those matches "
+              f"are HELD (not settled, results hidden). Give each a team in the '{REVIEW_TAB}' tab "
+              f"(answer 'New' with the Team column filled), or add a "
+              f"registry/team_aliases.json entry if the feed's team name is the problem: "
+              + "; ".join(f"{r['feed']} [{r['tour']}, roster team {r['team']}]" for r in _unattr),
               file=sys.stderr)
     if tours_failed:
         sys.exit(f"{len(tours_failed)} tour(s) failed to process: "
@@ -4057,6 +4180,75 @@ def find_silent_drops(perf, assigned, team_players):
             out.append((p, v))
     return out
 
+def find_unattributed(perf, assigned, team_players, leftover):
+    """Played feed rows that reach the END of the pipeline as NO row at all. The re-armed check.
+
+    WHAT WENT WRONG. The tolerant fallback that made an un-attributable player VISIBLE was the
+    `leftover` emit — feed entries the matcher could not resolve to any pid, published with team
+    "?" and `In Squad List = N` for a human to look at. `resolve_perf_pid` now mints
+    `ci:<espn athlete.id>` for anyone with an id, so on an ESPN-sourced tour `unresolved` is empty
+    ⇒ `leftover` is empty ⇒ that whole emit is DEAD CODE. MEASURED 14 Aug 2026: "In Squad List = Y"
+    on 2228/2228 rows across the Hundred M/W + CPL tabs, zero N; the same tab carried 9 "?" review
+    rows on 11 Aug. The one surviving path for "played, but in no squad slot" is the auto-add, and
+    its failure branch is `if es not in match_shorts: continue` — a bare drop whose comment still
+    claims "the leftover pass still emits him for review". It does not. Nothing does. So a player
+    the roster cannot attribute to either side leaves NO row, NO review entry and NO log line: his
+    performance is simply gone, and the match publishes COMPLETED and freezes money without it.
+
+    This check deliberately measures the OUTCOME, not the cause. It does not ask "did the auto-add
+    fall through?" or "was he in leftover?" — either question re-breaks the moment someone adds a
+    new way to fall out of the pipeline, which is exactly how the previous check died. It asks the
+    only question that matters: emit() iterates `team_players` and publishes
+    `assigned[(short,name)]`, plus every `leftover` row — so which PLAYED feed rows are in neither?
+
+    Identity, not object identity: `merge_perf` returns a NEW dict when two feed spellings fold
+    into one pid (it returns the object itself only for a single row), so an `id()`-based diff
+    would report a merged player as dropped. So a row with a pid is judged ON THE PID ALONE — that
+    survives the merge, and it does not silence a real drop just because someone already on a slot
+    normalises to the same name. Only a row with NO id falls back to the name, which is the sole
+    handle a `leftover` row (or a fuzzy-matched one) has.
+
+    `resolve_perf_pid` is safe to call again here: every entry in `perf` has already been through
+    it inside `match_squad_to_perf`, so the minting branch's `if norm(nm) not in ALIAS2PID` guard
+    makes these pure lookups (`find_silent_drops` relies on the same property).
+
+    Returns [(pid, perf)] — pid "" when the row has no id at all."""
+    slots = {(sh, nm) for sh, nm, _ in team_players}
+    consumed_pids, consumed_names = set(), set()
+    for key, d in assigned.items():
+        # emit() only ever looks up slots that exist in team_players; an `assigned` entry keyed
+        # on anything else would never be published, so it must not count as consumed.
+        if key not in slots or not d:
+            continue
+        p = resolve_perf_pid(d)
+        if p:
+            consumed_pids.add(p)
+        consumed_names.add(norm(d.get("name", "")))
+    for d in leftover.values():
+        p = resolve_perf_pid(d)
+        if p:
+            consumed_pids.add(p)
+        consumed_names.add(norm(d.get("name", "")))
+    out, seen = [], set()
+    for k, v in perf.items():
+        if not v.get("played"):
+            continue
+        # match_squad_to_perf drops junk entries ("Player Not Found", "sub") from its pool before
+        # it does anything else, so they are in neither `assigned` nor `leftover` BY DESIGN. Not
+        # re-applying that filter here would turn every one of them into a match-blocking row.
+        if is_junk(v.get("name", k)):
+            continue
+        p = resolve_perf_pid(v) or ""
+        nn = norm(v.get("name", "") or k)
+        if (p in consumed_pids) if p else (nn and nn in consumed_names):
+            continue
+        key = p or nn
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append((p, v))
+    return out
+
 def overrides_by_match(data, known_pids=None):
     """Index APPROVED overrides by match_key -> [override dicts] for O(1) apply.
 
@@ -4275,6 +4467,19 @@ def sync_player_aliases():
     except Exception as e:
         print(f"could not update '{ALIASES_TAB}' tab: {e}", file=sys.stderr)
 
+def open_review_items():
+    """The STILL-OPEN 'Needs Review' rows. Pure, so the ACK rule below is testable without gspread.
+
+    Drop anything already resolved (Yes/New) so the tab only ever shows open items — EXCEPT an
+    un-attributable performance. ACK is answered against a NAME ("stop asking me whether this feed
+    spelling is that squad player"); an unattributed row is open against a MATCH that is being HELD.
+    If a 'New' answer carried a team the squad matcher still can't resolve, the ACK would delete the
+    only actionable row while the match stayed LIVE forever with nothing left to click — a guard on
+    one side without its mirror, which is the recurring shape of defect in this file. Such a row
+    lives or dies on whether the player is still un-attributable, and on nothing else."""
+    return [r for r in dedup_review([r for r in REVIEW if r["kind"] == "review"])
+            if r.get("unattributed") or norm(r["feed"]) not in ACK]
+
 def write_review_tab():
     """Publish the still-unmatched players to 'Needs Review' as: closest-match guess + a
     'Correct?' column you answer Yes (guess is right) or New (real player the squad list is
@@ -4285,9 +4490,7 @@ def write_review_tab():
         return
     import gspread
     header = ["Tour", "Team", "Feed Name", "Closest Match", "Role", "Correct? (Yes/New)"]
-    # Drop anything you've already resolved (Yes/New) so the tab only ever shows open items.
-    items = [r for r in dedup_review([r for r in REVIEW if r["kind"] == "review"])
-             if norm(r["feed"]) not in ACK]
+    items = open_review_items()
     if items:
         rows = [[r["tour"], r["team"], r["feed"],
                  PRIOR_CLOSEST.get((r["tour"], r["feed"])) or r["suggestion"],   # keep any name you typed
