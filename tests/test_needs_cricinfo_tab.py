@@ -92,6 +92,14 @@ def _wire(wcmod, monkeypatch, tmp_path, tab_rows, pending, bridges=None):
     b.write_text(json.dumps(bridges if bridges is not None else {}))
     monkeypatch.setattr(wcmod, "CI_BRIDGES_PATH", str(b))
     wcmod.NEEDS_CRICINFO[:] = []
+    # A pending squad name only reaches the tab once the player has actually PLAYED — before his
+    # debut there is no cricinfo id anywhere to ask for. These tests are about the DEDUPE and
+    # ANSWERED rules, so mark the cohort as having appeared; the pre-debut rule has its own test.
+    wcmod.APPEARED.clear()
+    for e in pending:
+        nm = str(e.get("player") or "")
+        if nm:
+            wcmod.APPEARED.add(wcmod.norm(nm))
     return ws
 
 
@@ -257,6 +265,65 @@ def test_finalize_never_writes_the_pending_file(wcmod, monkeypatch, tmp_path, fa
     monkeypatch.setattr(wcmod, "CI_BRIDGES_PATH", str(tmp_path / "bridges.json"))
     ws = _FakeWS([HEADER])
     monkeypatch.setattr(wcmod, "open_gsheet", lambda: _FakeSheet(ws))
+    wcmod.APPEARED.clear()
+    wcmod.APPEARED.add(wcmod.norm("Test Person"))   # so a row is produced at all — see below
     finalize.write_needs_cricinfo_tab()
     assert len(ws.appended) == 1
-    assert p.read_text() == before
+    assert p.read_text() == before                  # THE POINT: the pending file is untouched
+
+
+def test_tour_ingest_asks_nothing_because_nobody_has_played_yet(wcmod, monkeypatch, tmp_path,
+                                                                fake_gspread):
+    """A pleasant consequence of the pre-debut rule. tour_sync_finalize runs at INGEST, before a
+    ball is bowled, so every unanchored squad name is by definition pre-debut and there is nothing
+    a human could look up. The tab stays empty until someone actually plays."""
+    import tour_sync_finalize as finalize
+    p = tmp_path / "pending.json"
+    p.write_text(json.dumps([{"player": "Fresh Signing", "current_pid": "uncapped:fresh-signing",
+                              "tour": "T", "team": "X", "closest_guess": ""}]))
+    monkeypatch.setattr(wcmod, "PENDING_CI_PATH", str(p))
+    monkeypatch.setattr(wcmod, "CI_BRIDGES_PATH", str(tmp_path / "bridges.json"))
+    ws = _FakeWS([HEADER])
+    monkeypatch.setattr(wcmod, "open_gsheet", lambda: _FakeSheet(ws))
+    wcmod.APPEARED.clear()
+    finalize.write_needs_cricinfo_tab()
+    assert ws.appended == []
+
+
+# ── the pre-debut rule: do not ask a human for an id that does not exist ─────────────────────
+def test_a_player_who_has_not_played_is_NOT_asked_about(wcmod, monkeypatch, tmp_path,
+                                                        fake_gspread):
+    """build_registry lists every squad name it could not anchor — but for an UNCAPPED player that
+    is not a gap, it is just too early. He is absent from people.csv BECAUSE he is uncapped, may
+    have no cricinfo page at all, and needs no id: his `uncapped:` pid joins fine because the sheet
+    and the draft carry the SAME placeholder. The moment he debuts, ESPN's athlete.id IS his
+    cricinfo id. Measured on CPL: of 23 surfaced, 21 had never played and 2 already had an id ESPN
+    had given us — the correct number of questions for a human was ZERO.
+    """
+    pending = [{"player": "Never Played", "current_pid": "uncapped:never-played",
+                "tour": "Caribbean Premier League 2026", "team": "MTBAR"}]
+    ws = _wire(wcmod, monkeypatch, tmp_path, [["player", "current_pid", "tour", "team",
+                                               "closest_guess", "cricinfo_id_FILL_HERE"]], pending)
+    wcmod.APPEARED.clear()                      # he has not turned out
+    wcmod.write_needs_cricinfo_tab()
+    assert ws.appended == [], "asked a human for an id that does not exist yet"
+
+
+def test_the_same_player_IS_asked_once_he_has_played(wcmod, monkeypatch, tmp_path, fake_gspread):
+    """The mirror: a man who PLAYED and still has no id is a real question, and must be asked."""
+    pending = [{"player": "Did Play", "current_pid": "uncapped:did-play",
+                "tour": "Caribbean Premier League 2026", "team": "MTBAR"}]
+    ws = _wire(wcmod, monkeypatch, tmp_path, [["player", "current_pid", "tour", "team",
+                                               "closest_guess", "cricinfo_id_FILL_HERE"]], pending)
+    wcmod.APPEARED.clear()
+    wcmod.APPEARED.add(wcmod.norm("Did Play"))
+    wcmod.write_needs_cricinfo_tab()
+    assert len(ws.appended) == 1 and ws.appended[0][0] == "Did Play"
+
+
+def test_note_appearance_only_counts_players_who_actually_featured(wcmod):
+    wcmod.APPEARED.clear()
+    wcmod.note_appearance({"a": {"name": "Played Man", "played": True},
+                           "b": {"name": "Benched Man", "played": False}})
+    assert wcmod.norm("Played Man") in wcmod.APPEARED
+    assert wcmod.norm("Benched Man") not in wcmod.APPEARED

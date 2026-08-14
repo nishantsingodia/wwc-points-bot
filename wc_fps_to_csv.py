@@ -220,7 +220,13 @@ RECON_ACK = set()       # (match_key, pid, param) approved + applied -> stop re-
 # still on a slug:/uncapped: pid). These go to the "Needs Cricinfo ID" tab — the same
 # self-maintaining loop build_registry uses — NOT to Recon Review, whose S1/S2 dropdown asks a
 # value question that makes no sense for "who is this player?".
-NEEDS_CRICINFO = []     # {player, current_pid, tour, team, closest_guess}
+NEEDS_CRICINFO = []
+# norm(name) of every player who APPEARED in a scored card this run. A pre-debut squad member has
+# no cricinfo id ANYWHERE — he is uncapped, so he is not in people.csv either and may not have a
+# cricinfo page at all — so asking a human for one is asking for something that does not exist.
+# The moment he plays, ESPN's athlete.id IS his cricinfo id and we get it free. See
+# pending_registry_gaps.
+APPEARED = set()     # {player, current_pid, tour, team, closest_guess}
 RECON_OVERRIDES = {}    # match_key -> [approved override dicts] (loaded once in main, before tours)
 
 # ── ESPN card HELD — the ball-count gate fired ───────────────────────────────
@@ -374,6 +380,17 @@ def resolve_pid(name):
 # from an authoritative id (never a guess), applied in-memory this run and persisted so the
 # spelling is known to every app that reads the registry. See CRICSHEET_LEARNED_PATH.
 CS_LEARNED = {}         # norm(cricsheet name) -> pid  (new this run)
+
+def note_appearance(perf):
+    """Remember who turned out, so the identity queue can tell a pre-debut squad name from a man
+    who PLAYED and still has no id. Only the second is a question a human can answer."""
+    for k, val in (perf or {}).items():
+        if isinstance(val, dict) and val.get("played"):
+            APPEARED.add(k)
+            nm = norm(val.get("name") or "")
+            if nm:
+                APPEARED.add(nm)
+
 
 def resolve_perf_pid(v):
     """Identity for ONE feed perf entry, id-first.
@@ -2850,6 +2867,11 @@ def run_tour(tour):
                 "no scorecard in any source yet (cricsheet/cricapi/ESPN all empty) — skipped; "
                 "will retry next run"), file=sys.stderr)
             continue
+        # Record who turned out, BEFORE the source branches, from every card we hold. The identity
+        # queue uses this to tell a pre-debut squad name (no id exists anywhere; nothing to ask)
+        # from a man who PLAYED and still has no id (a real question).
+        for _src in (cs_perf, espn_perf, api_perf):
+            note_appearance(_src)
         if cs_path:
             perf = cs_perf
             n_cs += 1; dots_final = True; status = "cricsheet · official"
@@ -4908,6 +4930,17 @@ def pending_registry_gaps():
             continue
         anchored = ALIAS2PID.get(norm(name))
         if anchored and not anchored.startswith(("slug:", "uncapped:", "cs:")):
+            skipped += 1
+            continue
+        # ⛔ DO NOT ASK ABOUT A PLAYER WHO HAS NOT PLAYED. build_registry lists every squad name it
+        # could not anchor, but for an UNCAPPED player that is not a gap — it is simply too early.
+        # He is not in people.csv (uncapped), may have no cricinfo page yet, and needs no id: his
+        # `uncapped:` pid joins correctly because the sheet and the draft carry the SAME placeholder.
+        # The instant he debuts, ESPN's athlete.id IS his cricinfo id and the promotion is automatic.
+        # Measured on CPL: of 23 surfaced, 21 had never played (nothing findable, by anyone) and 2
+        # already had an id ESPN had handed us. The correct number of questions for a human was 0.
+        # So ask only about someone who PLAYED and still has no id — genuinely rare, and real.
+        if norm(name) not in APPEARED and slug_name not in APPEARED:
             skipped += 1
             continue
         rows.append({"player": name, "current_pid": pid, "tour": p.get("tour", ""),
