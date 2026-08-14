@@ -1,5 +1,5 @@
 {
-  "note": "Human-approved reconciliation overrides, recorded from the 'Recon Review' sheet tab by read_recon_approvals() and applied to the perf dict BEFORE scoring (apply_recon_overrides), after which score() recomputes every derived bonus. Keyed by stable identity (date + order-independent team pair) via match_key_of() — NEVER the renumbered 'Match N' label. scope: 'match' (use a whole feed S1/S2 for every differing player), 'player' (one stat field; source S1/S2/Manual+value), or 'l2' (accept official cricsheet S2, or keep the held provisional value). RE-KEYED 2026-08-07: approvals still on pre-cricinfo-id pids had silently stopped applying (the row reappeared every run and the L2 baseline fell back to raw cricapi). Mapped via registry/pid_map.json; '_rekeyed_from' preserves the original key. ANY identity migration MUST re-key this file.",
+  "note": "Human-approved reconciliation overrides, recorded from the 'Recon Review' sheet tab by read_recon_approvals() and applied to the perf dict BEFORE scoring (apply_recon_overrides), after which score() recomputes every derived bonus. Keyed by stable identity (date + order-independent team pair) via match_key_of() — NEVER the renumbered 'Match N' label. scope: 'match' (use a whole feed S1/S2 for every differing player), 'player' (one stat field; source S1/S2/Manual+value), 'l2' (accept official cricsheet S2, or keep the held provisional value) or 'espn_card' (S2 = score a short ESPN card anyway, S1 = keep holding). RE-KEYED 2026-08-07: approvals still on pre-cricinfo-id pids had silently stopped applying (the row reappeared every run and the L2 baseline fell back to raw cricapi). Mapped via registry/pid_map.json; '_rekeyed_from' preserves the original key. ANY identity migration MUST re-key this file. RE-KEYED 2026-08-14: one straggler, slug:fabian-allen -> ci:670013. He was a sheet-added player (registry/new_players.json, MLC 2026, Los Angeles Knight Riders); a human typed his cricinfo id into 'Needs Cricinfo ID', manual_ci_bridges gained ci:670013 'fabian allen', and promote_new_players() rewrote new_players.json — but promote_new_players touches ONLY that file, so this ledger kept the dead slug and the approval stopped applying. A promotion is an identity migration; it must re-key here too. WITNESS, added 2026-08-14 — 'source' is a SLOT, not a feed. At L1, S1 = 'this tour's second witness' and S2 = ESPN; at L2, S2 = official cricsheet and S1 = 'keep the held provisional value'; on 'espn_card', S2 = 'score the short card anyway' and S1 = 'keep holding'. Making Cricbuzz the L1 witness on LPL / the Hundred M+W / CPL (13 Aug 2026) therefore re-pointed the S1 SLOT underneath 10 already-approved player-scope rows without touching a byte of them. MEASURED, all 10: 2 are MLC (no cricbuzz_series, and TOUR CONTROL says 'no') so they still resolve to cricapi; the other 8 now resolve to Cricbuzz, and Cricbuzz's number is IDENTICAL to the cricapi number the human approved on 8/8 (de Kock 61/6 unaffected; Chaudhary r 19, Rickelton r 37, Baker w 1, McCarthy w 1, Tharupathi w 1, Sahan w 1, Pavely w 1) — 0 fantasy points moved, against a 158-FP decision surface if they had disagreed. 'witness' NAMES the feed the human actually answered about and 'witness_value' PINS the number it carried, so the next re-point trips a guard (stamp != current witness AND a different number => refuse to apply, and the row goes back in front of a human) instead of substituting silently. Stamped ONLY on scope 'player'/'match', where S1/S2 name FEEDS; never on 'l2'/'espn_card', where they name CHOICES and no feed is implied. An entry with no 'witness' is a pre-2026-08-14 record: read it as cricapi, and refuse it under any other witness. ORDER IS LOAD-BEARING: apply_recon_overrides resolves a repeated (pid, field) by LAST-WINS on this list, and the 2026-08-07 re-key created 13 repeated signatures, 4 of them holding CONTRADICTORY answers (an older S2 on a pre-migration pid + a newer S1 on the ci: pid — ci:1184099 w, ci:1120320 w, ci:1282475 w, ci:1282476 w). The newer S1 rows sit later and so win today. Do not sort, dedupe or rewrite this list without deciding those four.",
   "overrides": [
     {
       "match_key": "2026-06-13::new zealand|west indies",
@@ -284,9 +284,10 @@
     {
       "match_key": "2026-06-29::los angeles knight riders|seattle orcas",
       "scope": "l2",
-      "pid": "slug:fabian-allen",
+      "pid": "ci:670013",
       "source": "S2",
-      "status": "approved"
+      "status": "approved",
+      "_rekeyed_from": "slug:fabian-allen"
     },
     {
       "match_key": "2026-07-03::mi new york|seattle orcas",
@@ -295,7 +296,9 @@
       "field": "r",
       "status": "approved",
       "source": "S1",
-      "_rekeyed_from": "372455c4"
+      "_rekeyed_from": "372455c4",
+      "witness": "cricapi",
+      "witness_value": 61
     },
     {
       "match_key": "2026-07-03::mi new york|seattle orcas",
@@ -304,7 +307,9 @@
       "field": "4s",
       "status": "approved",
       "source": "S1",
-      "_rekeyed_from": "372455c4"
+      "_rekeyed_from": "372455c4",
+      "witness": "cricapi",
+      "witness_value": 6
     },
     {
       "match_key": "2026-07-02::los angeles knight riders|washington freedom",
@@ -321,7 +326,8 @@
       "field": "w",
       "status": "approved",
       "source": "S2",
-      "_rekeyed_from": "espn:437316"
+      "_rekeyed_from": "espn:437316",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-06::seattle orcas|texas super kings",
@@ -330,7 +336,8 @@
       "field": "r",
       "status": "approved",
       "source": "S2",
-      "_rekeyed_from": "f0af99a7"
+      "_rekeyed_from": "f0af99a7",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-06::seattle orcas|texas super kings",
@@ -339,7 +346,8 @@
       "field": "6s",
       "status": "approved",
       "source": "S2",
-      "_rekeyed_from": "f0af99a7"
+      "_rekeyed_from": "f0af99a7",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-06::seattle orcas|texas super kings",
@@ -348,7 +356,8 @@
       "field": "r",
       "status": "approved",
       "source": "S2",
-      "_rekeyed_from": "6c7a68d0"
+      "_rekeyed_from": "6c7a68d0",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-06::seattle orcas|texas super kings",
@@ -357,7 +366,8 @@
       "field": "4s",
       "status": "approved",
       "source": "S2",
-      "_rekeyed_from": "6c7a68d0"
+      "_rekeyed_from": "6c7a68d0",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-09::england|india",
@@ -376,7 +386,8 @@
       "field": "4s",
       "status": "approved",
       "source": "S2",
-      "_rekeyed_from": "3d284ca3"
+      "_rekeyed_from": "3d284ca3",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-09::england|india",
@@ -579,7 +590,8 @@
       "field": "r",
       "status": "approved",
       "source": "S2",
-      "_rekeyed_from": "3d284ca3"
+      "_rekeyed_from": "3d284ca3",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-22::southern brave|welsh fire",
@@ -588,7 +600,8 @@
       "field": "4s",
       "status": "approved",
       "source": "S2",
-      "_rekeyed_from": "3d284ca3"
+      "_rekeyed_from": "3d284ca3",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-22::southern brave|welsh fire",
@@ -597,7 +610,8 @@
       "field": "6s",
       "status": "approved",
       "source": "S2",
-      "_rekeyed_from": "3d284ca3"
+      "_rekeyed_from": "3d284ca3",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-22::southern brave|welsh fire",
@@ -606,7 +620,9 @@
       "field": "r",
       "status": "approved",
       "source": "S1",
-      "_rekeyed_from": "espn:1079380"
+      "_rekeyed_from": "espn:1079380",
+      "witness": "cricapi",
+      "witness_value": 19
     },
     {
       "match_key": "2026-07-21::mi london|sunrisers leeds",
@@ -615,7 +631,8 @@
       "field": "w",
       "status": "approved",
       "source": "S2",
-      "_rekeyed_from": "cefad9fd"
+      "_rekeyed_from": "cefad9fd",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-21::mi london|sunrisers leeds",
@@ -624,7 +641,8 @@
       "field": "w",
       "status": "approved",
       "source": "S2",
-      "_rekeyed_from": "espn:1120320"
+      "_rekeyed_from": "espn:1120320",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-17::galle gallants|jaffna kings",
@@ -633,7 +651,8 @@
       "field": "w",
       "status": "approved",
       "source": "S2",
-      "_rekeyed_from": "03a83c50"
+      "_rekeyed_from": "03a83c50",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-18::colombo kaps|galle gallants",
@@ -642,7 +661,8 @@
       "field": "w",
       "status": "approved",
       "source": "S2",
-      "_rekeyed_from": "ec0b9258"
+      "_rekeyed_from": "ec0b9258",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-18::colombo kaps|galle gallants",
@@ -651,7 +671,8 @@
       "field": "w",
       "status": "approved",
       "source": "S2",
-      "_rekeyed_from": "d86d276e"
+      "_rekeyed_from": "d86d276e",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-22::dambulla sixers|galle gallants",
@@ -660,7 +681,8 @@
       "field": "r",
       "status": "approved",
       "source": "S2",
-      "_rekeyed_from": "slug:marques-ackerman"
+      "_rekeyed_from": "slug:marques-ackerman",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-22::dambulla sixers|galle gallants",
@@ -669,7 +691,8 @@
       "field": "w",
       "status": "approved",
       "source": "S2",
-      "_rekeyed_from": "slug:marques-ackerman"
+      "_rekeyed_from": "slug:marques-ackerman",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-22::dambulla sixers|galle gallants",
@@ -678,7 +701,8 @@
       "field": "4s",
       "status": "approved",
       "source": "S2",
-      "_rekeyed_from": "slug:marques-ackerman"
+      "_rekeyed_from": "slug:marques-ackerman",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-22::dambulla sixers|galle gallants",
@@ -687,7 +711,8 @@
       "field": "6s",
       "status": "approved",
       "source": "S2",
-      "_rekeyed_from": "slug:marques-ackerman"
+      "_rekeyed_from": "slug:marques-ackerman",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-22::southern brave|welsh fire",
@@ -695,7 +720,8 @@
       "pid": "ci:669365",
       "field": "r",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-22::southern brave|welsh fire",
@@ -703,7 +729,8 @@
       "pid": "ci:669365",
       "field": "4s",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-22::southern brave|welsh fire",
@@ -711,7 +738,8 @@
       "pid": "ci:669365",
       "field": "6s",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-22::southern brave|welsh fire",
@@ -719,7 +747,9 @@
       "pid": "ci:1079380",
       "field": "r",
       "status": "approved",
-      "source": "S1"
+      "source": "S1",
+      "witness": "cricapi",
+      "witness_value": 19
     },
     {
       "match_key": "2026-07-23::london spirit|manchester super giants",
@@ -727,7 +757,8 @@
       "pid": "ci:308251",
       "field": "w",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-25::southern brave|sunrisers leeds",
@@ -735,7 +766,9 @@
       "pid": "ci:605661",
       "field": "r",
       "status": "approved",
-      "source": "S1"
+      "source": "S1",
+      "witness": "cricapi",
+      "witness_value": 37
     },
     {
       "match_key": "2026-07-21::mi london|sunrisers leeds",
@@ -743,7 +776,9 @@
       "pid": "ci:1184099",
       "field": "w",
       "status": "approved",
-      "source": "S1"
+      "source": "S1",
+      "witness": "cricapi",
+      "witness_value": 1
     },
     {
       "match_key": "2026-07-22::dambulla sixers|galle gallants",
@@ -751,7 +786,8 @@
       "pid": "ci:596436",
       "field": "r",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-22::dambulla sixers|galle gallants",
@@ -759,7 +795,8 @@
       "pid": "ci:596436",
       "field": "w",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-22::dambulla sixers|galle gallants",
@@ -767,7 +804,8 @@
       "pid": "ci:596436",
       "field": "4s",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-22::dambulla sixers|galle gallants",
@@ -775,7 +813,8 @@
       "pid": "ci:596436",
       "field": "6s",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-25::colombo kaps|dambulla sixers",
@@ -783,7 +822,8 @@
       "pid": "ci:596436",
       "field": "r",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-25::colombo kaps|dambulla sixers",
@@ -791,7 +831,8 @@
       "pid": "ci:596436",
       "field": "4s",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-25::colombo kaps|dambulla sixers",
@@ -799,7 +840,8 @@
       "pid": "ci:596436",
       "field": "6s",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-21::mi london|sunrisers leeds",
@@ -807,7 +849,9 @@
       "pid": "ci:1120320",
       "field": "w",
       "status": "approved",
-      "source": "S1"
+      "source": "S1",
+      "witness": "cricapi",
+      "witness_value": 1
     },
     {
       "match_key": "2026-07-25::mi london|welsh fire",
@@ -815,7 +859,8 @@
       "pid": "ci:715351",
       "field": "r",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-25::mi london|welsh fire",
@@ -823,7 +868,8 @@
       "pid": "ci:715351",
       "field": "4s",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-17::galle gallants|jaffna kings",
@@ -831,7 +877,8 @@
       "pid": "ci:1153149",
       "field": "w",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-18::colombo kaps|galle gallants",
@@ -839,7 +886,9 @@
       "pid": "ci:1282475",
       "field": "w",
       "status": "approved",
-      "source": "S1"
+      "source": "S1",
+      "witness": "cricapi",
+      "witness_value": 1
     },
     {
       "match_key": "2026-07-18::colombo kaps|galle gallants",
@@ -847,7 +896,9 @@
       "pid": "ci:1282476",
       "field": "w",
       "status": "approved",
-      "source": "S1"
+      "source": "S1",
+      "witness": "cricapi",
+      "witness_value": 1
     },
     {
       "match_key": "2026-07-26::london spirit|trent rockets",
@@ -855,7 +906,8 @@
       "pid": "ci:1340525",
       "field": "r",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-26::london spirit|trent rockets",
@@ -863,7 +915,9 @@
       "pid": "ci:1340525",
       "field": "w",
       "status": "approved",
-      "source": "S1"
+      "source": "S1",
+      "witness": "cricapi",
+      "witness_value": 1
     },
     {
       "match_key": "2026-07-26::london spirit|trent rockets",
@@ -871,7 +925,8 @@
       "pid": "ci:939249",
       "field": "r",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-26::london spirit|trent rockets",
@@ -879,7 +934,8 @@
       "pid": "ci:939249",
       "field": "4s",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-26::london spirit|trent rockets",
@@ -887,7 +943,8 @@
       "pid": "ci:939249",
       "field": "6s",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-26::london spirit|trent rockets",
@@ -895,7 +952,8 @@
       "pid": "ci:652939",
       "field": "r",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-26::london spirit|trent rockets",
@@ -903,7 +961,8 @@
       "pid": "ci:652939",
       "field": "6s",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-26::london spirit|trent rockets",
@@ -911,7 +970,8 @@
       "pid": "ci:537440",
       "field": "w",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-26::jaffna kings|kandy royals",
@@ -919,7 +979,8 @@
       "pid": "ci:1072470",
       "field": "r",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-26::jaffna kings|kandy royals",
@@ -927,7 +988,8 @@
       "pid": "ci:1072470",
       "field": "6s",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-21::mi london|sunrisers leeds",
@@ -1049,7 +1111,8 @@
       "pid": "ci:669365",
       "field": "4s",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-08-01::birmingham phoenix|welsh fire",
@@ -1057,7 +1120,8 @@
       "pid": "ci:669365",
       "field": "6s",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-21::mi london|sunrisers leeds",
@@ -1177,7 +1241,8 @@
       "pid": "ci:1215360",
       "field": "w",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-08-01::birmingham phoenix|welsh fire",
@@ -1185,7 +1250,8 @@
       "pid": "ci:1187120",
       "field": "r",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-08-01::birmingham phoenix|welsh fire",
@@ -1193,7 +1259,8 @@
       "pid": "ci:1187120",
       "field": "4s",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-08-01::birmingham phoenix|welsh fire",
@@ -1201,7 +1268,8 @@
       "pid": "ci:275487",
       "field": "r",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-08-01::birmingham phoenix|welsh fire",
@@ -1209,7 +1277,8 @@
       "pid": "ci:275487",
       "field": "4s",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-08-01::birmingham phoenix|welsh fire",
@@ -1217,7 +1286,8 @@
       "pid": "ci:275487",
       "field": "6s",
       "status": "approved",
-      "source": "S2"
+      "source": "S2",
+      "witness": "espn"
     },
     {
       "match_key": "2026-07-21::mi london|sunrisers leeds",
