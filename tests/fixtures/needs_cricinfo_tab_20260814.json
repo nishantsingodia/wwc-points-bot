@@ -1,0 +1,429 @@
+{
+ "_note": "The live 'Needs Cricinfo ID' tab as it stood on 14 Aug 2026 (pulled via gviz): 1 header + 52 rows, 45 of them already carrying a filled-in cricinfo id, 8 CPL — every CPL row from the runtime path (2 ci:, 6 cb:), none from registry/needs_cricinfo_pending.json. Stored as JSON because *.csv is gitignored: a fixture the workflow never commits is a test that only passes on one laptop.",
+ "rows": [
+  [
+   "player",
+   "current_pid",
+   "tour",
+   "team",
+   "closest_guess",
+   "cricinfo_id_FILL_HERE"
+  ],
+  [
+   "KS Carlson",
+   "cs:9e707e02",
+   "The Hundred Men's Competition 2026",
+   "London Spirit",
+   "cricinfo 737833 — espncricinfo.com/cricketers/x-737833 (cricsheet 9e707e02) · official card only (Match 3 — MTLSP v MTMSG, 2026-07-23)",
+   "737833"
+  ],
+  [
+   "Calvin Harrison",
+   "slug:calvin-harrison",
+   "The Hundred Men's Competition 2026",
+   "MTTRR",
+   "official card: SR Dickson [cricinfo 688141 — espncricinfo.com/cricketers/x-688141 (cricsheet 2344bdd1)], CG Harrison [cricinfo 859899 — espncricinfo.com/cricketers/x-859899 (cricsheet f655d740)]",
+   "859899"
+  ],
+  [
+   "Sean Dickson",
+   "slug:sean-dickson",
+   "The Hundred Men's Competition 2026",
+   "MTBPH",
+   "official card: SR Dickson [cricinfo 688141 — espncricinfo.com/cricketers/x-688141 (cricsheet 2344bdd1)], CG Harrison [cricinfo 859899 — espncricinfo.com/cricketers/x-859899 (cricsheet f655d740)]",
+   "688141"
+  ],
+  [
+   "SR Dickson",
+   "cs:2344bdd1",
+   "The Hundred Men's Competition 2026",
+   "Birmingham Phoenix",
+   "cricinfo 688141 — espncricinfo.com/cricketers/x-688141 (cricsheet 2344bdd1) · official card only (Match 4 — MTBPH v MTTRR, 2026-07-24)",
+   "688141"
+  ],
+  [
+   "CG Harrison",
+   "cs:f655d740",
+   "The Hundred Men's Competition 2026",
+   "Trent Rockets",
+   "cricinfo 859899 — espncricinfo.com/cricketers/x-859899 (cricsheet f655d740) · official card only (Match 4 — MTBPH v MTTRR, 2026-07-24)",
+   "859899"
+  ],
+  [
+   "Matthew Revis",
+   "slug:matthew-revis",
+   "The Hundred Men's Competition 2026",
+   "MTSUNL",
+   "official card: ML Revis [cricinfo 1150021 — espncricinfo.com/cricketers/x-1150021 (cricsheet 28217d89)]",
+   "1150021"
+  ],
+  [
+   "ML Revis",
+   "cs:28217d89",
+   "The Hundred Men's Competition 2026",
+   "Sunrisers Leeds",
+   "cricinfo 1150021 — espncricinfo.com/cricketers/x-1150021 (cricsheet 28217d89) · official card only (Match 5 — MTSUNL v MTSBR, 2026-07-25)",
+   "1150021"
+  ],
+  [
+   "Andrew Tye",
+   "slug:andrew-tye",
+   "The Hundred Men's Competition 2026",
+   "MTLSP",
+   "official card: AJ Tye [cricinfo 459508 — espncricinfo.com/cricketers/x-459508 (cricsheet 7c7d63a2)], CG Harrison [cricinfo 859899 — espncricinfo.com/cricketers/x-859899 (cricsheet f655d740)]",
+   "459508"
+  ],
+  [
+   "AJ Tye",
+   "cs:7c7d63a2",
+   "The Hundred Men's Competition 2026",
+   "London Spirit",
+   "cricinfo 459508 — espncricinfo.com/cricketers/x-459508 (cricsheet 7c7d63a2) · official card only (Match 8 — MTTRR v MTLSP, 2026-07-26)",
+   "459508"
+  ],
+  [
+   "Saif Zaib",
+   "slug:saif-zaib",
+   "The Hundred Men's Competition 2026",
+   "MTSBR",
+   "official card: SA Zaib [cricinfo 663613 — espncricinfo.com/cricketers/x-663613 (cricsheet ab01e323)]",
+   "663613"
+  ],
+  [
+   "SA Zaib",
+   "cs:ab01e323",
+   "The Hundred Men's Competition 2026",
+   "Southern Brave",
+   "cricinfo 663613 — espncricinfo.com/cricketers/x-663613 (cricsheet ab01e323) · official card only (Match 9 — MTSBR v MTMILO, 2026-07-27)",
+   "663613"
+  ],
+  [
+   "Katupulle Gedara Mohamed Shiraz Sahab",
+   "slug:katupulle-gedara-mohamed-shiraz-sahab",
+   "Lanka Premier League 2026",
+   "",
+   "no cricinfo id yet (Match 10 — GG v JK, 2026-07-23)",
+   "801817"
+  ],
+  [
+   "KNA Bandara",
+   "cs:585dda5d",
+   "Lanka Premier League 2026",
+   "Colombo Kaps",
+   "cricinfo 958691 — espncricinfo.com/cricketers/x-958691 (cricsheet 585dda5d) · official card only (Match 15 — CK v JK, 2026-07-28)",
+   "958691"
+  ],
+  [
+   "Jane Maguire",
+   "slug:jane-maguire",
+   "Women's T20 WC 2026",
+   "Ireland",
+   "sheet-added player, still on a placeholder id — fill the cricinfo id to anchor them permanently",
+   "1229018"
+  ],
+  [
+   "Fabian Allen",
+   "slug:fabian-allen",
+   "Major League Cricket 2026",
+   "Los Angeles Knight Riders",
+   "sheet-added player, still on a placeholder id — fill the cricinfo id to anchor them permanently",
+   "670013"
+  ],
+  [
+   "Dian Forrester",
+   "slug:dian-forrester",
+   "Major League Cricket 2026",
+   "Texas Super Kings",
+   "sheet-added player, still on a placeholder id — fill the cricinfo id to anchor them permanently",
+   "696471"
+  ],
+  [
+   "Anirudh Immanuel",
+   "slug:anirudh-immanuel",
+   "Major League Cricket 2026",
+   "San Francisco Unicorns",
+   "sheet-added player, still on a placeholder id — fill the cricinfo id to anchor them permanently",
+   "1539667"
+  ],
+  [
+   "Shakib Al Hasan",
+   "slug:shakib-al-hasan",
+   "Major League Cricket 2026",
+   "MI New York",
+   "sheet-added player, still on a placeholder id — fill the cricinfo id to anchor them permanently",
+   "56143"
+  ],
+  [
+   "L Pope",
+   "slug:l-pope",
+   "Major League Cricket 2026",
+   "Los Angeles Knight Riders",
+   "sheet-added player, still on a placeholder id — fill the cricinfo id to anchor them permanently",
+   "1076721"
+  ],
+  [
+   "Aakarshit Gomel",
+   "slug:aakarshit-gomel",
+   "Major League Cricket 2026",
+   "San Francisco Unicorns",
+   "sheet-added player, still on a placeholder id — fill the cricinfo id to anchor them permanently",
+   "474782"
+  ],
+  [
+   "Ehsan Adil",
+   "slug:ehsan-adil",
+   "Major League Cricket 2026",
+   "MI New York",
+   "sheet-added player, still on a placeholder id — fill the cricinfo id to anchor them permanently",
+   "547092"
+  ],
+  [
+   "Khary Pierre",
+   "slug:khary-pierre",
+   "New Zealand vs West Indies Men's ODI 2026",
+   "West Indies",
+   "sheet-added player, still on a placeholder id — fill the cricinfo id to anchor them permanently",
+   "581160"
+  ],
+  [
+   "Vishwa Lahiru",
+   "slug:vishwa-lahiru",
+   "Lanka Premier League 2026",
+   "dambulla sixers",
+   "sheet-added player, still on a placeholder id — fill the cricinfo id to anchor them permanently",
+   "1364327"
+  ],
+  [
+   "Sonal Dinusha",
+   "slug:sonal-dinusha",
+   "Lanka Premier League 2026",
+   "Dambulla Sixers",
+   "sheet-added player, still on a placeholder id — fill the cricinfo id to anchor them permanently",
+   "1153148"
+  ],
+  [
+   "Thomas Fraser Rogers",
+   "slug:thomas-fraser-rogers",
+   "Lanka Premier League 2026",
+   "Galle Gallants",
+   "sheet-added player, still on a placeholder id — fill the cricinfo id to anchor them permanently",
+   "1137283"
+  ],
+  [
+   "Ripon Mondol",
+   "slug:ripon-mondol",
+   "Lanka Premier League 2026",
+   "Colombo Kaps",
+   "sheet-added player, still on a placeholder id — fill the cricinfo id to anchor them permanently",
+   "1276980"
+  ],
+  [
+   "Khawaja Nafay",
+   "cs:3cf54e77",
+   "Lanka Premier League 2026",
+   "Jaffna Kings",
+   "cricinfo 1329699 — espncricinfo.com/cricketers/x-1329699 (cricsheet 3cf54e77) · official card only (Match 20 — JK v DS, 2026-08-02)",
+   "1329699"
+  ],
+  [
+   "TF Rogers",
+   "cs:7f232d46",
+   "Lanka Premier League 2026",
+   "Galle Gallants",
+   "cricinfo 1137283 — espncricinfo.com/cricketers/x-1137283 (cricsheet 7f232d46) · official card only (Match 19 — CK v GG, 2026-08-01)",
+   "1137283"
+  ],
+  [
+   "R Mondol",
+   "cs:492ff0c2",
+   "Lanka Premier League 2026",
+   "Colombo Kaps",
+   "cricinfo 1276980 — espncricinfo.com/cricketers/x-1276980 (cricsheet 492ff0c2) · official card only (Match 19 — CK v GG, 2026-08-01)",
+   "1276980"
+  ],
+  [
+   "J Moores",
+   "cs:e24cf4d5",
+   "The Hundred Men's Competition 2026",
+   "London Spirit",
+   "cricinfo 1430324 — espncricinfo.com/cricketers/x-1430324 (cricsheet e24cf4d5) · official card only (Match 23 — MTLSP v MTMILO, 2026-08-06)",
+   "1430324"
+  ],
+  [
+   "MD Fisher",
+   "cs:8f2dfebf",
+   "The Hundred Men's Competition 2026",
+   "London Spirit",
+   "cricinfo 639080 — espncricinfo.com/cricketers/x-639080 (cricsheet 8f2dfebf) · official card only (Match 23 — MTLSP v MTMILO, 2026-08-06)",
+   "639080"
+  ],
+  [
+   "Rivaldo A Clarke",
+   "ci:1275938",
+   "Caribbean Premier League 2026",
+   "",
+   "NOT IN ANY SQUAD — id is ESPN's own athlete.id, verify at espncricinfo.com/cricketers/x-1275938 then add him to the squad",
+   "1275938"
+  ],
+  [
+   "Kevlon Alston Anderson",
+   "ci:1209188",
+   "Caribbean Premier League 2026",
+   "",
+   "NOT IN ANY SQUAD — id is ESPN's own athlete.id, verify at espncricinfo.com/cricketers/x-1209188 then add him to the squad",
+   "1209188"
+  ],
+  [
+   "Thomas George Helm",
+   "ci:512907",
+   "The Hundred Men's Competition 2026",
+   "",
+   "NOT IN ANY SQUAD — id is ESPN's own athlete.id, verify at espncricinfo.com/cricketers/x-512907 then add him to the squad",
+   "512907"
+  ],
+  [
+   "Ben William Sanderson",
+   "ci:297482",
+   "The Hundred Men's Competition 2026",
+   "",
+   "NOT IN ANY SQUAD — id is ESPN's own athlete.id, verify at espncricinfo.com/cricketers/x-297482 then add him to the squad",
+   "297482"
+  ],
+  [
+   "Jordan Clark",
+   "ci:301648",
+   "The Hundred Men's Competition 2026",
+   "",
+   "NOT IN ANY SQUAD — id is ESPN's own athlete.id, verify at espncricinfo.com/cricketers/x-301648 then add him to the squad",
+   "301648"
+  ],
+  [
+   "Joe James Weatherley",
+   "ci:748793",
+   "The Hundred Men's Competition 2026",
+   "",
+   "NOT IN ANY SQUAD — id is ESPN's own athlete.id, verify at espncricinfo.com/cricketers/x-748793 then add him to the squad",
+   "748793"
+  ],
+  [
+   "Henry Thomas Crocombe",
+   "ci:1143809",
+   "The Hundred Men's Competition 2026",
+   "",
+   "NOT IN ANY SQUAD — id is ESPN's own athlete.id, verify at espncricinfo.com/cricketers/x-1143809 then add him to the squad",
+   "1143809"
+  ],
+  [
+   "Manny Lumsden",
+   "ci:1488180",
+   "The Hundred Men's Competition 2026",
+   "",
+   "NOT IN ANY SQUAD — id is ESPN's own athlete.id, verify at espncricinfo.com/cricketers/x-1488180 then add him to the squad",
+   "1488180"
+  ],
+  [
+   "Charli Rae Knott",
+   "ci:1164537",
+   "The Hundred Women's Competition 2026",
+   "",
+   "NOT IN ANY SQUAD — id is ESPN's own athlete.id, verify at espncricinfo.com/cricketers/x-1164537 then add him to the squad",
+   "1164537"
+  ],
+  [
+   "Will Jacks",
+   "cb:12258",
+   "The Hundred Men's Competition 2026",
+   "MI London",
+   "cricbuzz-only fielding credit (ct 2 / st 0 / ro 0) on cb match 144747; bridge says revoked (cb_id claimed by 2 cricinfo ids). Run: python3 registry/cricbuzz_bridge.py --derive",
+   "897549"
+  ],
+  [
+   "Lhuan-dre Pretorius",
+   "cb:50545",
+   "The Hundred Men's Competition 2026",
+   "London Spirit",
+   "cricbuzz-only fielding credit (ct 1 / st 0 / ro 0) on cb match 144948; bridge says revoked (cb_id claimed by 2 cricinfo ids). Run: python3 registry/cricbuzz_bridge.py --derive",
+   "1385640"
+  ],
+  [
+   "cricbuzz player 12163",
+   "cb:12163",
+   "Lanka Premier League 2026",
+   "",
+   "cricbuzz-only fielding credit (ct 0 / st 0 / ro 1) on cb match 156948; bridge says unknown (no confirmation on any bridged match). Run: python3 registry/cricbuzz_bridge.py --derive",
+   "633660"
+  ],
+  [
+   "Sonal Dinusha",
+   "cb:13930",
+   "Lanka Premier League 2026",
+   "Dambulla Sixers",
+   "cricbuzz-only fielding credit (ct 1 / st 0 / ro 0) on cb match 157116; bridge says unknown (no confirmation on any bridged match). Run: python3 registry/cricbuzz_bridge.py --derive",
+   "1153148"
+  ],
+  [
+   "Khawaja Nafay",
+   "cb:37579",
+   "Lanka Premier League 2026",
+   "Jaffna Kings",
+   "cricbuzz-only fielding credit (ct 1 / st 0 / ro 0) on cb match 157193; bridge says unknown (no confirmation on any bridged match). Run: python3 registry/cricbuzz_bridge.py --derive",
+   "1329699"
+  ],
+  [
+   "Grace Harris",
+   "cb:11101",
+   "The Hundred Women's Competition 2026",
+   "London Spirit Women",
+   "cricbuzz-only fielding credit (ct 1 / st 0 / ro 0) on cb match 145044; bridge says revoked (cb_id claimed by 2 cricinfo ids). Run: python3 registry/cricbuzz_bridge.py --derive",
+   ""
+  ],
+  [
+   "Imran Tahir",
+   "cb:6667",
+   "Caribbean Premier League 2026",
+   "Guyana Amazon Warriors",
+   "cricbuzz-only fielding credit (ct 1 / st 0 / ro 0) on cb match 154370; bridge says unknown (no confirmation on any bridged match). Run: python3 registry/cricbuzz_bridge.py --derive",
+   ""
+  ],
+  [
+   "Shamar Joseph",
+   "cb:50458",
+   "Caribbean Premier League 2026",
+   "Guyana Amazon Warriors",
+   "cricbuzz-only fielding credit (ct 1 / st 0 / ro 0) on cb match 154370; bridge says unknown (no confirmation on any bridged match). Run: python3 registry/cricbuzz_bridge.py --derive",
+   ""
+  ],
+  [
+   "Mohammad Nabi",
+   "cb:3007",
+   "Caribbean Premier League 2026",
+   "Guyana Amazon Warriors",
+   "cricbuzz-only fielding credit (ct 2 / st 0 / ro 0) on cb match 154370; bridge says unknown (no confirmation on any bridged match). Run: python3 registry/cricbuzz_bridge.py --derive",
+   ""
+  ],
+  [
+   "Glenn Phillips",
+   "cb:10693",
+   "Caribbean Premier League 2026",
+   "Guyana Amazon Warriors",
+   "cricbuzz-only fielding credit (ct 1 / st 0 / ro 0) on cb match 154370; bridge says unknown (no confirmation on any bridged match). Run: python3 registry/cricbuzz_bridge.py --derive",
+   ""
+  ],
+  [
+   "Shai Hope",
+   "cb:10384",
+   "Caribbean Premier League 2026",
+   "Guyana Amazon Warriors",
+   "cricbuzz-only fielding credit (ct 1 / st 0 / ro 0) on cb match 154370; bridge says unknown (no confirmation on any bridged match). Run: python3 registry/cricbuzz_bridge.py --derive",
+   ""
+  ],
+  [
+   "Quentin Sampson",
+   "cb:1456809",
+   "Caribbean Premier League 2026",
+   "Guyana Amazon Warriors",
+   "cricbuzz-only fielding credit (ct 1 / st 0 / ro 0) on cb match 154370; bridge says unknown (no confirmation on any bridged match). Run: python3 registry/cricbuzz_bridge.py --derive",
+   ""
+  ]
+ ]
+}

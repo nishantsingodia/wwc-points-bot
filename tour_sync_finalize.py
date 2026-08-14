@@ -97,43 +97,48 @@ def write_review_tab(rows, stamp):
 
 
 def write_needs_cricinfo_tab():
-    """Append players build_registry couldn't auto-resolve (registry/needs_cricinfo_pending.json) to
-    the 'Needs Cricinfo ID' tab in the points sheet, so a human drops in the cricinfo id — which
-    manual_ci_bridges then picks up on the next build (the self-maintaining identity loop). Idempotent:
-    dedupes by current_pid so re-runs never duplicate a row and never clobber an already-filled id.
-    Best-effort — a failure here never breaks the gate."""
-    pending_path = os.path.join(BOT, "registry", "needs_cricinfo_pending.json")
+    """Push build_registry's unresolved squad names to 'Needs Cricinfo ID' — by DELEGATING to the
+    bot's writer, so there is exactly ONE implementation of that tab.
+
+    WHAT WENT WRONG (measured 14 Aug 2026). This tab had TWO writers with two sources and neither
+    read the other's:
+      · this one   — reads registry/needs_cricinfo_pending.json, runs ONLY on tour INGEST;
+      · wc_fps_to_csv.write_needs_cricinfo_tab — runtime discoveries, and (until 4bc310c) it
+        "deliberately does NOT touch needs_cricinfo_pending.json", read OR write.
+    Cost: 23 CPL squad names sat in the pending file from the 13 Aug ingest onward while the live
+    tab showed 52 rows — 8 CPL, every one of them from the runtime path (2 `ci:`, 6 `cb:`). The
+    owner was never asked about the 23. 4bc310c taught the bot's writer to READ the pending file
+    (still never to write it — build_registry keeps sole ownership), which makes the tab a view
+    over both sources on every full run. Two implementations of one tab is what created the gap,
+    so the fix here is to delete this one, not to teach it the same tricks.
+
+    Concretely, the copy this replaces had drifted in three ways that only ever failed silently:
+      · dedupe by BLIND COLUMN INDEX (`r[1]`) while read_needs_cricinfo reads its columns BY HEADER
+        NAME. One inserted column and every existing row goes unrecognised -> all 52 re-appended,
+        45 of them already carrying a filled-in id.
+      · no ANSWERED check: an id filled in and the row then deleted (the habit the Recon tab
+        teaches — resolved rows vanish) got re-asked on the next ingest. 134 names are answered in
+        manual_ci_bridges.json today.
+      · no ALREADY-ANCHORED check: a name that now resolves to a real pid was still queued.
+
+    The delegate is append-only, dedupes on current_pid, never writes a cell a human filled, and
+    prints its own summary. Best-effort: an import failure costs only the ingest-time push — the
+    pending file is still on disk and the next FULL bot run (2-hourly) surfaces it. Never fatal to
+    the verify gate."""
+    if BOT not in sys.path:
+        sys.path.insert(0, BOT)
     try:
-        pending = json.load(open(pending_path)) if os.path.exists(pending_path) else []
-    except Exception:
-        pending = []
-    if not pending:
-        print("  (needs-cricinfo: none pending)", file=sys.stderr); return
-    if not (os.environ.get("GSHEET_ID") and os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON")):
-        print(f"  (needs-cricinfo tab skipped — no GSheet creds; {len(pending)} pending)", file=sys.stderr); return
+        # Imported HERE, not at module scope: build_registry has just rewritten
+        # registry/players.json, and the bot loads the registry at import time. Importing earlier
+        # would suppress against a stale alias index. Import is ~0.06s and writes nothing.
+        import wc_fps_to_csv as bot
+    except Exception as e:
+        print(f"  (needs-cricinfo: could not import the bot's writer: {e} — pending file NOT "
+              f"pushed at ingest; the next full bot run will surface it)", file=sys.stderr)
+        return
+    bot.NEEDS_CRICINFO[:] = []   # ingest has no runtime scoring discoveries to merge in
     try:
-        import gspread
-        from google.oauth2.service_account import Credentials
-        info = json.loads(os.environ["GOOGLE_SERVICE_ACCOUNT_JSON"])
-        creds = Credentials.from_service_account_info(
-            info, scopes=["https://www.googleapis.com/auth/spreadsheets"])
-        sh = gspread.authorize(creds).open_by_key(os.environ["GSHEET_ID"])
-        header = ["player", "current_pid", "tour", "team", "closest_guess", "cricinfo_id_FILL_HERE"]
-        try:
-            ws = sh.worksheet("Needs Cricinfo ID")
-        except gspread.WorksheetNotFound:
-            ws = sh.add_worksheet(title="Needs Cricinfo ID", rows=200, cols=len(header))
-            ws.update(range_name="A1", values=[header], value_input_option="RAW")
-        existing = ws.get_all_values()
-        have = {(r[1] if len(r) > 1 else "") for r in existing[1:]}   # dedupe by current_pid
-        new_rows = [[p.get("player", ""), p.get("current_pid", ""), p.get("tour", ""),
-                     p.get("team", ""), p.get("closest_guess", ""), ""]
-                    for p in pending if p.get("current_pid") not in have]
-        if new_rows:
-            ws.append_rows(new_rows, value_input_option="RAW")
-            print(f"  Needs Cricinfo ID tab: appended {len(new_rows)} player(s) for review", file=sys.stderr)
-        else:
-            print("  Needs Cricinfo ID tab: nothing new (all pending already listed)", file=sys.stderr)
+        bot.write_needs_cricinfo_tab()
     except Exception as e:
         print(f"  (needs-cricinfo tab write failed: {e})", file=sys.stderr)
 

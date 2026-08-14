@@ -874,7 +874,16 @@ def series_matches(series_id, fresh=False):
 
     The URL slug is decorative: /cricket-series/12316/x/matches returns the LPL page (verified 200,
     correct <title>), so we never need to know Cricbuzz's slug for a series — only its id.
+
+    MEMOISED PER PROCESS, including the `fresh` path. The bot resolves one match at a time and
+    passes fresh=True for every match cricsheet has not settled, so a 31-match tour was
+    re-fetching the SAME ~280 KB page 31 times from an undocumented endpoint in one run. The
+    fixture list is assigned when the season is scheduled; it does not change between two matches
+    of one run. `reset_map_cache()` clears it.
     """
+    memo = (CACHE, str(series_id))
+    if memo in _SERIES_MEMO:
+        return _SERIES_MEMO[memo]
     html = cb_fetch("%s/cricket-series/%s/x/matches" % (CB_HOST, series_id),
                     "series_%s_matches.html" % series_id, fresh=fresh)
     payload = flight_payload(html)
@@ -909,8 +918,11 @@ def series_matches(series_id, fresh=False):
             "tz": (mi.get("venueInfo") or {}).get("timezone") or "",
         })
     if not out:
+        # Not memoised: an unreadable page is not a fixture list of zero, and caching it would
+        # make one bad fetch look like "this series has no matches" for the rest of the run.
         raise CricbuzzParseError("no fixtures with seriesId=%s on the series page — wrong id, or "
                                  "Cricbuzz renamed the matchInfo block" % series_id)
+    _SERIES_MEMO[memo] = out
     return out
 
 
@@ -936,26 +948,300 @@ def _dates_for(ms, tz):
     return out
 
 
-def resolve_match_id(series_id, date, teams, fresh=False):
-    """Cricbuzz match id for a (series, date, teams) triple, or None if it is not unique.
+def fixture_date(m):
+    """Cricbuzz's OWN calendar date for a fixture — venue-local when it states a timezone.
 
-    Teams are matched on a normalized SET of both full names and short codes, so "Colombo Kaps" /
-    "COLOMBO KAPS" / "CLK" all collapse. Returns None (never a guess) when 0 or >1 fixtures match —
-    a same-day double-header between the same two sides is the one genuine ambiguity.
+    Provenance only. What actually MATCHES is `_dates_for`'s ±1-day spread; this is the single
+    date a human reads in the pin file to see which fixture we paired to.
+    """
+    ms = m.get("start_ms")
+    if not ms:
+        return ""
+    off, mt = 0, re.match(r"([+-])(\d{1,2}):?(\d{2})", m.get("tz") or "")
+    if mt:
+        off = (1 if mt.group(1) == "+" else -1) * (int(mt.group(2)) * 3600 + int(mt.group(3)) * 60)
+    return time.strftime("%Y-%m-%d", time.gmtime(ms / 1000.0 + off))
+
+
+def derive_match(series_id, date, teams, fresh=False):
+    """DERIVE the cricbuzz fixture for a (series, date, teams) triple. -> (fixture, why, near).
+
+    `fixture` is the series-page dict, or None when the pairing is not UNIQUE — 0 hits or >1.
+    `why` then says which, in words that name the actual cause. That matters: both naming
+    conventions that broke this in one week surfaced only as "no unique cricbuzz match", which
+    reads like Cricbuzz not carrying the fixture at all, and sent the diagnosis in the wrong
+    direction twice (ESPN "St Lucia Kings" vs Cricbuzz "Saint Lucia Kings" cost 2 of 5 completed
+    CPL matches their second witness; ESPN "MI London (Men)" vs "MI London" cost the Hundred
+    Men's all 31). `near` carries the fixtures that ALMOST matched so the operator can see the
+    two spellings side by side.
+
+    Refusal semantics are unchanged and deliberate: >1 hit is a genuine same-day double-header
+    between the same two sides, and it stays refused rather than guessed.
     """
     want = frozenset(_slug(t) for t in teams if t)
-    hits = []
+    hits, same_date, same_teams = [], [], []
     for m in series_matches(series_id, fresh=fresh):
         names = frozenset(_slug(t) for t in m["teams"] if t)
         shorts = frozenset(_slug(t) for t in m["team_short"] if t)
-        if not (want <= names or want <= shorts):
-            continue
-        if date and date not in _dates_for(m["start_ms"], m["tz"]):
-            continue
-        hits.append(m)
+        team_ok = want <= names or want <= shorts
+        date_ok = (not date) or date in _dates_for(m["start_ms"], m["tz"])
+        if team_ok and date_ok:
+            hits.append(m)
+        elif team_ok:
+            same_teams.append(m)
+        elif date_ok:
+            same_date.append(m)
     if len(hits) == 1:
-        return hits[0]["match_id"]
-    return None
+        return hits[0], "", []
+    ours = "+".join(sorted(want))
+    if len(hits) > 1:
+        return (None,
+                "AMBIGUOUS: %d cricbuzz fixtures match %s on %s (%s) — refusing rather than "
+                "guessing; that is a same-day double-header between the same two sides"
+                % (len(hits), ours, date, ", ".join("cb%s %r" % (h["match_id"], h["desc"])
+                                                    for h in hits)),
+                hits)
+    if same_teams:
+        return (None,
+                "cricbuzz HAS this fixture but on a different date: %s — we asked for %s. A "
+                "schedule change, or the two feeds disagree by more than the ±1 day tolerance"
+                % (", ".join("cb%s %r on %s" % (m["match_id"], m["desc"], fixture_date(m))
+                             for m in same_teams), date),
+                same_teams)
+    if same_date:
+        return (None,
+                "TEAM NAMES DO NOT MEET: we asked for [%s]; cricbuzz lists %s on %s. That is a "
+                "spelling convention, not a missing fixture — fold it in cricbuzz._WORD_FOLD or "
+                "registry/team_aliases.json"
+                % (ours, ", ".join("cb%s [%s]" % (m["match_id"],
+                                                  "+".join(sorted(_slug(t) for t in m["teams"] if t)))
+                                   for m in same_date), date),
+                same_date)
+    return None, "cricbuzz series %s lists no fixture for %s on %s" % (series_id, ours, date), []
+
+
+# ── THE PIN. registry/cricbuzz_match_map.py + registry/cricbuzz_match_map.json ────────────────
+# Players have a shared key (ESPN's athlete.id IS the cricinfo id) and, where they don't, a
+# DERIVED bridge with a confirmations log. Matches had NEITHER: the pairing above was re-derived
+# from names on every run and nothing recorded that it had ever been made, so a rename upstream
+# could silently re-pair or un-pair an already-SETTLED match with no ledger showing it. The map
+# is the durable half — read the module header there for the key, the three contradiction
+# directions and why an absence never revokes a pin.
+MATCH_MAP_PATH = os.environ.get(
+    "WC_CB_MATCH_MAP",
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "registry", "cricbuzz_match_map.json"))
+
+PIN_ALERTS = []          # every pin event this process refused, held or recorded — see pin_alerts()
+_LAST_REFUSAL = [""]     # why the most recent resolve_match_id returned None — see last_refusal()
+_MAP_MOD = []            # [module] or [None]; [] == not tried yet
+_MAP_STORE = {}          # path -> store, loaded once per process
+_SERIES_MEMO = {}        # (cache, series) -> fixtures, so N matches cost ONE series page
+
+
+def _map_mod():
+    """The store module, or None if it cannot be imported (then pinning is simply off).
+
+    Import by NAME first so a test that does `import registry.cricbuzz_match_map` shares this
+    exact module object (one sys.modules entry, one store cache). The path fallback only exists
+    so cricbuzz.py stays runnable from a directory where `registry` is not importable.
+    """
+    if _MAP_MOD:
+        return _MAP_MOD[0]
+    mod = None
+    try:
+        from registry import cricbuzz_match_map as mod    # noqa: F401  (rebound below)
+    except Exception:
+        try:
+            import importlib.util
+            spec = importlib.util.spec_from_file_location(
+                "cricbuzz_match_map",
+                os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                             "registry", "cricbuzz_match_map.py"))
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+        except Exception as exc:
+            print("  cricbuzz: match map unavailable (%s) — pairings will be re-derived every "
+                  "run, which is what a rename upstream needs to move one" % exc, file=sys.stderr)
+            mod = None
+    _MAP_MOD.append(mod)
+    return mod
+
+
+def _map_store(mm, path=None):
+    p = path or MATCH_MAP_PATH
+    if p not in _MAP_STORE:
+        _MAP_STORE[p] = mm.load_store(p)
+    return _MAP_STORE[p]
+
+
+def reset_map_cache():
+    """Drop the per-process module/store/series caches. For tests and for a CLI that rewrites
+    the file underneath us."""
+    del _MAP_MOD[:]
+    _MAP_STORE.clear()
+    _SERIES_MEMO.clear()
+
+
+def pin_alerts():
+    """Everything the pin refused, held or recorded this run — the caller's loud surface."""
+    return list(PIN_ALERTS)
+
+
+def last_refusal():
+    """WHY the most recent resolve_match_id returned None; "" if it did not refuse.
+
+    Set at the top of every call, so it can only ever describe that call. Exists because the one
+    thing the caller currently prints — "no unique cricbuzz match for <date> <teams>" — reads as
+    "Cricbuzz does not carry this fixture", and that sent the diagnosis the wrong way for both of
+    the naming conventions that broke the pairing this week. The cause is knowable here; it just
+    had no way out of the function.
+    """
+    return _LAST_REFUSAL[0]
+
+
+def _pin_alert(kind, key, detail, loud=True):
+    rec = {"kind": kind, "key": key, "detail": detail}
+    PIN_ALERTS.append(rec)
+    if loud:
+        mark = {"contradiction": "⛔", "revoked": "⛔"}.get(kind, "⚠")
+        print("  %s cricbuzz match pin [%s] %s: %s" % (mark, kind, key, detail), file=sys.stderr)
+    return rec
+
+
+def _rename_hint(mm, store, series_id, date, slugs):
+    """Name the RENAME when a derivation finds nothing but a sibling pin sits on the same date.
+
+    Diagnosis only — it never resolves anything. Resolving on a partial team match would be a
+    guess about identity, which is the one thing this project does not do.
+    """
+    delta = mm.SAME_FIXTURE_DAYS
+    for k, rec in sorted((store.get("pins") or {}).items()):
+        if rec["series_id"] != str(series_id) or not (set(rec["teams"]) & set(slugs)):
+            continue
+        d = mm._date_delta_days(rec["date"], date or "")
+        if d is not None and d <= delta and set(rec["teams"]) != set(slugs):
+            return ("a pin already exists for [%s] on %s (cb%s) — one of those team names was "
+                    "RENAMED on one side; add the variant to registry/team_aliases.json"
+                    % ("+".join(rec["teams"]), rec["date"], rec["cricbuzz_match_id"]))
+    return ""
+
+
+def resolve_match_id(series_id, date, teams, fresh=False, espn_event=None, record=True,
+                     map_path=None):
+    """Cricbuzz match id for a (series, date, teams) triple, or None if it is not unique.
+
+    READ THE PIN, THEN DERIVE — never the other way round. A pairing that has been derived once
+    is recorded in registry/cricbuzz_match_map.json with its provenance and read back thereafter,
+    so a rename on either side cannot quietly move or drop the cross-check on a match whose
+    points are already settled. `fresh=True` (which the bot passes for any match cricsheet has
+    not settled) re-derives and CONFIRMS the pin; a settled match resolves from the file with no
+    network at all.
+
+    The refusal contract is unchanged: None on 0 or >1 hits, so a genuine same-day double-header
+    between the same two sides stays refused rather than guessed. Three new ways to get None, all
+    of them LOUD (see pin_alerts()) and all of them fail-safe — the caller loses a cross-check,
+    never a match:
+      • the key is REVOKED (a contradiction a human has not yet decided);
+      • this run derived a DIFFERENT id than the pin — both claims are refused, never last-wins;
+      • the ESPN event id belongs to a revoked key.
+
+    `espn_event` is the rename-proof anchor: an id, not a name. Pass it and a pin survives a team
+    being renamed on OUR side (the key moves, the event id does not). Without it the pin is keyed
+    on names, which is better than nothing (it survives a rename on CRICBUZZ's side) but not
+    rename-proof.
+    """
+    _LAST_REFUSAL[0] = ""
+    slugs = sorted({_slug(t) for t in teams if t})
+    mm = _map_mod()
+    if mm is None:                                   # no store module: exactly the old behaviour
+        fixture, why, _near = derive_match(series_id, date, teams, fresh=fresh)
+        if fixture:
+            return fixture["match_id"]
+        _LAST_REFUSAL[0] = why
+        return None
+
+    store = _map_store(mm, map_path)
+    key = mm.make_key(series_id, date, slugs)
+    hit = mm.lookup(store, key, espn_event)
+    if hit.status == mm.REVOKED:
+        a = _pin_alert("revoked", hit.key,
+                       hit.detail + " — no cross-check until `--forget` clears it")
+        _LAST_REFUSAL[0] = "pin REVOKED: " + a["detail"]
+        return None
+    pinned = int(hit.cricbuzz_match_id) if hit.cricbuzz_match_id else None
+    if pinned and not fresh:
+        return pinned
+
+    try:
+        fixture, why, _near = derive_match(series_id, date, teams, fresh=fresh)
+    except CricbuzzError as exc:
+        # ⛔ AN ABSENCE IS NOT A CONTRADICTION. A series page we could not fetch says nothing
+        # about the pairing; the pin stands. Unpinned, the caller sees the same exception it
+        # always did.
+        if pinned:
+            _pin_alert("held", hit.key, "cb%d stands — the series page was unreachable (%s)"
+                       % (pinned, exc))
+            return pinned
+        raise
+
+    if pinned:
+        if fixture is None:
+            _pin_alert("held", hit.key, "cb%d stands — this run could not re-derive it: %s"
+                       % (pinned, why))
+            return pinned
+        if str(fixture["match_id"]) != str(pinned):
+            # ⛔ CONTRADICTION. Record the new claim under the PINNED key so the store compiles
+            # both into a revocation, and refuse. Never last-wins: the evidence says one of the
+            # two derivations is wrong and does not say which.
+            store, changed = mm.record(store, hit.key, fixture["match_id"], method="teams+date",
+                                       espn_event=espn_event or "", cb_desc=fixture["desc"],
+                                       cb_date=fixture_date(fixture))
+            if changed and record:
+                _persist(mm, store, map_path)
+            a = _pin_alert("contradiction", hit.key,
+                           "pinned to cb%d, this run derived cb%s — BOTH refused. %r on %s. "
+                           "Decide which is right, then --forget the wrong claim"
+                           % (pinned, fixture["match_id"], fixture["desc"],
+                              fixture_date(fixture)))
+            _LAST_REFUSAL[0] = "pin CONTRADICTED: " + a["detail"]
+            return None
+
+    if fixture is None:
+        hint = _rename_hint(mm, store, series_id, date, slugs)
+        a = _pin_alert("unpaired", key, why + ((" · " + hint) if hint else ""), loud=bool(hint))
+        _LAST_REFUSAL[0] = a["detail"]
+        return None
+
+    if record:
+        store, changed = mm.record(store, key, fixture["match_id"], method="teams+date",
+                                   espn_event=espn_event or "", cb_desc=fixture["desc"],
+                                   cb_date=fixture_date(fixture))
+        if changed:
+            _MAP_STORE[map_path or MATCH_MAP_PATH] = store
+            _persist(mm, store, map_path)
+    return fixture["match_id"]
+
+
+_PERSIST_FAILED = []
+
+
+def _persist(mm, store, map_path=None):
+    """Write the map. A failure is reported ONCE and is never fatal — the pin is a durability
+    improvement, and losing it must not cost the run its points.
+
+    ⚠ The file only survives the run if the workflow COMMITS it: `registry/cricbuzz_match_map.json`
+    is in the LEDGERS list of wwc-points.yml / live-lineup.yml / on-demand-refresh.yml. Drop it
+    from there and every run re-derives from scratch — the file would be written and never read,
+    which is this repo's most-repeated bug shape.
+    """
+    _MAP_STORE[map_path or MATCH_MAP_PATH] = store
+    try:
+        mm.save_store(store, map_path or MATCH_MAP_PATH)
+    except OSError as exc:
+        if not _PERSIST_FAILED:
+            _PERSIST_FAILED.append(exc)
+            print("  cricbuzz: could not write the match map (%s) — this run's pairings will not "
+                  "persist" % exc, file=sys.stderr)
 
 
 def series_index(year, fresh=False):

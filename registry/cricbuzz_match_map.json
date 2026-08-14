@@ -1,0 +1,2049 @@
+{
+ "_schema": 1,
+ "_anchor": "our match ('<cricbuzz series>|<date>|<team slug>+<team slug>') -> the cricbuzz match id it was FIRST derived to, with provenance. The series id is part of the key because it is gender-specific (the Hundred: 11493 men / 11504 women), which is what keeps a men's and women's double-header between the same franchises on the same day apart.",
+ "_rules": "PINS ARE READ, NOT RE-DERIVED — that is the point: a rename upstream cannot move or drop a pairing that is already recorded. A later derivation that finds NOTHING does not disturb a pin (absence is not evidence). A later derivation that finds a DIFFERENT cricbuzz match revokes BOTH claims; so does one cricbuzz match claimed by two different fixtures, and one key carrying two ESPN events. Never last-wins. A revoked key stays revoked until a human runs --forget.",
+ "_note": "each pin's `confirmations` list IS the fact log; pins/revoked are a pure function of it (compile_pins o confirmations_log), and no clock is read anywhere. Regenerate, never hand-edit.",
+ "counts": {
+  "confirmations": 103,
+  "pinned": 94,
+  "revoked": 0,
+  "series": 4
+ },
+ "series": [
+  "11493",
+  "11504",
+  "12123",
+  "12316"
+ ],
+ "pins": {
+  "11493|2026-07-21|mi london+sunrisers leeds": {
+   "cricbuzz_match_id": "144662",
+   "series_id": "11493",
+   "date": "2026-07-21",
+   "teams": [
+    "mi london",
+    "sunrisers leeds"
+   ],
+   "espn_events": [
+    "1521231"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521231",
+     "cb_desc": "1st Match",
+     "cb_date": "2026-07-21"
+    }
+   ]
+  },
+  "11493|2026-07-22|southern brave+welsh fire": {
+   "cricbuzz_match_id": "144673",
+   "series_id": "11493",
+   "date": "2026-07-22",
+   "teams": [
+    "southern brave",
+    "welsh fire"
+   ],
+   "espn_events": [
+    "1521232"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521232",
+     "cb_desc": "2nd Match",
+     "cb_date": "2026-07-22"
+    }
+   ]
+  },
+  "11493|2026-07-23|london spirit+manchester super giants": {
+   "cricbuzz_match_id": "144684",
+   "series_id": "11493",
+   "date": "2026-07-23",
+   "teams": [
+    "london spirit",
+    "manchester super giants"
+   ],
+   "espn_events": [
+    "1521233"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521233",
+     "cb_desc": "3rd Match",
+     "cb_date": "2026-07-23"
+    }
+   ]
+  },
+  "11493|2026-07-24|birmingham phoenix+trent rockets": {
+   "cricbuzz_match_id": "144695",
+   "series_id": "11493",
+   "date": "2026-07-24",
+   "teams": [
+    "birmingham phoenix",
+    "trent rockets"
+   ],
+   "espn_events": [
+    "1521234"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521234",
+     "cb_desc": "4th Match",
+     "cb_date": "2026-07-24"
+    }
+   ]
+  },
+  "11493|2026-07-25|mi london+welsh fire": {
+   "cricbuzz_match_id": "144717",
+   "series_id": "11493",
+   "date": "2026-07-25",
+   "teams": [
+    "mi london",
+    "welsh fire"
+   ],
+   "espn_events": [
+    "1521236"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521236",
+     "cb_desc": "6th Match",
+     "cb_date": "2026-07-25"
+    }
+   ]
+  },
+  "11493|2026-07-25|southern brave+sunrisers leeds": {
+   "cricbuzz_match_id": "144706",
+   "series_id": "11493",
+   "date": "2026-07-25",
+   "teams": [
+    "southern brave",
+    "sunrisers leeds"
+   ],
+   "espn_events": [
+    "1521235"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521235",
+     "cb_desc": "5th Match",
+     "cb_date": "2026-07-25"
+    }
+   ]
+  },
+  "11493|2026-07-26|birmingham phoenix+manchester super giants": {
+   "cricbuzz_match_id": "144725",
+   "series_id": "11493",
+   "date": "2026-07-26",
+   "teams": [
+    "birmingham phoenix",
+    "manchester super giants"
+   ],
+   "espn_events": [
+    "1521237"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521237",
+     "cb_desc": "7th Match",
+     "cb_date": "2026-07-26"
+    }
+   ]
+  },
+  "11493|2026-07-26|london spirit+trent rockets": {
+   "cricbuzz_match_id": "144736",
+   "series_id": "11493",
+   "date": "2026-07-26",
+   "teams": [
+    "london spirit",
+    "trent rockets"
+   ],
+   "espn_events": [
+    "1521238"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521238",
+     "cb_desc": "8th Match",
+     "cb_date": "2026-07-26"
+    }
+   ]
+  },
+  "11493|2026-07-27|mi london+southern brave": {
+   "cricbuzz_match_id": "144747",
+   "series_id": "11493",
+   "date": "2026-07-27",
+   "teams": [
+    "mi london",
+    "southern brave"
+   ],
+   "espn_events": [
+    "1521239"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521239",
+     "cb_desc": "9th Match",
+     "cb_date": "2026-07-27"
+    }
+   ]
+  },
+  "11493|2026-07-28|manchester super giants+sunrisers leeds": {
+   "cricbuzz_match_id": "144758",
+   "series_id": "11493",
+   "date": "2026-07-28",
+   "teams": [
+    "manchester super giants",
+    "sunrisers leeds"
+   ],
+   "espn_events": [
+    "1521240"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521240",
+     "cb_desc": "10th Match",
+     "cb_date": "2026-07-28"
+    }
+   ]
+  },
+  "11493|2026-07-29|london spirit+mi london": {
+   "cricbuzz_match_id": "144780",
+   "series_id": "11493",
+   "date": "2026-07-29",
+   "teams": [
+    "london spirit",
+    "mi london"
+   ],
+   "espn_events": [
+    "1521242"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521242",
+     "cb_desc": "12th Match",
+     "cb_date": "2026-07-29"
+    }
+   ]
+  },
+  "11493|2026-07-29|trent rockets+welsh fire": {
+   "cricbuzz_match_id": "144769",
+   "series_id": "11493",
+   "date": "2026-07-29",
+   "teams": [
+    "trent rockets",
+    "welsh fire"
+   ],
+   "espn_events": [
+    "1521241"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521241",
+     "cb_desc": "11th Match",
+     "cb_date": "2026-07-29"
+    }
+   ]
+  },
+  "11493|2026-07-30|birmingham phoenix+southern brave": {
+   "cricbuzz_match_id": "144783",
+   "series_id": "11493",
+   "date": "2026-07-30",
+   "teams": [
+    "birmingham phoenix",
+    "southern brave"
+   ],
+   "espn_events": [
+    "1521243"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521243",
+     "cb_desc": "13th Match",
+     "cb_date": "2026-07-30"
+    }
+   ]
+  },
+  "11493|2026-07-31|manchester super giants+trent rockets": {
+   "cricbuzz_match_id": "144794",
+   "series_id": "11493",
+   "date": "2026-07-31",
+   "teams": [
+    "manchester super giants",
+    "trent rockets"
+   ],
+   "espn_events": [
+    "1521244"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521244",
+     "cb_desc": "14th Match",
+     "cb_date": "2026-07-31"
+    }
+   ]
+  },
+  "11493|2026-08-01|birmingham phoenix+welsh fire": {
+   "cricbuzz_match_id": "144805",
+   "series_id": "11493",
+   "date": "2026-08-01",
+   "teams": [
+    "birmingham phoenix",
+    "welsh fire"
+   ],
+   "espn_events": [
+    "1521245"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521245",
+     "cb_desc": "15th Match",
+     "cb_date": "2026-08-01"
+    }
+   ]
+  },
+  "11493|2026-08-01|london spirit+southern brave": {
+   "cricbuzz_match_id": "144816",
+   "series_id": "11493",
+   "date": "2026-08-01",
+   "teams": [
+    "london spirit",
+    "southern brave"
+   ],
+   "espn_events": [
+    "1521246"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521246",
+     "cb_desc": "16th Match",
+     "cb_date": "2026-08-01"
+    }
+   ]
+  },
+  "11493|2026-08-02|manchester super giants+mi london": {
+   "cricbuzz_match_id": "144838",
+   "series_id": "11493",
+   "date": "2026-08-02",
+   "teams": [
+    "manchester super giants",
+    "mi london"
+   ],
+   "espn_events": [
+    "1521248"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521248",
+     "cb_desc": "18th Match",
+     "cb_date": "2026-08-02"
+    }
+   ]
+  },
+  "11493|2026-08-02|sunrisers leeds+trent rockets": {
+   "cricbuzz_match_id": "144827",
+   "series_id": "11493",
+   "date": "2026-08-02",
+   "teams": [
+    "sunrisers leeds",
+    "trent rockets"
+   ],
+   "espn_events": [
+    "1521247"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521247",
+     "cb_desc": "17th Match",
+     "cb_date": "2026-08-02"
+    }
+   ]
+  },
+  "11493|2026-08-03|southern brave+welsh fire": {
+   "cricbuzz_match_id": "144849",
+   "series_id": "11493",
+   "date": "2026-08-03",
+   "teams": [
+    "southern brave",
+    "welsh fire"
+   ],
+   "espn_events": [
+    "1521249"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521249",
+     "cb_desc": "19th Match",
+     "cb_date": "2026-08-03"
+    }
+   ]
+  },
+  "11493|2026-08-04|london spirit+sunrisers leeds": {
+   "cricbuzz_match_id": "144860",
+   "series_id": "11493",
+   "date": "2026-08-04",
+   "teams": [
+    "london spirit",
+    "sunrisers leeds"
+   ],
+   "espn_events": [
+    "1521250"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521250",
+     "cb_desc": "20th Match",
+     "cb_date": "2026-08-04"
+    }
+   ]
+  },
+  "11493|2026-08-05|birmingham phoenix+trent rockets": {
+   "cricbuzz_match_id": "144882",
+   "series_id": "11493",
+   "date": "2026-08-05",
+   "teams": [
+    "birmingham phoenix",
+    "trent rockets"
+   ],
+   "espn_events": [
+    "1521252"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521252",
+     "cb_desc": "22nd Match",
+     "cb_date": "2026-08-05"
+    }
+   ]
+  },
+  "11493|2026-08-05|manchester super giants+welsh fire": {
+   "cricbuzz_match_id": "144871",
+   "series_id": "11493",
+   "date": "2026-08-05",
+   "teams": [
+    "manchester super giants",
+    "welsh fire"
+   ],
+   "espn_events": [
+    "1521251"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521251",
+     "cb_desc": "21st Match",
+     "cb_date": "2026-08-05"
+    }
+   ]
+  },
+  "11493|2026-08-06|london spirit+mi london": {
+   "cricbuzz_match_id": "144893",
+   "series_id": "11493",
+   "date": "2026-08-06",
+   "teams": [
+    "london spirit",
+    "mi london"
+   ],
+   "espn_events": [
+    "1521253"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521253",
+     "cb_desc": "23rd Match",
+     "cb_date": "2026-08-06"
+    }
+   ]
+  },
+  "11493|2026-08-07|birmingham phoenix+sunrisers leeds": {
+   "cricbuzz_match_id": "144904",
+   "series_id": "11493",
+   "date": "2026-08-07",
+   "teams": [
+    "birmingham phoenix",
+    "sunrisers leeds"
+   ],
+   "espn_events": [
+    "1521254"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "",
+     "cb_desc": "24th Match",
+     "cb_date": "2026-08-07"
+    },
+    {
+     "method": "teams+date",
+     "espn_event": "1521254",
+     "cb_desc": "24th Match",
+     "cb_date": "2026-08-07"
+    }
+   ]
+  },
+  "11493|2026-08-08|manchester super giants+southern brave": {
+   "cricbuzz_match_id": "144926",
+   "series_id": "11493",
+   "date": "2026-08-08",
+   "teams": [
+    "manchester super giants",
+    "southern brave"
+   ],
+   "espn_events": [
+    "1521256"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "",
+     "cb_desc": "26th Match",
+     "cb_date": "2026-08-08"
+    },
+    {
+     "method": "teams+date",
+     "espn_event": "1521256",
+     "cb_desc": "26th Match",
+     "cb_date": "2026-08-08"
+    }
+   ]
+  },
+  "11493|2026-08-08|mi london+trent rockets": {
+   "cricbuzz_match_id": "144915",
+   "series_id": "11493",
+   "date": "2026-08-08",
+   "teams": [
+    "mi london",
+    "trent rockets"
+   ],
+   "espn_events": [
+    "1521255"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "",
+     "cb_desc": "25th Match",
+     "cb_date": "2026-08-08"
+    },
+    {
+     "method": "teams+date",
+     "espn_event": "1521255",
+     "cb_desc": "25th Match",
+     "cb_date": "2026-08-08"
+    }
+   ]
+  },
+  "11493|2026-08-09|birmingham phoenix+london spirit": {
+   "cricbuzz_match_id": "144948",
+   "series_id": "11493",
+   "date": "2026-08-09",
+   "teams": [
+    "birmingham phoenix",
+    "london spirit"
+   ],
+   "espn_events": [
+    "1521258"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "",
+     "cb_desc": "28th Match",
+     "cb_date": "2026-08-09"
+    },
+    {
+     "method": "teams+date",
+     "espn_event": "1521258",
+     "cb_desc": "28th Match",
+     "cb_date": "2026-08-09"
+    }
+   ]
+  },
+  "11493|2026-08-09|sunrisers leeds+welsh fire": {
+   "cricbuzz_match_id": "144937",
+   "series_id": "11493",
+   "date": "2026-08-09",
+   "teams": [
+    "sunrisers leeds",
+    "welsh fire"
+   ],
+   "espn_events": [
+    "1521257"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "",
+     "cb_desc": "27th Match",
+     "cb_date": "2026-08-09"
+    },
+    {
+     "method": "teams+date",
+     "espn_event": "1521257",
+     "cb_desc": "27th Match",
+     "cb_date": "2026-08-09"
+    }
+   ]
+  },
+  "11493|2026-08-10|southern brave+trent rockets": {
+   "cricbuzz_match_id": "144959",
+   "series_id": "11493",
+   "date": "2026-08-10",
+   "teams": [
+    "southern brave",
+    "trent rockets"
+   ],
+   "espn_events": [
+    "1521259"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "",
+     "cb_desc": "29th Match",
+     "cb_date": "2026-08-10"
+    },
+    {
+     "method": "teams+date",
+     "espn_event": "1521259",
+     "cb_desc": "29th Match",
+     "cb_date": "2026-08-10"
+    }
+   ]
+  },
+  "11493|2026-08-11|manchester super giants+sunrisers leeds": {
+   "cricbuzz_match_id": "144970",
+   "series_id": "11493",
+   "date": "2026-08-11",
+   "teams": [
+    "manchester super giants",
+    "sunrisers leeds"
+   ],
+   "espn_events": [
+    "1521260"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "",
+     "cb_desc": "30th Match",
+     "cb_date": "2026-08-11"
+    },
+    {
+     "method": "teams+date",
+     "espn_event": "1521260",
+     "cb_desc": "30th Match",
+     "cb_date": "2026-08-11"
+    }
+   ]
+  },
+  "11493|2026-08-12|birmingham phoenix+mi london": {
+   "cricbuzz_match_id": "144992",
+   "series_id": "11493",
+   "date": "2026-08-12",
+   "teams": [
+    "birmingham phoenix",
+    "mi london"
+   ],
+   "espn_events": [
+    "1521262"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "",
+     "cb_desc": "32nd Match",
+     "cb_date": "2026-08-12"
+    },
+    {
+     "method": "teams+date",
+     "espn_event": "1521262",
+     "cb_desc": "32nd Match",
+     "cb_date": "2026-08-12"
+    }
+   ]
+  },
+  "11493|2026-08-12|london spirit+welsh fire": {
+   "cricbuzz_match_id": "144981",
+   "series_id": "11493",
+   "date": "2026-08-12",
+   "teams": [
+    "london spirit",
+    "welsh fire"
+   ],
+   "espn_events": [
+    "1521261"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "",
+     "cb_desc": "31st Match",
+     "cb_date": "2026-08-12"
+    },
+    {
+     "method": "teams+date",
+     "espn_event": "1521261",
+     "cb_desc": "31st Match",
+     "cb_date": "2026-08-12"
+    }
+   ]
+  },
+  "11504|2026-07-21|mi london+sunrisers leeds": {
+   "cricbuzz_match_id": "145011",
+   "series_id": "11504",
+   "date": "2026-07-21",
+   "teams": [
+    "mi london",
+    "sunrisers leeds"
+   ],
+   "espn_events": [
+    "1521197"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521197",
+     "cb_desc": "1st Match",
+     "cb_date": "2026-07-21"
+    }
+   ]
+  },
+  "11504|2026-07-22|southern brave+welsh fire": {
+   "cricbuzz_match_id": "145033",
+   "series_id": "11504",
+   "date": "2026-07-22",
+   "teams": [
+    "southern brave",
+    "welsh fire"
+   ],
+   "espn_events": [
+    "1521198"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521198",
+     "cb_desc": "2nd Match",
+     "cb_date": "2026-07-22"
+    }
+   ]
+  },
+  "11504|2026-07-23|london spirit+manchester super giants": {
+   "cricbuzz_match_id": "145044",
+   "series_id": "11504",
+   "date": "2026-07-23",
+   "teams": [
+    "london spirit",
+    "manchester super giants"
+   ],
+   "espn_events": [
+    "1521199"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521199",
+     "cb_desc": "3rd Match",
+     "cb_date": "2026-07-23"
+    }
+   ]
+  },
+  "11504|2026-07-24|birmingham phoenix+trent rockets": {
+   "cricbuzz_match_id": "145055",
+   "series_id": "11504",
+   "date": "2026-07-24",
+   "teams": [
+    "birmingham phoenix",
+    "trent rockets"
+   ],
+   "espn_events": [
+    "1521200"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521200",
+     "cb_desc": "4th Match",
+     "cb_date": "2026-07-24"
+    }
+   ]
+  },
+  "11504|2026-07-25|mi london+welsh fire": {
+   "cricbuzz_match_id": "145077",
+   "series_id": "11504",
+   "date": "2026-07-25",
+   "teams": [
+    "mi london",
+    "welsh fire"
+   ],
+   "espn_events": [
+    "1521202"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521202",
+     "cb_desc": "6th Match",
+     "cb_date": "2026-07-25"
+    }
+   ]
+  },
+  "11504|2026-07-25|southern brave+sunrisers leeds": {
+   "cricbuzz_match_id": "145066",
+   "series_id": "11504",
+   "date": "2026-07-25",
+   "teams": [
+    "southern brave",
+    "sunrisers leeds"
+   ],
+   "espn_events": [
+    "1521201"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521201",
+     "cb_desc": "5th Match",
+     "cb_date": "2026-07-25"
+    }
+   ]
+  },
+  "11504|2026-07-26|birmingham phoenix+manchester super giants": {
+   "cricbuzz_match_id": "145088",
+   "series_id": "11504",
+   "date": "2026-07-26",
+   "teams": [
+    "birmingham phoenix",
+    "manchester super giants"
+   ],
+   "espn_events": [
+    "1521203"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521203",
+     "cb_desc": "7th Match",
+     "cb_date": "2026-07-26"
+    }
+   ]
+  },
+  "11504|2026-07-26|london spirit+trent rockets": {
+   "cricbuzz_match_id": "145099",
+   "series_id": "11504",
+   "date": "2026-07-26",
+   "teams": [
+    "london spirit",
+    "trent rockets"
+   ],
+   "espn_events": [
+    "1521204"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521204",
+     "cb_desc": "8th Match",
+     "cb_date": "2026-07-26"
+    }
+   ]
+  },
+  "11504|2026-07-27|mi london+southern brave": {
+   "cricbuzz_match_id": "145110",
+   "series_id": "11504",
+   "date": "2026-07-27",
+   "teams": [
+    "mi london",
+    "southern brave"
+   ],
+   "espn_events": [
+    "1521205"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521205",
+     "cb_desc": "9th Match",
+     "cb_date": "2026-07-27"
+    }
+   ]
+  },
+  "11504|2026-07-28|manchester super giants+sunrisers leeds": {
+   "cricbuzz_match_id": "145121",
+   "series_id": "11504",
+   "date": "2026-07-28",
+   "teams": [
+    "manchester super giants",
+    "sunrisers leeds"
+   ],
+   "espn_events": [
+    "1521206"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521206",
+     "cb_desc": "10th Match",
+     "cb_date": "2026-07-28"
+    }
+   ]
+  },
+  "11504|2026-07-29|london spirit+mi london": {
+   "cricbuzz_match_id": "145143",
+   "series_id": "11504",
+   "date": "2026-07-29",
+   "teams": [
+    "london spirit",
+    "mi london"
+   ],
+   "espn_events": [
+    "1521208"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521208",
+     "cb_desc": "12th Match",
+     "cb_date": "2026-07-29"
+    }
+   ]
+  },
+  "11504|2026-07-29|trent rockets+welsh fire": {
+   "cricbuzz_match_id": "145132",
+   "series_id": "11504",
+   "date": "2026-07-29",
+   "teams": [
+    "trent rockets",
+    "welsh fire"
+   ],
+   "espn_events": [
+    "1521207"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521207",
+     "cb_desc": "11th Match",
+     "cb_date": "2026-07-29"
+    }
+   ]
+  },
+  "11504|2026-07-30|birmingham phoenix+southern brave": {
+   "cricbuzz_match_id": "145154",
+   "series_id": "11504",
+   "date": "2026-07-30",
+   "teams": [
+    "birmingham phoenix",
+    "southern brave"
+   ],
+   "espn_events": [
+    "1521209"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521209",
+     "cb_desc": "13th Match",
+     "cb_date": "2026-07-30"
+    }
+   ]
+  },
+  "11504|2026-07-31|manchester super giants+trent rockets": {
+   "cricbuzz_match_id": "145165",
+   "series_id": "11504",
+   "date": "2026-07-31",
+   "teams": [
+    "manchester super giants",
+    "trent rockets"
+   ],
+   "espn_events": [
+    "1521210"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521210",
+     "cb_desc": "14th Match",
+     "cb_date": "2026-07-31"
+    }
+   ]
+  },
+  "11504|2026-08-01|birmingham phoenix+welsh fire": {
+   "cricbuzz_match_id": "145176",
+   "series_id": "11504",
+   "date": "2026-08-01",
+   "teams": [
+    "birmingham phoenix",
+    "welsh fire"
+   ],
+   "espn_events": [
+    "1521211"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521211",
+     "cb_desc": "15th Match",
+     "cb_date": "2026-08-01"
+    }
+   ]
+  },
+  "11504|2026-08-01|london spirit+southern brave": {
+   "cricbuzz_match_id": "145187",
+   "series_id": "11504",
+   "date": "2026-08-01",
+   "teams": [
+    "london spirit",
+    "southern brave"
+   ],
+   "espn_events": [
+    "1521212"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521212",
+     "cb_desc": "16th Match",
+     "cb_date": "2026-08-01"
+    }
+   ]
+  },
+  "11504|2026-08-02|manchester super giants+mi london": {
+   "cricbuzz_match_id": "145209",
+   "series_id": "11504",
+   "date": "2026-08-02",
+   "teams": [
+    "manchester super giants",
+    "mi london"
+   ],
+   "espn_events": [
+    "1521214"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521214",
+     "cb_desc": "18th Match",
+     "cb_date": "2026-08-02"
+    }
+   ]
+  },
+  "11504|2026-08-02|sunrisers leeds+trent rockets": {
+   "cricbuzz_match_id": "145198",
+   "series_id": "11504",
+   "date": "2026-08-02",
+   "teams": [
+    "sunrisers leeds",
+    "trent rockets"
+   ],
+   "espn_events": [
+    "1521213"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521213",
+     "cb_desc": "17th Match",
+     "cb_date": "2026-08-02"
+    }
+   ]
+  },
+  "11504|2026-08-03|southern brave+welsh fire": {
+   "cricbuzz_match_id": "145212",
+   "series_id": "11504",
+   "date": "2026-08-03",
+   "teams": [
+    "southern brave",
+    "welsh fire"
+   ],
+   "espn_events": [
+    "1521215"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521215",
+     "cb_desc": "19th Match",
+     "cb_date": "2026-08-03"
+    }
+   ]
+  },
+  "11504|2026-08-04|london spirit+sunrisers leeds": {
+   "cricbuzz_match_id": "145223",
+   "series_id": "11504",
+   "date": "2026-08-04",
+   "teams": [
+    "london spirit",
+    "sunrisers leeds"
+   ],
+   "espn_events": [
+    "1521216"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521216",
+     "cb_desc": "20th Match",
+     "cb_date": "2026-08-04"
+    }
+   ]
+  },
+  "11504|2026-08-05|birmingham phoenix+trent rockets": {
+   "cricbuzz_match_id": "145245",
+   "series_id": "11504",
+   "date": "2026-08-05",
+   "teams": [
+    "birmingham phoenix",
+    "trent rockets"
+   ],
+   "espn_events": [
+    "1521218"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521218",
+     "cb_desc": "22nd Match",
+     "cb_date": "2026-08-05"
+    }
+   ]
+  },
+  "11504|2026-08-05|manchester super giants+welsh fire": {
+   "cricbuzz_match_id": "145234",
+   "series_id": "11504",
+   "date": "2026-08-05",
+   "teams": [
+    "manchester super giants",
+    "welsh fire"
+   ],
+   "espn_events": [
+    "1521217"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521217",
+     "cb_desc": "21st Match",
+     "cb_date": "2026-08-05"
+    }
+   ]
+  },
+  "11504|2026-08-06|london spirit+mi london": {
+   "cricbuzz_match_id": "145256",
+   "series_id": "11504",
+   "date": "2026-08-06",
+   "teams": [
+    "london spirit",
+    "mi london"
+   ],
+   "espn_events": [
+    "1521219"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521219",
+     "cb_desc": "23rd Match",
+     "cb_date": "2026-08-06"
+    }
+   ]
+  },
+  "11504|2026-08-07|birmingham phoenix+sunrisers leeds": {
+   "cricbuzz_match_id": "145267",
+   "series_id": "11504",
+   "date": "2026-08-07",
+   "teams": [
+    "birmingham phoenix",
+    "sunrisers leeds"
+   ],
+   "espn_events": [
+    "1521220"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521220",
+     "cb_desc": "24th Match",
+     "cb_date": "2026-08-07"
+    }
+   ]
+  },
+  "11504|2026-08-08|manchester super giants+southern brave": {
+   "cricbuzz_match_id": "145280",
+   "series_id": "11504",
+   "date": "2026-08-08",
+   "teams": [
+    "manchester super giants",
+    "southern brave"
+   ],
+   "espn_events": [
+    "1521222"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521222",
+     "cb_desc": "26th Match",
+     "cb_date": "2026-08-08"
+    }
+   ]
+  },
+  "11504|2026-08-08|mi london+trent rockets": {
+   "cricbuzz_match_id": "145269",
+   "series_id": "11504",
+   "date": "2026-08-08",
+   "teams": [
+    "mi london",
+    "trent rockets"
+   ],
+   "espn_events": [
+    "1521221"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521221",
+     "cb_desc": "25th Match",
+     "cb_date": "2026-08-08"
+    }
+   ]
+  },
+  "11504|2026-08-09|birmingham phoenix+london spirit": {
+   "cricbuzz_match_id": "145302",
+   "series_id": "11504",
+   "date": "2026-08-09",
+   "teams": [
+    "birmingham phoenix",
+    "london spirit"
+   ],
+   "espn_events": [
+    "1521224"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521224",
+     "cb_desc": "28th Match",
+     "cb_date": "2026-08-09"
+    }
+   ]
+  },
+  "11504|2026-08-09|sunrisers leeds+welsh fire": {
+   "cricbuzz_match_id": "145291",
+   "series_id": "11504",
+   "date": "2026-08-09",
+   "teams": [
+    "sunrisers leeds",
+    "welsh fire"
+   ],
+   "espn_events": [
+    "1521223"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521223",
+     "cb_desc": "27th Match",
+     "cb_date": "2026-08-09"
+    }
+   ]
+  },
+  "11504|2026-08-10|southern brave+trent rockets": {
+   "cricbuzz_match_id": "145313",
+   "series_id": "11504",
+   "date": "2026-08-10",
+   "teams": [
+    "southern brave",
+    "trent rockets"
+   ],
+   "espn_events": [
+    "1521225"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521225",
+     "cb_desc": "29th Match",
+     "cb_date": "2026-08-10"
+    }
+   ]
+  },
+  "11504|2026-08-11|manchester super giants+sunrisers leeds": {
+   "cricbuzz_match_id": "145324",
+   "series_id": "11504",
+   "date": "2026-08-11",
+   "teams": [
+    "manchester super giants",
+    "sunrisers leeds"
+   ],
+   "espn_events": [
+    "1521226"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521226",
+     "cb_desc": "30th Match",
+     "cb_date": "2026-08-11"
+    }
+   ]
+  },
+  "11504|2026-08-12|birmingham phoenix+mi london": {
+   "cricbuzz_match_id": "145346",
+   "series_id": "11504",
+   "date": "2026-08-12",
+   "teams": [
+    "birmingham phoenix",
+    "mi london"
+   ],
+   "espn_events": [
+    "1521228"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521228",
+     "cb_desc": "32nd Match",
+     "cb_date": "2026-08-12"
+    }
+   ]
+  },
+  "11504|2026-08-12|london spirit+welsh fire": {
+   "cricbuzz_match_id": "145335",
+   "series_id": "11504",
+   "date": "2026-08-12",
+   "teams": [
+    "london spirit",
+    "welsh fire"
+   ],
+   "espn_events": [
+    "1521227"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1521227",
+     "cb_desc": "31st Match",
+     "cb_date": "2026-08-12"
+    }
+   ]
+  },
+  "12123|2026-08-07|antigua barbuda falcons+jamaica kingsmen": {
+   "cricbuzz_match_id": "154315",
+   "series_id": "12123",
+   "date": "2026-08-07",
+   "teams": [
+    "antigua barbuda falcons",
+    "jamaica kingsmen"
+   ],
+   "espn_events": [
+    "1534179"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1534179",
+     "cb_desc": "1st Match",
+     "cb_date": "2026-08-07"
+    }
+   ]
+  },
+  "12123|2026-08-08|st kitts nevis patriots+trinbago knight riders": {
+   "cricbuzz_match_id": "154326",
+   "series_id": "12123",
+   "date": "2026-08-08",
+   "teams": [
+    "st kitts nevis patriots",
+    "trinbago knight riders"
+   ],
+   "espn_events": [
+    "1534180"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1534180",
+     "cb_desc": "2nd Match",
+     "cb_date": "2026-08-08"
+    }
+   ]
+  },
+  "12123|2026-08-09|antigua barbuda falcons+st lucia kings": {
+   "cricbuzz_match_id": "154337",
+   "series_id": "12123",
+   "date": "2026-08-09",
+   "teams": [
+    "antigua barbuda falcons",
+    "st lucia kings"
+   ],
+   "espn_events": [
+    "1534181"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1534181",
+     "cb_desc": "3rd Match",
+     "cb_date": "2026-08-09"
+    }
+   ]
+  },
+  "12123|2026-08-12|barbados tridents+jamaica kingsmen": {
+   "cricbuzz_match_id": "154348",
+   "series_id": "12123",
+   "date": "2026-08-12",
+   "teams": [
+    "barbados tridents",
+    "jamaica kingsmen"
+   ],
+   "espn_events": [
+    "1534182"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1534182",
+     "cb_desc": "4th Match",
+     "cb_date": "2026-08-11"
+    }
+   ]
+  },
+  "12123|2026-08-12|st kitts nevis patriots+st lucia kings": {
+   "cricbuzz_match_id": "154359",
+   "series_id": "12123",
+   "date": "2026-08-12",
+   "teams": [
+    "st kitts nevis patriots",
+    "st lucia kings"
+   ],
+   "espn_events": [
+    "1534183"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1534183",
+     "cb_desc": "5th Match",
+     "cb_date": "2026-08-12"
+    }
+   ]
+  },
+  "12123|2026-08-14|guyana amazon warriors+jamaica kingsmen": {
+   "cricbuzz_match_id": "154370",
+   "series_id": "12123",
+   "date": "2026-08-14",
+   "teams": [
+    "guyana amazon warriors",
+    "jamaica kingsmen"
+   ],
+   "espn_events": [
+    "1534184"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1534184",
+     "cb_desc": "6th Match",
+     "cb_date": "2026-08-13"
+    }
+   ]
+  },
+  "12316|2026-07-17|galle gallants+jaffna kings": {
+   "cricbuzz_match_id": "156948",
+   "series_id": "12316",
+   "date": "2026-07-17",
+   "teams": [
+    "galle gallants",
+    "jaffna kings"
+   ],
+   "espn_events": [
+    "1537331"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1537331",
+     "cb_desc": "1st Match",
+     "cb_date": "2026-07-17"
+    }
+   ]
+  },
+  "12316|2026-07-18|colombo kaps+galle gallants": {
+   "cricbuzz_match_id": "156966",
+   "series_id": "12316",
+   "date": "2026-07-18",
+   "teams": [
+    "colombo kaps",
+    "galle gallants"
+   ],
+   "espn_events": [
+    "1537333"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1537333",
+     "cb_desc": "3rd Match",
+     "cb_date": "2026-07-18"
+    }
+   ]
+  },
+  "12316|2026-07-18|dambulla sixers+kandy royals": {
+   "cricbuzz_match_id": "156955",
+   "series_id": "12316",
+   "date": "2026-07-18",
+   "teams": [
+    "dambulla sixers",
+    "kandy royals"
+   ],
+   "espn_events": [
+    "1537332"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1537332",
+     "cb_desc": "2nd Match",
+     "cb_date": "2026-07-18"
+    }
+   ]
+  },
+  "12316|2026-07-19|colombo kaps+kandy royals": {
+   "cricbuzz_match_id": "156988",
+   "series_id": "12316",
+   "date": "2026-07-19",
+   "teams": [
+    "colombo kaps",
+    "kandy royals"
+   ],
+   "espn_events": [
+    "1537335"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1537335",
+     "cb_desc": "5th Match",
+     "cb_date": "2026-07-19"
+    }
+   ]
+  },
+  "12316|2026-07-19|dambulla sixers+jaffna kings": {
+   "cricbuzz_match_id": "156977",
+   "series_id": "12316",
+   "date": "2026-07-19",
+   "teams": [
+    "dambulla sixers",
+    "jaffna kings"
+   ],
+   "espn_events": [
+    "1537334"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1537334",
+     "cb_desc": "4th Match",
+     "cb_date": "2026-07-19"
+    }
+   ]
+  },
+  "12316|2026-07-21|dambulla sixers+kandy royals": {
+   "cricbuzz_match_id": "156999",
+   "series_id": "12316",
+   "date": "2026-07-21",
+   "teams": [
+    "dambulla sixers",
+    "kandy royals"
+   ],
+   "espn_events": [
+    "1537336"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1537336",
+     "cb_desc": "6th Match",
+     "cb_date": "2026-07-21"
+    }
+   ]
+  },
+  "12316|2026-07-22|colombo kaps+jaffna kings": {
+   "cricbuzz_match_id": "157010",
+   "series_id": "12316",
+   "date": "2026-07-22",
+   "teams": [
+    "colombo kaps",
+    "jaffna kings"
+   ],
+   "espn_events": [
+    "1537337"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1537337",
+     "cb_desc": "7th Match",
+     "cb_date": "2026-07-22"
+    }
+   ]
+  },
+  "12316|2026-07-22|dambulla sixers+galle gallants": {
+   "cricbuzz_match_id": "157017",
+   "series_id": "12316",
+   "date": "2026-07-22",
+   "teams": [
+    "dambulla sixers",
+    "galle gallants"
+   ],
+   "espn_events": [
+    "1537338"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1537338",
+     "cb_desc": "8th Match",
+     "cb_date": "2026-07-22"
+    }
+   ]
+  },
+  "12316|2026-07-23|colombo kaps+kandy royals": {
+   "cricbuzz_match_id": "157028",
+   "series_id": "12316",
+   "date": "2026-07-23",
+   "teams": [
+    "colombo kaps",
+    "kandy royals"
+   ],
+   "espn_events": [
+    "1537339"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1537339",
+     "cb_desc": "9th Match",
+     "cb_date": "2026-07-23"
+    }
+   ]
+  },
+  "12316|2026-07-23|galle gallants+jaffna kings": {
+   "cricbuzz_match_id": "157039",
+   "series_id": "12316",
+   "date": "2026-07-23",
+   "teams": [
+    "galle gallants",
+    "jaffna kings"
+   ],
+   "espn_events": [
+    "1537340"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1537340",
+     "cb_desc": "10th Match",
+     "cb_date": "2026-07-23"
+    }
+   ]
+  },
+  "12316|2026-07-25|colombo kaps+dambulla sixers": {
+   "cricbuzz_match_id": "157061",
+   "series_id": "12316",
+   "date": "2026-07-25",
+   "teams": [
+    "colombo kaps",
+    "dambulla sixers"
+   ],
+   "espn_events": [
+    "1537342"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1537342",
+     "cb_desc": "12th Match",
+     "cb_date": "2026-07-25"
+    }
+   ]
+  },
+  "12316|2026-07-25|galle gallants+kandy royals": {
+   "cricbuzz_match_id": "157050",
+   "series_id": "12316",
+   "date": "2026-07-25",
+   "teams": [
+    "galle gallants",
+    "kandy royals"
+   ],
+   "espn_events": [
+    "1537341"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1537341",
+     "cb_desc": "11th Match",
+     "cb_date": "2026-07-25"
+    }
+   ]
+  },
+  "12316|2026-07-26|dambulla sixers+galle gallants": {
+   "cricbuzz_match_id": "157083",
+   "series_id": "12316",
+   "date": "2026-07-26",
+   "teams": [
+    "dambulla sixers",
+    "galle gallants"
+   ],
+   "espn_events": [
+    "1537344"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1537344",
+     "cb_desc": "14th Match",
+     "cb_date": "2026-07-26"
+    }
+   ]
+  },
+  "12316|2026-07-26|jaffna kings+kandy royals": {
+   "cricbuzz_match_id": "157072",
+   "series_id": "12316",
+   "date": "2026-07-26",
+   "teams": [
+    "jaffna kings",
+    "kandy royals"
+   ],
+   "espn_events": [
+    "1537343"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1537343",
+     "cb_desc": "13th Match",
+     "cb_date": "2026-07-26"
+    }
+   ]
+  },
+  "12316|2026-07-28|colombo kaps+jaffna kings": {
+   "cricbuzz_match_id": "157094",
+   "series_id": "12316",
+   "date": "2026-07-28",
+   "teams": [
+    "colombo kaps",
+    "jaffna kings"
+   ],
+   "espn_events": [
+    "1537345"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1537345",
+     "cb_desc": "15th Match",
+     "cb_date": "2026-07-28"
+    }
+   ]
+  },
+  "12316|2026-07-29|colombo kaps+dambulla sixers": {
+   "cricbuzz_match_id": "157116",
+   "series_id": "12316",
+   "date": "2026-07-29",
+   "teams": [
+    "colombo kaps",
+    "dambulla sixers"
+   ],
+   "espn_events": [
+    "1537347"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1537347",
+     "cb_desc": "17th Match",
+     "cb_date": "2026-07-29"
+    }
+   ]
+  },
+  "12316|2026-07-29|galle gallants+kandy royals": {
+   "cricbuzz_match_id": "157105",
+   "series_id": "12316",
+   "date": "2026-07-29",
+   "teams": [
+    "galle gallants",
+    "kandy royals"
+   ],
+   "espn_events": [
+    "1537346"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1537346",
+     "cb_desc": "16th Match",
+     "cb_date": "2026-07-29"
+    }
+   ]
+  },
+  "12316|2026-07-30|jaffna kings+kandy royals": {
+   "cricbuzz_match_id": "157127",
+   "series_id": "12316",
+   "date": "2026-07-30",
+   "teams": [
+    "jaffna kings",
+    "kandy royals"
+   ],
+   "espn_events": [
+    "1537348"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1537348",
+     "cb_desc": "18th Match",
+     "cb_date": "2026-07-30"
+    }
+   ]
+  },
+  "12316|2026-08-01|colombo kaps+galle gallants": {
+   "cricbuzz_match_id": "157138",
+   "series_id": "12316",
+   "date": "2026-08-01",
+   "teams": [
+    "colombo kaps",
+    "galle gallants"
+   ],
+   "espn_events": [
+    "1537349"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1537349",
+     "cb_desc": "19th Match",
+     "cb_date": "2026-08-01"
+    }
+   ]
+  },
+  "12316|2026-08-02|dambulla sixers+jaffna kings": {
+   "cricbuzz_match_id": "157149",
+   "series_id": "12316",
+   "date": "2026-08-02",
+   "teams": [
+    "dambulla sixers",
+    "jaffna kings"
+   ],
+   "espn_events": [
+    "1537350"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1537350",
+     "cb_desc": "20th Match",
+     "cb_date": "2026-08-02"
+    }
+   ]
+  },
+  "12316|2026-08-05|colombo kaps+kandy royals": {
+   "cricbuzz_match_id": "157171",
+   "series_id": "12316",
+   "date": "2026-08-05",
+   "teams": [
+    "colombo kaps",
+    "kandy royals"
+   ],
+   "espn_events": [
+    "1537352"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1537352",
+     "cb_desc": "Eliminator (3v4)",
+     "cb_date": "2026-08-05"
+    }
+   ]
+  },
+  "12316|2026-08-05|galle gallants+jaffna kings": {
+   "cricbuzz_match_id": "157160",
+   "series_id": "12316",
+   "date": "2026-08-05",
+   "teams": [
+    "galle gallants",
+    "jaffna kings"
+   ],
+   "espn_events": [
+    "1537351"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1537351",
+     "cb_desc": "Qualifier 1 (1v2)",
+     "cb_date": "2026-08-05"
+    }
+   ]
+  },
+  "12316|2026-08-07|colombo kaps+galle gallants": {
+   "cricbuzz_match_id": "157182",
+   "series_id": "12316",
+   "date": "2026-08-07",
+   "teams": [
+    "colombo kaps",
+    "galle gallants"
+   ],
+   "espn_events": [
+    "1537353"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1537353",
+     "cb_desc": "Qualifier 2 (Looser Q1 vs Winner Eliminator) ",
+     "cb_date": "2026-08-07"
+    }
+   ]
+  },
+  "12316|2026-08-08|galle gallants+jaffna kings": {
+   "cricbuzz_match_id": "157193",
+   "series_id": "12316",
+   "date": "2026-08-08",
+   "teams": [
+    "galle gallants",
+    "jaffna kings"
+   ],
+   "espn_events": [
+    "1537354"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1537354",
+     "cb_desc": "Final",
+     "cb_date": "2026-08-08"
+    }
+   ]
+  }
+ },
+ "revoked": {}
+}

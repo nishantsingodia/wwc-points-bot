@@ -260,7 +260,12 @@ def _release_espn_card(event_id):
     written-but-never-cleared mirror of the same bug class the gate exists for."""
     ESPN_HOLDS.pop(str(event_id), None)
 
-def _espn_hold_escalated(hours_since_start, is_live, approved):
+# Hold kinds that mean "we could not REACH ESPN", as opposed to "ESPN gave us a card that
+# contradicts itself". Only the second kind is a question a human can answer.
+_HOLD_UNREACHABLE = ("page_fetch_failed",)
+
+
+def _espn_hold_escalated(hours_since_start, is_live, approved, kind=None):
     """Has this hold outlived the retry budget? Pure, so the cutoff is testable without a fetch.
 
     `hours_since_start` is hours since the match's SCHEDULED START (None when unparseable, which
@@ -268,6 +273,16 @@ def _espn_hold_escalated(hours_since_start, is_live, approved):
     its card is legitimately still filling, and the summary/playbyplay fetches are seconds apart,
     so a one- or two-ball shortfall mid-innings is a fetch-ordering race, not a defect."""
     if is_live or approved or hours_since_start is None:
+        return False
+    # A TRANSPORT FAILURE IS NOT A SUSPECT CARD. page_fetch_failed means the fetch itself did not
+    # come back — expected reads None because the summary failed too — so there is nothing for a
+    # human to adjudicate: the answer is "try again", which the next run does anyway. Escalating it
+    # asked the owner to rule on data nobody had seen, and it withheld a MATCH THAT WAS FINE: the
+    # Hundred Women's 2026-08-12 (ev 1521227) was held 49h after start while ESPN in fact serves
+    # 206 deliveries against a scorecard expecting 206, two full rosters and a completed innings.
+    # Only a card we DID fetch and that contradicts itself (short_of_self_count / short_vs_scorecard)
+    # is a real question, because there the data is present and wrong.
+    if kind in _HOLD_UNREACHABLE:
         return False
     return hours_since_start >= OVER_HRS_MAX + ESPN_HOLD_GRACE_H
 
@@ -2805,7 +2820,8 @@ def run_tour(tour):
             _hrs = hours_since_start(m)
             hold.update({"tour": CURRENT_TOUR, "match": label, "date": mdate, "hours": _hrs,
                          "match_key": match_key_of(mdate, teams), "event": str(ev)})
-            hold["escalated"] = _espn_hold_escalated(_hrs, is_live, hold.get("approved"))
+            hold["escalated"] = _espn_hold_escalated(_hrs, is_live, hold.get("approved"),
+                                                     kind=hold.get("kind"))
             _rk = (hold["match_key"], f"espn:{ev}", "ESPN CARD")
             if hold["escalated"] and not FREQUENT and _rk not in RECON_ACK:
                 RECON_REVIEW.append(_espn_hold_row(hold))
