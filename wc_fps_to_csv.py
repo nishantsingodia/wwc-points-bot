@@ -3661,7 +3661,13 @@ def sync_tour_control(tours):
     sh = open_gsheet()
     if sh is None:
         return None
-    header = ["Tour", "Tab", "cricapi_series", "Poll cricapi? (yes/no)", "Notes"]
+    # `espn_series (optional)` is an INPUT column, not a report: paste the id from the ESPN series
+    # URL (.../the-hundred-men-s-competition-2026-1521176 -> 1521176) and tour_sync skips name
+    # resolution entirely. Resolution searches ESPN and validates candidates against dated
+    # scoreboards, which is right but can still come back UNRESOLVED on an oddly-named tour — and
+    # that fails the ingest gate. A pasted id removes the one step that can defeat the automation.
+    header = ["Tour", "Tab", "cricapi_series", "Poll cricapi? (yes/no)", "Notes",
+              "espn_series (optional)"]
     try:
         ws = sh.worksheet(TOUR_CONTROL_TAB)
         existing = ws.get_all_values()
@@ -3693,8 +3699,23 @@ def sync_tour_control(tours):
             ws = sh.add_worksheet(title=TOUR_CONTROL_TAB, rows=max(len(new_rows) + 10, 20), cols=len(header))
             ws.update(range_name="A1", values=[header] + new_rows, value_input_option="RAW")
             print(f"created '{TOUR_CONTROL_TAB}' tab ({len(new_rows)} tours; active→yes, rest→pending)", file=sys.stderr)
-        elif new_rows:
-            ws.append_rows(new_rows, value_input_option="RAW")
+        else:
+            # EXTEND THE HEADER on a tab that already exists. Only append_rows ran here, so a new
+            # column added to `header` never appeared on the live tab — and an INPUT column nobody
+            # can see is an input that does not exist. Writes row 1 only; every decision cell below
+            # is untouched.
+            if existing and not any(str(h).strip().lower().startswith("espn_series")
+                                    for h in (existing[0] or [])):
+                try:
+                    ws.update(range_name="A1", values=[header], value_input_option="RAW")
+                    print(f"'{TOUR_CONTROL_TAB}': added the 'espn_series (optional)' column — "
+                          f"paste an ESPN series id there to skip name resolution for that tour",
+                          file=sys.stderr)
+                except Exception as e:
+                    print(f"'{TOUR_CONTROL_TAB}': could not extend the header ({e})",
+                          file=sys.stderr)
+            if new_rows:
+                ws.append_rows(new_rows, value_input_option="RAW")
             print(f"'{TOUR_CONTROL_TAB}': added {len(new_rows)} new tour(s) as 'pending' (approve to poll)", file=sys.stderr)
     except Exception as e:
         print(f"tour control tab: {e}", file=sys.stderr)

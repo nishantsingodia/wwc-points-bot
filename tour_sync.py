@@ -602,11 +602,34 @@ def espn_build(lid, name, now, horizon, state):
     series_info = {"info": {"id": "", "name": name, "espn_id": str(lid)}, "matchList": matchlist}
     return series_info, gender, league_squads
 
-def espn_add_named(query, now, horizon, state):
-    """Resolve a tour BY NAME on ESPN and build it KEYLESS → [tour dicts] (empty if not found).
-    Shared by --espn-tour (one name) and --from-status-sheet (each Column-A name Nishant typed)."""
+def espn_add_named(query, now, horizon, state, espn_id=""):
+    """Resolve a tour on ESPN and build it KEYLESS → [tour dicts] (empty if not found).
+    Shared by --espn-tour (one name) and --from-status-sheet (each Column-A name Nishant typed).
+
+    `espn_id` short-circuits the name search. Name resolution searches ESPN and then VALIDATES each
+    candidate against dated scoreboards — correct, but it can still return UNRESOLVED on an
+    oddly-named tour, and that FAILS the ingest gate. Supplying the id (from the ESPN series URL,
+    e.g. .../the-hundred-men-s-competition-2026-1521176) removes the only step that can defeat the
+    automation. It is still VERIFIED before use: an id that serves no fixtures is refused rather
+    than written into tours.json, because a wrong id is worse than an unresolved one — it ingests a
+    tour whose matches will never appear."""
     clean = _clean_tour_name(query)          # "India tour of Zimbabwe 2026 (Men T20I)" -> "...2026"
     qn = norm(clean)
+    if espn_id:
+        built = espn_build(espn_id, clean, now, horizon, state)
+        if not built:
+            print(f"  espn-add: the espn_series {espn_id} you supplied for {query!r} serves NO "
+                  f"fixtures — refusing it (a wrong id ingests a tour whose matches never appear). "
+                  f"Check the number in the ESPN series URL, or clear the cell to let the name "
+                  f"search run.", file=sys.stderr)
+            return []
+        si, gender, lg = built
+        out = []
+        for fmt in ("ODI", "T20"):
+            t = gen_tour(si, {}, fmt, gender, state, league_squads=lg)
+            if t and t["tours_entry"]["tab"] not in state["existing_tabs"]:
+                out.append(t)
+        return out
     cands = _espn_search_leagues(clean)
     if not cands and (bare := re.sub(r"\s*\b(19|20)\d{2}\b", "", clean).strip()) != clean:
         # A season-less league ("Caribbean Premier League") is a ZERO-result search once a year is
@@ -651,12 +674,32 @@ def status_sheet_new_names(state):
         print(f"  from-status-sheet: sheet open failed: {e}", file=sys.stderr)
         return []
     # Add a tour by typing its name in Column A of EITHER control tab (Nishant used TOUR CONTROL).
-    col_a = []
+    # An OPTIONAL `espn_series` column lets you paste the id yourself. That matters: resolution
+    # searches ESPN and then VALIDATES each candidate against dated scoreboards, which is right but
+    # can still come back UNRESOLVED on an oddly-named tour — and that FAILS the ingest gate. A
+    # pasted id skips the search entirely, so the one step that can defeat the automation stops
+    # being able to. Read BY HEADER NAME, never by index, so inserting a column cannot silently
+    # start reading the wrong one.
+    col_a, ids = [], {}
     for tab in ("TOUR CONTROL", "TOUR STATUS"):
         try:
-            col_a += sh.worksheet(tab).col_values(1)[1:]   # skip the header row
+            rows = sh.worksheet(tab).get_all_values()
         except Exception:
-            pass
+            continue
+        if not rows:
+            continue
+        hdr = [h.strip().lower() for h in rows[0]]
+        ei = next((i for i, h in enumerate(hdr)
+                   if h.startswith("espn_series") or h.startswith("espn series")), -1)
+        for r in rows[1:]:
+            nm = (r[0] if r else "").strip()
+            if not nm:
+                continue
+            col_a.append(nm)
+            if ei >= 0 and len(r) > ei:
+                v = re.sub(r"\D", "", (r[ei] or ""))     # tolerate a pasted ESPN URL
+                if v:
+                    ids[norm(_clean_tour_name(nm))] = v
     existing = {norm(_clean_tour_name(t.get("name", ""))) for t in json.load(open(f"{BOT}/tours.json"))}
     out, seen = [], set()
     for raw in col_a:
@@ -667,7 +710,7 @@ def status_sheet_new_names(state):
         seen.add(key)
         if key in existing or any(key in en or en in key for en in existing):
             continue                              # already ingested
-        out.append(c)
+        out.append((c, ids.get(key, "")))
     return out
 
 
@@ -1019,9 +1062,13 @@ def main():
         now = datetime.now(timezone.utc)
         horizon = now + timedelta(days=45)
         names = status_sheet_new_names(state)
-        print(f"from-status-sheet: {len(names)} new name(s) in Column A: {names}", file=sys.stderr)
-        for nm in names:
-            tours += espn_add_named(nm, now, horizon, state)
+        print(f"from-status-sheet: {len(names)} new name(s) in Column A: "
+              f"{[n for n, _ in names]}", file=sys.stderr)
+        for nm, espn_id in names:
+            if espn_id:
+                print(f"  '{nm}': using the espn_series {espn_id} you supplied — skipping "
+                      f"name resolution", file=sys.stderr)
+            tours += espn_add_named(nm, now, horizon, state, espn_id=espn_id)
     elif args.espn_tour:
         # KEYLESS single-tour add (no cricapi): name -> ESPN league id -> fixtures + full squads.
         now = datetime.now(timezone.utc)
