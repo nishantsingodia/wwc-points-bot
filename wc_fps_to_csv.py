@@ -4995,7 +4995,11 @@ def write_needs_cricinfo_tab():
     writers cannot clobber each other on the TAB either — whichever runs first appends, the other
     sees the row present and skips."""
     queue = list(NEEDS_CRICINFO) + pending_registry_gaps()
-    if not queue:
+    # NOTE: no early return on an empty queue. This function also RETIRES rows nobody can answer,
+    # and "nothing new to append" is now the COMMON case — the pre-debut rule means most runs add
+    # nothing — so returning here would mean stale rows were never cleaned on exactly the runs
+    # that had no other reason to touch the tab.
+    if not queue and not APPEARED:
         return
     sh = open_gsheet()
     if sh is None:
@@ -5024,6 +5028,39 @@ def write_needs_cricinfo_tab():
                   f"no duplicates, and duplicating an answered row loses the answer.",
                   file=sys.stderr)
             return
+        # RETIRE A ROW NOBODY CAN ANSWER. The pre-debut rule (see pending_registry_gaps) stops NEW
+        # pre-debut names being written, but rows appended BEFORE it existed were left stranded:
+        # 23 uncapped CPL squad names sat unanswered on the tab, and 21 of them are unanswerable —
+        # an uncapped player who has not played has no cricinfo id ANYWHERE to look up. Leaving
+        # them is not harmless; it is what buries the rows that do need a human.
+        # Only UNANSWERED and pre-debut rows go. An answered row is retired by read_needs_cricinfo
+        # (its answer is in manual_ci_bridges by then); a player who HAS played and still has no id
+        # is a real question and stays. This runs after scoring, so APPEARED is populated — in the
+        # writer, not the reader, which runs first and would see it empty and retire everything.
+        ci_i = hdr.index("cricinfo_id_FILL_HERE") if "cricinfo_id_FILL_HERE" in hdr else -1
+        pl_i = hdr.index("player") if "player" in hdr else -1
+        stale = []
+        if ci_i >= 0 and pl_i >= 0 and APPEARED:
+            for _ri, r in enumerate(existing[1:], start=2):
+                _pid = (r[pid_i].strip() if len(r) > pid_i else "")
+                _ans = (r[ci_i].strip() if len(r) > ci_i else "")
+                _nm = (r[pl_i].strip() if len(r) > pl_i else "")
+                if _ans or not _pid.startswith(("uncapped:", "slug:")):
+                    continue
+                _slug = norm(_pid.split(":", 1)[-1].replace("-", " "))
+                if norm(_nm) not in APPEARED and _slug not in APPEARED:
+                    stale.append(_ri)
+        if stale:
+            try:
+                for _ri in sorted(stale, reverse=True):
+                    ws.delete_rows(_ri)
+                    del existing[_ri - 1]
+                print(f"'{NEEDS_CRICINFO_TAB}': retired {len(stale)} unanswerable row(s) — squad "
+                      f"names whose player has not debuted, so no cricinfo id exists to find yet; "
+                      f"they return automatically if he plays", file=sys.stderr)
+            except Exception as e:
+                print(f"'{NEEDS_CRICINFO_TAB}': could not retire pre-debut rows ({e})",
+                      file=sys.stderr)
         have = {(r[pid_i].strip() if len(r) > pid_i else "") for r in existing[1:]}
         seen, rows, from_pending = set(), [], 0
         for i, e in enumerate(queue):

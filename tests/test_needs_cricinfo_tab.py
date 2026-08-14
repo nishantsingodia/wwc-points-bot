@@ -377,3 +377,59 @@ def test_a_bad_id_is_not_retired_so_it_can_be_corrected(wcmod, monkeypatch, tmp_
                     [HEADER, ["Typo Player", "uncapped:typo-player", "T", "X", "", "not-an-id"]])
     wcmod.read_needs_cricinfo()
     assert ws.deleted == [], "a row with an unusable id was retired"
+
+
+# ── a question nobody can answer must not sit in the queue ───────────────────────────────────
+def test_a_stranded_pre_debut_row_is_retired(wcmod, monkeypatch, tmp_path, fake_gspread):
+    """The pre-debut rule stops NEW pre-debut names being written, but rows appended before it
+    existed were stranded: 23 uncapped CPL squad names sat unanswered, 21 of them unanswerable —
+    an uncapped player who has not played has no cricinfo id ANYWHERE. Leaving them buries the
+    rows that do need a human."""
+    tab = [HEADER,
+           ["Never Played", "uncapped:never-played", "T", "X", "", ""],
+           ["Did Play", "uncapped:did-play", "T", "X", "", ""]]
+    ws = _DelWS(tab)
+    monkeypatch.setattr(wcmod, "open_gsheet", lambda: _FakeSheet(ws))
+    p = tmp_path / "pending.json"; p.write_text("[]")
+    monkeypatch.setattr(wcmod, "PENDING_CI_PATH", str(p))
+    b = tmp_path / "bridges.json"; b.write_text("{}")
+    monkeypatch.setattr(wcmod, "CI_BRIDGES_PATH", str(b))
+    wcmod.NEEDS_CRICINFO[:] = []
+    wcmod.APPEARED.clear()
+    wcmod.APPEARED.add(wcmod.norm("Did Play"))          # one of the two turned out
+    wcmod.write_needs_cricinfo_tab()
+    assert ws.deleted == [2], "the unanswerable row was not retired"
+    assert [r[0] for r in ws.rows] == ["player", "Did Play"], "retired the wrong row"
+
+
+def test_an_ANSWERED_pre_debut_row_is_left_for_the_reader(wcmod, monkeypatch, tmp_path,
+                                                          fake_gspread):
+    """Retiring an answered row here would throw the answer away — read_needs_cricinfo consumes it
+    into manual_ci_bridges first, and only then retires it."""
+    tab = [HEADER, ["Never Played", "uncapped:never-played", "T", "X", "", "1234567"]]
+    ws = _DelWS(tab)
+    monkeypatch.setattr(wcmod, "open_gsheet", lambda: _FakeSheet(ws))
+    p = tmp_path / "pending.json"; p.write_text("[]")
+    monkeypatch.setattr(wcmod, "PENDING_CI_PATH", str(p))
+    b = tmp_path / "bridges.json"; b.write_text("{}")
+    monkeypatch.setattr(wcmod, "CI_BRIDGES_PATH", str(b))
+    wcmod.NEEDS_CRICINFO[:] = []
+    wcmod.APPEARED.clear()
+    wcmod.write_needs_cricinfo_tab()
+    assert ws.deleted == [], "an answered row was retired before its answer was consumed"
+
+
+def test_nothing_is_retired_when_no_match_was_scored(wcmod, monkeypatch, tmp_path, fake_gspread):
+    """APPEARED empty means no card was read this run — not that nobody played. Retiring then
+    would empty the whole tab on any run that scored nothing."""
+    tab = [HEADER, ["Never Played", "uncapped:never-played", "T", "X", "", ""]]
+    ws = _DelWS(tab)
+    monkeypatch.setattr(wcmod, "open_gsheet", lambda: _FakeSheet(ws))
+    p = tmp_path / "pending.json"; p.write_text("[]")
+    monkeypatch.setattr(wcmod, "PENDING_CI_PATH", str(p))
+    b = tmp_path / "bridges.json"; b.write_text("{}")
+    monkeypatch.setattr(wcmod, "CI_BRIDGES_PATH", str(b))
+    wcmod.NEEDS_CRICINFO[:] = []
+    wcmod.APPEARED.clear()
+    wcmod.write_needs_cricinfo_tab()
+    assert ws.deleted == []
