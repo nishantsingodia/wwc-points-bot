@@ -917,7 +917,16 @@ def espn_get(path, cache=True, **params):
     key = re.sub(r"[^a-z0-9]", "_", f"espn_{ESPN_SERIES}_{path}_{qs}".lower())
     fp = os.path.join(CACHE, key + ".json")
     if cache and os.path.exists(fp):
-        return json.load(open(fp))
+        _hit = json.load(open(fp))
+        # HEAL AN ALREADY-POISONED ENTRY. Refusing to WRITE an empty scoreboard (below) stops new
+        # poison, but CI restores its cache between runs, so a day cached empty during an ESPN
+        # wobble would stay empty forever and the fix would never reach the match it lost. A cached
+        # scoreboard with no events is therefore re-fetched rather than trusted: if the day really
+        # is empty we learn that again cheaply, and if it is not, the fixture comes back.
+        if not (path == "scoreboard" and not (_hit.get("events") or [])):
+            return _hit
+        print(f"  espn: cached scoreboard {params.get('dates','?')} is EMPTY — re-fetching rather "
+              f"than trusting it (this is how 2026-08-04 was lost)", file=sys.stderr)
     url = f"{ESPN_BASE}/{ESPN_SERIES}/{path}?{qs}"
     try:
         req = urllib.request.Request(url, headers={"User-Agent": ESPN_UA})
