@@ -327,3 +327,53 @@ def test_note_appearance_only_counts_players_who_actually_featured(wcmod):
                            "b": {"name": "Benched Man", "played": False}})
     assert wcmod.norm("Played Man") in wcmod.APPEARED
     assert wcmod.norm("Benched Man") not in wcmod.APPEARED
+
+
+# ── an answered question must stop being asked ───────────────────────────────────────────────
+class _DelWS(_FakeWS):
+    def __init__(self, rows):
+        super().__init__(rows)
+        self.deleted = []
+
+    def delete_rows(self, i):
+        self.deleted.append(i)
+        del self.rows[i - 1]
+
+
+def _wire_read(wcmod, monkeypatch, tmp_path, rows):
+    ws = _DelWS(rows)
+    monkeypatch.setattr(wcmod, "open_gsheet", lambda: _FakeSheet(ws))
+    b = tmp_path / "bridges.json"; b.write_text("{}")
+    monkeypatch.setattr(wcmod, "CI_BRIDGES_PATH", str(b))
+    return ws
+
+
+def test_an_answered_row_is_retired_from_the_tab(wcmod, monkeypatch, tmp_path, fake_gspread):
+    """The writer is append-only, so nothing ever removed an answered row: 45 of 75 rows on the
+    live tab were filled in and still being shown, burying the few that needed a human. The answer
+    is not lost — it lives in manual_ci_bridges.json, which is what build_registry anchors from."""
+    ws = _wire_read(wcmod, monkeypatch, tmp_path, [
+        HEADER,
+        ["Answered Player", "uncapped:answered-player", "T", "X", "", "1234567"],
+        ["Open Player", "uncapped:open-player", "T", "X", "", ""],
+    ])
+    wcmod.read_needs_cricinfo()
+    assert ws.deleted == [2], "the answered row was not retired"
+    assert [r[0] for r in ws.rows] == ["player", "Open Player"], "retired the wrong row"
+    assert "1234567" in open(wcmod.CI_BRIDGES_PATH).read(), "answer was dropped, not stored"
+
+
+def test_an_unanswered_row_is_never_retired(wcmod, monkeypatch, tmp_path, fake_gspread):
+    ws = _wire_read(wcmod, monkeypatch, tmp_path,
+                    [HEADER, ["Open Player", "uncapped:open-player", "T", "X", "", ""]])
+    wcmod.read_needs_cricinfo()
+    assert ws.deleted == [] and len(ws.rows) == 2
+
+
+def test_a_bad_id_is_not_retired_so_it_can_be_corrected(wcmod, monkeypatch, tmp_path,
+                                                        fake_gspread):
+    """A typo is not an answer. Retiring it would silently swallow the correction."""
+    ws = _wire_read(wcmod, monkeypatch, tmp_path,
+                    [HEADER, ["Typo Player", "uncapped:typo-player", "T", "X", "", "not-an-id"]])
+    wcmod.read_needs_cricinfo()
+    assert ws.deleted == [], "a row with an unusable id was retired"

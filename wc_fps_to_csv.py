@@ -4514,7 +4514,9 @@ def read_recon_approvals():
             for o in data.get("overrides", [])}
     cell = lambda r, i: (r[i].strip() if i is not None and i < len(r) else "")
     added = registered = 0
-    for r in rows[1:]:
+    consumed = []          # 1-based sheet row numbers whose answer is now safely in the registry
+    flagged = 0            # answered but ALSO flagged — kept on the tab, they still need a human
+    for _ri, r in enumerate(rows[1:], start=2):
         mk, pid, param, correct = cell(r, ki), cell(r, pi), cell(r, pm), cell(r, ci)
         manual = cell(r, mi)
         if not mk or not correct:
@@ -4794,7 +4796,9 @@ def read_needs_cricinfo():
     except Exception:
         pass
     added = registered = 0
-    for r in rows[1:]:
+    consumed = []          # 1-based sheet row numbers whose answer is now safely in the registry
+    flagged = 0            # answered but ALSO flagged — kept on the tab, they still need a human
+    for _ri, r in enumerate(rows[1:], start=2):
         raw = (r[ci_i].strip() if len(r) > ci_i else "")
         player = (r[pl_i].strip() if len(r) > pl_i else "")
         cur_pid = (r[pid_i].strip() if pid_i >= 0 and len(r) > pid_i else "")
@@ -4811,6 +4815,7 @@ def read_needs_cricinfo():
         # how "Kiran Carlson" ended up bound to Liam Dawson (ci:211855) — same team, so the Needs
         # Review "New" flow's closest-match linked them and every Carlson row scored as Dawson.
         # Filling in Carlson's real id would otherwise leave BOTH mappings live.
+        _keep_row = False
         prior = resolve_pid(player)
         _prior_disp = PID2DISP.get(prior, "") if prior else ""
         if (prior and prior != f"ci:{cid}"
@@ -4825,6 +4830,8 @@ def read_needs_cricinfo():
                            f"smear; the old alias must be removed or the points stay misattributed"})
             print(f"  needs-cricinfo: {player!r} already resolves to {prior} "
                   f"({PID2DISP.get(prior)!r}) — flagged, bridge still recorded", file=sys.stderr)
+            flagged += 1
+            _keep_row = True
         owner = known_ci.get(cid)
         if (owner and not same_person_plausible(owner[1].get("display", ""), player)
                 and not long_form_plausible(owner[1].get("display", ""), player)):
@@ -4860,8 +4867,28 @@ def read_needs_cricinfo():
             if nm and nm not in e["names"]:
                 e["names"].append(nm); added += 1
         e["names"] = sorted(set(e["names"]))
+        if not _keep_row:
+            consumed.append(_ri)
     if registered:
         _save_new_players(NEW_PLAYERS_DATA)
+    # RETIRE AN ANSWERED ROW. The writer is append-only and nothing ever removed anything, so a
+    # question you had already answered sat on the tab for good — 45 of the 75 rows were filled in
+    # and still being shown, which buries the handful that actually need you. The answer is not
+    # lost by removing the row: it now lives in manual_ci_bridges.json, which is the permanent
+    # store build_registry anchors from. Deleted bottom-up so earlier indices stay valid.
+    # Deliberately NOT retired: a row that was REFUSED (id already belongs to someone else) or
+    # FLAGGED as a possible false merge. Those are answered but not settled, and they are exactly
+    # the ones a human must still look at.
+    if consumed:
+        try:
+            for _ri in sorted(consumed, reverse=True):
+                ws.delete_rows(_ri)
+            print(f"[identity] retired {len(consumed)} answered row(s) from "
+                  f"'{NEEDS_CRICINFO_TAB}'"
+                  + (f"; kept {flagged} flagged for review" if flagged else ""), file=sys.stderr)
+        except Exception as e:
+            print(f"  needs-cricinfo: could not retire answered rows ({e}) — they will show again",
+                  file=sys.stderr)
     if added:
         try:
             json.dump(bridges, open(CI_BRIDGES_PATH, "w"), indent=1, ensure_ascii=False)
