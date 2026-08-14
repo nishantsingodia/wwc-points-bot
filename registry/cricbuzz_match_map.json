@@ -4,7 +4,7 @@
  "_rules": "PINS ARE READ, NOT RE-DERIVED — that is the point: a rename upstream cannot move or drop a pairing that is already recorded. A later derivation that finds NOTHING does not disturb a pin (absence is not evidence). A later derivation that finds a DIFFERENT cricbuzz match revokes BOTH claims; so does one cricbuzz match claimed by two different fixtures, and one key carrying two ESPN events. Never last-wins. A revoked key stays revoked until a human runs --forget.",
  "_note": "each pin's `confirmations` list IS the fact log; pins/revoked are a pure function of it (compile_pins o confirmations_log), and no clock is read anywhere. Regenerate, never hand-edit.",
  "counts": {
-  "confirmations": 103,
+  "confirmations": 118,
   "pinned": 94,
   "revoked": 0,
   "series": 4
@@ -1240,6 +1240,12 @@
    "confirmations": [
     {
      "method": "teams+date",
+     "espn_event": "",
+     "cb_desc": "24th Match",
+     "cb_date": "2026-08-07"
+    },
+    {
+     "method": "teams+date",
      "espn_event": "1521220",
      "cb_desc": "24th Match",
      "cb_date": "2026-08-07"
@@ -1259,6 +1265,12 @@
    ],
    "also_keyed_as": [],
    "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "",
+     "cb_desc": "26th Match",
+     "cb_date": "2026-08-08"
+    },
     {
      "method": "teams+date",
      "espn_event": "1521222",
@@ -1282,6 +1294,12 @@
    "confirmations": [
     {
      "method": "teams+date",
+     "espn_event": "",
+     "cb_desc": "25th Match",
+     "cb_date": "2026-08-08"
+    },
+    {
+     "method": "teams+date",
      "espn_event": "1521221",
      "cb_desc": "25th Match",
      "cb_date": "2026-08-08"
@@ -1301,6 +1319,12 @@
    ],
    "also_keyed_as": [],
    "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "",
+     "cb_desc": "28th Match",
+     "cb_date": "2026-08-09"
+    },
     {
      "method": "teams+date",
      "espn_event": "1521224",
@@ -1324,6 +1348,12 @@
    "confirmations": [
     {
      "method": "teams+date",
+     "espn_event": "",
+     "cb_desc": "27th Match",
+     "cb_date": "2026-08-09"
+    },
+    {
+     "method": "teams+date",
      "espn_event": "1521223",
      "cb_desc": "27th Match",
      "cb_date": "2026-08-09"
@@ -1343,6 +1373,12 @@
    ],
    "also_keyed_as": [],
    "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "",
+     "cb_desc": "29th Match",
+     "cb_date": "2026-08-10"
+    },
     {
      "method": "teams+date",
      "espn_event": "1521225",
@@ -1366,6 +1402,12 @@
    "confirmations": [
     {
      "method": "teams+date",
+     "espn_event": "",
+     "cb_desc": "30th Match",
+     "cb_date": "2026-08-11"
+    },
+    {
+     "method": "teams+date",
      "espn_event": "1521226",
      "cb_desc": "30th Match",
      "cb_date": "2026-08-11"
@@ -1385,6 +1427,12 @@
    ],
    "also_keyed_as": [],
    "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "",
+     "cb_desc": "32nd Match",
+     "cb_date": "2026-08-12"
+    },
     {
      "method": "teams+date",
      "espn_event": "1521228",
@@ -1408,6 +1456,12 @@
    "confirmations": [
     {
      "method": "teams+date",
+     "espn_event": "",
+     "cb_desc": "31st Match",
+     "cb_date": "2026-08-12"
+    },
+    {
+     "method": "teams+date",
      "espn_event": "1521227",
      "cb_desc": "31st Match",
      "cb_date": "2026-08-12"
@@ -1427,6 +1481,12 @@
    ],
    "also_keyed_as": [],
    "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "",
+     "cb_desc": "1st Match",
+     "cb_date": "2026-08-07"
+    },
     {
      "method": "teams+date",
      "espn_event": "1534179",
@@ -1450,6 +1510,12 @@
    "confirmations": [
     {
      "method": "teams+date",
+     "espn_event": "",
+     "cb_desc": "2nd Match",
+     "cb_date": "2026-08-08"
+    },
+    {
+     "method": "teams+date",
      "espn_event": "1534180",
      "cb_desc": "2nd Match",
      "cb_date": "2026-08-08"
@@ -1469,6 +1535,12 @@
    ],
    "also_keyed_as": [],
    "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "",
+     "cb_desc": "3rd Match",
+     "cb_date": "2026-08-09"
+    },
     {
      "method": "teams+date",
      "espn_event": "1534181",
@@ -1492,6 +1564,12 @@
    "confirmations": [
     {
      "method": "teams+date",
+     "espn_event": "",
+     "cb_desc": "4th Match",
+     "cb_date": "2026-08-11"
+    },
+    {
+     "method": "teams+date",
      "espn_event": "1534182",
      "cb_desc": "4th Match",
      "cb_date": "2026-08-11"
@@ -1513,6 +1591,12 @@
    "confirmations": [
     {
      "method": "teams+date",
+     "espn_event": "",
+     "cb_desc": "5th Match",
+     "cb_date": "2026-08-12"
+    },
+    {
+     "method": "teams+date",
      "espn_event": "1534183",
      "cb_desc": "5th Match",
      "cb_date": "2026-08-12"
@@ -1532,6 +1616,12 @@
    ],
    "also_keyed_as": [],
    "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "",
+     "cb_desc": "6th Match",
+     "cb_date": "2026-08-13"
+    },
     {
      "method": "teams+date",
      "espn_event": "1534184",
