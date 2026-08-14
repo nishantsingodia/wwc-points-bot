@@ -882,8 +882,12 @@ def series_matches(series_id, fresh=False):
     of one run. `reset_map_cache()` clears it.
     """
     memo = (CACHE, str(series_id))
-    if memo in _SERIES_MEMO:
-        return _SERIES_MEMO[memo]
+    was_fresh, cached = _SERIES_MEMO.get(memo, (False, None))
+    if cached is not None and (was_fresh or not fresh):
+        return cached
+    # A memo filled from the DISK cache must not satisfy a later fresh=True: the disk copy can be
+    # a run old, and a stale fixture list whose ids have moved would derive a different match id
+    # and read as a CONTRADICTION against a perfectly good pin.
     html = cb_fetch("%s/cricket-series/%s/x/matches" % (CB_HOST, series_id),
                     "series_%s_matches.html" % series_id, fresh=fresh)
     payload = flight_payload(html)
@@ -922,7 +926,7 @@ def series_matches(series_id, fresh=False):
         # make one bad fetch look like "this series has no matches" for the rest of the run.
         raise CricbuzzParseError("no fixtures with seriesId=%s on the series page — wrong id, or "
                                  "Cricbuzz renamed the matchInfo block" % series_id)
-    _SERIES_MEMO[memo] = out
+    _SERIES_MEMO[memo] = (fresh, out)
     return out
 
 
@@ -1108,6 +1112,28 @@ def _pin_alert(kind, key, detail, loud=True):
     return rec
 
 
+def _pinned_int(hit):
+    """The pinned id as a positive int, or None if the file carries something unusable.
+
+    A hand-edited or truncated map must not resolve to 0: `str("0")` is truthy and `int("0")` is
+    falsy, so an absence would read as a pin in one line and as no pin in the next. Corruption is
+    LOUD and then falls through to a normal derivation — refusing to derive would turn one bad
+    line in a JSON file into a tour-wide loss of the second witness.
+    """
+    raw = hit.cricbuzz_match_id
+    if not raw:
+        return None
+    try:
+        val = int(raw)
+    except (TypeError, ValueError):
+        val = 0
+    if val <= 0:
+        _pin_alert("corrupt", hit.key, "pinned cricbuzz match id %r is not a positive integer — "
+                                       "ignoring the pin and re-deriving" % (raw,))
+        return None
+    return val
+
+
 def _rename_hint(mm, store, series_id, date, slugs):
     """Name the RENAME when a derivation finds nothing but a sibling pin sits on the same date.
 
@@ -1168,7 +1194,7 @@ def resolve_match_id(series_id, date, teams, fresh=False, espn_event=None, recor
                        hit.detail + " — no cross-check until `--forget` clears it")
         _LAST_REFUSAL[0] = "pin REVOKED: " + a["detail"]
         return None
-    pinned = int(hit.cricbuzz_match_id) if hit.cricbuzz_match_id else None
+    pinned = _pinned_int(hit)
     if pinned and not fresh:
         return pinned
 
@@ -1184,6 +1210,14 @@ def resolve_match_id(series_id, date, teams, fresh=False, espn_event=None, recor
             return pinned
         raise
 
+    # A fixture we cannot address by id is not a pairing. `series_matches` reads matchId through
+    # _int(), which yields 0 for a missing or unparseable one, and mm.record refuses to store that
+    # (0 is an absence wearing a value's clothes). Turn it into an ordinary refusal HERE so the
+    # store's invariant can never surface to the caller as "cricbuzz series unreachable".
+    if fixture is not None and int(fixture.get("match_id") or 0) <= 0:
+        fixture, why = None, ("cricbuzz lists the fixture with no usable matchId (%r) — it cannot "
+                              "be addressed, so it cannot be paired" % (fixture.get("match_id"),))
+
     if pinned:
         if fixture is None:
             _pin_alert("held", hit.key, "cb%d stands — this run could not re-derive it: %s"
@@ -1196,6 +1230,10 @@ def resolve_match_id(series_id, date, teams, fresh=False, espn_event=None, recor
             store, changed = mm.record(store, hit.key, fixture["match_id"], method="teams+date",
                                        espn_event=espn_event or "", cb_desc=fixture["desc"],
                                        cb_date=fixture_date(fixture))
+            # The revocation lands in the in-process store either way — `record=False` gates the
+            # WRITE, not what this process believes. Otherwise the next match in the same run
+            # would read the contradicted pin as if it were still good.
+            _MAP_STORE[map_path or MATCH_MAP_PATH] = store
             if changed and record:
                 _persist(mm, store, map_path)
             a = _pin_alert("contradiction", hit.key,

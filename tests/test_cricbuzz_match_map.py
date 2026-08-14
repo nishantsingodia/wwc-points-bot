@@ -128,6 +128,8 @@ def test_second_run_reads_the_pin_without_re_deriving(env, monkeypatch):
 def test_a_pinned_tour_reads_the_series_page_once_per_process(env, monkeypatch):
     """31 matches used to cost 31 fetches of the same ~280 KB page from an undocumented endpoint,
     because the bot passes fresh=True for every match cricsheet has not settled yet."""
+    # the wrapper records the DECISION to fetch and then reads the committed fixture from disk —
+    # `real(url, k)` deliberately drops `fresh`, so nothing dials out
     real, calls = cb.cb_fetch, []
     monkeypatch.setattr(cb, "cb_fetch", lambda url, k, **kw: (calls.append(url), real(url, k))[1])
     for d, t in (("2026-07-17", ["Galle Gallants", "Jaffna Kings"]),
@@ -458,3 +460,86 @@ def test_last_refusal_names_the_cause_of_every_none(env):
     # and it is per-call: a success must not leave the previous refusal lying around
     assert cb.resolve_match_id(*(CPL,) + CPL_SLK[:2]) == CPL_SLK[2]
     assert cb.last_refusal() == ""
+
+
+# ═════════════════════════════════════════════════════════════════════════════════════════════
+# 10. THE MIRROR THAT WAS MISSING — one ESPN event, two cricbuzz matches
+# ═════════════════════════════════════════════════════════════════════════════════════════════
+def test_one_espn_event_paired_to_two_cricbuzz_matches_revokes_both():
+    """A rename that RE-pairs lands HERE and nowhere else: the team slug moves so the key is new
+    (direction 1 blind), and the cricbuzz ids differ so the cb-id mirror is blind too. Before this
+    check existed, both pins stood and a lookup by the new key silently returned the NEW pairing
+    for a match whose points are already settled — reproduced exactly, cb154347 vs cb999002 under
+    ESPN event 1534181, 2 pins / 0 revoked."""
+    st = mm.empty_store()
+    st, _ = mm.record(st, "12123|2026-08-09|antigua barbuda falcons+st lucia kings", 154347,
+                      espn_event="1534181")
+    st, _ = mm.record(st, "12123|2026-08-09|antigua barbuda falcons+saint lucia kings xi", 999002,
+                      espn_event="1534181")
+    assert st["pins"] == {}
+    assert len(st["revoked"]) == 2
+    for rec in st["revoked"].values():
+        assert "one fixture" in rec["reason"] and rec["espn_event"] == "1534181"
+
+
+def test_the_same_pairing_under_a_renamed_key_still_merges():
+    """The benign half of the same shape: same event, SAME cricbuzz match. That is one fixture
+    recorded twice, and refusing it would punish a rename we survived correctly."""
+    st = mm.empty_store()
+    st, _ = mm.record(st, "12123|2026-08-09|antigua barbuda falcons+st lucia kings", 154347,
+                      espn_event="1534181")
+    st, _ = mm.record(st, "12123|2026-08-09|antigua barbuda falcons+saint lucia kings xi", 154347,
+                      espn_event="1534181")
+    assert len(st["pins"]) == 2 and st["revoked"] == {}
+    assert all(rec["also_keyed_as"] for rec in st["pins"].values())
+
+
+# ═════════════════════════════════════════════════════════════════════════════════════════════
+# 11. AN ABSENCE MUST NOT WEAR THE CLOTHES OF A VALUE
+# ═════════════════════════════════════════════════════════════════════════════════════════════
+def test_a_zero_match_id_is_refused_not_pinned():
+    """series_matches reads matchId through _int(), which yields 0 for a missing one. `str("0")`
+    is truthy and `int("0")` is falsy, so a pinned 0 reads as a pin on one line and as no pin on
+    the next."""
+    st = mm.empty_store()
+    for bad in (0, "0", -5, None):
+        with pytest.raises(mm.MatchMapError):
+            mm.record(st, "12316|2026-07-17|a+b", bad)
+
+
+def test_a_corrupt_pin_is_named_and_re_derived(env):
+    """One bad line in a JSON file must not cost a whole tour its second witness — but it must
+    not pass silently either."""
+    st = mm.empty_store()
+    st, _ = mm.record(st, "12316|2026-07-17|galle gallants+jaffna kings", 156948)
+    st["pins"]["12316|2026-07-17|galle gallants+jaffna kings"]["cricbuzz_match_id"] = "not-an-id"
+    mm.save_store(st, env)
+    cb.reset_map_cache()
+    assert cb.resolve_match_id(LPL, *LPL_M1[:2]) == 156948
+    assert alerts("corrupt")
+
+
+def test_a_disk_cached_series_page_does_not_satisfy_a_fresh_call(env, monkeypatch):
+    """The memo must respect `fresh`. A memo filled from the disk cache can be a run old, and a
+    stale fixture list whose ids have moved would derive a different match id and read as a
+    CONTRADICTION against a perfectly good pin."""
+    calls = []                                   # records what series_matches ASKED for; the
+    real = cb.cb_fetch                           # wrapper then serves the committed fixture
+    monkeypatch.setattr(cb, "cb_fetch", lambda url, k, **kw: (calls.append(kw.get("fresh")),
+                                                              real(url, k))[1])
+    cb.series_matches(LPL)                       # disk-cached read
+    cb.series_matches(LPL, fresh=True)           # must go out again
+    cb.series_matches(LPL, fresh=True)           # now memoised as fresh
+    assert calls == [False, True]
+
+
+def test_a_fixture_with_no_usable_id_is_an_ordinary_refusal(env, monkeypatch):
+    """The store refuses to pin a non-positive id (0 is an absence in a value's clothes). That
+    invariant must never reach the caller as an exception — cb_match_perf would relabel it
+    'cricbuzz series unreachable', which is a different, wrong diagnosis."""
+    real = cb.series_matches(LPL)
+    broken = [dict(m, match_id=0) if m["match_id"] == LPL_M1[2] else m for m in real]
+    monkeypatch.setattr(cb, "series_matches", lambda sid, fresh=False: broken)
+    assert cb.resolve_match_id(LPL, *LPL_M1[:2]) is None
+    assert "no usable matchId" in cb.last_refusal()
+    assert store_of(env)["pins"] == {}

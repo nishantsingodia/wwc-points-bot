@@ -35,7 +35,7 @@ WHAT IS STORED
   MATCH date out of a payload or off the caller's fixture — so re-deriving a season reproduces the
   file byte for byte. Regenerate; never hand-edit.
 
-CONTRADICTION — THREE DIRECTIONS, ALL REFUSING BOTH SIDES (never last-wins)
+CONTRADICTION — FOUR DIRECTIONS, ALL REFUSING BOTH SIDES (never last-wins)
   key    -> 2 cricbuzz matches   the pairing MOVED. One of the two derivations is wrong and the
                                  evidence does not say which, so both are refused.
   cb id  -> 2 keys               two of our fixtures pointing at one Cricbuzz card, i.e. one of
@@ -43,6 +43,13 @@ CONTRADICTION — THREE DIRECTIONS, ALL REFUSING BOTH SIDES (never last-wins)
                                  EXCEPT where the two keys are demonstrably the SAME FIXTURE (see
                                  `same_fixture`), which is what a ±1-day date convention or a
                                  renamed team produces.
+  ESPN event -> 2 cb matches     THE MIRROR OF THE ONE ABOVE, and the one that actually bites: one
+                                 of OUR fixtures (proved by an id, not a name) paired to two
+                                 different Cricbuzz cards. A rename that RE-pairs lands here and
+                                 nowhere else — the slug moves so direction 1 cannot see it, the
+                                 cb ids differ so direction 2 cannot either. Written last, after
+                                 reproducing it: two keys, one ESPN event, cb154347 vs cb999002,
+                                 both pinned, zero revoked.
   key    -> 2 ESPN events        our own key is ambiguous: a genuine same-day double-header
                                  between the same two sides INSIDE one (gender-specific) series.
                                  That is the one ambiguity `resolve_match_id` has always refused
@@ -277,6 +284,36 @@ def compile_pins(confirmations):
                    % (cb_id, len(keys), "; ".join(keys)),
                 merge_confirmations(confs, []),
                 {"collides_with": [o for o in keys if o != k]})
+
+    # ── direction 4: one ESPN event pointing at two Cricbuzz matches ──────────────────────────
+    # THE MIRROR OF DIRECTION 2, AND THE ONE THAT ACTUALLY BITES. Direction 2 catches "two of our
+    # keys, one cricbuzz card"; this catches "one of OUR fixtures (proved by its ESPN event id),
+    # two cricbuzz cards" — which is what a rename produces when it re-pairs rather than un-pairs:
+    # the team slug moves, so the new key is NOT the old key and direction 1 never fires, and the
+    # cricbuzz ids differ, so direction 2 never fires either. Both pins then stand and a lookup by
+    # the new key silently returns the NEW pairing for a match whose points are already settled —
+    # the exact failure this whole file exists to make impossible. Verified missing before this
+    # block existed: two keys, one ESPN event, cb 154347 vs cb 999002, both pinned, 0 revoked.
+    by_event = defaultdict(set)
+    for key, rec in pins.items():
+        for ev in rec.get("espn_events") or []:
+            by_event[ev].add(key)
+    for ev, keys in sorted(by_event.items()):
+        ids = {pins[k]["cricbuzz_match_id"] for k in keys if k in pins}
+        if len(ids) < 2:
+            continue
+        for k in sorted(keys):
+            if k not in pins:
+                continue
+            rec = pins.pop(k)
+            confs = [dict(c, key=k, cricbuzz_match_id=rec["cricbuzz_match_id"])
+                     for c in rec["confirmations"]]
+            revoked[k] = _revoked_record(
+                k, "ESPN event %s — one fixture — is paired to %d cricbuzz matches (%s); the "
+                   "pairing was RE-DERIVED to something else. Refusing all"
+                   % (ev, len(ids), ", ".join("cb%s" % i for i in sorted(ids))),
+                merge_confirmations(confs, []),
+                {"espn_event": ev, "collides_with": sorted(k2 for k2 in keys if k2 != k)})
     return pins, revoked
 
 
@@ -386,6 +423,12 @@ def record(store, key, cricbuzz_match_id, method="teams+date", espn_event="",
     Idempotent: recording a confirmation the log already carries changes nothing and rewrites
     nothing, so a run that pairs the same 31 matches it paired yesterday produces an EMPTY diff.
     """
+    if int(cricbuzz_match_id or 0) <= 0:
+        # `series_matches` reads matchId through _int(), which yields 0 for a missing or
+        # unparseable one. Pinning "0" would put an ABSENCE in the file wearing the clothes of a
+        # value: str("0") is truthy, int("0") is falsy, and the two disagree in the caller.
+        raise MatchMapError("refusing to pin %r to a non-positive cricbuzz match id %r"
+                            % (key, cricbuzz_match_id))
     conf = {"key": key, "cricbuzz_match_id": str(cricbuzz_match_id), "method": method,
             "espn_event": str(espn_event or ""), "cb_desc": cb_desc or "", "cb_date": cb_date or ""}
     log = confirmations_log(store)

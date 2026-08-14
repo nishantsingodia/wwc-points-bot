@@ -295,6 +295,44 @@ Recon rows generated. Same machinery throughout: `compute_l1_gaps` / `build_reco
   is directional (never pass it to an ESPN fetcher, never "tidy" `ESPN_UA` into it), and
   `tests/test_cricbuzz_l1.py` pins that `ESPN_UA` is identical in every module that carries it.
 
+## ⛔ The cricbuzz↔our-match PIN (14 Aug 2026) — matches had no shared key and no ledger
+Players have a shared key (ESPN `athlete.id` IS the cricinfo id) and, where they don't, a DERIVED
+bridge with a confirmations log. **MATCHES had neither**: `cricbuzz.resolve_match_id` paired on
+normalised team names + date and RE-DERIVED ON EVERY RUN, with nothing recording that the pair had
+ever been made — so a rename upstream could silently re-pair or un-pair an already-SETTLED match
+and no ledger would show it. Two naming conventions broke it in one week, **both reported as "no
+unique cricbuzz match"**, which reads as Cricbuzz not having the fixture and sent the diagnosis the
+wrong way twice: ESPN `St Lucia Kings` vs Cricbuzz `Saint Lucia Kings` (−2 of 5 completed CPL
+matches' second witness) and ESPN `MI London (Men)` vs `MI London` (−31 of 31 Hundred Men's).
+- **`registry/cricbuzz_match_map.json`** — written on the first successful pair, read thereafter.
+  Key = `<cricbuzz series>|<our date>|<slug>+<slug>`. **The series id is in the key on purpose**:
+  `match_key_of` strips gender qualifiers, so the Hundred's men's and women's fixtures between the
+  same franchises on the same day collapse onto one key there (the collision that had just disabled
+  the completed-ratchet's LIVE arm on 60 of 92). A Cricbuzz series is gender-specific — 11493 men /
+  11504 women — so all **32** same-day M/W double-headers stay apart by construction.
+  Backfilled from cached payloads: **LPL 24 · Hundred M 32 · Hundred W 32 · CPL 6 = 94 pins,
+  0 revoked, 94/94 carrying their ESPN event id**. `--verify` re-derives all 94: 94 agree.
+- **`confirmations` is the fact log; `pins`/`revoked` are a pure function of it** (`compile_pins ∘
+  confirmations_log`), no clock read anywhere, so a re-derive reproduces the file byte for byte —
+  same discipline as `cricbuzz_bridge.json`. Regenerate, never hand-edit.
+- **FOUR contradiction directions, all refusing BOTH sides, never last-wins.** key→2 cb matches ·
+  cb match→2 keys · **ESPN event→2 cb matches** · key→2 ESPN events. The third was the one missing
+  in the first draft and is the one that actually bites: a rename that RE-pairs moves the slug (so
+  direction 1 is blind) and changes the cb id (so direction 2 is blind) — reproduced with two keys
+  under ESPN event 1534181, cb154347 vs cb999002, **both pinned, 0 revoked**. Pass `espn_event=`
+  (see the unapplied hook patch) and the pin is rename-proof; without it the key is name-derived.
+- **⛔ AN ABSENCE IS NOT A CONTRADICTION.** A later derivation that finds NOTHING (0 hits, an
+  ambiguous >1, a 403 on the series page) leaves the pin STANDING. Only a DIFFERENT id contradicts —
+  treating "nothing matched" as evidence would hand the rename exactly the power the pin removes.
+- Refusal semantics are unchanged: None on 0 or >1 hits, so a same-day double-header between the
+  same two sides stays refused (real occurrence: the CPL's three `TBC v TBC` playoff fixtures).
+  A revoked key stays revoked until a human runs `--forget <key> --write`; self-healing would be
+  last-wins in a costume.
+- The map is in the **LEDGERS** list of all three workflows. Drop it and every run re-derives from
+  names — written-but-never-read, this repo's most-repeated bug shape.
+- `series_matches` is memoised per process (fresh-aware): a 31-match tour was re-fetching the same
+  ~280 KB page 31 times because the bot passes `fresh=True` for every match cricsheet hasn't settled.
+
 ## ⛔ A refused ESPN card is HELD, named, and CUT OFF (13 Aug 2026)
 The ball-count gate above returns `{}` on refusal — indistinguishable from "ESPN has no data", so on
 an ESPN-only tour the match fell through the no-data guard, `continue`d, and was **absent from the
