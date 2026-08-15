@@ -55484,6 +55484,23 @@
    "match": "Match 1 — MTANT v MTJAM",
    "date": "2026-08-07",
    "team": "MTANT",
+   "pid": "ci:1209191",
+   "full": "Joshua Michael James",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "ESPN scorecard (cricapi empty) · ⏳ provisional (dots unverified, awaiting cricsheet) · cricbuzz cross-checked (21 players)",
+   "frozen_at": "2026-08-15",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-07::antigua and barbuda falcons|jamaica kingsmen",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 1 — MTANT v MTJAM",
+   "date": "2026-08-07",
+   "team": "MTANT",
    "pid": "ci:1139028",
    "full": "Karima Gore",
    "points": 25,
@@ -65420,6 +65437,23 @@
    "tour": "Caribbean Premier League 2026",
    "match": "Match 3 — MTANT v MTSTL",
    "date": "2026-08-09",
+   "team": "MTANT",
+   "pid": "ci:1209191",
+   "full": "Joshua Michael James",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "ESPN scorecard (cricapi empty) · ⏳ provisional (dots unverified, awaiting cricsheet) · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-15",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-09::antigua and barbuda falcons|st lucia kings",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 3 — MTANT v MTSTL",
+   "date": "2026-08-09",
    "team": "MTSTL",
    "pid": "ci:556531",
    "full": "Kamil Pooran",
@@ -65495,6 +65529,23 @@
    "status": "COMPLETED_FLAGGED",
    "source": "ESPN scorecard (cricapi empty) · ⏳ provisional (dots unverified, awaiting cricsheet) · ⚠ cricbuzz unavailable",
    "frozen_at": "2026-08-14",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-09::antigua and barbuda falcons|st lucia kings",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 3 — MTANT v MTSTL",
+   "date": "2026-08-09",
+   "team": "MTSTL",
+   "pid": "ci:1443401",
+   "full": "Khari Campbell",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "ESPN scorecard (cricapi empty) · ⏳ provisional (dots unverified, awaiting cricsheet) · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-15",
    "provenance": "live",
    "fields": {
     "played": false
@@ -78792,6 +78843,23 @@
     "dismissed": true,
     "lbwb": 0,
     "dro": 0
+   }
+  },
+  {
+   "match_key": "2026-08-12::st kitts and nevis patriots|st lucia kings",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 5 — MTSTL v MTSTK",
+   "date": "2026-08-12",
+   "team": "MTSTL",
+   "pid": "ci:1443401",
+   "full": "Khari Campbell",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "ESPN scorecard (cricapi empty) · ⏳ provisional (dots unverified, awaiting cricsheet) · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-15",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
