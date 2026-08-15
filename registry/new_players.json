@@ -656,6 +656,32 @@
         "Caribbean Premier League 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:1443401",
+      "display": "Khari Campbell",
+      "aliases": [
+        "khari campbell"
+      ],
+      "team": "MTSTL",
+      "role": "BOWL",
+      "tours": [
+        "Caribbean Premier League 2026"
+      ],
+      "source": "auto"
+    },
+    {
+      "pid": "ci:1209191",
+      "display": "Joshua Michael James",
+      "aliases": [
+        "joshua michael james"
+      ],
+      "team": "MTANT",
+      "role": "BAT",
+      "tours": [
+        "Caribbean Premier League 2026"
+      ],
+      "source": "auto"
     }
   ]
 }
