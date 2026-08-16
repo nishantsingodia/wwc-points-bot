@@ -11,6 +11,12 @@ Fixtures shipped (LPL 2026):
                                 "c sub (Pawan Sandesh)", Cricbuzz says "c Garuka Sanketh"
   m10  cb157039 / espn1537340   Lizaad Williams "retd out" 0 off 0 on CB, absent from ESPN's
                                 ball-by-ball — pins the all-zero batting-line fold
+Also shipped (The Hundred Women's 2026):
+  gh   cb145302 / espn1521224   the FIELDER-ATTRIBUTION DISPUTE — Cricbuzz says "A Capsey c Grace
+                                Harris b Charis Pavely", ESPN says "c Higham". Joining them minted
+                                cb11101 (Grace Harris) onto ci:874201 and REVOKED her, discarding
+                                eight matches of fingerprint evidence. 3 of the 12 `cb:` rows on
+                                "Needs Cricinfo ID" on 16 Aug 2026 were this one shape.
 
 The Cricbuzz side is kept as the RAW `scoreCard` list (trimmed to the fields the module reads) so
 the tests exercise the real parser, including the all-zero did-not-bat rows.
@@ -30,7 +36,12 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "..", "..", "registry"))
 import cricbuzz_bridge as cbb  # noqa: E402
 
-MATCHES = [(157061, 1537342), (157138, 1537349), (156988, 1537335), (157039, 1537340)]
+# (cricbuzz match, espn event, espn SERIES). The series is only needed to find the payload in the
+# bot's own cache (`espn_<series>_playbyplay_event_<ev>_limit_500_page_<n>.json`); the standalone
+# `pbp_<ev>.json` name is tried first so an old cache dir still works.
+MATCHES = [(157061, 1537342, "1537330"), (157138, 1537349, "1537330"),
+           (156988, 1537335, "1537330"), (157039, 1537340, "1537330"),
+           (145302, 1521224, "1521193")]
 
 BAT_KEYS = ("batId", "batName", "runs", "balls", "fours", "sixes", "outDesc", "wicketCode",
             "fielderId1", "fielderId2", "bowlerId", "dots")
@@ -103,11 +114,24 @@ def reduce_espn(pbp):
     return {"commentary": {"items": items}}
 
 
+def _pbp(src, ev, series):
+    """The standalone `pbp_<ev>.json` if it is there, else the bot's own cached play-by-play
+    (which is what actually exists on a machine that has run the bot). The bot-cache reader
+    refuses a truncated card rather than returning a partial one."""
+    plain = os.path.join(src, "pbp_%d.json" % ev)
+    if os.path.exists(plain):
+        return json.load(open(plain, encoding="utf-8"))
+    pbp = cbb.espn_pbp_from_bot_cache(str(ev), series, src)
+    if pbp is None:
+        raise SystemExit("no cached play-by-play for event %s in %s" % (ev, src))
+    return pbp
+
+
 def main(src):
-    for cb_id, ev in MATCHES:
+    for cb_id, ev, series in MATCHES:
         html = open(os.path.join(src, "cb_sc_%d.html" % cb_id), encoding="utf-8").read()
         card, header = cbb.parse_cb_scorecard_html(html)
-        pbp = json.load(open(os.path.join(src, "pbp_%d.json" % ev), encoding="utf-8"))
+        pbp = _pbp(src, ev, series)
         fx = {"cb_match_id": str(cb_id), "espn_event_id": str(ev),
               "date": cbb.match_date(header),
               "cb_score_card": trim_cb(card), "espn_pbp": reduce_espn(pbp)}
@@ -123,7 +147,7 @@ def main(src):
         assert full["dismissals"] == red["dismissals"], cb_id
         print("wrote", os.path.basename(path), os.path.getsize(path), "bytes")
 
-    pbp = json.load(open(os.path.join(src, "pbp_1537342.json"), encoding="utf-8"))
+    pbp = _pbp(src, 1537342, "1537330")
     keep = []
     for it in pbp["commentary"]["items"][:14]:
         row = {}

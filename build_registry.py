@@ -402,6 +402,23 @@ def build_tour(tour, con, draft_players, ts_bridges, players, idx):
         ns = norm(sname)
         # 0) CROSS-TOUR REUSE: already known globally (zero rework, idempotent)
         pid = by_alias.get(ns)
+        # ⛔ A HUMAN-ASSERTED BRIDGE OUTRANKS REUSE. manual_ci_bridges is documented as "the ONLY
+        # sanctioned way to assert an identity" — but reuse ran first, so a CORRUPT alias already in
+        # players.json silently beat the correction. Both live cases were wrong people, not typos:
+        #   ci:443150 (KA Hope, Kyle) carried aliases 'shai hope' AND 'ka hope' — two players merged
+        #     onto one id, so every Shai Hope resolved to Kyle;
+        #   ci:1126982 (GK Atkinson) carried alias 'gus atkinson' — Gus is AAP Atkinson, ci:1039481,
+        #     a distinct person with distinct cricsheet and CricketArchive ids.
+        # Fixing the bridge changed nothing while reuse won, and the mismatch dropped both men from
+        # their draft XIs (the app is pid-authoritative, so a seed pid that disagrees with the feed
+        # reads as "did not play"). If the bridge disagrees with reuse, the bridge is the answer.
+        _bridge_ci = NAME2CI.get(ns)
+        if _bridge_ci and pid:
+            _reuse_ci = players.get(pid, {}).get("cricinfo_id")
+            if _reuse_ci and str(_reuse_ci) != str(_bridge_ci):
+                print(f"  BRIDGE OVERRIDES REUSE: {sname!r} reused {pid} (ci {_reuse_ci}) but the "
+                      f"human bridge says ci:{_bridge_ci} — taking the bridge", file=sys.stderr)
+                pid = by_ci.get(str(_bridge_ci)) or f"ci:{_bridge_ci}"
         ci = players.get(pid, {}).get("cricinfo_id") if pid else None
         if pid: n_reused += 1
         how = "reuse" if ci else None

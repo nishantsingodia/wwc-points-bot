@@ -2163,11 +2163,29 @@ def classify_recon_state(cs_path, unresolved, unsourced, l2_pairs, l2_appr, unat
 
     `unattributed` = played performances that landed on no squad slot at all (find_unattributed).
     They are unconsumed data in the most literal sense — not a disputed value, an ABSENT row — so
-    they open L1 exactly like `unsourced` does."""
-    if unresolved or unsourced or unattributed:
+    they open L1 exactly like `unsourced` does.
+
+    ⛔ `unresolved` OPENS L1 ONLY WHILE THERE IS NO OFFICIAL CARD (16 Aug 2026). An unresolved L1
+    gap is "the two PROVISIONAL feeds disagree — pick one". Once cricsheet posts, that question is
+    not merely stale, it is one the bot deliberately REFUSES TO ASK and whose answer would do
+    damage: the Recon tab only queues L1 rows `if unresolved and not cs_path`, and
+    apply_recon_overrides writes into the same perf dicts emit() scores — which on a cricsheet run
+    hold the OFFICIAL figures. So an S1/S2 answer given after cricsheet lands overwrites the
+    official card with a provisional feed's number.
+    Reporting L1_OPEN there therefore announced an open question with (a) no row to answer it and
+    (b) an answer that must not be given. Harmless while it was only a column; fatal the moment the
+    base-points freeze started reading this axis — the match could never reach L1_DONE, so it would
+    publish COMPLETED and never freeze a baseline, forever, with nothing for a human to click.
+    MEASURED on the live sheet 16 Aug 2026: 15 matches / 496 rows sat in exactly that state
+    (Hundred M 8, Hundred W 7 — 36 players carrying an unresolved L1 gap between them), every one
+    of them cricsheet-settled and showing the draft's "⏳ L1 recon open — feeds disagree or data is
+    missing, so this result is not final yet" banner on a result that IS final.
+    `unsourced` and `unattributed` are NOT relaxed: nobody measured the field / the row is not in
+    the sheet at all, and cricsheet posting cannot un-drop a player the pipeline never attributed."""
+    if unsourced or unattributed:
         return "L1_OPEN"
     if not cs_path:
-        return "L1_DONE"
+        return "L1_OPEN" if unresolved else "L1_DONE"
     return "L2_PENDING" if any(pid not in l2_appr for pid in l2_pairs) else "L2_DONE"
 
 RECON_STATE_LABEL = {"L1_OPEN": "⏳ L1 recon open", "L1_DONE": "✅ L1 recon done",
@@ -2777,6 +2795,10 @@ def run_tour(tour):
             "Recon State", "Points Delta"]
     rows = []
     n_cs = n_espn = n_api = 0
+    # Matches that PUBLISHED COMPLETED this run without freezing a baseline (L1 still open). Kept
+    # per-tour because it gates the tour-level freeze below: a dormant tour never runs again, so a
+    # baseline it has not frozen by then is a baseline it can never freeze.
+    unfrozen_completed = []
     _key = lambda x: x.get("dateTimeGMT", x.get("date", ""))
     to_score = [(m, False) for m in sorted(ended, key=_key)] + [(m, True) for m in sorted(live, key=_key)]
     for mi, (m, is_live) in enumerate(to_score, 1):
@@ -3205,24 +3227,13 @@ def run_tour(tour):
                             dd[field] = pv
                     id_held.add(pid)
         l2_dirty = any(pid not in l2_appr for pid in l2_pairs)
-        # The write-once settlement baseline doubles as the "has this ever published as
-        # COMPLETED?" record — which is exactly the ratchet the spec's "COMPLETED never returns to
-        # LIVE" needs, and it costs nothing extra because the rows are already loaded.
-        # TOUR-SCOPED. match_key is date::teamA|teamB with the gender qualifier stripped, so the
-        # Hundred's same-day men's/women's double-headers between the same franchises COLLIDE:
-        # measured 31 of 31 Women's keys also carry Men's rows — e.g.
-        # 2026-08-04::london spirit|sunrisers leeds holds 33 Men's rows AND 32 Women's under one key.
-        # An unscoped `any(k[0] == mk)` therefore answered "yes, already completed" for a Women's
-        # match off the MEN'S result, and tours.json lists Men's first, so from run 2 onward every
-        # Hundred Women's fixture read already_completed=True. That silently disables the LIVE arm
-        # of classify_match_status on 60 of 92 live matches: a match with an unattributed player, or
-        # a HELD ESPN card, could never go LIVE — it returned COMPLETED_FLAGGED, which the draft
-        # treats as done, so the contest settled with the performance simply missing.
-        # Scoping on the `tour` already stored on every settlement record (verified present on all
-        # 3380) fixes it WITHOUT touching match_key — so nothing is re-keyed, no settled row is
-        # orphaned, and the draft (which never reads this key at all) is unaffected.
-        already_completed = any(k[0] == mk and v.get("tour") == CURRENT_TOUR
-                                for k, v in SETTLEMENTS.items())
+        # THE RATCHET — now its own ledger, no longer inferred from the settlement store. Base
+        # points freeze at L1_DONE (see freeze_ok below), so "has a frozen baseline" and "has
+        # published COMPLETED" are no longer the same fact and the old inference would forget every
+        # match published while L1 was open. See has_published_completed for the two witnesses and
+        # for why the key is (tour, match_key) — an unscoped key collides across the Hundred's
+        # same-day M/W double-headers and silently disabled the LIVE arm on 60 of 92 matches.
+        already_completed = has_published_completed(mk, CURRENT_TOUR)
         match_status, recon_flag = classify_match_status(cs_path, bool(espn_perf), l1_gaps,
                                                         unresolved, l2_dirty, id_break=id_break,
                                                         unsourced=emit_unsourced,
@@ -3275,6 +3286,37 @@ def run_tour(tour):
         if is_live:
             match_status, recon_flag, player_recon = "LIVE", "🔴 in progress", {}
             recon_state, recon_state_col = "L1_OPEN", "🔴 in progress"
+        # ── THE TWO EVENTS, RECORDED SEPARATELY (16 Aug 2026) ────────────────────────────────
+        # Everything above is now final for this match, so this is the only honest place to record
+        # either fact — before it, `is_live` and the ESPN-hold branch can still overturn the status.
+        published = match_status in ("COMPLETED", "COMPLETED_FLAGGED")
+        if published:
+            record_completed(mk, CURRENT_TOUR, label, mdate, match_status)
+        # ⇒⇒ BASE POINTS FREEZE AT THE L1-DONE TRANSITION ⇐⇐ (the owner-locked spec). The code
+        # froze on the FIRST COMPLETED publish instead, which is a strictly earlier moment: the
+        # cs_path branch of classify_match_status returns COMPLETED without ever inspecting
+        # `unresolved` / `unsourced`, so a match whose feeds still disagreed published COMPLETED
+        # and minted a WRITE-ONCE baseline off the provisional number. Write-once means the owner's
+        # later L1 adjudication — the 30/30-correct one — could never move it; re-approving felt
+        # like it changed nothing on all 92 matches, because it did.
+        # MEASURED on the live sheet 16 Aug 2026: 913 rows / 27 matches are published COMPLETED
+        # while their Recon State still reads "⏳ L1 recon open" (Hundred M 439/13, Hundred W
+        # 359/11, CPL 115/3), and all 913 already carry a frozen baseline. This gate is what stops
+        # the 28th.
+        # recon_state, not match_status: they are INDEPENDENT axes, and this is a recon question.
+        # L1_OPEN is the only refusing state — L1_DONE freezes, and L2_PENDING/L2_DONE mean L1 is
+        # long done and cricsheet has since posted, so a match first seen after cricsheet must
+        # still be able to freeze (that is unchanged behaviour).
+        freeze_ok = published and recon_state != "L1_OPEN"
+        if published and not freeze_ok:
+            # NAME IT. A baseline that silently does not exist is how "the audit says nothing
+            # moved" ends up meaning "there was nothing to compare against".
+            unfrozen_completed.append(label)
+            print(f"  {label}: published {match_status} but base points NOT frozen — "
+                  f"{RECON_STATE_LABEL.get(recon_state, recon_state)}"
+                  + (f" ({recon_flag})" if recon_flag else "")
+                  + ". Answer the Recon Review row(s) and the baseline freezes on the next run.",
+                  file=sys.stderr)
         # Queue review rows for UNRESOLVED gaps (skip ones already approved+acked).
         if unresolved and not cs_path and not is_live:
             new_rows = build_recon_rows(mk, label, mdate, CURRENT_TOUR, unresolved,
@@ -3421,7 +3463,9 @@ def run_tour(tour):
                              l1_col, l2_col, match_status, recon_flag, player_recon.get(pid, ""),
                              recon_state_col,
                              _points_delta(mk, pid, s["total"]) if attributed else ""])
-                if attributed and match_status in ("COMPLETED", "COMPLETED_FLAGGED"):
+                # `freeze_ok`, not `match_status in (COMPLETED, ...)`: publishing and freezing are
+                # different moments now — see where freeze_ok is computed.
+                if attributed and freeze_ok:
                     record_settlement(mk, CURRENT_TOUR, label, mdate, short, pid, full,
                                       s["total"], match_status, src,
                                       perf=d, field_sources=override_sources.get(pid))
@@ -3431,8 +3475,11 @@ def run_tour(tour):
                              player_recon.get(pid, ""), recon_state_col,
                              _points_delta(mk, pid, 0)])
                 # Freeze non-players at 0 too: a contest scored them 0, so a later run that
-                # gives them points is just as much a change from the settled state.
-                if match_status in ("COMPLETED", "COMPLETED_FLAGGED"):
+                # gives them points is just as much a change from the settled state. Gated on the
+                # SAME freeze_ok as the scored branch — a half-frozen match (non-players in, played
+                # players out) would make the audit read "11 players moved" on a match nobody had
+                # settled yet.
+                if freeze_ok:
                     record_settlement(mk, CURRENT_TOUR, label, mdate, short, pid, full,
                                       0, match_status, src,
                                       perf={"played": False},
@@ -3541,11 +3588,32 @@ def run_tour(tour):
         ended_past = bool(tour.get("ends")) and date.today() > date.fromisoformat(tour["ends"])
     except ValueError:
         ended_past = False
+    # ...AND never while a published match still owes a baseline. Freezing base points at L1_DONE
+    # means a COMPLETED match with an open L1 gap has NO settled record yet and gets one on the run
+    # after the owner answers it. Marking the tour frozen (or letting it go dormant) before that
+    # answer arrives makes the gap permanent — there is no later run to freeze it. That is not
+    # hypothetical: on 14 Aug the LPL's baseline was cleared expecting the next publish to rebuild
+    # it, and the tour had already ended, so 1074 rows / 29,400 FP had to be restored by hand from
+    # a sidecar. `unfrozen_completed` is per-run, so this defers the freeze by one run at a time
+    # and clears itself the moment the queue is answered.
     if (ended_past and matches_fmt and not live and not pending
             and len(ended) == len(matches_fmt) and n_cs == len(ended)):
-        mark_frozen(WC_SERIES)
-        print(f"tour fully resolved ({n_cs}/{len(matches_fmt)} cricsheet-official) -> FROZEN; "
-              f"future runs skip the cricapi poll for this tour", file=sys.stderr)
+        if unfrozen_completed:
+            print(f"tour fully resolved BUT NOT frozen — {len(unfrozen_completed)} published "
+                  f"match(es) still have no settled baseline (L1 recon open): "
+                  f"{', '.join(unfrozen_completed)}. Answer their Recon Review rows; a frozen "
+                  f"tour never runs again, so the baseline would be lost for good.",
+                  file=sys.stderr)
+        else:
+            mark_frozen(WC_SERIES)
+            print(f"tour fully resolved ({n_cs}/{len(matches_fmt)} cricsheet-official) -> FROZEN; "
+                  f"future runs skip the cricapi poll for this tour", file=sys.stderr)
+    elif unfrozen_completed:
+        print(f"⚠ {len(unfrozen_completed)} published match(es) in '{CURRENT_TOUR}' have no "
+              f"settled baseline yet (L1 recon open): {', '.join(unfrozen_completed)}. They freeze "
+              f"on the first run after their Recon Review rows are answered — and this tour goes "
+              f"dormant {FREEZE_GRACE_DAYS} day(s) after {tour.get('ends') or 'its last match'}, "
+              f"after which nothing freezes them.", file=sys.stderr)
 
     with open(out_csv, "w", newline="") as f:
         w = csv.writer(f)
@@ -3836,6 +3904,14 @@ def main():
         print(f"[settlement] froze {SETTLE_NEW} new baseline row(s) "
               f"({len(SETTLEMENTS)} total)", file=sys.stderr)
         save_settlements()
+    # The ratchet is persisted in EVERY mode and INDEPENDENTLY of the baseline — that separation is
+    # the whole point of the file. A match can publish COMPLETED on any run (including an on-demand
+    # one) without freezing a single row, and if that publish is not remembered the next run's
+    # first new gap retracts it.
+    if COMPLETED_NEW:
+        print(f"[completed] {COMPLETED_NEW} match(es) recorded as published COMPLETED "
+              f"({len(COMPLETED)} total)", file=sys.stderr)
+        save_completed()
     if CS_LEARNED:
         _save_cricsheet_learned()
     if not FREQUENT:
@@ -4098,6 +4174,88 @@ def settled_baseline(match_key, pid):
     freezing. THIS is what L2 must compare cricsheet against — never a recomputation."""
     rec = SETTLEMENTS.get((match_key, pid))
     return (rec or {}).get("fields")
+
+# ── THE COMPLETED-PUBLISH RATCHET — a SEPARATE record from the settled baseline ──────────────
+# "COMPLETED never returns to LIVE" needs a memory of which matches have published COMPLETED.
+# Until 16 Aug 2026 that memory WAS the settlement store:
+#     already_completed = any(k[0] == mk and v.get("tour") == CURRENT_TOUR ...)
+# which only ever worked because the two events COINCIDED — every COMPLETED publish also froze a
+# baseline. Freezing at the L1-DONE transition (the locked spec) breaks that coincidence: a match
+# that publishes COMPLETED while L1 is still open now freezes NOTHING, so a settlement-derived
+# ratchet would forget it had ever published, and the next run's first new gap would retract it.
+# That is the 7-9 Aug 2026 outage — 12 matches / 410 settled rows un-published days after they
+# were settled — re-opened by a one-line gate change, which is why this file exists FIRST.
+# MEASURED on the live sheet, 16 Aug 2026: 417 rows / 12 matches (Hundred M 5, Hundred W 4, CPL 3)
+# are published RIGHT NOW *only* because the ratchet remembers a prior COMPLETED — every one reads
+# "⚠ pending recon approval (N players)", a flag classify_match_status can only return when
+# already_completed is True. Lose the memory and those 12 go back to LIVE.
+# WRITE-ONCE and never revoked, exactly like the settlement store: a match that has published
+# COMPLETED has published, whatever a later run computes about it.
+# KEYED (tour, match_key), NOT match_key. match_key_of strips the gender qualifier, so the
+# Hundred's same-day men's/women's double-headers between the same franchises collide on one key
+# (31 of 31 Women's keys also carry Men's rows) — an unscoped ratchet answered "already completed"
+# for a Women's fixture off the MEN'S result and silently disabled the LIVE arm on 60 of 92
+# matches. The tour is in the key here rather than bolted on at the read, so it cannot be dropped.
+COMPLETED_PATH = os.path.join(os.path.dirname(__file__), "registry", "completed_matches.json")
+COMPLETED_NEW = 0       # how many matches this run recorded as first-published (for the log)
+
+def _load_completed():
+    try:
+        data = json.load(open(COMPLETED_PATH))
+    except Exception:
+        return {}
+    return {(r.get("tour", ""), r.get("match_key", "")): r for r in data.get("completed", [])}
+
+# Loaded at IMPORT, not in main(). A ratchet that only exists on one code path is a ratchet that
+# is silently absent on every other one — and an absent ratchet reads exactly like "this match has
+# never completed", which is the failure this ledger is here to prevent.
+COMPLETED = _load_completed()
+
+def save_completed():
+    """Persist the ratchet. Only ever grows; CI commits it (see the LEDGERS list in all three
+    workflows — a ledger the workflow does not commit is written-but-never-read, this repo's
+    most-repeated bug shape, and here it would silently reset the ratchet on every run)."""
+    try:
+        rows = sorted(COMPLETED.values(), key=lambda r: (r.get("date", ""), r.get("tour", ""),
+                                                         r.get("match_key", "")))
+        json.dump({"note": "WRITE-ONCE record of every match that has PUBLISHED as COMPLETED or "
+                           "COMPLETED_FLAGGED, independent of whether its base points froze. This "
+                           "is the 'COMPLETED never returns to LIVE' ratchet. It used to be "
+                           "inferred from settlement_snapshots.json, which stopped being a valid "
+                           "proxy when base points began freezing at L1_DONE instead of on any "
+                           "COMPLETED publish: a match can now publish without freezing anything. "
+                           "Never edited by hand and never revoked.",
+                   "completed": rows},
+                  open(COMPLETED_PATH, "w"), indent=1, ensure_ascii=False)
+    except Exception as e:
+        print(f"could not update completed_matches.json: {e}", file=sys.stderr)
+
+def record_completed(match_key, tour, label, mdate, status):
+    """Remember that this match has published COMPLETED. WRITE-ONCE per (tour, match_key).
+
+    Deliberately records the FIRST status and date and never updates them: this answers "has it
+    published?", not "what does it look like now" — the sheet answers that, every run."""
+    global COMPLETED_NEW
+    if not match_key or (tour, match_key) in COMPLETED:
+        return
+    COMPLETED[(tour, match_key)] = {"tour": tour, "match_key": match_key, "match": label,
+                                    "date": mdate, "first_status": status,
+                                    "first_seen": _today_iso(), "provenance": "live"}
+    COMPLETED_NEW += 1
+
+def has_published_completed(match_key, tour):
+    """The ratchet read. TWO witnesses, OR'd — and the OR is the design, not belt-and-braces.
+
+    A settlement row for (match_key, pid) with this tour PROVES the match published COMPLETED at
+    some point (that is the only thing that ever wrote one), so the old inference stays valid for
+    every match frozen before this ledger existed — 95 matches / 3470 rows on 16 Aug 2026, i.e.
+    full coverage of the four live tours with no migration and no re-keying. The ledger covers the
+    class the settlement store can no longer see: published, but not frozen because L1 is open.
+    Union of two write-once stores is monotone, so this can only ever REMEMBER more than before —
+    it can never retract a match that today stays published."""
+    if (tour, match_key) in COMPLETED:
+        return True
+    return any(k[0] == match_key and v.get("tour") == tour for k, v in SETTLEMENTS.items())
 
 def _today_iso():
     return datetime.now(timezone.utc).strftime("%Y-%m-%d")
@@ -5036,6 +5194,22 @@ def write_needs_cricinfo_tab():
             ws = sh.add_worksheet(title=NEEDS_CRICINFO_TAB, rows=200, cols=len(header))
             ws.update(range_name="A1", values=[header], value_input_option="RAW")
             existing = [header]
+        # A tab that EXISTS but has a BLANK ROW 1 is not an empty queue — it is a queue nobody can
+        # answer. read_needs_cricinfo resolves its columns BY NAME, so with row 1 blank it reads
+        # the first DATA row as the header, finds no 'cricinfo_id_FILL_HERE', and returns 0: every
+        # cricinfo id the owner types is discarded, silently, on every run, forever, while the tab
+        # looks perfectly healthy. Measured 14 Aug 2026 against a headerless worksheet: 1 row
+        # appended, its id filled in by hand, read_needs_cricinfo added 0 and wrote no bridge.
+        # Reachable whenever the `ws.update` above fails (rate limit) or a human clears the tab —
+        # both leave a tab that looks fine.
+        # Fires ONLY when row 1 is blank, so it can never land on top of a live header or a human's
+        # answer; and the surviving rows are carried over rather than dropped, or the dedupe key
+        # set would come back empty and re-append every row that is already on the tab.
+        if not any((c or "").strip() for c in (existing[0] if existing else [])):
+            ws.update(range_name="A1", values=[header], value_input_option="RAW")
+            existing = [header] + list(existing[1:])
+            print(f"'{NEEDS_CRICINFO_TAB}': row 1 was blank — header restored. Without it every id "
+                  f"filled into this tab reads back as nothing.", file=sys.stderr)
         # Dedupe key resolved BY HEADER NAME. `read_needs_cricinfo` reads its columns by name while
         # this writer read column index 1 blind — so a human inserting one column ahead of
         # current_pid would make every existing row unrecognisable and re-append all 52, including

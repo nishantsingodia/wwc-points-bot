@@ -1,0 +1,1117 @@
+{
+"cb_match_id":"145302",
+"espn_event_id":"1521224",
+"date":"2026-08-09",
+"cb_score_card":[
+{
+"matchId":145302,
+"inningsId":1,
+"batTeamDetails":{
+"batTeamName":"London Spirit Women",
+"batsmenData":{
+"bat_1":{
+"batId":11101,
+"batName":"Grace Harris",
+"runs":0,
+"balls":4,
+"fours":0,
+"sixes":0,
+"outDesc":"c Alice Capsey b Fatima Sana",
+"wicketCode":"CAUGHT",
+"fielderId1":19417,
+"fielderId2":0,
+"bowlerId":14806,
+"dots":4
+},
+"bat_2":{
+"batId":9145,
+"batName":"Amy Jones",
+"runs":39,
+"balls":30,
+"fours":6,
+"sixes":0,
+"outDesc":"c Fatima Sana b Alana King",
+"wicketCode":"CAUGHT",
+"fielderId1":14806,
+"fielderId2":0,
+"bowlerId":12002,
+"dots":13
+},
+"bat_3":{
+"batId":13054,
+"batName":"Marie Kelly",
+"runs":17,
+"balls":22,
+"fours":1,
+"sixes":0,
+"outDesc":"c Fatima Sana b Alice Capsey",
+"wicketCode":"CAUGHT",
+"fielderId1":14806,
+"fielderId2":0,
+"bowlerId":19417,
+"dots":10
+},
+"bat_4":{
+"batId":9182,
+"batName":"Marizanne Kapp",
+"runs":57,
+"balls":28,
+"fours":2,
+"sixes":6,
+"outDesc":"not out",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":7
+},
+"bat_5":{
+"batId":13050,
+"batName":"Charlotte Dean",
+"runs":7,
+"balls":10,
+"fours":0,
+"sixes":0,
+"outDesc":"b Alana King",
+"wicketCode":"BOWLED",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":12002,
+"dots":3
+},
+"bat_6":{
+"batId":12752,
+"batName":"Nadine de Klerk",
+"runs":13,
+"balls":6,
+"fours":1,
+"sixes":1,
+"outDesc":"not out",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":2
+},
+"bat_7":{
+"batId":9089,
+"batName":"Deandra Dottin",
+"runs":0,
+"balls":0,
+"fours":0,
+"sixes":0,
+"outDesc":"",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":0
+},
+"bat_8":{
+"batId":38687,
+"batName":"Charis Pavely",
+"runs":0,
+"balls":0,
+"fours":0,
+"sixes":0,
+"outDesc":"",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":0
+},
+"bat_9":{
+"batId":13049,
+"batName":"Katie George",
+"runs":0,
+"balls":0,
+"fours":0,
+"sixes":0,
+"outDesc":"",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":0
+},
+"bat_10":{
+"batId":13832,
+"batName":"Hannah Rainey",
+"runs":0,
+"balls":0,
+"fours":0,
+"sixes":0,
+"outDesc":"",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":0
+},
+"bat_11":{
+"batId":13010,
+"batName":"Lucy Higham",
+"runs":0,
+"balls":0,
+"fours":0,
+"sixes":0,
+"outDesc":"",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":0
+}
+}
+},
+"bowlTeamDetails":{
+"bowlTeamName":"Birmingham Phoenix Women",
+"bowlersData":{
+"bowl_1":{
+"bowlerId":14806,
+"bowlName":"Fatima Sana",
+"overs":2,
+"balls":20,
+"runs":25,
+"wickets":1,
+"maidens":12,
+"dots":12,
+"wides":1,
+"no_balls":0
+},
+"bowl_2":{
+"bowlerId":19711,
+"bowlName":"Lauren Filer",
+"overs":2,
+"balls":20,
+"runs":26,
+"wickets":0,
+"maidens":10,
+"dots":10,
+"wides":1,
+"no_balls":0
+},
+"bowl_3":{
+"bowlerId":12002,
+"bowlName":"Alana King",
+"overs":2,
+"balls":20,
+"runs":18,
+"wickets":2,
+"maidens":8,
+"dots":8,
+"wides":1,
+"no_balls":0
+},
+"bowl_4":{
+"bowlerId":13018,
+"bowlName":"Linsey Smith",
+"overs":1.5,
+"balls":15,
+"runs":18,
+"wickets":0,
+"maidens":4,
+"dots":4,
+"wides":0,
+"no_balls":0
+},
+"bowl_5":{
+"bowlerId":19417,
+"bowlName":"Alice Capsey",
+"overs":2,
+"balls":20,
+"runs":45,
+"wickets":1,
+"maidens":4,
+"dots":4,
+"wides":0,
+"no_balls":0
+},
+"bowl_6":{
+"bowlerId":39247,
+"bowlName":"Annerie Dercksen",
+"overs":0.5,
+"balls":5,
+"runs":5,
+"wickets":0,
+"maidens":1,
+"dots":1,
+"wides":1,
+"no_balls":0
+}
+}
+}
+},
+{
+"matchId":145302,
+"inningsId":2,
+"batTeamDetails":{
+"batTeamName":"Birmingham Phoenix Women",
+"batsmenData":{
+"bat_1":{
+"batId":38673,
+"batName":"Davina Perrin",
+"runs":25,
+"balls":23,
+"fours":3,
+"sixes":0,
+"outDesc":"c Katie George b Charlie Dean",
+"wicketCode":"CAUGHT",
+"fielderId1":13049,
+"fielderId2":0,
+"bowlerId":13050,
+"dots":8
+},
+"bat_2":{
+"batId":1449882,
+"batName":"Jemima Spence",
+"runs":2,
+"balls":5,
+"fours":0,
+"sixes":0,
+"outDesc":"c Amy Jones b Marizanne Kapp",
+"wicketCode":"CAUGHT",
+"fielderId1":9145,
+"fielderId2":0,
+"bowlerId":9182,
+"dots":3
+},
+"bat_3":{
+"batId":9115,
+"batName":"Ellyse Perry",
+"runs":10,
+"balls":15,
+"fours":2,
+"sixes":0,
+"outDesc":"c Katie George b Charlie Dean",
+"wicketCode":"CAUGHT",
+"fielderId1":13049,
+"fielderId2":0,
+"bowlerId":13050,
+"dots":11
+},
+"bat_4":{
+"batId":11898,
+"batName":"Emma Lamb",
+"runs":36,
+"balls":26,
+"fours":2,
+"sixes":1,
+"outDesc":"b Nadine de Klerk",
+"wicketCode":"BOWLED",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":12752,
+"dots":2
+},
+"bat_5":{
+"batId":19417,
+"batName":"Alice Capsey",
+"runs":10,
+"balls":7,
+"fours":1,
+"sixes":0,
+"outDesc":"c Grace Harris b Charis Pavely",
+"wicketCode":"CAUGHT",
+"fielderId1":11101,
+"fielderId2":0,
+"bowlerId":38687,
+"dots":2
+},
+"bat_6":{
+"batId":39247,
+"batName":"Annerie Dercksen",
+"runs":1,
+"balls":5,
+"fours":0,
+"sixes":0,
+"outDesc":"c Amy Jones b Hannah Rainey",
+"wicketCode":"CAUGHT",
+"fielderId1":9145,
+"fielderId2":0,
+"bowlerId":13832,
+"dots":4
+},
+"bat_7":{
+"batId":9141,
+"batName":"Tammy Beaumont",
+"runs":5,
+"balls":6,
+"fours":0,
+"sixes":0,
+"outDesc":"c Amy Jones b Charlie Dean",
+"wicketCode":"CAUGHT",
+"fielderId1":9145,
+"fielderId2":0,
+"bowlerId":13050,
+"dots":1
+},
+"bat_8":{
+"batId":14806,
+"batName":"Fatima Sana",
+"runs":14,
+"balls":11,
+"fours":1,
+"sixes":0,
+"outDesc":"not out",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":1
+},
+"bat_9":{
+"batId":12002,
+"batName":"Alana King",
+"runs":1,
+"balls":2,
+"fours":0,
+"sixes":0,
+"outDesc":"lbw b Nadine de Klerk",
+"wicketCode":"LBW",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":12752,
+"dots":1
+},
+"bat_10":{
+"batId":13018,
+"batName":"Linsey Smith",
+"runs":0,
+"balls":0,
+"fours":0,
+"sixes":0,
+"outDesc":"",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":0
+},
+"bat_11":{
+"batId":19711,
+"batName":"Lauren Filer",
+"runs":0,
+"balls":0,
+"fours":0,
+"sixes":0,
+"outDesc":"",
+"wicketCode":"",
+"fielderId1":0,
+"fielderId2":0,
+"bowlerId":0,
+"dots":0
+}
+}
+},
+"bowlTeamDetails":{
+"bowlTeamName":"London Spirit Women",
+"bowlersData":{
+"bowl_1":{
+"bowlerId":9182,
+"bowlName":"Marizanne Kapp",
+"overs":1.5,
+"balls":15,
+"runs":10,
+"wickets":1,
+"maidens":9,
+"dots":9,
+"wides":1,
+"no_balls":0
+},
+"bowl_2":{
+"bowlerId":13832,
+"bowlName":"Hannah Rainey",
+"overs":2,
+"balls":20,
+"runs":22,
+"wickets":1,
+"maidens":5,
+"dots":5,
+"wides":1,
+"no_balls":0
+},
+"bowl_3":{
+"bowlerId":13049,
+"bowlName":"Katie George",
+"overs":2,
+"balls":20,
+"runs":32,
+"wickets":0,
+"maidens":3,
+"dots":3,
+"wides":1,
+"no_balls":0
+},
+"bowl_4":{
+"bowlerId":13050,
+"bowlName":"Charlotte Dean",
+"overs":2,
+"balls":20,
+"runs":17,
+"wickets":3,
+"maidens":6,
+"dots":6,
+"wides":0,
+"no_balls":0
+},
+"bowl_5":{
+"bowlerId":38687,
+"bowlName":"Charis Pavely",
+"overs":1,
+"balls":10,
+"runs":6,
+"wickets":1,
+"maidens":7,
+"dots":7,
+"wides":0,
+"no_balls":0
+},
+"bowl_6":{
+"bowlerId":12752,
+"bowlName":"Nadine de Klerk",
+"overs":1.5,
+"balls":15,
+"runs":21,
+"wickets":2,
+"maidens":3,
+"dots":3,
+"wides":1,
+"no_balls":0
+}
+}
+}
+}
+],
+"espn_pbp":{
+"commentary":{
+"items":[
+{
+"batsman":{
+"athlete":{
+"id":"275487",
+"displayName":"Ellyse Perry"
+},
+"totalRuns":6,
+"faced":10,
+"fours":1,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"297074",
+"displayName":"Tammy Beaumont"
+},
+"totalRuns":5,
+"faced":6,
+"fours":0,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"351836",
+"displayName":"Marizanne Kapp"
+},
+"totalRuns":57,
+"faced":28,
+"fours":2,
+"sixes":6
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"381268",
+"displayName":"Grace Harris"
+},
+"totalRuns":0,
+"faced":4,
+"fours":0,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"515874",
+"displayName":"Amy Jones"
+},
+"totalRuns":39,
+"faced":30,
+"fours":6,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"652939",
+"displayName":"Marie Kelly"
+},
+"totalRuns":17,
+"faced":22,
+"fours":1,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"749957",
+"displayName":"Emma Lamb"
+},
+"totalRuns":36,
+"faced":26,
+"fours":2,
+"sixes":1
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"939249",
+"displayName":"Nadine de Klerk"
+},
+"totalRuns":13,
+"faced":6,
+"fours":1,
+"sixes":1
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"944393",
+"displayName":"Alana King"
+},
+"totalRuns":1,
+"faced":2,
+"fours":0,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"1039421",
+"displayName":"Charlie Dean"
+},
+"totalRuns":7,
+"faced":10,
+"fours":0,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"1144886",
+"displayName":"Fatima Sana"
+},
+"totalRuns":14,
+"faced":11,
+"fours":1,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"1163087",
+"displayName":"Annerie Dercksen"
+},
+"totalRuns":1,
+"faced":5,
+"fours":0,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"1187120",
+"displayName":"Alice Capsey"
+},
+"totalRuns":10,
+"faced":7,
+"fours":1,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"1277200",
+"displayName":"Davina Perrin"
+},
+"totalRuns":29,
+"faced":28,
+"fours":4,
+"sixes":0
+}
+},
+{
+"batsman":{
+"athlete":{
+"id":"1334186",
+"displayName":"Jemima Spence"
+},
+"totalRuns":2,
+"faced":5,
+"fours":0,
+"sixes":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"351836",
+"displayName":"Marizanne Kapp"
+},
+"balls":15,
+"conceded":10,
+"wickets":1,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"517577",
+"displayName":"Linsey Smith"
+},
+"balls":15,
+"conceded":18,
+"wickets":0,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"879369",
+"displayName":"Katie George"
+},
+"balls":20,
+"conceded":32,
+"wickets":0,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"939249",
+"displayName":"Nadine de Klerk"
+},
+"balls":15,
+"conceded":21,
+"wickets":2,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"944393",
+"displayName":"Alana King"
+},
+"balls":20,
+"conceded":18,
+"wickets":2,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"1039421",
+"displayName":"Charlie Dean"
+},
+"balls":20,
+"conceded":17,
+"wickets":3,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"1095834",
+"displayName":"Hannah Rainey"
+},
+"balls":20,
+"conceded":22,
+"wickets":1,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"1144886",
+"displayName":"Fatima Sana"
+},
+"balls":20,
+"conceded":25,
+"wickets":1,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"1146129",
+"displayName":"Lauren Filer"
+},
+"balls":20,
+"conceded":26,
+"wickets":0,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"1163087",
+"displayName":"Annerie Dercksen"
+},
+"balls":5,
+"conceded":5,
+"wickets":0,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"1187120",
+"displayName":"Alice Capsey"
+},
+"balls":20,
+"conceded":45,
+"wickets":1,
+"maidens":0
+}
+},
+{
+"bowler":{
+"athlete":{
+"id":"1340525",
+"displayName":"Charis Pavely"
+},
+"balls":10,
+"conceded":6,
+"wickets":1,
+"maidens":0
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"GM Harris c Capsey b Fatima Sana 0 (7m 4b 0x4 0x6) SR: 0",
+"batsman":{
+"athlete":{
+"id":"381268",
+"displayName":"Grace Harris"
+}
+},
+"bowler":{
+"athlete":{
+"id":"1144886",
+"displayName":"Fatima Sana"
+}
+},
+"fielder":{
+"athlete":{
+"id":"1187120",
+"displayName":"Alice Capsey"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"AE Jones c Fatima Sana b King 39 (33m 30b 6x4 0x6) SR: 130",
+"batsman":{
+"athlete":{
+"id":"515874",
+"displayName":"Amy Jones"
+}
+},
+"bowler":{
+"athlete":{
+"id":"944393",
+"displayName":"Alana King"
+}
+},
+"fielder":{
+"athlete":{
+"id":"1144886",
+"displayName":"Fatima Sana"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"M Kelly c Fatima Sana b Capsey 17 (43m 22b 1x4 0x6) SR: 77.27",
+"batsman":{
+"athlete":{
+"id":"652939",
+"displayName":"Marie Kelly"
+}
+},
+"bowler":{
+"athlete":{
+"id":"1187120",
+"displayName":"Alice Capsey"
+}
+},
+"fielder":{
+"athlete":{
+"id":"1144886",
+"displayName":"Fatima Sana"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"bowled",
+"text":"CE Dean  b King 7 (14m 10b 0x4 0x6) SR: 70",
+"batsman":{
+"athlete":{
+"id":"1039421",
+"displayName":"Charlie Dean"
+}
+},
+"bowler":{
+"athlete":{
+"id":"944393",
+"displayName":"Alana King"
+}
+},
+"fielder":{
+"athlete":{
+"id":null,
+"displayName":null
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"J Spence c &dagger;Jones b Kapp 2 (9m 5b 0x4 0x6) SR: 40",
+"batsman":{
+"athlete":{
+"id":"1334186",
+"displayName":"Jemima Spence"
+}
+},
+"bowler":{
+"athlete":{
+"id":"351836",
+"displayName":"Marizanne Kapp"
+}
+},
+"fielder":{
+"athlete":{
+"id":"515874",
+"displayName":"Amy Jones"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"EA Perry c George b Dean 6 (15m 10b 1x4 0x6) SR: 60",
+"batsman":{
+"athlete":{
+"id":"275487",
+"displayName":"Ellyse Perry"
+}
+},
+"bowler":{
+"athlete":{
+"id":"1039421",
+"displayName":"Charlie Dean"
+}
+},
+"fielder":{
+"athlete":{
+"id":"879369",
+"displayName":"Katie George"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"D Perrin c George b Dean 29 (37m 28b 4x4 0x6) SR: 103.57",
+"batsman":{
+"athlete":{
+"id":"1277200",
+"displayName":"Davina Perrin"
+}
+},
+"bowler":{
+"athlete":{
+"id":"1039421",
+"displayName":"Charlie Dean"
+}
+},
+"fielder":{
+"athlete":{
+"id":"879369",
+"displayName":"Katie George"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"A Capsey c Higham b Pavely 10 (6m 7b 1x4 0x6) SR: 142.85",
+"batsman":{
+"athlete":{
+"id":"1187120",
+"displayName":"Alice Capsey"
+}
+},
+"bowler":{
+"athlete":{
+"id":"1340525",
+"displayName":"Charis Pavely"
+}
+},
+"fielder":{
+"athlete":{
+"id":"874201",
+"displayName":"Lucy Higham"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"A Dercksen c &dagger;Jones b Rainey 1 (5m 5b 0x4 0x6) SR: 20",
+"batsman":{
+"athlete":{
+"id":"1163087",
+"displayName":"Annerie Dercksen"
+}
+},
+"bowler":{
+"athlete":{
+"id":"1095834",
+"displayName":"Hannah Rainey"
+}
+},
+"fielder":{
+"athlete":{
+"id":"515874",
+"displayName":"Amy Jones"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"caught",
+"text":"TT Beaumont c &dagger;Jones b Dean 5 (9m 6b 0x4 0x6) SR: 83.33",
+"batsman":{
+"athlete":{
+"id":"297074",
+"displayName":"Tammy Beaumont"
+}
+},
+"bowler":{
+"athlete":{
+"id":"1039421",
+"displayName":"Charlie Dean"
+}
+},
+"fielder":{
+"athlete":{
+"id":"515874",
+"displayName":"Amy Jones"
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"bowled",
+"text":"EL Lamb  b de Klerk 36 (46m 26b 2x4 1x6) SR: 138.46",
+"batsman":{
+"athlete":{
+"id":"749957",
+"displayName":"Emma Lamb"
+}
+},
+"bowler":{
+"athlete":{
+"id":"939249",
+"displayName":"Nadine de Klerk"
+}
+},
+"fielder":{
+"athlete":{
+"id":null,
+"displayName":null
+}
+}
+}
+},
+{
+"dismissal":{
+"dismissal":true,
+"type":"leg before wicket",
+"text":"AM King lbw b de Klerk 1 (2m 2b 0x4 0x6) SR: 50",
+"batsman":{
+"athlete":{
+"id":"944393",
+"displayName":"Alana King"
+}
+},
+"bowler":{
+"athlete":{
+"id":"939249",
+"displayName":"Nadine de Klerk"
+}
+},
+"fielder":{
+"athlete":{
+"id":null,
+"displayName":null
+}
+}
+}
+}
+]
+}
+}
+}

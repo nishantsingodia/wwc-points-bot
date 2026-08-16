@@ -20,6 +20,8 @@ M12 = "cb157061_espn1537342.json"   # LPL 12th match, one of the eval's two refe
 M19 = "cb157138_espn1537349.json"   # LPL 19th match, the other
 M05 = "cb156988_espn1537335.json"   # the substitute-fielder disagreement
 M10 = "cb157039_espn1537340.json"   # Lizaad Williams "retd out" 0 off 0, absent from ESPN's bbb
+GH = "cb145302_espn1521224.json"   # Hundred W: the fielder-attribution dispute that revoked
+                                   # cb11101 Grace Harris — CB "c Grace Harris", ESPN "c Higham"
 
 
 def load(name):
@@ -244,23 +246,74 @@ def test_substitute_disagreement_is_refused_not_paired():
     assert diag["layer_conflicts"] == []             # and no same-match conflict survives
 
 
-def test_a_layer_conflict_inside_one_match_is_surfaced_and_revoked():
-    """If Layer B ever contradicts Layer A about one cricbuzz id in one match, both claims are
-    emitted on purpose: compile_bridge revokes the pair and the human sees which two cricinfo ids
-    were claimed. Suppressing one silently would keep a pair that might be the wrong one."""
-    _, cb, espn = load(M05)
+def test_a_layer_conflict_inside_one_match_never_reaches_the_fact_log():
+    """Layer B contradicting Layer A about one cricbuzz id in one match used to emit BOTH claims,
+    on the reasoning that hiding one would hide the disagreement. What it actually hid was the
+    KIND of disagreement: the two feeds name different FIELDERS for one catch, which is a value
+    question, and letting it into the identity log revoked a player whose id was never in doubt.
+
+    REAL PAYLOAD, not a forgery — Hundred W cb145302/espn1521224: Cricbuzz's card says
+    "A Capsey c Grace Harris b Charis Pavely", ESPN's says "c Higham" (ci:874201). Layer A had
+    Grace Harris (cb11101) as ci:381268 from eight matches; the single dismissal claim revoked
+    all of it and put her on "Needs Cricinfo ID" with nothing a human could answer.
+    """
+    _, cb, espn = load(GH)
     a = cbb.layer_a(cb, espn)
-    forged = copy.deepcopy(cb)
-    for d in forged["dismissals"]:
-        if d["fielder"] == "52768":
-            d["desc"] = d["desc"] + " (sub)"          # re-create the pre-guard disagreement
-    b, _ = cbb.layer_b(forged, espn, a)
-    assert b["52768"] == "1253695" != a["52768"]
-    log = [conf("52768", a["52768"], "m1"), conf("52768", b["52768"], "m1",
-                                                 cbb.METHOD_DISMISSAL)]
-    bridge, revoked = cbb.compile_bridge(log)
-    assert "52768" in revoked and "52768" not in bridge
-    assert set(revoked["52768"]["claims"]) == {"1364328", "1253695"}
+    b, unjoined = cbb.layer_b(cb, espn, a)
+    assert a["11101"] == "381268"                     # Layer A, from figures unique on both sides
+    assert "11101" not in b                           # Layer B does not get to overrule it
+    disputes = cbb.fielder_disputes(unjoined)
+    assert [d["cb_fielder"] for d in disputes] == ["11101"]
+    assert disputes[0]["layer_a"] == "381268" and disputes[0]["layer_b"] == "874201"
+    assert "Grace Harris" in disputes[0]["desc"] and "Higham" in disputes[0]["espn_desc"]
+    confs, diag = derive(GH)
+    assert diag["layer_conflicts"] == []              # empty BY CONSTRUCTION now
+    assert diag["fielder_disputes"] and len(diag["fielder_disputes"]) == 1
+    # and the fact log carries exactly one claim for her, the fingerprint one
+    hers = [c for c in confs if c["cricbuzz_id"] == "11101"]
+    assert [(c["cricinfo_id"], c["method"]) for c in hers] == [("381268", cbb.METHOD_FINGERPRINT)]
+    bridge, revoked = cbb.compile_bridge(confs)
+    assert bridge["11101"]["cricinfo_id"] == "381268" and "11101" not in revoked
+
+
+def test_the_mirror_guard_refuses_a_fielder_ci_layer_a_gave_to_someone_else():
+    """The mirror of the guard above, read from the ESPN end: the cricinfo fielder ESPN names is
+    already Layer A's for a DIFFERENT cricbuzz id, so accepting would put two cricbuzz ids on one
+    human. Measured 0 of 49 new Layer-B pairs across the 92-match corpus, i.e. it costs nothing
+    today — it exists because a guard on one side and not its mirror is how this class comes back.
+    Constructed by REDIRECTING a real dismissal, so nothing about the pairing itself is invented.
+    """
+    _, cb, espn = load(M12)
+    a = cbb.layer_a(cb, espn)
+    # cb22666 (Malsha Tharupathi) is the one fielder in this match Layer A never reaches, and he
+    # takes both of his catches off bridged batsmen — i.e. exactly the pair Layer B exists for.
+    assert "22666" not in a and cbb.layer_b(cb, espn, a)[0]["22666"] == "1282475"
+    stolen = a["7884"]                                # a human Layer A has already spoken for
+    forged = copy.deepcopy(espn)
+    for e in forged["dismissals"]:
+        if e["fielder"] == "1282475":
+            e["fielder"] = stolen                     # ESPN now credits that already-paired human
+    b, unjoined = cbb.layer_b(cb, forged, a)
+    assert "22666" not in b                           # refused, not two cricbuzz ids on one human
+    assert any(u.get("cb_fielder") == "22666" and "already gave ci:%s" % stolen in u["reason"]
+               for u in unjoined)
+    assert len(cbb.fielder_disputes(unjoined)) == 2   # both of his catches, each named
+
+
+def test_the_guards_cost_none_of_the_pairs_layer_b_exists_for():
+    """The guards must not touch the payoff. MEASURED per fixture, and pinned: no Layer-B pair
+    contradicts Layer A any more, and every genuinely-new pair (the ones Layer A can never reach —
+    a substitute, a pure fielder) survives. Corpus-wide the same measurement is 587 Layer-B pairs
+    = 534 restating Layer A + 49 new + 4 refused disputes, i.e. the guards cost 0 of the 49."""
+    expected = {M12: (22, 5, 1), M19: (22, 7, 1), M05: (24, 7, 0),
+                M10: (24, 10, 1), GH: (18, 3, 0)}
+    for name, (n_a, n_b, n_new) in expected.items():
+        _, cb, espn = load(name)
+        a = cbb.layer_a(cb, espn)
+        b, _ = cbb.layer_b(cb, espn, a)
+        assert (len(a), len(b), sum(1 for k in b if k not in a)) == (n_a, n_b, n_new), name
+        for cb_id, ci in b.items():
+            assert a.get(cb_id) in (None, ci), name    # never contradicts A
 
 
 def test_substitute_agreed_by_both_feeds_still_bridges():

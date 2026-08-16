@@ -112,7 +112,7 @@ jobs:
           # must be committed or it is written-but-never-read: every run would re-derive the
           # pairing from team names, which is exactly the state in which a rename upstream can
           # silently re-pair or un-pair an already-SETTLED match.
-          LEDGERS="registry/recon_overrides.json registry/new_players.json registry/identity_splits.json registry/frozen_tours.json registry/settlement_snapshots.json registry/cricsheet_learned_aliases.json registry/manual_ci_bridges.json registry/cricbuzz_match_map.json"
+          LEDGERS="registry/recon_overrides.json registry/new_players.json registry/identity_splits.json registry/frozen_tours.json registry/settlement_snapshots.json registry/completed_matches.json registry/cricsheet_learned_aliases.json registry/manual_ci_bridges.json registry/cricbuzz_match_map.json"
           if [ -n "$(git status --porcelain $LEDGERS)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

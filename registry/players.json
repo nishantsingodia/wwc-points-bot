@@ -1,6 +1,6 @@
 {
  "anchor": "cricinfo_id (ci:); cs:/uncapped: fallback; cricsheet_id derived from crosswalk",
- "count": 754,
+ "count": 755,
  "players": {
   "ci:597806": {
    "aliases": [
@@ -6404,9 +6404,7 @@
   },
   "ci:443150": {
    "aliases": [
-    "ka hope",
-    "shai diego hope",
-    "shai hope"
+    "ka hope"
    ],
    "tours": [
     "New Zealand vs West Indies Men's ODI 2026",
@@ -6415,8 +6413,8 @@
    "cricinfo_id": "443150",
    "cricsheet_id": "c59d8f8a",
    "espn_id": "443150",
-   "display": "Shai Hope",
-   "draft_id": 10241,
+   "display": "Kyle Hope",
+   "draft_id": null,
    "auction_id": 8188
   },
   "ci:391832": {
@@ -6881,6 +6879,7 @@
   },
   "ci:801817": {
    "aliases": [
+    "katupulle gedara mohamed shiraz sahab",
     "m shiraz",
     "mohamed shiraz",
     "mohommed shiraz"
@@ -7492,6 +7491,7 @@
   },
   "ci:704693": {
    "aliases": [
+    "lahiru igalagamage",
     "lahiru udara",
     "lahiru udara igalagamage",
     "lu igalagamage"
@@ -7544,16 +7544,19 @@
   },
   "ci:823509": {
    "aliases": [
-    "gd phillips"
+    "gd phillips",
+    "glenn dominic phillips",
+    "glenn phillips"
    ],
    "tours": [
+    "Caribbean Premier League 2026",
     "Lanka Premier League 2026"
    ],
    "cricinfo_id": "823509",
    "cricsheet_id": "9a46c4e5",
    "espn_id": "823509",
    "display": "Dale Phillips",
-   "draft_id": null,
+   "draft_id": 10777,
    "auction_id": 402
   },
   "ci:1329936": {
@@ -7857,7 +7860,8 @@
   "ci:1175296": {
    "aliases": [
     "s colombage",
-    "sachindu colombage"
+    "sachindu colombage",
+    "sachindu maduwantha colombage"
    ],
    "tours": [
     "Lanka Premier League 2026"
@@ -8157,7 +8161,8 @@
   "ci:902447": {
    "aliases": [
     "dale nathan phillips",
-    "dale phillips"
+    "dale phillips",
+    "dn phillips"
    ],
    "tours": [
     "Lanka Premier League 2026"
@@ -9018,17 +9023,15 @@
    "cricbuzz_tier": 2
   },
   "ci:1126982": {
-   "aliases": [
-    "gus atkinson"
-   ],
+   "aliases": [],
    "tours": [
     "The Hundred Men's Competition 2026"
    ],
    "cricinfo_id": "1126982",
    "cricsheet_id": "add6bd03",
    "espn_id": "1126982",
-   "display": "Gus Atkinson",
-   "draft_id": 10461,
+   "display": "GK Atkinson",
+   "draft_id": null,
    "auction_id": null
   },
   "ci:1150772": {
@@ -11903,17 +11906,6 @@
    "draft_id": 10769,
    "auction_id": null
   },
-  "uncapped:mavendra-dindyal": {
-   "aliases": [
-    "mavendra dindyal"
-   ],
-   "tours": [
-    "Caribbean Premier League 2026"
-   ],
-   "display": "Mavendra Dindyal",
-   "draft_id": 10770,
-   "auction_id": null
-  },
   "ci:25913": {
    "aliases": [
     "mohammad nabi"
@@ -11956,17 +11948,6 @@
    "draft_id": 10776,
    "auction_id": null
   },
-  "uncapped:glenn-phillips": {
-   "aliases": [
-    "glenn phillips"
-   ],
-   "tours": [
-    "Caribbean Premier League 2026"
-   ],
-   "display": "Glenn Phillips",
-   "draft_id": 10777,
-   "auction_id": null
-  },
   "ci:581160": {
    "aliases": [
     "khary pierre"
@@ -11979,17 +11960,6 @@
    "cricsheet_id": "a61bcb94",
    "espn_id": "581160",
    "draft_id": 10778,
-   "auction_id": null
-  },
-  "uncapped:dwaine-pretorius": {
-   "aliases": [
-    "dwaine pretorius"
-   ],
-   "tours": [
-    "Caribbean Premier League 2026"
-   ],
-   "display": "Dwaine Pretorius",
-   "draft_id": 10779,
    "auction_id": null
   },
   "ci:974087": {
@@ -12104,6 +12074,65 @@
    "auction_id": null,
    "cricbuzz_id": "1467475",
    "cricbuzz_tier": 1
+  },
+  "ci:1394274": {
+   "aliases": [
+    "mavendra dindyal"
+   ],
+   "tours": [
+    "Caribbean Premier League 2026"
+   ],
+   "display": "Mavendra Dindyal",
+   "draft_id": 10770,
+   "auction_id": null,
+   "cricinfo_id": "1394274",
+   "cricsheet_id": null,
+   "espn_id": "1394274"
+  },
+  "ci:327830": {
+   "aliases": [
+    "dwaine pretorius"
+   ],
+   "tours": [
+    "Caribbean Premier League 2026"
+   ],
+   "display": "Dwaine Pretorius",
+   "draft_id": 10779,
+   "auction_id": null,
+   "cricinfo_id": "327830",
+   "cricsheet_id": "11614d87",
+   "espn_id": "327830"
+  },
+  "ci:581379": {
+   "aliases": [
+    "shai diego hope",
+    "shai hope"
+   ],
+   "tours": [
+    "Caribbean Premier League 2026"
+   ],
+   "display": "Shai Hope",
+   "cricinfo_id": "581379",
+   "cricsheet_id": "1fc6ef83",
+   "espn_id": "581379",
+   "draft_id": 10772,
+   "auction_id": null
+  },
+  "ci:1039481": {
+   "aliases": [
+    "aap atkinson",
+    "angus atkinson",
+    "gus atkinson"
+   ],
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "display": "Gus Atkinson",
+   "cricinfo_id": "1039481",
+   "cricsheet_id": "70d57519",
+   "espn_id": "1039481",
+   "draft_id": 10461,
+   "auction_id": null
   }
  }
 }

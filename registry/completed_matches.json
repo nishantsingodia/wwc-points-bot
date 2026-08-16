@@ -1,0 +1,860 @@
+{
+ "note": "WRITE-ONCE record of every match that has PUBLISHED as COMPLETED or COMPLETED_FLAGGED, independent of whether its base points froze. This is the 'COMPLETED never returns to LIVE' ratchet. It used to be inferred from settlement_snapshots.json, which stopped being a valid proxy when base points began freezing at L1_DONE instead of on any COMPLETED publish: a match can now publish without freezing anything. Never edited by hand and never revoked.",
+ "completed": [
+  {
+   "tour": "Lanka Premier League 2026",
+   "match_key": "2026-07-17::galle gallants|jaffna kings",
+   "match": "Match 1 — JK v GG",
+   "date": "2026-07-17",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-07-29",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Lanka Premier League 2026",
+   "match_key": "2026-07-18::colombo kaps|galle gallants",
+   "match": "Match 3 — GG v CK",
+   "date": "2026-07-18",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-07-29",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Lanka Premier League 2026",
+   "match_key": "2026-07-18::dambulla sixers|kandy royals",
+   "match": "Match 2 — KR v DS",
+   "date": "2026-07-18",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-07-22",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Lanka Premier League 2026",
+   "match_key": "2026-07-19::colombo kaps|kandy royals",
+   "match": "Match 5 — CK v KR",
+   "date": "2026-07-19",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-07-22",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Lanka Premier League 2026",
+   "match_key": "2026-07-19::dambulla sixers|jaffna kings",
+   "match": "Match 4 — DS v JK",
+   "date": "2026-07-19",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-07-22",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Lanka Premier League 2026",
+   "match_key": "2026-07-21::dambulla sixers|kandy royals",
+   "match": "Match 6 — DS v KR",
+   "date": "2026-07-21",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-07-22",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-07-21::mi london|sunrisers leeds",
+   "match": "Match 1 — MTMILO v MTSUNL",
+   "date": "2026-07-21",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-07-21::mi london|sunrisers leeds",
+   "match": "Match 1 — WTMILO v WTSUNL",
+   "date": "2026-07-21",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Lanka Premier League 2026",
+   "match_key": "2026-07-22::colombo kaps|jaffna kings",
+   "match": "Match 7 — JK v CK",
+   "date": "2026-07-22",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-07-29",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Lanka Premier League 2026",
+   "match_key": "2026-07-22::dambulla sixers|galle gallants",
+   "match": "Match 8 — DS v GG",
+   "date": "2026-07-22",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-07-29",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-07-22::southern brave|welsh fire",
+   "match": "Match 2 — MTSBR v MTWLF",
+   "date": "2026-07-22",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-07-22::southern brave|welsh fire",
+   "match": "Match 2 — WTSBR v WTWLF",
+   "date": "2026-07-22",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Lanka Premier League 2026",
+   "match_key": "2026-07-23::colombo kaps|kandy royals",
+   "match": "Match 9 — KR v CK",
+   "date": "2026-07-23",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-07-29",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Lanka Premier League 2026",
+   "match_key": "2026-07-23::galle gallants|jaffna kings",
+   "match": "Match 10 — GG v JK",
+   "date": "2026-07-23",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-07-29",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-07-23::london spirit|manchester super giants",
+   "match": "Match 3 — MTLSP v MTMSG",
+   "date": "2026-07-23",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-07-23::london spirit|manchester super giants",
+   "match": "Match 3 — WTLSP v WTMSG",
+   "date": "2026-07-23",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-07-24::birmingham phoenix|trent rockets",
+   "match": "Match 4 — MTBPH v MTTRR",
+   "date": "2026-07-24",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-07-24::birmingham phoenix|trent rockets",
+   "match": "Match 4 — WTBPH v WTTRR",
+   "date": "2026-07-24",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Lanka Premier League 2026",
+   "match_key": "2026-07-25::colombo kaps|dambulla sixers",
+   "match": "Match 12 — DS v CK",
+   "date": "2026-07-25",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-07-29",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Lanka Premier League 2026",
+   "match_key": "2026-07-25::galle gallants|kandy royals",
+   "match": "Match 11 — GG v KR",
+   "date": "2026-07-25",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-07-29",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-07-25::mi london|welsh fire",
+   "match": "Match 6 — MTWLF v MTMILO",
+   "date": "2026-07-25",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-07-25::southern brave|sunrisers leeds",
+   "match": "Match 5 — MTSUNL v MTSBR",
+   "date": "2026-07-25",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-07-25::mi london|welsh fire",
+   "match": "Match 6 — WTWLF v WTMILO",
+   "date": "2026-07-25",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-07-25::southern brave|sunrisers leeds",
+   "match": "Match 5 — WTSUNL v WTSBR",
+   "date": "2026-07-25",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Lanka Premier League 2026",
+   "match_key": "2026-07-26::dambulla sixers|galle gallants",
+   "match": "Match 14 — GG v DS",
+   "date": "2026-07-26",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-07-29",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Lanka Premier League 2026",
+   "match_key": "2026-07-26::jaffna kings|kandy royals",
+   "match": "Match 13 — KR v JK",
+   "date": "2026-07-26",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-07-29",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-07-26::birmingham phoenix|manchester super giants",
+   "match": "Match 7 — MTMSG v MTBPH",
+   "date": "2026-07-26",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-07-26::london spirit|trent rockets",
+   "match": "Match 8 — MTTRR v MTLSP",
+   "date": "2026-07-26",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-07-26::london spirit|trent rockets",
+   "match": "Match 8 — WTTRR v WTLSP",
+   "date": "2026-07-26",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-07-27::mi london|southern brave",
+   "match": "Match 9 — MTSBR v MTMILO",
+   "date": "2026-07-27",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-07-27::mi london|southern brave",
+   "match": "Match 9 — WTSBR v WTMILO",
+   "date": "2026-07-27",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Lanka Premier League 2026",
+   "match_key": "2026-07-28::colombo kaps|jaffna kings",
+   "match": "Match 15 — CK v JK",
+   "date": "2026-07-28",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-07-29",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-07-28::manchester super giants|sunrisers leeds",
+   "match": "Match 10 — MTSUNL v MTMSG",
+   "date": "2026-07-28",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-07-28::manchester super giants|sunrisers leeds",
+   "match": "Match 10 — WTSUNL v WTMSG",
+   "date": "2026-07-28",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Lanka Premier League 2026",
+   "match_key": "2026-07-29::colombo kaps|dambulla sixers",
+   "match": "Match 17 — CK v DS",
+   "date": "2026-07-29",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-08-01",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Lanka Premier League 2026",
+   "match_key": "2026-07-29::galle gallants|kandy royals",
+   "match": "Match 16 — GG v KR",
+   "date": "2026-07-29",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-08-01",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-07-29::london spirit|mi london",
+   "match": "Match 12 — MTMILO v MTLSP",
+   "date": "2026-07-29",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-07-29::trent rockets|welsh fire",
+   "match": "Match 11 — MTWLF v MTTRR",
+   "date": "2026-07-29",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-07-29::london spirit|mi london",
+   "match": "Match 12 — WTMILO v WTLSP",
+   "date": "2026-07-29",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-07-29::trent rockets|welsh fire",
+   "match": "Match 11 — WTWLF v WTTRR",
+   "date": "2026-07-29",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Lanka Premier League 2026",
+   "match_key": "2026-07-30::jaffna kings|kandy royals",
+   "match": "Match 18 — JK v KR",
+   "date": "2026-07-30",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-03",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-07-30::birmingham phoenix|southern brave",
+   "match": "Match 13 — MTSBR v MTBPH",
+   "date": "2026-07-30",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-07-30::birmingham phoenix|southern brave",
+   "match": "Match 13 — WTSBR v WTBPH",
+   "date": "2026-07-30",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-07-31::manchester super giants|trent rockets",
+   "match": "Match 14 — MTMSG v MTTRR",
+   "date": "2026-07-31",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-07-31::manchester super giants|trent rockets",
+   "match": "Match 14 — WTMSG v WTTRR",
+   "date": "2026-07-31",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Lanka Premier League 2026",
+   "match_key": "2026-08-01::colombo kaps|galle gallants",
+   "match": "Match 19 — CK v GG",
+   "date": "2026-08-01",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-01",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-08-01::birmingham phoenix|welsh fire",
+   "match": "Match 15 — MTBPH v MTWLF",
+   "date": "2026-08-01",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-08-01::london spirit|southern brave",
+   "match": "Match 16 — MTLSP v MTSBR",
+   "date": "2026-08-01",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-08-01::birmingham phoenix|welsh fire",
+   "match": "Match 15 — WTBPH v WTWLF",
+   "date": "2026-08-01",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-08-01::london spirit|southern brave",
+   "match": "Match 16 — WTLSP v WTSBR",
+   "date": "2026-08-01",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Lanka Premier League 2026",
+   "match_key": "2026-08-02::dambulla sixers|jaffna kings",
+   "match": "Match 20 — JK v DS",
+   "date": "2026-08-02",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-08-03",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-08-02::manchester super giants|mi london",
+   "match": "Match 18 — MTMILO v MTMSG",
+   "date": "2026-08-02",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-08-02::sunrisers leeds|trent rockets",
+   "match": "Match 17 — MTTRR v MTSUNL",
+   "date": "2026-08-02",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-08-02::manchester super giants|mi london",
+   "match": "Match 18 — WTMILO v WTMSG",
+   "date": "2026-08-02",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-08-02::sunrisers leeds|trent rockets",
+   "match": "Match 17 — WTTRR v WTSUNL",
+   "date": "2026-08-02",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-08-03::southern brave|welsh fire",
+   "match": "Match 19 — MTWLF v MTSBR",
+   "date": "2026-08-03",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-08-03::southern brave|welsh fire",
+   "match": "Match 19 — WTWLF v WTSBR",
+   "date": "2026-08-03",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-08-04::london spirit|sunrisers leeds",
+   "match": "Match 20 — WTSUNL v WTLSP",
+   "date": "2026-08-04",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Lanka Premier League 2026",
+   "match_key": "2026-08-05::colombo kaps|kandy royals",
+   "match": "Match 22 — CK v KR",
+   "date": "2026-08-05",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-08-05",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Lanka Premier League 2026",
+   "match_key": "2026-08-05::galle gallants|jaffna kings",
+   "match": "Match 21 — GG v JK",
+   "date": "2026-08-05",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-08-05",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-08-05::birmingham phoenix|trent rockets",
+   "match": "Match 21 — MTTRR v MTBPH",
+   "date": "2026-08-05",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-08-05::manchester super giants|welsh fire",
+   "match": "Match 20 — MTMSG v MTWLF",
+   "date": "2026-08-05",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-08-05::birmingham phoenix|trent rockets",
+   "match": "Match 22 — WTTRR v WTBPH",
+   "date": "2026-08-05",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-08-05::manchester super giants|welsh fire",
+   "match": "Match 21 — WTMSG v WTWLF",
+   "date": "2026-08-05",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-08-06::london spirit|mi london",
+   "match": "Match 22 — MTLSP v MTMILO",
+   "date": "2026-08-06",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-08-06::london spirit|mi london",
+   "match": "Match 23 — WTLSP v WTMILO",
+   "date": "2026-08-06",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Caribbean Premier League 2026",
+   "match_key": "2026-08-07::antigua and barbuda falcons|jamaica kingsmen",
+   "match": "Match 1 — MTANT v MTJAM",
+   "date": "2026-08-07",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Lanka Premier League 2026",
+   "match_key": "2026-08-07::colombo kaps|galle gallants",
+   "match": "Match 23 — GG v CK",
+   "date": "2026-08-07",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-10",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-08-07::birmingham phoenix|sunrisers leeds",
+   "match": "Match 23 — MTBPH v MTSUNL",
+   "date": "2026-08-07",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-08-07::birmingham phoenix|sunrisers leeds",
+   "match": "Match 24 — WTBPH v WTSUNL",
+   "date": "2026-08-07",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Caribbean Premier League 2026",
+   "match_key": "2026-08-08::st kitts and nevis patriots|trinbago knight riders",
+   "match": "Match 2 — MTSTK v MTTRI",
+   "date": "2026-08-08",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Lanka Premier League 2026",
+   "match_key": "2026-08-08::galle gallants|jaffna kings",
+   "match": "Match 24 — JK v GG",
+   "date": "2026-08-08",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-10",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-08-08::manchester super giants|southern brave",
+   "match": "Match 25 — MTSBR v MTMSG",
+   "date": "2026-08-08",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-08-08::mi london|trent rockets",
+   "match": "Match 24 — MTMILO v MTTRR",
+   "date": "2026-08-08",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-08-08::manchester super giants|southern brave",
+   "match": "Match 26 — WTSBR v WTMSG",
+   "date": "2026-08-08",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-08-08::mi london|trent rockets",
+   "match": "Match 25 — WTMILO v WTTRR",
+   "date": "2026-08-08",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Caribbean Premier League 2026",
+   "match_key": "2026-08-09::antigua and barbuda falcons|st lucia kings",
+   "match": "Match 3 — MTANT v MTSTL",
+   "date": "2026-08-09",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-08-09::birmingham phoenix|london spirit",
+   "match": "Match 27 — MTLSP v MTBPH",
+   "date": "2026-08-09",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-08-09::sunrisers leeds|welsh fire",
+   "match": "Match 26 — MTSUNL v MTWLF",
+   "date": "2026-08-09",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-08-09::birmingham phoenix|london spirit",
+   "match": "Match 28 — WTLSP v WTBPH",
+   "date": "2026-08-09",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-08-09::sunrisers leeds|welsh fire",
+   "match": "Match 27 — WTSUNL v WTWLF",
+   "date": "2026-08-09",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-08-10::southern brave|trent rockets",
+   "match": "Match 28 — MTTRR v MTSBR",
+   "date": "2026-08-10",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-08-10::southern brave|trent rockets",
+   "match": "Match 29 — WTTRR v WTSBR",
+   "date": "2026-08-10",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-08-11::manchester super giants|sunrisers leeds",
+   "match": "Match 29 — MTMSG v MTSUNL",
+   "date": "2026-08-11",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-08-11::manchester super giants|sunrisers leeds",
+   "match": "Match 30 — WTMSG v WTSUNL",
+   "date": "2026-08-11",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Caribbean Premier League 2026",
+   "match_key": "2026-08-12::barbados tridents|jamaica kingsmen",
+   "match": "Match 4 — MTJAM v MTBAR",
+   "date": "2026-08-12",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Caribbean Premier League 2026",
+   "match_key": "2026-08-12::st kitts and nevis patriots|st lucia kings",
+   "match": "Match 5 — MTSTL v MTSTK",
+   "date": "2026-08-12",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-08-12::birmingham phoenix|mi london",
+   "match": "Match 31 — MTBPH v MTMILO",
+   "date": "2026-08-12",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-08-12::london spirit|welsh fire",
+   "match": "Match 30 — MTWLF v MTLSP",
+   "date": "2026-08-12",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-08-12::birmingham phoenix|mi london",
+   "match": "Match 32 — WTBPH v WTMILO",
+   "date": "2026-08-12",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-08-12::london spirit|welsh fire",
+   "match": "Match 31 — WTWLF v WTLSP",
+   "date": "2026-08-12",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Caribbean Premier League 2026",
+   "match_key": "2026-08-14::antigua and barbuda falcons|st lucia kings",
+   "match": "Match 7 — MTSTL v MTANT",
+   "date": "2026-08-14",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-15",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-08-14::manchester super giants|sunrisers leeds",
+   "match": "Match 32 — MTMSG v MTSUNL",
+   "date": "2026-08-14",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-08-15",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-08-14::southern brave|sunrisers leeds",
+   "match": "Match 33 — WTSBR v WTSUNL",
+   "date": "2026-08-14",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-14",
+   "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "Caribbean Premier League 2026",
+   "match_key": "2026-08-16::jamaica kingsmen|trinbago knight riders",
+   "match": "Match 8 — MTJAM v MTTRI",
+   "date": "2026-08-16",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-16",
+   "provenance": "derived-from-settlement"
+  }
+ ]
+}

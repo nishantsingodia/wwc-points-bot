@@ -23,6 +23,17 @@ COMPLETED  (never returns to LIVE)   cricsheet not posted yet      → "L1 recon
   "ESPN's value", NOT cricapi's, NOT a value recomputed from raw feeds on a later run.
   ⇒ **READ the baseline from the frozen record; never recompute the provisional cut.** That
   recomputation is the root cause of the phantom `dots 0→N` review rows that corrupted settled points.
+- **An unresolved L1 gap opens L1 only while there is NO official card** (refined 16 Aug 2026, and
+  it is a REFINEMENT of the locked model, not a re-derivation — flag it to the owner). "The two
+  provisional feeds disagree, pick one" is a question the bot deliberately stops asking once
+  cricsheet posts: the Recon tab only queues an L1 row `if unresolved and not cs_path`, and
+  `apply_recon_overrides` writes into the very perf dicts `emit()` scores — which on a cricsheet run
+  hold the OFFICIAL figures, so an answer given after cricsheet lands overwrites the official card
+  with a provisional feed. Reporting `L1_OPEN` there announced an open question with no row and no
+  safe answer; harmless as a column, fatal once the freeze started reading this axis (the match
+  could never reach L1_DONE ⇒ published forever with no baseline and nothing to click). Measured:
+  15 matches / 496 rows / 36 players. `unsourced` and `unattributed` are NOT relaxed — cricsheet
+  cannot un-drop a row the pipeline never attributed, and it cannot retro-measure a field nobody saw.
 - **Single-source fields = `dots` + `maidens`, ESPN ONLY** (cricapi supplies neither; cricsheet
   supplies both). No second number at L1 ⇒ **no L1 comparison**; ESPN's value is accepted and does
   NOT block COMPLETED. ESPN's value ABSENT for a bowler who bowled = unconsumed data ⇒ stays LIVE.
@@ -89,9 +100,30 @@ reconciliation. **Per the locked spec above that recomputation IS the bug**: bas
 L1-done and the L2 baseline must be READ from the frozen record.
 - `registry/settlement_snapshots.json` + the **`SETTLEMENT AUDIT`** sheet tab = **WRITE-ONCE** record
   of each player's points the first time their match published COMPLETED. Never edit it; the draft
-  app diffs the live sheet against it (`/audit`, results "Audit" tab, lobby Completed badge). It
-  currently fires on any COMPLETED/`COMPLETED_FLAGGED` publish (`wc_fps_to_csv.py:2394`); the locked
-  freeze point is the **L1-done transition** — this is the store the L2 baseline must be read from.
+  app diffs the live sheet against it (`/audit`, results "Audit" tab, lobby Completed badge). This
+  is the store the L2 baseline must be read from.
+- **FIXED 16 Aug 2026 — the freeze is at L1-DONE, not on any COMPLETED publish.** It used to fire on
+  any COMPLETED/`COMPLETED_FLAGGED` publish, which is strictly earlier: `classify_match_status`'s
+  cs_path branch returns COMPLETED without ever inspecting `unresolved`/`unsourced`, so a match whose
+  feeds still disagreed minted a write-once baseline off the provisional cut — and write-once meant
+  the owner's later (30/30-correct) L1 adjudication could never move it. Measured on the live sheet:
+  **913 rows / 27 matches** were published COMPLETED with Recon State still `⏳ L1 recon open`. The
+  gate is now `freeze_ok = published and recon_state != "L1_OPEN"` — the RECON axis, not the status.
+  A published match with no baseline is normal and visible (the sheet's Recon State says so, the
+  draft renders `NO_BASELINE`, and the run prints one line per match).
+- ⛔ **`registry/completed_matches.json` is the "COMPLETED never returns to LIVE" ratchet** and is
+  now a SEPARATE ledger. It used to be inferred from the settlement store
+  (`any(k[0] == mk and v["tour"] == tour ...)`), which only worked while every publish also froze a
+  baseline. Freezing at L1-DONE breaks that: **narrowing the freeze without this file re-opens the
+  7-9 Aug bug that un-published 12 matches / 410 settled rows.** 417 rows / 12 matches were published
+  on 16 Aug ONLY because the ratchet remembered. `has_published_completed` reads BOTH stores (a
+  settlement row still proves a publish, so the 95 pre-ledger matches need no migration); keyed
+  `(tour, match_key)` because match_key collides across the Hundred's same-day M/W double-headers.
+  Backfill/regenerate with `python3 registry/backfill_completed_matches.py --write` — pure function
+  of the settlement store, never hand-edited. It is in the **LEDGERS** list of all three workflows;
+  drop it and the ratchet silently resets every run. A tour is also **not marked frozen** while any
+  published match still owes a baseline — a dormant tour never runs again (that is how the LPL's
+  1074 rows had to be restored by hand on 14 Aug).
 - **cricsheet rows resolve by ID, not name** (`resolve_perf_pid` + `CS2PID`). cricsheet writes
   initials form (`PWH de Silva` = Wanindu Hasaranga) — name matching zeroed him on two matches the
   app badged COMPLETED with no flag. Two different "E Jones" exist in the Hundred Women's data; only

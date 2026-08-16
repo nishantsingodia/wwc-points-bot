@@ -87,6 +87,7 @@ import os
 import re
 import sys
 import time
+import urllib.error
 import urllib.request
 from collections import defaultdict, namedtuple
 
@@ -95,6 +96,11 @@ BRIDGE_PATH = os.path.join(REG_DIR, "cricbuzz_bridge.json")
 PLAYERS_PATH = os.path.join(REG_DIR, "players.json")
 PID_MAP_PATH = os.path.join(REG_DIR, "pid_map.json")
 NEEDS_PATH = os.path.join(REG_DIR, "needs_cricinfo_pending.json")
+MATCH_MAP_PATH = os.path.join(REG_DIR, "cricbuzz_match_map.json")
+TOURS_PATH = os.path.join(os.path.dirname(REG_DIR), "tours.json")
+# The bot's own HTTP cache. `cricbuzz.cb_fetch` and `wc_fps_to_csv.espn_get` both write here, so
+# everything a --derive needs is normally already on disk and the whole pass is offline.
+BOT_CACHE = os.environ.get("WC_CACHE_DIR", "/tmp/wc_api_cache")
 
 SCHEMA = 1
 
@@ -107,7 +113,8 @@ CB_UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
          "(KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36")
 ESPN_UA = "wwc-points-bot/1.0 (+https://github.com/nishantsingodia/wwc-points-bot)"
 
-CB_SCORECARD_URL = "https://www.cricbuzz.com/live-cricket-scorecard/{mid}/x"
+CB_HOST = "https://www.cricbuzz.com"
+CB_SCORECARD_URL = CB_HOST + "/live-cricket-scorecard/{mid}/x"
 ESPN_PBP_URL = ("https://site.api.espn.com/apis/site/v2/sports/cricket/{league}/playbyplay"
                 "?event={ev}&limit=1000")
 
@@ -205,6 +212,79 @@ def fetch_espn_pbp(event_id, league="lanka-premier-league", cache_dir=None):
     duplicate. Prefer passing a payload the bot already validated."""
     cache = os.path.join(cache_dir, "pbp_%s.json" % event_id) if cache_dir else None
     return json.loads(_cached_get(ESPN_PBP_URL.format(league=league, ev=event_id), cache, ESPN_UA))
+
+
+def espn_pbp_from_bot_cache(event_id, espn_series, cache_dir):
+    """The SAME play-by-play the bot already fetched, read out of WC_CACHE_DIR. None if absent.
+
+    WHY: the two modules cache the identical bytes under different names. `cricbuzz.cb_fetch`
+    writes `cb_sc_<mid>.html`, which is byte-for-byte the name `fetch_cb_scorecard` uses, so the
+    Cricbuzz half of a --derive has always been free. The ESPN half was not: the bot writes
+    `espn_<series>_playbyplay_event_<ev>_limit_500_page_<n>.json` and this module looked for
+    `pbp_<ev>.json`, so every --derive re-fetched ESPN over the network. That is why the derive
+    corpus was hand-driven and why it fell 11 matches behind the pin ledger.
+
+    ⛔ COMPLETENESS IS CHECKED HERE, not assumed. `parse_espn` refuses a short card because a
+    truncated innings scores as if complete (the Hundred Women's sample came back 197 balls short
+    when one page 502'd). A truncated card is just as dangerous to IDENTITY: it silently changes
+    a player's fingerprint, which can pair him with the wrong person or drop him. So every page
+    ESPN says exists must be on disk and the item count must reach ESPN's own `count`; anything
+    less RAISES rather than returning a partial card — an absence must never present as a value.
+    """
+    pages, expected, npages = [], None, 1
+    page = 1
+    while page <= 10:
+        fp = os.path.join(cache_dir, "espn_%s_playbyplay_event_%s_limit_500_page_%d.json"
+                          % (espn_series, event_id, page))
+        if not os.path.exists(fp):
+            if page == 1:
+                return None                       # not cached at all — the caller may fetch
+            raise BridgeError("espn %s: playbyplay page %d of %d missing from %s — refusing to "
+                              "derive identity from a truncated card"
+                              % (event_id, page, npages, cache_dir))
+        with open(fp, encoding="utf-8") as fh:
+            body = fh.read()
+        if not body.strip():
+            raise BridgeError("espn %s: empty cache file %s — refusing to read it as data"
+                              % (event_id, fp))
+        d = json.loads(body)
+        com = (d.get("commentary") or {}) if isinstance(d, dict) else {}
+        if "commentary" not in (d or {}):
+            raise BridgeError("espn %s: cached page %d has no `commentary` key" % (event_id, page))
+        pages.append(d)
+        if page == 1:
+            try:
+                npages = int(com.get("pageCount") or 1)
+            except (TypeError, ValueError):
+                npages = 1
+            try:
+                expected = int(com.get("count")) if com.get("count") is not None else None
+            except (TypeError, ValueError):
+                expected = None
+        if page >= npages:
+            break
+        page += 1
+    items = []
+    for d in pages:
+        items += ((d.get("commentary") or {}).get("items") or [])
+    if expected is not None and len(items) < expected:
+        raise BridgeError("espn %s: cached %d of %d deliveries — truncated, refusing to derive "
+                          "identity from it" % (event_id, len(items), expected))
+    # ESPN emits byte-identical duplicate commentary items (ev1537345: 259 items, 255 unique ids).
+    # normalize_espn_card takes a MAX over running totals so a duplicate cannot inflate a
+    # fingerprint the way it inflated dots in the scorer — deduping anyway keeps the two readers'
+    # inputs identical, so a fingerprint derived here is the one the bot's card would give.
+    seen, uniq = set(), []
+    for it in items:
+        iid = it.get("id")
+        if iid is not None:
+            if iid in seen:
+                continue
+            seen.add(iid)
+        uniq.append(it)
+    merged = dict(pages[0])
+    merged["commentary"] = dict(pages[0].get("commentary") or {}, items=uniq)
+    return merged
 
 
 # ══════════════════════════════════════════════════════════════════════════════════════════════
@@ -581,6 +661,11 @@ def layer_b(cb_card, espn_card, a_pairs):
     for d in espn_card["dismissals"]:
         if d["bat"]:
             by_bat[d["bat"]].append(d)
+    # Layer A's claims, read BOTH ways, so the two in-match contradiction guards below can ask
+    # "is this cricbuzz id already spoken for?" and "is this cricinfo id already spoken for?".
+    a_inverse = {}
+    for _cb, _ci in a_pairs.items():
+        a_inverse.setdefault(str(_ci), _cb)
     pairs, unjoined = {}, []
     for d in cb_card["dismissals"]:
         ci_bat = a_pairs.get(d["bat"])
@@ -630,8 +715,68 @@ def layer_b(cb_card, espn_card, a_pairs):
                              "cb_bat": d["bat"], "code": d["code"], "desc": d["desc"],
                              "espn_desc": espn_d["desc"]})
             continue
+        # ⛔ THE TWO FEEDS NAMING DIFFERENT FIELDERS IS A **VALUE** DISAGREEMENT, NOT AN IDENTITY
+        # ONE — and until 16 Aug 2026 this join silently converted one into the other. Measured
+        # over all 92 pinned matches with cached payloads: 587 fielder pairs, 534 (90.9%) merely
+        # restate what Layer A already derived in the same match, 49 are genuinely NEW (the payoff
+        # — a substitute or a pure fielder Layer A can never reach), and **4 CONTRADICT Layer A
+        # inside that same match**. All four are one shape: Cricbuzz's card credits the catch to
+        # player X, ESPN's credits it to a different player Y, and the join then asserts
+        # "cricbuzz X IS cricinfo Y".
+        #     cb144747/ev1521239  CB "CJ Jordan c Will Jacks"        ESPN "c Vince"
+        #     cb144981/ev1521261  CB "TK-Cadmore c Lhuan-dre Pretorius"  ESPN "c Livingstone"
+        #     cb145302/ev1521224  CB "A Capsey c Grace Harris"       ESPN "c Higham"
+        #     cb157127/ev1537348  CB "V Shankar c Towhid Hridoy"     ESPN "c Mathew"
+        # The cost was not a wrong pair — compile_bridge caught the contradiction — it was worse:
+        # the single bad claim REVOKED the player outright, throwing away 8, 8, 8 and 2 matches of
+        # good fingerprint evidence respectively, and putting Will Jacks, Lhuan-dre Pretorius and
+        # Grace Harris on "Needs Cricinfo ID" as unanswerable identity questions when their
+        # cricinfo id was never in doubt. One disputed catch cost three players their bridge.
+        # So: when Layer A has ALREADY paired this cricbuzz fielder in THIS match, from figures
+        # that are unique on BOTH sides and independent of the disputed field, it wins and the
+        # dismissal claim is discarded as identity evidence. The disagreement is not lost — it is
+        # already reported through the right channel, as a `catches` diff on the Recon tab
+        # (cb_match_perf cross-checks catches/stumpings/runouts per player), which is exactly
+        # CLAUDE.md rule E: identity → Needs Cricinfo ID, values → Recon Review, never mixed.
+        prior = a_pairs.get(d["fielder"])
+        if prior is not None and str(prior) != str(espn_d["fielder"]):
+            unjoined.append({"reason": "fielder attribution disputed (VALUE, -> Recon): layer A "
+                                       "paired this cricbuzz fielder to ci:%s in this same match"
+                                       % prior,
+                             "cb_bat": d["bat"], "code": d["code"], "desc": d["desc"],
+                             "espn_desc": espn_d["desc"], "cb_fielder": d["fielder"],
+                             "layer_a": str(prior), "layer_b": str(espn_d["fielder"])})
+            continue
+        # THE MIRROR of the guard above, and the reason it exists is that a guard on one side but
+        # not its mirror is this repo's most-repeated bug. Same disputed catch, read from the other
+        # end: the cricinfo fielder ESPN names is already Layer A's for a DIFFERENT cricbuzz id, so
+        # accepting would put two cricbuzz ids on one human. Measured occurrences in the 92-match
+        # corpus: **0 of 49** new pairs — it costs nothing today and closes the door the four cases
+        # above came through, in the direction where the contradiction would otherwise only surface
+        # at store level (compile_bridge's ci→cb check) and revoke BOTH innocent players.
+        owner = a_inverse.get(str(espn_d["fielder"]))
+        if owner is not None and str(owner) != str(d["fielder"]):
+            unjoined.append({"reason": "fielder attribution disputed (VALUE, -> Recon): layer A "
+                                       "already gave ci:%s to cricbuzz %s in this same match"
+                                       % (espn_d["fielder"], owner),
+                             "cb_bat": d["bat"], "code": d["code"], "desc": d["desc"],
+                             "espn_desc": espn_d["desc"], "cb_fielder": d["fielder"],
+                             "layer_a": str(owner), "layer_b": str(espn_d["fielder"])})
+            continue
         pairs[d["fielder"]] = espn_d["fielder"]
     return pairs, unjoined
+
+
+def fielder_disputes(unjoined):
+    """The dismissals both guards above refused — the two feeds naming different fielders.
+
+    Pulled out as a NAMED diagnostic because `layer_conflicts` used to be the only place this
+    class ever appeared, and now that layer_b refuses them, `layer_conflicts` is empty by
+    construction. An observation that stops being emitted anywhere is the "written but never read"
+    bug run backwards; this keeps it readable, on the diagnostics side of the wall where a value
+    disagreement belongs.
+    """
+    return [u for u in unjoined if u.get("reason", "").startswith("fielder attribution disputed")]
 
 
 # ══════════════════════════════════════════════════════════════════════════════════════════════
@@ -684,12 +829,13 @@ def derive_match(cb_card, espn_card, cb_match_id, espn_event_id, date=""):
                   "why": "fingerprint not unique on both sides; no dismissal to join on"}
                  for pid in sorted(fingerprints(cb_card), key=_id_key) if pid not in bridged]
 
-    # Layer B disagreeing with Layer A about the SAME cricbuzz id inside ONE match is the
-    # loudest corruption signal there is. Both claims are still emitted — compile_bridge revokes
-    # the pair and a human sees WHICH two cricinfo ids were claimed; suppressing one here would
-    # hide the disagreement and quietly keep a pair that might be the wrong one. The only such
-    # case measured in 16 matches was the substitute mix-up now caught in layer_b, so if this
-    # list is ever non-empty a NEW failure mode has appeared and wants reading.
+    # Layer B disagreeing with Layer A about the SAME cricbuzz id inside ONE match used to be
+    # emitted as two rival confirmations, on the reasoning that "suppressing one would hide the
+    # disagreement". It hid something worse: the disagreement is about WHO TOOK THE CATCH, and
+    # letting it into the identity log revoked three players whose id was never in question (see
+    # layer_b). `layer_b` now refuses those joins outright, so this list is EMPTY BY CONSTRUCTION
+    # and stays as a tripwire — non-empty here means a path was added that can still smuggle a
+    # value disagreement into the fact log. The disagreements themselves are in `fielder_disputes`.
     conflicts = [{"cricbuzz_id": k, "layer_a": a_pairs[k], "layer_b": b_pairs[k]}
                  for k in sorted(b_pairs) if k in a_pairs and a_pairs[k] != b_pairs[k]]
 
@@ -697,6 +843,7 @@ def derive_match(cb_card, espn_card, cb_match_id, espn_event_id, date=""):
             "layer_a": len(a_pairs), "layer_b": len(b_pairs),
             "layer_b_new": sum(1 for k in b_pairs if k not in a_pairs),
             "layer_conflicts": conflicts,
+            "fielder_disputes": fielder_disputes(unjoined),
             "cb_players": len(fingerprints(cb_card)), "espn_players": len(fingerprints(espn_card)),
             "totals_delta": totals_delta(cb_card, espn_card),
             "unjoined": unjoined, "unbridged_cb": unbridged}
@@ -829,19 +976,63 @@ def save_store(store, path=BRIDGE_PATH):
     return path
 
 
+def cricbuzz_profile_url(cricbuzz_id):
+    """The human's landing page for a cricbuzz id. `/x` is the slug placeholder Cricbuzz accepts
+    in place of the real name — the same convention `cricbuzz.scorecard_html` already uses.
+    VERIFIED 16 Aug 2026: /profiles/<id>/x → HTTP 200 with the right player's <title> on
+    10693 Glenn Phillips, 11101 Grace Harris, 12258 Will Jacks, 50545 Lhuan-dre Pretorius,
+    12163 Virandeep Singh, 6667 Imran Tahir, 10384 Shai Hope. Bare /profiles/<id> (no slug) is a
+    404 that still returns a 166 KB body, so a naive fetcher would read it as a real page."""
+    return "%s/profiles/%s/x" % (CB_HOST, cricbuzz_id)
+
+
+def cricinfo_profile_url(cricinfo_id):
+    return "https://www.espncricinfo.com/cricketers/x-%s" % cricinfo_id
+
+
 def resolve(store, cricbuzz_id, purpose=PURPOSE_CROSSCHECK):
     """The ONLY sanctioned read path. Returns a Resolution whose `status` names the failure —
-    never a bare None a caller can mistake for a zero."""
+    never a bare None a caller can mistake for a zero.
+
+    ⚠ `detail` IS A USER-FACING STRING. `wc_fps_to_csv.cb_match_perf` interpolates it verbatim
+    into the "Needs Cricinfo ID" row a human has to answer, so it has to carry the evidence, not
+    just the verdict. It used to read `no confirmation on any bridged match` / `cb_id claimed by
+    2 cricinfo ids` — true, unanswerable, and with no way to even see who the player is. Every
+    branch now carries the cricbuzz profile URL, and where a candidate exists, that candidate with
+    its evidence, so answering is a look-and-confirm rather than a research project.
+    """
     cb_id = str(cricbuzz_id)
-    if cb_id in store.get("revoked", {}):
-        return Resolution(None, 0, REVOKED, store["revoked"][cb_id]["reason"])
+    cb_url = cricbuzz_profile_url(cb_id)
+    rev = store.get("revoked", {}).get(cb_id)
+    if rev:
+        # Name WHICH ids collided and how much evidence each has: the shape of a contradiction is
+        # almost always lopsided (8 matches vs 1), and the human cannot see that from the reason.
+        claims = rev.get("claims") or {}
+        ranked = sorted(claims.items(), key=lambda kv: (-len(kv[1]), kv[0]))
+        ev = "; ".join("ci:%s (%d match%s: %s) %s"
+                       % (ci, len(ms), "" if len(ms) == 1 else "es", ", ".join(sorted(ms)),
+                          cricinfo_profile_url(ci))
+                       for ci, ms in ranked)
+        return Resolution(None, 0, REVOKED, "%s — %s | cricbuzz %s" % (rev["reason"], ev, cb_url))
     rec = store.get("bridge", {}).get(cb_id)
     if not rec:
-        return Resolution(None, 0, UNKNOWN, "no confirmation on any bridged match")
+        # Say how big the corpus he is absent from actually IS. "No confirmation" reads as "we
+        # looked everywhere"; for most of these the truth is that the derive corpus simply does
+        # not yet include the match he played in (11 of the 94 pinned matches were underived on
+        # 16 Aug 2026, and 6 of the tab's rows were one single match among them).
+        n = len({m for r in store.get("bridge", {}).values() for m in r["matches"]})
+        return Resolution(None, 0, UNKNOWN,
+                          "no confirmation in the %d derived match(es) — either he has not played "
+                          "one of them, or his match is pinned but not yet derived (run "
+                          "`registry/cricbuzz_bridge.py --derive --from-map`) | cricbuzz %s"
+                          % (n, cb_url))
     need = MIN_MATCHES[purpose]
     if rec["tier"] < need:
         return Resolution(None, rec["tier"], INSUFFICIENT_TIER,
-                          "tier %d < %d required for %s" % (rec["tier"], need, purpose))
+                          "candidate ci:%s from %d match(es) (%s) but %s needs %d — %s | "
+                          "cricbuzz %s"
+                          % (rec["cricinfo_id"], rec["tier"], ", ".join(rec["matches"]), purpose,
+                             need, cricinfo_profile_url(rec["cricinfo_id"]), cb_url))
     return Resolution(rec["cricinfo_id"], rec["tier"], OK,
                       "%d match(es): %s" % (rec["tier"], ", ".join(rec["matches"])))
 
@@ -953,12 +1144,67 @@ def rekey(store, pid_map_path=PID_MAP_PATH):
 # ══════════════════════════════════════════════════════════════════════════════════════════════
 # 10. CLI
 # ══════════════════════════════════════════════════════════════════════════════════════════════
-def _load_pair(cb_id, espn_id, cb_cache, espn_cache, league):
+def _load_pair(cb_id, espn_id, cb_cache, espn_cache, league, espn_series=None, bot_cache=None):
     html = fetch_cb_scorecard(cb_id, cb_cache)
     card, header = parse_cb_scorecard_html(html)
     cb = normalize_cb_card(card)
-    espn = normalize_espn_card(fetch_espn_pbp(espn_id, league, espn_cache))
-    return cb, espn, match_date(header)
+    pbp = None
+    if bot_cache and espn_series:
+        pbp = espn_pbp_from_bot_cache(espn_id, espn_series, bot_cache)
+    if pbp is None:
+        # ⚠ THE "LEAGUE" PATH SEGMENT IS THE ESPN **SERIES ID**, not a slug. `wc_fps_to_csv.espn_get`
+        # builds `{ESPN_BASE}/{ESPN_SERIES}/{path}` and that is the only shape ESPN answers for
+        # these events. The `--league lanka-premier-league` default is a legacy string that works
+        # for LPL alone: falling back to it for a Hundred event returned **HTTP 500**, which the
+        # caller would otherwise have logged as "ESPN has no play-by-play for this match".
+        # Verified 16 Aug 2026: .../cricket/1521193/playbyplay?event=1521218 → 200, 188 items.
+        pbp = fetch_espn_pbp(espn_id, espn_series or league, espn_cache)
+    return cb, normalize_espn_card(pbp), match_date(header)
+
+
+# `tours.json` is the one place that says which ESPN series a Cricbuzz series is the witness for.
+# Read, never hard-coded: a fifth tour opting in must not need an edit here as well as there.
+def pairs_from_match_map(map_path=MATCH_MAP_PATH, tours_path=TOURS_PATH, series=None):
+    """→ [(cb_match_id, espn_event_id, cricbuzz_series, espn_series, date)] from the PIN LEDGER.
+
+    ⛔ THIS IS THE JOIN THAT DID NOT EXIST. `registry/cricbuzz_match_map.json` knows every
+    cb-match ↔ ESPN-event pairing that has ever been confirmed (94 pins on 16 Aug 2026); the
+    bridge's --derive took hand-typed `--pair CBID:ESPNID` arguments. Nothing connected them, so
+    the derive corpus drifted behind the ledger and stayed there: **83 of 94 pinned matches were
+    derived, 11 were not**, and six of the twelve `cb:` rows sitting on "Needs Cricinfo ID" were
+    one single underived match (cb154370, CPL Guyana v Jamaica, 14 Aug) whose whole XI Layer A
+    pairs 22/22. Written-but-never-read, in the shape where the unread thing is a whole ledger.
+    """
+    with open(map_path, encoding="utf-8") as fh:
+        store = json.load(fh)
+    with open(tours_path, encoding="utf-8") as fh:
+        tours = json.load(fh)
+    cb2espn = {str(t["cricbuzz_series"]): str(t.get("espn_series") or "")
+               for t in tours if t.get("cricbuzz_series")}
+    out, unknown = [], set()
+    for key, pin in sorted(store.get("pins", {}).items()):
+        cb_series = str(pin.get("series_id") or "")
+        if series and cb_series != str(series):
+            continue
+        espn_series = cb2espn.get(cb_series)
+        if not espn_series:
+            unknown.add(cb_series)
+            continue
+        for ev in pin.get("espn_events") or []:
+            out.append((str(pin["cricbuzz_match_id"]), str(ev), cb_series, espn_series,
+                        pin.get("date", "")))
+    for s in sorted(unknown):
+        print("  cricbuzz series %s is pinned but no tour in tours.json claims it — its matches "
+              "are NOT in the derive corpus" % s, file=sys.stderr)
+    # A pin can carry more than one ESPN event only if the map itself is contradicted, and it
+    # refuses both sides in that case — so this is deduped for safety, not because it is expected.
+    seen, uniq = set(), []
+    for row in out:
+        if row[:2] in seen:
+            continue
+        seen.add(row[:2])
+        uniq.append(row)
+    return uniq
 
 
 def main(argv=None):
@@ -970,8 +1216,16 @@ def main(argv=None):
                     help="print the residual as Needs-Cricinfo-ID rows (identity tab, never Recon)")
     ap.add_argument("--rekey", action="store_true")
     ap.add_argument("--pair", action="append", default=[], metavar="CBID:ESPNID")
+    ap.add_argument("--from-map", action="store_true",
+                    help="take the pairs from registry/cricbuzz_match_map.json (the pin ledger) "
+                         "instead of hand-typed --pair args — the corpus can then never lag it")
+    ap.add_argument("--series", default=None,
+                    help="with --from-map, restrict to one cricbuzz series id")
     ap.add_argument("--cb-cache", default=None)
     ap.add_argument("--espn-cache", default=None)
+    ap.add_argument("--bot-cache", default=BOT_CACHE,
+                    help="the bot's WC_CACHE_DIR; ESPN play-by-play is read from it when present "
+                         "so a re-derive is offline. '' disables.")
     ap.add_argument("--league", default="lanka-premier-league")
     ap.add_argument("--store", default=BRIDGE_PATH)
     ap.add_argument("--dry-run", action="store_true")
@@ -979,15 +1233,38 @@ def main(argv=None):
 
     store = load_store(args.store)
     if args.derive:
+        specs = [(cb_id, espn_id, None, None, "") for cb_id, _, espn_id in
+                 (s.partition(":") for s in args.pair)]
+        if args.from_map:
+            already = {m for r in store.get("bridge", {}).values() for m in r["matches"]}
+            already |= {c["match"] for r in store.get("revoked", {}).values()
+                        for c in r["confirmations"]}
+            pinned = pairs_from_match_map(series=args.series)
+            fresh = [p for p in pinned if match_key(p[0], p[1]) not in already]
+            print("from-map: %d pinned pair(s), %d already derived, %d to derive"
+                  % (len(pinned), len(pinned) - len(fresh), len(fresh)), file=sys.stderr)
+            # Re-derive EVERY pin, not just the new ones: `bridge`/`revoked` are a pure function
+            # of the fact log, so a logic change (the layer_b fielder-dispute guard, 16 Aug) only
+            # reaches already-stored confirmations if the matches that produced them are derived
+            # again. Deriving only the gap would have left the three revoked players revoked.
+            specs = list(pinned)
+        # CB scorecards live under the SAME name in both caches (`cb_sc_<mid>.html`), so pointing
+        # --cb-cache at the bot's directory is always safe and is the default when --bot-cache is.
+        cb_cache = args.cb_cache or (args.bot_cache or None)
         confs, diags = [], []
-        for spec in args.pair:
-            cb_id, espn_id = spec.split(":")
+        for cb_id, espn_id, _cb_series, espn_series, _date in specs:
+            spec = "%s:%s" % (cb_id, espn_id)
             try:
-                cb, espn, date = _load_pair(cb_id, espn_id, args.cb_cache, args.espn_cache,
-                                            args.league)
+                cb, espn, date = _load_pair(cb_id, espn_id, cb_cache, args.espn_cache,
+                                            args.league, espn_series, args.bot_cache or None)
                 c, d = derive_match(cb, espn, cb_id, espn_id, date)
             except BridgeError as e:
                 print("REFUSED %s: %s" % (spec, e), file=sys.stderr)
+                continue
+            except (OSError, urllib.error.URLError) as e:
+                # A payload we cannot READ is not a match with no players. Name it and move on;
+                # the pin stays, so the next run picks it up (an absence is not a contradiction).
+                print("UNREADABLE %s: %s" % (spec, e), file=sys.stderr)
                 continue
             confs.extend(c)
             diags.append(d)
@@ -997,10 +1274,37 @@ def main(argv=None):
             for x in d["layer_conflicts"]:
                 print("   ⚠ LAYER CONFLICT in one match: cb%s -> A says ci:%s, B says ci:%s"
                       % (x["cricbuzz_id"], x["layer_a"], x["layer_b"]), file=sys.stderr)
+            for x in d["fielder_disputes"]:
+                # A VALUE disagreement. Printed so it is visible, NOT stored as identity: the
+                # Recon tab already carries it as a per-player `catches` diff.
+                print("   fielder disputed (value, already a Recon catches diff): cb%s — "
+                      "cricbuzz %r vs espn %r; layer A keeps ci:%s"
+                      % (x.get("cb_fielder"), x.get("desc"), x.get("espn_desc"),
+                         x.get("layer_a")), file=sys.stderr)
             for x in d["totals_delta"]:
                 print("   advisory (Recon, not identity): %s cb=%s espn=%s"
                       % (x["field"], x["cb"], x["espn"]), file=sys.stderr)
-        store = build_store(merge_confirmations(confirmations_log(store), confs))
+        base = confirmations_log(store)
+        if args.from_map:
+            # ⛔ SUPERSEDE ONLY WHAT WAS ACTUALLY RE-DERIVED. `bridge`/`revoked` are a pure
+            # function of the fact log, so a logic change (the layer_b fielder-dispute guard)
+            # reaches stored confirmations only if their match is derived again and the OLD
+            # confirmations for that match are dropped — otherwise the rival claim survives in
+            # the log and the player stays revoked.
+            # But the set to drop is the matches this pass DERIVED, never the matches it
+            # ATTEMPTED. Keying it on `specs` cost me cb145245/espn1521218 on the first run:
+            # its ESPN payload had aged out of the cache, the derive was skipped — and its 22
+            # confirmations were deleted anyway, dropping 22 players a tier. An unreadable
+            # payload is an ABSENCE; absence is not evidence that nobody played.
+            derived = {d["match"] for d in diags}
+            base = [c for c in base if c["match"] not in derived]
+            skipped = [s for s in specs if match_key(s[0], s[1]) not in derived]
+            if skipped:
+                print("  %d pinned pair(s) NOT re-derived (payload unreadable/absent); their "
+                      "existing confirmations are KEPT: %s"
+                      % (len(skipped), ", ".join(match_key(s[0], s[1]) for s in skipped)),
+                      file=sys.stderr)
+        store = build_store(merge_confirmations(base, confs))
         if not args.dry_run:
             save_store(store, args.store)
     if args.rekey:
