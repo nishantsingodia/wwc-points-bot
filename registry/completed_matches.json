@@ -830,6 +830,15 @@
    "provenance": "derived-from-settlement"
   },
   {
+   "tour": "Caribbean Premier League 2026",
+   "match_key": "2026-08-14::guyana amazon warriors|jamaica kingsmen",
+   "match": "Match 6 — MTJAM v MTGUY",
+   "date": "2026-08-14",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-16",
+   "provenance": "live"
+  },
+  {
    "tour": "The Hundred Men's Competition 2026",
    "match_key": "2026-08-14::manchester super giants|sunrisers leeds",
    "match": "Match 32 — MTMSG v MTSUNL",
