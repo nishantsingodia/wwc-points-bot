@@ -143,6 +143,12 @@ _CB_SUB = "(sub)"
 
 METHOD_FINGERPRINT = "fingerprint"
 METHOD_DISMISSAL = "dismissal"
+METHOD_MANUAL = "manual"        # the OWNER answered a "Needs Cricinfo ID" row. See adopt().
+# A manual confirmation has no match, so it needs a match KEY that cannot collide with a real one
+# and cannot be mistaken for one. Because tier counts DISTINCT MATCHES, every manual answer for a
+# player collapses into this single slot — so a hand-typed id yields tier 1 (cross-check) and can
+# never on its own reach the tier 2 that CREATING points from a Cricbuzz-only field requires.
+MANUAL_MATCH = "manual/owner-answer"
 
 # Resolution statuses. An absence must never present as a value (CLAUDE.md rule): every failure
 # mode gets its own NAME, so a caller cannot mistake "we don't know him" for "he scored nothing".
@@ -211,7 +217,28 @@ def fetch_espn_pbp(event_id, league="lanka-premier-league", cache_dir=None):
     bot's own parse_espn has the completeness gate (espn_expected_balls) this module does not
     duplicate. Prefer passing a payload the bot already validated."""
     cache = os.path.join(cache_dir, "pbp_%s.json" % event_id) if cache_dir else None
-    return json.loads(_cached_get(ESPN_PBP_URL.format(league=league, ev=event_id), cache, ESPN_UA))
+    pbp = json.loads(_cached_get(ESPN_PBP_URL.format(league=league, ev=event_id), cache, ESPN_UA))
+    # Completeness, on the network path too — `limit=1000` covers a T20/Hundred innings pair with
+    # room to spare, but "covers it in practice" is not a check. A card short of ESPN's own
+    # `count`, or spread over a page this fetcher never asks for, would silently change the
+    # fingerprints identity is derived from. Raise; never derive from a partial card.
+    com = (pbp.get("commentary") or {}) if isinstance(pbp, dict) else {}
+    items = com.get("items") or []
+    try:
+        npages = int(com.get("pageCount") or 1)
+    except (TypeError, ValueError):
+        npages = 1
+    try:
+        expected = int(com.get("count")) if com.get("count") is not None else None
+    except (TypeError, ValueError):
+        expected = None
+    if npages > 1:
+        raise BridgeError("espn %s: play-by-play is %d pages at limit=1000 and this fetcher reads "
+                          "only the first — refusing a truncated card" % (event_id, npages))
+    if expected is not None and len(items) < expected:
+        raise BridgeError("espn %s: %d of %d deliveries — truncated, refusing to derive identity "
+                          "from it" % (event_id, len(items), expected))
+    return pbp
 
 
 def espn_pbp_from_bot_cache(event_id, espn_series, cache_dir):
@@ -866,8 +893,14 @@ def merge_confirmations(existing, new):
         if k in seen:
             continue
         seen.add(k)
-        out.append({"cricbuzz_id": str(c["cricbuzz_id"]), "cricinfo_id": str(c["cricinfo_id"]),
-                    "match": c["match"], "method": c["method"], "date": c.get("date", "")})
+        row = {"cricbuzz_id": str(c["cricbuzz_id"]), "cricinfo_id": str(c["cricinfo_id"]),
+               "match": c["match"], "method": c["method"], "date": c.get("date", "")}
+        # This function RE-PROJECTS every confirmation, so any field it does not name is deleted
+        # here — the same "written and never read" shape as the reader dropping it, one layer up.
+        # `source` (who answered, and why) survives only because it is named.
+        if c.get("source"):
+            row["source"] = c["source"]
+        out.append(row)
     return out
 
 
@@ -906,8 +939,15 @@ def compile_bridge(confirmations):
         matches = sorted({c["match"] for c in confs})
         bridge[cb_id] = {"cricinfo_id": ci_id, "tier": len(matches), "matches": matches,
                          "methods": sorted({c["method"] for c in confs}),
-                         "confirmations": [{"match": c["match"], "method": c["method"],
-                                            "date": c["date"]} for c in confs]}
+                         # `source` is written ONLY when there is one (a manual answer carries
+                         # who/why). Emitting an empty string on all 2000 derived confirmations
+                         # would rewrite the whole file for nothing and break the byte-identical
+                         # round-trip the determinism test pins.
+                         "confirmations": [dict({"match": c["match"], "method": c["method"],
+                                                 "date": c["date"]},
+                                                **({"source": c["source"]} if c.get("source")
+                                                   else {}))
+                                           for c in confs]}
 
     # mirror direction
     by_ci = defaultdict(list)
@@ -930,14 +970,18 @@ def confirmations_log(store):
     """Flatten the per-pair provenance back into the full-form fact log compile_bridge eats.
     The file stores each confirmation exactly ONCE, under its pair; this is the reader."""
     out = []
+    # `source` travels back out too. A field the writer emits and the reader drops is erased on the
+    # next recompile — the manual answer would keep its id and silently lose WHO said so.
     for cb_id, rec in store.get("bridge", {}).items():
         for c in rec["confirmations"]:
             out.append({"cricbuzz_id": cb_id, "cricinfo_id": rec["cricinfo_id"],
-                        "match": c["match"], "method": c["method"], "date": c.get("date", "")})
+                        "match": c["match"], "method": c["method"], "date": c.get("date", ""),
+                        "source": c.get("source", "")})
     for cb_id, rec in store.get("revoked", {}).items():
         for c in rec["confirmations"]:
             out.append({"cricbuzz_id": cb_id, "cricinfo_id": c["cricinfo_id"],
-                        "match": c["match"], "method": c["method"], "date": c.get("date", "")})
+                        "match": c["match"], "method": c["method"], "date": c.get("date", ""),
+                        "source": c.get("source", "")})
     return sorted(out, key=_conf_sort_key)
 
 
@@ -1118,6 +1162,40 @@ def needs_cricinfo_rows(store, diagnostics, players_path=PLAYERS_PATH):
     return rows
 
 
+def adopt(store, cricbuzz_id, cricinfo_id, source=""):
+    """Record the OWNER's answer to a "Needs Cricinfo ID" row as a confirmation. (store, changed).
+
+    ⛔ THE ANSWER HAD NOWHERE TO LAND. `read_needs_cricinfo` consumes a filled-in id into
+    `manual_ci_bridges.json` as `ci:<id> -> [normalised NAME]`, and its `extra` alias is built only
+    for a `slug:`/`uncapped:` pid — so for a `cb:<id>` row **the cricbuzz id is discarded**. The
+    question asked was "which cricinfo id is cricbuzz player N?"; the answer was filed as a name
+    alias, which is the one thing that may never decide identity, and the bridge went on saying
+    `unknown` for N. Measured on the live tab, 16 Aug 2026: `cb:12163` and `cb:10693` were both
+    answered (633660, 823509) and both still resolved to UNKNOWN, so the same row regenerates
+    every time either man fields a catch. Written, and never read.
+
+    Deliberately NOT a trump card. If the store already DERIVED a different cricinfo id for this
+    cricbuzz id, this claim contradicts it and `compile_bridge` revokes BOTH — loudly, for a human
+    — rather than letting one keystroke overwrite N matches of both-sides-unique fingerprints.
+    A hand-typed id also cannot reach tier 2 by itself (see MANUAL_MATCH), so it enables the
+    cross-check and still gates CREATING points from a Cricbuzz-only field.
+    """
+    cb_id, ci_id = str(cricbuzz_id).strip(), re.sub(r"\D", "", str(cricinfo_id or ""))
+    if not cb_id.isdigit() or int(cb_id) <= 0:
+        raise BridgeError("refusing to adopt a non-positive cricbuzz id %r" % cricbuzz_id)
+    if not ci_id or int(ci_id) <= 0:
+        # An unparseable id is an ABSENCE. Writing "" would put a blank in the identity ledger
+        # wearing the clothes of an answer, and every later read would treat it as decided.
+        raise BridgeError("refusing to adopt cb%s -> %r: not a cricinfo id" % (cb_id, cricinfo_id))
+    conf = {"cricbuzz_id": cb_id, "cricinfo_id": ci_id, "match": MANUAL_MATCH,
+            "method": METHOD_MANUAL, "date": "", "source": source or ""}
+    log = confirmations_log(store)
+    merged = merge_confirmations(log, [conf])
+    if merged == log:
+        return store, False
+    return build_store(merged), True
+
+
 def rekey(store, pid_map_path=PID_MAP_PATH):
     """Apply registry/pid_map.json (old pid → 'ci:<id>') to the STORED cricinfo ids.
 
@@ -1215,6 +1293,11 @@ def main(argv=None):
     ap.add_argument("--needs", action="store_true",
                     help="print the residual as Needs-Cricinfo-ID rows (identity tab, never Recon)")
     ap.add_argument("--rekey", action="store_true")
+    ap.add_argument("--adopt", action="append", default=[], metavar="CBID:CRICINFOID",
+                    help="record the OWNER's answer to a `cb:` Needs-Cricinfo-ID row. Tier 1 "
+                         "(cross-check) only; it can never alone authorise CREATE.")
+    ap.add_argument("--why", default="",
+                    help="provenance for --adopt (who said so, and from what)")
     ap.add_argument("--pair", action="append", default=[], metavar="CBID:ESPNID")
     ap.add_argument("--from-map", action="store_true",
                     help="take the pairs from registry/cricbuzz_match_map.json (the pin ledger) "
@@ -1305,6 +1388,15 @@ def main(argv=None):
                       % (len(skipped), ", ".join(match_key(s[0], s[1]) for s in skipped)),
                       file=sys.stderr)
         store = build_store(merge_confirmations(base, confs))
+        if not args.dry_run:
+            save_store(store, args.store)
+    for spec in args.adopt:
+        cb_id, _, ci_id = spec.partition(":")
+        store, changed = adopt(store, cb_id, ci_id, source=args.why)
+        res = resolve(store, cb_id)
+        print("adopt cb%s -> ci:%s  %s  (now %s%s)"
+              % (cb_id, ci_id, "recorded" if changed else "already recorded", res.status,
+                 "" if res.status == OK else " — " + res.detail), file=sys.stderr)
         if not args.dry_run:
             save_store(store, args.store)
     if args.rekey:

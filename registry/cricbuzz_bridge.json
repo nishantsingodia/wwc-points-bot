@@ -4,10 +4,10 @@
  "_tiers": "tier = number of DISTINCT MATCHES confirming the pair. >=1 cross-check only; >=2 required before a CB-only field may CREATE points.",
  "_note": "each pair's `confirmations` list IS the fact log; bridge/revoked are a pure function of it (compile_bridge o confirmations_log). Regenerate, never hand-edit. A contradicted pair moves to `revoked` and is refused BOTH ways — there is no last-wins.",
  "counts": {
-  "confirmations": 1981,
-  "bridged": 391,
+  "confirmations": 2068,
+  "bridged": 398,
   "revoked": 0,
-  "tier2_plus": 325
+  "tier2_plus": 334
  },
  "bridge": {
   "466": {
@@ -95,6 +95,23 @@
      "match": "cb157193/espn1537354",
      "method": "fingerprint",
      "date": "2026-08-08"
+    }
+   ]
+  },
+  "657": {
+   "cricinfo_id": "230559",
+   "tier": 1,
+   "matches": [
+    "cb154392/espn1534186"
+   ],
+   "methods": [
+    "fingerprint"
+   ],
+   "confirmations": [
+    {
+     "match": "cb154392/espn1534186",
+     "method": "fingerprint",
+     "date": "2026-08-16"
     }
    ]
   },
@@ -283,10 +300,11 @@
   },
   "2245": {
    "cricinfo_id": "334621",
-   "tier": 4,
+   "tier": 5,
    "matches": [
     "cb154337/espn1534181",
     "cb154359/espn1534183",
+    "cb154381/espn1534185",
     "cb157116/espn1537347",
     "cb157149/espn1537350"
    ],
@@ -305,6 +323,11 @@
      "date": "2026-08-12"
     },
     {
+     "match": "cb154381/espn1534185",
+     "method": "fingerprint",
+     "date": "2026-08-14"
+    },
+    {
      "match": "cb157116/espn1537347",
      "method": "fingerprint",
      "date": "2026-07-29"
@@ -318,7 +341,7 @@
   },
   "2258": {
    "cricinfo_id": "308967",
-   "tier": 7,
+   "tier": 8,
    "matches": [
     "cb144684/espn1521233",
     "cb144725/espn1521237",
@@ -326,7 +349,8 @@
     "cb144794/espn1521244",
     "cb144838/espn1521248",
     "cb144871/espn1521251",
-    "cb144926/espn1521256"
+    "cb144926/espn1521256",
+    "cb144994/espn1521263"
    ],
    "methods": [
     "fingerprint"
@@ -366,14 +390,20 @@
      "match": "cb144926/espn1521256",
      "method": "fingerprint",
      "date": "2026-08-08"
+    },
+    {
+     "match": "cb144994/espn1521263",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
   "2276": {
    "cricinfo_id": "230558",
-   "tier": 1,
+   "tier": 2,
    "matches": [
-    "cb154326/espn1534180"
+    "cb154326/espn1534180",
+    "cb154392/espn1534186"
    ],
    "methods": [
     "fingerprint"
@@ -383,6 +413,11 @@
      "match": "cb154326/espn1534180",
      "method": "fingerprint",
      "date": "2026-08-08"
+    },
+    {
+     "match": "cb154392/espn1534186",
+     "method": "fingerprint",
+     "date": "2026-08-16"
     }
    ]
   },
@@ -458,7 +493,7 @@
   },
   "6250": {
    "cricinfo_id": "272450",
-   "tier": 8,
+   "tier": 9,
    "matches": [
     "cb144662/espn1521231",
     "cb144706/espn1521235",
@@ -467,7 +502,8 @@
     "cb144860/espn1521250",
     "cb144904/espn1521254",
     "cb144937/espn1521257",
-    "cb144970/espn1521260"
+    "cb144970/espn1521260",
+    "cb144994/espn1521263"
    ],
    "methods": [
     "fingerprint"
@@ -512,6 +548,11 @@
      "match": "cb144970/espn1521260",
      "method": "fingerprint",
      "date": "2026-08-11"
+    },
+    {
+     "match": "cb144994/espn1521263",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -846,7 +887,7 @@
   },
   "6639": {
    "cricinfo_id": "211855",
-   "tier": 8,
+   "tier": 9,
    "matches": [
     "cb144684/espn1521233",
     "cb144725/espn1521237",
@@ -855,7 +896,8 @@
     "cb144838/espn1521248",
     "cb144871/espn1521251",
     "cb144926/espn1521256",
-    "cb144970/espn1521260"
+    "cb144970/espn1521260",
+    "cb144994/espn1521263"
    ],
    "methods": [
     "fingerprint"
@@ -900,6 +942,11 @@
      "match": "cb144970/espn1521260",
      "method": "fingerprint",
      "date": "2026-08-11"
+    },
+    {
+     "match": "cb144994/espn1521263",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -1093,12 +1140,13 @@
   },
   "6692": {
    "cricinfo_id": "8917",
-   "tier": 11,
+   "tier": 12,
    "matches": [
     "cb144816/espn1521246",
     "cb144849/espn1521249",
     "cb144926/espn1521256",
     "cb144959/espn1521259",
+    "cb154381/espn1534185",
     "cb156988/espn1537335",
     "cb156999/espn1537336",
     "cb157028/espn1537339",
@@ -1130,6 +1178,11 @@
      "match": "cb144959/espn1521259",
      "method": "fingerprint",
      "date": "2026-08-10"
+    },
+    {
+     "match": "cb154381/espn1534185",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     },
     {
      "match": "cb156988/espn1537335",
@@ -1170,9 +1223,10 @@
   },
   "6734": {
    "cricinfo_id": "249866",
-   "tier": 1,
+   "tier": 2,
    "matches": [
-    "cb154326/espn1534180"
+    "cb154326/espn1534180",
+    "cb154392/espn1534186"
    ],
    "methods": [
     "fingerprint"
@@ -1182,6 +1236,11 @@
      "match": "cb154326/espn1534180",
      "method": "fingerprint",
      "date": "2026-08-08"
+    },
+    {
+     "match": "cb154392/espn1534186",
+     "method": "fingerprint",
+     "date": "2026-08-16"
     }
    ]
   },
@@ -1246,11 +1305,12 @@
   },
   "7736": {
    "cricinfo_id": "276298",
-   "tier": 3,
+   "tier": 4,
    "matches": [
     "cb154315/espn1534179",
     "cb154348/espn1534182",
-    "cb154370/espn1534184"
+    "cb154370/espn1534184",
+    "cb154392/espn1534186"
    ],
    "methods": [
     "fingerprint"
@@ -1270,6 +1330,11 @@
      "match": "cb154370/espn1534184",
      "method": "fingerprint",
      "date": "2026-08-14"
+    },
+    {
+     "match": "cb154392/espn1534186",
+     "method": "fingerprint",
+     "date": "2026-08-16"
     }
    ]
   },
@@ -1669,9 +1734,10 @@
   },
   "8085": {
    "cricinfo_id": "232359",
-   "tier": 1,
+   "tier": 2,
    "matches": [
-    "cb154326/espn1534180"
+    "cb154326/espn1534180",
+    "cb154392/espn1534186"
    ],
    "methods": [
     "fingerprint"
@@ -1681,6 +1747,11 @@
      "match": "cb154326/espn1534180",
      "method": "fingerprint",
      "date": "2026-08-08"
+    },
+    {
+     "match": "cb154392/espn1534186",
+     "method": "fingerprint",
+     "date": "2026-08-16"
     }
    ]
   },
@@ -2140,9 +2211,10 @@
   },
   "8435": {
    "cricinfo_id": "530812",
-   "tier": 1,
+   "tier": 2,
    "matches": [
-    "cb154326/espn1534180"
+    "cb154326/espn1534180",
+    "cb154392/espn1534186"
    ],
    "methods": [
     "fingerprint"
@@ -2152,6 +2224,11 @@
      "match": "cb154326/espn1534180",
      "method": "fingerprint",
      "date": "2026-08-08"
+    },
+    {
+     "match": "cb154392/espn1534186",
+     "method": "fingerprint",
+     "date": "2026-08-16"
     }
    ]
   },
@@ -2467,10 +2544,11 @@
   },
   "8579": {
    "cricinfo_id": "431901",
-   "tier": 2,
+   "tier": 3,
    "matches": [
     "cb154315/espn1534179",
-    "cb154337/espn1534181"
+    "cb154337/espn1534181",
+    "cb154381/espn1534185"
    ],
    "methods": [
     "fingerprint"
@@ -2485,6 +2563,11 @@
      "match": "cb154337/espn1534181",
      "method": "fingerprint",
      "date": "2026-08-09"
+    },
+    {
+     "match": "cb154381/espn1534185",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -3293,10 +3376,11 @@
   },
   "9394": {
    "cricinfo_id": "494581",
-   "tier": 2,
+   "tier": 3,
    "matches": [
     "cb154315/espn1534179",
-    "cb154337/espn1534181"
+    "cb154337/espn1534181",
+    "cb154381/espn1534185"
    ],
    "methods": [
     "fingerprint"
@@ -3311,6 +3395,11 @@
      "match": "cb154337/espn1534181",
      "method": "fingerprint",
      "date": "2026-08-09"
+    },
+    {
+     "match": "cb154381/espn1534185",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -3339,7 +3428,7 @@
   },
   "9406": {
    "cricinfo_id": "604302",
-   "tier": 8,
+   "tier": 9,
    "matches": [
     "cb144662/espn1521231",
     "cb144717/espn1521236",
@@ -3348,7 +3437,8 @@
     "cb144838/espn1521248",
     "cb144893/espn1521253",
     "cb144915/espn1521255",
-    "cb144992/espn1521262"
+    "cb144992/espn1521262",
+    "cb154392/espn1534186"
    ],
    "methods": [
     "fingerprint"
@@ -3393,6 +3483,11 @@
      "match": "cb144992/espn1521262",
      "method": "fingerprint",
      "date": "2026-08-12"
+    },
+    {
+     "match": "cb154392/espn1534186",
+     "method": "fingerprint",
+     "date": "2026-08-16"
     }
    ]
   },
@@ -3439,7 +3534,7 @@
   },
   "9420": {
    "cricinfo_id": "517572",
-   "tier": 8,
+   "tier": 9,
    "matches": [
     "cb145011/espn1521197",
     "cb145066/espn1521201",
@@ -3448,7 +3543,8 @@
     "cb145223/espn1521216",
     "cb145267/espn1521220",
     "cb145291/espn1521223",
-    "cb145324/espn1521226"
+    "cb145324/espn1521226",
+    "cb145357/espn1521229"
    ],
    "methods": [
     "dismissal",
@@ -3494,12 +3590,17 @@
      "match": "cb145324/espn1521226",
      "method": "fingerprint",
      "date": "2026-08-11"
+    },
+    {
+     "match": "cb145357/espn1521229",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
   "9443": {
    "cricinfo_id": "625964",
-   "tier": 8,
+   "tier": 9,
    "matches": [
     "cb144684/espn1521233",
     "cb144725/espn1521237",
@@ -3508,7 +3609,8 @@
     "cb144838/espn1521248",
     "cb144871/espn1521251",
     "cb144926/espn1521256",
-    "cb144970/espn1521260"
+    "cb144970/espn1521260",
+    "cb144994/espn1521263"
    ],
    "methods": [
     "fingerprint"
@@ -3553,6 +3655,11 @@
      "match": "cb144970/espn1521260",
      "method": "fingerprint",
      "date": "2026-08-11"
+    },
+    {
+     "match": "cb144994/espn1521263",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -3735,11 +3842,12 @@
   },
   "9491": {
    "cricinfo_id": "269280",
-   "tier": 11,
+   "tier": 12,
    "matches": [
     "cb154315/espn1534179",
     "cb154348/espn1534182",
     "cb154370/espn1534184",
+    "cb154392/espn1534186",
     "cb156955/espn1537332",
     "cb156977/espn1537334",
     "cb156999/espn1537336",
@@ -3767,6 +3875,11 @@
      "match": "cb154370/espn1534184",
      "method": "fingerprint",
      "date": "2026-08-14"
+    },
+    {
+     "match": "cb154392/espn1534186",
+     "method": "fingerprint",
+     "date": "2026-08-16"
     },
     {
      "match": "cb156955/espn1537332",
@@ -4112,7 +4225,7 @@
   },
   "9537": {
    "cricinfo_id": "374936",
-   "tier": 8,
+   "tier": 9,
    "matches": [
     "cb145011/espn1521197",
     "cb145066/espn1521201",
@@ -4121,7 +4234,8 @@
     "cb145223/espn1521216",
     "cb145267/espn1521220",
     "cb145291/espn1521223",
-    "cb145324/espn1521226"
+    "cb145324/espn1521226",
+    "cb145357/espn1521229"
    ],
    "methods": [
     "fingerprint"
@@ -4166,15 +4280,21 @@
      "match": "cb145324/espn1521226",
      "method": "fingerprint",
      "date": "2026-08-11"
+    },
+    {
+     "match": "cb145357/espn1521229",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
   "9551": {
    "cricinfo_id": "326968",
-   "tier": 2,
+   "tier": 3,
    "matches": [
     "cb144926/espn1521256",
-    "cb144970/espn1521260"
+    "cb144970/espn1521260",
+    "cb144994/espn1521263"
    ],
    "methods": [
     "dismissal",
@@ -4190,6 +4310,11 @@
      "match": "cb144970/espn1521260",
      "method": "dismissal",
      "date": "2026-08-11"
+    },
+    {
+     "match": "cb144994/espn1521263",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -4265,7 +4390,7 @@
   },
   "9653": {
    "cricinfo_id": "483484",
-   "tier": 8,
+   "tier": 9,
    "matches": [
     "cb145033/espn1521198",
     "cb145066/espn1521201",
@@ -4274,7 +4399,8 @@
     "cb145187/espn1521212",
     "cb145212/espn1521215",
     "cb145280/espn1521222",
-    "cb145313/espn1521225"
+    "cb145313/espn1521225",
+    "cb145357/espn1521229"
    ],
    "methods": [
     "fingerprint"
@@ -4319,6 +4445,11 @@
      "match": "cb145313/espn1521225",
      "method": "fingerprint",
      "date": "2026-08-10"
+    },
+    {
+     "match": "cb145357/espn1521229",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -4383,7 +4514,7 @@
   },
   "9773": {
    "cricinfo_id": "297085",
-   "tier": 7,
+   "tier": 8,
    "matches": [
     "cb145011/espn1521197",
     "cb145121/espn1521206",
@@ -4391,7 +4522,8 @@
     "cb145223/espn1521216",
     "cb145267/espn1521220",
     "cb145291/espn1521223",
-    "cb145324/espn1521226"
+    "cb145324/espn1521226",
+    "cb145357/espn1521229"
    ],
    "methods": [
     "fingerprint"
@@ -4431,15 +4563,21 @@
      "match": "cb145324/espn1521226",
      "method": "fingerprint",
      "date": "2026-08-11"
+    },
+    {
+     "match": "cb145357/espn1521229",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
   "9785": {
    "cricinfo_id": "670013",
-   "tier": 2,
+   "tier": 3,
    "matches": [
     "cb154315/espn1534179",
-    "cb154337/espn1534181"
+    "cb154337/espn1534181",
+    "cb154381/espn1534185"
    ],
    "methods": [
     "fingerprint"
@@ -4454,6 +4592,11 @@
      "match": "cb154337/espn1534181",
      "method": "fingerprint",
      "date": "2026-08-09"
+    },
+    {
+     "match": "cb154381/espn1534185",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -5063,14 +5206,15 @@
   },
   "10209": {
    "cricinfo_id": "436757",
-   "tier": 6,
+   "tier": 7,
    "matches": [
     "cb144684/espn1521233",
     "cb144725/espn1521237",
     "cb144758/espn1521240",
     "cb144838/espn1521248",
     "cb144871/espn1521251",
-    "cb144926/espn1521256"
+    "cb144926/espn1521256",
+    "cb144994/espn1521263"
    ],
    "methods": [
     "dismissal",
@@ -5106,6 +5250,11 @@
      "match": "cb144926/espn1521256",
      "method": "fingerprint",
      "date": "2026-08-08"
+    },
+    {
+     "match": "cb144994/espn1521263",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -5128,7 +5277,7 @@
   },
   "10385": {
    "cricinfo_id": "641423",
-   "tier": 8,
+   "tier": 9,
    "matches": [
     "cb144662/espn1521231",
     "cb144706/espn1521235",
@@ -5137,7 +5286,8 @@
     "cb144860/espn1521250",
     "cb144904/espn1521254",
     "cb144937/espn1521257",
-    "cb144970/espn1521260"
+    "cb144970/espn1521260",
+    "cb144994/espn1521263"
    ],
    "methods": [
     "fingerprint"
@@ -5182,6 +5332,11 @@
      "match": "cb144970/espn1521260",
      "method": "fingerprint",
      "date": "2026-08-11"
+    },
+    {
+     "match": "cb144994/espn1521263",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -5850,9 +6005,10 @@
   },
   "10934": {
    "cricinfo_id": "784367",
-   "tier": 12,
+   "tier": 13,
    "matches": [
     "cb154359/espn1534183",
+    "cb154381/espn1534185",
     "cb156948/espn1537331",
     "cb156966/espn1537333",
     "cb157017/espn1537338",
@@ -5873,6 +6029,11 @@
      "match": "cb154359/espn1534183",
      "method": "fingerprint",
      "date": "2026-08-12"
+    },
+    {
+     "match": "cb154381/espn1534185",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     },
     {
      "match": "cb156948/espn1537331",
@@ -6248,7 +6409,7 @@
   },
   "11098": {
    "cricinfo_id": "597811",
-   "tier": 8,
+   "tier": 9,
    "matches": [
     "cb145011/espn1521197",
     "cb145066/espn1521201",
@@ -6257,7 +6418,8 @@
     "cb145223/espn1521216",
     "cb145267/espn1521220",
     "cb145291/espn1521223",
-    "cb145324/espn1521226"
+    "cb145324/espn1521226",
+    "cb145357/espn1521229"
    ],
    "methods": [
     "dismissal",
@@ -6303,6 +6465,11 @@
      "match": "cb145324/espn1521226",
      "method": "fingerprint",
      "date": "2026-08-11"
+    },
+    {
+     "match": "cb145357/espn1521229",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -6550,11 +6717,12 @@
   },
   "11189": {
    "cricinfo_id": "959789",
-   "tier": 3,
+   "tier": 4,
    "matches": [
     "cb154315/espn1534179",
     "cb154348/espn1534182",
-    "cb154370/espn1534184"
+    "cb154370/espn1534184",
+    "cb154392/espn1534186"
    ],
    "methods": [
     "fingerprint"
@@ -6574,14 +6742,20 @@
      "match": "cb154370/espn1534184",
      "method": "fingerprint",
      "date": "2026-08-14"
+    },
+    {
+     "match": "cb154392/espn1534186",
+     "method": "fingerprint",
+     "date": "2026-08-16"
     }
    ]
   },
   "11211": {
    "cricinfo_id": "914455",
-   "tier": 1,
+   "tier": 2,
    "matches": [
-    "cb154326/espn1534180"
+    "cb154326/espn1534180",
+    "cb154392/espn1534186"
    ],
    "methods": [
     "fingerprint"
@@ -6591,16 +6765,22 @@
      "match": "cb154326/espn1534180",
      "method": "fingerprint",
      "date": "2026-08-08"
+    },
+    {
+     "match": "cb154392/espn1534186",
+     "method": "fingerprint",
+     "date": "2026-08-16"
     }
    ]
   },
   "11214": {
    "cricinfo_id": "677081",
-   "tier": 3,
+   "tier": 4,
    "matches": [
     "cb154315/espn1534179",
     "cb154348/espn1534182",
-    "cb154370/espn1534184"
+    "cb154370/espn1534184",
+    "cb154392/espn1534186"
    ],
    "methods": [
     "fingerprint"
@@ -6620,16 +6800,39 @@
      "match": "cb154370/espn1534184",
      "method": "fingerprint",
      "date": "2026-08-14"
+    },
+    {
+     "match": "cb154392/espn1534186",
+     "method": "fingerprint",
+     "date": "2026-08-16"
+    }
+   ]
+  },
+  "11215": {
+   "cricinfo_id": "820691",
+   "tier": 1,
+   "matches": [
+    "cb154392/espn1534186"
+   ],
+   "methods": [
+    "fingerprint"
+   ],
+   "confirmations": [
+    {
+     "match": "cb154392/espn1534186",
+     "method": "fingerprint",
+     "date": "2026-08-16"
     }
    ]
   },
   "11217": {
    "cricinfo_id": "820677",
-   "tier": 3,
+   "tier": 4,
    "matches": [
     "cb154315/espn1534179",
     "cb154348/espn1534182",
-    "cb154370/espn1534184"
+    "cb154370/espn1534184",
+    "cb154392/espn1534186"
    ],
    "methods": [
     "fingerprint"
@@ -6649,15 +6852,21 @@
      "match": "cb154370/espn1534184",
      "method": "fingerprint",
      "date": "2026-08-14"
+    },
+    {
+     "match": "cb154392/espn1534186",
+     "method": "fingerprint",
+     "date": "2026-08-16"
     }
    ]
   },
   "11220": {
    "cricinfo_id": "670031",
-   "tier": 2,
+   "tier": 3,
    "matches": [
     "cb154315/espn1534179",
-    "cb154337/espn1534181"
+    "cb154337/espn1534181",
+    "cb154381/espn1534185"
    ],
    "methods": [
     "fingerprint"
@@ -6672,6 +6881,11 @@
      "match": "cb154337/espn1534181",
      "method": "fingerprint",
      "date": "2026-08-09"
+    },
+    {
+     "match": "cb154381/espn1534185",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -6700,10 +6914,11 @@
   },
   "11223": {
    "cricinfo_id": "820689",
-   "tier": 2,
+   "tier": 3,
    "matches": [
     "cb154315/espn1534179",
-    "cb154337/espn1534181"
+    "cb154337/espn1534181",
+    "cb154381/espn1534185"
    ],
    "methods": [
     "fingerprint"
@@ -6718,6 +6933,11 @@
      "match": "cb154337/espn1534181",
      "method": "fingerprint",
      "date": "2026-08-09"
+    },
+    {
+     "match": "cb154381/espn1534185",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -6805,7 +7025,7 @@
   },
   "11374": {
    "cricinfo_id": "922481",
-   "tier": 8,
+   "tier": 9,
    "matches": [
     "cb145033/espn1521198",
     "cb145066/espn1521201",
@@ -6814,7 +7034,8 @@
     "cb145187/espn1521212",
     "cb145212/espn1521215",
     "cb145280/espn1521222",
-    "cb145313/espn1521225"
+    "cb145313/espn1521225",
+    "cb145357/espn1521229"
    ],
    "methods": [
     "fingerprint"
@@ -6859,19 +7080,25 @@
      "match": "cb145313/espn1521225",
      "method": "fingerprint",
      "date": "2026-08-10"
+    },
+    {
+     "match": "cb145357/espn1521229",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
   "11398": {
    "cricinfo_id": "595739",
-   "tier": 6,
+   "tier": 7,
    "matches": [
     "cb144684/espn1521233",
     "cb144725/espn1521237",
     "cb144794/espn1521244",
     "cb144838/espn1521248",
     "cb144871/espn1521251",
-    "cb144926/espn1521256"
+    "cb144926/espn1521256",
+    "cb144994/espn1521263"
    ],
    "methods": [
     "dismissal",
@@ -6907,6 +7134,11 @@
      "match": "cb144926/espn1521256",
      "method": "fingerprint",
      "date": "2026-08-08"
+    },
+    {
+     "match": "cb144994/espn1521263",
+     "method": "dismissal",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -6971,14 +7203,15 @@
   },
   "11436": {
    "cricinfo_id": "596417",
-   "tier": 6,
+   "tier": 7,
    "matches": [
     "cb144662/espn1521231",
     "cb144706/espn1521235",
     "cb144758/espn1521240",
     "cb144860/espn1521250",
     "cb144904/espn1521254",
-    "cb144937/espn1521257"
+    "cb144937/espn1521257",
+    "cb144994/espn1521263"
    ],
    "methods": [
     "fingerprint"
@@ -7013,16 +7246,22 @@
      "match": "cb144937/espn1521257",
      "method": "fingerprint",
      "date": "2026-08-09"
+    },
+    {
+     "match": "cb144994/espn1521263",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
   "11445": {
    "cricinfo_id": "820351",
-   "tier": 3,
+   "tier": 4,
    "matches": [
     "cb154315/espn1534179",
     "cb154348/espn1534182",
-    "cb154370/espn1534184"
+    "cb154370/espn1534184",
+    "cb154392/espn1534186"
    ],
    "methods": [
     "fingerprint"
@@ -7042,16 +7281,22 @@
      "match": "cb154370/espn1534184",
      "method": "fingerprint",
      "date": "2026-08-14"
+    },
+    {
+     "match": "cb154392/espn1534186",
+     "method": "fingerprint",
+     "date": "2026-08-16"
     }
    ]
   },
   "11527": {
    "cricinfo_id": "909225",
-   "tier": 3,
+   "tier": 4,
    "matches": [
     "cb144871/espn1521251",
     "cb144926/espn1521256",
-    "cb144970/espn1521260"
+    "cb144970/espn1521260",
+    "cb144994/espn1521263"
    ],
    "methods": [
     "fingerprint"
@@ -7071,6 +7316,11 @@
      "match": "cb144970/espn1521260",
      "method": "fingerprint",
      "date": "2026-08-11"
+    },
+    {
+     "match": "cb144994/espn1521263",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -7177,10 +7427,11 @@
   },
   "11543": {
    "cricinfo_id": "391832",
-   "tier": 2,
+   "tier": 3,
    "matches": [
     "cb154337/espn1534181",
-    "cb154359/espn1534183"
+    "cb154359/espn1534183",
+    "cb154381/espn1534185"
    ],
    "methods": [
     "fingerprint"
@@ -7195,6 +7446,11 @@
      "match": "cb154359/espn1534183",
      "method": "fingerprint",
      "date": "2026-08-12"
+    },
+    {
+     "match": "cb154381/espn1534185",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -7334,10 +7590,11 @@
   },
   "11959": {
    "cricinfo_id": "485379",
-   "tier": 2,
+   "tier": 3,
    "matches": [
     "cb154337/espn1534181",
-    "cb154359/espn1534183"
+    "cb154359/espn1534183",
+    "cb154381/espn1534185"
    ],
    "methods": [
     "fingerprint"
@@ -7352,6 +7609,11 @@
      "match": "cb154359/espn1534183",
      "method": "fingerprint",
      "date": "2026-08-12"
+    },
+    {
+     "match": "cb154381/espn1534185",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -7528,7 +7790,7 @@
   },
   "12011": {
    "cricinfo_id": "944373",
-   "tier": 7,
+   "tier": 8,
    "matches": [
     "cb145033/espn1521198",
     "cb145066/espn1521201",
@@ -7536,7 +7798,8 @@
     "cb145154/espn1521209",
     "cb145187/espn1521212",
     "cb145212/espn1521215",
-    "cb145280/espn1521222"
+    "cb145280/espn1521222",
+    "cb145357/espn1521229"
    ],
    "methods": [
     "fingerprint"
@@ -7576,6 +7839,11 @@
      "match": "cb145280/espn1521222",
      "method": "fingerprint",
      "date": "2026-08-08"
+    },
+    {
+     "match": "cb145357/espn1521229",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -7932,6 +8200,24 @@
     }
    ]
   },
+  "12163": {
+   "cricinfo_id": "633660",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "owner answered the 'Needs Cricinfo ID' tab (cb:12163 -> 633660); cricbuzz.com/profiles/12163/x is Virandeep Singh and ci:633660 is Virandeep Singh — cross-checked 16 Aug 2026"
+    }
+   ]
+  },
   "12173": {
    "cricinfo_id": "921509",
    "tier": 6,
@@ -8029,7 +8315,7 @@
   },
   "12201": {
    "cricinfo_id": "911707",
-   "tier": 8,
+   "tier": 9,
    "matches": [
     "cb144662/espn1521231",
     "cb144706/espn1521235",
@@ -8038,7 +8324,8 @@
     "cb144860/espn1521250",
     "cb144904/espn1521254",
     "cb144937/espn1521257",
-    "cb144970/espn1521260"
+    "cb144970/espn1521260",
+    "cb144994/espn1521263"
    ],
    "methods": [
     "fingerprint"
@@ -8083,12 +8370,17 @@
      "match": "cb144970/espn1521260",
      "method": "fingerprint",
      "date": "2026-08-11"
+    },
+    {
+     "match": "cb144994/espn1521263",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
   "12211": {
    "cricinfo_id": "1071705",
-   "tier": 8,
+   "tier": 9,
    "matches": [
     "cb145011/espn1521197",
     "cb145066/espn1521201",
@@ -8097,7 +8389,8 @@
     "cb145223/espn1521216",
     "cb145267/espn1521220",
     "cb145291/espn1521223",
-    "cb145324/espn1521226"
+    "cb145324/espn1521226",
+    "cb145357/espn1521229"
    ],
    "methods": [
     "fingerprint"
@@ -8142,6 +8435,11 @@
      "match": "cb145324/espn1521226",
      "method": "fingerprint",
      "date": "2026-08-11"
+    },
+    {
+     "match": "cb145357/espn1521229",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -8276,10 +8574,11 @@
   },
   "12259": {
    "cricinfo_id": "1023361",
-   "tier": 2,
+   "tier": 3,
    "matches": [
     "cb144827/espn1521247",
-    "cb144904/espn1521254"
+    "cb144904/espn1521254",
+    "cb144994/espn1521263"
    ],
    "methods": [
     "fingerprint"
@@ -8294,6 +8593,11 @@
      "match": "cb144904/espn1521254",
      "method": "fingerprint",
      "date": "2026-08-07"
+    },
+    {
+     "match": "cb144994/espn1521263",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -8422,10 +8726,11 @@
   },
   "12332": {
    "cricinfo_id": "1079860",
-   "tier": 2,
+   "tier": 3,
    "matches": [
     "cb154315/espn1534179",
-    "cb154337/espn1534181"
+    "cb154337/espn1534181",
+    "cb154381/espn1534185"
    ],
    "methods": [
     "fingerprint"
@@ -8440,6 +8745,11 @@
      "match": "cb154337/espn1534181",
      "method": "fingerprint",
      "date": "2026-08-09"
+    },
+    {
+     "match": "cb154381/espn1534185",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -8555,6 +8865,23 @@
     }
    ]
   },
+  "12674": {
+   "cricinfo_id": "820681",
+   "tier": 1,
+   "matches": [
+    "cb154381/espn1534185"
+   ],
+   "methods": [
+    "fingerprint"
+   ],
+   "confirmations": [
+    {
+     "match": "cb154381/espn1534185",
+     "method": "fingerprint",
+     "date": "2026-08-14"
+    }
+   ]
+  },
   "12678": {
    "cricinfo_id": "581160",
    "tier": 1,
@@ -8574,7 +8901,7 @@
   },
   "12747": {
    "cricinfo_id": "857975",
-   "tier": 8,
+   "tier": 9,
    "matches": [
     "cb144684/espn1521233",
     "cb144725/espn1521237",
@@ -8583,7 +8910,8 @@
     "cb144838/espn1521248",
     "cb144871/espn1521251",
     "cb144926/espn1521256",
-    "cb144970/espn1521260"
+    "cb144970/espn1521260",
+    "cb144994/espn1521263"
    ],
    "methods": [
     "fingerprint"
@@ -8628,6 +8956,11 @@
      "match": "cb144970/espn1521260",
      "method": "fingerprint",
      "date": "2026-08-11"
+    },
+    {
+     "match": "cb144994/espn1521263",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -8692,7 +9025,7 @@
   },
   "12770": {
    "cricinfo_id": "665053",
-   "tier": 8,
+   "tier": 9,
    "matches": [
     "cb144662/espn1521231",
     "cb144706/espn1521235",
@@ -8701,7 +9034,8 @@
     "cb144860/espn1521250",
     "cb144904/espn1521254",
     "cb144937/espn1521257",
-    "cb144970/espn1521260"
+    "cb144970/espn1521260",
+    "cb144994/espn1521263"
    ],
    "methods": [
     "dismissal",
@@ -8747,12 +9081,17 @@
      "match": "cb144970/espn1521260",
      "method": "fingerprint",
      "date": "2026-08-11"
+    },
+    {
+     "match": "cb144994/espn1521263",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
   "12777": {
    "cricinfo_id": "1027781",
-   "tier": 8,
+   "tier": 9,
    "matches": [
     "cb144662/espn1521231",
     "cb144706/espn1521235",
@@ -8761,7 +9100,8 @@
     "cb144860/espn1521250",
     "cb144904/espn1521254",
     "cb144937/espn1521257",
-    "cb144970/espn1521260"
+    "cb144970/espn1521260",
+    "cb144994/espn1521263"
    ],
    "methods": [
     "fingerprint"
@@ -8806,6 +9146,11 @@
      "match": "cb144970/espn1521260",
      "method": "fingerprint",
      "date": "2026-08-11"
+    },
+    {
+     "match": "cb144994/espn1521263",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -8905,7 +9250,7 @@
   },
   "13009": {
    "cricinfo_id": "885837",
-   "tier": 8,
+   "tier": 9,
    "matches": [
     "cb145033/espn1521198",
     "cb145066/espn1521201",
@@ -8914,7 +9259,8 @@
     "cb145187/espn1521212",
     "cb145212/espn1521215",
     "cb145280/espn1521222",
-    "cb145313/espn1521225"
+    "cb145313/espn1521225",
+    "cb145357/espn1521229"
    ],
    "methods": [
     "fingerprint"
@@ -8959,6 +9305,11 @@
      "match": "cb145313/espn1521225",
      "method": "fingerprint",
      "date": "2026-08-10"
+    },
+    {
+     "match": "cb145357/espn1521229",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -9134,7 +9485,7 @@
   },
   "13023": {
    "cricinfo_id": "874277",
-   "tier": 8,
+   "tier": 9,
    "matches": [
     "cb145011/espn1521197",
     "cb145066/espn1521201",
@@ -9143,7 +9494,8 @@
     "cb145223/espn1521216",
     "cb145267/espn1521220",
     "cb145291/espn1521223",
-    "cb145324/espn1521226"
+    "cb145324/espn1521226",
+    "cb145357/espn1521229"
    ],
    "methods": [
     "fingerprint"
@@ -9188,6 +9540,11 @@
      "match": "cb145324/espn1521226",
      "method": "fingerprint",
      "date": "2026-08-11"
+    },
+    {
+     "match": "cb145357/espn1521229",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -9252,7 +9609,7 @@
   },
   "13029": {
    "cricinfo_id": "885851",
-   "tier": 7,
+   "tier": 8,
    "matches": [
     "cb145033/espn1521198",
     "cb145066/espn1521201",
@@ -9260,7 +9617,8 @@
     "cb145187/espn1521212",
     "cb145212/espn1521215",
     "cb145280/espn1521222",
-    "cb145313/espn1521225"
+    "cb145313/espn1521225",
+    "cb145357/espn1521229"
    ],
    "methods": [
     "fingerprint"
@@ -9300,6 +9658,11 @@
      "match": "cb145313/espn1521225",
      "method": "fingerprint",
      "date": "2026-08-10"
+    },
+    {
+     "match": "cb145357/espn1521229",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -9352,7 +9715,7 @@
   },
   "13034": {
    "cricinfo_id": "886203",
-   "tier": 7,
+   "tier": 8,
    "matches": [
     "cb145011/espn1521197",
     "cb145066/espn1521201",
@@ -9360,7 +9723,8 @@
     "cb145223/espn1521216",
     "cb145267/espn1521220",
     "cb145291/espn1521223",
-    "cb145324/espn1521226"
+    "cb145324/espn1521226",
+    "cb145357/espn1521229"
    ],
    "methods": [
     "fingerprint"
@@ -9400,6 +9764,11 @@
      "match": "cb145324/espn1521226",
      "method": "fingerprint",
      "date": "2026-08-11"
+    },
+    {
+     "match": "cb145357/espn1521229",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -9713,7 +10082,7 @@
   },
   "13070": {
    "cricinfo_id": "605661",
-   "tier": 8,
+   "tier": 9,
    "matches": [
     "cb144662/espn1521231",
     "cb144706/espn1521235",
@@ -9722,7 +10091,8 @@
     "cb144860/espn1521250",
     "cb144904/espn1521254",
     "cb144937/espn1521257",
-    "cb144970/espn1521260"
+    "cb144970/espn1521260",
+    "cb144994/espn1521263"
    ],
    "methods": [
     "fingerprint"
@@ -9767,14 +10137,20 @@
      "match": "cb144970/espn1521260",
      "method": "fingerprint",
      "date": "2026-08-11"
+    },
+    {
+     "match": "cb144994/espn1521263",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
   "13089": {
    "cricinfo_id": "595267",
-   "tier": 1,
+   "tier": 2,
    "matches": [
-    "cb154326/espn1534180"
+    "cb154326/espn1534180",
+    "cb154392/espn1534186"
    ],
    "methods": [
     "fingerprint"
@@ -9784,6 +10160,11 @@
      "match": "cb154326/espn1534180",
      "method": "fingerprint",
      "date": "2026-08-08"
+    },
+    {
+     "match": "cb154392/espn1534186",
+     "method": "fingerprint",
+     "date": "2026-08-16"
     }
    ]
   },
@@ -10150,7 +10531,7 @@
   },
   "13681": {
    "cricinfo_id": "1039481",
-   "tier": 7,
+   "tier": 8,
    "matches": [
     "cb144684/espn1521233",
     "cb144725/espn1521237",
@@ -10158,7 +10539,8 @@
     "cb144794/espn1521244",
     "cb144838/espn1521248",
     "cb144871/espn1521251",
-    "cb144970/espn1521260"
+    "cb144970/espn1521260",
+    "cb144994/espn1521263"
    ],
    "methods": [
     "fingerprint"
@@ -10198,6 +10580,11 @@
      "match": "cb144970/espn1521260",
      "method": "fingerprint",
      "date": "2026-08-11"
+    },
+    {
+     "match": "cb144994/espn1521263",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -10501,7 +10888,7 @@
   },
   "13811": {
    "cricinfo_id": "1022077",
-   "tier": 8,
+   "tier": 9,
    "matches": [
     "cb145033/espn1521198",
     "cb145066/espn1521201",
@@ -10510,7 +10897,8 @@
     "cb145187/espn1521212",
     "cb145212/espn1521215",
     "cb145280/espn1521222",
-    "cb145313/espn1521225"
+    "cb145313/espn1521225",
+    "cb145357/espn1521229"
    ],
    "methods": [
     "fingerprint"
@@ -10555,12 +10943,17 @@
      "match": "cb145313/espn1521225",
      "method": "fingerprint",
      "date": "2026-08-10"
+    },
+    {
+     "match": "cb145357/espn1521229",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
   "13812": {
    "cricinfo_id": "878025",
-   "tier": 8,
+   "tier": 9,
    "matches": [
     "cb145033/espn1521198",
     "cb145066/espn1521201",
@@ -10569,7 +10962,8 @@
     "cb145187/espn1521212",
     "cb145212/espn1521215",
     "cb145280/espn1521222",
-    "cb145313/espn1521225"
+    "cb145313/espn1521225",
+    "cb145357/espn1521229"
    ],
    "methods": [
     "fingerprint"
@@ -10614,6 +11008,11 @@
      "match": "cb145313/espn1521225",
      "method": "fingerprint",
      "date": "2026-08-10"
+    },
+    {
+     "match": "cb145357/espn1521229",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -11042,9 +11441,10 @@
   },
   "13958": {
    "cricinfo_id": "1152714",
-   "tier": 1,
+   "tier": 2,
    "matches": [
-    "cb154326/espn1534180"
+    "cb154326/espn1534180",
+    "cb154392/espn1534186"
    ],
    "methods": [
     "fingerprint"
@@ -11054,6 +11454,11 @@
      "match": "cb154326/espn1534180",
      "method": "fingerprint",
      "date": "2026-08-08"
+    },
+    {
+     "match": "cb154392/espn1534186",
+     "method": "fingerprint",
+     "date": "2026-08-16"
     }
    ]
   },
@@ -11271,10 +11676,11 @@
   },
   "14378": {
    "cricinfo_id": "1164537",
-   "tier": 2,
+   "tier": 3,
    "matches": [
     "cb145280/espn1521222",
-    "cb145313/espn1521225"
+    "cb145313/espn1521225",
+    "cb145357/espn1521229"
    ],
    "methods": [
     "fingerprint"
@@ -11289,6 +11695,11 @@
      "match": "cb145313/espn1521225",
      "method": "fingerprint",
      "date": "2026-08-10"
+    },
+    {
+     "match": "cb145357/espn1521229",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -11683,10 +12094,11 @@
   },
   "15063": {
    "cricinfo_id": "1078693",
-   "tier": 2,
+   "tier": 3,
    "matches": [
     "cb154337/espn1534181",
-    "cb154359/espn1534183"
+    "cb154359/espn1534183",
+    "cb154381/espn1534185"
    ],
    "methods": [
     "fingerprint"
@@ -11701,6 +12113,11 @@
      "match": "cb154359/espn1534183",
      "method": "fingerprint",
      "date": "2026-08-12"
+    },
+    {
+     "match": "cb154381/espn1534185",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -11902,7 +12319,7 @@
   },
   "15332": {
    "cricinfo_id": "1146066",
-   "tier": 8,
+   "tier": 9,
    "matches": [
     "cb145033/espn1521198",
     "cb145066/espn1521201",
@@ -11911,7 +12328,8 @@
     "cb145187/espn1521212",
     "cb145212/espn1521215",
     "cb145280/espn1521222",
-    "cb145313/espn1521225"
+    "cb145313/espn1521225",
+    "cb145357/espn1521229"
    ],
    "methods": [
     "fingerprint"
@@ -11956,12 +12374,17 @@
      "match": "cb145313/espn1521225",
      "method": "fingerprint",
      "date": "2026-08-10"
+    },
+    {
+     "match": "cb145357/espn1521229",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
   "15452": {
    "cricinfo_id": "1182529",
-   "tier": 8,
+   "tier": 9,
    "matches": [
     "cb144684/espn1521233",
     "cb144725/espn1521237",
@@ -11970,7 +12393,8 @@
     "cb144838/espn1521248",
     "cb144871/espn1521251",
     "cb144926/espn1521256",
-    "cb144970/espn1521260"
+    "cb144970/espn1521260",
+    "cb144994/espn1521263"
    ],
    "methods": [
     "fingerprint"
@@ -12015,19 +12439,25 @@
      "match": "cb144970/espn1521260",
      "method": "fingerprint",
      "date": "2026-08-11"
+    },
+    {
+     "match": "cb144994/espn1521263",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
   "15478": {
    "cricinfo_id": "1150021",
-   "tier": 6,
+   "tier": 7,
    "matches": [
     "cb144706/espn1521235",
     "cb144758/espn1521240",
     "cb144860/espn1521250",
     "cb144904/espn1521254",
     "cb144937/espn1521257",
-    "cb144970/espn1521260"
+    "cb144970/espn1521260",
+    "cb144994/espn1521263"
    ],
    "methods": [
     "fingerprint"
@@ -12062,12 +12492,17 @@
      "match": "cb144970/espn1521260",
      "method": "fingerprint",
      "date": "2026-08-11"
+    },
+    {
+     "match": "cb144994/espn1521263",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
   "15480": {
    "cricinfo_id": "826915",
-   "tier": 8,
+   "tier": 9,
    "matches": [
     "cb144662/espn1521231",
     "cb144706/espn1521235",
@@ -12076,7 +12511,8 @@
     "cb144860/espn1521250",
     "cb144904/espn1521254",
     "cb144937/espn1521257",
-    "cb144970/espn1521260"
+    "cb144970/espn1521260",
+    "cb144994/espn1521263"
    ],
    "methods": [
     "fingerprint"
@@ -12121,6 +12557,11 @@
      "match": "cb144970/espn1521260",
      "method": "fingerprint",
      "date": "2026-08-11"
+    },
+    {
+     "match": "cb144994/espn1521263",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -12191,7 +12632,7 @@
   },
   "15636": {
    "cricinfo_id": "1176132",
-   "tier": 8,
+   "tier": 9,
    "matches": [
     "cb145011/espn1521197",
     "cb145066/espn1521201",
@@ -12200,7 +12641,8 @@
     "cb145223/espn1521216",
     "cb145267/espn1521220",
     "cb145291/espn1521223",
-    "cb145324/espn1521226"
+    "cb145324/espn1521226",
+    "cb145357/espn1521229"
    ],
    "methods": [
     "dismissal",
@@ -12246,6 +12688,11 @@
      "match": "cb145324/espn1521226",
      "method": "fingerprint",
      "date": "2026-08-11"
+    },
+    {
+     "match": "cb145357/espn1521229",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -12416,10 +12863,11 @@
   },
   "15809": {
    "cricinfo_id": "1209190",
-   "tier": 2,
+   "tier": 3,
    "matches": [
     "cb154337/espn1534181",
-    "cb154359/espn1534183"
+    "cb154359/espn1534183",
+    "cb154381/espn1534185"
    ],
    "methods": [
     "fingerprint"
@@ -12434,14 +12882,37 @@
      "match": "cb154359/espn1534183",
      "method": "fingerprint",
      "date": "2026-08-12"
+    },
+    {
+     "match": "cb154381/espn1534185",
+     "method": "fingerprint",
+     "date": "2026-08-14"
+    }
+   ]
+  },
+  "15810": {
+   "cricinfo_id": "1209191",
+   "tier": 1,
+   "matches": [
+    "cb154381/espn1534185"
+   ],
+   "methods": [
+    "fingerprint"
+   ],
+   "confirmations": [
+    {
+     "match": "cb154381/espn1534185",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
   "15814": {
    "cricinfo_id": "1209196",
-   "tier": 1,
+   "tier": 2,
    "matches": [
-    "cb154370/espn1534184"
+    "cb154370/espn1534184",
+    "cb154392/espn1534186"
    ],
    "methods": [
     "fingerprint"
@@ -12451,15 +12922,21 @@
      "match": "cb154370/espn1534184",
      "method": "fingerprint",
      "date": "2026-08-14"
+    },
+    {
+     "match": "cb154392/espn1534186",
+     "method": "fingerprint",
+     "date": "2026-08-16"
     }
    ]
   },
   "15817": {
    "cricinfo_id": "1199304",
-   "tier": 2,
+   "tier": 3,
    "matches": [
     "cb154315/espn1534179",
-    "cb154337/espn1534181"
+    "cb154337/espn1534181",
+    "cb154381/espn1534185"
    ],
    "methods": [
     "fingerprint"
@@ -12474,6 +12951,11 @@
      "match": "cb154337/espn1534181",
      "method": "fingerprint",
      "date": "2026-08-09"
+    },
+    {
+     "match": "cb154381/espn1534185",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -12566,10 +13048,11 @@
   },
   "18155": {
    "cricinfo_id": "647771",
-   "tier": 2,
+   "tier": 3,
    "matches": [
     "cb154315/espn1534179",
-    "cb154370/espn1534184"
+    "cb154370/espn1534184",
+    "cb154392/espn1534186"
    ],
    "methods": [
     "fingerprint"
@@ -12584,6 +13067,11 @@
      "match": "cb154370/espn1534184",
      "method": "fingerprint",
      "date": "2026-08-14"
+    },
+    {
+     "match": "cb154392/espn1534186",
+     "method": "fingerprint",
+     "date": "2026-08-16"
     }
    ]
   },
@@ -12836,10 +13324,11 @@
   },
   "18504": {
    "cricinfo_id": "1138316",
-   "tier": 9,
+   "tier": 10,
    "matches": [
     "cb154337/espn1534181",
     "cb154359/espn1534183",
+    "cb154381/espn1534185",
     "cb156955/espn1537332",
     "cb156977/espn1537334",
     "cb156999/espn1537336",
@@ -12861,6 +13350,11 @@
      "match": "cb154359/espn1534183",
      "method": "fingerprint",
      "date": "2026-08-12"
+    },
+    {
+     "match": "cb154381/espn1534185",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     },
     {
      "match": "cb156955/espn1537332",
@@ -13566,7 +14060,7 @@
   },
   "20031": {
    "cricinfo_id": "1191192",
-   "tier": 7,
+   "tier": 8,
    "matches": [
     "cb144684/espn1521233",
     "cb144725/espn1521237",
@@ -13574,7 +14068,8 @@
     "cb144794/espn1521244",
     "cb144838/espn1521248",
     "cb144871/espn1521251",
-    "cb144970/espn1521260"
+    "cb144970/espn1521260",
+    "cb144994/espn1521263"
    ],
    "methods": [
     "fingerprint"
@@ -13614,12 +14109,17 @@
      "match": "cb144970/espn1521260",
      "method": "fingerprint",
      "date": "2026-08-11"
+    },
+    {
+     "match": "cb144994/espn1521263",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
   "20057": {
    "cricinfo_id": "1184099",
-   "tier": 7,
+   "tier": 8,
    "matches": [
     "cb145066/espn1521201",
     "cb145121/espn1521206",
@@ -13627,7 +14127,8 @@
     "cb145223/espn1521216",
     "cb145267/espn1521220",
     "cb145291/espn1521223",
-    "cb145324/espn1521226"
+    "cb145324/espn1521226",
+    "cb145357/espn1521229"
    ],
    "methods": [
     "fingerprint"
@@ -13667,6 +14168,11 @@
      "match": "cb145324/espn1521226",
      "method": "fingerprint",
      "date": "2026-08-11"
+    },
+    {
+     "match": "cb145357/espn1521229",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -14060,10 +14566,11 @@
   },
   "23271": {
    "cricinfo_id": "1275056",
-   "tier": 2,
+   "tier": 3,
    "matches": [
     "cb154337/espn1534181",
-    "cb154359/espn1534183"
+    "cb154359/espn1534183",
+    "cb154381/espn1534185"
    ],
    "methods": [
     "fingerprint"
@@ -14078,6 +14585,11 @@
      "match": "cb154359/espn1534183",
      "method": "fingerprint",
      "date": "2026-08-12"
+    },
+    {
+     "match": "cb154381/espn1534185",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -14135,6 +14647,23 @@
      "match": "cb154315/espn1534179",
      "method": "fingerprint",
      "date": "2026-08-07"
+    }
+   ]
+  },
+  "23891": {
+   "cricinfo_id": "1275939",
+   "tier": 1,
+   "matches": [
+    "cb154392/espn1534186"
+   ],
+   "methods": [
+    "fingerprint"
+   ],
+   "confirmations": [
+    {
+     "match": "cb154392/espn1534186",
+     "method": "fingerprint",
+     "date": "2026-08-16"
     }
    ]
   },
@@ -14387,10 +14916,11 @@
   },
   "27438": {
    "cricinfo_id": "1264775",
-   "tier": 2,
+   "tier": 3,
    "matches": [
     "cb144937/espn1521257",
-    "cb144970/espn1521260"
+    "cb144970/espn1521260",
+    "cb144994/espn1521263"
    ],
    "methods": [
     "fingerprint"
@@ -14405,6 +14935,11 @@
      "match": "cb144970/espn1521260",
      "method": "fingerprint",
      "date": "2026-08-11"
+    },
+    {
+     "match": "cb144994/espn1521263",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -15113,7 +15648,7 @@
   },
   "47336": {
    "cricinfo_id": "1120320",
-   "tier": 8,
+   "tier": 9,
    "matches": [
     "cb145011/espn1521197",
     "cb145066/espn1521201",
@@ -15122,7 +15657,8 @@
     "cb145223/espn1521216",
     "cb145267/espn1521220",
     "cb145291/espn1521223",
-    "cb145324/espn1521226"
+    "cb145324/espn1521226",
+    "cb145357/espn1521229"
    ],
    "methods": [
     "dismissal",
@@ -15168,6 +15704,11 @@
      "match": "cb145324/espn1521226",
      "method": "fingerprint",
      "date": "2026-08-11"
+    },
+    {
+     "match": "cb145357/espn1521229",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -15430,10 +15971,11 @@
   },
   "54287": {
    "cricinfo_id": "1394273",
-   "tier": 2,
+   "tier": 3,
    "matches": [
     "cb154337/espn1534181",
-    "cb154359/espn1534183"
+    "cb154359/espn1534183",
+    "cb154381/espn1534185"
    ],
    "methods": [
     "fingerprint"
@@ -15448,6 +15990,11 @@
      "match": "cb154359/espn1534183",
      "method": "fingerprint",
      "date": "2026-08-12"
+    },
+    {
+     "match": "cb154381/espn1534185",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -15470,11 +16017,12 @@
   },
   "55092": {
    "cricinfo_id": "1331347",
-   "tier": 3,
+   "tier": 4,
    "matches": [
     "cb154315/espn1534179",
     "cb154348/espn1534182",
-    "cb154370/espn1534184"
+    "cb154370/espn1534184",
+    "cb154392/espn1534186"
    ],
    "methods": [
     "fingerprint"
@@ -15494,12 +16042,17 @@
      "match": "cb154370/espn1534184",
      "method": "fingerprint",
      "date": "2026-08-14"
+    },
+    {
+     "match": "cb154392/espn1534186",
+     "method": "fingerprint",
+     "date": "2026-08-16"
     }
    ]
   },
   "55799": {
    "cricinfo_id": "1333415",
-   "tier": 7,
+   "tier": 8,
    "matches": [
     "cb144695/espn1521234",
     "cb144725/espn1521237",
@@ -15507,7 +16060,8 @@
     "cb144805/espn1521245",
     "cb144882/espn1521252",
     "cb144904/espn1521254",
-    "cb144948/espn1521258"
+    "cb144948/espn1521258",
+    "cb154392/espn1534186"
    ],
    "methods": [
     "fingerprint"
@@ -15547,6 +16101,11 @@
      "match": "cb144948/espn1521258",
      "method": "fingerprint",
      "date": "2026-08-09"
+    },
+    {
+     "match": "cb154392/espn1534186",
+     "method": "fingerprint",
+     "date": "2026-08-16"
     }
    ]
   },
@@ -15637,7 +16196,7 @@
   },
   "1428674": {
    "cricinfo_id": "1184176",
-   "tier": 7,
+   "tier": 8,
    "matches": [
     "cb145033/espn1521198",
     "cb145066/espn1521201",
@@ -15645,7 +16204,8 @@
     "cb145187/espn1521212",
     "cb145212/espn1521215",
     "cb145280/espn1521222",
-    "cb145313/espn1521225"
+    "cb145313/espn1521225",
+    "cb145357/espn1521229"
    ],
    "methods": [
     "dismissal",
@@ -15686,12 +16246,17 @@
      "match": "cb145313/espn1521225",
      "method": "fingerprint",
      "date": "2026-08-10"
+    },
+    {
+     "match": "cb145357/espn1521229",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
   "1428744": {
    "cricinfo_id": "1427057",
-   "tier": 8,
+   "tier": 9,
    "matches": [
     "cb145033/espn1521198",
     "cb145066/espn1521201",
@@ -15700,7 +16265,8 @@
     "cb145187/espn1521212",
     "cb145212/espn1521215",
     "cb145280/espn1521222",
-    "cb145313/espn1521225"
+    "cb145313/espn1521225",
+    "cb145357/espn1521229"
    ],
    "methods": [
     "fingerprint"
@@ -15745,6 +16311,11 @@
      "match": "cb145313/espn1521225",
      "method": "fingerprint",
      "date": "2026-08-10"
+    },
+    {
+     "match": "cb145357/espn1521229",
+     "method": "fingerprint",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -15766,6 +16337,23 @@
     },
     {
      "match": "cb154370/espn1534184",
+     "method": "fingerprint",
+     "date": "2026-08-14"
+    }
+   ]
+  },
+  "1430289": {
+   "cricinfo_id": "1443401",
+   "tier": 1,
+   "matches": [
+    "cb154381/espn1534185"
+   ],
+   "methods": [
+    "fingerprint"
+   ],
+   "confirmations": [
+    {
+     "match": "cb154381/espn1534185",
      "method": "fingerprint",
      "date": "2026-08-14"
     }
@@ -16074,10 +16662,11 @@
   },
   "1467499": {
    "cricinfo_id": "1500757",
-   "tier": 2,
+   "tier": 3,
    "matches": [
     "cb154348/espn1534182",
-    "cb154370/espn1534184"
+    "cb154370/espn1534184",
+    "cb154392/espn1534186"
    ],
    "methods": [
     "fingerprint"
@@ -16092,6 +16681,11 @@
      "match": "cb154370/espn1534184",
      "method": "fingerprint",
      "date": "2026-08-14"
+    },
+    {
+     "match": "cb154392/espn1534186",
+     "method": "fingerprint",
+     "date": "2026-08-16"
     }
    ]
   },
@@ -16219,11 +16813,13 @@
   },
   "1477847": {
    "cricinfo_id": "1108828",
-   "tier": 1,
+   "tier": 2,
    "matches": [
-    "cb154337/espn1534181"
+    "cb154337/espn1534181",
+    "cb154381/espn1534185"
    ],
    "methods": [
+    "dismissal",
     "fingerprint"
    ],
    "confirmations": [
@@ -16231,6 +16827,11 @@
      "match": "cb154337/espn1534181",
      "method": "fingerprint",
      "date": "2026-08-09"
+    },
+    {
+     "match": "cb154381/espn1534185",
+     "method": "dismissal",
+     "date": "2026-08-14"
     }
    ]
   }

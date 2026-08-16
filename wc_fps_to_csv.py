@@ -575,6 +575,23 @@ def match_squad_to_perf(team_players, pool, quiet=False):
         if pid:
             pid_pool[pid] = merge_perf(pid_pool.get(pid), v)
             pid_names.setdefault(pid, []).append(v.get("name", k))   # track who folded into each pid
+        elif str(v.get("espn_id") or "").strip():
+            # ⛔ A ROW CARRYING AN ATHLETE ID MUST NEVER REACH THE SURNAME MATCHER. `unresolved` is
+            # the pool the fuzzy matcher is allowed to guess in, and its last strategy is "surname
+            # unique in the candidate set" — which is only sound if the candidate set CONTAINS the
+            # right person. When he is missing from it, the unique surname belongs to somebody else.
+            # That is exactly how Glenn Phillips's innings was handed to Dale Phillips: ESPN gave
+            # athlete.id 823509, no ci:823509 existed yet, "Glenn Dominic Phillips" was not an
+            # alias, so he fell through to a surname that was unique only because Glenn himself was
+            # unmatchable. The sheet then read Glenn Played=N and Dale Played=Y with 99 FP, and
+            # ESPN's 22-man roster for that match contains exactly one Phillips: Glenn.
+            # We were holding his id the whole time. resolve_perf_pid now mints ci:<athlete.id> so
+            # this branch should be unreachable — but state the invariant rather than leave it
+            # emergent, because a non-numeric id (which minting refuses) would otherwise put an
+            # id-bearing row back in front of a surname guess.
+            print(f"  {v.get('name')!r} carries espn_id {v.get('espn_id')} but resolved to no pid "
+                  f"— NOT surname-matching an id-bearing row; treating as unattributed",
+                  file=sys.stderr)
         else:
             unresolved[k] = v
     # FALSE-MERGE detector: a pid that absorbed 2+ feed names that are NOT plausibly the same

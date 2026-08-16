@@ -521,6 +521,26 @@ def _backfill(store, tours, cache_dir, verbose=True):
             key = make_key(cb_series, f["date"], [cb._slug(t) for t in f["teams"]])
             hit = lookup(store, key, f["espn_event"])
             if hit.status in (PINNED, PINNED_BY_EVENT) and hit.key == key:
+                # ⛔ ONE EXCEPTION TO "already pinned, skip": a pin that carries NO ESPN event.
+                # The runtime caller does not pass `espn_event=` (the hook is still unapplied), so
+                # every pin the bot creates while a tour is running is name-derived only — and the
+                # rename-proof direction-3 guard (ESPN event → 2 cb matches) is inert on it. The
+                # backfill could MINT a pin with an event but never ADD one to a pin without: a
+                # guard on one side and not its mirror, and the reason the two newest CPL pins
+                # (cb154381 2026-08-14, cb154392 2026-08-16) sat with `espn_events: []` and
+                # therefore could not enter the bridge's derive corpus at all — cb154392 is where
+                # the unbridged Odean Smith (cb:11215) row on "Needs Cricinfo ID" comes from.
+                # `record` is idempotent on the confirmation tuple, so this is a no-op for every
+                # pin that already carries the event.
+                rec = (store.get("pins") or {}).get(hit.key) or {}
+                if f["espn_event"] in (rec.get("espn_events") or []):
+                    n_old += 1
+                    continue
+                store, changed = record(store, hit.key, hit.cricbuzz_match_id,
+                                        method="teams+date", espn_event=f["espn_event"])
+                if changed and verbose:
+                    print("     +espn event  %s  cb%s <- ev%s (pin was name-derived only)"
+                          % (hit.key, hit.cricbuzz_match_id, f["espn_event"]), file=sys.stderr)
                 n_old += 1
                 continue
             fixture, why, _near = cb.derive_match(cb_series, f["date"], f["teams"])

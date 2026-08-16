@@ -115,7 +115,13 @@ def test_the_23_pending_reach_the_tab_and_none_of_the_live_52_are_reappended(
     ws = _wire(wcmod, monkeypatch, tmp_path, tab, pending)
     wcmod.write_needs_cricinfo_tab()
 
-    assert len(ws.appended) == 23                          # every pending gap reached the payload
+    # 20, not 23: Mavendra Dindyal, Glenn Phillips and Dwaine Pretorius have since been ANCHORED to
+    # real cricinfo ids (ci:1394274 / ci:823509 / ci:327830), so asking about them again would be
+    # asking a question we have already answered. The fixture is a 13 Aug snapshot; the rule that
+    # skips an anchored name is what makes the difference, and it is the rule worth pinning.
+    anchored = {"Mavendra Dindyal", "Glenn Phillips", "Dwaine Pretorius"}
+    assert len(ws.appended) == 23 - len(anchored)
+    assert not (anchored & {r[0] for r in ws.appended}), "re-asked an already-anchored player"
     live_pids = {r[1].strip() for r in tab[1:]}
     assert [r for r in ws.appended if r[1] in live_pids] == []   # NONE of the 52 re-appended
     assert all(r[5] == "" for r in ws.appended)            # the fill column is never written to
@@ -126,7 +132,7 @@ def test_second_run_appends_nothing(wcmod, monkeypatch, tmp_path, fake_gspread):
     pending = json.load(open(os.path.join(FIX, "needs_cricinfo_pending_20260813.json")))
     ws = _wire(wcmod, monkeypatch, tmp_path, _live_tab(), pending)
     wcmod.write_needs_cricinfo_tab()
-    assert len(ws.appended) == 23
+    assert len(ws.appended) == 20      # 23 minus the 3 since anchored — see the test above
     ws.appended.clear()
     wcmod.write_needs_cricinfo_tab()
     assert ws.appended == []
@@ -224,7 +230,7 @@ def test_dedupe_survives_a_column_inserted_before_current_pid(wcmod, monkeypatch
     wcmod.write_needs_cricinfo_tab()
     live_pids = {r[2].strip() for r in shifted[1:]}
     assert [r for r in ws.appended if r[1] in live_pids] == []
-    assert len(ws.appended) == 23
+    assert len(ws.appended) == 20      # 23 minus the 3 since anchored — see the first test
 
 
 def test_no_current_pid_column_holds_the_queue_instead_of_duplicating_it(

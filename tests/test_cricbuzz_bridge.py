@@ -476,3 +476,123 @@ def test_adapter_applies_the_same_batting_fold_and_drops_maidens():
     assert card["batting"]["2"] is None            # all-zero row folds even though batted=True
     assert card["bowling"]["2"] == (24, 30, 2)     # 3-tuple: maidens=None never leaks in
     assert card["dismissals"][0]["fielder"] == "2"
+
+
+# ══ the corpus: reading the bot's own cache, and joining the pin ledger ════════════════════════
+def _bot_pbp(items, page_count=1, count=None):
+    return {"commentary": {"pageCount": page_count,
+                           "count": len(items) if count is None else count,
+                           "items": items}}
+
+
+def _write_page(d, series, ev, page, payload):
+    (d / ("espn_%s_playbyplay_event_%s_limit_500_page_%d.json" % (series, ev, page))).write_text(
+        json.dumps(payload), encoding="utf-8")
+
+
+def test_bot_cache_pbp_is_read_under_the_bots_own_key(tmp_path):
+    """The two modules cached the SAME bytes under different names, so every --derive re-fetched
+    ESPN. That is why the corpus was hand-driven and fell 11 matches behind the pin ledger."""
+    _write_page(tmp_path, "1521193", "1521218", 1, _bot_pbp([{"id": 1}, {"id": 2}]))
+    got = cbb.espn_pbp_from_bot_cache("1521218", "1521193", str(tmp_path))
+    assert [i["id"] for i in got["commentary"]["items"]] == [1, 2]
+    # not cached is None — "the caller may fetch", never an empty card
+    assert cbb.espn_pbp_from_bot_cache("9999999", "1521193", str(tmp_path)) is None
+
+
+def test_bot_cache_pbp_refuses_a_truncated_card(tmp_path):
+    """An absence must never present as a value. A card short of ESPN's own count, or missing a
+    page ESPN says exists, changes the very fingerprints identity is derived from — so it raises
+    rather than deriving from what is there. Mirrors parse_espn's ball-count gate."""
+    _write_page(tmp_path, "S", "E1", 1, _bot_pbp([{"id": 1}], count=9))
+    with pytest.raises(cbb.BridgeError):
+        cbb.espn_pbp_from_bot_cache("E1", "S", str(tmp_path))
+
+    _write_page(tmp_path, "S", "E2", 1, _bot_pbp([{"id": 1}], page_count=2, count=2))
+    with pytest.raises(cbb.BridgeError):          # page 2 of 2 is not on disk
+        cbb.espn_pbp_from_bot_cache("E2", "S", str(tmp_path))
+    _write_page(tmp_path, "S", "E2", 2, _bot_pbp([{"id": 2}], page_count=2, count=2))
+    got = cbb.espn_pbp_from_bot_cache("E2", "S", str(tmp_path))
+    assert [i["id"] for i in got["commentary"]["items"]] == [1, 2]
+
+    # a zero-byte cache file is corruption, not "no deliveries"
+    (tmp_path / "espn_S_playbyplay_event_E3_limit_500_page_1.json").write_text("", encoding="utf-8")
+    with pytest.raises(cbb.BridgeError):
+        cbb.espn_pbp_from_bot_cache("E3", "S", str(tmp_path))
+
+
+def test_bot_cache_pbp_dedups_espn_duplicate_items(tmp_path):
+    """ev1537345 shipped 259 items with 255 unique ids. The scorer's dots inflated on it; a
+    fingerprint would not (normalize takes a max), but the two readers must see the same card."""
+    _write_page(tmp_path, "S", "E", 1, _bot_pbp([{"id": 7}, {"id": 7}, {"id": 8}], count=3))
+    got = cbb.espn_pbp_from_bot_cache("E", "S", str(tmp_path))
+    assert [i["id"] for i in got["commentary"]["items"]] == [7, 8]
+
+
+def test_pairs_come_from_the_pin_ledger_not_from_hand_typed_args(tmp_path):
+    """`--from-map` is the join that did not exist: 94 pinned pairs, 83 derived, and six of the
+    twelve `cb:` rows on the identity tab were ONE undderived match (cb154370)."""
+    mp = tmp_path / "map.json"
+    mp.write_text(json.dumps({"pins": {
+        "12123|2026-08-14|a+b": {"cricbuzz_match_id": "154370", "series_id": "12123",
+                                 "date": "2026-08-14", "espn_events": ["1534184"]},
+        "11493|2026-07-21|c+d": {"cricbuzz_match_id": "144662", "series_id": "11493",
+                                 "date": "2026-07-21", "espn_events": ["1521231"]},
+        "99999|2026-01-01|e+f": {"cricbuzz_match_id": "1", "series_id": "99999",
+                                 "date": "2026-01-01", "espn_events": ["2"]},
+        "12123|2026-08-16|g+h": {"cricbuzz_match_id": "154392", "series_id": "12123",
+                                 "date": "2026-08-16", "espn_events": []},
+    }}), encoding="utf-8")
+    tr = tmp_path / "tours.json"
+    tr.write_text(json.dumps([{"cricbuzz_series": "12123", "espn_series": "8623"},
+                              {"cricbuzz_series": "11493", "espn_series": "1521176"},
+                              {"espn_series": "1483859"}]), encoding="utf-8")
+    got = cbb.pairs_from_match_map(str(mp), str(tr))
+    assert got == [("144662", "1521231", "11493", "1521176", "2026-07-21"),
+                   ("154370", "1534184", "12123", "8623", "2026-08-14")]
+    # a cricbuzz series no tour claims is NAMED and dropped, not silently paired to the wrong
+    # ESPN series; and a pin with no ESPN event yields no pair (it cannot be derived yet).
+    assert cbb.pairs_from_match_map(str(mp), str(tr), series="12123") == [
+        ("154370", "1534184", "12123", "8623", "2026-08-14")]
+
+
+def test_the_espn_league_segment_is_the_series_id(tmp_path, monkeypatch):
+    """`{ESPN_BASE}/{ESPN_SERIES}/playbyplay` is the only shape ESPN answers. Falling back to the
+    legacy `--league lanka-premier-league` for a Hundred event returned HTTP 500, which the caller
+    would have logged as "ESPN has no play-by-play for this match"."""
+    seen = []
+    monkeypatch.setattr(cbb, "fetch_cb_scorecard", lambda mid, cache: open(
+        os.path.join(FIX, "flight_page.html"), encoding="utf-8").read())
+
+    def fake(event_id, league, cache_dir):
+        seen.append(league)
+        return {"commentary": {"items": []}}
+    monkeypatch.setattr(cbb, "fetch_espn_pbp", fake)
+    cbb._load_pair("157061", "1521218", None, None, "lanka-premier-league",
+                   espn_series="1521193", bot_cache=str(tmp_path))
+    assert seen == ["1521193"]
+
+
+# ══ the identity row a human has to answer ════════════════════════════════════════════════════
+def test_every_unresolved_status_hands_the_human_a_cricbuzz_profile_url():
+    """`detail` is interpolated verbatim into the "Needs Cricinfo ID" row. It used to read
+    "no confirmation on any bridged match" — true, and unanswerable: no way even to see who the
+    cricbuzz id belongs to. VERIFIED 16 Aug 2026 that /profiles/<id>/x serves the right player."""
+    st = cbb.build_store([conf("11101", "381268", "m1"), conf("11101", "874201", "m1",
+                                                              cbb.METHOD_DISMISSAL),
+                          conf("50458", "1356971", "m2")])
+    rev = cbb.resolve(st, "11101")
+    assert rev.status == cbb.REVOKED
+    assert "cricbuzz.com/profiles/11101/x" in rev.detail
+    assert "ci:381268" in rev.detail and "ci:874201" in rev.detail
+    assert "cricketers/x-381268" in rev.detail        # both candidates, both linked
+
+    unk = cbb.resolve(st, "99999")
+    assert unk.status == cbb.UNKNOWN and "cricbuzz.com/profiles/99999/x" in unk.detail
+    assert "--from-map" in unk.detail                 # and what to run about it
+
+    low = cbb.resolve(st, "50458", cbb.PURPOSE_CREATE)
+    assert low.status == cbb.INSUFFICIENT_TIER
+    assert "candidate ci:1356971" in low.detail and "cricketers/x-1356971" in low.detail
+    assert "cricbuzz.com/profiles/50458/x" in low.detail
+    assert cbb.resolve(st, "50458").status == cbb.OK  # crosscheck still fine at tier 1
