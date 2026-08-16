@@ -864,6 +864,15 @@
    "first_status": "COMPLETED",
    "first_seen": "2026-08-16",
    "provenance": "derived-from-settlement"
+  },
+  {
+   "tour": "The Hundred Women's Competition 2026",
+   "match_key": "2026-08-16::sunrisers leeds|trent rockets",
+   "match": "Match 32 — WTSUNL v WTTRR",
+   "date": "2026-08-16",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-16",
+   "provenance": "live"
   }
  ]
 }
