@@ -682,6 +682,19 @@
         "Caribbean Premier League 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:820691",
+      "display": "Odean Fabian Smith",
+      "aliases": [
+        "odean fabian smith"
+      ],
+      "team": "MTJAM",
+      "role": "BOWL",
+      "tours": [
+        "Caribbean Premier League 2026"
+      ],
+      "source": "auto"
     }
   ]
 }
