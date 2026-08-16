@@ -298,8 +298,43 @@ Recon rows generated. Same machinery throughout: `compute_l1_gaps` / `build_reco
 - **Identity comes ONLY from `registry/cricbuzz_bridge.json`** — derived from performance
   fingerprints + the dismissal join, never names, tier = number of distinct confirming matches
   (≥1 cross-check, ≥2 before a CB-only field may CREATE points). The bot READS it; deriving is
-  `python3 registry/cricbuzz_bridge.py --derive` out of band, so a scoring run can never mutate
-  identity while it publishes points. Unbridged CB players never enter the witness view.
+  `python3 registry/cricbuzz_bridge.py --derive --from-map` out of band, so a scoring run can never
+  mutate identity while it publishes points. Unbridged CB players never enter the witness view.
+- **⛔ RUN IT AS `--derive --from-map`. The corpus used to lag the pin ledger** (fixed 16 Aug 2026).
+  The pin ledger knows every cb-match ⇄ ESPN-event pairing; `--derive` took HAND-TYPED `--pair`
+  args and nothing joined them, so the corpus drifted behind and stayed there: **83 of 94 pins
+  derived, 11 not**, and 6 of the 12 `cb:` rows on "Needs Cricinfo ID" were ONE of the eleven
+  (cb154370, CPL Guyana v Jamaica, 14 Aug) whose whole XI Layer A pairs 22/22. `--from-map` also
+  reads ESPN play-by-play out of the bot's own `WC_CACHE_DIR` (the two modules cached the same
+  bytes under different names, which is why every derive re-fetched), and re-derives EVERY pin —
+  a logic change reaches a stored confirmation only if its match is derived again.
+  `tests/test_cricbuzz_bridge.py::test_the_derive_corpus_does_not_lag_the_pin_ledger` now fails if
+  a pin with an ESPN event is left underived. The one standing exception is cb145088/espn1521203,
+  Hundred W 26 Jul, *abandoned without a ball bowled* — CB serves a page with no `scoreCard`.
+- **⛔ TWO FEEDS NAMING DIFFERENT FIELDERS IS A VALUE DISAGREEMENT, NOT AN IDENTITY ONE.** Layer B
+  converted one into the other and it cost three players their bridge. Measured over all 92 pinned
+  matches with cached payloads: 587 Layer-B pairs = **534** restating Layer A + **49** genuinely
+  new (the payoff — a substitute or pure fielder Layer A can never reach) + **4** contradicting
+  Layer A *inside the same match*, every one of them CB crediting a catch to X and ESPN to Y
+  (`c Will Jacks`/`c Vince`, `c Lhuan-dre Pretorius`/`c Livingstone`, `c Grace Harris`/`c Higham`,
+  `c Towhid Hridoy`/`c Mathew`). Each single claim revoked a player who had 8, 8, 8 and 2 matches
+  of fingerprint evidence, and put Will Jacks, Lhuan-dre Pretorius and Grace Harris on the identity
+  tab as unanswerable questions. `layer_b` now refuses a join that contradicts Layer A in that same
+  match (and the mirror: a fielder id Layer A gave to another cricbuzz id — 0 of 49 today, there so
+  the class cannot return through the other door). Cost: **0 of the 49**. The disagreement is not
+  lost — it is already a per-player `catches` diff on the Recon tab, which is where a value
+  question belongs. `derive_match` reports it as `fielder_disputes`; `layer_conflicts` is now empty
+  by construction and stays as a tripwire.
+- **A human's answer to a `cb:` row is `--adopt`, not a name alias.** `read_needs_cricinfo` files a
+  filled-in id as `ci:<id> -> [NAME]` and builds its extra alias only for `slug:`/`uncapped:` pids,
+  so a `cb:` row's cricbuzz id was DISCARDED — cb:12163 and cb:10693 were both answered on the live
+  tab and both still resolved UNKNOWN, regenerating the same row on the player's next catch.
+  `cricbuzz_bridge.adopt()` records the answer as a `manual` confirmation. It does **not** trump
+  derived evidence (a contradiction revokes both, as always) and every manual answer collapses into
+  one match slot, so a hand-typed id is **tier 1 — a cross-check, never on its own licence to
+  CREATE points** from a Cricbuzz-only field. The hook that would call it from a run is UNAPPLIED
+  (`scratchpad/cbbridge_patch.md`); ⚠ applying it makes a scoring run write the store, so
+  `registry/cricbuzz_bridge.json` must join the workflows' `LEDGERS` list at the same time.
 - **Cold start is real and by design**: coverage is 0% entering a season's first two matches, 48%
   at match 3, 88–100% from match 4 (measured over 16 LPL matches). Zero bridged ⇒ "cannot witness"
   ⇒ single-feed flag. Because of that, **"ESPN has a row and Cricbuzz doesn't" is NOT reported** when

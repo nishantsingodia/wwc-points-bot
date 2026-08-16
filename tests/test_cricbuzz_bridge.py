@@ -596,3 +596,107 @@ def test_every_unresolved_status_hands_the_human_a_cricbuzz_profile_url():
     assert "candidate ci:1356971" in low.detail and "cricketers/x-1356971" in low.detail
     assert "cricbuzz.com/profiles/50458/x" in low.detail
     assert cbb.resolve(st, "50458").status == cbb.OK  # crosscheck still fine at tier 1
+
+
+# ══ the owner's answer, which had nowhere to land ══════════════════════════════════════════════
+def test_an_answered_cb_row_becomes_a_confirmation_not_a_name_alias():
+    """`read_needs_cricinfo` files a filled-in id into manual_ci_bridges as `ci:<id> -> [NAME]`,
+    and builds its extra alias only for slug:/uncapped: pids — so a `cb:` row's cricbuzz id was
+    DISCARDED and the bridge went on saying UNKNOWN. Measured 16 Aug 2026: cb:12163 and cb:10693
+    were both answered on the live tab and both still resolved UNKNOWN."""
+    st = cbb.build_store([conf("999", "111", "m1")])
+    assert cbb.resolve(st, "12163").status == cbb.UNKNOWN
+    st, changed = cbb.adopt(st, "12163", "633660", source="owner, Needs Cricinfo ID tab")
+    assert changed
+    r = cbb.resolve(st, "12163")
+    assert (r.status, r.cricinfo_id, r.tier) == (cbb.OK, "633660", 1)
+    # ...and it is a FACT in the log, so the store stays a pure function of it
+    assert cbb.build_store(cbb.confirmations_log(st)) == st
+    assert cbb.resolve(st, "12163", cbb.PURPOSE_CREATE).status == cbb.INSUFFICIENT_TIER
+    st2, again = cbb.adopt(st, "12163", "633660")
+    assert again is False and st2 == st              # idempotent
+
+
+def test_a_manual_answer_cannot_alone_authorise_creating_points():
+    """Tier counts DISTINCT MATCHES and every manual answer collapses into one slot, so a
+    hand-typed id is a cross-check and never, by itself, licence to CREATE a Cricbuzz-only field
+    (a run-out fielding credit ESPN structurally cannot supply)."""
+    st = cbb.build_store([])
+    st, _ = cbb.adopt(st, "1", "100")
+    st, _ = cbb.adopt(st, "1", "100", source="a second answer, same pair")
+    assert st["bridge"]["1"]["tier"] == 1
+    assert cbb.resolve(st, "1", cbb.PURPOSE_CREATE).status == cbb.INSUFFICIENT_TIER
+    st, _ = cbb.adopt(cbb.build_store([conf("1", "100", "cb1/espn1")]), "1", "100")
+    assert st["bridge"]["1"]["tier"] == 2            # one derived match + the answer = 2
+
+
+def test_a_manual_answer_does_not_outrank_derived_evidence():
+    """One keystroke must not overwrite N matches of both-sides-unique fingerprints. It
+    contradicts, and BOTH are refused — the existing, loud semantic."""
+    st = cbb.build_store([conf("11101", "381268", "m%d" % i) for i in range(8)])
+    st, _ = cbb.adopt(st, "11101", "874201", source="a typo")
+    assert cbb.resolve(st, "11101").status == cbb.REVOKED
+    assert set(st["revoked"]["11101"]["claims"]) == {"381268", "874201"}
+
+
+def test_adopt_refuses_an_absence_wearing_the_clothes_of_an_answer():
+    st = cbb.build_store([])
+    for cb_id, ci_id in (("0", "1"), ("x", "1"), ("1", ""), ("1", "abc"), ("1", "0")):
+        with pytest.raises(cbb.BridgeError):
+            cbb.adopt(st, cb_id, ci_id)
+    # a pasted profile URL is tolerated — that is a format, not an absence
+    st, _ = cbb.adopt(st, "1", "https://www.espncricinfo.com/cricketers/x-633660")
+    assert st["bridge"]["1"]["cricinfo_id"] == "633660"
+
+
+def test_provenance_survives_every_reprojection():
+    """`merge_confirmations` and `compile_bridge`/`confirmations_log` each RE-PROJECT a
+    confirmation, so a field none of them names is deleted on the next recompile. `source` was
+    dropped by two of the three when it was first added."""
+    st = cbb.build_store([])
+    st, _ = cbb.adopt(st, "1", "100", source="who said so")
+    for _ in range(3):
+        st = cbb.build_store(cbb.confirmations_log(st))
+    assert st["bridge"]["1"]["confirmations"][0]["source"] == "who said so"
+    # a derived confirmation gains no empty `source` key — that would rewrite the whole file
+    plain = cbb.build_store([conf("2", "200", "m1")])
+    assert plain["bridge"]["2"]["confirmations"] == [
+        {"match": "m1", "method": cbb.METHOD_FINGERPRINT, "date": "2026-07-25"}]
+
+
+def test_the_committed_store_is_a_pure_function_of_its_own_log():
+    """The shipped file, not a synthetic one: regenerating it from its own confirmations must
+    reproduce it exactly, or `--derive` is not reproducible and the file is hand-editable in
+    practice whatever the header says."""
+    st = cbb.load_store()
+    assert cbb.build_store(cbb.confirmations_log(st)) == st
+    assert st["revoked"] == {}, "a revoked pair is an unanswerable identity row — none should ship"
+
+
+def test_the_derive_corpus_does_not_lag_the_pin_ledger():
+    """THE ROOT CAUSE of six of the twelve `cb:` rows on "Needs Cricinfo ID", pinned on the two
+    committed ledgers so it cannot come back silently.
+
+    The pin ledger knew 94 cb-match ⇄ ESPN-event pairings; `--derive` took hand-typed `--pair`
+    args, and nothing joined them — so 83 were derived and 11 were not. cb154370 (CPL Guyana v
+    Jamaica, 14 Aug) was one of the 11, and it alone carried Glenn Phillips, Imran Tahir, Shamar
+    Joseph, Mohammad Nabi, Shai Hope and Quentin Sampson. Measured end to end on the cached pair:
+    cb_match_perf went from **10/22 bridged with 6 identity rows** to **22/22 with 0**.
+
+    The one permitted exception is a fixture with nothing to derive: espn1521203 / cb145088,
+    The Hundred Women's 26 July, "Match abandoned without a ball bowled" — ESPN's play-by-play
+    carries 1 item and Cricbuzz serves a page with no `scoreCard` at all.
+    """
+    store = cbb.load_store()
+    derived = {m for r in store["bridge"].values() for m in r["matches"]}
+    derived |= {c["match"] for r in store.get("revoked", {}).values()
+                for c in r["confirmations"]}
+    with open(os.path.join(os.path.dirname(__file__), "..", "registry",
+                           "cricbuzz_match_map.json"), encoding="utf-8") as fh:
+        pins = json.load(fh)["pins"]
+    want = {cbb.match_key(p["cricbuzz_match_id"], ev)
+            for p in pins.values() for ev in (p.get("espn_events") or [])}
+    assert want, "the pin ledger carries no ESPN event ids at all"
+    assert want - derived == {"cb145088/espn1521203"}, sorted(want - derived)
+    # and every pin must carry its event, or the pairing cannot enter the corpus at all
+    assert [k for k, p in pins.items() if not p.get("espn_events")] == []

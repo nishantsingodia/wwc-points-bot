@@ -74,9 +74,24 @@ IDEMPOTENCE / DETERMINISM
   is the durable store; re-run `python3 registry/cricbuzz_bridge.py --apply` after every
   build_registry run (it is idempotent and needs no network).
 
+⛔ THE CORPUS MUST NOT LAG THE PIN LEDGER (fixed 16 Aug 2026)
+  `registry/cricbuzz_match_map.json` knows every cb-match ⇄ ESPN-event pairing that has ever been
+  confirmed; --derive took HAND-TYPED `--pair` args and nothing joined the two. The corpus drifted
+  behind and stayed there: **83 of 94 pins derived, 11 not** — and six of the twelve `cb:` rows
+  then sitting on "Needs Cricinfo ID" were ONE of the eleven (cb154370, CPL Guyana v Jamaica,
+  14 Aug), whose whole XI Layer A pairs 22/22. `--derive --from-map` is now the way to run it, and
+  `test_the_derive_corpus_does_not_lag_the_pin_ledger` fails if a pin is ever left underived again.
+  It re-derives EVERY pin, not just the gap: the store is a pure function of the fact log, so a
+  logic change only reaches stored confirmations if their match is derived again.
+
 CLI
+  python3 registry/cricbuzz_bridge.py --derive --from-map    # ← THE ONE TO RUN. Pairs come from
+          # the pin ledger, ESPN play-by-play from the bot's own WC_CACHE_DIR: normally offline.
   python3 registry/cricbuzz_bridge.py --derive --pair 157061:1537342 --pair 157138:1537349 \
-          --cb-cache /path --espn-cache /path        # derive + merge + write the store
+          --cb-cache /path --espn-cache /path        # one-off, hand-typed
+  python3 registry/cricbuzz_bridge.py --adopt 12163:633660 --why "owner answered the tab"
+          # record a HUMAN answer to a `cb:` Needs-Cricinfo-ID row. tier 1: cross-check only, and
+          # it never outranks derived evidence — a contradiction revokes both, as always.
   python3 registry/cricbuzz_bridge.py --apply        # mirror the store into players.json
   python3 registry/cricbuzz_bridge.py --report       # tiers, revocations, off-registry ids
   python3 registry/cricbuzz_bridge.py --rekey        # apply registry/pid_map.json to stored ci ids
@@ -972,16 +987,22 @@ def confirmations_log(store):
     out = []
     # `source` travels back out too. A field the writer emits and the reader drops is erased on the
     # next recompile — the manual answer would keep its id and silently lose WHO said so.
+    # It is omitted when EMPTY, exactly as merge_confirmations and compile_bridge omit it: three
+    # projections of one row that disagree about which keys exist make equality comparisons lie,
+    # and `adopt`/`record` decide "did anything change?" by comparing two of them.
+    def _row(cb_id, ci_id, c):
+        r = {"cricbuzz_id": cb_id, "cricinfo_id": ci_id, "match": c["match"],
+             "method": c["method"], "date": c.get("date", "")}
+        if c.get("source"):
+            r["source"] = c["source"]
+        return r
+
     for cb_id, rec in store.get("bridge", {}).items():
         for c in rec["confirmations"]:
-            out.append({"cricbuzz_id": cb_id, "cricinfo_id": rec["cricinfo_id"],
-                        "match": c["match"], "method": c["method"], "date": c.get("date", ""),
-                        "source": c.get("source", "")})
+            out.append(_row(cb_id, rec["cricinfo_id"], c))
     for cb_id, rec in store.get("revoked", {}).items():
         for c in rec["confirmations"]:
-            out.append({"cricbuzz_id": cb_id, "cricinfo_id": c["cricinfo_id"],
-                        "match": c["match"], "method": c["method"], "date": c.get("date", ""),
-                        "source": c.get("source", "")})
+            out.append(_row(cb_id, c["cricinfo_id"], c))
     return sorted(out, key=_conf_sort_key)
 
 
