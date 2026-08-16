@@ -60,27 +60,33 @@ def test_empty_candidate_set_returns_none():
 
 
 # ── the case this project actually paid for ─────────────────────────────────────────────────
-def test_glenn_vs_dale_and_the_limit_of_strategy_5():
-    """CPL Match 6, and the sharpest thing these fixtures record.
+def test_the_model_separates_dale_from_glenn_in_every_form():
+    """THE MODEL WAS NEVER THE PROBLEM. Given both Phillipses as candidates it is right every time,
+    in every spelling the feeds actually produce — long form, announced form, initial, initials.
+    Verified identical in the TypeScript package.
 
-    With BOTH Phillipses present the model is right: strategy 5 needs a UNIQUE surname, two
-    candidates share it, so it falls through to the correct answer via the earlier strategies.
-
-    With Glenn ABSENT it returns DALE — verified identical in the TypeScript package
-    (fuzzyMatchName("Glenn Dominic Phillips", ["Dale Phillips"]) === "Dale Phillips"), so this is
-    the model's real behaviour and this port is faithful, not broken.
-
-    ⚠ THE CALLER OWNS THIS RISK. Strategy 5 asks "is this surname unique in the candidate set",
-    which is only a safe question when the set CONTAINS the right person. Hand it an incomplete
-    squad and the "unique" surname belongs to whoever is left. That is exactly how Glenn's 99-point
-    innings reached Dale: Glenn was unmatchable (no cricinfo id), so the only Phillips left was
-    Dale. The matcher did what it was designed to do.
-
-    So the protection is upstream, never here: do not call this with an id-bearing row (the bot now
-    refuses to), and do not call it with a candidate set you know is missing people.
+    The bot's misattribution (Glenn's 99-point innings published under Dale, Glenn as Played=N)
+    came from the bot NOT USING this model: it scored name_similarity*60 + surname_similarity*40
+    in closest_squad and returned a best guess with no ambiguity floor, against a squad Glenn had
+    already dropped out of because he had no cricinfo id. Two faults, neither of them here — a
+    private scorer, and an incomplete candidate set.
     """
-    assert fuzzy_match_name("Glenn Dominic Phillips",
-                            ["Dale Phillips", "Glenn Phillips"]) == "Glenn Phillips"
+    both = ["Dale Phillips", "Glenn Phillips"]
+    assert fuzzy_match_name("Glenn Dominic Phillips", both) == "Glenn Phillips"
+    assert fuzzy_match_name("Glenn Phillips", both) == "Glenn Phillips"
+    assert fuzzy_match_name("G Phillips", both) == "Glenn Phillips"
+    assert fuzzy_match_name("GD Phillips", both) == "Glenn Phillips"
+    assert fuzzy_match_name("D Phillips", both) == "Dale Phillips"
+
+
+def test_a_candidate_set_missing_the_right_player_is_the_callers_bug():
+    """Asked to match a Phillips against a list containing only Dale, the model returns Dale — as
+    it should; that is strategy 5 doing its job ("WK Dilhari" -> the only Dilhari). It is not a
+    failure to tell the two apart, it is a caller handing over a list the right man is absent from.
+
+    So the protection lives upstream, and now does: an id-bearing row can no longer reach the
+    matcher at all, because an athlete id is better evidence than any name.
+    """
     assert fuzzy_match_name("Glenn Dominic Phillips", ["Dale Phillips"]) == "Dale Phillips"
 
 
