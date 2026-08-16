@@ -866,6 +866,15 @@
    "provenance": "derived-from-settlement"
   },
   {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-08-16::manchester super giants|trent rockets",
+   "match": "Match 32 — MTMSG v MTTRR",
+   "date": "2026-08-16",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-08-16",
+   "provenance": "live"
+  },
+  {
    "tour": "The Hundred Women's Competition 2026",
    "match_key": "2026-08-16::sunrisers leeds|trent rockets",
    "match": "Match 32 — WTSUNL v WTTRR",
