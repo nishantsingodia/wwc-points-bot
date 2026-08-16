@@ -20,6 +20,10 @@ Usage:
 """
 import os, sys, json, re, csv, time, glob, html, unicodedata, urllib.request
 from difflib import SequenceMatcher
+
+# The OWNER'S name-matching model, ported faithfully in cricket_identity.py and pinned by his own
+# fixtures. Every identity DECISION goes through this; nothing in this file may score names itself.
+from cricket_identity import fuzzy_match_name as _ci_fuzzy
 from datetime import date, timedelta, datetime, timezone
 
 # FREQUENT mode = the every-5-min "live lineup" tick (vs the 2-hourly full run).
@@ -328,8 +332,18 @@ def guess_role(p):
     return "BAT"
 
 def closest_squad(name, team_players):
-    """Best-guess closest squad player for an unmatched feed name (surname-weighted), even
-    below the match threshold — so 'Needs Review' can say 'is this <X>? Yes/No'."""
+    """A HINT for the human, never an assignment.
+
+    ⚠ This deliberately does NOT use the shared cricket-identity model, and that is the point: the
+    model returns None on ambiguity, which is correct for deciding identity and useless for asking
+    "is this <X>? Yes/No" — a Needs Review row with no suggestion gives the reader nothing to react
+    to. So it keeps a surname-weighted score to surface the nearest name.
+
+    Its output must NEVER reach an assignment. Every identity DECISION in this file goes through
+    _ci_fuzzy (the shared model); this only fills the 'Closest Match' column a human then confirms.
+    Scoring names to decide who someone is, rather than to prompt a person, is what published 99 FP
+    under Dale Phillips instead of Glenn.
+    """
     nn = norm(name); nt = nn.split()
     if not nt:
         return ("", 0.0)
@@ -620,27 +634,34 @@ def match_squad_to_perf(team_players, pool, quiet=False):
     # 2) FUZZY FALLBACK (legacy behaviour) — only squad players unresolved by pid, matched
     #    against feed entries that also lacked a pid. Logged, never silent.
     if pending and unresolved:
+        # ⛔ USE THE SHARED MODEL. This block used to score every (squad, feed) pair with its own
+        # weights — name_similarity*100 with +8 for a shared surname and +6 for a shared first
+        # token, plus a ladder of 100/95/92/90 special cases — then assign anything scoring 84+.
+        # That is a DIFFERENT algorithm from cricket-identity, which wwc-draft and the auction both
+        # consume, and the difference is not academic: a weighted score always produces a best
+        # candidate, so there is no ambiguity floor. The shared model returns None when two
+        # candidates match a strategy, and that refusal is the whole safety property.
+        # It cost real money here: ESPN's "Glenn Dominic Phillips" scored against a squad Glenn had
+        # already dropped out of (no cricinfo id), the only remaining Phillips was Dale, and 99 FP
+        # published under the wrong man with Glenn marked Played=N.
+        # One model, three apps. Behaviour changes belong in the cricket-identity repo, not here.
         pairs = []
         for short, name, role in pending:
-            nn = norm(name); nt = nn.split(); ln, fi = nt[-1], nt[0][0]
-            for uk, uv in unresolved.items():
-                ak = ALIAS.get(uk, uk); pt = ak.split()
-                if not pt: continue
-                pl, pf = pt[-1], pt[0][0]
-                if ak == nn: sc = 100.0
-                elif set(nt).issubset(set(pt)): sc = 95.0
-                elif pl == ln and pf == fi: sc = 92.0
-                elif pl == ln and max((SequenceMatcher(None, a, b).ratio()
-                                       for a in nt for b in pt), default=0) >= 0.85: sc = 90.0
-                else:
-                    sc = SequenceMatcher(None, nn, ak).ratio() * 100
-                    if pl == ln: sc += 8
-                    if pt[0] == nt[0]: sc += 6
-                pairs.append((sc, short, name, uk))
-        pairs.sort(key=lambda x: -x[0])
+            # Candidates are the feed's ALIASED names (the same strings the old scorer compared),
+            # keyed back to their feed entry so the assignment below is unchanged.
+            cand_keys = list(unresolved.keys())
+            cand_names = [ALIAS.get(uk, uk) for uk in cand_keys]
+            hit = _ci_fuzzy(name, cand_names)
+            if hit is None:
+                continue                      # ambiguous or no match -> leave it for review
+            uk = cand_keys[cand_names.index(hit)]
+            # Score is retained only for the log line and the stable ordering below; the DECISION
+            # is the model's, not the number's.
+            pairs.append((100.0, short, name, uk))
+        pairs.sort(key=lambda x: (-x[0], x[1], x[2]))
         used_sq = set()
         for sc, short, name, uk in pairs:
-            if sc < 84 or (short, name) in used_sq or uk in used_uk:
+            if (short, name) in used_sq or uk in used_uk:
                 continue
             assigned[(short, name)] = unresolved[uk]
             used_sq.add((short, name)); used_uk.add(uk)
@@ -664,6 +685,13 @@ def match_squad_to_perf(team_players, pool, quiet=False):
 def best_team(name, team_map):
     """Fuzzy-match a player name to an ESPN roster {norm_name: team} and return the team
     (handles verbose ESPN spellings). '' if no confident match."""
+    # Decided by the SHARED model, not a private score: this picks WHICH PERSON on the roster the
+    # feed name is, and the team falls out of that. A weighted score always yields a best candidate
+    # and so cannot refuse; the model returns None when two roster names match a strategy, which is
+    # exactly the refusal that keeps two same-surname players on one roster from swapping sides.
+    _hit = _ci_fuzzy(name, list(team_map.keys()))
+    if _hit is not None:
+        return team_map[_hit]
     nn = norm(name); nt = nn.split()
     if not nt:
         return ""
