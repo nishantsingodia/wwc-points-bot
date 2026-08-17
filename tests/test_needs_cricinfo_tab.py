@@ -119,9 +119,16 @@ def test_the_23_pending_reach_the_tab_and_none_of_the_live_52_are_reappended(
     # real cricinfo ids (ci:1394274 / ci:823509 / ci:327830), so asking about them again would be
     # asking a question we have already answered. The fixture is a 13 Aug snapshot; the rule that
     # skips an anchored name is what makes the difference, and it is the rule worth pinning.
-    anchored = {"Mavendra Dindyal", "Glenn Phillips", "Dwaine Pretorius"}
-    assert len(ws.appended) == 23 - len(anchored)
-    assert not (anchored & {r[0] for r in ws.appended}), "re-asked an already-anchored player"
+    # DERIVED, never a magic number. Players get anchored to real cricinfo ids over time — Dindyal,
+    # Glenn Phillips and Pretorius first, then Odean Smith and Nathan Edward as they debuted — and
+    # each one correctly stops being asked about. A hardcoded count turns that healthy progress into
+    # a test failure, so assert the RULE: everyone still unanchored is asked, everyone anchored is
+    # not. That cannot go stale.
+    unanchored = [e["player"] for e in pending
+                  if not (wcmod.ALIAS2PID.get(wcmod.norm(e["player"])) or "")
+                  .startswith("ci:")]
+    assert {r[0] for r in ws.appended} == set(unanchored)
+    assert len(ws.appended) < 23, "nothing was anchored — the fixture or the registry is stale"
     live_pids = {r[1].strip() for r in tab[1:]}
     assert [r for r in ws.appended if r[1] in live_pids] == []   # NONE of the 52 re-appended
     assert all(r[5] == "" for r in ws.appended)            # the fill column is never written to
@@ -132,7 +139,9 @@ def test_second_run_appends_nothing(wcmod, monkeypatch, tmp_path, fake_gspread):
     pending = json.load(open(os.path.join(FIX, "needs_cricinfo_pending_20260813.json")))
     ws = _wire(wcmod, monkeypatch, tmp_path, _live_tab(), pending)
     wcmod.write_needs_cricinfo_tab()
-    assert len(ws.appended) == 20      # 23 minus the 3 since anchored — see the test above
+    unanchored = [e["player"] for e in pending
+                  if not (wcmod.ALIAS2PID.get(wcmod.norm(e["player"])) or "").startswith("ci:")]
+    assert len(ws.appended) == len(unanchored)   # derived — see the first test
     ws.appended.clear()
     wcmod.write_needs_cricinfo_tab()
     assert ws.appended == []
@@ -203,7 +212,10 @@ def test_a_placeholder_anchor_is_not_an_answer(wcmod, monkeypatch, tmp_path, fak
 def test_unreadable_bridges_file_fails_open(wcmod, monkeypatch, tmp_path, fake_gspread):
     """An ABSENCE must never read as 'already handled'. A missing/corrupt bridges file means we
     know nothing about who has been answered — so surface the row, don't swallow it."""
-    pending = [{"player": "Odean Smith", "current_pid": "uncapped:odean-smith",
+    # A SYNTHETIC name on purpose. This used to use Odean Smith, who has since debuted and been
+    # anchored to ci:820691 — so he stopped being asked about, correctly, and took the test with
+    # him. A fixture that names a real player silently expires the moment that player is resolved.
+    pending = [{"player": "Zzz Neveranchored", "current_pid": "uncapped:zzz-neveranchored",
                 "tour": "CPL", "team": "MTJAM", "closest_guess": ""}]
     ws = _wire(wcmod, monkeypatch, tmp_path, [HEADER], pending)
     monkeypatch.setattr(wcmod, "CI_BRIDGES_PATH", str(tmp_path / "does-not-exist.json"))
@@ -230,7 +242,9 @@ def test_dedupe_survives_a_column_inserted_before_current_pid(wcmod, monkeypatch
     wcmod.write_needs_cricinfo_tab()
     live_pids = {r[2].strip() for r in shifted[1:]}
     assert [r for r in ws.appended if r[1] in live_pids] == []
-    assert len(ws.appended) == 20      # 23 minus the 3 since anchored — see the first test
+    unanchored = [e["player"] for e in pending
+                  if not (wcmod.ALIAS2PID.get(wcmod.norm(e["player"])) or "").startswith("ci:")]
+    assert len(ws.appended) == len(unanchored)   # derived — see the first test
 
 
 def test_no_current_pid_column_holds_the_queue_instead_of_duplicating_it(
