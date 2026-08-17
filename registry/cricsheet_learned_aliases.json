@@ -148,6 +148,402 @@
   "johann francis jeremiah": {
    "pid": "ci:1342552",
    "display": "Johann Jeremiah"
+  },
+  "pinnaduwage wanindu hasaranga de silva": {
+   "pid": "ci:784379",
+   "display": "Wanindu Hasaranga"
+  },
+  "kariyawasam indipalage charith asalanka": {
+   "pid": "ci:784367",
+   "display": "Charith Asalanka"
+  },
+  "thomas kevin curran": {
+   "pid": "ci:550235",
+   "display": "Tom Curran"
+  },
+  "richard james gleeson": {
+   "pid": "ci:473191",
+   "display": "Richard Gleeson"
+  },
+  "nathan adam sowter": {
+   "pid": "ci:747315",
+   "display": "Nathan Sowter"
+  },
+  "rashid khan arman": {
+   "pid": "ci:793463",
+   "display": "Rashid Khan"
+  },
+  "daniel william lawrence": {
+   "pid": "ci:641423",
+   "display": "Dan Lawrence"
+  },
+  "thomas philip alsop": {
+   "pid": "ci:602155",
+   "display": "Tom Alsop"
+  },
+  "benny alexander cameron howell": {
+   "pid": "ci:211748",
+   "display": "Benny Howell"
+  },
+  "brydon alexander carse": {
+   "pid": "ci:596417",
+   "display": "Brydon Carse"
+  },
+  "jason jonathan roy": {
+   "pid": "ci:298438",
+   "display": "Jason Roy"
+  },
+  "matthew james potts": {
+   "pid": "ci:1027781",
+   "display": "Matthew Potts"
+  },
+  "james michael vince": {
+   "pid": "ci:296597",
+   "display": "James Vince"
+  },
+  "joshua ryan philippe": {
+   "pid": "ci:1124282",
+   "display": "Josh Philippe"
+  },
+  "bac howell": {
+   "pid": "ci:211748",
+   "display": "Benny Howell"
+  },
+  "mj potts": {
+   "pid": "ci:1027781",
+   "display": "Matthew Potts"
+  },
+  "jj roy": {
+   "pid": "ci:298438",
+   "display": "Jason Roy"
+  },
+  "tk curran": {
+   "pid": "ci:550235",
+   "display": "Tom Curran"
+  },
+  "jamie luke smith": {
+   "pid": "ci:1096092",
+   "display": "Jamie Smith"
+  },
+  "christopher roger woakes": {
+   "pid": "ci:247235",
+   "display": "Chris Woakes"
+  },
+  "ben stewart mckinney": {
+   "pid": "ci:1280097",
+   "display": "Ben McKinney"
+  },
+  "samuel james cook": {
+   "pid": "ci:772061",
+   "display": "Sam Cook"
+  },
+  "thomas henry sidney rew": {
+   "pid": "ci:1379431",
+   "display": "Thomas Rew"
+  },
+  "david andrew miller": {
+   "pid": "ci:321777",
+   "display": "David Miller"
+  },
+  "joseph edward root": {
+   "pid": "ci:303669",
+   "display": "Joe Root"
+  },
+  "benjamin ian kellaway": {
+   "pid": "ci:1200126",
+   "display": "Ben Kellaway"
+  },
+  "christopher james jordan": {
+   "pid": "ci:288992",
+   "display": "Chris Jordan"
+  },
+  "daniel james worrall": {
+   "pid": "ci:557298",
+   "display": "Dan Worrall"
+  },
+  "jordan matthew cox": {
+   "pid": "ci:1112537",
+   "display": "Jordan Cox"
+  },
+  "asa mark tribe": {
+   "pid": "ci:1195664",
+   "display": "Asa Tribe"
+  },
+  "jl smith": {
+   "pid": "ci:1096092",
+   "display": "Jamie Smith"
+  },
+  "ths rew": {
+   "pid": "ci:1379431",
+   "display": "Thomas Rew"
+  },
+  "da miller": {
+   "pid": "ci:321777",
+   "display": "David Miller"
+  },
+  "t stubbs": {
+   "pid": "ci:595978",
+   "display": "Tristan Stubbs"
+  },
+  "cj jordan": {
+   "pid": "ci:288992",
+   "display": "Chris Jordan"
+  },
+  "mw short": {
+   "pid": "ci:605575",
+   "display": "Matthew Short"
+  },
+  "je root": {
+   "pid": "ci:303669",
+   "display": "Joe Root"
+  },
+  "am tribe": {
+   "pid": "ci:1195664",
+   "display": "Asa Tribe"
+  },
+  "bi kellaway": {
+   "pid": "ci:1200126",
+   "display": "Ben Kellaway"
+  },
+  "m jansen": {
+   "pid": "ci:696401",
+   "display": "Marco Jansen"
+  },
+  "lh ferguson": {
+   "pid": "ci:493773",
+   "display": "Lockie Ferguson"
+  },
+  "sj cook": {
+   "pid": "ci:772061",
+   "display": "Sam Cook"
+  },
+  "aiden kyle markram": {
+   "pid": "ci:600498",
+   "display": "Aiden Markram"
+  },
+  "david jonathan willey": {
+   "pid": "ci:308251",
+   "display": "David Willey"
+  },
+  "tymal solomon mills": {
+   "pid": "ci:459257",
+   "display": "Tymal Mills"
+  },
+  "james matthew coles": {
+   "pid": "ci:1231590",
+   "display": "James Coles"
+  },
+  "liam stephen livingstone": {
+   "pid": "ci:403902",
+   "display": "Liam Livingstone"
+  },
+  "jacobus leus du plooy": {
+   "pid": "ci:595739",
+   "display": "Leus du Plooy"
+  },
+  "thomas james moores": {
+   "pid": "ci:788101",
+   "display": "Tom Moores"
+  },
+  "angus alexander patrick atkinson": {
+   "pid": "ci:1039481",
+   "display": "Gus Atkinson"
+  },
+  "noor ahmad lakanwal": {
+   "pid": "ci:1182529",
+   "display": "Noor Ahmad"
+  },
+  "james edward kenneth rew": {
+   "pid": "ci:1184436",
+   "display": "James Rew"
+  },
+  "jl du plooy": {
+   "pid": "ci:595739",
+   "display": "Leus du Plooy"
+  },
+  "tj moores": {
+   "pid": "ci:788101",
+   "display": "Tom Moores"
+  },
+  "jc tongue": {
+   "pid": "ci:857975",
+   "display": "Josh Tongue"
+  },
+  "lg pretorius": {
+   "pid": "ci:1385640",
+   "display": "Lhuan-dre Pretorius"
+  },
+  "jek rew": {
+   "pid": "ci:1184436",
+   "display": "James Rew"
+  },
+  "jm coles": {
+   "pid": "ci:1231590",
+   "display": "James Coles"
+  },
+  "j overton": {
+   "pid": "ci:510530",
+   "display": "Jamie Overton"
+  },
+  "ts mills": {
+   "pid": "ci:459257",
+   "display": "Tymal Mills"
+  },
+  "joe michael clarke": {
+   "pid": "ci:571911",
+   "display": "Joe Clarke"
+  },
+  "matthew james henry": {
+   "pid": "ci:506612",
+   "display": "Matt Henry"
+  },
+  "william conrad francis smeed": {
+   "pid": "ci:1099224",
+   "display": "Will Smeed"
+  },
+  "ben matthew duckett": {
+   "pid": "ci:521637",
+   "display": "Ben Duckett"
+  },
+  "scott william currie": {
+   "pid": "ci:1104697",
+   "display": "Scott Currie"
+  },
+  "samuel william billings": {
+   "pid": "ci:297628",
+   "display": "Sam Billings"
+  },
+  "laurie john evans": {
+   "pid": "ci:256956",
+   "display": "Laurie Evans"
+  },
+  "jm clarke": {
+   "pid": "ci:571911",
+   "display": "Joe Clarke"
+  },
+  "lj evans": {
+   "pid": "ci:256956",
+   "display": "Laurie Evans"
+  },
+  "sw currie": {
+   "pid": "ci:1104697",
+   "display": "Scott Currie"
+  },
+  "c overton": {
+   "pid": "ci:464626",
+   "display": "Craig Overton"
+  },
+  "mj henry": {
+   "pid": "ci:506612",
+   "display": "Matt Henry"
+  },
+  "se rutherford": {
+   "pid": "ci:914541",
+   "display": "Sherfane Rutherford"
+  },
+  "jonathan marc bairstow": {
+   "pid": "ci:297433",
+   "display": "Jonny Bairstow"
+  },
+  "oliver john douglas pope": {
+   "pid": "ci:887207",
+   "display": "Ollie Pope"
+  },
+  "oj pope": {
+   "pid": "ci:887207",
+   "display": "Ollie Pope"
+  },
+  "oliver peter stone": {
+   "pid": "ci:457279",
+   "display": "Olly Stone"
+  },
+  "christopher philip wood": {
+   "pid": "ci:310525",
+   "display": "Chris Wood"
+  },
+  "aneurin henry thomas donald": {
+   "pid": "ci:562281",
+   "display": "Aneurin Donald"
+  },
+  "liam anthony patterson white": {
+   "pid": "ci:1023361",
+   "display": "Liam Patterson-White"
+  },
+  "caleb matthew falconer": {
+   "pid": "ci:1434859",
+   "display": "Caleb Falconer"
+  },
+  "bf smith": {
+   "pid": "ci:874277",
+   "display": "Bryony Smith"
+  },
+  "l winfield hill": {
+   "pid": "ci:517572",
+   "display": "Lauren Winfield-Hill"
+  },
+  "s turner": {
+   "pid": "ci:1230752",
+   "display": "Sophia Turner"
+  },
+  "cm mccarthy": {
+   "pid": "ci:1120320",
+   "display": "Cassidy McCarthy"
+  },
+  "matilda rose corteen coleman": {
+   "pid": "ci:1427057",
+   "display": "Tilly Corteen-Coleman"
+  },
+  "l lee": {
+   "pid": "ci:483484",
+   "display": "Lizelle Lee"
+  },
+  "mr corteen coleman": {
+   "pid": "ci:1427057",
+   "display": "Tilly Corteen-Coleman"
+  },
+  "h graham": {
+   "pid": "ci:546629",
+   "display": "Heather Graham"
+  },
+  "m kelly": {
+   "pid": "ci:652939",
+   "display": "Marie Kelly"
+  },
+  "kl george": {
+   "pid": "ci:879369",
+   "display": "Katie George"
+  },
+  "m brown": {
+   "pid": "ci:1061621",
+   "display": "Maitlan Brown"
+  },
+  "j spence": {
+   "pid": "ci:1334186",
+   "display": "Jemima Spence"
+  },
+  "e gray": {
+   "pid": "ci:1008089",
+   "display": "Eva Gray"
+  },
+  "e jones": {
+   "pid": "ci:858807",
+   "display": "Eve Jones"
+  },
+  "sl bates": {
+   "pid": "ci:537440",
+   "display": "Samantha Bates"
+  },
+  "k moore": {
+   "pid": "ci:1185628",
+   "display": "Kalea Moore"
+  },
+  "cn phillips": {
+   "pid": "ci:1482630",
+   "display": "Charley Phillips"
+  },
+  "t johnson": {
+   "pid": "ci:1469035",
+   "display": "Trudy Johnson"
   }
  }
 }
