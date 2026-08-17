@@ -527,6 +527,17 @@ def long_form_plausible(a, b):
         return True
     return len(long_) >= 4 and hits >= 2
 
+# A row whose "player" is a generated stand-in makes NO NAME ASSERTION. The false-merge guards
+# below compare two names to decide whether a human is fusing two people — a question that cannot
+# be asked of "cricbuzz player 12163", which resembles nobody by construction. Left unhandled it is
+# an infinite loop: the guard refuses, a refused row is deliberately never retired, and the same
+# unanswerable question returns on every run. Live: cb:12163 -> ci:633660, tier 1, method "manual"
+# — the owner had ALREADY answered it, and the answer was correct (ci:633660 is Virandeep Singh).
+_PLACEHOLDER_NAME = re.compile(r"^(cricbuzz|cricapi|espn) player \d+$", re.I)
+
+def is_placeholder_name(n):
+    return bool(_PLACEHOLDER_NAME.match((n or "").strip()))
+
 JUNK_NAMES = {"player not found", "sub", "substitute", "not available"}
 def is_junk(name):
     n = norm(name)
@@ -5042,7 +5053,8 @@ def read_needs_cricinfo():
         _keep_row = False
         prior = resolve_pid(player)
         _prior_disp = PID2DISP.get(prior, "") if prior else ""
-        if (prior and prior != f"ci:{cid}"
+        _no_name = is_placeholder_name(player)
+        if (prior and prior != f"ci:{cid}" and not _no_name
                 and not same_person_plausible(_prior_disp, player)
                 and not long_form_plausible(_prior_disp, player)):
             ANOMALIES.append({
@@ -5057,7 +5069,8 @@ def read_needs_cricinfo():
             flagged += 1
             _keep_row = True
         owner = known_ci.get(cid)
-        if (owner and not same_person_plausible(owner[1].get("display", ""), player)
+        if (owner and not _no_name
+                and not same_person_plausible(owner[1].get("display", ""), player)
                 and not long_form_plausible(owner[1].get("display", ""), player)):
             ANOMALIES.append({
                 "tour": CURRENT_TOUR or "(needs-cricinfo)", "kind": "false_merge",
