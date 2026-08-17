@@ -78715,6 +78715,23 @@
    "match": "Match 5 — MTSTL v MTSTK",
    "date": "2026-08-12",
    "team": "MTSTL",
+   "pid": "ci:1342545",
+   "full": "Amari Alexandre Goodridge",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "ESPN scorecard (cricapi empty) · ⏳ provisional (dots unverified, awaiting cricsheet) · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-17",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-12::st kitts and nevis patriots|st lucia kings",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 5 — MTSTL v MTSTK",
+   "date": "2026-08-12",
+   "team": "MTSTL",
    "pid": "uncapped:amari-goodridge",
    "full": "Amari Goodridge",
    "points": 0,
@@ -79727,6 +79744,23 @@
     "dismissed": false,
     "lbwb": 0,
     "dro": 0
+   }
+  },
+  {
+   "match_key": "2026-08-14::antigua and barbuda falcons|st lucia kings",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 7 — MTSTL v MTANT",
+   "date": "2026-08-14",
+   "team": "MTSTL",
+   "pid": "ci:1342545",
+   "full": "Amari Alexandre Goodridge",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "ESPN scorecard (cricapi empty) · ⏳ provisional (dots unverified, awaiting cricsheet) · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-17",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
