@@ -7557,7 +7557,7 @@
    "cricinfo_id": "823509",
    "cricsheet_id": "9a46c4e5",
    "espn_id": "823509",
-   "display": "Dale Phillips",
+   "display": "Glenn Phillips",
    "draft_id": 10777,
    "auction_id": 402
   },
@@ -11384,17 +11384,6 @@
    "draft_id": 10693,
    "auction_id": null
   },
-  "uncapped:odean-smith": {
-   "aliases": [
-    "odean smith"
-   ],
-   "tours": [
-    "Caribbean Premier League 2026"
-   ],
-   "display": "Odean Smith",
-   "draft_id": 10695,
-   "auction_id": null
-  },
   "uncapped:tayyab-arif": {
    "aliases": [
     "tayyab arif"
@@ -11628,17 +11617,6 @@
    "auction_id": null,
    "cricbuzz_id": "13750",
    "cricbuzz_tier": 1
-  },
-  "uncapped:nathan-edward": {
-   "aliases": [
-    "nathan edward"
-   ],
-   "tours": [
-    "Caribbean Premier League 2026"
-   ],
-   "display": "Nathan Edward",
-   "draft_id": 10721,
-   "auction_id": null
   },
   "ci:914455": {
    "aliases": [
@@ -12177,6 +12155,35 @@
    "espn_id": "1039481",
    "draft_id": 10461,
    "auction_id": null
+  },
+  "ci:820691": {
+   "aliases": [
+    "odean fabian smith",
+    "odean smith"
+   ],
+   "tours": [
+    "Caribbean Premier League 2026"
+   ],
+   "display": "Odean Smith",
+   "draft_id": 10695,
+   "auction_id": null,
+   "cricinfo_id": "820691",
+   "cricsheet_id": "23cca426",
+   "espn_id": "820691"
+  },
+  "ci:1275939": {
+   "aliases": [
+    "nathan edward"
+   ],
+   "tours": [
+    "Caribbean Premier League 2026"
+   ],
+   "display": "Nathan Edward",
+   "draft_id": 10721,
+   "auction_id": null,
+   "cricinfo_id": "1275939",
+   "cricsheet_id": "267468de",
+   "espn_id": "1275939"
   }
  }
 }

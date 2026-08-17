@@ -1,1 +1,128 @@
-[]
+[
+ {
+  "player": "Joshua James",
+  "team": "MTANT",
+  "tour": "Caribbean Premier League 2026",
+  "current_pid": "uncapped:joshua-james",
+  "closest_guess": "JM James"
+ },
+ {
+  "player": "Anderson Mahase",
+  "team": "MTANT",
+  "tour": "Caribbean Premier League 2026",
+  "current_pid": "uncapped:anderson-mahase",
+  "closest_guess": "Anderson Mahase"
+ },
+ {
+  "player": "Anderson Phillip",
+  "team": "MTANT",
+  "tour": "Caribbean Premier League 2026",
+  "current_pid": "uncapped:anderson-phillip",
+  "closest_guess": "A Phillip"
+ },
+ {
+  "player": "Sufyan Moqim",
+  "team": "MTANT",
+  "tour": "Caribbean Premier League 2026",
+  "current_pid": "uncapped:sufyan-moqim",
+  "closest_guess": "Sufiyan Muqeem"
+ },
+ {
+  "player": "Romaine Morris",
+  "team": "MTJAM",
+  "tour": "Caribbean Premier League 2026",
+  "current_pid": "uncapped:romaine-morris",
+  "closest_guess": "Romaine Morris"
+ },
+ {
+  "player": "Tayyab Arif",
+  "team": "MTJAM",
+  "tour": "Caribbean Premier League 2026",
+  "current_pid": "uncapped:tayyab-arif",
+  "closest_guess": "Tayyab Arif"
+ },
+ {
+  "player": "Usman Khan",
+  "team": "MTJAM",
+  "tour": "Caribbean Premier League 2026",
+  "current_pid": "uncapped:usman-khan",
+  "closest_guess": "Usman Khan"
+ },
+ {
+  "player": "Jeremiah Louis",
+  "team": "MTSTK",
+  "tour": "Caribbean Premier League 2026",
+  "current_pid": "uncapped:jeremiah-louis",
+  "closest_guess": "JS Louis"
+ },
+ {
+  "player": "Mikyle Louis",
+  "team": "MTSTK",
+  "tour": "Caribbean Premier League 2026",
+  "current_pid": "uncapped:mikyle-louis",
+  "closest_guess": "M Louis"
+ },
+ {
+  "player": "Micah McKenzie",
+  "team": "MTSTK",
+  "tour": "Caribbean Premier League 2026",
+  "current_pid": "uncapped:micah-mckenzie",
+  "closest_guess": "Micah McKenzie"
+ },
+ {
+  "player": "Abdul-Raheem Toppin",
+  "team": "MTTRI",
+  "tour": "Caribbean Premier League 2026",
+  "current_pid": "uncapped:abdul-raheem-toppin",
+  "closest_guess": "Abdul-Raheem Toppin"
+ },
+ {
+  "player": "Amari Goodridge",
+  "team": "MTSTL",
+  "tour": "Caribbean Premier League 2026",
+  "current_pid": "uncapped:amari-goodridge",
+  "closest_guess": "Amari Goodridge"
+ },
+ {
+  "player": "Damion Joachim",
+  "team": "MTSTL",
+  "tour": "Caribbean Premier League 2026",
+  "current_pid": "uncapped:damion-joachim",
+  "closest_guess": "Damion Joachim"
+ },
+ {
+  "player": "Kofi James",
+  "team": "MTBAR",
+  "tour": "Caribbean Premier League 2026",
+  "current_pid": "uncapped:kofi-james",
+  "closest_guess": "KHM James"
+ },
+ {
+  "player": "Jakeem Pollard",
+  "team": "MTBAR",
+  "tour": "Caribbean Premier League 2026",
+  "current_pid": "uncapped:jakeem-pollard",
+  "closest_guess": "Jakeem Pollard"
+ },
+ {
+  "player": "Ronaldo Alimohamed",
+  "team": "MTGUY",
+  "tour": "Caribbean Premier League 2026",
+  "current_pid": "uncapped:ronaldo-alimohamed",
+  "closest_guess": "Ronaldo Alimohamed"
+ },
+ {
+  "player": "Isai Thorne",
+  "team": "MTGUY",
+  "tour": "Caribbean Premier League 2026",
+  "current_pid": "uncapped:isai-thorne",
+  "closest_guess": "Isai Thorne"
+ },
+ {
+  "player": "Jonathan van Lange",
+  "team": "MTGUY",
+  "tour": "Caribbean Premier League 2026",
+  "current_pid": "uncapped:jonathan-van-lange",
+  "closest_guess": "Jonathan van Lange"
+ }
+]
