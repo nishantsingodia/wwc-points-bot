@@ -858,6 +858,15 @@
   },
   {
    "tour": "Caribbean Premier League 2026",
+   "match_key": "2026-08-16::barbados tridents|st lucia kings",
+   "match": "Match 9 — MTSTL v MTBAR",
+   "date": "2026-08-16",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-17",
+   "provenance": "live"
+  },
+  {
+   "tour": "Caribbean Premier League 2026",
    "match_key": "2026-08-16::jamaica kingsmen|trinbago knight riders",
    "match": "Match 8 — MTJAM v MTTRI",
    "date": "2026-08-16",

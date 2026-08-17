@@ -695,6 +695,19 @@
         "Caribbean Premier League 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:1342545",
+      "display": "Amari Alexandre Goodridge",
+      "aliases": [
+        "amari alexandre goodridge"
+      ],
+      "team": "MTSTL",
+      "role": "BAT",
+      "tours": [
+        "Caribbean Premier League 2026"
+      ],
+      "source": "auto"
     }
   ]
 }
