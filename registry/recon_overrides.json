@@ -6786,6 +6786,123 @@
       "field": "runouts",
       "status": "approved",
       "source": "S1"
+    },
+    {
+      "match_key": "2026-08-09::antigua and barbuda falcons|st lucia kings",
+      "scope": "player",
+      "pid": "ci:1209190",
+      "field": "balls",
+      "status": "approved",
+      "source": "S1"
+    },
+    {
+      "match_key": "2026-07-26::london spirit|trent rockets",
+      "scope": "l2",
+      "pid": "ci:521637",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-29::trent rockets|welsh fire",
+      "scope": "l2",
+      "pid": "ci:521637",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-07-29::london spirit|mi london",
+      "scope": "l2",
+      "pid": "ci:1385640",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-08::manchester super giants|southern brave",
+      "scope": "player",
+      "pid": "ci:669855",
+      "field": "runs_conceded",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-08-08::manchester super giants|southern brave",
+      "scope": "player",
+      "pid": "ci:669855",
+      "field": "dots",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-08-09::sunrisers leeds|welsh fire",
+      "scope": "player",
+      "pid": "ci:493773",
+      "field": "balls",
+      "status": "approved",
+      "source": "S1"
+    },
+    {
+      "match_key": "2026-08-09::birmingham phoenix|london spirit",
+      "scope": "player",
+      "pid": "ci:688141",
+      "field": "catches",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-08-09::birmingham phoenix|london spirit",
+      "scope": "player",
+      "pid": "ci:660889",
+      "field": "dots",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-08-09::birmingham phoenix|london spirit",
+      "scope": "player",
+      "pid": "ci:748793",
+      "field": "catches",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-08-12::london spirit|welsh fire",
+      "scope": "player",
+      "pid": "ci:403902",
+      "field": "catches",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-08-12::london spirit|welsh fire",
+      "scope": "player",
+      "pid": "ci:1385640",
+      "field": "catches",
+      "status": "approved",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-08-14::manchester super giants|sunrisers leeds",
+      "scope": "player",
+      "pid": "ci:211855",
+      "field": "balls",
+      "status": "approved",
+      "source": "S1"
+    },
+    {
+      "match_key": "2026-08-14::manchester super giants|sunrisers leeds",
+      "scope": "player",
+      "pid": "ci:1191192",
+      "field": "balls",
+      "status": "approved",
+      "source": "S1"
+    },
+    {
+      "match_key": "2026-08-14::manchester super giants|sunrisers leeds",
+      "scope": "player",
+      "pid": "ci:1191192",
+      "field": "dots",
+      "status": "approved",
+      "source": "S1"
     }
   ]
 }
