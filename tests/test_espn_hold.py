@@ -126,7 +126,8 @@ def test_hold_row_names_the_match_and_carries_both_numbers(wcmod):
 def test_approval_roundtrips_into_an_override(wcmod):
     o = wcmod._approval_to_override("2026-08-12::br|tkr", "espn:1534183", "ESPN CARD", "S2", "")
     assert o == {"match_key": "2026-08-12::br|tkr", "scope": "espn_card",
-                 "pid": "espn:1534183", "source": "S2", "status": "approved"}
+                 "pid": "espn:1534183", "source": "S2", "status": "approved",
+                 "witness": "espn"}      # the slot names its feed, so it cannot drift silently
     assert wcmod._approval_to_override("k", "espn:1", "ESPN CARD", "S1", "")["source"] == "S1"
     assert wcmod._approval_to_override("k", "espn:1", "ESPN CARD", "", "") is None
 

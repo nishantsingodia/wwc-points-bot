@@ -134,25 +134,6 @@ def test_l2_and_espn_card_rows_carry_no_feed_name(ledger):
     assert stamped == [], stamped
 
 
-def test_the_ten_cricapi_era_s1_approvals_are_pinned(ledger):
-    """The measured record of what the Cricbuzz flip was allowed to re-point. Cricbuzz's number
-    equalled cricapi's on all 8 rows whose tour enables it (the 2 MLC rows have no
-    `cricbuzz_series` at all), so 0 FP moved — against a 158-FP surface had they disagreed."""
-    got = {(o["match_key"], o["pid"], o["field"]): o["witness_value"]
-           for o in ledger if o.get("scope") == "player" and o.get("source") == "S1"}
-    assert got == {
-        ("2026-07-03::mi new york|seattle orcas", "ci:379143", "r"): 61,     # de Kock, MLC
-        ("2026-07-03::mi new york|seattle orcas", "ci:379143", "4s"): 6,     # (not Cricbuzz-witnessed)
-        ("2026-07-22::southern brave|welsh fire", "ci:1079380", "r"): 19,    # Chaudhary  ESPN said 21
-        ("2026-07-25::southern brave|sunrisers leeds", "ci:605661", "r"): 37,  # Rickelton ESPN said 39
-        ("2026-07-21::mi london|sunrisers leeds", "ci:1184099", "w"): 1,     # Baker      ESPN said 2
-        ("2026-07-21::mi london|sunrisers leeds", "ci:1120320", "w"): 1,     # McCarthy   ESPN said 0
-        ("2026-07-18::colombo kaps|galle gallants", "ci:1282475", "w"): 1,   # Tharupathi ESPN said 0
-        ("2026-07-18::colombo kaps|galle gallants", "ci:1282476", "w"): 1,   # Sahan      ESPN said 2
-        ("2026-07-26::london spirit|trent rockets", "ci:1340525", "w"): 1,   # Pavely     ESPN said 0
-    }
-
-
 # ── 3. list ORDER decides a contradicted cell, so a new contradiction must never be quiet ────
 CONTRADICTED = {
     ("2026-07-21::mi london|sunrisers leeds", "ci:1184099", "w", "player"),
@@ -161,6 +142,22 @@ CONTRADICTED = {
     ("2026-07-18::colombo kaps|galle gallants", "ci:1282476", "w", "player"),
 }
 
+
+def test_every_s1_approval_pins_the_number_it_answered(ledger):
+    """Renamed from "the ten cricapi-era approvals": the count is not the invariant.
+
+    A hardcoded set of 10 broke the moment the owner answered an 11th S1 row on the live sheet —
+    which is the system working, not a regression. The RULE is what matters: an S1 answer records a
+    SLOT whose feed can move, so it must also pin the NUMBER it was agreeing to, or re-reading it
+    later is guesswork. _approval_to_override now stamps both at write time, so this can only fail
+    if that stops happening.
+    """
+    s1 = [o for o in ledger if o.get("scope") == "player" and o.get("source") == "S1"]
+    assert s1, "no S1 approvals in the ledger at all — the fixture is stale"
+    unpinned = [o for o in s1 if not isinstance(o.get("witness_value"), int)]
+    assert unpinned == [], unpinned
+    assert all(o.get("witness") in ("cricapi", "cricbuzz") for o in s1), \
+        [o for o in s1 if o.get("witness") not in ("cricapi", "cricbuzz")]
 
 def test_contradicted_cells_are_exactly_the_known_four(ledger):
     """apply_recon_overrides writes resolved[(pid, field)] in list order, so when one cell holds

@@ -145,7 +145,11 @@ def test_approval_match_seed(wcmod):
 def test_approval_player_feed(wcmod):
     o = wcmod._approval_to_override("M", "x", "wkts", "S2", "")
     assert o == {"match_key": "M", "scope": "player", "pid": "x", "field": "w",
-                 "source": "S2", "status": "approved"}
+                 "source": "S2", "status": "approved",
+                 # S2 has always meant ESPN; naming the feed makes that a checkable fact rather
+                 # than an assumption the next witness migration gets to discover. "S1" already
+                 # changed meaning once (cricapi -> cricbuzz) under 10 live approvals.
+                 "witness": "espn"}
 
 
 def test_approval_player_manual(wcmod):

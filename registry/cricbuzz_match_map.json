@@ -1773,12 +1773,14 @@
     "barbados tridents",
     "st lucia kings"
    ],
-   "espn_events": [],
+   "espn_events": [
+    "1534187"
+   ],
    "also_keyed_as": [],
    "confirmations": [
     {
      "method": "teams+date",
-     "espn_event": "",
+     "espn_event": "1534187",
      "cb_desc": "9th Match",
      "cb_date": "2026-08-16"
     }

@@ -86,15 +86,26 @@ def test_lpl_match6_no_longer_completes_clean(wcmod):
 
 # ── 3. Points backstop: a moved total can't hide behind "✓ complete" ─────────
 def test_points_gap_catches_change_in_an_uncompared_field(wcmod):
-    """balls faced isn't in RECON_L2, so recon_gaps sees nothing — yet the SR component moves.
-    30 off 15 = SR 200 (+6); 30 off 30 = SR 100 (no band). Same runs, different points."""
+    """The backstop must catch a total that moves even when every LISTED field agrees.
+
+    This used to demonstrate the hole with `b` (balls faced), which was genuinely absent from
+    RECON_L2 — so recon_gaps was blind while the strike-rate component moved. That hole is now
+    closed: RECON_L2 covers all 14 scoring fields, so the owner gets three levels of recon on every
+    parameter a point is awarded on, and cricsheet can overrule an L1 answer on any of them.
+
+    The backstop still matters, because it is the guard against the NEXT field somebody forgets to
+    list. Demonstrated here with a field deliberately excluded from the comparison list rather than
+    one missing from RECON_L2 — the property under test is "the total is checked independently of
+    the field list", not "this particular field is unlisted".
+    """
     before = wcmod.blank_perf("X")
     before.update(played=True, r=30, b=15, dismissed=True)
     after = dict(before, b=30)
-    assert wcmod.recon_gaps(before, after, wcmod.RECON_L2, sep="→") == ""   # blind, as designed
-    assert wcmod.points_gap(before, after, "BAT") == "pts 44→38"            # backstop catches it
-    assert wcmod.score(before, "BAT")["sr"] - wcmod.score(after, "BAT")["sr"] == 6  # the SR band
-
+    partial = [f for f in wcmod.RECON_L2 if f != "b"]        # pretend someone forgot to list it
+    assert wcmod.recon_gaps(before, after, partial, sep="\u2192") == ""   # blind, as it would be
+    assert wcmod.points_gap(before, after, "BAT", sep="\u2192") != ""     # the backstop still sees it
+    # and with the real list, the field itself is now compared too
+    assert wcmod.recon_gaps(before, after, wcmod.RECON_L2, sep="\u2192") == "faced 15\u219230"
 
 def test_points_gap_silent_when_total_unchanged(wcmod):
     p = wcmod.blank_perf("Y")

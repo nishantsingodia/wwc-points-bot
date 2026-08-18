@@ -1834,12 +1834,23 @@ def parse_match(mid, live=False):
 # L2 = cricsheet (official) ↔ the provisional cut, once cricsheet posts. Richer:
 #      cricsheet has everything, so we compare the full fantasy-relevant set.
 RECON_L1 = ["r", "w", "4s", "6s"]
+# EVERY FIELD A POINT IS AWARDED ON GETS ALL THREE LEVELS. This list was four fields short of the
+# L1 set, so `b`, `balls`, `dro` and `lbwb` were cross-checked by Cricbuzz-vs-ESPN at L1 and then
+# NEVER by cricsheet — the official arbiter was silent on exactly the fields with no third opinion.
+# That is not a small gap: `lbwb` is the +8 bowled/lbw bonus, `dro` splits a run-out 12 vs 6, and
+# `b`/`balls` drive strike rate and economy, so a wrong L1 answer there moves the total while every
+# individual field still reads clean. If the owner resolves an L1 tie by picking a side, cricsheet
+# must be able to overrule him on ANY of it — otherwise a coin-flip on dro or lbwb is permanent.
+# parse_cricsheet already computes all four (balls faced, balls bowled, bowled/lbw wickets, and a
+# direct hit as len(fielders)==1 on a run out), so this costs nothing but the listing.
 RECON_L2 = ["r", "w", "4s", "6s", "dots", "maidens", "runs_conceded",
-            "catches", "stumpings", "runouts"]
+            "catches", "stumpings", "runouts",
+            "b", "balls", "dro", "lbwb"]
 RECON_LABEL = {"r": "runs", "w": "wkts", "4s": "4s", "6s": "6s", "dots": "dots",
                "maidens": "maid", "runs_conceded": "conc", "catches": "ct",
                "stumpings": "st", "runouts": "ro",
-               # Only ever compared when the witness is Cricbuzz (cricapi carries none of these).
+               # cricapi carries none of these, so at L1 they are compared only when the witness
+               # is Cricbuzz — but cricsheet has all four, so at L2 they are always compared.
                "b": "faced", "balls": "bowled", "dro": "d-ro", "lbwb": "lbw/b"}
 
 # The L1 field set when the second witness is CRICBUZZ. RECON_L1 above is the cricapi set and is
@@ -4608,7 +4619,7 @@ def overrides_by_match(data, known_pids=None):
               f"{', '.join(uniq[:10])}{' …' if len(uniq) > 10 else ''}", file=sys.stderr)
     return idx
 
-def _approval_to_override(match_key, pid, param, correct, manual):
+def _approval_to_override(match_key, pid, param, correct, manual, s1_cell=""):
     """Turn one Recon Review answer into an override record (or None if blank/unset).
     `correct` is the 'Correct Value' cell (S1/S2/Manual); `manual` the 'Manual Value' cell.
     Pure — unit-testable without the sheet."""
@@ -4627,7 +4638,8 @@ def _approval_to_override(match_key, pid, param, correct, manual):
         # flagged; S1 = keep holding. Either answer stops the run failing: the gate's contract is
         # that a human decided, not that the bot picked for him.
         return {"match_key": match_key, "scope": "espn_card", "pid": pid,
-                "source": ("S2" if src == "S2" else "S1"), "status": "approved"}
+                "source": ("S2" if src == "S2" else "S1"), "status": "approved",
+                "witness": _witness_name(src)}
     if param == "L2":                   # accept official (S2) or keep provisional (S1)
         return {"match_key": match_key, "scope": "l2", "pid": pid,
                 "source": ("S2" if src == "S2" else "S1"), "status": "approved"}
@@ -4642,7 +4654,26 @@ def _approval_to_override(match_key, pid, param, correct, manual):
         # Answering just acknowledges it so the row stops reappearing.
         return None
     field = LABEL2FIELD.get(param, param)   # player-level: a single stat field
-    o = {"match_key": match_key, "scope": "player", "pid": pid, "field": field, "status": "approved"}
+    o = {"match_key": match_key, "scope": "player", "pid": pid, "field": field, "status": "approved",
+         # STAMP THE FEED AT WRITE TIME. "S1" is a SLOT, not a source: it meant cricapi until 13 Aug
+         # and means Cricbuzz on any tour with a cricbuzz_series. An approval that records only the
+         # slot silently changes meaning the next time the witness moves — which already happened
+         # once to 10 rows. A back-fill fixed those, but every NEW answer re-created the gap: the
+         # owner answered a batch of rows and 6 landed unstamped. Stamp it here, where the human's
+         # intent is still known, so the ledger can never drift again. A MANUAL answer names no
+         # feed at all — the human typed a number — so it is stamped with nothing rather than an
+         # invented attribution.
+         }
+    _w = _witness_name(src)
+    if _w:
+        o["witness"] = _w
+    # PIN THE NUMBER AN S1 ANSWER AGREED TO. "S1" names a SLOT and the slot's feed can move, so an
+    # approval that records only the slot is unreadable later. The cell reads like "8 (cricbuzz)";
+    # keep the integer, so re-reading an old approval is checkable rather than a guess.
+    if src == "S1":
+        _m = re.search(r"-?\d+", s1_cell or "")
+        if _m:
+            o["witness_value"] = int(_m.group(0))
     if src == "MANUAL":
         try:
             o["value"] = int(float((manual or "").strip()))
@@ -4652,6 +4683,20 @@ def _approval_to_override(match_key, pid, param, correct, manual):
     else:
         o["source"] = src
     return o
+
+def _witness_name(src):
+    """Which FEED an S1/S2 answer actually names, right now, for the tour being processed.
+
+    S2 has always been ESPN. S1 is whatever this tour's second witness is — cricapi historically,
+    Cricbuzz wherever `cricbuzz_series` is set. Manual names no feed at all: the human typed a
+    number, so there is nothing to attribute.
+    """
+    if src == "S2":
+        return "espn"
+    if src == "MANUAL":
+        return None      # a typed number names NO feed; stamping one would invent an attribution
+    return "cricbuzz" if cb_witness_active() else "cricapi"
+
 
 def read_anomaly_confirmations():
     """Read the 'Identity Anomalies' tab BEFORE processing. Record every Yes/No answer (preserved
@@ -4744,6 +4789,10 @@ def read_recon_approvals():
     h = {c.strip(): i for i, c in enumerate(rows[0])}
     pi = h.get("Player ID", 3); pm = h.get("Param", 5)
     ci = h.get("Correct Value", 8); mi = h.get("Manual Value", 9); ki = h.get("Match Key", 11)
+    # The S1 column BY PREFIX: its header spells out which feed the slot currently means, so the
+    # wording changes whenever the witness does. Matching the prefix keeps that from breaking the
+    # read, and the cell's number is what an S1 answer is actually agreeing to.
+    s1i = next((i for c, i in h.items() if c.strip().upper().startswith("S1")), 6)
     data = _load_overrides()   # committed ledger (persisted across runs by the workflow)
     have = {(o.get("match_key"), o.get("pid"), o.get("field"), o.get("scope"))
             for o in data.get("overrides", [])}
@@ -4760,7 +4809,7 @@ def read_recon_approvals():
         if manual:
             PRIOR_MANUAL[(mk, pid, param)] = manual
         RECON_ACK.add((mk, pid, param))   # answered -> dropped from the tab next write
-        o = _approval_to_override(mk, pid, param, correct, manual)
+        o = _approval_to_override(mk, pid, param, correct, manual, s1_cell=cell(r, s1i))
         if o:
             sig = (o.get("match_key"), o.get("pid"), o.get("field"), o.get("scope"))
             if sig not in have:
