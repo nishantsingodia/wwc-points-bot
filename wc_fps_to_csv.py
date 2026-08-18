@@ -23,7 +23,7 @@ from difflib import SequenceMatcher
 
 # The OWNER'S name-matching model, ported faithfully in cricket_identity.py and pinned by his own
 # fixtures. Every identity DECISION goes through this; nothing in this file may score names itself.
-from cricket_identity import fuzzy_match_name as _ci_fuzzy
+from cricket_identity import fuzzy_match_name as _ci_fuzzy, norm_name as _ci_norm
 from datetime import date, timedelta, datetime, timezone
 
 # FREQUENT mode = the every-5-min "live lineup" tick (vs the 2-hourly full run).
@@ -693,6 +693,22 @@ def match_squad_to_perf(team_players, pool, quiet=False):
                            "kind": "review", "suggestion": guess, "role": guess_role(v)})
     return assigned, leftover, set()
 
+def _ci_refused_as_ambiguous(name, cands):
+    """Did the shared model return None because the answer is AMBIGUOUS, or because it simply
+    does not know this name? The model collapses both into None, and the difference decides
+    whether a fallback is allowed to answer.
+
+    Ambiguity is measured the model's own way — its strategy 5 requires the surname to be UNIQUE
+    in the candidate set — using the model's normaliser, never the bot's. More than one candidate
+    sharing the probe's surname is exactly the Dale-vs-Glenn / two-Fernandos / Shai-vs-Kyle shape,
+    and it is the one case where a best-guess is not a weaker answer but a WRONG one."""
+    n = _ci_norm(name)
+    if not n:
+        return False
+    ln = n.split()[-1]
+    return sum(1 for c in cands if (_ci_norm(c).split() or [""])[-1] == ln) > 1
+
+
 def best_team(name, team_map):
     """Fuzzy-match a player name to an ESPN roster {norm_name: team} and return the team
     (handles verbose ESPN spellings). '' if no confident match."""
@@ -700,9 +716,37 @@ def best_team(name, team_map):
     # feed name is, and the team falls out of that. A weighted score always yields a best candidate
     # and so cannot refuse; the model returns None when two roster names match a strategy, which is
     # exactly the refusal that keeps two same-surname players on one roster from swapping sides.
-    _hit = _ci_fuzzy(name, list(team_map.keys()))
+    #
+    # ⛔ CANDIDATES IN THEIR RAW SPELLING. The model normalises BOTH sides itself, and its
+    # normaliser DELETES [^a-z ] where the bot's `norm` replaces it with a SPACE:
+    # "Wyatt-Hodge" -> "wyatthodge" vs "wyatt hodge". Handing it keys the bot had already
+    # normalised broke the "both sides are normalized here, so the two can never disagree"
+    # invariant the port promises, and silently disabled the strategy it was ported for —
+    # `_ci_fuzzy("Danni Wyatt-Hodge", ["danni wyatt hodge"])` is None, the EXACT spelling.
+    # 11 of 755 registry names normalise differently (Wyatt-Hodge, Sciver-Brunt, Kohler-Cadmore,
+    # Winfield-Hill, Davidson-Richards, Patterson-White, MacDonald-Gay, Corteen-Coleman,
+    # Lhuan-dre Pretorius, Abdul-Raheem Toppin, Zia-ul-Haq), and for every one of them this
+    # function never consulted the model at all — it always landed on the legacy scorer below.
+    _cand = getattr(team_map, "raw", None) or team_map
+    _hit = _ci_fuzzy(name, list(_cand.keys()))
     if _hit is not None:
-        return team_map[_hit]
+        return _cand[_hit]
+    # ⛔ AND HONOUR THE REFUSAL. This used to fall straight through on None, into a scorer where
+    # `elif kl == ln: sc = 86.0` clears the 84 threshold on surname alone — so with two same-
+    # surname players on one roster the FIRST in ESPN's roster order won, and `sc > best_sc` being
+    # strict meant roster ordering silently decided the answer. Measured:
+    #   best_team("Phillips", {dale: Barbados, glenn: Trinbago})            -> 'Barbados Royals'
+    #   the same dict, insertion order reversed                             -> 'Trinbago Knight Riders'
+    #   the shared model on both                                            -> None
+    # The docstring above claimed this refusal for weeks while the code did the opposite. It is
+    # not cosmetic: the caller at the SILENT-DROP AUTO-ADD uses the answer to pick which side a
+    # player is scored on AND persists it to new_players.json as a permanent member of that team.
+    # Wrong side = a whole innings on the wrong team, permanently. Returning "" instead routes him
+    # to the unattributed review row, which HOLDS the match and names him — a question, not a guess.
+    if _ci_refused_as_ambiguous(name, list(_cand.keys())):
+        print(f"  best_team: {name!r} is ambiguous on this roster (>1 candidate shares the "
+              f"surname) — REFUSING to guess a team", file=sys.stderr)
+        return ""
     nn = norm(name); nt = nn.split()
     if not nt:
         return ""
@@ -1094,11 +1138,25 @@ def espn_toss(event_id):
             return re.sub(r"\s*,\s*", ", ", (n.get("text") or "").strip())
     return ""
 
+class TeamMap(dict):
+    """{norm(player): team} — with the RAW spellings kept alongside in `.raw`.
+
+    Both are needed and they are not interchangeable. Callers look up by `norm(name)`, so the
+    keys must stay bot-normalised; the SHARED identity model must be given the raw spelling,
+    because it normalises both sides itself with a DIFFERENT normaliser (it deletes `[^a-z ]`,
+    `norm` replaces it with a space) and pre-normalised input silently defeats it. Carrying both
+    is what lets `best_team` consult the model without changing what every caller passes.
+    """
+    def __init__(self, *a, **kw):
+        super().__init__(*a, **kw)
+        self.raw = {}
+
+
 def espn_team_map(event_id, fresh=False):
     """{norm(player): team displayName} from ESPN rosters — reliable team attribution
-    (cricapi's innings labels are sometimes malformed)."""
+    (cricapi's innings labels are sometimes malformed). Also carries `.raw` (see TeamMap)."""
     d = espn_get("summary", cache=not fresh, event=event_id)
-    out = {}
+    out = TeamMap()
     for team in d.get("rosters", []):
         tn = team.get("team", {}).get("displayName", "")
         for p in team.get("roster", []):
@@ -1106,6 +1164,7 @@ def espn_team_map(event_id, fresh=False):
             nm = a.get("fullName") or a.get("displayName")
             if nm and tn:
                 out[norm(nm)] = tn
+                out.raw[nm] = tn
     return out
 
 def espn_runouts(event_id, fresh=False):
