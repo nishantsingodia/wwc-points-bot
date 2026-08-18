@@ -1236,8 +1236,18 @@ def espn_batting_card(event_id, fresh=False):
                 # the STRIKER and so was actively misleading on exactly the rows this fixes.
                 txt = html.unescape(det.get("shortText") or "").strip()
                 dismissed = card not in ESPN_NOT_OUT_CARDS
+                _b = (det.get("bowler") or {})
+                _bn = _b.get("fullName") or _b.get("displayName")
+                _fl = []
+                for _f in (det.get("fielders") or []):
+                    _fa = _f.get("athlete") or {}
+                    _fn = _fa.get("fullName") or _fa.get("displayName")
+                    if _fn:
+                        _fl.append((_fn, str(_fa.get("id") or "")))
                 out[k] = {"name": nm, "espn_id": str(a.get("id") or ""), "order": order,
-                          "dismissed": dismissed, "dismissal": (txt or card) if dismissed else ""}
+                          "dismissed": dismissed, "dismissal": (txt or card) if dismissed else "",
+                          "card": card, "fielders": _fl,
+                          "bowler": (_bn, str(_b.get("id") or "")) if _bn else None}
     return out
 
 def espn_xi(event_id, fresh=False):
@@ -1275,6 +1285,99 @@ def espn_expected_balls(event_id, fresh=False):
                     except (TypeError, ValueError):
                         pass
     return tot
+
+
+# ESPN scorecard `dismissalCard` values that put the wicket on the BOWLER's card. 'run out',
+# 'retired out'/'retired not out' and 'obstructing the field' deliberately do not (the batter is
+# out, nobody bowled him out) — the same split `not_bowler_wkt` makes on the ball-by-ball side.
+ESPN_BOWLER_WKT_CARDS = ("c", "bowled", "lbw", "st", "hit wicket", "handled the ball")
+ESPN_KNOWN_CARDS = ESPN_BOWLER_WKT_CARDS + ("run out", "retired out", "retired not out",
+                                            "not out", "obstructing the field", "")
+
+
+def _apply_dismissal_credit(event_id, get, card, pbp_credit):
+    """Credit each dismissal from the batter's OWN SCORECARD LINE, falling back to the
+    ball-by-ball only where the scorecard cannot answer.
+
+    WHAT WENT WRONG. `dismissal.type` / `dismissal.fielder` on a playbyplay item describe the
+    dismissal ESPN chose to hang on that delivery — and it is not always the delivery's own. On
+    The Hundred Women's ev1521204 the item for over 19 ball 1 is, by its own commentary text,
+    "the simplest of catches for Harris at long on" off Charis Pavely — E Jones, caught Harris,
+    bowled Pavely. Its `dismissal` block instead reads type='retired out', batsman=Georgia Elwiss,
+    fielder={} — Elwiss's retirement, which had actually happened on the PREVIOUS delivery (ESPN's
+    own over 18 ball 5, where the block is empty). So `not_bowler_wkt` correctly refused to credit
+    a retired-out, and the real caught vanished with it:
+        Pavely  wicket  1 -> 0   (-30 FP)
+        Harris  catch   1 -> 0   ( -8 FP)
+    ESPN's own scorecard had it right the whole time: E Jones 'c Harris b Pavely' with bowler id
+    1340525 and fielders[0] id 381268, and its bowling figures give Pavely 1 wicket. The
+    ball-by-ball is the only place in the payload that is wrong.
+
+    This is the SAME misattribution the `dismissed` flag was moved off the ball-by-ball for (the
+    striker-vs-victim class) — it just reaches the bowler and the fielder as well as the batter,
+    so the mirror was only half applied. Swept over every event with both a cached ESPN card and a
+    cricsheet twin (52 matches, id-joined via crosswalk.json), pbp-credited bowler wickets vs the
+    same event's scorecard bowling figures disagree on exactly one: this one.
+
+    An ABSENCE MUST NOT PRESENT AS A VALUE, in either direction. The scorecard is authoritative
+    only where it actually answers: a card that names no bowler on a bowler's wicket, or no
+    fielder on a c/st, keeps the ball-by-ball's credit and says so out loud. A dismissal the
+    scorecard never mentions keeps its ball-by-ball credit too. Over the 132 cached summaries the
+    fallback fires 0 times — every one of 837 'c', 234 'bowled', 82 'lbw' and 38 'st' carries its
+    bowler id, and every 'c'/'st' exactly one fielder id (11 of which are SUBSTITUTES, who own no
+    other row in the payload and were previously resolved by name similarity alone)."""
+    fell_back = set()
+    for k, c in card.items():
+        cd = (c.get("card") or "").strip().lower()
+        if cd in ESPN_NOT_OUT_CARDS or not c.get("dismissed"):
+            continue
+        if cd not in ESPN_KNOWN_CARDS:
+            print(f"  espn {event_id}: unknown dismissalCard {cd!r} for {c['name']} — keeping the "
+                  f"ball-by-ball's credit for it", file=sys.stderr)
+            fell_back.add(k)
+            continue
+        if cd in ESPN_BOWLER_WKT_CARDS:
+            bw = c.get("bowler")
+            if not bw:
+                fell_back.add(k)
+                print(f"  espn {event_id}: scorecard says {c['name']} was out {cd!r} but names no "
+                      f"bowler — falling back to the ball-by-ball for this dismissal",
+                      file=sys.stderr)
+                continue
+            p = get(bw[0], bw[1]); p["played"] = True; p["w"] += 1   # he bowled the delivery
+            if cd in ("bowled", "lbw"):
+                p["lbwb"] += 1
+        if cd in ("c", "st"):
+            fl = c.get("fielders") or []
+            if not fl:
+                print(f"  espn {event_id}: scorecard says {c['name']} was out {cd!r} but names no "
+                      f"fielder — the catch/stumping is UNATTRIBUTED", file=sys.stderr)
+            for fn, fid in fl:
+                # ⛔ NO `played = True` HERE. `played` is the +4 in-XI bonus, and 11 of the
+                # fielders this loop credits across the cached corpus are SUBSTITUTES with no
+                # roster entry at all (ev1521240: "c sub (EG Barnard) b Ellis", athlete id
+                # 578769). A sub fields but is not in the XI: setting played gave Barnard +4 he
+                # had not earned, against cricsheet, and the ball-by-ball path it replaces never
+                # set it either. The catch itself is scored unconditionally.
+                get(fn, fid)["catches" if cd == "c" else "stumpings"] += 1
+    # Dismissals the scorecard could not adjudicate keep exactly what the ball-by-ball gave them.
+    for k, crs in pbp_credit.items():
+        if k in card and k not in fell_back:
+            continue
+        if k not in card and card:
+            print(f"  espn {event_id}: ball-by-ball has a dismissal for {k!r} that the scorecard "
+                  f"does not carry — keeping its ball-by-ball credit", file=sys.stderr)
+        for cr in crs:
+            if cr["wkt"]:
+                nm, aid, lbwb = cr["wkt"]
+                p = get(nm, aid); p["w"] += 1
+                if lbwb:
+                    p["lbwb"] += 1
+            if cr["catch"]:
+                get(*cr["catch"])["catches"] += 1
+            if cr["stump"]:
+                get(*cr["stump"])["stumpings"] += 1
+
 
 def parse_espn(event_id, fresh=False):
     """Full scorecard from ESPN ball-by-ball (cricinfo) — exact dots/maidens/fielding,
@@ -1357,6 +1460,10 @@ def parse_espn(event_id, fresh=False):
     # {norm(name): (name, athlete_id, text)} derived from the ball-by-ball. Never written straight
     # onto a perf row. The id is carried so the fallback row is still ID-anchored, not name-only.
     pbp_dis = {}
+    # STAGED ball-by-ball dismissal credit, keyed by the VICTIM (dis.batsman), so the scorecard
+    # can adjudicate it per dismissal instead of it being written on unconditionally. See the
+    # reconciliation after the batting card is fetched.
+    pbp_credit = {}
     def get(n, aid=""):
         # Key by norm(name) for the pool contract, but CARRY athlete.id so the row resolves by id.
         k = norm(n)
@@ -1374,8 +1481,16 @@ def parse_espn(event_id, fresh=False):
         # no-ball only in shortText — so `"no ball" not in desc` counted 19 of them as legal balls
         # across 22 LPL matches, inflating bowler balls (wrong econ/SR denominators) and, because
         # scoreValue INCLUDES the no-ball penalty, the batter's runs by +1 each.
-        _short = (it.get("shortText") or "") + " " + (it.get("text") or "")
-        is_nb = ("no ball" in desc) or bool(re.search(r"\(?no[- ]?ball\)?", _short, re.I))
+        # ⛔ THE MARKER ONLY — NOT THE COMMENTARY. This regex used to run over shortText + text,
+        # i.e. the whole paragraph, so a commentator SAYING the words flipped a legal delivery to
+        # illegal: ev1521204 per2 ov9.4 "A brief check to see if it is a No ball but nothing doing
+        # on that count" cost Elwiss a legal ball and its dot. 17 such deliveries across the 101
+        # cached events (10 with a points effect, +24 FP; the rest were wides, already illegal).
+        # The prose search bought nothing: measured against cricsheet on the 52 events with an
+        # official twin, all 61 real no-balls are caught by `desc == "no ball"` or the
+        # parenthesised shortText marker alone — 0/61 needed the prose, 17/17 prose hits were wrong.
+        _short = it.get("shortText") or ""
+        is_nb = ("no ball" in desc) or bool(re.search(r"\(\s*no[- ]?balls?\s*\)", _short, re.I))
         legal = not is_wide and not is_nb
         _bwa = (it.get("bowler", {}).get("athlete") or {})
         _bta = (it.get("batsman", {}).get("athlete") or {})
@@ -1453,12 +1568,6 @@ def parse_espn(event_id, fresh=False):
             # tuple misses (that bug wrongly credited De Lange a 3rd wicket). Match by prefix.
             not_bowler_wkt = (typ == "run out" or typ.startswith("retired")
                               or "obstruct" in typ or typ == "hit wicket")
-            if bw and not not_bowler_wkt:
-                pw = get(bw, bw_id); pw["w"] += 1
-                if typ in ("bowled", "lbw", "leg before wicket"):   # ESPN spells lbw out
-                    pw["lbwb"] += 1
-            elif bw and typ == "hit wicket":   # bowler's wicket (no lbw/bowled bonus)
-                get(bw)["w"] += 1
             _fla = (dis.get("fielder", {}).get("athlete") or {})
             fld, fld_id = _fla.get("fullName"), _fla.get("id", "")
             # CARRY fld_id. It was extracted on the line above and then never read ANYWHERE —
@@ -1471,12 +1580,31 @@ def parse_espn(event_id, fresh=False):
             # all, reaching the right human purely on a name-similarity score. One is decided by a
             # 95-vs-90 margin between two Fernandos in the same Jaffna Kings squad, while ESPN was
             # handing us 1074333 the whole time. That is the Dale-into-Glenn class, on a live tour.
+            #
+            # ⛔ STAGED, NOT WRITTEN. Every credit below is held against the VICTIM and applied
+            # after the batting card is read, so the card can adjudicate it — see
+            # `_apply_dismissal_credit`. The ball-by-ball's dismissal block can describe a
+            # DIFFERENT delivery from the one it rides on (ev1521204: Elwiss's retired-out is
+            # hung on the ball that was actually E Jones c Harris b Pavely, so `not_bowler_wkt`
+            # correctly declined a retired-out and the real caught went with it — Pavely −30,
+            # Harris −8). This is the same striker-vs-victim misattribution `dismissed` was
+            # already moved off the ball-by-ball for; the mirror was only half applied.
+            _wkt_to = None
+            if bw and (not not_bowler_wkt or typ == "hit wicket"):
+                _wkt_to = (bw, bw_id, typ in ("bowled", "lbw", "leg before wicket"))
+            _catch_to = _stump_to = None
             if typ == "caught and bowled" or (typ == "caught" and fld and norm(fld) == norm(bw or "")):
-                if bw: get(bw, bw_id)["catches"] += 1   # caught off own bowling — credit the catch
+                if bw: _catch_to = (bw, bw_id)          # caught off own bowling — credit the catch
             elif typ == "caught" and fld and norm(fld) != norm(bw or ""):
-                get(fld, fld_id)["catches"] += 1
+                _catch_to = (fld, fld_id)
             elif typ == "stumped" and fld:
-                get(fld, fld_id)["stumpings"] += 1
+                _stump_to = (fld, fld_id)
+            if _dis_bt:
+                # APPEND, never assign. A batter can carry two dismissal items in one match
+                # (retired hurt, resumed, then out); overwriting would keep only the last and
+                # could drop the bowler's wicket depending on emission order.
+                pbp_credit.setdefault(norm(_dis_bt), []).append(
+                    {"wkt": _wkt_to, "catch": _catch_to, "stump": _stump_to, "type": typ})
             # NOTE: run outs are deliberately NOT credited here. playbyplay's dismissal.fielder is
             # always empty for a run out and neither shortText nor text names the fielders, so any
             # attempt from this payload silently credits nobody. They are applied below from the
@@ -1520,8 +1648,12 @@ def parse_espn(event_id, fresh=False):
     # AUTHORITATIVE, and applied in BOTH directions: it sets the run-out victim dismissed AND
     # clears the striker the ball-by-ball wrongly flagged. A one-directional patch would leave the
     # bogus duck in place — that mirror-guard gap is the recurring bug class in this file.
-    # Bowler wicket credit is NOT touched here (it was already correct: run-outs are excluded via
-    # not_bowler_wkt, giving 13 bowler wickets + 2 run-outs = 15 = ESPN's own header on ev1534179).
+    # Bowler/fielder credit IS applied here too, via _apply_dismissal_credit. It used to be
+    # written straight off the ball-by-ball under the belief that it "was already correct" —
+    # true on ev1534179 (13 bowler wickets + 2 run-outs = 15 = ESPN's own header), false on
+    # ev1521204, where the dismissal block on the wicket delivery describes a DIFFERENT
+    # delivery and cost Pavely a wicket and Harris a catch. Same striker-vs-victim class as
+    # `dismissed` above; the mirror was only half applied.
     _card = espn_batting_card(event_id, fresh)
     if _card:
         for k, c in _card.items():
@@ -1530,6 +1662,7 @@ def parse_espn(event_id, fresh=False):
             p["bat_order"] = c["order"] or p.get("bat_order") or 0
             p["dismissed"] = c["dismissed"]
             p["dismissal"] = c["dismissal"]
+        _apply_dismissal_credit(event_id, get, _card, pbp_credit)
     else:
         # An absence must never present as a value: with no scorecard batting card we CANNOT know
         # who was out, so say so loudly rather than publishing silence as "nobody was dismissed".
@@ -1540,6 +1673,7 @@ def parse_espn(event_id, fresh=False):
         for nm, aid, txt in pbp_dis.values():
             fp = get(nm, aid)      # a batter ESPN says was OUT played, even if he faced no ball
             fp["played"] = True; fp["dismissed"] = True; fp["dismissal"] = txt
+        _apply_dismissal_credit(event_id, get, {}, pbp_credit)
 
     for o in overs.values():
         if o["legal"] == 6 and o["runs"] == 0 and o["bowler"]:
