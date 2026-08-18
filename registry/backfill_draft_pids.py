@@ -81,3 +81,27 @@ try:
     print(f"synced registry mirror -> {_mirror}")
 except Exception as _e:
     print(f"  ⚠ registry mirror NOT synced ({_e}) — the draft may judge players not-in-XI")
+
+# ...AND THE PID MAP, WHICH IS THE SECOND MIRROR. There are TWO files the draft reads from this
+# registry, and syncing one of them is the same "exactly half the job" the comment above is about —
+# it was just one mirror further along. build_registry writes every PROMOTION (uncapped:/slug:/cs:
+# -> ci:) into registry/pid_map.json so rows ALREADY PUBLISHED under the placeholder keep joining;
+# the draft applies that map in lib/points.ts `resolvePid`, reading its own lib/pid-map.json copy.
+# Nothing copied it. Measured at the moment this was written: bot 690 entries, draft 680, and the
+# 10 missing included the two CPL promotions being deployed that minute (uncapped:odean-smith ->
+# ci:820691, uncapped:nathan-edward -> ci:1275939).
+#
+# The failure is the exact INVERSE of the one above and just as expensive: promoting a pid in
+# players-raw.json without the map means the draft asks for ci:820691 while every already-settled
+# CPL row still says uncapped:odean-smith, so a player who was joining fine before the promotion
+# stops joining after it — an identity fix that reads as points vanishing from a settled match.
+_pmap = os.path.normpath(os.path.join(os.path.dirname(DRAFT_RAW), "..", "lib", "pid-map.json"))
+try:
+    src = os.path.join(HERE, "pid_map.json")
+    with open(src) as _f:
+        _blob = _f.read()
+    with open(_pmap, "w") as _f:
+        _f.write(_blob)
+    print(f"synced pid map -> {_pmap} ({len(json.loads(_blob))} entries)")
+except Exception as _e:
+    print(f"  ⚠ pid map NOT synced ({_e}) — promoted players will drop off already-settled matches")
