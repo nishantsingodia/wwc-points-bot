@@ -4,8 +4,8 @@
  "_rules": "PINS ARE READ, NOT RE-DERIVED — that is the point: a rename upstream cannot move or drop a pairing that is already recorded. A later derivation that finds NOTHING does not disturb a pin (absence is not evidence). A later derivation that finds a DIFFERENT cricbuzz match revokes BOTH claims; so does one cricbuzz match claimed by two different fixtures, and one key carrying two ESPN events. Never last-wins. A revoked key stays revoked until a human runs --forget.",
  "_note": "each pin's `confirmations` list IS the fact log; pins/revoked are a pure function of it (compile_pins o confirmations_log), and no clock is read anywhere. Regenerate, never hand-edit.",
  "counts": {
-  "confirmations": 131,
-  "pinned": 101,
+  "confirmations": 132,
+  "pinned": 102,
   "revoked": 0,
   "series": 4
  },
@@ -1810,6 +1810,25 @@
      "espn_event": "1534186",
      "cb_desc": "",
      "cb_date": ""
+    }
+   ]
+  },
+  "12123|2026-08-19|jamaica kingsmen+st kitts nevis patriots": {
+   "cricbuzz_match_id": "154410",
+   "series_id": "12123",
+   "date": "2026-08-19",
+   "teams": [
+    "jamaica kingsmen",
+    "st kitts nevis patriots"
+   ],
+   "espn_events": [],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "",
+     "cb_desc": "10th Match",
+     "cb_date": "2026-08-18"
     }
    ]
   },
