@@ -59,3 +59,23 @@ def _isolate_learned_identity():
     wc.ESPN_CARD_SCORE_ANYWAY.clear(); wc.ESPN_CARD_SCORE_ANYWAY.update(approved)
     wc.CB_SERIES, wc.CB_STORE = cb_series, cb_store
     wc.CB_DIAG.clear(); wc.CB_DIAG.update(cb_diag)
+
+
+@pytest.fixture(autouse=True)
+def _isolate_identity_ledger(tmp_path, monkeypatch):
+    """A TEST MUST NEVER WRITE THE REAL RE-KEY LEDGER.
+
+    `promote_new_players` records every pid move into registry/identity_changes.json, and the
+    end-to-end run_tour tests call it — so `pytest` alone appended a real-looking promotion to a
+    real identity store, with provenance claiming a run had done it. That ledger is what a human
+    will later read to decide whether a SETTLED number is real; an entry no run produced is worse
+    than a missing one, because it is indistinguishable from a true one after the fact.
+
+    Same reasoning as the fixture above (a test must not teach the module an identity), one file
+    further out: there the damage was in-process and vanished at exit, here it is on disk and
+    committed. Redirect the path per test; the module is re-imported inside
+    `_record_identity_change`, so patching the attribute is enough.
+    """
+    from registry import identity_changes as ic
+    monkeypatch.setattr(ic, "CHANGES_PATH", str(tmp_path / "identity_changes.json"))
+    yield

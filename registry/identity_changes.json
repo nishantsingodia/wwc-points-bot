@@ -1,0 +1,33 @@
+{
+ "note": "APPEND-ONLY record that one pid became another. `changes` is the fact log; every other view (compile_map, canonical_pid) is a pure function of it and reads no clock. Never edit or delete an entry — a superseded pid stays valid forever, because the rows already published under it are immutable. Regenerate views, never this list.",
+ "changes": [
+  {
+   "from": "slug:calvin-harrison",
+   "to": "ci:859899",
+   "at": "2026-08-19",
+   "reason": "promote",
+   "evidence": "promote_new_players: manual_ci_bridges gives ci:859899 for 'Calvin Harrison'; a human typed that id into Needs Cricinfo ID"
+  },
+  {
+   "from": "uncapped:joshua-james",
+   "to": "ci:1209191",
+   "at": "2026-08-19",
+   "reason": "split-merge",
+   "evidence": "PROVEN by performance identity, not by name: the settled row on ci:1209191 (CPL M7, 2026-08-14 ABF v SLK) holds r=3 w=2 dots=6 conc=13 b=13 balls=10 bat_order=9 dismissal='c Auguste b Bishop', and cricsheet's official card assigned that identical performance to uncapped:joshua-james (sheet L2 revision reads runs 0->3, wkts 0->2, dots 0->6, conc 0->13). One performance, two pids. Merged toward the ci: id (anchored rung of the ladder); ci:1209191 is also fingerprint-confirmed in cricbuzz_bridge as cb:15810."
+  },
+  {
+   "from": "uncapped:amari-goodridge",
+   "to": "ci:1342545",
+   "at": "2026-08-19",
+   "reason": "split-merge",
+   "evidence": "Owner confirmed against espncricinfo.com/cricketers/x-1342545 on 2026-08-19 that this is the same human as the MTSTL squad entry 'Amari Goodridge'. Cost of the split: CPL M9 contest 182 froze a 10-man XI while he scored 29 on the minted pid."
+  },
+  {
+   "from": "uncapped:odean-smith",
+   "to": "ci:820691",
+   "at": "2026-08-19",
+   "reason": "split-merge",
+   "evidence": "Owner confirmed against espncricinfo.com/cricketers/x-820691 on 2026-08-19. RETROACTIVE record: the promotion itself already happened (build_registry promoted the placeholder and pid_map carries the redirect) but predates this ledger, so it had no provenance. Logged so the flat map is derivable from the fact log rather than only accumulated."
+  }
+ ]
+}

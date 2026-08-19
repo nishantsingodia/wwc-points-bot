@@ -569,6 +569,28 @@ def main():
         json.dump(pm, open(pm_path, "w"), indent=1, ensure_ascii=False, sort_keys=True)
         print(f"  pid_map: +{added} promotion(s) recorded so already-published rows still join",
               file=sys.stderr)
+        # AND INTO THE FACT LOG. pid_map is the flat lookup — it answers "what is this pid now?"
+        # but not "why", "when", or "on whose evidence", and it cannot express a CONTRADICTION.
+        # identity_changes.json is the append-only record the flat map should be derivable from,
+        # and it is what lets a settled row published under the old pid be folded into the new one
+        # deliberately rather than forensically. Same discipline as cricbuzz_match_map's
+        # `confirmations` -> `pins`: log the fact, derive the view.
+        try:
+            from registry import identity_changes as _ic
+            from datetime import date as _date
+            for old_pid, new_pid in sorted(PROMOTED.items()):
+                _ic.record(old_pid, new_pid, "build_registry.promote",
+                           f"placeholder {old_pid} resolved to {new_pid} via a human-asserted "
+                           f"cricinfo id (manual_ci_bridges / crosswalk)",
+                           at=_date.today().isoformat())
+            _forks = _ic.forks()
+            if _forks:
+                print(f"  ⛔ identity_changes: {len(_forks)} pid(s) are claimed to have become "
+                      f"MORE THAN ONE pid — refusing to fold them; a human must decide: {_forks}",
+                      file=sys.stderr)
+        except Exception as _e:
+            print(f"  ⚠ identity_changes NOT updated ({_e}) — pid_map still has the redirect, but "
+                  f"the promotion has no provenance and settled rows cannot be folded", file=sys.stderr)
     print(f"GLOBAL registry written: {len(players)} players -> {GLOBAL_PATH} | needs-review {len(all_review)}",
           file=sys.stderr)
 

@@ -204,6 +204,17 @@ CURRENT_FMT = "T20"     # set by run_tour from tour["format"] ("T20" | "ODI" | "
 # Surfaced for a Yes/No so identity changes are never silent. Separate tab + separate globals so
 # the Needs Review / Player Aliases no-code flow is completely untouched.
 ANOMALIES = []          # {tour, kind, pid, display, context, names, finding}
+# Human label per anomaly kind, for the Identity Anomalies tab. The tab's question is
+# "Different players? (Yes/No)", which reads correctly for ALL of these: Yes = keep them apart,
+# No = one human. `identity_split` is the MIRROR of the other three — they detect OVER-merging
+# (two names collapsed onto one pid), it detects one human split across two pids, which nothing
+# in this file could see before and which is what silently shrank two live CPL XIs.
+_ANOMALY_TYP = {
+    "false_merge": "false merge",
+    "duplicate_pid": "duplicate id",
+    "duplicate_slot": "duplicate slot",
+    "identity_split": "split identity",
+}
 PRIOR_ANOMALY = {}      # (tour, pid, kind) -> the user's Yes/No so far (preserved across rewrites)
 ANOMALY_ACK = set()     # (tour, pid, kind) the user answered -> stop re-flagging
 
@@ -406,6 +417,28 @@ def note_appearance(perf):
                 APPEARED.add(nm)
 
 
+def _placeholder_twin(name, minted_pid):
+    """A registry pid that is PLAUSIBLY the same human as `name`, about to be minted separately.
+
+    Deliberately narrow. It only ever looks at placeholder pids (`uncapped:` / `slug:` / `cs:`) —
+    an anchored `ci:` entry already has a cricinfo id, so if it were the same person the id-first
+    branches above would have found him and we would never reach the mint. A placeholder exists
+    precisely BECAUSE its cricinfo id was never established, which is what makes it invisible to
+    every id-based check and is why this class stayed silent.
+
+    Returns a pid to ASK ABOUT, never one to use. `long_form_plausible` is a question-raiser, not
+    an identity decider: it returns False for 'Dale Phillips' vs 'Glenn Phillips' by design, so it
+    cannot manufacture the merge that started all this."""
+    if not name:
+        return ""
+    for pid, disp in PID2DISP.items():
+        if pid == minted_pid or not pid.startswith(("uncapped:", "slug:", "cs:")):
+            continue
+        if disp and long_form_plausible(disp, name):
+            return pid
+    return ""
+
+
 def resolve_perf_pid(v):
     """Identity for ONE feed perf entry, id-first.
 
@@ -469,6 +502,38 @@ def resolve_perf_pid(v):
         return by_name
     pid = f"ci:{eid_s}"
     nm = v.get("name", "")
+    # ⛔ THE SPLIT-IDENTITY CHECK, BEFORE THE MINT LANDS.
+    # The guard above ("NEVER let an ESPN id override a pid the registry already holds for this
+    # name") is keyed on `resolve_pid(name)` — a guard against name-blind splitting that is itself
+    # NAME-keyed, so it cannot fire on the one input that causes splits: a LONGER legal name.
+    # Measured on the live registry:
+    #     resolve_pid('Joshua James')          -> 'uncapped:joshua-james'
+    #     resolve_pid('Joshua Michael James')  -> None      <- what the feed actually sends
+    # So `by_name` is falsy, control reaches here, and ci:1209191 is minted for a human the squad
+    # already carries. Both halves then settle separately (67 pts on the mint, 0 on the squad pid)
+    # and the draft — pid-authoritative by design — judges the DRAFTED pid not-in-XI and deletes
+    # the slot. That is how contests 180 and 182 froze a 10-man XI.
+    #
+    # It is deliberately NOT resolved here. Names cannot decide identity in this project, and
+    # `long_form_plausible` can only ever RAISE the question (it returns False for Dale vs Glenn
+    # by design). So: publish under the minted id — losing the performance is strictly worse —
+    # and make the fork a NAMED QUESTION on the tab whose answer re-keys identity, instead of the
+    # silent divergence it is today. A human's 'No' folds them via registry/identity_changes.json.
+    _twin = _placeholder_twin(nm, pid)
+    if _twin:
+        ANOMALIES.append({
+            "tour": CURRENT_TOUR, "kind": "identity_split", "pid": pid, "display": nm,
+            "names": [nm, PID2DISP.get(_twin, _twin)],
+            "finding": f"ESPN calls this player {nm!r} and gave him athlete id {eid_s}, so he "
+                       f"minted as {pid}. The registry ALREADY carries {_twin} "
+                       f"({PID2DISP.get(_twin, _twin)!r}), whose name is a plausible short form. "
+                       f"If they are one human he is now split across two pids — his points will "
+                       f"land on {pid} while a draft holding {_twin} scores him ZERO and drops "
+                       f"him from the XI.",
+        })
+        print(f"  ⚠ SPLIT IDENTITY? '{nm}' -> {pid} but the registry already has {_twin} "
+              f"('{PID2DISP.get(_twin, _twin)}') — raised on the '{ANOMALY_TAB}' tab",
+              file=sys.stderr)
     if norm(nm) not in ALIAS2PID:
         ALIAS2PID[norm(nm)] = pid
         NEEDS_CRICINFO.append({
@@ -5112,7 +5177,10 @@ def write_anomaly_tab():
     for a in ANOMALIES:
         by_key.setdefault((a["kind"], a["pid"]), a)
     for (kind, pid), a in by_key.items():
-        typ = "false merge" if kind == "false_merge" else "duplicate id"
+        # Every kind needs its own label. This used to be a two-way `if/else`, so ANY new kind
+        # silently rendered as "duplicate id" — a different question with a different answer, on
+        # the one tab where the answer re-keys identity.
+        typ = _ANOMALY_TYP.get(kind, kind.replace("_", " "))
         if (typ, pid) in ANOMALY_ACK:
             continue
         rows.append([a.get("tour", "—"), typ, pid, a.get("display", ""),
@@ -5155,6 +5223,17 @@ def _save_cricsheet_learned():
 NEEDS_CRICINFO_TAB = "Needs Cricinfo ID"
 CI_BRIDGES_PATH = os.path.join(os.path.dirname(__file__), "registry", "manual_ci_bridges.json")
 
+
+def _record_identity_change(old_pid, new_pid, reason, evidence):
+    """Log a pid move to registry/identity_changes.json. Never fatal to a scoring run — but LOUD,
+    because an unrecorded move is how a settled match gets settled twice."""
+    try:
+        from registry import identity_changes as _ic
+        _ic.record(old_pid, new_pid, reason, evidence, at=date.today().isoformat())
+    except Exception as _e:
+        print(f"  ⚠ identity change {old_pid} -> {new_pid} NOT RECORDED ({_e}) — the re-key "
+              f"ledger is the only thing that can fold their settled rows together", file=sys.stderr)
+
 def promote_new_players():
     """Upgrade sheet-added players from a placeholder `slug:` pid to their real `ci:` id.
 
@@ -5195,6 +5274,17 @@ def promote_new_players():
             continue
         new_pid = f"ci:{cands.pop()}"
         print(f"  promote: {e.get('display'):24} {pid} -> {new_pid}", file=sys.stderr)
+        # ⛔ RECORD THAT THE LABEL MOVED, BEFORE MOVING IT. This line used to be `e["pid"] = ...`
+        # alone, which destroyed the only evidence that these two pids are one human — and every
+        # pid-keyed store then forked silently: settlement_snapshots' write-once guard is
+        # `(match_key, pid)`, so a moved key mints a SECOND settled row for an already-settled
+        # match (Atkinson, 9 matches / 618 pts), and the draft's pid-authoritative matchPlayerInXI
+        # judges the drafted pid not-in-XI and deletes the slot (Joshua James, Goodridge — a real
+        # XI shrunk to 10 in two live CPL contests). With the ledger, folding those rows together
+        # is a join rather than a forensic exercise.
+        _record_identity_change(pid, new_pid, "promote",
+                                f"promote_new_players: manual_ci_bridges gives {new_pid} for "
+                                f"{e.get('display')!r}; a human typed that id into Needs Cricinfo ID")
         e["pid"] = new_pid
         ALIAS2PID[norm(e.get("display", ""))] = new_pid
         for a in e.get("aliases", []):
