@@ -1,0 +1,140 @@
+{
+ "TENG": {
+  "name": "England",
+  "players": [
+   [
+    "Ben Duckett",
+    "BAT"
+   ],
+   [
+    "Emilio Gay",
+    "BAT"
+   ],
+   [
+    "Ollie Pope",
+    "BAT"
+   ],
+   [
+    "Joe Root",
+    "BAT"
+   ],
+   [
+    "Harry Brook",
+    "BAT"
+   ],
+   [
+    "Jamie Smith",
+    "WK"
+   ],
+   [
+    "Brydon Carse",
+    "AR"
+   ],
+   [
+    "Gus Atkinson",
+    "BOWL"
+   ],
+   [
+    "Jofra Archer",
+    "BOWL"
+   ],
+   [
+    "Josh Tongue",
+    "BOWL"
+   ],
+   [
+    "Shoaib Bashir",
+    "BOWL"
+   ],
+   [
+    "Dan Lawrence",
+    "BAT"
+   ],
+   [
+    "Jordan Cox",
+    "WK"
+   ],
+   [
+    "Ollie Robinson",
+    "BOWL"
+   ],
+   [
+    "Matthew Fisher",
+    "BOWL"
+   ]
+  ]
+ },
+ "TPAK": {
+  "name": "Pakistan",
+  "players": [
+   [
+    "Abdullah Shafique",
+    "BAT"
+   ],
+   [
+    "Imam-ul-Haq",
+    "BAT"
+   ],
+   [
+    "Shan Masood",
+    "BAT"
+   ],
+   [
+    "Babar Azam",
+    "BAT"
+   ],
+   [
+    "Saud Shakeel",
+    "BAT"
+   ],
+   [
+    "Mohammad Rizwan",
+    "WK"
+   ],
+   [
+    "Salman Ali Agha",
+    "AR"
+   ],
+   [
+    "Sajid Khan",
+    "BOWL"
+   ],
+   [
+    "Mohammad Abbas",
+    "BOWL"
+   ],
+   [
+    "Ali Usman",
+    "BOWL"
+   ],
+   [
+    "Khurram Shahzad",
+    "BOWL"
+   ],
+   [
+    "Azan Awais",
+    "BAT"
+   ],
+   [
+    "Awais Zafar",
+    "BAT"
+   ],
+   [
+    "Aamir Jamal",
+    "AR"
+   ],
+   [
+    "Mohammad Ali",
+    "BOWL"
+   ],
+   [
+    "Ubaid Shah",
+    "BOWL"
+   ],
+   [
+    "Ghazi Ghori",
+    "WK"
+   ]
+  ]
+ }
+}

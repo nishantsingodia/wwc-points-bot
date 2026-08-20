@@ -109,6 +109,20 @@ R_HUN = dict(
     wkt=30, lbwb=8, dot=1, h2=4, h3=8, h4=12, h5=16,
     catch=8, c3=4, stump=12, dro=12, ro=6, xi=4,
 )
+# ---- Dream11 TEST (red ball) rules — mirror of compute_fantasy_points_test in
+# cricket-auction-helper/data/etl_cricsheet.py, and CONFIRMED against the live Dream11 Test page
+# (18 Aug 2026): NO strike-rate, NO economy, NO maiden, NO dot-ball and NO 3-catch award, so this is
+# a pure per-EVENT scorer. Wicket is +20 — LOWER than T20 (+25) and ODI (+30) — because a Test yields
+# ~20 wickets, while batting milestones run two tiers deeper (125 -> +20, 150 -> +24). Duck is -4 and
+# applies to Batter/WK/All-Rounder only (the page states the roles explicitly).
+#
+# ⚠️ THE TIERS ARE EVALUATED PER INNINGS, NOT PER MATCH — see _score_test. That is the whole reason
+# this format needs a different code path and not just a different rules dict.
+R_TEST = dict(
+    perRun=1, b4=4, b6=6, m25=4, m50=8, m75=12, m100=16, m125=20, m150=24, duck=-4,
+    wkt=20, lbwb=8, h4=4, h5=8, h6=12,
+    catch=8, stump=12, dro=12, ro=6, xi=4,
+)
 
 def norm(s):
     s = unicodedata.normalize("NFKD", s or "").encode("ascii", "ignore").decode()
@@ -268,6 +282,16 @@ ESPN_CARD_SCORE_ANYWAY = set()   # event ids a human approved (S2) -> score the 
 ESPN_HOLD_GRACE_H = float(os.environ.get("ESPN_HOLD_GRACE_H", "6"))
 OVER_HRS_MAX = 12   # the ODI value of run_tour's OVER_HRS; the budget uses the LONGER of the two
                     # so a T20 hold is never escalated early on an ODI-length game's clock.
+# ⛔ RED BALL BREAKS THE SHARED CONSTANT. A Test runs five days, so a 12h+6h budget expires during
+# the FIRST AFTERNOON: a perfectly healthy in-progress Test would be escalated as a suspect card,
+# posting an ESPN CARD Recon row and failing the run non-zero, every run, for four more days. The
+# budget must outlast the longest match the tour can produce, so it is per-format now.
+OVER_HRS_BY_FMT = {"TEST": 132, "ODI": 12, "HUN": 8, "T20": 8}
+
+
+def _over_hrs_for(fmt):
+    """The completion clock for a format — the same value run_tour's OVER_HRS uses."""
+    return OVER_HRS_BY_FMT.get((fmt or "T20").upper(), 8)
 
 def _hold_espn_card(event_id, kind, got, expected):
     """Record WHY this card was refused and return parse_espn's refusal value, so a refusal is
@@ -305,7 +329,11 @@ def _espn_hold_escalated(hours_since_start, is_live, approved, kind=None):
     # is a real question, because there the data is present and wrong.
     if kind in _HOLD_UNREACHABLE:
         return False
-    return hours_since_start >= OVER_HRS_MAX + ESPN_HOLD_GRACE_H
+    # Per-format, so a five-day Test is never escalated on a one-day game's clock. Falls back to the
+    # longest white-ball value when the format is unknown, keeping the old behaviour for every
+    # existing tour (max(12, 12) == 12).
+    budget = max(OVER_HRS_MAX, _over_hrs_for(CURRENT_FMT))
+    return hours_since_start >= budget + ESPN_HOLD_GRACE_H
 
 # ── Cricbuzz: the L1 SECOND WITNESS ──────────────────────────────────────────────────────────
 # cricapi is the historical second witness and its code is untouched — it is still the witness on
@@ -1000,9 +1028,20 @@ def load_cricsheet_index(dirpath, gender="female"):
         idx[(info["dates"][0], team_key(info.get("teams", [])))] = f
     return idx
 
+# Counter keys that simply add up when folding a red-ball match's innings into match totals.
+_PERF_SUM_KEYS = ("r", "b", "4s", "6s", "balls", "runs_conceded", "w", "lbwb", "dots",
+                  "maidens", "catches", "stumpings", "runouts", "dro")
+
+
 def parse_cricsheet(path):
     d = json.load(open(path)); info = d["info"]
     perf = {}
+    # RED BALL: the D11 Test milestone and wicket-haul tiers are evaluated INSIDE an innings, so the
+    # match aggregate cannot reproduce the score (see _score_test). Detected from the file itself
+    # rather than CURRENT_FMT, so this is right even when a run is scoped to another tour.
+    is_red = (info.get("match_type") or "").upper() in ("TEST", "MDM")
+    inns_perfs = []          # [ {norm name -> perf}, ... ] one per scored innings; red ball only
+    cur = None               # the innings currently accumulating (None => accumulate flat, as before)
     # cricsheet's OWN name -> person-id registry, carried in every match file. Stamped onto
     # each perf entry so identity resolves by ID (resolve_perf_pid) instead of by the
     # initials-form spelling, which the alias table can't be expected to enumerate.
@@ -1018,9 +1057,33 @@ def parse_cricsheet(path):
     for tname, plist in info.get("players", {}).items():   # known playing XI -> +4 each
         for n in plist:
             p = get(n); p["played"] = True; p["team"] = p["team"] or tname
+    def iget(n, played=False):
+        """Accumulate a STAT into the current innings (red ball) or straight into the match dict.
+
+        Match-level facts — played, team, cs_id, bat_order — always live on the flat entry, so those
+        keep going through get()/crease(). For white ball `cur` is None and this returns exactly what
+        get() returned before, which is why every other format is byte-identical.
+
+        ⛔ `played` is OPT-IN and only the batter/bowler pass it, exactly as before. Marking everyone
+        this touches as played awards the +4 announced-XI bonus to a SUBSTITUTE FIELDER who merely
+        took a catch — caught by the white-ball regression on 8 of 48 matches (D Nikolov, T Marumani,
+        RA Jadeja, …), each a non-XI player gaining 4 points they never earned."""
+        p = get(n)
+        if played:
+            p["played"] = True
+        if cur is None:
+            return p
+        k = norm(n)
+        if k not in cur:
+            cur[k] = blank_perf(n)
+        return cur[k]
+
     for inn in d.get("innings", []):
         if inn.get("super_over"):
             continue  # super-over deliveries score no fantasy points (match ESPN's period>2 skip)
+        if is_red:
+            cur = {}
+            inns_perfs.append(cur)
         bat_pos = 0  # batting order = order players first appear at the crease this innings
         def crease(nm):
             nonlocal bat_pos
@@ -1041,7 +1104,7 @@ def parse_cricsheet(path):
                 # register striker then non-striker so openers get positions 1 & 2
                 crease(dl["batter"])
                 if dl.get("non_striker"): crease(dl["non_striker"])
-                pb = get(dl["batter"]); pb["played"] = True
+                pb = iget(dl["batter"], played=True)
                 if not is_wide: pb["b"] += 1
                 pb["r"] += rb
                 # cricsheet marks all-run 4s/6s and overthrows with `non_boundary: true`. Counting
@@ -1052,7 +1115,7 @@ def parse_cricsheet(path):
                 if not dl.get("runs", {}).get("non_boundary"):
                     if rb == 4: pb["4s"] += 1
                     elif rb == 6: pb["6s"] += 1
-                pw = get(dl["bowler"]); pw["played"] = True
+                pw = iget(dl["bowler"], played=True)
                 pw["runs_conceded"] += bcharged
                 # A maiden is an over with NO RUNS CHARGED TO THE BOWLER. Byes/leg-byes do not
                 # break one (never his leak); WIDES AND NO-BALLS DO, and they were invisible here
@@ -1073,7 +1136,7 @@ def parse_cricsheet(path):
                     if bcharged == 0: pw["dots"] += 1
                 for w in dl.get("wickets", []):
                     kind = w.get("kind", ""); fs = w.get("fielders", [])
-                    po = get(w.get("player_out", "")); po["dismissed"] = True; po["dismissal"] = kind
+                    po = iget(w.get("player_out", "")); po["dismissed"] = True; po["dismissal"] = kind
                     if kind not in ("run out", "retired hurt", "retired not out",
                                     "retired out", "obstructing the field", "hit wicket"):
                         pw["w"] += 1
@@ -1082,19 +1145,35 @@ def parse_cricsheet(path):
                     if kind == "caught":
                         for fi in fs:
                             fn = fi.get("name", "")
-                            if fn and fn != dl["bowler"]: get(fn)["catches"] += 1
+                            if fn and fn != dl["bowler"]: iget(fn)["catches"] += 1
                     if kind == "caught and bowled":   # the bowler caught it — credit the catch too
                         pw["catches"] += 1
                     if kind == "stumped":
                         for fi in fs:
-                            if fi.get("name"): get(fi["name"])["stumpings"] += 1
+                            if fi.get("name"): iget(fi["name"])["stumpings"] += 1
                     if kind == "run out":
                         for fi in fs:
                             if fi.get("name"):
-                                rp = get(fi["name"]); rp["runouts"] += 1
+                                rp = iget(fi["name"]); rp["runouts"] += 1
                                 if len(fs) == 1: rp["dro"] += 1
             if legal == 6 and over_runs == 0 and over_bowler:
-                get(over_bowler)["maidens"] += 1
+                iget(over_bowler)["maidens"] += 1
+    # Fold the per-innings counters into match totals so every existing consumer (points_gap, the
+    # recon diff, the CSV columns) keeps seeing exactly the aggregate it saw before, and attach the
+    # split for _score_test. Red ball only; white ball never entered this branch.
+    if is_red:
+        for ip in inns_perfs:
+            for k, sp in ip.items():
+                tgt = perf.get(k) or perf.setdefault(k, blank_perf(sp["name"]))
+                for kk in _PERF_SUM_KEYS:
+                    tgt[kk] += sp[kk]
+                if sp["dismissed"]:
+                    tgt["dismissed"] = True
+                    tgt["dismissal"] = sp["dismissal"]   # latest innings he was out in
+        for k, tgt in perf.items():
+            splits = [ip[k] for ip in inns_perfs if k in ip]
+            if splits:
+                tgt["innings"] = splits
     return perf, info.get("teams", [])
 
 _ESPN_FAILED = set()
@@ -1286,7 +1365,7 @@ def espn_runouts(event_id, fresh=False):
 # the official-card parser would move L2 baselines for a case worth 0 points.
 ESPN_NOT_OUT_CARDS = ("", "not out", "retired not out")
 
-def espn_batting_card(event_id, fresh=False):
+def espn_batting_card(event_id, fresh=False, fmt=None):
     """Each batter's OWN scorecard line from `summary`: batting position + how he was out.
 
     WHY THIS EXISTS — two separate bugs, one payload:
@@ -1325,6 +1404,11 @@ def espn_batting_card(event_id, fresh=False):
 
     Returns {norm(name): {"name", "espn_id", "order", "dismissed", "dismissal"}}."""
     d = espn_get("summary", cache=not fresh, event=event_id)
+    # RED BALL: periods 3 and 4 are the SECOND innings of each side, not a super-over, so the gate
+    # below has to let them through or half of every Test is discarded. White ball keeps max 2, where
+    # period 3+ genuinely is a super-over and scores nothing.
+    _f = (fmt or CURRENT_FMT or "T20").upper()
+    max_per = 4 if _f == "TEST" else 2
     out = {}
     for team in d.get("rosters", []) or []:
         for p in team.get("roster", []) or []:
@@ -1340,14 +1424,13 @@ def espn_batting_card(event_id, fresh=False):
                     per = int(ls.get("period") or 0)
                 except (TypeError, ValueError):
                     per = 0
-                if per > 2:
+                if per > max_per:
                     continue
                 bat = ((ls.get("statistics") or {}).get("batting")) or {}
                 if not bat:
                     continue          # did not bat in this innings
                 k = norm(nm)
-                if k in out:
-                    continue          # first innings he batted in wins (mirrors parse_cricsheet)
+                seen = k in out
                 det = bat.get("outDetails") or {}
                 card = (det.get("dismissalCard") or "").strip().lower()
                 try:
@@ -1368,10 +1451,18 @@ def espn_batting_card(event_id, fresh=False):
                     _fn = _fa.get("fullName") or _fa.get("displayName")
                     if _fn:
                         _fl.append((_fn, str(_fa.get("id") or "")))
-                out[k] = {"name": nm, "espn_id": str(a.get("id") or ""), "order": order,
-                          "dismissed": dismissed, "dismissal": (txt or card) if dismissed else "",
-                          "card": card, "fielders": _fl,
-                          "bowler": (_bn, str(_b.get("id") or "")) if _bn else None}
+                ent = {"name": nm, "espn_id": str(a.get("id") or ""), "order": order,
+                       "dismissed": dismissed, "dismissal": (txt or card) if dismissed else "",
+                       "card": card, "fielders": _fl, "period": per,
+                       "bowler": (_bn, str(_b.get("id") or "")) if _bn else None}
+                if seen:
+                    # A second (or third) batting innings — Test only, since white ball cannot reach
+                    # here. The TOP-LEVEL fields still describe the FIRST innings he batted in, which
+                    # is what every existing consumer reads (bat_order, the Dismissal column), so
+                    # nothing downstream changes; the extra innings live in the list.
+                    out[k]["innings"].append(ent)
+                    continue
+                out[k] = dict(ent, innings=[ent])
     return out
 
 def espn_xi(event_id, fresh=False):
@@ -1580,6 +1671,11 @@ def parse_espn(event_id, fresh=False):
               file=sys.stderr)
     items = _uniq
     perf, overs, super_over = {}, {}, False
+    # RED BALL: periods 3 and 4 are the second innings of each side, NOT a super over. The
+    # `per > 2 -> super_over` gate below would flag them and skip half of every Test.
+    _fmt = (CURRENT_FMT or "T20").upper()
+    _max_per = 4 if _fmt == "TEST" else 2
+    inns_perf = {}   # period -> {norm name -> perf}; red ball only, feeds _score_test's tiers
     # Degraded-mode fallback ONLY (see the batting-card application after the loop):
     # {norm(name): (name, athlete_id, text)} derived from the ball-by-ball. Never written straight
     # onto a perf row. The id is carried so the fallback row is still ID-anchored, not name-only.
@@ -1596,6 +1692,21 @@ def parse_espn(event_id, fresh=False):
         elif aid and not perf[k].get("espn_id"):
             perf[k]["espn_id"] = str(aid)
         return perf[k]
+    _cur_per = [None]   # the period being read, so iget knows which innings to bill
+    def iget(n, aid=""):
+        """The match-total row for white ball; the CURRENT INNINGS row for red ball.
+
+        Red-ball callers get an innings-scoped dict so the milestone/haul tiers can be evaluated
+        inside each innings (see _score_test). The match-total row is still maintained by the fold
+        after the loop, so every existing consumer of `perf` is unaffected."""
+        row = get(n, aid)                     # always ensure/refresh the match-level row
+        if _fmt != "TEST" or _cur_per[0] is None:
+            return row
+        bucket = inns_perf.setdefault(_cur_per[0], {})
+        k = norm(n)
+        if k not in bucket:
+            bucket[k] = blank_perf(n, espn_id=aid)
+        return bucket[k]
     _deliveries = 0  # EVERY delivery seen, extras and super-over INCLUDED — see the balls check
     for it in items:
         per = it.get("period")
@@ -1631,15 +1742,17 @@ def parse_espn(event_id, fresh=False):
         # completeness check must not depend on the extras-parsing it exists to validate.
         if bw:
             _deliveries += 1
-        if per and per > 2:
+        if per and per > _max_per:
             super_over = True
             continue
+        _cur_per[0] = per
         try:
             sv = int(it.get("scoreValue", 0) or 0)
         except (TypeError, ValueError):
             sv = 0
         if bt:
-            pb = get(bt, bt_id); pb["played"] = True
+            get(bt, bt_id)["played"] = True
+            pb = iget(bt, bt_id); pb["played"] = True
             if not is_wide:
                 pb["b"] += 1
             if desc in ("run", "four", "six"):
@@ -1649,7 +1762,8 @@ def parse_espn(event_id, fresh=False):
             elif desc == "six":
                 pb["6s"] += 1
         if bw:
-            pw = get(bw, bw_id); pw["played"] = True
+            get(bw, bw_id)["played"] = True
+            pw = iget(bw, bw_id); pw["played"] = True
             # Runs charged to the bowler exclude byes/leg-byes (drives economy, maidens, dots).
             # Byes/leg-byes are the keeper's leak, not the bowler's — EXCEPT the no-ball penalty
             # itself, which is always charged to the bowler.
@@ -1787,6 +1901,41 @@ def parse_espn(event_id, fresh=False):
             p["dismissed"] = c["dismissed"]
             p["dismissal"] = c["dismissal"]
         _apply_dismissal_credit(event_id, get, _card, pbp_credit)
+        # ⛔ RED BALL: split the WICKETS and the DUCK flag across innings.
+        #
+        # _apply_dismissal_credit bills the bowler on the MATCH row, which is right for the aggregate
+        # but leaves every innings bucket at w=0 — and _score_test reads bowling PER INNINGS, so
+        # without this a five-wicket haul scores nothing at all (measured on the live 1st Test:
+        # OE Robinson 5 wickets, innings split 0). It also reads the per-innings dismissalCard rather
+        # than the top-level one, which describes only the FIRST innings a batter batted in: from day
+        # three, when a side bats again, the top-level card would credit one dismissal and silently
+        # drop the other.
+        if _fmt == "TEST":
+            for c in _card.values():
+                for ie in c.get("innings") or []:
+                    per = ie.get("period")
+                    if per is None:
+                        continue
+                    bucket = inns_perf.setdefault(per, {})
+
+                    def _row(nm, nid=""):
+                        kk = norm(nm)
+                        if kk not in bucket:
+                            bucket[kk] = blank_perf(nm, espn_id=nid)
+                        return bucket[kk]
+
+                    # The duck must survive per innings: a first-innings 0 that aggregation would
+                    # forgive (0 then 60 reads as 60 not out) is a real -4.
+                    vic = _row(c["name"], c.get("espn_id") or "")
+                    vic["dismissed"] = bool(ie.get("dismissed"))
+                    vic["dismissal"] = ie.get("dismissal") or ""
+                    cd = (ie.get("card") or "").strip().lower()
+                    bw = ie.get("bowler")
+                    if cd in ESPN_BOWLER_WKT_CARDS and bw:
+                        bp2 = _row(bw[0], bw[1])
+                        bp2["w"] += 1
+                        if cd in ("bowled", "lbw"):
+                            bp2["lbwb"] += 1
     else:
         # An absence must never present as a value: with no scorecard batting card we CANNOT know
         # who was out, so say so loudly rather than publishing silence as "nobody was dismissed".
@@ -1798,6 +1947,26 @@ def parse_espn(event_id, fresh=False):
             fp = get(nm, aid)      # a batter ESPN says was OUT played, even if he faced no ball
             fp["played"] = True; fp["dismissed"] = True; fp["dismissal"] = txt
         _apply_dismissal_credit(event_id, get, {}, pbp_credit)
+
+    # RED BALL: fold the per-innings delivery stats into the match row, and attach the splits for
+    # _score_test. ONLY the delivery-derived keys are folded — catches/stumpings/run-outs/maidens are
+    # billed straight onto the match row further down (from the summary's dismissal card and
+    # espn_runouts, not per delivery), so folding them here would double-count. _score_test reads
+    # untiered fielding off the match row for exactly this reason.
+    if _fmt == "TEST" and inns_perf:
+        # w/lbwb are deliberately ABSENT: the delivery loop never writes them (it STAGES the credit,
+        # which _apply_dismissal_credit applies to the match row) and the red-ball pass above bills
+        # them straight into the innings buckets. Folding them here would double the match total.
+        _DELIVERY_KEYS = ("r", "b", "4s", "6s", "balls", "runs_conceded", "dots")
+        for per_no in sorted(inns_perf):
+            for k, sp in inns_perf[per_no].items():
+                tgt = perf.get(k) or get(sp["name"], sp.get("espn_id", ""))
+                for kk in _DELIVERY_KEYS:
+                    tgt[kk] += sp[kk]
+        for k, tgt in perf.items():
+            splits = [inns_perf[pn][k] for pn in sorted(inns_perf) if k in inns_perf[pn]]
+            if splits:
+                tgt["innings"] = splits
 
     for o in overs.values():
         if o["legal"] == 6 and o["runs"] == 0 and o["bowler"]:
@@ -1849,6 +2018,8 @@ def score(p, role, fmt=None):
         return _score_odi(p, role)
     if f == "HUN":
         return _score_hundred(p, role)
+    if f == "TEST":
+        return _score_test(p, role)
     return _score_t20(p, role)
 
 def _bowled(p):
@@ -1984,6 +2155,78 @@ def _score_odi(p, role):
     xi = R2["xi"] if p["played"] else 0
     total = bat + bowl + field + sr_pts + eco_pts + xi
     return dict(bat=bat, bowl=bowl, field=field, sr=sr_pts, eco=eco_pts, xi=xi, total=total)
+
+def _score_test_innings(p, role):
+    """D11 Test points for ONE INNINGS. Excludes the +4 announced-XI award, which is per MATCH.
+
+    Mirror of compute_fantasy_points_test in cricket-auction-helper/data/etl_cricsheet.py; the two are
+    parity-tested against each other on real cricsheet Tests (tests/test_test_scorer_parity.py).
+    """
+    R2 = R_TEST
+    bat = bowl = field = 0
+    if p["b"] > 0 or p["r"] > 0:
+        bat += p["r"] * R2["perRun"] + p["4s"] * R2["b4"] + p["6s"] * R2["b6"]
+        # HIGHEST TIER ONLY. The FPS is explicit: "Any player scoring 150 Runs will only get points
+        # for that. No points will be awarded as their 25/50/75/100/125 Run Bonus."
+        if p["r"] >= 150: bat += R2["m150"]
+        elif p["r"] >= 125: bat += R2["m125"]
+        elif p["r"] >= 100: bat += R2["m100"]
+        elif p["r"] >= 75: bat += R2["m75"]
+        elif p["r"] >= 50: bat += R2["m50"]
+        elif p["r"] >= 25: bat += R2["m25"]
+    # Outside the runs/balls gate so a 0-off-0 run-out still counts (as in the ODI scorer).
+    if p["dismissed"] and p["r"] == 0 and role in ("BAT", "WK", "AR"):
+        bat += R2["duck"]
+    if _bowled(p):
+        # No dot, no maiden, no economy in Test.
+        bowl += p["w"] * R2["wkt"] + p["lbwb"] * R2["lbwb"]
+        if p["w"] >= 6: bowl += R2["h6"]
+        elif p["w"] >= 5: bowl += R2["h5"]
+        elif p["w"] >= 4: bowl += R2["h4"]
+    field = _test_fielding(p)
+    return bat, bowl, field
+
+
+def _test_fielding(p):
+    """Test fielding points. NO TIERS — no 3-catch bonus — so this is a pure per-event sum and is
+    therefore identical whether it is read per innings or off the match total. That is what lets
+    _score_test take fielding from the MATCH row: the ESPN path bills catches/stumpings/run-outs at
+    match level (from the summary's dismissal card and espn_runouts, not per delivery), so there is
+    no per-innings fielding to read there, while cricsheet has both and they agree by construction."""
+    R2 = R_TEST
+    return (p["catches"] * R2["catch"] + p["stumpings"] * R2["stump"]
+            + p["dro"] * R2["dro"] + (p["runouts"] - p["dro"]) * R2["ro"])
+
+
+def _score_test(p, role):
+    """D11 Test scorer for a whole match, summing PER-INNINGS scores.
+
+    Reads p["innings"] — the per-innings splits the feed parsers attach for red ball. Scoring off the
+    match aggregate instead is simply a different, wrong number, because the milestone and wicket-haul
+    tiers are evaluated inside an innings: 40 and 40 is two 25-bonuses (+8), not a 75-bonus (+12);
+    3-for + 3-for earns no haul where an aggregate 6-for earns +12; and a 10-wicket match would cap at
+    the 6w tier. A first-innings duck also survives here, where aggregation would forgive it.
+
+    FALLBACK: with no innings splits (a feed that could not supply them) this scores the flat dict as
+    a single innings and the caller marks the row provisional. That is deliberately the LEAST wrong
+    option — it is exact for a one-innings appearance and errs only on the tier distribution — but it
+    must never be mistaken for a reconciled number.
+    """
+    inns = p.get("innings") or []
+    if not inns:
+        bat, bowl, field = _score_test_innings(p, role)
+    else:
+        # Tiered components (milestones, hauls, duck) come from the innings; fielding is untiered so
+        # it is taken ONCE off the match row — see _test_fielding for why that is the same number.
+        bat = bowl = 0
+        for ip in inns:
+            b, w, _ = _score_test_innings(ip, role)
+            bat += b; bowl += w
+        field = _test_fielding(p)
+    xi = R_TEST["xi"] if p["played"] else 0   # once per match, however many innings he appeared in
+    total = bat + bowl + field + xi
+    return dict(bat=bat, bowl=bowl, field=field, sr=0, eco=0, xi=xi, total=total)
+
 
 def overs_to_balls(o):
     o = float(o or 0)
@@ -2872,6 +3115,11 @@ _FMT_MATCHTYPE = {"HUN": "hundred", "T20": "t20", "ODI": "odi", "TEST": "test"}
 ESPN_LIST_BACK_STOP = 8      # consecutive empty days that end the backward scan
 ESPN_LIST_MAX_BACK  = 150    # hard cap on how far back we look
 ESPN_LIST_FORWARD   = 14     # days ahead to list upcoming fixtures (for the announced-XI pass)
+# A TEST SERIES HAS MULTI-WEEK GAPS. ENG v PAK 2026 runs 19 Aug / 27 Aug / 9 Sep — the third Test is
+# 21 days out, so a 14-day forward window simply does not contain it and the fixture is invisible
+# until late August. White-ball tours play every few days and never hit this. The scan is still
+# bounded by the tour's own `ends`, so the wider window costs only a few scoreboard reads.
+ESPN_LIST_FORWARD_TEST = 45
 
 def _espn_event_to_match(e):
     """One ESPN scoreboard event -> one cricapi-matchList-shaped dict (minus the cricapi id)."""
@@ -2958,7 +3206,9 @@ def espn_match_list(tour, squad_team_names):
             break
     # and forwards for upcoming fixtures
     d = min(today, end_d) + timedelta(days=1)
-    stop = min(today + timedelta(days=ESPN_LIST_FORWARD), end_d)
+    fwd = (ESPN_LIST_FORWARD_TEST if (CURRENT_FMT or "").upper() == "TEST"
+           else ESPN_LIST_FORWARD)
+    stop = min(today + timedelta(days=fwd), end_d)
     while d <= stop:
         scan(d)
         d += timedelta(days=1)
@@ -3074,6 +3324,13 @@ def run_tour(tour):
     # back to the match name.
     def is_fmt(m):
         mt = (m.get("matchType") or "").lower()
+        if CURRENT_FMT == "TEST":
+            # Both fallbacks below EXCLUDE "test" by name, so without this branch a Test tour admits
+            # nothing at all and the run scores zero matches while reporting success.
+            if mt:
+                return "test" in mt
+            nm = (m.get("name") or "").lower()
+            return "test" in nm and "t20" not in nm and "odi" not in nm
         if CURRENT_FMT == "ODI":
             if mt:
                 return "odi" in mt
@@ -3101,7 +3358,12 @@ def run_tour(tour):
     # time has passed since its scheduled start for the game to have finished. Without this
     # fallback a completed-but-unflagged match is only scored "live" while within near_today, then
     # silently vanishes — its points never finalize (the root cause of "LPL points not updating").
-    OVER_HRS = 12 if CURRENT_FMT == "ODI" else 8   # T20 ~3.5h / ODI ~8h, plus a rain/delay buffer
+    # ⛔ A TEST RUNS FIVE DAYS. With the ODI/T20 clock a Test is declared "over" on the afternoon of
+    # DAY ONE, and the ended-path then scores and FREEZES a first-session card as the final result —
+    # the single most damaging way this bot could handle red ball. 132h = 5 days + 12h of rain/bad
+    # light/extra-day buffer. A Test that finishes inside three days is still caught immediately by
+    # the matchEnded flag; this constant only governs how long we refuse to give up on one.
+    OVER_HRS = _over_hrs_for(CURRENT_FMT)
     def hours_since_start(m):
         dt = m.get("dateTimeGMT") or ((m.get("date") + "T00:00:00Z") if m.get("date") else "")
         try:

@@ -122,5 +122,16 @@
   "tab": "CARIBBEAN PREMIER LEAGUE 2026 POINTS",
   "cricbuzz_series": "12123",
   "starts": "2026-08-05"
+ },
+ {
+  "cricapi_series": "",
+  "espn_series": "23806",
+  "format": "TEST",
+  "gender": "male",
+  "name": "England vs Pakistan Men's Test 2026",
+  "squads": "eng_pak_test_2026_squads.json",
+  "tab": "ENG v PAK TEST 2026 POINTS",
+  "starts": "2026-08-19",
+  "ends": "2026-09-13"
  }
 ]
