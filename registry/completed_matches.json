@@ -894,6 +894,15 @@
   },
   {
    "tour": "Caribbean Premier League 2026",
+   "match_key": "2026-08-19::guyana amazon warriors|st lucia kings",
+   "match": "Match 11 — MTSTL v MTGUY",
+   "date": "2026-08-19",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-20",
+   "provenance": "live"
+  },
+  {
+   "tour": "Caribbean Premier League 2026",
    "match_key": "2026-08-19::jamaica kingsmen|st kitts and nevis patriots",
    "match": "Match 10 — MTJAM v MTSTK",
    "date": "2026-08-19",
