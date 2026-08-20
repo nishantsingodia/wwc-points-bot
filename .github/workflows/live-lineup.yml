@@ -2,9 +2,11 @@ name: Live Lineup (toss XI)
 
 # Every 5 min, but the script exits immediately unless a match is in its toss
 # window ([toss-30m, start+15m]) per committed toss_windows.json — so idle ticks
-# cost zero API. In-window, it does a normal run (ESPN posts the announced XI;
-# series_info is cached 2h so this never threatens cricapi's 100/day cap). The
-# 2-hourly full run (wwc-points.yml) is unchanged and still owns points.
+# do no work at all. In-window, it does a normal run (ESPN posts the announced XI).
+# Every feed is keyless and unmetered (ESPN + Cricbuzz + cricsheet), so there is no
+# daily cap to ration; the tick still prefers cached immutable payloads (TICK_CACHE_ONLY)
+# out of politeness/latency, not budget. The 4-hourly full run (wwc-points.yml) is
+# unchanged and still owns points.
 on:
   workflow_dispatch:
   schedule:
@@ -34,8 +36,9 @@ jobs:
           python-version: "3.11"
       - run: pip install -r requirements.txt
 
-      # Share the cricapi scorecard/series cache with the main workflow.
-      - name: Restore cricapi cache
+      # Share the keyless feed cache (WC_CACHE_DIR: ESPN + Cricbuzz responses) with the
+      # main workflow — this is what TICK_CACHE_ONLY serves final scorecards out of.
+      - name: Restore feed cache (ESPN + Cricbuzz)
         uses: actions/cache@v4
         with:
           path: api_cache
@@ -54,8 +57,6 @@ jobs:
       - name: Live lineup tick (ESPN announced XI, toss-window only)
         env:
           FREQUENT: "1"
-          CRICKET_API_KEY: ${{ secrets.CRICKET_API_KEY }}
-          CRICKET_API_KEY2: ${{ secrets.CRICKET_API_KEY2 }}   # failover key — the frequent tick had none
           GSHEET_ID: ${{ secrets.GSHEET_ID }}
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           CRICSHEET_DIR: cricsheet
@@ -69,7 +70,10 @@ jobs:
           # must be committed or it is written-but-never-read: every run would re-derive the
           # pairing from team names, which is exactly the state in which a rename upstream can
           # silently re-pair or un-pair an already-SETTLED match.
-          LEDGERS="registry/recon_overrides.json registry/new_players.json registry/identity_splits.json registry/frozen_tours.json registry/settlement_snapshots.json registry/completed_matches.json registry/cricsheet_learned_aliases.json registry/manual_ci_bridges.json registry/cricbuzz_match_map.json registry/identity_changes.json"
+          # registry/cricbuzz_bridge.json is the cricbuzz_id -> cricinfo_id IDENTITY bridge, and it
+          # was MISSING from this list: every adoption the run made died with the runner, so the
+          # bridge could never accumulate. Now that Cricbuzz is the only second witness, it persists.
+          LEDGERS="registry/recon_overrides.json registry/new_players.json registry/identity_splits.json registry/frozen_tours.json registry/settlement_snapshots.json registry/completed_matches.json registry/cricsheet_learned_aliases.json registry/manual_ci_bridges.json registry/cricbuzz_match_map.json registry/cricbuzz_bridge.json registry/identity_changes.json"
           if [ -n "$(git status --porcelain $LEDGERS)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

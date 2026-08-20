@@ -1,12 +1,12 @@
 name: Tour Sync (auto-ingest)
 
-# Discovers cricket tours starting in the next few days (cricapi, watchlist-filtered),
+# Reads the tour names typed into Column A of the "TOUR STATUS" GSheet tab and resolves each
+# on ESPN (name -> league id -> fixtures -> full squads) — keyless, no discovery feed. It then
 # generates the draft-app + bot artifacts, VALIDATES them, then commits both repos and
 # triggers a Vercel prod deploy — so a new tour appears in wwc-draft and gets scored by
 # the bot with no manual code edits.
 #
 # REQUIRED SECRETS (set in this repo's Settings -> Secrets -> Actions):
-#   CRICKET_API_KEY      - already used by the points workflow (reuse)
 #   GSHEET_ID            - already used by the points workflow (reuse; builds the tab gviz URL)
 #   DRAFT_REPO_PAT       - a PAT (repo scope) that can push to nishantsingodia/wwc-draft   [NEW]
 #   VERCEL_TOKEN         - a Vercel access token (Account Settings -> Tokens).             [NEW]
@@ -25,10 +25,10 @@ on:
         type: boolean
         default: true
   schedule:
-    # 00:10 UTC — right after cricapi's daily quota reset (00:00 UTC), so tour-sync gets
-    # fresh hits BEFORE the 2-hourly points bot drains both keys. (It ran at 06:00 before,
-    # by which point the live points scoring had maxed the free-tier 100/day cap on both
-    # keys, so discovery silently found nothing for 6 days.)
+    # 00:10 UTC — an early-UTC slot deliberately AHEAD of the points runs, so a tour typed
+    # into Column A is ingested and validated before the day's scoring starts reading tours.json.
+    # (Historically this slot existed to catch cricapi's 00:00 UTC quota reset; there is no quota
+    # any more, so keep or move it on scheduling grounds alone.)
     - cron: "10 0 * * *"
 
 permissions:
@@ -52,8 +52,8 @@ jobs:
           token: ${{ secrets.DRAFT_REPO_PAT }}
           path: wwc-draft
 
-      # Auction app = the source of curated, identity-anchored LEAGUE squads (cricapi carries
-      # none). We read its seed files; no build, just the .ts squad exports.
+      # Auction app = the source of curated, identity-anchored LEAGUE squads. We read its seed
+      # files; no build, just the .ts squad exports.
       - name: Checkout auction app (squad seeds)
         uses: actions/checkout@v4
         with:
@@ -69,7 +69,7 @@ jobs:
           node-version: "24"   # TypeScript type-stripping for the squad-seed extractor
 
       # Dump the auction seed squads to JSON (node strips the TS types). Non-fatal: if it
-      # fails, tour_sync just falls back to cricapi squads for any discovered tour.
+      # fails, tour_sync falls back to the ESPN squads it builds from the league fixtures.
       - name: Extract auction league squads
         run: |
           node extract_auction_squads.mjs "$GITHUB_WORKSPACE/cricket-auction-helper" \
@@ -80,12 +80,8 @@ jobs:
       - name: Generate tours
         id: gen
         env:
-          # Per Nishant: tour-sync uses the NORMAL shared cricapi pool (no dedicated key). Discovery
-          # is only ~15-25 hits/day and the TOUR CONTROL gate keeps the points bot from draining the
-          # pool on unapproved tours, so the shared budget has room. (_keys() falls back to the
-          # shared keys when TOUR_SYNC_API_KEY is unset — we deliberately don't pass it.)
-          CRICKET_API_KEY: ${{ secrets.CRICKET_API_KEY }}
-          CRICKET_API_KEY2: ${{ secrets.CRICKET_API_KEY2 }}
+          # No feed key: this step only ever runs tour_sync.py --from-status-sheet, which is the
+          # keyless Column-A -> ESPN path and never touches a metered API.
           DRAFT_REPO: ${{ github.workspace }}/wwc-draft
           SYNC_SHEET_ID: ${{ secrets.GSHEET_ID }}
           GSHEET_ID: ${{ secrets.GSHEET_ID }}
@@ -95,7 +91,7 @@ jobs:
           set -o pipefail   # so a crashed generator fails the step (tee was masking it)
           pip install -r requirements.txt   # gspread — needed to READ Column A of the TOUR STATUS tab
           # KEYLESS, Column-A-driven: read the tour names Nishant typed in the TOUR STATUS tab and
-          # ESPN-add any new ones (name → league id → fixtures → full squads). No cricapi.
+          # ESPN-add any new ones (name → league id → fixtures → full squads). ESPN only.
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
             echo "DRY RUN — read Column A + resolve on ESPN, nothing written/committed/deployed"
             python3 tour_sync.py --dry-run --from-status-sheet | tee /tmp/sync.out
@@ -129,7 +125,7 @@ jobs:
 
       # E2E per-tour visibility → writes the "TOUR STATUS" GSheet tab (Tour/Squads/Draft/Sheet +
       # the sheet↔draft team-code & pid mapping health). Always runs (even with nothing applied) so
-      # the dashboard reflects current reality. Read-only: no cricapi, never mutates a repo.
+      # the dashboard reflects current reality. Read-only: no feed calls, never mutates a repo.
       - name: Tour status dashboard
         # Runs on dry-runs too, so the TOUR STATUS tab is CREATED/refreshed even before a real
         # apply — that's the tab Nishant types new tour names into (Column A). Read-only.

@@ -1,59 +1,11 @@
 """Tests for the feed-parser data-quality fixes:
-- caught-&-bowled catch credit in cricapi parse_match (cricapi's `catching` array omits it),
-- robust retirement/obstruction guard + 'leg before wicket' in parse_espn (the De Lange 2/3 bug)."""
+- robust retirement/obstruction guard + 'leg before wicket' in parse_espn (the De Lange 2/3 bug).
 
-
-def _scorecard(batting, bowling, catching):
-    return {"data": {"scorecard": [{
-        "inning": "Australia Women Inning 1",
-        "batting": batting, "bowling": bowling, "catching": catching,
-    }]}}
-
-
-def test_caught_and_bowled_credits_bowler(wcmod, monkeypatch):
-    fake = _scorecard(
-        batting=[
-            {"batsman": {"name": "Beth Mooney"}, "r": 20, "b": 15, "4s": 2, "6s": 0,
-             "dismissal": "caught", "dismissal-text": "c & b Sophie Ecclestone"},
-            {"batsman": {"name": "Ellyse Perry"}, "r": 30, "b": 20, "4s": 3, "6s": 0,
-             "dismissal": "caught", "dismissal-text": "c Heather Knight b Sophie Ecclestone"},
-        ],
-        bowling=[{"bowler": {"name": "Sophie Ecclestone"}, "o": 4, "r": 25, "w": 2, "m": 0}],
-        catching=[{"catcher": {"name": "Heather Knight"}, "catch": 1, "stumped": 0}],
-    )
-    monkeypatch.setattr(wcmod, "api", lambda *a, **k: fake)
-    perf = wcmod.parse_match("x")
-    ecc = perf[wcmod.norm("Sophie Ecclestone")]
-    assert ecc["catches"] == 1   # the caught-&-bowled catch (cricapi's `catching` omits it)
-    assert ecc["w"] == 2
-    # the regular catch (Knight, off Perry) is NOT double-credited to the bowler
-    assert perf[wcmod.norm("Heather Knight")]["catches"] == 1
-
-
-def test_caught_and_bowled_same_name_form(wcmod, monkeypatch):
-    fake = _scorecard(
-        batting=[{"batsman": {"name": "A B"}, "r": 5, "b": 4, "4s": 0, "6s": 0,
-                  "dismissal": "caught", "dismissal-text": "c Megan Schutt b Megan Schutt"}],
-        bowling=[{"bowler": {"name": "Megan Schutt"}, "o": 2, "r": 10, "w": 1, "m": 0}],
-        catching=[],
-    )
-    monkeypatch.setattr(wcmod, "api", lambda *a, **k: fake)
-    perf = wcmod.parse_match("x")
-    assert perf[wcmod.norm("Megan Schutt")]["catches"] == 1
-
-
-def test_normal_catch_not_credited_to_bowler(wcmod, monkeypatch):
-    # a plain catch (catcher != bowler) must NOT add a catch to the bowler (no double count)
-    fake = _scorecard(
-        batting=[{"batsman": {"name": "A B"}, "r": 5, "b": 4, "4s": 0, "6s": 0,
-                  "dismissal": "caught", "dismissal-text": "c Alyssa Healy b Megan Schutt"}],
-        bowling=[{"bowler": {"name": "Megan Schutt"}, "o": 2, "r": 10, "w": 1, "m": 0}],
-        catching=[{"catcher": {"name": "Alyssa Healy"}, "catch": 1, "stumped": 0}],
-    )
-    monkeypatch.setattr(wcmod, "api", lambda *a, **k: fake)
-    perf = wcmod.parse_match("x")
-    assert perf[wcmod.norm("Megan Schutt")]["catches"] == 0
-    assert perf[wcmod.norm("Alyssa Healy")]["catches"] == 1
+The caught-&-bowled catch-credit tests that used to live here exercised the cricapi scorecard
+parser (`parse_match`) and its `api()` transport, both DELETED when cricapi was dropped as a feed.
+The INVARIANT is not gone with them — it moved to `_apply_dismissal_credit`, which reads the
+batter's own ESPN scorecard line. ESPN is now the ONLY base card, so that path is re-tested below
+rather than left as a claim: it had no coverage of its own while cricapi's parser carried these."""
 
 
 def test_espn_retirement_not_a_wicket_and_lbw_bonus(wcmod, monkeypatch):
@@ -73,3 +25,56 @@ def test_espn_retirement_not_a_wicket_and_lbw_bonus(wcmod, monkeypatch):
     dl = perf[wcmod.norm("Caroline de Lange")]
     assert dl["w"] == 1       # only the lbw counts; the "retired not out (hurt)" does NOT
     assert dl["lbwb"] == 1    # "leg before wicket" now triggers the +8 bonus
+
+
+# ── caught-&-bowled / catch credit on the ESPN path (_apply_dismissal_credit) ────────────────
+# The rule: a "c" dismissal credits the BOWLER a wicket and the FIELDER a catch. On a caught-and-
+# bowled those are the SAME player, who must get both. A plain catch must never give the bowler a
+# catch. Fielders must NOT be marked played — 11 of the fielders credited across the cached corpus
+# are substitutes, and `played` is the +4 in-XI bonus (ev1521240 "c sub (EG Barnard) b Ellis").
+
+def _credit(wcmod, card_entry):
+    """Run _apply_dismissal_credit over one scorecard line and return {norm_name: perf}."""
+    perf = {}
+
+    def get(n, espn_id=""):
+        k = wcmod.norm(n)
+        if k not in perf:
+            perf[k] = wcmod.blank_perf(n, espn_id=espn_id)
+        return perf[k]
+
+    base = {"name": "The Batter", "espn_id": "900", "order": 3, "dismissed": True,
+            "dismissal": "c", "card": "c", "fielders": [], "period": 1, "bowler": None}
+    base.update(card_entry)
+    wcmod._apply_dismissal_credit("ev-test", get, {wcmod.norm(base["name"]): base}, {})
+    return perf
+
+
+def test_caught_and_bowled_credits_the_bowler_both_wicket_and_catch(wcmod):
+    perf = _credit(wcmod, {"card": "c", "bowler": ("Sam Bowler", "111"),
+                           "fielders": [("Sam Bowler", "111")]})
+    b = perf[wcmod.norm("Sam Bowler")]
+    assert b["w"] == 1, "the bowler must get the wicket"
+    assert b["catches"] == 1, "on a caught-and-bowled the bowler IS the catcher"
+
+
+def test_plain_catch_does_not_credit_the_bowler_with_a_catch(wcmod):
+    perf = _credit(wcmod, {"card": "c", "bowler": ("Sam Bowler", "111"),
+                           "fielders": [("Fred Fielder", "222")]})
+    b, f = perf[wcmod.norm("Sam Bowler")], perf[wcmod.norm("Fred Fielder")]
+    assert (b["w"], b["catches"]) == (1, 0), "bowler gets the wicket, NOT the catch"
+    assert f["catches"] == 1
+    assert not f["played"], "a fielder may be a substitute — crediting +4 in-XI would be wrong"
+
+
+def test_bowled_credits_the_lbw_bowled_bonus(wcmod):
+    perf = _credit(wcmod, {"card": "bowled", "bowler": ("Sam Bowler", "111"), "fielders": []})
+    b = perf[wcmod.norm("Sam Bowler")]
+    assert (b["w"], b["lbwb"]) == (1, 1), "bowled/lbw carries the +8 bonus as well as the wicket"
+
+
+def test_a_not_out_batter_credits_nobody(wcmod):
+    perf = _credit(wcmod, {"card": "", "dismissed": False,
+                           "bowler": ("Sam Bowler", "111"), "fielders": [("Fred Fielder", "222")]})
+    assert all(v["w"] == 0 and v["catches"] == 0 for v in perf.values()), \
+        "a not-out line must not manufacture a wicket or a catch"

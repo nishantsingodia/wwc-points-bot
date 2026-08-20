@@ -51,7 +51,7 @@ def test_a_flagged_bowler_keeps_the_match_LIVE(wcmod):
 
     status = wcmod.classify_match_status(
         cs_path=False, espn_present=False, l1_gaps="", unresolved=set(), l2_dirty=False,
-        unsourced=unsourced, already_completed=False, capi_present=True,
+        unsourced=unsourced, already_completed=False, witness_present=True,
     )
     assert "LIVE" in str(status).upper(), (
         f"a bowler with no dots source published as {status!r} — that is the write-once freeze "

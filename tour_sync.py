@@ -1,14 +1,20 @@
 #!/usr/bin/env python3
 """
-tour_sync — auto-discover cricket tours starting soon and generate the draft-app +
-points-bot artifacts for them, so a new tour appears in wwc-draft and gets scored by
-the bot with NO manual code edits.
+tour_sync — add cricket tours and generate the draft-app + points-bot artifacts for them, so a
+new tour appears in wwc-draft and gets scored by the bot with NO manual code edits.
+
+FEED: ESPN ONLY. cricapi is gone from this module — no key, no quota, no rotation, and nothing
+here can re-introduce it on a future tour. ESPN is the primary/only base feed; Cricbuzz is the
+L1 second witness (resolved into `cricbuzz_series` at ingest, but only when it can be VALIDATED);
+cricsheet is the L2 arbiter, later, at scoring time.
 
 Pipeline (run daily from GH Actions):
-  discover (cricapi /currentMatches for near-live + /series search for upcoming fixtures,
-            watchlist-filtered; rotates across CRICKET_API_KEY/KEY2 and RAISES if all keys
-            are quota-blocked so a dead key never silently reports "0 tours")
-    -> for each new (series, format) tour: fixtures (/series_info) + squads (/match_squad)
+  pick tours — Column A of the TOUR CONTROL / TOUR STATUS tab (--from-status-sheet; the path CI
+               runs), one name on the CLI (--espn-tour), or ESPN watchlist search (--discover)
+    -> per tour: name -> ESPN league id -> fixtures (dated scoreboard scan) -> FULL squads
+       (event summary.squads)
+    -> tours.json ids: espn_series = the ESPN league id; cricbuzz_series = a PROPOSED Cricbuzz id
+       that we then VALIDATE against its own fixture DATES (never adopted on a name alone)
     -> generate draft artifacts (data/matches.json, data/players-raw.json, data/team-codes.json)
        + bot artifacts (tours.json, <tour>_squads.json, toss_windows.json)
     -> validate + commit both repos + trigger the Vercel deploy hook (done by the workflow)
@@ -18,17 +24,18 @@ Squad squad_number is a role-group seed; it self-corrects from the sheet's Bat O
 match 1. efppm is a role-based pick-guide seed. pids resolve via the registry (returning
 players) else slug:, upgraded post-match by build_registry.py / backfill_draft_pids.py.
 
-Usage:
-  python3 tour_sync.py --dry-run                 # live discovery, print only, touch nothing
-  python3 tour_sync.py --dry-run --from-saved DIR # transform saved cricapi JSON (no quota)
-  python3 tour_sync.py --emit OUTDIR              # write generated artifacts to OUTDIR (still no repo writes)
+Usage (a discovery path is REQUIRED — there is no default feed to fall back on):
+  python3 tour_sync.py --dry-run --from-status-sheet          # what CI runs, dry
+  python3 tour_sync.py --dry-run --espn-tour 'India tour of Zimbabwe 2026'
+  python3 tour_sync.py --dry-run --discover                   # ESPN watchlist search
+  python3 tour_sync.py --apply  --from-status-sheet           # write both repos
+  python3 tour_sync.py --emit OUTDIR --from-status-sheet      # artifacts to OUTDIR, no repo writes
 """
 import argparse, json, os, re, sys, time, urllib.error, urllib.request, urllib.parse
 from datetime import datetime, timedelta, timezone
 
 DRAFT = os.environ.get("DRAFT_REPO", os.path.expanduser("~/wwc-draft"))
 BOT = os.path.dirname(os.path.abspath(__file__))
-API = "https://api.cricapi.com/v1"
 IST = timezone(timedelta(hours=5, minutes=30))
 
 # ── Watchlist (the curation guardrail; edit here to broaden/narrow) ──────────────
@@ -55,43 +62,134 @@ DENY = ["u19", "under-19", "under 19", "unofficial", "development", "emerging",
 # into a hundred calls (7 franchises are covered in ~4-6 events).
 MAX_SQUAD_EVENTS = 25
 
-# formats we ingest (cricapi matchType); tests/other are skipped
-FMT_BUCKET = {"t20": "T20", "t20i": "T20", "odi": "ODI",
-              "hundred": "T20", "the hundred": "T20", "100-ball": "T20", "100 ball": "T20"}
+# ── FORMAT VOCABULARY — WHO SPEAKS WHAT ───────────────────────────────────────────
+# ESPN (the only feed here) states a fixture's format on competitions[0].class:
+#   · class.eventType        — NORMALIZED. Exactly "T20" | "ODI" | "Test" in every series
+#                              measured. THIS is what we key on.
+#   · class.generalClassCard — the human label, NOT normalized: "Twenty20" | "T20I" |
+#                              "Women T20" | "ODI" | "One-Day Internationals" | "Test".
+#                              Fallback only, for a series that leaves eventType blank.
+# MEASURED 20 Aug 2026 against six live series: CPL 8623 (T20/Twenty20), Hundred M 1521176
+# (T20/Twenty20), ENG-PAK Test 23806 (Test/Test), NZ-WI ODI 1538619 (ODI/ODI), IND-ENG T20I
+# 1496489 (T20/T20I), WWC 1483859 (T20/Women T20).
+# cricapi's `matchType` vocabulary ("t20i" / "hundred" / null) is GONE. Do NOT re-add it here.
+# The BOT speaks a third vocabulary — its SCORING formats "T20"/"ODI"/"HUN"/"TEST" — and gen_tour
+# is the one place that translates (score_fmt), so the value written to tours.json is the bot's,
+# while everything in this module is ESPN's.
+# ESPN buckets The Hundred as eventType "T20" (verified on 1521176), so a Hundred fixture rides
+# the T20 discovery bucket and gen_tour re-labels the TOUR as "HUN" for scoring.
+# ⚠ class can be MISSING/blank on some series. That is exactly the failure that once admitted
+# 0 of 34 matches for a whole competition, so a blank falls back — in order — to the fixture's
+# own description, then the SERIES-level declared format (_declared_fmt), then a LOUD drop.
+ESPN_FMT_BUCKET = {
+    # class.eventType (normalized)
+    "t20": "T20", "odi": "ODI",
+    # class.generalClassCard variants, for a blank eventType
+    "twenty20": "T20", "t20i": "T20", "women t20": "T20", "womens t20": "T20",
+    "one-day internationals": "ODI", "women odi": "ODI", "womens odi": "ODI", "list a": "ODI",
+}
+# Formats ESPN states plainly that this module deliberately does NOT ingest (it only mints
+# ODI/T20 tours). Known-and-skipped, so the drop is quiet instead of a "vocabulary changed" alarm.
+ESPN_FMT_SKIP = {"test", "first class", "fc", "4-day", "youth test"}
+# ESPN league-level class ids (scoreboard leagues[].classId) — how a series whose per-fixture
+# class block is blank can still be bucketed. MEASURED VALUES ONLY: an id that is not in this map
+# is left UNRESOLVED rather than guessed, because a guessed series format mis-buckets a whole
+# competition. "SKIP" = stated, and not a format we ingest.
+ESPN_LEAGUE_CLASS = {
+    "2": "ODI",    # One-Day Internationals      (measured: NZ v WI 1538619)
+    "3": "T20",    # T20 Internationals          (measured: IND v ZIM 24301, IND v ENG 1496489)
+    "6": "T20",    # domestic Twenty20           (measured: CPL 8623, Hundred M 1521176)
+    "10": "T20",   # Women's T20 Internationals  (measured: WWC 1483859)
+    "1": "SKIP",   # Test                        (measured: ENG v PAK 23806, with 11)
+    "11": "SKIP",  # First class                 (measured: ENG v PAK 23806, with 1)
+}
 
-def _fmt_of(m):
-    """Bucket a cricapi match to 'T20' or 'ODI', tolerating The Hundred (matchType 'hundred')
-    and the null/variable matchType cricapi emits for franchise leagues — mirrors the bot's
-    is_fmt (wc_fps_to_csv.py) so a Hundred/uncategorized fixture isn't silently dropped (the
-    22 Jul bug: no 'hundred' bucket → empty match list → gen_tour returned None → no ingest)."""
-    mt = (m.get("matchType") or "").lower()
-    if mt in FMT_BUCKET:
-        return FMT_BUCKET[mt]
-    nm = (m.get("name") or "").lower()
+def _fmt_stated(m):
+    """The format ESPN STATES for this one fixture — 'T20' | 'ODI' | None. No series fallback.
+
+    Reads ESPN's vocabulary only (eventType, then generalClassCard, then ESPN's own event
+    description e.g. "3rd T20I"). Returns None both for "ESPN said Test" and for "ESPN said
+    nothing" — use _fmt_skipped to tell those apart."""
+    for tok in ((m.get("espn_event_type") or ""), (m.get("espn_class_card") or "")):
+        tok = tok.strip().lower()
+        if tok in ESPN_FMT_BUCKET:
+            return ESPN_FMT_BUCKET[tok]
+        if tok in ESPN_FMT_SKIP:
+            return None
+    nm = (m.get("name") or "").lower()      # ESPN's description: "3rd T20I" / "12th Match"
     if "test" in nm:
         return None
-    if "odi" in nm:
+    if "odi" in nm or "one-day" in nm:
         return "ODI"
     if "hundred" in nm or "t20" in nm or "100" in nm:
         return "T20"
-    return None  # genuinely unknown — caller logs the drop loudly
+    return None
+
+def _fmt_skipped(m):
+    """True when ESPN states a format we deliberately do not ingest (Test / first class)."""
+    toks = [(m.get("espn_event_type") or "").strip().lower(),
+            (m.get("espn_class_card") or "").strip().lower()]
+    return any(t in ESPN_FMT_SKIP for t in toks) or "test" in (m.get("name") or "").lower()
+
+def _fmt_of(m):
+    """Bucket one ESPN fixture row into this module's discovery format ('T20'/'ODI'), or None.
+
+    ESPN's own class wins; a Test-class fixture is dropped on purpose; and only a fixture ESPN
+    left UNCLASSIFIED falls back to `declared_fmt`, the series-level format _espn_matchlist
+    stamped on every row. None here means the caller must log the drop loudly."""
+    f = _fmt_stated(m)
+    if f or _fmt_skipped(m):
+        return f
+    return m.get("declared_fmt") or None
+
+def _declared_fmt(class_ids, tour_name, matchlist):
+    """The SERIES-level format ('T20'/'ODI'/None) + the reason, for fixtures ESPN left unclassified.
+
+    Order, most authoritative first — every step reads ESPN's vocabulary or our own tour name,
+    never cricapi's:
+      1. the LEAGUE's own classId (ESPN_LEAGUE_CLASS; measured ids only),
+      2. what its SIBLING fixtures state (a series is nearly always single-format),
+      3. the tour's DECLARED format from its name ("hundred"/"t20" -> T20, "odi" -> ODI,
+         "test" -> not ingested here).
+    None means "no honest answer available" — the caller then DROPS those fixtures loudly rather
+    than guessing. A guess here is what silently admitted 0 of 34 matches for a whole competition."""
+    mapped = {ESPN_LEAGUE_CLASS[c] for c in class_ids if c in ESPN_LEAGUE_CLASS}
+    real = mapped - {"SKIP"}
+    if len(real) == 1:
+        return real.pop(), f"ESPN league classId {sorted(class_ids)}"
+    if mapped == {"SKIP"}:
+        return None, f"ESPN league classId {sorted(class_ids)} is a format we do not ingest"
+    sib = [f for f in (_fmt_stated(m) for m in matchlist) if f]
+    if sib and len(set(sib)) == 1:
+        return sib[0], f"all {len(sib)} fixture(s) ESPN DID classify say {sib[0]}"
+    n = (tour_name or "").lower()
+    if "test" in n:
+        return None, "the tour's own name says Test — not ingested here"
+    if "hundred" in n or "t20" in n:
+        return "T20", "the tour's declared format (from its name)"
+    if "odi" in n or "one-day" in n:
+        return "ODI", "the tour's declared format (from its name)"
+    return None, ("neither ESPN's league classId, its other fixtures, nor the tour name declares "
+                  "a format")
 DISCOVERY_WINDOW_DAYS = int(os.environ.get("SYNC_WINDOW_DAYS", "4"))
-# Distinct search tokens for /series fixtures-discovery (fewer than MAJOR_LEAGUES to save
-# quota; cricapi matches substrings and results are de-duped by series id). "hundred"
-# catches both the men's and women's Hundred. Override with SYNC_SEARCH_TERMS=a,b,c to
-# scope a manual run (e.g. SYNC_SEARCH_TERMS=hundred).
+# Search tokens for --discover. These go to ESPN's search endpoint (site.web.api, keyless and
+# unmetered — the old "fewer terms to save cricapi quota" reason is gone; the list stays short
+# because every extra term costs a scoreboard probe per in-scope hit). ESPN matches substrings and
+# candidates are de-duped by league id. "hundred" catches both the men's and women's Hundred.
+# Override with SYNC_SEARCH_TERMS=a,b,c to scope a manual run (e.g. SYNC_SEARCH_TERMS=hundred).
 _LEAGUE_SEARCH_TERMS = [
     "hundred", "indian premier league", "big bash", "pakistan super league",
     "caribbean premier league", "sa20", "international league t20",
     "major league cricket", "lanka premier league", "bangladesh premier league",
     "super smash", "vitality blast", "womens premier league", "wbbl",
 ]
-# ALSO search each major TEAM by name — this is how a pre-live BILATERAL is caught (the gap that
-# missed "India tour of Zimbabwe 2026" starting today: /currentMatches is empty until the first
-# ball, /series page-0 is future-ordered, and only leagues were searched). cricapi ranks
-# "India tour of Zimbabwe" into a search for "india"; in_scope() then reads BOTH teams from the
-# series name and confirms the major-vs-major bilateral. ~12 extra hits/run — the cost of catching
-# a marquee bilateral ~4 days ahead instead of only once it goes live. Dedup is by series id.
+# ALSO search each major TEAM by name — this is how a pre-live BILATERAL is caught at all: ESPN's
+# search ranks "India tour of Zimbabwe" into a search for "india", and in_scope() then reads BOTH
+# teams from the league name and confirms the major-vs-major bilateral. ~12 extra keyless searches
+# per run. Dedup is by ESPN league id.
+# ⚠ ESPN search is genuinely weak at DISCOVERY: it buries this season's edition behind older
+# editions of the same tour, so --discover is best-effort and Column A (--from-status-sheet) stays
+# the path CI runs. Nothing here silently substitutes for a name typed into the sheet.
 _DEFAULT_SEARCH_TERMS = _LEAGUE_SEARCH_TERMS + sorted(MAJOR_TEAMS)
 SEARCH_TERMS = ([s.strip() for s in os.environ["SYNC_SEARCH_TERMS"].split(",") if s.strip()]
                 if os.environ.get("SYNC_SEARCH_TERMS") else _DEFAULT_SEARCH_TERMS)
@@ -107,80 +205,11 @@ ROLE_ORDER = {"WK": 0, "BAT": 1, "AR": 2, "BOWL": 3}
 ORD = {1: "1st", 2: "2nd", 3: "3rd", 4: "4th", 5: "5th", 6: "6th", 7: "7th"}
 
 
-# ── cricapi layer (key rotation + loud failures) ─────────────────────────────
-# The free tier is 100 hits/day PER KEY. The points bot (wc_fps_to_csv.py) survives an
-# exhausted key by rotating to CRICKET_API_KEY2; tour-sync historically used ONLY the
-# first key with no failover AND swallowed a failure response as an empty result — so a
-# single blocked key made discovery silently return "0 tours" while the workflow went
-# green. We now (a) rotate across all keys and (b) RAISE when every key is quota-blocked,
-# so a dead key fails the run visibly instead of masquerading as "nothing on today".
-def _keys():
-    # A DEDICATED key (TOUR_SYNC_API_KEY) wins outright and is used EXCLUSIVELY — that's the
-    # whole point: discovery needs only ~15-25 hits/day, so its own free key never contends
-    # with the auction app or the live points bot (which together drain the shared keys before
-    # tour-sync ever runs). Keep it out of .env.local and out of the points-bot secrets.
-    ded = os.environ.get("TOUR_SYNC_API_KEY", "").strip().strip('"')
-    if ded:
-        return [ded]
-    raw = os.environ.get("CRICKET_API_KEY", "").split(",") + [os.environ.get("CRICKET_API_KEY2", "")]
-    keys = [k.strip().strip('"') for k in raw if k.strip()]
-    if not keys:  # local convenience: borrow the auction app's key(s) for dry-runs
-        p = os.path.expanduser("~/cricket-auction-helper/.env.local")
-        if os.path.exists(p):
-            m = re.search(r"CRICKET_API_KEY=([^\n\"]+)", open(p).read())
-            if m:
-                keys = [x.strip().strip('"') for x in m.group(1).split(",") if x.strip()]
-    seen, out = set(), []          # de-dupe, preserve order
-    for k in keys:
-        if k not in seen:
-            seen.add(k); out.append(k)
-    return out
-
-API_KEYS = _keys()
-_key_idx = 0
-
-def _is_quota(d):
-    r = (d.get("reason") or "").lower()
-    return d.get("status") != "success" and ("limit" in r or "block" in r or "hits" in r)
-
-def capi(path, **params):
-    """Query cricapi, failing over to the next key on a quota/blocked response. Raises if
-    EVERY key is quota-blocked. A non-quota non-success (e.g. a squad-less match) is returned
-    as-is so tolerant callers can handle it."""
-    global _key_idx
-    if not API_KEYS:
-        raise RuntimeError("no cricapi key (set CRICKET_API_KEY and/or CRICKET_API_KEY2)")
-    data = {"status": "failure", "reason": "no api key"}
-    for _ in range(len(API_KEYS)):
-        url = f"{API}/{path}?" + urllib.parse.urlencode({**params, "apikey": API_KEYS[_key_idx]})
-        try:
-            with urllib.request.urlopen(url, timeout=30) as r:
-                data = json.load(r)
-        except Exception as e:
-            data = {"status": "failure", "reason": f"fetch error: {e}"}
-        if data.get("status") == "success" or not _is_quota(data):
-            break
-        info = data.get("info") or {}
-        if _key_idx + 1 < len(API_KEYS):
-            print(f"  capi({path}): key #{_key_idx+1} blocked "
-                  f"(hits {info.get('hitsToday','?')}/{info.get('hitsLimit','?')}) "
-                  f"— failing over to key #{_key_idx+2}", file=sys.stderr)
-            _key_idx += 1
-        else:
-            break
-    if _is_quota(data):
-        info = data.get("info") or {}
-        raise RuntimeError(f"cricapi {path}: all {len(API_KEYS)} key(s) quota-blocked "
-                           f"(hits {info.get('hitsToday','?')}/{info.get('hitsLimit','?')}). "
-                           f"Discovery aborted — NOT reporting '0 tours'.")
-    return data
-
-
 # ── ESPN series-id resolution (fills tours_entry.espn_series) ────────────────────
 # The points bot pulls the live XI AND (critically) the full fallback scorecard from ESPN,
 # scoped by espn_series. tour-sync historically left it BLANK → no ESPN fallback → franchise-
-# league points never populate (cricsheet lags, cricapi's scorecard is often empty — the
-# 22 Jul Hundred bug). We resolve it here: ESPN search → candidate league ids → VALIDATE each
+# league points never populate (cricsheet lags days behind — the 22 Jul Hundred bug). We resolve
+# it here: ESPN search → candidate league ids → VALIDATE each
 # by hitting its dated scoreboard and matching the fixture's teams, so we never write a wrong id.
 # Unresolved → "" (caller flags loud: the verify gate fails + the Tour Ingest Review tab lists it).
 ESPN_SITE = "https://site.api.espn.com/apis/site/v2/sports/cricket"
@@ -220,20 +249,10 @@ def _espn_get(url, tries=3):
     return {}
 
 def _espn_search_league_ids(query):
-    """League ids ESPN's search returns for a query (best-effort — the caller validates each)."""
-    d = _espn_get(f"{ESPN_SEARCH}?limit=15&sport=cricket&query={urllib.parse.quote(query)}")
-    out, seen = [], set()
-    def walk(o):
-        if isinstance(o, dict):
-            if o.get("type") == "league" and o.get("id") and str(o["id"]) not in seen:
-                seen.add(str(o["id"])); out.append(str(o["id"]))
-            for v in o.values():
-                walk(v)
-        elif isinstance(o, list):
-            for v in o:
-                walk(v)
-    walk(d)
-    return out
+    """League ids ESPN's search returns for a query (best-effort — the caller validates each).
+
+    Thin view over _espn_search_leagues so there is exactly ONE ESPN search client in this file."""
+    return [lid for lid, _name in _espn_search_leagues(query)]
 
 def resolve_espn_series(tour_name, fixture_teams, fixture_gmt):
     """Resolve the ESPN series id for a tour, VALIDATED against the dated scoreboard: search ESPN,
@@ -306,7 +325,7 @@ def in_scope(series_name, teams):
     return False, None
 
 def to_ist_iso(dt_gmt):
-    # cricapi dateTimeGMT like "2026-07-14T12:00:00" (UTC, no tz)
+    # ESPN event dates arrive as "2026-07-14T12:00Z" / "...T12:00:00" (UTC)
     dt = datetime.fromisoformat(dt_gmt.replace("Z", "")).replace(tzinfo=timezone.utc)
     return dt.astimezone(IST).strftime("%Y-%m-%dT%H:%M:00+05:30")
 
@@ -340,7 +359,7 @@ def load_state():
                     reg_alias[norm(a)] = e.get("cricsheet_id") or pid
     return {
         "matches": dm, "players": dp, "team_codes": tc,
-        "existing_series": {t.get("cricapi_series") for t in tours},
+        # espn_series is the identity of an ingested tour now (there is no cricapi_series index).
         "existing_espn": {str(t.get("espn_series")) for t in tours if t.get("espn_series")},
         "existing_tabs": {t.get("tab") for t in tours},
         "codes": set(tc.keys()),
@@ -350,13 +369,24 @@ def load_state():
     }
 
 def mint_code(gp, fmt, short, taken):
+    """Mint a <=6-char draft team code, collision-free.
+
+    ⚠ The retry TRUNCATES THE BASE, not the counter. `f"{base}{i}"[:6]` looked equivalent but hangs
+    forever when base is already 6 chars long: the suffix is the part that gets cut, so `code` never
+    changes and `while code in taken` never terminates. A 6-char base needs a 4-char `short`, which
+    the ESPN path cannot produce (3-char shorts) but the auction seed can (`name[:4].upper()`), and
+    this function runs in an unattended scheduled job."""
     gl = "M" if gp == "male" else "W"
     fl = "O" if fmt == "ODI" else "T"
     base = f"{gl}{fl}{short}".upper()[:6]
     code, i = base, 1
     while code in taken:
         i += 1
-        code = f"{base}{i}"[:6]
+        if i > 999:            # the whole 6-char space for this base is taken: say so, don't spin
+            raise RuntimeError(f"mint_code: no free code left for {short!r} (base {base!r}) — "
+                               f"{len(taken)} codes already taken")
+        suf = str(i)
+        code = f"{base[:6 - len(suf)]}{suf}"
     taken.add(code)
     return code
 
@@ -364,18 +394,18 @@ def resolve_pid(name, reg_alias):
     return reg_alias.get(norm(name)) or "slug:" + re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
 
 
-# ── league squads from the auction seed (cricapi has no franchise-league squads) ────
+# ── league squads from the auction seed (an OPTIONAL curated override for ESPN's) ────
 # The auction app maintains curated, identity-anchored squads per league. extract_auction_
 # squads.mjs emits them as [{export, gender, teams:[{name, short, players:[{name,role}]}]}].
 # build_league_squads picks the seed export that best covers a discovered series' teams.
-LEAGUE_TEAM_ALIASES = {   # normalized cricapi team name -> normalized canonical (rebrands etc.)
+LEAGUE_TEAM_ALIASES = {   # normalized feed team name -> normalized canonical (rebrands etc.)
     "manchester originals": "manchester super giants",
 }
 # Merge the bot's canonical franchise-rename aliases (registry/team_aliases.json) so tour_sync folds
-# cricapi feed names to the SAME canonical the bot SCORES with. Without this the two alias sources
-# diverge: a rebrand cricapi lags on (e.g. LPL 2025→2026, Manchester Originals→Super Giants) attaches
-# at ingest but the bot's short_of() misses at completion → the sheet label falls back to the raw
-# cricapi name → the draft can't attach → 0 COMPLETED points. One source now = no divergence.
+# ESPN's feed names to the SAME canonical the bot SCORES with. Without this the two alias sources
+# diverge: a rebrand the feed lags on (e.g. LPL 2025→2026, Manchester Originals→Super Giants)
+# attaches at ingest but the bot's short_of() misses at completion → the sheet label falls back to
+# the raw feed name → the draft can't attach → 0 COMPLETED points. One source = no divergence.
 try:
     _ta = json.load(open(os.path.join(BOT, "registry", "team_aliases.json"))).get("aliases", {})
     for _canon, _variants in _ta.items():
@@ -385,16 +415,18 @@ except Exception as _e:
     print(f"  (team_aliases.json merge skipped: {_e})", file=sys.stderr)
 
 def _team_key(name):
-    # strip gender qualifiers so cricapi "MI London", ESPN "MI London (Men)"/"(Women)" and
+    # strip gender qualifiers so ESPN's "MI London", "MI London (Men)"/"(Women)" and
     # "X Women" all collapse to one key (needed for ESPN event matching + league seed lookup).
     n = re.sub(r"\b(men|women)\b", "", norm(name)).strip()
     n = re.sub(r"\s+", " ", n)
     return LEAGUE_TEAM_ALIASES.get(n, n)
 
-def build_league_squads(seeds, cricapi_teams, gender):
+def build_league_squads(seeds, feed_teams, gender):
     """Return the league_squads dict gen_tour expects, or None if no seed covers >=2 of the
-    series' teams. Both a rebrand alias and the new name collapse onto ONE canonical team."""
-    real = [t for t in cricapi_teams if norm(t) not in TBC_NAMES]
+    series' teams. Both a rebrand alias and the new name collapse onto ONE canonical team.
+
+    `feed_teams` are ESPN team displayNames (the only feed left)."""
+    real = [t for t in feed_teams if norm(t) not in TBC_NAMES]
     want = {_team_key(t) for t in real}
     best, best_hit = None, 0
     for s in seeds:
@@ -419,13 +451,12 @@ def build_league_squads(seeds, cricapi_teams, gender):
     return {"canon": canon, "squads": squads} if len(squads) >= 2 else None
 
 
-# ── ESPN-only tour creation (KEYLESS — no cricapi) ──────────────────────────────
-# cricapi is NOT needed to CREATE a tour. ESPN carries all three pieces keylessly: discovery
-# (search), fixtures (scoreboard, single-date), and FULL squads (summary.squads — the pre-match
-# squad, distinct from `rosters` = the announced XI at toss). We build the SAME cricapi-shaped
-# inputs gen_tour already consumes (series_info + injected league_squads) so artifact-building is
-# reused verbatim. cricapi_series is left "" (espn_series = the ESPN league id); points scoring —
-# gated by TOUR CONTROL — can resolve cricapi later or score from cricsheet+ESPN.
+# ── ESPN tour creation (KEYLESS — the only creation path) ───────────────────────
+# ESPN carries all three pieces keylessly: discovery (search), fixtures (scoreboard, single-date),
+# and FULL squads (summary.squads — the pre-match squad, distinct from `rosters` = the announced XI
+# at toss). These build the series_info + league_squads pair gen_tour consumes, so artifact-building
+# is shared by every entry point. espn_series = the ESPN league id; a tour's SECOND witness
+# (cricbuzz_series) is resolved separately in gen_tour and is absent unless it validates.
 def _espn_role(pos):
     p = (pos or "").lower()
     if "wk" in p or "keeper" in p:
@@ -458,36 +489,68 @@ def _espn_event_teams(e):
     comps = (e.get("competitions") or [{}])[0].get("competitors", [])
     return [c.get("team", {}).get("displayName", "") for c in comps if c.get("team")]
 
-def _espn_event_fmt(e):
-    """ESPN states a match's format outright on the competition: class.eventType ('T20'/'ODI'/
-    'TEST'). Read it instead of leaving matchType blank — _fmt_of's name-sniffing fallback only
-    works for bilaterals, whose description carries '1st T20I'. A franchise league's description
-    is '4th Match', so a blank matchType buckets to None and gen_tour drops the ENTIRE fixture
-    list (CPL 2026 ingested as 0 matches)."""
-    comps = e.get("competitions") or [{}]
-    cls = comps[0].get("class") or {}
-    return (cls.get("eventType") or cls.get("generalClassCard") or "").strip().lower()
+def _espn_event_class(e):
+    """BOTH format fields ESPN puts on a competition's `class` block, lowercased:
+    (eventType, generalClassCard). See the FORMAT VOCABULARY block for what each says.
 
-def _espn_scan_day(lid, day, matchlist, event_ids):
-    """Append one date's ESPN fixtures → cricapi-shaped rows. Returns True if any were added."""
-    evs = _espn_get(f"{ESPN_SITE}/{lid}/scoreboard?dates={day}").get("events", [])
+    Read both, because name-sniffing only rescues bilaterals (description "1st T20I"); a franchise
+    league's description is "4th Match", so an unread/blank class buckets to None and gen_tour drops
+    the ENTIRE fixture list (CPL 2026 ingested as 0 matches)."""
+    cls = (e.get("competitions") or [{}])[0].get("class") or {}
+    return ((cls.get("eventType") or "").strip().lower(),
+            (cls.get("generalClassCard") or "").strip().lower())
+
+def _espn_scan_day(lid, day, matchlist, event_ids, class_ids=None):
+    """Append one date's ESPN fixtures → ESPN-shaped rows. Returns True if any were added.
+
+    Also collects the LEAGUE-level class ids (scoreboard leagues[].classId) into `class_ids` — the
+    series-level answer to "what format is this?" for a series whose per-fixture class is blank."""
+    sb = _espn_get(f"{ESPN_SITE}/{lid}/scoreboard?dates={day}")
+    if class_ids is not None:
+        for lg in (sb.get("leagues") or []):
+            for cid in (lg.get("classId") or []):
+                class_ids.add(str(cid))
     hit = False
-    for e in evs:
+    for e in sb.get("events", []):
         teams = _espn_event_teams(e)
         if len(teams) != 2:
             continue
         hit = True
+        ev_type, card = _espn_event_class(e)
         matchlist.append({
             "id": e.get("id"), "teams": teams, "dateTimeGMT": e.get("date"),
-            "date": (e.get("date") or "")[:10], "matchType": _espn_event_fmt(e),
-            "name": e.get("description") or e.get("shortName") or "", "hasSquad": True,
+            "date": (e.get("date") or "")[:10],
+            "espn_event_type": ev_type, "espn_class_card": card,
+            "name": e.get("description") or e.get("shortName") or "",
         })
         event_ids.append(e.get("id"))
     return hit
 
-def _espn_matchlist(lid, now, span_days=60, back_days=30):
+def _stamp_declared_fmt(matchlist, class_ids, name, lid):
+    """Stamp the SERIES-level format fallback on every row and report the format census LOUDLY.
+
+    Nothing downstream can tell "this league plays T20" from "ESPN forgot to say", so the count of
+    unclassified fixtures is printed either way: bucketed (with the reason) or dropped."""
+    declared, why = _declared_fmt(class_ids, name, matchlist)
+    blank = [m for m in matchlist if _fmt_stated(m) is None and not _fmt_skipped(m)]
+    for m in matchlist:
+        m["declared_fmt"] = declared
+    census = {}
+    for m in matchlist:
+        k = _fmt_of(m) or ("skipped(Test/FC)" if _fmt_skipped(m) else "UNKNOWN")
+        census[k] = census.get(k, 0) + 1
+    print(f"  espn: {name or lid} — {len(matchlist)} fixture(s) by format {census}", file=sys.stderr)
+    if blank and declared:
+        print(f"  espn: {len(blank)} of {len(matchlist)} fixture(s) carry NO ESPN class — bucketed "
+              f"as {declared} because {why}", file=sys.stderr)
+    elif blank:
+        print(f"  ⚠ espn: {len(blank)} of {len(matchlist)} fixture(s) carry NO ESPN class and "
+              f"{why} — they will be DROPPED. Fix by declaring the format in the tour name "
+              f"(e.g. '... T20' / '... ODI') rather than letting them vanish.", file=sys.stderr)
+
+def _espn_matchlist(lid, now, name="", span_days=60, back_days=30):
     """Scan the ESPN scoreboard day-by-day (it only accepts a single date) around `now` across the
-    tour's span → cricapi-shaped matchList + the event ids, date-ordered. Keyless.
+    tour's span → ESPN-shaped matchList + the event ids, date-ordered. Keyless.
 
     The window must cover the WHOLE season in BOTH directions, because `apply_to_repos` skips a
     tour whose tab already exists — the fixture list written at ingest is never extended or
@@ -501,21 +564,26 @@ def _espn_matchlist(lid, now, span_days=60, back_days=30):
         nothing behind it, so this costs 6 calls in the common "added a few days early" case, and
         the gap between seasons stops it from reaching last year's edition of the same league id.
     """
-    matchlist, event_ids = [], []
+    matchlist, event_ids, class_ids = [], [], set()
     empty = 0
     for i in range(1, back_days + 1):
-        if _espn_scan_day(lid, (now - timedelta(days=i)).strftime("%Y%m%d"), matchlist, event_ids):
+        if _espn_scan_day(lid, (now - timedelta(days=i)).strftime("%Y%m%d"),
+                          matchlist, event_ids, class_ids):
             empty = 0
         elif (empty := empty + 1) >= 6:
             break
     seen, empty = bool(matchlist), 0
     for i in range(span_days):
-        if _espn_scan_day(lid, (now + timedelta(days=i)).strftime("%Y%m%d"), matchlist, event_ids):
+        if _espn_scan_day(lid, (now + timedelta(days=i)).strftime("%Y%m%d"),
+                          matchlist, event_ids, class_ids):
             seen, empty = True, 0
         elif seen and (empty := empty + 1) >= 6:
             break
     order = sorted(range(len(matchlist)), key=lambda k: matchlist[k]["dateTimeGMT"] or "")
-    return [matchlist[k] for k in order], [event_ids[k] for k in order]
+    matchlist, event_ids = [matchlist[k] for k in order], [event_ids[k] for k in order]
+    if matchlist:
+        _stamp_declared_fmt(matchlist, class_ids, name, lid)
+    return matchlist, event_ids
 
 def _espn_squads(lid, event_id):
     """Full squads from an ESPN event summary → {espn_team_displayName: [(name, role), ...]}."""
@@ -534,7 +602,7 @@ def _espn_squads(lid, event_id):
 def espn_discover(now, horizon):
     """Discover in-scope tours via ESPN search (keyless). Bilaterals are found by searching each
     major TEAM name (in_scope reads both teams from the series name); leagues by the watchlist.
-    Returns {league_id: name}. This is the cricapi-free replacement for discover()."""
+    Returns {league_id: name}. Keyless, and the only auto-discovery this module has."""
     hits, floor = {}, now - timedelta(days=2)
     for term in SEARCH_TERMS:
         for lid, name in _espn_search_leagues(term):
@@ -556,10 +624,14 @@ def espn_discover(now, horizon):
             print(f"  espn/search[{term!r}]: KEEP {name!r} (lid {lid}, {kind}, next={evs[0].get('date','?')[:10] if evs else '?'})", file=sys.stderr)
     return hits
 
-def espn_build(lid, name, now, horizon, state):
+def espn_build(lid, name, now, horizon, state, seeds=None):
     """Build a tour ENTIRELY from ESPN → (series_info, gender, league_squads) for gen_tour, or None.
-    No cricapi. cricapi_series stays '' (espn_series = lid)."""
-    matchlist, event_ids = _espn_matchlist(lid, now)
+
+    espn_series = lid. `seeds` (--auction-squads) is an OPTIONAL curated override for ESPN's squads,
+    adopted only when a seed covers EVERY team in the fixture list — a partially-covering seed would
+    silently drop the uncovered teams' matches (gen_tour's canonical() returns None for them), which
+    is a worse outcome than ESPN's own squads."""
+    matchlist, event_ids = _espn_matchlist(lid, now, name)
     def _soon(m):
         try:
             return datetime.fromisoformat((m["dateTimeGMT"] or "").replace("Z", "")).replace(tzinfo=timezone.utc) <= horizon
@@ -591,18 +663,30 @@ def espn_build(lid, name, now, horizon, state):
                   "players": [list(p) for p in players]}
               for t, players in sqmap.items()}
     league_squads = {"canon": {t: t for t in sqmap}, "squads": squads}
+    if seeds:
+        seeded = build_league_squads(seeds, sorted(want), gender)
+        if seeded and want <= set(seeded["canon"]):
+            print(f"  squads: using the auction seed ({len(seeded['squads'])} teams, curated + "
+                  f"identity-anchored) instead of ESPN's — it covers every team in the fixture list",
+                  file=sys.stderr)
+            league_squads = seeded
+        elif seeded:
+            print(f"  squads: auction seed covers only {len(seeded['canon'])} of {len(want)} teams "
+                  f"— keeping ESPN's squads (a partial seed would DROP the uncovered teams' "
+                  f"matches)", file=sys.stderr)
     # ESPN's LEAGUE name is season-less ("Caribbean Premier League"), but gen_tour derives the tour
     # name AND the sheet tab from it — so next season would mint the same tab, and apply_to_repos
     # skips a tab that already exists (the 2027 edition would silently never ingest). Stamp the
-    # season year the fixtures actually fall in, matching the cricapi path ("Lanka Premier League 2026").
+    # season year the fixtures actually fall in, as the hand-written entries do ("... League 2026").
     if not re.search(r"\b(19|20)\d{2}\b", name):
         years = [m["date"][:4] for m in matchlist if (m.get("date") or "")[:4].isdigit()]
         if years:
             name = f"{name} {max(set(years), key=years.count)}"
-    series_info = {"info": {"id": "", "name": name, "espn_id": str(lid)}, "matchList": matchlist}
+    # No feed id beyond ESPN's: `espn_id` IS the tour's series identity now.
+    series_info = {"info": {"name": name, "espn_id": str(lid)}, "matchList": matchlist}
     return series_info, gender, league_squads
 
-def espn_add_named(query, now, horizon, state, espn_id=""):
+def espn_add_named(query, now, horizon, state, espn_id="", seeds=None):
     """Resolve a tour on ESPN and build it KEYLESS → [tour dicts] (empty if not found).
     Shared by --espn-tour (one name) and --from-status-sheet (each Column-A name Nishant typed).
 
@@ -616,7 +700,7 @@ def espn_add_named(query, now, horizon, state, espn_id=""):
     clean = _clean_tour_name(query)          # "India tour of Zimbabwe 2026 (Men T20I)" -> "...2026"
     qn = norm(clean)
     if espn_id:
-        built = espn_build(espn_id, clean, now, horizon, state)
+        built = espn_build(espn_id, clean, now, horizon, state, seeds)
         if not built:
             print(f"  espn-add: the espn_series {espn_id} you supplied for {query!r} serves NO "
                   f"fixtures — refusing it (a wrong id ingests a tour whose matches never appear). "
@@ -626,7 +710,7 @@ def espn_add_named(query, now, horizon, state, espn_id=""):
         si, gender, lg = built
         out = []
         for fmt in ("ODI", "T20"):
-            t = gen_tour(si, {}, fmt, gender, state, league_squads=lg)
+            t = gen_tour(si, fmt, gender, state, lg)
             if t and t["tours_entry"]["tab"] not in state["existing_tabs"]:
                 out.append(t)
         return out
@@ -646,13 +730,13 @@ def espn_add_named(query, now, horizon, state, espn_id=""):
         return []
     lid, name = target
     print(f"  espn-add: {query!r} → ESPN league {lid} ({name!r})", file=sys.stderr)
-    built = espn_build(lid, name, now, horizon, state)
+    built = espn_build(lid, name, now, horizon, state, seeds)
     if not built:
         return []
     si, gender, lg = built
     out = []
     for fmt in ("ODI", "T20"):
-        t = gen_tour(si, {}, fmt, gender, state, league_squads=lg)
+        t = gen_tour(si, fmt, gender, state, lg)
         if t and t["tours_entry"]["tab"] not in state["existing_tabs"]:
             out.append(t)
     return out
@@ -660,7 +744,7 @@ def espn_add_named(query, now, horizon, state, espn_id=""):
 def status_sheet_new_names(state):
     """Read the 'TOUR STATUS' tab's Column A and return the tour names Nishant typed that are NOT
     yet ingested. This is the 'add a tour = type its name in Column A' input. GSheet-only (no
-    cricapi); returns [] without creds (local)."""
+    match feed at all); returns [] without creds (local)."""
     gid = os.environ.get("GSHEET_ID", "") or os.environ.get("SYNC_SHEET_ID", "")
     creds = os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON", "")
     if not (gid and creds):
@@ -714,49 +798,125 @@ def status_sheet_new_names(state):
     return out
 
 
+# ── the L1 SECOND WITNESS: a VALIDATED cricbuzz_series, or none at all ──────────
+def _plus_minus_a_day(day):
+    """{day-1, day, day+1} as YYYY-MM-DD. Feeds disagree about which calendar day a match belongs
+    to (a 19:30 IST start is already tomorrow in UTC), so a same-day-only comparison would reject
+    a perfectly correct series id."""
+    try:
+        d = datetime.strptime(day, "%Y-%m-%d")
+    except (TypeError, ValueError):
+        return set()
+    return {(d + timedelta(days=k)).strftime("%Y-%m-%d") for k in (-1, 0, 1)}
+
+def resolve_cricbuzz_series(tour_name, matchlist):
+    """PROPOSE and then VALIDATE a Cricbuzz series id for a tour → (series_id_str, why).
+
+    ESPN is the base feed; Cricbuzz is the L1 SECOND WITNESS the bot reconciles ESPN against. A
+    tour ingested without one has NO second witness at all until cricsheet (L2) publishes days
+    later, so we try to resolve it here — but we only adopt an id we can check.
+
+    cricbuzz.resolve_series_id is a NAME match, and its own docstring says it PROPOSES only: "the
+    result belongs in tours.json ... written once by a human who opened the URL". Rule 3 (never let
+    a name decide identity) is about PLAYERS and still holds absolutely; a series is not a person.
+    But a wrong series id is a whole-tour mis-ingest, so the proposal is validated against
+    Cricbuzz's OWN fixture list on DATES — never on team names: at least 2 of ESPN's fixture dates
+    (±1 day) must appear among the proposed series' fixtures. Anything less returns "" plus a loud
+    reason, and the caller then reports the tour as having no L1 witness. Never a guess.
+
+    Cheap and safe to call twice per tour (once per format): cricbuzz.series_matches is memoised
+    per process and the archive index is disk-cached; every fetch either returns bytes or raises,
+    so an outage can never look like "this series has no fixtures"."""
+    espn_dates = {(m.get("date") or "") for m in matchlist if m.get("date")}
+    years = [d[:4] for d in espn_dates if d[:4].isdigit()]
+    if not years:
+        return "", "no dated ESPN fixture to anchor the Cricbuzz year — cannot even look"
+    year = max(set(years), key=years.count)
+    clean = _clean_tour_name(tour_name)
+    try:
+        import cricbuzz
+    except Exception as e:                      # never fatal: ingest proceeds without an L1 id
+        return "", f"cricbuzz module unavailable ({e})"
+    try:
+        prop = cricbuzz.resolve_series_id(clean, int(year))
+    except Exception as e:                      # CricbuzzUnavailable/ParseError — raises, never lies
+        return "", f"cricbuzz archive {year} unavailable ({e})"
+    if not prop:
+        return "", (f"cricbuzz proposed nothing unambiguous for {clean!r} ({year}) — a bilateral's "
+                    f"in-house name usually shares no vocabulary with Cricbuzz's slug; resolve it "
+                    f"by hand (cricbuzz.series_candidates) and paste cricbuzz_series into tours.json")
+    sid, slug = prop
+    try:
+        fixtures = cricbuzz.series_matches(sid)
+    except Exception as e:
+        return "", f"cricbuzz series {sid} ({slug}) could not be VERIFIED ({e}) — not adopting it"
+    cb_dates = set()
+    for f in fixtures:
+        cb_dates |= _plus_minus_a_day(cricbuzz.fixture_date(f))
+    hit = len(espn_dates & cb_dates)
+    # A MAJORITY of dates, not just two: Cricbuzz lists every fixture of a tour (all formats), so a
+    # correct series id covers essentially all of ESPN's dates, while two coincidental overlaps are
+    # easy for a different tour running the same week. Rejecting is safe — the tour still ingests,
+    # loudly, with no L1 witness; adopting a wrong series id would be a whole-tour mis-witness.
+    need = min(len(espn_dates), max(2, -(-6 * len(espn_dates) // 10)))
+    if hit < need:
+        return "", (f"cricbuzz {sid} ({slug}) REJECTED: only {hit} of {len(espn_dates)} ESPN "
+                    f"fixture date(s) appear among its {len(fixtures)} fixtures (needed {need}) — "
+                    f"a name match that does not line up on dates is the wrong series")
+    return str(sid), (f"cricbuzz {sid} ({slug}) validated — {hit}/{len(espn_dates)} ESPN fixture "
+                      f"dates matched its {len(fixtures)} fixtures")
+
+
 # ── the generator: one (series, format) -> all artifacts ────────────────────────
 TBC_NAMES = {"tbc", "tba", "to be confirmed", "to be decided", "winner", ""}
 
-def gen_tour(series_info, squads_by_matchid, fmt, gender, state, league_squads=None):
+def gen_tour(series_info, fmt, gender, state, league_squads):
     """Build one (series, format) tour's artifacts.
 
     Handles BOTH 2-team bilaterals and N-team leagues: teams are the union across the whole
     fixture list (not just match 1), and TBC/knockout placeholders are skipped.
 
-    squads_by_matchid : {matchId: match_squad['data']} from cricapi (empty for most leagues).
-    league_squads     : optional injected squads for a league whose squads cricapi lacks
-                        (e.g. from the auction seed):
-                          {"canon":  {cricapi_team_name: canonical_name, ...},   # collapses
-                                     # aliases (e.g. Manchester Originals -> ...Super Giants),
-                                     # excludes TBC; any name absent here is treated as TBC.
-                           "squads": {canonical_name: {"short": str,
-                                                       "players": [[name, role], ...]}}}  # ordered
+    series_info   : {"info": {"name", "espn_id"}, "matchList": [rows from _espn_matchlist]}.
+                    ESPN is the only feed; there is no cricapi shape here any more.
+    league_squads : REQUIRED. The tour's roster AND its team-naming authority — ESPN's squads
+                    (espn_build) or the curated auction seed (build_league_squads):
+                      {"canon":  {feed_team_name: canonical_name, ...},   # collapses aliases
+                                 # (e.g. Manchester Originals -> ...Super Giants) and excludes
+                                 # TBC; any name absent here is treated as TBC and DROPPED.
+                       "squads": {canonical_name: {"short": str,
+                                                   "players": [[name, role], ...]}}}  # ordered
     """
+    if not league_squads or not league_squads.get("squads"):
+        # Was an optional arg while cricapi could supply /match_squad rosters. It cannot any more,
+        # and the old fallback built a tour with ZERO players. Refuse loudly instead.
+        raise ValueError("gen_tour requires league_squads: ESPN's summary.squads (or the auction "
+                         "seed) is the only roster source now, and a tour with no roster settles "
+                         "every player at zero")
     info = series_info["info"]
-    # DISCOVERY vs SCORING format split: cricapi buckets The Hundred under "T20" (FMT_BUCKET) so
-    # its fixtures aren't dropped from the ("ODI","T20") discovery loop (the 22 Jul empty-list bug).
-    # But it must be SCORED on its own D11 ruleset (no SR/econ/maiden — see _score_hundred in the
-    # bot), so the format we WRITE into tours.json/matches.json is "HUN". Everything downstream
-    # (bot CURRENT_FMT, draft scoreFormatOf) keys off this written value, not the discovery bucket.
+    # DISCOVERY vs SCORING format split: ESPN classes The Hundred as eventType "T20" (verified on
+    # league 1521176), so its fixtures ride the ("ODI","T20") discovery loop instead of being
+    # dropped (the 22 Jul empty-list bug). But it must be SCORED on its own D11 ruleset (no
+    # SR/econ/maiden — see _score_hundred in the bot), so the format WRITTEN into
+    # tours.json/matches.json is "HUN". Everything downstream (bot CURRENT_FMT, draft
+    # scoreFormatOf) keys off this written value, not the ESPN discovery bucket.
     score_fmt = "HUN" if "hundred" in (info.get("name") or "").lower() else fmt
     ml = [m for m in series_info["matchList"] if _fmt_of(m) == fmt]
     ml.sort(key=lambda m: m.get("dateTimeGMT") or m.get("date") or "")
     if not ml:
-        # Loud drop: an in-scope series yielding zero matches for this format is usually an
-        # unsupported/variable matchType (the Hundred bug) — never silently emit nothing.
-        types = sorted({(m.get("matchType") or "∅") for m in series_info["matchList"]})
-        print(f"  gen_tour: '{info.get('name')}' -> 0 {fmt} matches (cricapi types={types}) — dropped",
-              file=sys.stderr)
+        # Loud drop: an in-scope series yielding zero matches for this format is nearly always a
+        # format-vocabulary miss (ESPN leaving class blank — the CPL-as-0-matches bug), so print
+        # exactly what ESPN said, in ESPN's own words, rather than "nothing to do".
+        all_ml = series_info["matchList"]
+        cls = sorted({f"{m.get('espn_event_type') or '∅'}/{m.get('espn_class_card') or '∅'}"
+                      for m in all_ml})
+        print(f"  gen_tour: '{info.get('name')}' -> 0 {fmt} matches "
+              f"(ESPN eventType/generalClassCard={cls}, series fallback="
+              f"{all_ml[0].get('declared_fmt') if all_ml else None!r}) — dropped", file=sys.stderr)
         return None
 
-    ti = {t["name"]: t.get("shortname") or t["name"][:3].upper()
-          for m in ml for t in m.get("teamInfo", [])}  # cricapi shortnames
-
     def canonical(name):
-        """Map a raw cricapi team name to its canonical team, or None to drop it (TBC/unknown)."""
-        if league_squads is not None:
-            return league_squads["canon"].get(name)         # None if unmapped/TBC
-        return None if norm(name) in TBC_NAMES else name
+        """Map a raw ESPN team name to its canonical team, or None to drop it (TBC/unmapped)."""
+        return league_squads["canon"].get(name)             # None if unmapped/TBC
 
     # union of real teams across ALL matches, in first-appearance order
     teams, seen = [], set()
@@ -770,10 +930,7 @@ def gen_tour(series_info, squads_by_matchid, fmt, gender, state, league_squads=N
     league = len(teams) > 2
 
     gl = "M" if gender == "male" else "W"
-    if league_squads is not None:
-        shorts = {t: league_squads["squads"][t]["short"] for t in teams}
-    else:
-        shorts = {t: ti.get(t, t[:3].upper()) for t in teams}
+    shorts = {t: league_squads["squads"][t]["short"] for t in teams}
     code = {t: mint_code(gender, fmt, shorts[t], state["codes"]) for t in teams}
 
     if league:
@@ -817,22 +974,13 @@ def gen_tour(series_info, squads_by_matchid, fmt, gender, state, league_squads=N
     if not matches:
         return None
 
-    # ---- rosters: injected (ordered, preserves the curated XI-first order) or cricapi union ----
+    # ---- rosters (ordered — preserves the squad source's XI-first order) ----
     players, squads_json, team_codes = [], {}, {}
     for t in teams:
         c = code[t]
         team_codes[c] = {"flag": state["name_flag"].get(t.lower(), "🏏"), "name": t}
         squads_json[c] = {"name": t, "players": []}
-        if league_squads is not None:
-            items = [(p, norm_role(r)) for p, r in league_squads["squads"][t]["players"]]
-        else:
-            roster = {}
-            for m in ml:
-                for team in (squads_by_matchid.get(m["id"]) or []):
-                    if canonical(team.get("teamName") or "") == t:
-                        for p in team.get("players", []):
-                            roster[p["name"]] = norm_role(p.get("role"))
-            items = sorted(roster.items(), key=lambda kv: (ROLE_ORDER[kv[1]], kv[0]))
+        items = [(p, norm_role(r)) for p, r in league_squads["squads"][t]["players"]]
         for sn, (pname, role) in enumerate(items, 1):
             players.append({
                 "id": state["next_pid_id"], "name": pname, "country": t, "role": role,
@@ -844,9 +992,10 @@ def gen_tour(series_info, squads_by_matchid, fmt, gender, state, league_squads=N
 
     ends = ml[-1].get("date") or info.get("enddate")
     squads_path = re.sub(r"[^a-z0-9]+", "_", tour_name.lower()).strip("_") + "_squads.json"
-    # espn_series: if the source already knows it (ESPN-first path passes info["espn_id"]), use it
-    # verbatim. Otherwise (cricapi path) resolve it against the first REAL fixture; "" if unconfirmed
-    # (the verify gate + Tour Ingest Review tab flag it). cricapi_series is "" on the ESPN-only path.
+    # espn_series — the BASE feed id, so a blank one means the tour has no feed at all. Every
+    # builder in this file already knows it (info["espn_id"]); resolve_espn_series is the validated
+    # fallback for any caller that hands us a series_info without one (search -> candidate league
+    # ids -> confirm the fixture's two teams on that id's dated scoreboard; "" rather than a guess).
     espn_id = (info.get("espn_id") or "").strip()
     if not espn_id:
         for m in ml:
@@ -855,93 +1004,33 @@ def gen_tour(series_info, squads_by_matchid, fmt, gender, state, league_squads=N
             if len(cc) == 2 and cc[0] and cc[1] and cc[0] != cc[1]:
                 espn_id = resolve_espn_series(tour_name, cc, m.get("dateTimeGMT"))
                 break
+    if not espn_id:
+        print(f"  ⚠ {tour_name}: espn_series UNRESOLVED — ESPN is the ONLY base feed, so this tour "
+              f"would be ingested with no feed whatsoever. tour_sync_finalize's verify gate fails "
+              f"on this; paste the id from the ESPN series URL into Column A's espn_series cell.",
+              file=sys.stderr)
+    # cricbuzz_series — the L1 SECOND WITNESS. Written only when it VALIDATES on fixture dates;
+    # the key is omitted entirely otherwise, so nothing downstream can mistake a guess for an id.
+    cb_id, cb_why = resolve_cricbuzz_series(tour_name, ml)
+    print(f"  cricbuzz: {cb_why}", file=sys.stderr)
     tours_entry = {
-        "cricapi_series": info.get("id", ""), "ends": ends, "espn_series": espn_id,
-        "format": score_fmt, "gender": gender, "name": tour_name,
-        "squads": squads_path, "tab": tab,
+        "ends": ends, "espn_series": espn_id, "format": score_fmt, "gender": gender,
+        "name": tour_name, "squads": squads_path, "tab": tab,
     }
+    if cb_id:
+        tours_entry["cricbuzz_series"] = cb_id
+    else:
+        print(f"  ⚠⚠ NO L1 SECOND WITNESS for '{tour_name}'. ESPN is now the ONLY source for it: "
+              f"every number is single-sourced until cricsheet (L2) publishes, and an ESPN gap "
+              f"cannot be caught by anything. Resolve the Cricbuzz series by hand and add "
+              f"\"cricbuzz_series\" to its tours.json entry.", file=sys.stderr)
     return {
         "tour_name": tour_name, "codes": code,
         "matches": matches, "players": players, "team_codes": team_codes,
         "tours_entry": tours_entry, "squads_json": squads_json,
         "squads_path": squads_path, "toss_windows": toss,
+        "no_l1_witness": not cb_id,
     }
-
-
-# ── discovery ───────────────────────────────────────────────────────────────────
-def _parse_series_date(s):
-    """cricapi /series dates arrive as 'Jul 21, 2026' (sometimes ISO). Best-effort -> UTC."""
-    if not s:
-        return None
-    for fmt in ("%b %d, %Y", "%Y-%m-%d", "%Y-%m-%dT%H:%M:%S"):
-        try:
-            return datetime.strptime(s.strip(), fmt).replace(tzinfo=timezone.utc)
-        except ValueError:
-            continue
-    return None
-
-def _discover_current(now, horizon):
-    """Near-live discovery: /currentMatches page 0, in the [now-2d, horizon] window."""
-    cm = capi("currentMatches", offset=0)
-    matches = cm.get("data", [])
-    info = cm.get("info") or {}
-    print(f"  discover/currentMatches: {len(matches)} match(es) returned "
-          f"[key hits {info.get('hitsToday','?')}/{info.get('hitsLimit','?')}]", file=sys.stderr)
-    hits = {}
-    for m in matches:
-        dt = m.get("dateTimeGMT")
-        if not dt:
-            continue
-        try:
-            when = datetime.fromisoformat(dt.replace("Z", "")).replace(tzinfo=timezone.utc)
-        except ValueError:
-            continue
-        if not (now - timedelta(days=2) <= when <= horizon):
-            continue
-        ok, kind = in_scope(m.get("name", ""), m.get("teams", []))
-        if not ok:
-            continue
-        sid = m.get("series_id")
-        if sid:
-            hits[sid] = {"name": m.get("name", ""), "teams": m.get("teams", []), "kind": kind}
-    return hits
-
-def _discover_series(now, horizon):
-    """Fixtures-based discovery: search /series for each watchlist league and keep the ones
-    running or starting inside the window. /currentMatches only shows near-live games, so
-    THIS is what catches a tour (e.g. The Hundred) 3-4 days ahead of its first ball."""
-    hits = {}
-    floor = now - timedelta(days=2)
-    for term in SEARCH_TERMS:
-        r = capi("series", offset=0, search=term)   # raises loudly if all keys are blocked
-        for s in r.get("data", []):
-            sid, name = s.get("id"), s.get("name", "")
-            if not sid or sid in hits:
-                continue
-            ok, kind = in_scope(name, [])
-            if not ok:
-                continue
-            start, end = _parse_series_date(s.get("startDate")), _parse_series_date(s.get("endDate"))
-            in_window = start is not None and floor <= start <= horizon
-            running   = start is not None and end is not None and start <= horizon and end >= floor
-            unknown   = start is None                       # fail-open: unparseable dates
-            if in_window or running or unknown:
-                hits[sid] = {"name": name, "teams": [], "kind": kind,
-                             "start": s.get("startDate"), "end": s.get("endDate")}
-                print(f"  discover/series[{term!r}]: KEEP {name!r} "
-                      f"start={s.get('startDate')} end={s.get('endDate')} ({kind}"
-                      f"{', dates-unparsed' if unknown else ''})", file=sys.stderr)
-    return hits
-
-def discover(window_days):
-    """Return {series_id: {name, teams, kind, ...}} for in-scope series active in the window,
-    combining near-live (/currentMatches) and fixtures (/series search) discovery."""
-    now = datetime.now(timezone.utc)
-    horizon = now + timedelta(days=window_days)
-    hits = _discover_current(now, horizon)
-    for sid, meta in _discover_series(now, horizon).items():
-        hits.setdefault(sid, meta)
-    return hits
 
 
 def _load(p):
@@ -953,7 +1042,7 @@ def _dump(p, obj):
 
 def apply_to_repos(tours):
     """Append each generated tour into the draft + bot files. Idempotent-ish: skips a
-    tour whose cricapi_series+tab is already registered. Re-parses every file it writes."""
+    tour whose tab is already registered. Re-parses every file it writes."""
     if not tours:
         return []
     dm = _load(f"{DRAFT}/data/matches.json")
@@ -994,19 +1083,18 @@ def apply_to_repos(tours):
         # every request. It once served a WWC auction-budget board as CPL points.
         #
         # ⚠ The CONDITION here was "has a cricapi_series", which was correct only while a tour
-        # without one went unscored. Since 13 Aug 2026 an ESPN-only tour IS scored
-        # (espn_match_list + the TOUR CONTROL gate skip), so that test would have permanently
-        # withheld CPL's tab: the bot would compute and publish every CPL point and the draft would
-        # never read one of them. The real question is "will the bot write this tab", and the bot
-        # writes a tab for any tour it can source a scorecard for — cricapi OR ESPN.
-        if sheet_id and ((t["tours_entry"].get("cricapi_series") or "").strip()
-                         or (t["tours_entry"].get("espn_series") or "").strip()):
+        # without one went unscored. An ESPN-only tour IS scored, so that test would have
+        # permanently withheld CPL's tab: the bot would compute and publish every CPL point and the
+        # draft would never read one of them. The real question is "will the bot write this tab",
+        # and the bot writes a tab for any tour it can source a scorecard for — which, with cricapi
+        # gone, is exactly "has an espn_series".
+        if sheet_id and (t["tours_entry"].get("espn_series") or "").strip():
             tab = urllib.parse.quote(t["tours_entry"]["tab"])
             pt.append(f"https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={tab}&headers=1")
         elif sheet_id:
-            print(f"  points tab NOT registered for {t['tour_name']}: neither a cricapi_series nor "
-                  f"an espn_series, so the bot can source no scorecard and will never write the tab "
-                  f"(an unknown gviz tab silently returns another sheet)", file=sys.stderr)
+            print(f"  points tab NOT registered for {t['tour_name']}: no espn_series, so the bot "
+                  f"can source no scorecard and will never write the tab (an unknown gviz tab "
+                  f"silently returns another sheet)", file=sys.stderr)
         applied.append(t["tour_name"])
     _dump(f"{DRAFT}/data/matches.json", dm)
     _dump(f"{DRAFT}/data/players-raw.json", dp)
@@ -1021,24 +1109,26 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--apply", action="store_true", help="write artifacts into the draft + bot repo files")
-    ap.add_argument("--from-saved", help="dir with capi_series_info.json + capi_match_squad.json (no quota)")
     ap.add_argument("--emit", help="write generated artifacts to this dir")
-    ap.add_argument("--auction-squads", help="JSON from extract_auction_squads.mjs; used as the "
-                    "squad source for any discovered league it covers (cricapi has no league squads)")
-    ap.add_argument("--source", choices=["espn", "cricapi"],
-                    default=os.environ.get("SYNC_SOURCE", "cricapi"),
-                    help="AUTO-discovery source. 'cricapi' (default) reliably finds near-term tours; "
-                         "'espn' search is unreliable for near-term bilaterals (buries them behind "
-                         "historical editions) — kept only as a keyless best-effort.")
-    ap.add_argument("--espn-tour", help="KEYLESS add of ONE named tour (no cricapi): resolves the "
-                    "ESPN league id from the name, then builds fixtures + full squads from ESPN. "
-                    "Use when you know the tour (ESPN can't be trusted to DISCOVER it, but nails "
-                    "everything else). e.g. --espn-tour 'India tour of Zimbabwe 2026'")
+    ap.add_argument("--auction-squads", help="JSON from extract_auction_squads.mjs. Used INSTEAD of "
+                    "ESPN's squads for a league it covers COMPLETELY (curated, identity-anchored "
+                    "rosters); ignored for a partial cover, which would drop the uncovered teams.")
+    # ---- the three ways in. All three are ESPN-only and keyless; there is no default. ----
     ap.add_argument("--from-status-sheet", action="store_true",
-                    help="KEYLESS: read the tour names Nishant typed in Column A of the 'TOUR STATUS' "
-                         "GSheet tab and ESPN-add any that aren't ingested yet. This is the "
-                         "'add a tour = type its name in the sheet' path.")
+                    help="THE path CI runs: read the tour names typed in Column A of the "
+                         "'TOUR CONTROL'/'TOUR STATUS' GSheet tabs and ESPN-add any that aren't "
+                         "ingested yet (an optional espn_series column skips name resolution).")
+    ap.add_argument("--espn-tour", help="add ONE named tour: name -> ESPN league id -> fixtures + "
+                    "full squads. e.g. --espn-tour 'India tour of Zimbabwe 2026'")
+    ap.add_argument("--discover", action="store_true",
+                    help="ESPN watchlist auto-discovery (search -> league id -> fixtures). "
+                         "BEST-EFFORT only: ESPN's search buries a near-term bilateral behind older "
+                         "editions of the same tour, so it complements Column A, never replaces it.")
     args = ap.parse_args()
+    if not (args.from_status_sheet or args.espn_tour or args.discover):
+        # Deliberately an error, not a default. The old default ran cricapi discovery; with that
+        # gone, quietly picking a path (or quietly doing nothing) is how a missed tour hides.
+        ap.error("pick a path: --from-status-sheet (what CI runs), --espn-tour NAME, or --discover")
     state = load_state()
     seeds = json.load(open(args.auction_squads)) if args.auction_squads else []
     if seeds:
@@ -1046,20 +1136,9 @@ def main():
               f"{len(seeds)} seed(s)", file=sys.stderr)
 
     tours = []
-    if args.from_saved:
-        si = json.load(open(f"{args.from_saved}/capi_series_info.json"))["data"]
-        ms = json.load(open(f"{args.from_saved}/capi_match_squad.json")).get("data", [])
-        gender = infer_gender(si["info"]["name"], si["matchList"][0]["teams"])
-        # attach the one saved match_squad to every ODI match (demo: real run fetches per match)
-        odi_ids = [m["id"] for m in si["matchList"] if (m.get("matchType") or "").lower() == "odi"]
-        sq_by = {mid: ms for mid in odi_ids}
-        for fmt in ("ODI", "T20"):
-            t = gen_tour(si, sq_by, fmt, gender, state)
-            if t:
-                tours.append(t)
-    elif args.from_status_sheet:
-        # KEYLESS: the tour names Nishant typed in Column A of the TOUR STATUS tab → ESPN-add each.
-        now = datetime.now(timezone.utc)
+    now = datetime.now(timezone.utc)
+    if args.from_status_sheet:
+        # The tour names Nishant typed in Column A → ESPN-add each. Keyless end to end.
         horizon = now + timedelta(days=45)
         names = status_sheet_new_names(state)
         print(f"from-status-sheet: {len(names)} new name(s) in Column A: "
@@ -1068,71 +1147,25 @@ def main():
             if espn_id:
                 print(f"  '{nm}': using the espn_series {espn_id} you supplied — skipping "
                       f"name resolution", file=sys.stderr)
-            tours += espn_add_named(nm, now, horizon, state, espn_id=espn_id)
+            tours += espn_add_named(nm, now, horizon, state, espn_id=espn_id, seeds=seeds)
     elif args.espn_tour:
-        # KEYLESS single-tour add (no cricapi): name -> ESPN league id -> fixtures + full squads.
-        now = datetime.now(timezone.utc)
         horizon = now + timedelta(days=45)
-        tours += espn_add_named(args.espn_tour, now, horizon, state)
-    elif args.source == "espn":
-        # KEYLESS best-effort auto-discovery (unreliable for near-term bilaterals — see --espn-tour).
-        now = datetime.now(timezone.utc)
+        tours += espn_add_named(args.espn_tour, now, horizon, state, seeds=seeds)
+    else:
         horizon = now + timedelta(days=DISCOVERY_WINDOW_DAYS)
         found = espn_discover(now, horizon)
-        print(f"espn-discover: {len(found)} in-scope tour(s) in next {DISCOVERY_WINDOW_DAYS}d (keyless)", file=sys.stderr)
+        print(f"espn-discover: {len(found)} in-scope tour(s) in next {DISCOVERY_WINDOW_DAYS}d "
+              f"(keyless)", file=sys.stderr)
         for lid, name in found.items():
             if lid in state["existing_espn"]:
                 print(f"  skip (already ingested): {name[:50]}", file=sys.stderr)
                 continue
-            built = espn_build(lid, name, now, horizon, state)
+            built = espn_build(lid, name, now, horizon, state, seeds)
             if not built:
                 continue
             si, gender, lg = built
             for fmt in ("ODI", "T20"):
-                t = gen_tour(si, {}, fmt, gender, state, league_squads=lg)
-                if t and t["tours_entry"]["tab"] not in state["existing_tabs"]:
-                    tours.append(t)
-                elif t:
-                    print(f"  skip (tab exists): {t['tours_entry']['tab']}", file=sys.stderr)
-    else:
-        now = datetime.now(timezone.utc)
-        found = discover(DISCOVERY_WINDOW_DAYS)
-        print(f"discover: {len(found)} in-scope series in next {DISCOVERY_WINDOW_DAYS}d", file=sys.stderr)
-        for sid, meta in found.items():
-            if sid in state["existing_series"]:
-                print(f"  skip (already ingested): {meta['name'][:50]}", file=sys.stderr)
-                continue
-            si = capi("series_info", id=sid).get("data")
-            if not si or not si.get("matchList"):
-                print(f"  skip (no matchList): {meta['name'][:50]}", file=sys.stderr)
-                continue
-            ml = si["matchList"]
-            types = sorted({(m.get("matchType") or "?").lower() for m in ml})
-            def _when(m):
-                try:
-                    return datetime.fromisoformat((m.get("dateTimeGMT") or "").replace("Z", "")).replace(tzinfo=timezone.utc)
-                except ValueError:
-                    return None
-            upcoming = [m for m in ml if (_when(m) is None or _when(m) >= now - timedelta(days=3))]
-            print(f"  series {si['info']['name'][:45]!r}: {len(ml)} matches, types={types}, "
-                  f"{len(upcoming)} now/upcoming", file=sys.stderr)
-            if not upcoming:
-                print(f"  skip (finished edition — no upcoming match): {si['info']['name'][:45]}", file=sys.stderr)
-                continue
-            gender = infer_gender(si["info"]["name"], ml[0].get("teams", []))
-            series_teams = sorted({t for m in ml for t in (m.get("teams") or [])})
-            lg = build_league_squads(seeds, series_teams, gender) if seeds else None
-            sq_by = {}
-            if lg:
-                print(f"  squads: injected from auction seed ({len(lg['squads'])} teams)", file=sys.stderr)
-            else:
-                for m in ml:   # cricapi squads (bilaterals / leagues cricapi actually carries)
-                    if _fmt_of(m) and m.get("hasSquad"):
-                        r = capi("match_squad", id=m["id"])
-                        if r.get("status") == "success":
-                            sq_by[m["id"]] = r.get("data", [])
-            for fmt in ("ODI", "T20"):
-                t = gen_tour(si, sq_by, fmt, gender, state, league_squads=lg)
+                t = gen_tour(si, fmt, gender, state, lg)
                 if t and t["tours_entry"]["tab"] not in state["existing_tabs"]:
                     tours.append(t)
                 elif t:
@@ -1147,7 +1180,20 @@ def main():
         for c, sq in t["squads_json"].items():
             pids = sum(1 for p in t["players"] if p["team_code"] == c and not p["pid"].startswith("slug:"))
             print(f"  {c} ({t['team_codes'][c]['flag']} {sq['name']}): {len(sq['players'])} players, {pids} registry-pid'd")
+        print(f"  feeds: espn_series={t['tours_entry'].get('espn_series') or 'UNRESOLVED'}  "
+              f"cricbuzz_series={t['tours_entry'].get('cricbuzz_series') or 'NONE (no L1 witness)'}")
         print(f"  tours.json: {json.dumps(t['tours_entry'], ensure_ascii=False)}")
+
+    # A tour with no cricbuzz_series has no SECOND witness at all now that cricapi is gone — ESPN
+    # is both the base feed and the only feed, so an ESPN gap or error has nothing to contradict it
+    # until cricsheet (L2) publishes days later. Never let that be a log line nobody reads.
+    blind = [t["tour_name"] for t in tours if t.get("no_l1_witness")]
+    if blind:
+        print(f"\n⚠⚠ {len(blind)} of {len(tours)} tour(s) have NO L1 SECOND WITNESS "
+              f"(no cricbuzz_series): {blind}")
+        print("   ESPN is single-sourced for these. Resolve each Cricbuzz series by hand "
+              "(python3 -c \"import cricbuzz; print(cricbuzz.series_candidates('<tour>', <year>))\") "
+              "and add \"cricbuzz_series\" to its tours.json entry.")
 
     if args.emit:
         os.makedirs(args.emit, exist_ok=True)
