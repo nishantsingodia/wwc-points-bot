@@ -6,8 +6,10 @@ name: WWC T20 Points
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 */4 * * *"   # every 4 hours (UTC) — halved from 2h to save cricapi budget; the
-                            # 5-min ESPN tick + on-demand button cover freshness between runs
+    - cron: "0 */4 * * *"   # every 4 hours (UTC). Every feed is keyless and unmetered now
+                            # (ESPN + Cricbuzz + cricsheet), so this cadence is about cricsheet
+                            # publishing lag and politeness to ESPN, not a daily quota. The 5-min
+                            # ESPN tick + on-demand button cover freshness between runs.
 
 # Push approved recon overrides back to the repo (registry/recon_overrides.json).
 permissions:
@@ -30,9 +32,13 @@ jobs:
 
       - run: pip install -r requirements.txt
 
-      # Persist cricapi scorecards between runs (completed matches are immutable),
-      # so we don't re-fetch them every run and blow the 100 hits/day free limit.
-      - name: Cache cricapi scorecards
+      # Persist FEED RESPONSES between runs. This is WC_CACHE_DIR — the ONE cache every
+      # keyless feed writes into: espn_get() in wc_fps_to_csv.py and cricbuzz.py both key off
+      # it, and registry/cricbuzz_bridge.py reads the bot's already-fetched ESPN play-by-play
+      # out of it. A completed match's card is immutable, so a hit here is exact; without the
+      # cache the 5-min tick re-fetches ESPN from cold 288x/day (and TICK_CACHE_ONLY, which
+      # prefers a cached immutable payload over a refetch, has nothing to serve).
+      - name: Cache feed responses (ESPN + Cricbuzz)
         uses: actions/cache@v4
         with:
           path: api_cache
@@ -51,7 +57,8 @@ jobs:
           restore-keys: wc-cricsheet-
 
       - name: Download cricsheet ball-by-ball (gold source - exact dots)
-        continue-on-error: true   # non-fatal: if cricsheet is slow/down, fall back to cricapi
+        continue-on-error: true   # non-fatal: if cricsheet is slow/down, matches stay PROVISIONAL
+                                  # on ESPN (+Cricbuzz as L1 witness) until the next run gets it
         run: |
           mkdir -p cricsheet
           # International T20Is (men's & women's) — covers WWC + bilateral T20I tours.
@@ -81,10 +88,10 @@ jobs:
           curl -fsSL --retry 3 --retry-delay 5 --max-time 180 -o hnd.zip \
             https://cricsheet.org/downloads/hnd_json.zip
           unzip -o -q hnd.zip "*.json" -d cricsheet
-          # Caribbean Premier League — its own archive, same reasoning as MLC/LPL above. Wired in
-          # ahead of CPL being scored: the tour is currently ESPN-only (cricapi_series ""), so the
-          # bot skips it entirely; once its cricapi series id is set this is what makes the
-          # official L2 reconciliation fire instead of it riding ESPN-provisional forever.
+          # Caribbean Premier League — its own archive, same reasoning as MLC/LPL above. CPL is
+          # scored off ESPN + Cricbuzz today and every one of its settled rows is still
+          # ESPN-provisional, so this archive is what lets the official L2 reconciliation fire
+          # instead of the tour riding ESPN-provisional forever.
           curl -fsSL --retry 3 --retry-delay 5 --max-time 180 -o cpl.zip \
             https://cricsheet.org/downloads/cpl_json.zip
           unzip -o -q cpl.zip "*.json" -d cricsheet
@@ -92,8 +99,6 @@ jobs:
       - name: Compute D11 points and write to Google Sheet(s)
         # Tours are defined in tours.json (each writes its own tab). See TOURS.md.
         env:
-          CRICKET_API_KEY: ${{ secrets.CRICKET_API_KEY }}
-          CRICKET_API_KEY2: ${{ secrets.CRICKET_API_KEY2 }}   # optional failover key (2nd cricapi account)
           GSHEET_ID: ${{ secrets.GSHEET_ID }}
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           CRICSHEET_DIR: cricsheet
@@ -106,13 +111,17 @@ jobs:
           # The bot folds sheet decisions into these committed ledgers (recon picks ->
           # recon_overrides.json; "New"/auto-added players -> new_players.json; Identity Anomalies
           # Yes/No -> identity_splits.json; fully-completed tours -> frozen_tours.json, which stops
-          # cricapi polling for finished tournaments); commit them so they survive the ephemeral
+          # re-polling finished tournaments); commit them so they survive the ephemeral
           # runner (and the answered sheet rows can be dropped without the answer re-surfacing).
           # registry/cricbuzz_match_map.json is the cricbuzz<->our-match PIN. It is DERIVED, but it
           # must be committed or it is written-but-never-read: every run would re-derive the
           # pairing from team names, which is exactly the state in which a rename upstream can
           # silently re-pair or un-pair an already-SETTLED match.
-          LEDGERS="registry/recon_overrides.json registry/new_players.json registry/identity_splits.json registry/frozen_tours.json registry/settlement_snapshots.json registry/completed_matches.json registry/cricsheet_learned_aliases.json registry/manual_ci_bridges.json registry/cricbuzz_match_map.json registry/identity_changes.json"
+          # registry/cricbuzz_bridge.json is the cricbuzz_id -> cricinfo_id IDENTITY bridge, and it
+          # was MISSING from this list: every adoption the run made died with the runner, so the
+          # bridge could never accumulate and the L1 second witness kept re-deriving identity from
+          # scratch. Now that Cricbuzz is the only second witness, that has to persist.
+          LEDGERS="registry/recon_overrides.json registry/new_players.json registry/identity_splits.json registry/frozen_tours.json registry/settlement_snapshots.json registry/completed_matches.json registry/cricsheet_learned_aliases.json registry/manual_ci_bridges.json registry/cricbuzz_match_map.json registry/cricbuzz_bridge.json registry/identity_changes.json"
           if [ -n "$(git status --porcelain $LEDGERS)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

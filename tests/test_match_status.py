@@ -4,6 +4,24 @@ systemic detection, and the approval->override mapping. Includes the Match 30 re
 import pytest
 
 
+@pytest.fixture
+def feed(wcmod):
+    """A witness/ESPN row as the REAL feeds hand one over: every L1 field present.
+
+    L1 used to be four fields wide (r/w/4s/6s) because that was all cricapi and ESPN both
+    carried, so a four-key stub was a faithful fixture. Cricbuzz is the witness now and parses the
+    whole card, so L1 compares — and a match-level 'use S1/S2' seed WRITES — all 14 scoring
+    fields. A stub row would therefore hand a seed a missing key (read as 0 by
+    apply_recon_overrides) and zero a measured value, which is a fixture artefact, not the
+    behaviour under test. Keyed off RECON_L1 so the next widening cannot leave these rows short.
+    """
+    def _make(**over):
+        row = {f: 0 for f in wcmod.RECON_L1}
+        row.update(over)
+        return row
+    return _make
+
+
 # ── classify_match_status (the 4 locked decisions) ──────────────────────────
 def test_clean_l1_is_completed(wcmod):
     assert wcmod.classify_match_status(False, True, {}, {}, False) == ("COMPLETED", "")
@@ -77,14 +95,18 @@ def test_compute_l1_gaps_skips_espn_without_ballbyball(wcmod):
 
 
 # ── apply_recon_overrides + recompute ───────────────────────────────────────
-def test_match_seed_uses_espn_and_recomputes(perf, wcmod):
+def test_match_seed_uses_espn_and_recomputes(perf, feed, wcmod):
     charani = perf("Shree Charani", w=1, balls=18, runs_conceded=26, dots=9, played=True)
     perry = perf("Ellyse Perry", r=38, b=26, catches=1, balls=6, dots=3, played=True, **{"4s": 5})
-    capi = {"cha": {"r": 0, "w": 1, "4s": 0, "6s": 0}, "per": {"r": 38, "w": 0, "4s": 5, "6s": 0}}
-    espn = {"cha": {"r": 0, "w": 2, "4s": 0, "6s": 0}, "per": {"r": 57, "w": 0, "4s": 8, "6s": 0}}
-    l1 = wcmod.compute_l1_gaps(capi, espn)
+    # Full-card rows on BOTH sides (see the `feed` fixture): the seed writes all 14 L1 fields, so
+    # the feeds have to state the ones they measured and agree on, not leave them absent.
+    wit = {"cha": feed(w=1, balls=18, runs_conceded=26, dots=9),
+           "per": feed(r=38, b=26, balls=6, dots=3, catches=1, **{"4s": 5})}
+    espn = {"cha": feed(w=2, balls=18, runs_conceded=26, dots=9),
+            "per": feed(r=57, b=26, balls=6, dots=3, catches=1, **{"4s": 8})}
+    l1 = wcmod.compute_l1_gaps(wit, espn)
     idx = {"M": [{"match_key": "M", "scope": "match", "source": "S2", "status": "approved"}]}
-    applied = wcmod.apply_recon_overrides({"cha": charani, "per": perry}, capi, espn, l1, "M", idx)
+    applied = wcmod.apply_recon_overrides({"cha": charani, "per": perry}, wit, espn, l1, "M", idx)
     assert applied == {"cha", "per"}
     assert charani["w"] == 2 and perry["r"] == 57 and perry["4s"] == 8
     # re-scoring after override picks up the corrected raw stats + derived bonuses
@@ -114,17 +136,22 @@ def test_no_overrides_is_noop(perf, wcmod):
 
 
 # ── build_recon_rows: one row per (player, MATERIAL field), no whole-match collapse ──
-def test_build_recon_rows_per_player_handles_mixed_match(wcmod):
+def test_build_recon_rows_per_player_handles_mixed_match(wcmod, feed):
     # a mixed match (Match-23 class): each differing player gets its own row so the user can
     # pick S1 for one and S2 for another — no single whole-match pick is forced.
     unresolved = {"ferdous": "runs 33/40", "cha": "wkts 1/2"}
-    capi = {"ferdous": {"r": 33, "w": 0, "4s": 2, "6s": 0}, "cha": {"r": 0, "w": 1, "4s": 0, "6s": 0}}
-    espn = {"ferdous": {"r": 40, "w": 0, "4s": 2, "6s": 0}, "cha": {"r": 0, "w": 2, "4s": 0, "6s": 0}}
-    rows = wcmod.build_recon_rows("M", "IND v BAN", "d", "WWC", unresolved, capi, espn)
+    wit = {"ferdous": feed(r=33, b=25, **{"4s": 2}), "cha": feed(w=1, balls=24, runs_conceded=30)}
+    espn = {"ferdous": feed(r=40, b=25, **{"4s": 2}), "cha": feed(w=2, balls=24, runs_conceded=30)}
+    rows = wcmod.build_recon_rows("M", "IND v BAN", "d", "WWC", unresolved, wit, espn)
     assert all(r["tier"] == "player" for r in rows)            # NO whole-match collapse
     got = {(r["pid"], r["param"]): (r["s1"], r["s2"]) for r in rows}
-    assert got[("ferdous", "runs")] == (33, 40)
-    assert got[("cha", "wkts")] == (1, 2)
+    # The S1 cell NAMES its feed — always, now that cricbuzz is the only witness. The old bare
+    # number was the cricapi special case ("s1": cv if witness == "cricapi" else ...), and a
+    # sheet column whose meaning is implicit is exactly how "S1" changed feeds under 10 live
+    # approvals without a single row saying so.
+    assert got[("ferdous", "runs")] == ("33 (cricbuzz)", 40)
+    assert got[("cha", "wkts")] == ("1 (cricbuzz)", 2)
+    assert all(r["witness"] == "cricbuzz" for r in rows)
 
 
 def test_build_recon_rows_skips_one_run_blip(wcmod):
@@ -178,16 +205,17 @@ def _p2(**kw):
     return base
 
 
-def test_l2_compares_against_reconciled_not_raw_cricapi(wcmod):
-    # cricapi froze Charani at 1 wkt; ESPN had 2; you approved S2 (ESPN). cricsheet later CONFIRMS
-    # 2. L2 must be SILENT — comparing official(2) to the reconciled(2), not raw cricapi(1).
+def test_l2_compares_against_reconciled_not_raw_witness(wcmod, feed):
+    # The witness froze Charani at 1 wkt; ESPN had 2; you approved S2 (ESPN). cricsheet later
+    # CONFIRMS 2. L2 must be SILENT — comparing official(2) to the reconciled(2), not the raw
+    # provisional(1).
     prov = {"cha": _p2(w=1, dots=9, runs_conceded=26)}
-    capi = {"cha": {"r": 0, "w": 1, "4s": 0, "6s": 0}}
-    espn = {"cha": {"r": 0, "w": 2, "4s": 0, "6s": 0}}
+    wit = {"cha": feed(w=1, balls=18, runs_conceded=26, dots=9)}
+    espn = {"cha": feed(w=2, balls=18, runs_conceded=26, dots=9)}
     cs = {"cha": _p2(w=2, dots=9, runs_conceded=26)}
-    l1 = wcmod.compute_l1_gaps(capi, espn)
+    l1 = wcmod.compute_l1_gaps(wit, espn)
     idx = {"M": [{"match_key": "M", "scope": "match", "source": "S2", "status": "approved"}]}
-    recon = wcmod.reconciled_provisional(prov, capi, espn, l1, "M", idx)
+    recon = wcmod.reconciled_provisional(prov, wit, espn, l1, "M", idx)
     assert recon["cha"]["w"] == 2                          # approved correction is in the baseline
     assert wcmod.recon_gaps(recon["cha"], cs["cha"], wcmod.RECON_L2, sep="→") == ""  # silent ✓
     # the OLD (buggy) comparison against raw cricapi WOULD have falsely flagged a revision:
@@ -223,12 +251,14 @@ def test_approval_blank_and_manual_without_value_are_none(wcmod):
 
 
 # ── Match 30 regression: LIVE -> approve 'use ESPN' -> COMPLETED ─────────────
-def test_match30_live_then_completed(perf, wcmod):
-    capi = {"cha": {"r": 0, "w": 1, "4s": 0, "6s": 0}, "per": {"r": 38, "w": 0, "4s": 5, "6s": 0}}
-    espn = {"cha": {"r": 0, "w": 2, "4s": 0, "6s": 0}, "per": {"r": 57, "w": 0, "4s": 8, "6s": 0}}
-    l1 = wcmod.compute_l1_gaps(capi, espn)
+def test_match30_live_then_completed(perf, feed, wcmod):
+    wit = {"cha": feed(w=1, balls=18, runs_conceded=26, dots=9),
+           "per": feed(r=38, b=26, balls=6, dots=3, catches=1, **{"4s": 5})}
+    espn = {"cha": feed(w=2, balls=18, runs_conceded=26, dots=9),
+            "per": feed(r=57, b=26, balls=6, dots=3, catches=1, **{"4s": 8})}
+    l1 = wcmod.compute_l1_gaps(wit, espn)
     # one per-player row per differing player (Charani wkts, Perry runs+4s) — no whole-match collapse
-    rows = wcmod.build_recon_rows("M", "AUS v IND", "2026-06-28", "WWC", l1, capi, espn)
+    rows = wcmod.build_recon_rows("M", "AUS v IND", "2026-06-28", "WWC", l1, wit, espn)
     assert rows and all(r["tier"] == "player" for r in rows)
     assert {(r["pid"], r["param"]) for r in rows} >= {("cha", "wkts"), ("per", "runs")}
     # pre-approval: every gap unresolved -> LIVE
@@ -237,7 +267,7 @@ def test_match30_live_then_completed(perf, wcmod):
     pbp = {"cha": perf(w=1, balls=18, runs_conceded=26, dots=9, played=True),
            "per": perf(r=38, b=26, catches=1, balls=6, dots=3, played=True, **{"4s": 5})}
     idx = {"M": [{"match_key": "M", "scope": "match", "source": "S2", "status": "approved"}]}
-    applied = wcmod.apply_recon_overrides(pbp, capi, espn, l1, "M", idx)
+    applied = wcmod.apply_recon_overrides(pbp, wit, espn, l1, "M", idx)
     unresolved = {p: g for p, g in l1.items() if p not in applied}
     assert wcmod.classify_match_status(False, True, l1, unresolved, False) == ("COMPLETED", "")
     assert wcmod.score(pbp["cha"], "BOWL")["total"] == 73
@@ -292,15 +322,15 @@ def test_baseline_recovers_dots_via_squad_matcher(wcmod):
     """The phantom `dots 0→N` regression.
 
     ESPN spells him 'Shaheen Afridi', the squad says 'Shaheen Shah Afridi'. The old strict id-only
-    index lost the ESPN row and kept cricapi's dots=0, so cricsheet's real 6 read as an official
-    revision of a value that was never on screen. The squad-anchored matcher finds him."""
+    index lost the ESPN row, so the baseline carried dots=0 and cricsheet's real 6 read as an
+    official revision of a value that was never on screen. The squad-anchored matcher finds him —
+    and now that ESPN is the base card as well as the dots source, a lost row means the baseline
+    has NO line for a man who was scored, which is the same phantom revision one step worse."""
     team_players = [("DS", "Shaheen Shah Afridi", "BOWL")]
-    api = {"shaheen shah afridi": wcmod.blank_perf("Shaheen Shah Afridi")}
-    api["shaheen shah afridi"].update(balls=18, runs_conceded=24, w=1, played=True)
     espn = {"shaheen afridi": wcmod.blank_perf("Shaheen Afridi")}
     espn["shaheen afridi"].update(balls=18, runs_conceded=24, w=1, dots=6, played=True)
 
-    prov, unsourced = wcmod.build_provisional_cut(team_players, api, espn)
+    prov, unsourced = wcmod.build_provisional_cut(team_players, espn)
     pid = wcmod.resolve_pid("Shaheen Shah Afridi")
     assert prov[pid]["dots"] == 6      # was 0 under the old id-only index -> phantom revision
     assert unsourced == set()
@@ -309,21 +339,32 @@ def test_baseline_recovers_dots_via_squad_matcher(wcmod):
     assert wcmod.recon_gaps(prov[pid], cs, wcmod.RECON_L2, sep="→") == ""
 
 
-def test_baseline_flags_bowler_with_no_espn_row_at_all(wcmod):
+def test_baseline_is_empty_when_espn_has_no_card(wcmod):
+    """No ESPN card ⇒ no provisional cut, and nothing invented to stand in for one.
+
+    INVARIANT CHANGED by the cricapi removal. This used to assert that a bowler cricapi said had
+    bowled 4 overs, with no ESPN row to supply his dots, came back in `unsourced` — scored on an
+    ASSUMED dots=0 rather than a measured one. cricapi was the base CARD then; ESPN is the base
+    card now, so 'a bowler with no ESPN row' is no longer a bowler missing one field, it is a
+    bowler who appears on no card at all and is never scored (run_tour skips a match with no
+    cricsheet and no ESPN data outright).
+
+    What must still hold is the half of the old invariant that guards money: the baseline is
+    RECONSTRUCTED, never fabricated. If it fell back to the squad list, every player would enter
+    L2 as an all-zero row and cricsheet's real figures would read as official revisions of numbers
+    nobody ever published — the phantom-revision class this whole test group exists for. Absence
+    of a source is still not a zero; it is an absence, and it stays one."""
     team_players = [("DS", "Nuwan Thushara", "BOWL")]
-    api = {"nuwan thushara": wcmod.blank_perf("Nuwan Thushara")}
-    api["nuwan thushara"].update(balls=24, runs_conceded=30, w=2, played=True)
-    prov, unsourced = wcmod.build_provisional_cut(team_players, api, {})
-    assert unsourced == {wcmod.resolve_pid("Nuwan Thushara")}
+    assert wcmod.build_provisional_cut(team_players, {}) == ({}, set())
 
 
 def test_baseline_matcher_is_quiet(wcmod):
     """Rebuilding the baseline must not re-report anomalies the emit path already reported."""
     before = len(wcmod.ANOMALIES), len(wcmod.REVIEW), len(wcmod.AUTO_ALIASES)
     team_players = [("DS", "Nuwan Thushara", "BOWL")]
-    api = {"someone entirely unknown": wcmod.blank_perf("Someone Entirely Unknown")}
-    api["someone entirely unknown"].update(balls=24, played=True)
-    wcmod.build_provisional_cut(team_players, api, {})
+    espn = {"someone entirely unknown": wcmod.blank_perf("Someone Entirely Unknown")}
+    espn["someone entirely unknown"].update(balls=24, played=True)
+    wcmod.build_provisional_cut(team_players, espn)
     assert (len(wcmod.ANOMALIES), len(wcmod.REVIEW), len(wcmod.AUTO_ALIASES)) == before
 
 
@@ -383,21 +424,37 @@ def test_espn_only_bare_xi_player_still_gets_xi_only(wcmod, perf):
     assert wcmod.score(assigned[("DS", "Did Not Bat")], "BAT")["total"] == wcmod.R["xi"]
 
 
-def test_l1_flags_espn_only_player(wcmod, perf):
-    capi = {"a": {"r": 40, "b": 30, "w": 0, "4s": 4, "6s": 0}}
-    espn = {"a": {"r": 40, "b": 30, "w": 0, "4s": 4, "6s": 0},
-            "ghost": {"r": 62, "b": 31, "w": 0, "4s": 6, "6s": 2}}
-    gaps = wcmod.compute_l1_gaps(capi, espn)
-    assert "ghost" in gaps and "ESPN only" in gaps["ghost"]
+def test_l1_does_not_flag_espn_only_player_under_the_cricbuzz_witness(wcmod, feed):
+    """INVARIANT CHANGED, and it is the identity exception, not a relaxation.
+
+    With cricapi as the witness this direction had to be a Recon row: cricapi was also the base
+    CARD, so a player only ESPN listed was the 4-vs-110 class — real runs that reached nobody's
+    total. Cricbuzz is a witness ONLY (ESPN is the base card and every ESPN row is scored), and a
+    Cricbuzz row exists here only once the derived bridge has resolved its cricbuzz id, so a
+    missing witness row means 'we could not BRIDGE him', not 'Cricbuzz did not see him'. That is an
+    identity gap, which must never enter the Recon tab (rule E) — cb_match_perf routes it to
+    'Needs Cricinfo ID' instead, and posting it would put ~22 unanswerable rows per match on the
+    season's first two games, where bridge coverage is 0%.
+
+    The MIRROR direction stays a value fact about ESPN, so it is still reported — see the
+    next test.
+    """
+    wit = {"a": feed(r=40, b=30, **{"4s": 4})}
+    espn = {"a": feed(r=40, b=30, **{"4s": 4}),
+            "ghost": feed(r=62, b=31, **{"4s": 6, "6s": 2})}
+    gaps = wcmod.compute_l1_gaps(wit, espn)
+    assert "ghost" not in gaps                   # identity gap -> Needs Cricinfo ID, not Recon
     assert "a" not in gaps                       # feeds agree on him
 
 
-def test_l1_flags_cricapi_only_player_when_espn_covers_match(wcmod):
-    capi = {"a": {"r": 40, "b": 30, "w": 0, "4s": 4, "6s": 0},
-            "missing": {"r": 55, "b": 33, "w": 0, "4s": 5, "6s": 1}}
-    espn = {"a": {"r": 40, "b": 30, "w": 0, "4s": 4, "6s": 0}}
-    gaps = wcmod.compute_l1_gaps(capi, espn)
-    assert "missing" in gaps and "cricapi only" in gaps["missing"]
+def test_l1_flags_witness_only_player_when_espn_covers_match(wcmod, feed):
+    # The witness (cricbuzz) saw a performance ESPN missed, on a match ESPN otherwise covers: the
+    # absence is about THIS player, so it IS a value row — and it names the witness, because a
+    # stored approval records only "S1".
+    wit = {"a": feed(r=40, b=30, **{"4s": 4}), "missing": feed(r=55, b=33, **{"4s": 5, "6s": 1})}
+    espn = {"a": feed(r=40, b=30, **{"4s": 4})}
+    gaps = wcmod.compute_l1_gaps(wit, espn)
+    assert "missing" in gaps and "cricbuzz only" in gaps["missing"]
 
 
 def test_l1_does_not_flag_everyone_when_espn_has_no_coverage(wcmod):

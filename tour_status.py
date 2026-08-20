@@ -6,12 +6,18 @@ For every tour in tours.json it answers, in one place: is it registered, do squa
 draft get it (matches/players/team-codes/espn-series), is the points tab live, and — the bit that
 silently breaks — do the SHEET's team tokens and Player IDs actually MAP to the draft's codes/pids.
 Prints a table to stdout (always, so it shows in CI logs) and writes a "TOUR STATUS" GSheet tab when
-creds are present. Read-only: no cricapi (sheet via public gviz), never mutates a repo.
+creds are present. Read-only and feedless: it reads repo files + the sheet via public gviz, calls no
+match feed at all, and never mutates a repo.
+
+FEED COLUMNS. espn_series is the BASE feed (blank = the tour cannot be scored); cricbuzz_series is
+the L1 SECOND WITNESS (blank = ESPN is single-sourced for that tour until cricsheet publishes).
+There is no cricapi column any more — cricapi is not a feed of this project.
 
 Run:  DRAFT_REPO=~/wwc-draft python3 tour_status.py
 Env:  DRAFT_REPO, GSHEET_ID (+ GOOGLE_SERVICE_ACCOUNT_JSON to write the tab), SHEET_ID override.
 """
 import json, os, re, sys, urllib.request, urllib.parse
+from datetime import date
 
 BOT = os.path.dirname(os.path.abspath(__file__))
 DRAFT = os.environ.get("DRAFT_REPO", os.path.expanduser("~/wwc-draft"))
@@ -79,7 +85,6 @@ def main():
     dcodes = _load(f"{DRAFT}/data/team-codes.json", {}) or {}
     despn = _load(f"{DRAFT}/data/espn-series.json", {}) or {}
     dmirror = (_load(f"{DRAFT}/lib/registry-players.json", {}) or {}).get("players", {})
-    control = _load(f"{DRAFT}/../tour_control.json")  # optional local cache; sheet is source of truth
     aliases = _team_code_aliases()
     sid = _sheet_id()
 
@@ -97,17 +102,19 @@ def main():
                 return c
         return None
 
-    header = ["Tour", "Fmt/Gender", "Bot tours.json", "espn_series", "cricapi_series",
+    header = ["Tour", "Fmt/Gender", "Bot tours.json", "espn_series", "cricbuzz_series (L1)",
               "Squads (bot)", "Draft matches", "Draft players", "Draft espn-series",
               "Registry mirror", "Points tab (sheet)", "Sheet→draft TEAM", "Sheet→draft PID",
               "Verdict / gaps"]
+    today = date.today().isoformat()
     rows = []
     for t in tours:
         name, tab = t.get("name", ""), t.get("tab", "")
         gender = t.get("gender", "")
         fmt = (t.get("format") or "T20").upper()
         espn = (t.get("espn_series") or "").strip()
-        capi = (t.get("cricapi_series") or "").strip()
+        cbz = str(t.get("cricbuzz_series") or "").strip()
+        ends = (t.get("ends") or "").strip()
         gaps = []
 
         # squads (bot)
@@ -124,6 +131,12 @@ def main():
             gaps.append(f"espn_series not in draft espn-series[{gkey}]")
         if not espn:
             gaps.append("espn_series blank (live pts won't resolve)")
+        # ESPN is the only base feed, so a tour with no cricbuzz_series has no SECOND witness at
+        # all: nothing can contradict an ESPN gap until cricsheet (L2) publishes days later. Only a
+        # gap for a tour still to come or still running — a finished tour is settled from cricsheet
+        # and flagging it forever would bury the ones that still matter.
+        if not cbz and (not ends or ends >= today):
+            gaps.append("no L1 second witness (cricbuzz_series unset — ESPN single-sourced)")
 
         # points tab + sheet<->draft mapping (the silent-break checks)
         sheet_rows = _read_tab(sid, tab) if tab else []
@@ -174,7 +187,7 @@ def main():
                 gaps.append("mirror stale/thin")
 
         verdict = "✅ READY" if not gaps else "⚠ " + "; ".join(gaps)
-        rows.append([name[:34], f"{fmt}/{gkey}", "Y", espn or "✗", capi or "—(ESPN-only)",
+        rows.append([name[:34], f"{fmt}/{gkey}", "Y", espn or "✗", cbz or "✗ none",
                      squads_cell, dm_cell, dp_cell, "Y" if espn_in_draft else "✗",
                      mirror_cell, tab_cell, team_cell, pid_cell, verdict])
 
