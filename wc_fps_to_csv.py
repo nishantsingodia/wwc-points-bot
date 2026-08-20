@@ -2134,16 +2134,37 @@ RECON_LABEL = {"r": "runs", "w": "wkts", "4s": "4s", "6s": "6s", "dots": "dots",
 RECON_L1_CB = ["r", "b", "4s", "6s", "w", "balls", "runs_conceded", "dots", "maidens",
                "catches", "stumpings", "runouts", "dro", "lbwb"]
 
-def recon_gaps(a, b, fields, sep="/"):
+_ABSENT = object()   # "this dict has no such key" — distinct from a key whose value is 0 or None
+
+
+def recon_gaps(a, b, fields, sep="/", unverified=None):
     """Compare two perf dicts on `fields`; return a compact 'field a{sep}b' gap string
     (empty if every field agrees, or either side is missing). For L1 use sep='/'
     (cricapi/ESPN — two parallel feeds); for L2 use sep='→' (provisional→official, so the
-    arrow reads as 'was → corrected to')."""
+    arrow reads as 'was → corrected to').
+
+    `unverified` (optional list) collects fields that could NOT be compared because one side has
+    no such key. Pass it on the L2 path: a frozen baseline predating a widening of RECON_L2 has no
+    entry for the new fields, and silently skipping them would report "✓ complete" for fields
+    nobody ever checked — claiming coverage we do not have, which is the mirror of inventing a gap.
+    """
     if not a or not b:
         return ""
     out = []
     for f in fields:
-        av, bv = a.get(f, 0), b.get(f, 0)
+        av, bv = a.get(f, _ABSENT), b.get(f, _ABSENT)
+        # ⛔ A MISSING KEY IS NOT A ZERO. This was `a.get(f, 0)`, so a baseline frozen before a
+        # field joined SETTLED_FIELDS compared its ABSENCE against cricsheet's real number and
+        # manufactured a gap on a SETTLED match — "lbwb 0→1" for a wicket nobody disputes. The
+        # rule is already written 10 lines below, over _SCORING_CRITICAL ("defaulting it to 0 is
+        # not a harmless shortcut ... Say 'unverified' instead of inventing a number") — but that
+        # guard protects `points_gap`, and `recon_gaps` runs FIRST. Measured when RECON_L2 widened
+        # 10 -> 14 (b, balls, dro, lbwb): 996 of 3665 settled rows lack at least one of the new
+        # keys, and 44 LPL rows would have fired a phantom red row on already-settled money.
+        if av is _ABSENT or bv is _ABSENT:
+            if unverified is not None:
+                unverified.append(f)
+            continue
         # ABSENT ON EITHER SIDE = nothing to compare. Cricbuzz writes None (never 0) for a field
         # it could not establish — HUN `maidens` is hard-ignored as corrupt, `dots` is None when
         # the ball-count completeness gate failed. The old `or 0` turned that absence into a real
@@ -3497,10 +3518,16 @@ def run_tour(tour):
             n_legacy += 1
             return recon_prov.get(pid)
         l2_pairs = {}
+        l2_unverified = {}
         if cs_pid:
             for pid in cs_pid:
                 base = _l2_baseline(pid)
-                g = recon_gaps(base, cs_pid[pid], RECON_L2, sep="→")
+                # Collect the fields the frozen baseline cannot answer for, so "no gap" is not
+                # confused with "checked and clean" — see recon_gaps(unverified=...).
+                _unv = []
+                g = recon_gaps(base, cs_pid[pid], RECON_L2, sep="→", unverified=_unv)
+                if _unv:
+                    l2_unverified[pid] = sorted(set(_unv))
                 if not g:
                     # Nothing in the compared field list moved — but did the SCORED TOTAL?
                     g = points_gap(base, cs_pid[pid], role_by_pid.get(pid, "?") or "?")
@@ -3510,6 +3537,15 @@ def run_tour(tour):
             print(f"  {label}: {n_legacy} player(s) settled before field-level freezing — L2 "
                   f"compared against a RECOMPUTED baseline for them, not the frozen one",
                   file=sys.stderr)
+        if l2_unverified:
+            _byf = {}
+            for _p, _fs in l2_unverified.items():
+                for _f in _fs:
+                    _byf[_f] = _byf.get(_f, 0) + 1
+            print(f"  {label}: L2 could NOT verify {sum(_byf.values())} field-comparison(s) across "
+                  f"{len(l2_unverified)} player(s) — the frozen baseline has no such key, so the "
+                  f"absence is reported rather than compared against zero: "
+                  f"{', '.join(f'{k}x{v}' for k, v in sorted(_byf.items()))}", file=sys.stderr)
         # IDENTITY BREAK on the official card (previously invisible to this gate entirely).
         cs_orphans = unresolved_official(cs_perf) if cs_path else []
         id_zeroed, id_orphans = (identity_break(recon_prov, cs_pid, cs_orphans)
