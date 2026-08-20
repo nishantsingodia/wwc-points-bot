@@ -710,6 +710,45 @@
         "Caribbean Premier League 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:527776",
+      "display": "Oliver Edward Robinson",
+      "aliases": [
+        "oliver edward robinson"
+      ],
+      "team": "TENG",
+      "role": "BOWL",
+      "tours": [
+        "England vs Pakistan Men's Test 2026"
+      ],
+      "source": "auto"
+    },
+    {
+      "pid": "ci:233901",
+      "display": "Shan Masood Khan",
+      "aliases": [
+        "shan masood khan"
+      ],
+      "team": "TPAK",
+      "role": "BAT",
+      "tours": [
+        "England vs Pakistan Men's Test 2026"
+      ],
+      "source": "auto"
+    },
+    {
+      "pid": "ci:1148593",
+      "display": "Emilio Nico Gay",
+      "aliases": [
+        "emilio nico gay"
+      ],
+      "team": "TENG",
+      "role": "BAT",
+      "tours": [
+        "England vs Pakistan Men's Test 2026"
+      ],
+      "source": "auto"
     }
   ]
 }
