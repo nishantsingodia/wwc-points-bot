@@ -73,7 +73,8 @@
   "squads": "lpl_2026_squads.json",
   "ends": "2026-08-08",
   "cricbuzz_series": "12316",
-  "starts": "2026-07-15"
+  "starts": "2026-07-15",
+  "active_until": "2026-09-30"
  },
  {
   "cricapi_series": "ac5127e7-663b-4666-83ca-38f5d6935228",
@@ -85,7 +86,8 @@
   "tab": "THE HUNDRED MENS 2026 POINTS",
   "format": "HUN",
   "cricbuzz_series": "11493",
-  "starts": "2026-07-20"
+  "starts": "2026-07-20",
+  "active_until": "2026-09-30"
  },
  {
   "cricapi_series": "99aea2e0-513f-4d4c-b83c-336e456723ae",
@@ -97,7 +99,8 @@
   "tab": "THE HUNDRED WOMENS 2026 POINTS",
   "format": "HUN",
   "cricbuzz_series": "11504",
-  "starts": "2026-07-20"
+  "starts": "2026-07-20",
+  "active_until": "2026-09-30"
  },
  {
   "cricapi_series": "a5cb9f61-1d86-43ea-bb6a-085df6422bd0",

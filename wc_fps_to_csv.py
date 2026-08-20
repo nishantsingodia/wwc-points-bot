@@ -4024,8 +4024,43 @@ def load_tours():
 # match whose ball-by-ball posts late may be frozen on provisional (ESPN/cricapi) numbers.
 FREEZE_GRACE_DAYS = int(os.environ.get("FREEZE_GRACE_DAYS", "5"))
 
+def held_open_until(tour):
+    """`active_until` — an explicit per-tour extension of the grace window, or "" if unset.
+
+    WHY A PER-TOUR FIELD AND NOT A BIGGER FREEZE_GRACE_DAYS. That constant is global, so raising
+    it to reach one finished tour wakes EVERY finished tour (India tour of England, ZIM v IND, MLC
+    ...) and each one costs cricapi hits from a 100/day budget the still-live tour needs. The
+    comment on FREEZE_GRACE_DAYS records that exact regression: "the old 21 kept ~6 tours active,
+    draining the daily cricapi budget before the still-live tour was even reached."
+
+    WHAT IT OVERRIDES. Both skips, because both are quota rationing rather than correctness:
+    `dormant` (ends + grace) and `frozen_tours` (fully cricsheet-resolved). A tour whose scoring
+    logic changed AFTER it closed can only be corrected by reaching it again — and a completed
+    tour is exactly where a scoring fix is most likely to have arrived late, since that is when
+    the official cards exist to find it with.
+
+    Set it deliberately and remove it when done: a tour held open is re-scored every run.
+    """
+    return str(tour.get("active_until") or "").strip()
+
+
+def _held_open(tour):
+    e = held_open_until(tour)
+    if not e:
+        return False
+    try:
+        return date.today() <= date.fromisoformat(e)
+    except ValueError:
+        print(f"  ⚠ {tour.get('name')!r}: active_until={e!r} is not an ISO date — IGNORED, the "
+              f"tour keeps its normal grace window", file=sys.stderr)
+        return False
+
+
 def is_active(tour):
-    """A tour stays live until `ends` + grace; then it's dormant (skipped entirely)."""
+    """A tour stays live until `ends` + grace; then it's dormant (skipped entirely).
+    An explicit `active_until` in tours.json overrides that — see held_open_until."""
+    if _held_open(tour):
+        return True
     e = tour.get("ends")
     if not e:
         return True
@@ -4220,12 +4255,16 @@ def main():
             print(f"-- {t['name']}: not approved in TOUR CONTROL "
                   f"(poll={control.get(t.get('cricapi_series')) or 'pending'}) — skipped (0 API)", file=sys.stderr)
             continue
-        if not espn_only and t.get("cricapi_series") in frozen:
+        if not espn_only and t.get("cricapi_series") in frozen and not _held_open(t):
             print(f"-- {t['name']}: frozen (fully resolved, cricsheet-official) — skipped (0 API)", file=sys.stderr)
             continue
         if not is_active(t):
             print(f"-- {t['name']}: dormant (ended {t.get('ends')}, frozen) — skipped", file=sys.stderr)
             continue
+        if _held_open(t):
+            print(f"-- {t['name']}: HELD OPEN by active_until={held_open_until(t)} — re-scoring a "
+                  f"tour that would otherwise be skipped (dormant/frozen). Remove the field when "
+                  f"the numbers are settled.", file=sys.stderr)
         try:
             run_tour(t)
             tours_ok += 1
