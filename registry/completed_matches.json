@@ -909,6 +909,15 @@
    "first_status": "COMPLETED",
    "first_seen": "2026-08-19",
    "provenance": "live"
+  },
+  {
+   "tour": "Caribbean Premier League 2026",
+   "match_key": "2026-08-22::antigua and barbuda falcons|trinbago knight riders",
+   "match": "Match 12 — MTANT v MTTRI",
+   "date": "2026-08-22",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-23",
+   "provenance": "live"
   }
  ]
 }

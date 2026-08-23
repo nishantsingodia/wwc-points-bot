@@ -749,6 +749,19 @@
         "England vs Pakistan Men's Test 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:1398125",
+      "display": "Hasan Nawaz",
+      "aliases": [
+        "hasan nawaz"
+      ],
+      "team": "MTANT",
+      "role": "BAT",
+      "tours": [
+        "Caribbean Premier League 2026"
+      ],
+      "source": "auto"
     }
   ]
 }
