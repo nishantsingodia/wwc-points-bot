@@ -296,6 +296,13 @@ def load_ci_bridges():
     global NAME2CI
     if not os.path.exists(CI_BRIDGES_PATH): return
     for _pid, b in json.load(open(CI_BRIDGES_PATH)).items():
+        # A hand-edited file can carry an entry in the wrong shape (a bare "Name": "<id>" string
+        # instead of the {"cricinfo_id":..., "names":[...]} object). That killed every scoring run
+        # for ~2.5 days on 2026-08-20. Name it and skip it; never take the whole build down.
+        if not isinstance(b, dict):
+            print(f"  ⛔ manual_ci_bridges.json: {_pid!r} is {type(b).__name__}, not an object — "
+                  f"SKIPPED (bridge not in effect)", file=sys.stderr)
+            continue
         ci = b.get("cricinfo_id")
         for nm in b.get("names", []):
             if nm and ci: NAME2CI[nm] = str(ci)

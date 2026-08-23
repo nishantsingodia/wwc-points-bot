@@ -1,5 +1,4 @@
 {
- "Ali Usman": "681099",
  "ci:1000791": {
   "cricinfo_id": "1000791",
   "names": [
@@ -768,6 +767,12 @@
   "cricinfo_id": "670013",
   "names": [
    "fabian allen"
+  ]
+ },
+ "ci:681099": {
+  "cricinfo_id": "681099",
+  "names": [
+   "ali usman"
   ]
  },
  "ci:688141": {
