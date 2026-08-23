@@ -762,6 +762,32 @@
         "Caribbean Premier League 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:348026",
+      "display": "John Campbell",
+      "aliases": [
+        "john dillon campbell"
+      ],
+      "team": "MTSTL",
+      "role": "BAT",
+      "tours": [
+        "Caribbean Premier League 2026"
+      ],
+      "source": "auto"
+    },
+    {
+      "pid": "ci:328160",
+      "display": "Obus Pienaar",
+      "aliases": [
+        "abraham jacobus pienaar"
+      ],
+      "team": "MTSTL",
+      "role": "BAT",
+      "tours": [
+        "Caribbean Premier League 2026"
+      ],
+      "source": "auto"
     }
   ]
 }

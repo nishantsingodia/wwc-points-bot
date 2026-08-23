@@ -515,6 +515,15 @@
    "provenance": "derived-from-settlement"
   },
   {
+   "tour": "The Hundred Men's Competition 2026",
+   "match_key": "2026-08-04::london spirit|sunrisers leeds",
+   "match": "Match 20 — MTSUNL v MTLSP",
+   "date": "2026-08-04",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-23",
+   "provenance": "live"
+  },
+  {
    "tour": "The Hundred Women's Competition 2026",
    "match_key": "2026-08-04::london spirit|sunrisers leeds",
    "match": "Match 20 — WTSUNL v WTLSP",
@@ -908,6 +917,33 @@
    "date": "2026-08-19",
    "first_status": "COMPLETED",
    "first_seen": "2026-08-19",
+   "provenance": "live"
+  },
+  {
+   "tour": "England vs Pakistan Men's Test 2026",
+   "match_key": "2026-08-19::england|pakistan",
+   "match": "Match 1 — TENG v TPAK",
+   "date": "2026-08-19",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-08-23",
+   "provenance": "live"
+  },
+  {
+   "tour": "Caribbean Premier League 2026",
+   "match_key": "2026-08-20::antigua and barbuda falcons|st kitts and nevis patriots",
+   "match": "Match 12 — MTANT v MTSTK",
+   "date": "2026-08-20",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-08-23",
+   "provenance": "live"
+  },
+  {
+   "tour": "Caribbean Premier League 2026",
+   "match_key": "2026-08-21::jamaica kingsmen|st lucia kings",
+   "match": "Match 13 — MTSTL v MTJAM",
+   "date": "2026-08-21",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-23",
    "provenance": "live"
   },
   {
