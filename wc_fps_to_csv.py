@@ -2828,7 +2828,7 @@ def cb_witness_active():
     return bool(CB_SERIES and _cricbuzz is not None and _cb_bridge is not None
                 and (CB_STORE or {}).get("bridge"))
 
-def cb_match_perf(mdate, teams, espn_perf, fresh=False):
+def cb_match_perf(mdate, teams, espn_perf, fresh=False, espn_event=None):
     """Cricbuzz's card for one match, keyed by the SAME pid space as every other feed.
 
     Returns (perf_by_pid, note, diag). `perf_by_pid` is None whenever Cricbuzz cannot serve as a
@@ -2870,7 +2870,17 @@ def cb_match_perf(mdate, teams, espn_perf, fresh=False):
         return None, "cricbuzz bridge store is empty — no derived cricbuzz→cricinfo pairs", {}
     diag = {}
     try:
-        cb_mid = _cricbuzz.resolve_match_id(CB_SERIES, mdate, teams, fresh=fresh)
+        # PASS THE ESPN EVENT ID. resolve_match_id calls it "the rename-proof anchor: an id, not
+        # a name", records it on the pin, and looks pins up by it — but this call never supplied
+        # one, so EVERY pin this bot created was written with an empty `espn_event` and keyed on
+        # teams+date alone. MEASURED 2026-08-23: all 5 unanchored pins in
+        # registry/cricbuzz_match_map.json are CPL ones this path created, and it is what keeps
+        # test_the_committed_map_covers_the_four_live_tours red ("every backfilled pin carries its
+        # ESPN event id"). A teams+date-only pin is exactly the state in which a rename upstream
+        # can silently re-pair or un-pair an already-SETTLED match. The caller has had `ev` in
+        # scope the whole time.
+        cb_mid = _cricbuzz.resolve_match_id(CB_SERIES, mdate, teams, fresh=fresh,
+                                            espn_event=str(espn_event) if espn_event else None)
     except Exception as e:                    # CricbuzzUnavailable / ParseError / anything else
         return None, f"cricbuzz series {CB_SERIES} unreachable ({e})", {}
     if not cb_mid:
@@ -3365,7 +3375,8 @@ def run_tour(tour):
         # settle by the end), so a fetch there would cost a page per match per tick and buy nothing.
         cb_pid, cb_note, cb_diag = None, "", {}
         if cb_witness_active() and not is_live and not FREQUENT:
-            cb_pid, cb_note, cb_diag = cb_match_perf(mdate, teams, espn_perf, fresh=espn_fresh)
+            cb_pid, cb_note, cb_diag = cb_match_perf(mdate, teams, espn_perf, fresh=espn_fresh,
+                                                     espn_event=ev)
             CB_DIAG[match_key_of(mdate, teams)] = {"note": cb_note, **cb_diag}
             if cb_note:
                 print(f"  {label}: {cb_note}", file=sys.stderr)

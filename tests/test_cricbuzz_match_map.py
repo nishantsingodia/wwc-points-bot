@@ -543,3 +543,32 @@ def test_a_fixture_with_no_usable_id_is_an_ordinary_refusal(env, monkeypatch):
     assert cb.resolve_match_id(LPL, *LPL_M1[:2]) is None
     assert "no usable matchId" in cb.last_refusal()
     assert store_of(env)["pins"] == {}
+
+
+def test_cb_match_perf_forwards_the_espn_event_as_the_pin_anchor(monkeypatch):
+    """The pin anchor must actually REACH resolve_match_id.
+
+    resolve_match_id calls espn_event "the rename-proof anchor: an id, not a name", records it on
+    the pin and looks pins up by it — but cb_match_perf never passed one, so every pin this bot
+    created was written with an empty `espn_event` and keyed on teams+date alone. MEASURED
+    2026-08-23: all 5 unanchored pins in registry/cricbuzz_match_map.json were created by this
+    path. A teams+date-only pin is exactly the state in which a rename upstream can silently
+    re-pair or un-pair an already-SETTLED match, which is what the committed-map test guards.
+    """
+    import wc_fps_to_csv as wc
+    seen = {}
+
+    class _CB:
+        def resolve_match_id(self, series, date, teams, fresh=False, espn_event=None, **kw):
+            seen["espn_event"] = espn_event
+            return None            # refuse: we only care what was passed in
+
+    monkeypatch.setattr(wc, "_cricbuzz", _CB())
+    monkeypatch.setattr(wc, "_cb_bridge", object())
+    monkeypatch.setattr(wc, "CB_SERIES", "12123")
+    monkeypatch.setattr(wc, "CB_STORE", {"bridge": {"1": "2"}})   # non-empty: pass the store guard
+    monkeypatch.setattr(wc, "cb_witness_active", lambda: True)
+    wc.cb_match_perf("2026-08-19", ["St Lucia Kings", "Guyana Amazon Warriors"], {},
+                     espn_event="1534189")
+    assert seen.get("espn_event") == "1534189", \
+        "cb_match_perf must forward the ESPN event id, or every pin it creates is unanchored"
