@@ -750,8 +750,10 @@
  "ci:639080": {
   "cricinfo_id": "639080",
   "names": [
+   "matthew david fisher",
    "md fisher"
-  ]
+  ],
+  "source": "Two different men are both announced \"Matthew Fisher\": MD Fisher (cricinfo 639080, cricsheet 8f2dfebf, England/Yorkshire — London Spirit in The Hundred Men's 2026 and the ENG v PAK Test squad) and MJ Fisher (cricinfo 1129635, cricsheet 7068c81e, New Zealand). The bare spelling resolved to MJ, so MD's one Hundred appearance (06 Aug, MTLSP v MTMILO, 38 pts) settled under BOTH pids. The squads now announce the full legal names and these two bridges anchor them; do NOT re-add the ambiguous \"matthew fisher\" to either."
  },
  "ci:652939": {
   "cricinfo_id": "652939",
@@ -966,5 +968,12 @@
    "usman khan"
   ],
   "source": "MTJAM (CPL 2026). ESPNcricinfo id from the CPL 2026 (ESPN league 8623) rosters: athlete.id IS the cricinfo id, displayName and fullName both \"Usman Khan\", position WBT — the Pakistan keeper-batter. NOTE: \"Usman Khan\" is a common name; if a second one enters any tour, split this bridge rather than widening it."
+ },
+ "ci:1129635": {
+  "cricinfo_id": "1129635",
+  "names": [
+   "matthew john fisher"
+  ],
+  "source": "Two different men are both announced \"Matthew Fisher\": MD Fisher (cricinfo 639080, cricsheet 8f2dfebf, England/Yorkshire — London Spirit in The Hundred Men's 2026 and the ENG v PAK Test squad) and MJ Fisher (cricinfo 1129635, cricsheet 7068c81e, New Zealand). The bare spelling resolved to MJ, so MD's one Hundred appearance (06 Aug, MTLSP v MTMILO, 38 pts) settled under BOTH pids. The squads now announce the full legal names and these two bridges anchor them; do NOT re-add the ambiguous \"matthew fisher\" to either."
  }
 }
