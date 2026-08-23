@@ -692,6 +692,42 @@
   "s smale": {
    "pid": "ci:1277198",
    "display": "Seren Smale"
+  },
+  "tg helm": {
+   "pid": "ci:512907",
+   "display": "Thomas George Helm"
+  },
+  "bw sanderson": {
+   "pid": "ci:297482",
+   "display": "Ben William Sanderson"
+  },
+  "j clark": {
+   "pid": "ci:301648",
+   "display": "Jordan Clark"
+  },
+  "jj weatherley": {
+   "pid": "ci:748793",
+   "display": "Joe James Weatherley"
+  },
+  "ht crocombe": {
+   "pid": "ci:1143809",
+   "display": "Henry Thomas Crocombe"
+  },
+  "m lumsden": {
+   "pid": "ci:1488180",
+   "display": "Manny Lumsden"
+  },
+  "cr knott": {
+   "pid": "ci:1164537",
+   "display": "Charli Rae Knott"
+  },
+  "tf rogers": {
+   "pid": "ci:1137283",
+   "display": "Thomas Fraser Rogers"
+  },
+  "r mondol": {
+   "pid": "ci:1276980",
+   "display": "Ripon Mondol"
   }
  }
 }
