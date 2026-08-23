@@ -5377,6 +5377,45 @@ def _save_cricsheet_learned():
 NEEDS_CRICINFO_TAB = "Needs Cricinfo ID"
 CI_BRIDGES_PATH = os.path.join(os.path.dirname(__file__), "registry", "manual_ci_bridges.json")
 
+def load_ci_bridges_safe():
+    """manual_ci_bridges.json, with every MALFORMED entry named and dropped instead of fatal.
+
+    ⛔ WHY THIS EXISTS. This file is hand-edited — it is the sanctioned way a human asserts an
+    identity — and every entry is expected to be `"ci:<id>": {"cricinfo_id": ..., "names": [...]}`.
+    On 2026-08-20 a bridge was committed in the OTHER shape, a bare `"Ali Usman": "681099"`
+    (commit 0aa3026). `promote_new_players` does `e.get("cricinfo_id")` over the values, so a
+    string value raised AttributeError, main() died before scoring anything, and EVERY 4-hourly
+    run failed for ~2.5 days: 12 consecutive red runs, three completed CPL matches
+    (20/21/22 Aug) never published, and no settlement or completed-match ledger written. The
+    5-minute ESPN tick kept succeeding the whole time, so the sheet looked alive.
+
+    One malformed hand-edit must never be able to stop all scoring. A bad entry is now SKIPPED
+    and NAMED — loudly, every run, so it gets fixed — while every well-formed bridge still loads.
+    Returns {} on an unreadable/corrupt file, exactly as the old callers' try/except did."""
+    try:
+        raw = json.load(open(CI_BRIDGES_PATH))
+    except Exception as e:
+        print(f"  ⚠ manual_ci_bridges.json unreadable ({e}) — no manual bridges this run",
+              file=sys.stderr)
+        return {}
+    if not isinstance(raw, dict):
+        print(f"  ⚠ manual_ci_bridges.json is a {type(raw).__name__}, expected an object — "
+              f"no manual bridges this run", file=sys.stderr)
+        return {}
+    good, bad = {}, []
+    for k, v in raw.items():
+        if isinstance(v, dict):
+            good[k] = v
+        else:
+            bad.append((k, v))
+    for k, v in bad:
+        _cid = re.sub(r"\D", "", str(v))
+        print(f"  ⛔ manual_ci_bridges.json: entry {k!r} is {type(v).__name__} {v!r}, not an "
+              f"object — SKIPPED (this bridge is NOT in effect). Expected shape: "
+              f'"ci:{_cid or "<id>"}": {{"cricinfo_id": "{_cid or "<id>"}", '
+              f'"names": ["{norm(k)}"]}}', file=sys.stderr)
+    return good
+
 
 def _record_identity_change(old_pid, new_pid, reason, evidence):
     """Log a pid move to registry/identity_changes.json. Never fatal to a scoring run — but LOUD,
@@ -5404,10 +5443,7 @@ def promote_new_players():
     Promotes ONLY on a human-asserted bridge (an id someone typed into the tab). Deliberately does
     NOT promote by matching the global registry's aliases: that path can merge two people silently,
     which is the failure this whole exercise exists to stop."""
-    try:
-        bridges = json.load(open(CI_BRIDGES_PATH))
-    except Exception:
-        return 0
+    bridges = load_ci_bridges_safe()
     name2ci = {}
     for key, e in bridges.items():
         cid = str(e.get("cricinfo_id") or key.split(":", 1)[-1])
@@ -5719,7 +5755,7 @@ def pending_registry_gaps():
     if not isinstance(pending, list):
         return []
     try:
-        answered = {n for e in json.load(open(CI_BRIDGES_PATH)).values()
+        answered = {n for e in load_ci_bridges_safe().values()
                     for n in (e.get("names") or [])}
     except Exception:
         answered = set()          # FAIL OPEN — see docstring

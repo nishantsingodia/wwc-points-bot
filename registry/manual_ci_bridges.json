@@ -201,6 +201,18 @@
    "kevlon alston anderson"
   ]
  },
+ "ci:1209191": {
+  "cricinfo_id": "1209191",
+  "names": [
+   "joshua michael james"
+  ]
+ },
+ "ci:1209196": {
+  "cricinfo_id": "1209196",
+  "names": [
+   "kirk mckenzie"
+  ]
+ },
  "ci:1229018": {
   "cricinfo_id": "1229018",
   "names": [
@@ -223,6 +235,12 @@
   "cricinfo_id": "1275938",
   "names": [
    "rivaldo a clarke"
+  ]
+ },
+ "ci:1275939": {
+  "cricinfo_id": "1275939",
+  "names": [
+   "nathan edward"
   ]
  },
  "ci:1276980": {
@@ -369,6 +387,12 @@
   "cricinfo_id": "1441681",
   "names": [
    "ayan desai"
+  ]
+ },
+ "ci:1443401": {
+  "cricinfo_id": "1443401",
+  "names": [
+   "khari campbell"
   ]
  },
  "ci:1462402": {
@@ -714,6 +738,12 @@
    "sugandika kumari"
   ]
  },
+ "ci:633660": {
+  "cricinfo_id": "633660",
+  "names": [
+   "cricbuzz player 12163"
+  ]
+ },
  "ci:639080": {
   "cricinfo_id": "639080",
   "names": [
@@ -737,6 +767,12 @@
   "cricinfo_id": "670013",
   "names": [
    "fabian allen"
+  ]
+ },
+ "ci:681099": {
+  "cricinfo_id": "681099",
+  "names": [
+   "ali usman"
   ]
  },
  "ci:688141": {
@@ -819,6 +855,13 @@
    "m shiraz"
   ]
  },
+ "ci:820691": {
+  "cricinfo_id": "820691",
+  "names": [
+   "odean fabian smith",
+   "odean smith"
+  ]
+ },
  "ci:823509": {
   "cricinfo_id": "823509",
   "names": [
@@ -889,43 +932,6 @@
   "cricinfo_id": "958691",
   "names": [
    "kna bandara"
-  ]
- },
- "ci:1443401": {
-  "cricinfo_id": "1443401",
-  "names": [
-   "khari campbell"
-  ]
- },
- "ci:1209191": {
-  "cricinfo_id": "1209191",
-  "names": [
-   "joshua michael james"
-  ]
- },
- "ci:820691": {
-  "cricinfo_id": "820691",
-  "names": [
-   "odean fabian smith",
-   "odean smith"
-  ]
- },
- "ci:1209196": {
-  "cricinfo_id": "1209196",
-  "names": [
-   "kirk mckenzie"
-  ]
- },
- "ci:1275939": {
-  "cricinfo_id": "1275939",
-  "names": [
-   "nathan edward"
-  ]
- },
- "ci:633660": {
-  "cricinfo_id": "633660",
-  "names": [
-   "cricbuzz player 12163"
   ]
  }
 }
