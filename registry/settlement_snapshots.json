@@ -57354,6 +57354,23 @@
    "match": "Match 1 — MTANT v MTJAM",
    "date": "2026-08-07",
    "team": "MTJAM",
+   "pid": "ci:1123428",
+   "full": "Usman Khan",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (21 players)",
+   "frozen_at": "2026-08-23",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-07::antigua and barbuda falcons|jamaica kingsmen",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 1 — MTANT v MTJAM",
+   "date": "2026-08-07",
+   "team": "MTJAM",
    "pid": "ci:1500757",
    "full": "Vitel Lawes",
    "points": 4,
@@ -65914,6 +65931,23 @@
    "match": "Match 2 — MTSTK v MTTRI",
    "date": "2026-08-08",
    "team": "MTSTK",
+   "pid": "ci:1078695",
+   "full": "Mikyle Louis",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (20 players)",
+   "frozen_at": "2026-08-23",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-08::st kitts and nevis patriots|trinbago knight riders",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 2 — MTSTK v MTTRI",
+   "date": "2026-08-08",
+   "team": "MTSTK",
    "pid": "ci:1158088",
    "full": "Naseem Shah",
    "points": 0,
@@ -66696,6 +66730,23 @@
    "match": "Match 3 — MTANT v MTSTL",
    "date": "2026-08-09",
    "team": "MTSTL",
+   "pid": "ci:348026",
+   "full": "John Campbell",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-23",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-09::antigua and barbuda falcons|st lucia kings",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 3 — MTANT v MTSTL",
+   "date": "2026-08-09",
+   "team": "MTSTL",
    "pid": "ci:1078693",
    "full": "Joshua Bishop",
    "points": 32,
@@ -67025,6 +67076,23 @@
    "status": "COMPLETED_FLAGGED",
    "source": "ESPN scorecard (cricapi empty) · ⏳ provisional (dots unverified, awaiting cricsheet) · ⚠ cricbuzz unavailable",
    "frozen_at": "2026-08-14",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-09::antigua and barbuda falcons|st lucia kings",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 3 — MTANT v MTSTL",
+   "date": "2026-08-09",
+   "team": "MTSTL",
+   "pid": "ci:328160",
+   "full": "Obus Pienaar",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-23",
    "provenance": "live",
    "fields": {
     "played": false
@@ -75808,6 +75876,23 @@
    "match": "Match 4 — MTJAM v MTBAR",
    "date": "2026-08-12",
    "team": "MTJAM",
+   "pid": "ci:1123428",
+   "full": "Usman Khan",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "cricsheet · official · cricbuzz cross-checked (21 players)",
+   "frozen_at": "2026-08-23",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-12::barbados tridents|jamaica kingsmen",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 4 — MTJAM v MTBAR",
+   "date": "2026-08-12",
+   "team": "MTJAM",
    "pid": "ci:1500757",
    "full": "Vitel Lawes",
    "points": 61,
@@ -80074,6 +80159,23 @@
    "tour": "Caribbean Premier League 2026",
    "match": "Match 5 — MTSTL v MTSTK",
    "date": "2026-08-12",
+   "team": "MTSTL",
+   "pid": "ci:348026",
+   "full": "John Campbell",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-23",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-12::st kitts and nevis patriots|st lucia kings",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 5 — MTSTL v MTSTK",
+   "date": "2026-08-12",
    "team": "MTSTK",
    "pid": "ci:333066",
    "full": "Johnson Charles",
@@ -80415,6 +80517,23 @@
    "match": "Match 5 — MTSTL v MTSTK",
    "date": "2026-08-12",
    "team": "MTSTK",
+   "pid": "ci:1078695",
+   "full": "Mikyle Louis",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-23",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-12::st kitts and nevis patriots|st lucia kings",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 5 — MTSTL v MTSTK",
+   "date": "2026-08-12",
+   "team": "MTSTK",
    "pid": "ci:1158088",
    "full": "Naseem Shah",
    "points": 0,
@@ -80526,6 +80645,23 @@
     "dismissed": false,
     "lbwb": 0,
     "dro": 0
+   }
+  },
+  {
+   "match_key": "2026-08-12::st kitts and nevis patriots|st lucia kings",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 5 — MTSTL v MTSTK",
+   "date": "2026-08-12",
+   "team": "MTSTL",
+   "pid": "ci:328160",
+   "full": "Obus Pienaar",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-23",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
@@ -81197,6 +81333,23 @@
    "match": "Match 7 — MTSTL v MTANT",
    "date": "2026-08-14",
    "team": "MTSTL",
+   "pid": "ci:348026",
+   "full": "John Campbell",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-23",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-14::antigua and barbuda falcons|st lucia kings",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 7 — MTSTL v MTANT",
+   "date": "2026-08-14",
+   "team": "MTSTL",
    "pid": "ci:1078693",
    "full": "Joshua Bishop",
    "points": 103,
@@ -81526,6 +81679,23 @@
    "status": "COMPLETED",
    "source": "ESPN scorecard (cricapi empty) · ⏳ provisional (dots unverified, awaiting cricsheet) · cricbuzz cross-checked (19 players)",
    "frozen_at": "2026-08-15",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-14::antigua and barbuda falcons|st lucia kings",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 7 — MTSTL v MTANT",
+   "date": "2026-08-14",
+   "team": "MTSTL",
+   "pid": "ci:328160",
+   "full": "Obus Pienaar",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-23",
    "provenance": "live",
    "fields": {
     "played": false
@@ -82784,6 +82954,23 @@
    "status": "COMPLETED",
    "source": "ESPN scorecard (cricapi empty) · ⏳ provisional (dots unverified, awaiting cricsheet) · cricbuzz cross-checked (22 players)",
    "frozen_at": "2026-08-16",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-14::guyana amazon warriors|jamaica kingsmen",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 6 — MTJAM v MTGUY",
+   "date": "2026-08-14",
+   "team": "MTJAM",
+   "pid": "ci:1123428",
+   "full": "Usman Khan",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-23",
    "provenance": "live",
    "fields": {
     "played": false
@@ -85158,6 +85345,23 @@
    "match": "Match 9 — MTSTL v MTBAR",
    "date": "2026-08-16",
    "team": "MTSTL",
+   "pid": "ci:348026",
+   "full": "John Campbell",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (21 players)",
+   "frozen_at": "2026-08-23",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-16::barbados tridents|st lucia kings",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 9 — MTSTL v MTBAR",
+   "date": "2026-08-16",
+   "team": "MTSTL",
    "pid": "ci:1078693",
    "full": "Joshua Bishop",
    "points": 7,
@@ -85453,6 +85657,23 @@
    "status": "COMPLETED",
    "source": "ESPN scorecard (cricapi empty) · ⏳ provisional (dots unverified, awaiting cricsheet) · cricbuzz cross-checked (19 players)",
    "frozen_at": "2026-08-17",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-16::barbados tridents|st lucia kings",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 9 — MTSTL v MTBAR",
+   "date": "2026-08-16",
+   "team": "MTSTL",
+   "pid": "ci:328160",
+   "full": "Obus Pienaar",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (21 players)",
+   "frozen_at": "2026-08-23",
    "provenance": "live",
    "fields": {
     "played": false
@@ -86745,6 +86966,23 @@
    "status": "COMPLETED",
    "source": "ESPN scorecard (cricapi empty) · ⏳ provisional (dots unverified, awaiting cricsheet) · cricbuzz cross-checked (18 players)",
    "frozen_at": "2026-08-16",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-16::jamaica kingsmen|trinbago knight riders",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 8 — MTJAM v MTTRI",
+   "date": "2026-08-16",
+   "team": "MTJAM",
+   "pid": "ci:1123428",
+   "full": "Usman Khan",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-23",
    "provenance": "live",
    "fields": {
     "played": false
@@ -89849,6 +90087,23 @@
    "tour": "Caribbean Premier League 2026",
    "match": "Match 11 — MTSTL v MTGUY",
    "date": "2026-08-19",
+   "team": "MTSTL",
+   "pid": "ci:348026",
+   "full": "John Campbell",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-23",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-19::guyana amazon warriors|st lucia kings",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 11 — MTSTL v MTGUY",
+   "date": "2026-08-19",
    "team": "MTGUY",
    "pid": "uncapped:jonathan-van-lange",
    "full": "Jonathan van Lange",
@@ -90179,6 +90434,23 @@
    "status": "COMPLETED",
    "source": "ESPN scorecard (cricapi empty) · ⏳ provisional (dots unverified, awaiting cricsheet) · cricbuzz cross-checked (22 players)",
    "frozen_at": "2026-08-20",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-19::guyana amazon warriors|st lucia kings",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 11 — MTSTL v MTGUY",
+   "date": "2026-08-19",
+   "team": "MTSTL",
+   "pid": "ci:328160",
+   "full": "Obus Pienaar",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (22 players)",
+   "frozen_at": "2026-08-23",
    "provenance": "live",
    "fields": {
     "played": false
@@ -91057,6 +91329,23 @@
    "match": "Match 10 — MTJAM v MTSTK",
    "date": "2026-08-19",
    "team": "MTSTK",
+   "pid": "ci:1078695",
+   "full": "Mikyle Louis",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (21 players)",
+   "frozen_at": "2026-08-23",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-19::jamaica kingsmen|st kitts and nevis patriots",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 10 — MTJAM v MTSTK",
+   "date": "2026-08-19",
+   "team": "MTSTK",
    "pid": "ci:1158088",
    "full": "Naseem Shah",
    "points": 0,
@@ -91422,6 +91711,40 @@
     "played": true,
     "bat_order": 4,
     "dismissal": "lbw b Hasaranga",
+    "dismissed": true
+   }
+  },
+  {
+   "match_key": "2026-08-19::jamaica kingsmen|st kitts and nevis patriots",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 10 — MTJAM v MTSTK",
+   "date": "2026-08-19",
+   "team": "MTJAM",
+   "pid": "ci:1123428",
+   "full": "Usman Khan",
+   "points": 31,
+   "status": "COMPLETED",
+   "source": "cricsheet · official · cricbuzz cross-checked (21 players)",
+   "frozen_at": "2026-08-23",
+   "provenance": "live",
+   "fields": {
+    "r": 13,
+    "w": 0,
+    "4s": 0,
+    "6s": 1,
+    "dots": 0,
+    "maidens": 0,
+    "runs_conceded": 0,
+    "catches": 1,
+    "stumpings": 0,
+    "runouts": 0,
+    "b": 17,
+    "balls": 0,
+    "dro": 0,
+    "lbwb": 0,
+    "played": true,
+    "bat_order": 4,
+    "dismissal": "lbw",
     "dismissed": true
    }
   },
@@ -92171,6 +92494,40 @@
    "provenance": "live",
    "fields": {
     "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-20::antigua and barbuda falcons|st kitts and nevis patriots",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 12 — MTANT v MTSTK",
+   "date": "2026-08-20",
+   "team": "MTSTK",
+   "pid": "ci:1078695",
+   "full": "Mikyle Louis",
+   "points": 4,
+   "status": "COMPLETED_FLAGGED",
+   "source": "cricsheet · official · cricbuzz cross-checked (19 players)",
+   "frozen_at": "2026-08-23",
+   "provenance": "live",
+   "fields": {
+    "r": 0,
+    "w": 0,
+    "4s": 0,
+    "6s": 0,
+    "dots": 0,
+    "maidens": 0,
+    "runs_conceded": 0,
+    "catches": 0,
+    "stumpings": 0,
+    "runouts": 0,
+    "b": 0,
+    "balls": 0,
+    "dro": 0,
+    "lbwb": 0,
+    "played": true,
+    "bat_order": 0,
+    "dismissal": "",
+    "dismissed": false
    }
   },
   {
@@ -93591,6 +93948,40 @@
    "date": "2026-08-21",
    "team": "MTJAM",
    "pid": "uncapped:usman-khan",
+   "full": "Usman Khan",
+   "points": 74,
+   "status": "COMPLETED",
+   "source": "ESPN scorecard · ⏳ provisional (dots unverified, awaiting cricsheet) · cricbuzz cross-checked (18 players)",
+   "frozen_at": "2026-08-23",
+   "provenance": "live",
+   "fields": {
+    "r": 28,
+    "w": 0,
+    "4s": 3,
+    "6s": 2,
+    "dots": 0,
+    "maidens": 0,
+    "runs_conceded": 0,
+    "catches": 1,
+    "stumpings": 0,
+    "runouts": 0,
+    "b": 11,
+    "balls": 0,
+    "dro": 0,
+    "lbwb": 0,
+    "played": true,
+    "bat_order": 4,
+    "dismissal": "c Pienaar b Forde",
+    "dismissed": true
+   }
+  },
+  {
+   "match_key": "2026-08-21::jamaica kingsmen|st lucia kings",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 13 — MTSTL v MTJAM",
+   "date": "2026-08-21",
+   "team": "MTJAM",
+   "pid": "ci:1123428",
    "full": "Usman Khan",
    "points": 74,
    "status": "COMPLETED",
