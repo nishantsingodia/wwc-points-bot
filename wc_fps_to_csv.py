@@ -3631,13 +3631,31 @@ def run_tour(tour):
         # shown, so it invented `dots 0→N` revisions for values that were already correct, and the
         # hold below then wrote those fabrications over cricsheet's exact figures.
         n_legacy = 0
+        n_completed, completed_keys, complete_refused = 0, {}, []
+        _l2_base_memo = {}
         def _l2_baseline(pid):
-            nonlocal n_legacy
+            nonlocal n_legacy, n_completed
+            if pid in _l2_base_memo:
+                return _l2_base_memo[pid]
             frozen = settled_baseline(mk, pid)
             if frozen is not None:
-                return frozen
+                # A baseline frozen before a scoring-critical field existed is PARTIAL: it wins
+                # over the recompute yet cannot be scored, so the total silently goes unverified.
+                # Fill only its holes, and only if the result re-scores to the settled total.
+                base, filled, why = complete_baseline(mk, pid, frozen, recon_prov.get(pid),
+                                                      role_by_pid.get(pid, "?") or "?")
+                if filled:
+                    n_completed += 1
+                    for k in filled:
+                        completed_keys[k] = completed_keys.get(k, 0) + 1
+                elif why:
+                    complete_refused.append((pid, why))
+                _l2_base_memo[pid] = base
+                return base
             n_legacy += 1
-            return recon_prov.get(pid)
+            base = recon_prov.get(pid)
+            _l2_base_memo[pid] = base
+            return base
         l2_pairs = {}
         l2_unverified = {}
         if cs_pid:
@@ -3657,6 +3675,15 @@ def run_tour(tour):
         if n_legacy:
             print(f"  {label}: {n_legacy} player(s) settled before field-level freezing — L2 "
                   f"compared against a RECOMPUTED baseline for them, not the frozen one",
+                  file=sys.stderr)
+        if n_completed:
+            print(f"  {label}: COMPLETED {n_completed} partial frozen baseline(s) — filled only "
+                  f"the keys they never captured ("
+                  + ", ".join(f"{k}x{v}" for k, v in sorted(completed_keys.items()))
+                  + "), each verified to re-score to its settled total. The TOTAL is now checkable "
+                  f"for these rows instead of 'pts ?→?'", file=sys.stderr)
+        for _p, _why in complete_refused:
+            print(f"  ⛔ {label}: {PID2DISP.get(_p, _p)} — partial baseline NOT completed: {_why}",
                   file=sys.stderr)
         if l2_unverified:
             _byf = {}
@@ -4739,6 +4766,67 @@ def settled_baseline(match_key, pid):
     freezing. THIS is what L2 must compare cricsheet against — never a recomputation."""
     rec = SETTLEMENTS.get((match_key, pid))
     return (rec or {}).get("fields")
+
+def settled_points(match_key, pid):
+    """The total this player was SETTLED on, or None. The gate for completing a partial baseline."""
+    rec = SETTLEMENTS.get((match_key, pid))
+    return None if rec is None else rec.get("points")
+
+def complete_baseline(match_key, pid, frozen, fallback, role):
+    """A PARTIAL frozen baseline, completed from the provisional recompute — for the keys it is
+    missing and ONLY those. Returns (baseline, filled_keys, refusal_reason).
+
+    WHY THIS EXISTS. `fields` is stamped with whatever SETTLED_FIELDS held at freeze time, so a row
+    frozen before a field joined the list genuinely lacks it. Such a row is worse than no baseline
+    at all: it wins over the recompute (settled_baseline returned it), yet score() raises KeyError
+    on the missing key, so the points backstop reports 'pts ?→? (baseline predates …)' and the
+    TOTAL — the thing a contest actually settles on — goes unverified. Measured: 1086 rows across
+    4 tours, incl. every one of LPL's 88 field-frozen rows and 247 on live CPL.
+
+    WHY COMPLETING AND NOT REPLACING. Replacing the whole dict with the recompute is the exact
+    move that manufactured the phantom `dots 0→N` revisions and then wrote them over cricsheet's
+    correct figures (see the L2 HOLD). Every value the frozen record DID capture still wins here;
+    only genuine holes are filled, so no published number can be overridden by a recomputation.
+
+    THE GATE. A completion is accepted only if re-scoring it reproduces the settled total exactly.
+    That is a real proof, not a plausibility check: the filled keys are the only free variables, so
+    if the total lands on the settled number the completion is consistent with the money that was
+    paid out. If it does not, we refuse and keep today's behaviour (partial dict, total unverified)
+    — a wrong baseline would impose itself on cricsheet via the hold, which is unrecoverable.
+    """
+    if not frozen:
+        return frozen, (), ""
+    missing = tuple(k for k in _SCORING_CRITICAL if k not in frozen)
+    if not missing:
+        return frozen, (), ""
+    cand, holes = dict(frozen), []
+    # SELF-DERIVED FIRST. `dismissal` was frozen from the start and is written as "" exactly when
+    # the batter was NOT out (see the ESPN card parse), so `dismissed` is a lossless function of a
+    # key the record already holds. Deriving it beats filling it from a recompute: no second source
+    # is consulted at all, so there is nothing to disagree with. This is 48 of LPL's 88 rows.
+    if "dismissed" in missing and "dismissal" in frozen:
+        cand["dismissed"] = bool(frozen.get("dismissal"))
+        holes.append("dismissed")
+    missing = tuple(k for k in missing if k not in holes)
+    if missing:
+        if not fallback:
+            return frozen, (), "no provisional recompute to fill from"
+        unanswerable = [k for k in missing if fallback.get(k) is None]
+        if unanswerable:
+            return frozen, (), "the recompute cannot answer " + "/".join(unanswerable)
+        for k in missing:
+            cand[k] = fallback[k]
+            holes.append(k)
+    holes = tuple(holes)
+    want = settled_points(match_key, pid)
+    try:
+        got = score(cand, role)["total"]
+    except Exception as e:
+        return frozen, (), f"completed baseline still will not score ({e})"
+    if want is None or int(got) != int(want):
+        return frozen, (), (f"completing it scores {got}, but this row was SETTLED on {want} — "
+                            f"refused, the frozen partial stands")
+    return cand, holes, ""
 
 # ── THE COMPLETED-PUBLISH RATCHET — a SEPARATE record from the settled baseline ──────────────
 # "COMPLETED never returns to LIVE" needs a memory of which matches have published COMPLETED.
