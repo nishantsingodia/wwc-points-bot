@@ -1,12 +1,5 @@
 [
  {
-  "player": "Joshua James",
-  "team": "MTANT",
-  "tour": "Caribbean Premier League 2026",
-  "current_pid": "uncapped:joshua-james",
-  "closest_guess": "JM James"
- },
- {
   "player": "Anderson Mahase",
   "team": "MTANT",
   "tour": "Caribbean Premier League 2026",
@@ -42,25 +35,11 @@
   "closest_guess": "Tayyab Arif"
  },
  {
-  "player": "Usman Khan",
-  "team": "MTJAM",
-  "tour": "Caribbean Premier League 2026",
-  "current_pid": "uncapped:usman-khan",
-  "closest_guess": "Usman Khan"
- },
- {
   "player": "Jeremiah Louis",
   "team": "MTSTK",
   "tour": "Caribbean Premier League 2026",
   "current_pid": "uncapped:jeremiah-louis",
   "closest_guess": "JS Louis"
- },
- {
-  "player": "Mikyle Louis",
-  "team": "MTSTK",
-  "tour": "Caribbean Premier League 2026",
-  "current_pid": "uncapped:mikyle-louis",
-  "closest_guess": "M Louis"
  },
  {
   "player": "Micah McKenzie",
@@ -75,13 +54,6 @@
   "tour": "Caribbean Premier League 2026",
   "current_pid": "uncapped:abdul-raheem-toppin",
   "closest_guess": "Abdul-Raheem Toppin"
- },
- {
-  "player": "Amari Goodridge",
-  "team": "MTSTL",
-  "tour": "Caribbean Premier League 2026",
-  "current_pid": "uncapped:amari-goodridge",
-  "closest_guess": "Amari Goodridge"
  },
  {
   "player": "Damion Joachim",

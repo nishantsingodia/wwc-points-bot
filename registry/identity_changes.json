@@ -28,6 +28,20 @@
    "at": "2026-08-19",
    "reason": "split-merge",
    "evidence": "Owner confirmed against espncricinfo.com/cricketers/x-820691 on 2026-08-19. RETROACTIVE record: the promotion itself already happened (build_registry promoted the placeholder and pid_map carries the redirect) but predates this ledger, so it had no provenance. Logged so the flat map is derivable from the fact log rather than only accumulated."
+  },
+  {
+   "from": "uncapped:mikyle-louis",
+   "to": "ci:1078695",
+   "at": "2026-08-23",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:mikyle-louis resolved to ci:1078695 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:usman-khan",
+   "to": "ci:1123428",
+   "at": "2026-08-23",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:usman-khan resolved to ci:1123428 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
   }
  ]
 }

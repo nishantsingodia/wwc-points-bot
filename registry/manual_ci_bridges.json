@@ -198,13 +198,15 @@
  "ci:1209188": {
   "cricinfo_id": "1209188",
   "names": [
-   "kevlon alston anderson"
+   "kevlon alston anderson",
+   "kevlon anderson"
   ]
  },
  "ci:1209191": {
   "cricinfo_id": "1209191",
   "names": [
-   "joshua michael james"
+   "joshua michael james",
+   "joshua james"
   ]
  },
  "ci:1209196": {
@@ -234,7 +236,8 @@
  "ci:1275938": {
   "cricinfo_id": "1275938",
   "names": [
-   "rivaldo a clarke"
+   "rivaldo a clarke",
+   "rivaldo clarke"
   ]
  },
  "ci:1275939": {
@@ -933,5 +936,35 @@
   "names": [
    "kna bandara"
   ]
+ },
+ "ci:1078695": {
+  "cricinfo_id": "1078695",
+  "names": [
+   "mikyle louis"
+  ],
+  "source": "MTSTK. ESPNcricinfo id observed on the CPL 2026 (ESPN league 8623) match rosters — athlete.id IS the cricinfo id. Was minting uncapped:<slug>, which no feed can emit, so matchPlayerInXI judged the player not-in-XI every match he played."
+ },
+ "ci:1342545": {
+  "cricinfo_id": "1342545",
+  "names": [
+   "amari goodridge",
+   "amari alexandre goodridge"
+  ],
+  "source": "MTSTL. ESPNcricinfo id observed on the CPL 2026 (ESPN league 8623) match rosters — athlete.id IS the cricinfo id. Was minting uncapped:<slug>, which no feed can emit, so matchPlayerInXI judged the player not-in-XI every match he played."
+ },
+ "ci:1398125": {
+  "cricinfo_id": "1398125",
+  "names": [
+   "hasan nawaz",
+   "hassan nawaz"
+  ],
+  "source": "MTANT. ESPNcricinfo id observed on the CPL 2026 (ESPN league 8623) match rosters — athlete.id IS the cricinfo id. Was minting uncapped:<slug>, which no feed can emit, so matchPlayerInXI judged the player not-in-XI every match he played."
+ },
+ "ci:1123428": {
+  "cricinfo_id": "1123428",
+  "names": [
+   "usman khan"
+  ],
+  "source": "MTJAM (CPL 2026). ESPNcricinfo id from the CPL 2026 (ESPN league 8623) rosters: athlete.id IS the cricinfo id, displayName and fullName both \"Usman Khan\", position WBT — the Pakistan keeper-batter. NOTE: \"Usman Khan\" is a common name; if a second one enters any tour, split this bridge rather than widening it."
  }
 }

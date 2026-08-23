@@ -1,6 +1,6 @@
 {
  "anchor": "cricinfo_id (ci:); cs:/uncapped: fallback; cricsheet_id derived from crosswalk",
- "count": 755,
+ "count": 759,
  "players": {
   "ci:597806": {
    "aliases": [
@@ -3788,7 +3788,8 @@
     "obus pienaar"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "Caribbean Premier League 2026"
    ],
    "cricinfo_id": "328160",
    "cricsheet_id": "647a48da",
@@ -6369,7 +6370,8 @@
     "john dillon campbell"
    ],
    "tours": [
-    "New Zealand vs West Indies Men's ODI 2026"
+    "New Zealand vs West Indies Men's ODI 2026",
+    "Caribbean Premier League 2026"
    ],
    "cricinfo_id": "348026",
    "cricsheet_id": "6fd0c8e1",
@@ -11172,17 +11174,6 @@
    "cricbuzz_id": "14811",
    "cricbuzz_tier": 2
   },
-  "uncapped:joshua-james": {
-   "aliases": [
-    "joshua james"
-   ],
-   "tours": [
-    "Caribbean Premier League 2026"
-   ],
-   "display": "Joshua James",
-   "draft_id": 10663,
-   "auction_id": null
-  },
   "ci:431901": {
    "aliases": [
     "evin lewis"
@@ -11423,17 +11414,6 @@
    "draft_id": 10696,
    "auction_id": null
   },
-  "uncapped:usman-khan": {
-   "aliases": [
-    "usman khan"
-   ],
-   "tours": [
-    "Caribbean Premier League 2026"
-   ],
-   "display": "Usman Khan",
-   "draft_id": 10697,
-   "auction_id": null
-  },
   "ci:1078692": {
    "aliases": [
     "alick athanaze"
@@ -11491,17 +11471,6 @@
    ],
    "display": "Jeremiah Louis",
    "draft_id": 10705,
-   "auction_id": null
-  },
-  "uncapped:mikyle-louis": {
-   "aliases": [
-    "mikyle louis"
-   ],
-   "tours": [
-    "Caribbean Premier League 2026"
-   ],
-   "display": "Mikyle Louis",
-   "draft_id": 10706,
    "auction_id": null
   },
   "ci:906783": {
@@ -11752,19 +11721,9 @@
    "draft_id": 10741,
    "auction_id": null
   },
-  "uncapped:amari-goodridge": {
-   "aliases": [
-    "amari goodridge"
-   ],
-   "tours": [
-    "Caribbean Premier League 2026"
-   ],
-   "display": "Amari Goodridge",
-   "draft_id": 10742,
-   "auction_id": null
-  },
   "ci:1342552": {
    "aliases": [
+    "johann francis jeremiah",
     "johann jeremiah"
    ],
    "tours": [
@@ -12234,6 +12193,123 @@
    "espn_id": "1275939",
    "cricbuzz_id": "23891",
    "cricbuzz_tier": 1
+  },
+  "ci:1209191": {
+   "aliases": [
+    "joshua james",
+    "joshua michael james"
+   ],
+   "tours": [
+    "Caribbean Premier League 2026"
+   ],
+   "display": "Joshua James",
+   "draft_id": 10663,
+   "auction_id": null,
+   "cricinfo_id": "1209191",
+   "cricsheet_id": "24f6e254",
+   "espn_id": "1209191"
+  },
+  "ci:1398125": {
+   "aliases": [
+    "hasan nawaz",
+    "hassan nawaz"
+   ],
+   "tours": [
+    "Caribbean Premier League 2026"
+   ],
+   "display": "Hasan Nawaz",
+   "cricinfo_id": "1398125",
+   "cricsheet_id": "26a8b2fe",
+   "espn_id": "1398125",
+   "draft_id": 10817,
+   "auction_id": null
+  },
+  "ci:1123428": {
+   "aliases": [
+    "usman khan"
+   ],
+   "tours": [
+    "Caribbean Premier League 2026"
+   ],
+   "display": "Usman Khan",
+   "draft_id": 10697,
+   "auction_id": null,
+   "cricinfo_id": "1123428",
+   "cricsheet_id": "bafb9238",
+   "espn_id": "1123428"
+  },
+  "ci:1078695": {
+   "aliases": [
+    "mikyle louis"
+   ],
+   "tours": [
+    "Caribbean Premier League 2026"
+   ],
+   "display": "Mikyle Louis",
+   "draft_id": 10706,
+   "auction_id": null,
+   "cricinfo_id": "1078695",
+   "cricsheet_id": "1d8c298b",
+   "espn_id": "1078695"
+  },
+  "ci:1342545": {
+   "aliases": [
+    "amari alexandre goodridge",
+    "amari goodridge"
+   ],
+   "tours": [
+    "Caribbean Premier League 2026"
+   ],
+   "display": "Amari Goodridge",
+   "draft_id": 10742,
+   "auction_id": null,
+   "cricinfo_id": "1342545",
+   "cricsheet_id": null,
+   "espn_id": "1342545"
+  },
+  "ci:1443401": {
+   "aliases": [
+    "khari campbell"
+   ],
+   "tours": [
+    "Caribbean Premier League 2026"
+   ],
+   "display": "Khari Campbell",
+   "cricinfo_id": "1443401",
+   "cricsheet_id": "4f3ab93a",
+   "espn_id": "1443401",
+   "draft_id": 10821,
+   "auction_id": null
+  },
+  "ci:1209188": {
+   "aliases": [
+    "kevlon alston anderson",
+    "kevlon anderson"
+   ],
+   "tours": [
+    "Caribbean Premier League 2026"
+   ],
+   "display": "Kevlon Anderson",
+   "cricinfo_id": "1209188",
+   "cricsheet_id": "672d7379",
+   "espn_id": "1209188",
+   "draft_id": 10818,
+   "auction_id": null
+  },
+  "ci:1275938": {
+   "aliases": [
+    "rivaldo a clarke",
+    "rivaldo clarke"
+   ],
+   "tours": [
+    "Caribbean Premier League 2026"
+   ],
+   "display": "Rivaldo Clarke",
+   "cricinfo_id": "1275938",
+   "cricsheet_id": "de098678",
+   "espn_id": "1275938",
+   "draft_id": 10819,
+   "auction_id": null
   }
  }
 }
