@@ -1090,6 +1090,31 @@ def _espn_warn_once(exc, url):
         _ESPN_FAILED.add(key)
         print(f"  espn: fetch failed ({exc}) — e.g. {url[:110]}", file=sys.stderr)
 
+def _scoreboard_unsettled(data):
+    """States of any fixture on this scoreboard day that has NOT finished.
+
+    ⛔ WHY. espn_match_list treats a day older than yesterday as immutable and serves it from
+    cache. That is only true once every fixture on it has FINISHED. The forward scan looks up to
+    ESPN_LIST_FORWARD days AHEAD, and espn_get's write is unconditional — `cache=False` gates the
+    READ only — so scanning for upcoming fixtures PERSISTED those future days with their events in
+    state "pre". Two days later the same day is "past", is read from cache, and
+    _espn_event_to_match derives matchStarted = state in ("in","post") = False. The match had been
+    played, but the bot could never see it finish.
+
+    MEASURED 2026-08-23: CPL 20 Aug (Falcons v Patriots) and 21 Aug (Kings v Kingsmen) were both
+    `post` on ESPN and both absent from the sheet — the run listed 29 fixtures and called only 12
+    completed. The sibling guard below already refuses to persist an EMPTY scoreboard ("this is how
+    2026-08-04 was lost"); this is the same class with a different symptom, and 2026-08-04 is
+    itself one of four Hundred matches that went missing the same way.
+    """
+    out = []
+    for e in (data.get("events") or []):
+        st = (((e.get("status") or {}).get("type") or {}).get("state") or "").lower()
+        if st != "post":
+            out.append(st or "?")
+    return out
+
+
 def espn_get(path, cache=True, **params):
     os.makedirs(CACHE, exist_ok=True)
     qs = "&".join(f"{k}={v}" for k, v in params.items())
@@ -1102,9 +1127,21 @@ def espn_get(path, cache=True, **params):
         # wobble would stay empty forever and the fix would never reach the match it lost. A cached
         # scoreboard with no events is therefore re-fetched rather than trusted: if the day really
         # is empty we learn that again cheaply, and if it is not, the fixture comes back.
-        if not (path == "scoreboard" and not (_hit.get("events") or [])):
+        _stale = ""
+        if path == "scoreboard":
+            if not (_hit.get("events") or []):
+                _stale = "is EMPTY"
+            else:
+                # A cached day is trustworthy only if every fixture on it has finished. CI restores
+                # the cache between runs, so without this a day cached while its match was still
+                # upcoming would report "pre" forever and that match would never score.
+                _u = _scoreboard_unsettled(_hit)
+                if _u:
+                    _stale = (f"holds {len(_u)} UNFINISHED fixture(s) "
+                              f"[{','.join(sorted(set(_u)))}]")
+        if not _stale:
             return _hit
-        print(f"  espn: cached scoreboard {params.get('dates','?')} is EMPTY — re-fetching rather "
+        print(f"  espn: cached scoreboard {params.get('dates','?')} {_stale} — re-fetching rather "
               f"than trusting it (this is how 2026-08-04 was lost)", file=sys.stderr)
     url = f"{ESPN_BASE}/{ESPN_SERIES}/{path}?{qs}"
     try:
@@ -1132,6 +1169,18 @@ def espn_get(path, cache=True, **params):
               file=sys.stderr)
         time.sleep(0.3)
         return data
+    if path == "scoreboard":
+        # DO NOT FREEZE A FIXTURE THAT HAS NOT FINISHED. This write is unconditional — `cache`
+        # gates the read, not the write — so the forward scan for upcoming fixtures used to
+        # persist future days in state "pre", and espn_match_list then served that frozen "pre"
+        # from cache once the day was old enough to be considered immutable.
+        _u = _scoreboard_unsettled(data)
+        if _u:
+            print(f"  espn: scoreboard {params.get('dates','?')} has {len(_u)} unfinished "
+                  f"fixture(s) [{','.join(sorted(set(_u)))}] — not caching it; a day is only "
+                  f"immutable once every match on it is final", file=sys.stderr)
+            time.sleep(0.3)
+            return data
     json.dump(data, open(fp, "w"))
     time.sleep(0.3)
     return data

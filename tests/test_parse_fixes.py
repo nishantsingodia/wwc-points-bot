@@ -1,3 +1,4 @@
+import json
 """Tests for the feed-parser data-quality fixes:
 - robust retirement/obstruction guard + 'leg before wicket' in parse_espn (the De Lange 2/3 bug).
 
@@ -78,3 +79,62 @@ def test_a_not_out_batter_credits_nobody(wcmod):
                            "bowler": ("Sam Bowler", "111"), "fielders": [("Fred Fielder", "222")]})
     assert all(v["w"] == 0 and v["catches"] == 0 for v in perf.values()), \
         "a not-out line must not manufacture a wicket or a catch"
+
+
+# ── the scoreboard cache must never freeze a fixture that has not finished ───────────────────
+# espn_match_list treats any day older than yesterday as immutable and serves it from cache. That
+# holds only once every fixture on the day is FINAL. espn_get's write is unconditional (`cache`
+# gates the READ), so the forward scan for upcoming fixtures used to persist future days with
+# their events in state "pre"; two days later the same day was read back from cache, and
+# _espn_event_to_match derived matchStarted = state in ("in","post") = False. The match had been
+# played and the bot could never see it finish.
+# MEASURED 2026-08-23: CPL 20 Aug and 21 Aug were both `post` on ESPN and both absent from the
+# sheet — 29 fixtures listed, only 12 called completed.
+
+def _sb(*states):
+    return {"events": [{"id": str(i), "status": {"type": {"state": s}}}
+                       for i, s in enumerate(states)]}
+
+
+def test_unsettled_returns_only_the_unfinished_states(wcmod):
+    assert wcmod._scoreboard_unsettled(_sb("post", "post")) == []
+    assert wcmod._scoreboard_unsettled(_sb("post", "pre")) == ["pre"]
+    assert wcmod._scoreboard_unsettled(_sb("in")) == ["in"]
+    assert wcmod._scoreboard_unsettled({"events": []}) == []      # empty is a separate guard
+
+
+def _run(wcmod, monkeypatch, tmp_path, payload, cache=True):
+    """Call espn_get for a scoreboard day against a private cache dir."""
+    monkeypatch.setattr(wcmod, "CACHE", str(tmp_path))
+    calls = []
+
+    class _R:
+        def __enter__(self): return self
+        def __exit__(self, *a): return False
+        def read(self): calls.append(1); return json.dumps(payload).encode()
+
+    monkeypatch.setattr(wcmod.urllib.request, "urlopen", lambda *a, **k: _R())
+    monkeypatch.setattr(wcmod.time, "sleep", lambda *a: None)
+    got = wcmod.espn_get("scoreboard", cache=cache, dates="20260820")
+    return got, calls, list(tmp_path.iterdir())
+
+
+def test_a_day_with_an_unfinished_fixture_is_not_cached(wcmod, monkeypatch, tmp_path):
+    _, _, files = _run(wcmod, monkeypatch, tmp_path, _sb("pre"))
+    assert files == [], "a fixture that has not finished must never be frozen into the cache"
+
+
+def test_a_finished_day_is_cached(wcmod, monkeypatch, tmp_path):
+    _, _, files = _run(wcmod, monkeypatch, tmp_path, _sb("post", "post"))
+    assert len(files) == 1, "an all-final day is genuinely immutable and should be cached"
+
+
+def test_an_already_poisoned_pre_entry_is_refetched_not_trusted(wcmod, monkeypatch, tmp_path):
+    # Simulate a cache written by an older build: the day is on disk holding a "pre" event.
+    monkeypatch.setattr(wcmod, "CACHE", str(tmp_path))
+    key = wcmod.re.sub(r"[^a-z0-9]", "_",
+                       f"espn_{wcmod.ESPN_SERIES}_scoreboard_dates=20260820".lower())
+    (tmp_path / (key + ".json")).write_text(json.dumps(_sb("pre")))
+    got, calls, _ = _run(wcmod, monkeypatch, tmp_path, _sb("post"), cache=True)
+    assert calls, "a cached day holding an unfinished fixture must be RE-FETCHED, not trusted"
+    assert wcmod._scoreboard_unsettled(got) == [], "and the fresh copy is the finished one"
