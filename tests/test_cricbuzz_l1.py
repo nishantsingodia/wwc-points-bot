@@ -113,26 +113,34 @@ def test_fourteen_field_comparison_is_clean_on_a_real_match(witness, espn_fixtur
     wc = witness
     cb_pid, _, _ = wc.cb_match_perf("2026-08-01", ["Colombo Kaps", "Galle Gallants"], espn_fixture)
     espn_pid = wc._by_pid(espn_fixture)
-    gaps = wc.compute_l1_gaps(cb_pid, espn_pid, fields=wc.RECON_L1_CB, witness="cricbuzz")
+    gaps = wc.compute_l1_gaps(cb_pid, espn_pid, fields=wc.RECON_L1, witness="cricbuzz")
     assert gaps == {}, f"cricbuzz and ESPN disagreed on a match measured exact: {gaps}"
     rows = wc.build_recon_rows("mk", "lbl", "2026-08-01", "LPL", gaps, cb_pid, espn_pid,
-                               fields=wc.RECON_L1_CB, witness="cricbuzz")
+                               fields=wc.RECON_L1, witness="cricbuzz")
     assert rows == []
 
 
 def test_the_fields_cricapi_could_never_check_are_actually_compared(witness, espn_fixture):
     """A comparison that silently compares nothing looks identical to a clean one. Perturb each
-    cricbuzz-only field and assert every single one raises a row."""
+    field beyond cricapi's old four and assert every single one raises a row.
+
+    INVARIANT UPDATED with the cricapi removal: these ten fields USED to be absent from RECON_L1
+    (which was cricapi's ["r","w","4s","6s"] — all cricapi could carry). Cricbuzz witnesses the
+    whole card, so RECON_L1 is now the 14-field set and every one of them MUST be in it. The
+    assertion therefore flips direction: presence in RECON_L1 is what proves the widening is
+    real, and the perturbation below proves the comparison actually reads the field."""
     wc = witness
     cb_pid, _, _ = wc.cb_match_perf("2026-08-01", ["Colombo Kaps", "Galle Gallants"], espn_fixture)
     espn_pid = wc._by_pid(espn_fixture)
     for field in ("dots", "maidens", "runs_conceded", "balls", "b", "catches", "stumpings",
                   "runouts", "dro", "lbwb"):
-        assert field not in wc.RECON_L1, f"{field} is not a cricbuzz-only field any more"
+        assert field in wc.RECON_L1, (
+            f"{field} is not in the widened L1 set — cricbuzz witnesses it and it is no "
+            "longer cross-checked at L1")
         pid = next(p for p, v in cb_pid.items() if v.get(field) is not None)
         poisoned = {p: (dict(v) if p != pid else dict(v, **{field: (v.get(field) or 0) + 7}))
                     for p, v in cb_pid.items()}
-        gaps = wc.compute_l1_gaps(poisoned, espn_pid, fields=wc.RECON_L1_CB, witness="cricbuzz")
+        gaps = wc.compute_l1_gaps(poisoned, espn_pid, fields=wc.RECON_L1, witness="cricbuzz")
         assert pid in gaps, f"a 7-unit error in `{field}` was not detected — the field is unchecked"
 
 
@@ -159,7 +167,7 @@ def test_a_whole_match_s1_seed_never_writes_an_absent_value(wcmod):
     scored = {"p": {"r": 41, "maidens": 2, "dots": 9}}
     idx = {"M": [{"scope": "match", "source": "S1", "status": "approved"}]}
     wcmod.apply_recon_overrides(scored, wit, espn, {"p": "runs 40/41"}, "M", idx,
-                                fields=wcmod.RECON_L1_CB)
+                                fields=wcmod.RECON_L1)
     assert scored["p"]["r"] == 40, "the approved S1 value was not applied"
     assert scored["p"]["maidens"] == 2, (
         "an ABSENT cricbuzz maidens overwrote ESPN's real figure with 0")
@@ -245,7 +253,7 @@ def test_an_unresolvable_match_id_is_never_guessed(witness, espn_fixture, monkey
 def test_a_missing_witness_flags_the_match_single_feed(wcmod):
     """The published row must say the cross-check never happened — a silently-absent witness is
     indistinguishable from a passing one."""
-    st, flag = wcmod.classify_match_status(False, True, {}, {}, False, capi_present=False,
+    st, flag = wcmod.classify_match_status(False, True, {}, {}, False, witness_present=False,
                                            witness="cricbuzz")
     assert st == "COMPLETED_FLAGGED"
     assert "single feed" in flag and "cricbuzz" in flag

@@ -195,17 +195,6 @@ def espn_harvest(series, squad_teams_full, dates):
                                     "espn_id": str(a.get("id")) if a.get("id") else None, "team": tname})
     return ath
 
-def cricapi_cached_names():
-    names = []
-    for f in glob.glob(os.path.join(CACHE, "match_scorecard_id_*.json")):
-        try: d = json.load(open(f))
-        except Exception: continue
-        for inn in d.get("data", {}).get("scorecard", []):
-            for b in inn.get("batting", []) + inn.get("bowling", []):
-                n = (b.get("batsman") or b.get("bowler") or {}).get("name")
-                if n: names.append(n)
-    return names
-
 POOL_EXPORT = os.path.join(REG_DIR, "auction_players.json.gz")
 
 def open_pool_con():

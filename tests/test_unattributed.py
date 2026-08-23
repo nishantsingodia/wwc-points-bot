@@ -151,7 +151,7 @@ def test_recon_state_opens_l1(wcmod):
 # So prove the stronger claim directly — with `unattributed` empty, the gate is IDENTICAL to the
 # pre-change one on every combination of its inputs, cricsheet path included.
 def _legacy_status(cs_path, espn_present, l1_gaps, unresolved, l2_dirty, id_break=False,
-                   unsourced=(), already_completed=False, capi_present=True, witness="cricapi"):
+                   unsourced=(), already_completed=False, witness_present=True, witness="cricbuzz"):
     """Verbatim pre-change body (wc_fps_to_csv.py @ b3057d9)."""
     if cs_path:
         if id_break:
@@ -164,7 +164,7 @@ def _legacy_status(cs_path, espn_present, l1_gaps, unresolved, l2_dirty, id_brea
                 else ("LIVE", "⏳ " + msg))
     if not espn_present:
         return ("COMPLETED_FLAGGED", f"⚠ unverified — single feed ({witness} only)")
-    if not capi_present:
+    if not witness_present:
         return ("COMPLETED_FLAGGED",
                 f"⚠ unverified — single feed (ESPN only, {witness} had no card)")
     if unresolved:
@@ -178,12 +178,14 @@ def _legacy_status(cs_path, espn_present, l1_gaps, unresolved, l2_dirty, id_brea
 def test_empty_unattributed_is_byte_identical_to_the_old_gate(wcmod):
     import itertools
     n = 0
-    for (cs, espn, gaps, unres, dirty, idb, uns, done, capi, wit) in itertools.product(
+    # `wit` is a display label interpolated into the flag text; both strings are kept so the
+    # interpolation itself stays pinned, even though "cricbuzz" is now the only witness produced.
+    for (cs, espn, gaps, unres, dirty, idb, uns, done, wit_present, wit) in itertools.product(
             ["", "cs.json"], [False, True], [{}, {"p": "g"}], [{}, {"p": "g"}, {"p": "g", "q": "g"}],
             [False, True], [False, True], [(), {("A", "X")}], [False, True], [False, True],
             ["cricapi", "cricbuzz"]):
         kw = dict(id_break=idb, unsourced=uns, already_completed=done,
-                  capi_present=capi, witness=wit)
+                  witness_present=wit_present, witness=wit)
         assert wcmod.classify_match_status(cs, espn, gaps, unres, dirty, **kw) \
             == _legacy_status(cs, espn, gaps, unres, dirty, **kw)
         assert wcmod.classify_match_status(cs, espn, gaps, unres, dirty, unattributed=(), **kw) \

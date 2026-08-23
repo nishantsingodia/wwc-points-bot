@@ -19,6 +19,11 @@ After `tour_sync.py --apply` writes a new tour's tours.json entry + squads + dra
      failed, or the tour's espn_series is MISSING from the draft's espn-series.json (so live points
      would never resolve). Guarantees the silent-failure modes behind the LPL/Hundred bugs — blank
      espn_series, blank pids, stale mirror, unregistered draft series — can never ship green.
+     ESPN is the only base feed now, so a blank espn_series is a tour with NO feed at all.
+     A missing cricbuzz_series is reported as a WARN, not a gate failure: it means the tour has no
+     L1 SECOND WITNESS (ESPN single-sourced until cricsheet publishes), which is a real risk a human
+     must see — but Cricbuzz's series resolver legitimately cannot name every bilateral, and
+     blocking ingest on it would stop the tour being scored at all, which is strictly worse.
 
 Usage: python3 tour_sync_finalize.py '["The Hundred Men\\'s Competition 2026", ...]'
 Env: DRAFT_REPO, GSHEET_ID + GOOGLE_SERVICE_ACCOUNT_JSON (review tab; optional),
@@ -80,8 +85,8 @@ def write_review_tab(rows, stamp):
         creds = Credentials.from_service_account_info(
             info, scopes=["https://www.googleapis.com/auth/spreadsheets"])
         sh = gspread.authorize(creds).open_by_key(os.environ["GSHEET_ID"])
-        header = ["Ingested (UTC)", "Tour", "Tab", "espn_series", "Squad", "PID coverage",
-                  "Health (blockers/fixable/unmapped)", "Verdict", "Action needed"]
+        header = ["Ingested (UTC)", "Tour", "Tab", "espn_series", "cricbuzz_series (L1)", "Squad",
+                  "PID coverage", "Health (blockers/fixable/unmapped)", "Verdict", "Action needed"]
         try:
             ws = sh.worksheet("TOUR INGEST REVIEW")
         except gspread.WorksheetNotFound:
@@ -151,22 +156,19 @@ def main():
     tours = {t["name"]: t for t in json.load(open(os.path.join(BOT, "tours.json")))}
     stamp = os.environ.get("SYNC_STAMP") or datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M")
 
-    # 1. anchor each new tour's identity. cricapi-scored tours run build_registry here — and it now
-    # anchors in CI via the committed players export (registry/auction_players.json.gz), so they no
-    # longer need the 61MB gitignored auction DB (build_registry.open_pool_con falls back to it).
-    # EVERY tour is anchored, including ESPN-only ones.
-    # The old rule skipped build_registry when cricapi_series was "", reasoning that such a tour
-    # "isn't bot-scored and its draft LIVE join uses ESPN name-match". Both halves were wrong in
-    # consequence: the draft's COMPLETED join is pid-based for EVERY tour, so a tour that ships on
-    # placeholder slug: pids can never match a points row and settles at ZERO — permanently, with
-    # no name fallback (lookupPlayerPoints refuses to fuzzy-fall-back for a pid'd player).
-    # It shipped 82 such players: the whole CPL squad set plus Rohit Sharma, Shubman Gill, Virat
-    # Kohli, KL Rahul, Kuldeep Yadav and Jasprit Bumrah on the India ODI tour.
-    # And "not bot-scored TODAY" is not a durable reason: once cricapi leaves, ESPN-only is the
-    # DEFAULT for every tour. build_registry anchors fine from ESPN rosters — athlete.id IS the
-    # cricinfo id — so there was never a technical need to skip it.
-    def _is_espn_only(nm):
-        return not (tours.get(nm, {}).get("cricapi_series") or "").strip()
+    # 1. anchor each new tour's identity. build_registry anchors in CI via the committed players
+    # export (registry/auction_players.json.gz), so it no longer needs the 61MB gitignored auction
+    # DB (build_registry.open_pool_con falls back to it). EVERY tour is anchored, no exemption.
+    # There used to be one: build_registry was skipped when cricapi_series was "", reasoning that
+    # such a tour "isn't bot-scored and its draft LIVE join uses ESPN name-match". Both halves were
+    # wrong in consequence: the draft's COMPLETED join is pid-based for EVERY tour, so a tour that
+    # ships on placeholder slug: pids can never match a points row and settles at ZERO —
+    # permanently, with no name fallback (lookupPlayerPoints refuses to fuzzy-fall-back for a pid'd
+    # player). It shipped 82 such players: the whole CPL squad set plus Rohit Sharma, Shubman Gill,
+    # Virat Kohli, KL Rahul, Kuldeep Yadav and Jasprit Bumrah on the India ODI tour.
+    # That exemption is not just fixed but unrepresentable now: ESPN-only IS every tour, there is no
+    # cricapi_series left to branch on, and build_registry anchors fine from ESPN rosters
+    # (athlete.id IS the cricinfo id).
     for name in applied:
         print(f"== build_registry: {name} ==", file=sys.stderr)
         run([sys.executable, "build_registry.py", name])
@@ -230,7 +232,7 @@ def main():
     for name in applied:
         t = tours.get(name, {})
         espn = (t.get("espn_series") or "").strip()
-        espn_only = _is_espn_only(name)
+        cbz = str(t.get("cricbuzz_series") or "").strip()
         squad_path = os.path.join(BOT, t.get("squads", ""))
         cov = pid_coverage(squad_path) if os.path.exists(squad_path) else {"total": 0, "resolved": 0}
         frac = (cov["resolved"] / cov["total"]) if cov["total"] else 0.0
@@ -240,9 +242,16 @@ def main():
         hc = run([sys.executable, "identity_healthcheck.py", name])
         blockers, fixable, unmapped = parse_healthcheck(hc.stdout + hc.stderr)
 
-        problems = []
+        problems, warns = [], []
         if not espn:
-            problems.append("SET espn_series (auto-resolve failed) — franchise pts won't load")
+            # ESPN is the ONLY base feed: no espn_series means no scorecard, no lineups, no points.
+            problems.append("SET espn_series (auto-resolve failed) — with no base feed this tour "
+                            "cannot be scored at all")
+        if not cbz:
+            # NOT a gate failure — see the module docstring. But it must be SEEN: with cricapi gone,
+            # no cricbuzz_series means nothing can contradict ESPN until cricsheet (L2) publishes.
+            warns.append("NO L1 SECOND WITNESS (cricbuzz_series unset) — ESPN is single-sourced "
+                         "for this tour; resolve the Cricbuzz series by hand and add it")
         # pid coverage gates EVERY tour. The old exemption for ESPN-only tours is what let CPL ship
         # with 75 unanchored players: live points may resolve by ESPN name-match, but the COMPLETED
         # join — the one that settles money — is pid-based for every tour without exception.
@@ -253,10 +262,11 @@ def main():
         gkey = "W" if t.get("gender") == "female" else "M"
         if espn and espn not in (draft_series.get(gkey) or []):
             problems.append(f"espn_series {espn} MISSING from draft espn-series.json[{gkey}] — live points won't resolve")
-        verdict = "REVIEW" if problems else ("OK (has slug fixable-miss)" if fixable else "OK")
-        rows.append([name, t.get("tab", ""), espn or "UNRESOLVED",
+        verdict = ("REVIEW" if problems else "WARN (no L1 witness)" if warns
+                   else "OK (has slug fixable-miss)" if fixable else "OK")
+        rows.append([name, t.get("tab", ""), espn or "UNRESOLVED", cbz or "NONE",
                      str(cov["total"]), f"{frac:.0%} ({cov['resolved']}/{cov['total']})",
-                     f"{blockers}/{fixable}/{unmapped}", verdict, "; ".join(problems)])
+                     f"{blockers}/{fixable}/{unmapped}", verdict, "; ".join(problems + warns)])
         if problems:
             gate_fail.append(f"{name}: " + "; ".join(problems))
 
@@ -266,8 +276,12 @@ def main():
     # 4. VERIFY GATE — the whole point: never ship a tour that will silently show no points.
     print("\n=== TOUR INGEST VERIFY ===", file=sys.stderr)
     for r in rows:
-        print(f"  {r[0][:40]:40} espn={r[2]:12} cov={r[4]:16} health(b/f/u)={r[5]:8} -> {r[6]}",
-              file=sys.stderr)
+        print(f"  {r[0][:40]:40} espn={r[2]:12} cricbuzz={r[3]:8} cov={r[5]:16} "
+              f"health(b/f/u)={r[6]:8} -> {r[7]}", file=sys.stderr)
+    blind = [r[0] for r in rows if r[3] == "NONE"]
+    if blind:
+        print(f"\n⚠ {len(blind)} tour(s) ingested with NO L1 SECOND WITNESS (ESPN single-sourced "
+              f"until cricsheet publishes): {blind}", file=sys.stderr)
     if gate_fail:
         print("\n❌ VERIFY GATE FAILED — NOT shipping (fix, then re-run):", file=sys.stderr)
         for g in gate_fail:
