@@ -139,18 +139,46 @@ def load_registry():
     return alias2pid, pid2disp, cs2pid
 
 ALIAS2PID, PID2DISP, CS2PID = load_registry()
+CS_ANCHORED = []        # (pid, cricsheet_id) auto-anchored from a `ci:` pid this run (for the log)
 
 def load_crosswalk():
-    """people.csv-derived cricsheet_id -> cricinfo_id. Used to make an UNRESOLVABLE official-card
-    row actionable: we may not know the player, but we can name the exact cricinfo id to bridge,
-    so the fix is one paste instead of a research task. Never used to invent identity."""
+    """people.csv-derived cricsheet_id -> cricinfo_id (+ alternate-cricinfo-id folding). Used to
+    make an UNRESOLVABLE official-card row actionable: we may not know the player, but we can name
+    the exact cricinfo id to bridge, so the fix is one paste instead of a research task. Also
+    inverted (CI2CS) to auto-anchor a `ci:` pid to its cricsheet id — see anchor_ci_pid.
+    Never used to invent identity: every mapping here is an id<->id fact from cricsheet's
+    people.csv, so folding through it can only ever restate who a verified id already is."""
     path = os.path.join(os.path.dirname(__file__), "registry", "crosswalk.json")
     try:
-        return json.load(open(path)).get("cs2ci", {}) or {}
+        cx = json.load(open(path))
     except Exception:
-        return {}
+        cx = {}
+    return (cx.get("cs2ci") or {}), (cx.get("ci_alt") or {})
 
-CS2CI = load_crosswalk()
+CS2CI, CI_ALT = load_crosswalk()
+CI2CS = {str(ci): cs for cs, ci in CS2CI.items()}   # unique by construction (verified: 0 collisions)
+
+def fold_ci(ci):
+    """any cricinfo id (primary OR an alternate profile id) -> the PRIMARY cricinfo id."""
+    ci = str(ci or "")
+    return CI_ALT.get(ci, ci)
+
+def anchor_ci_pid(pid):
+    """AUTO-ANCHOR: a pid of the form `ci:<cricinfo_id>` implies a cricsheet id via the crosswalk,
+    so index it in CS2PID. Without this, a player who exists ONLY in new_players.json (the sheet /
+    silent-drop path, which build_registry.py never reads) has no cricsheet_id anywhere — so when
+    the official cricsheet card arrives, resolve_perf_pid's CS2PID lookup MISSES and the row falls
+    through to the name fallback, which correctly refuses to guess and raises an IDENTITY question
+    in Recon Review. Every debut therefore generated a fresh row for a player we already knew.
+
+    This is id-anchored only: `ci:X` -> crosswalk -> cricsheet id. No name is consulted, and it
+    never overwrites an existing anchor (setdefault), so a build_registry-derived mapping wins."""
+    if not pid or not str(pid).startswith("ci:"):
+        return None
+    cs = CI2CS.get(fold_ci(str(pid)[3:]))
+    if cs:
+        CS2PID.setdefault(str(cs), pid)
+    return cs
 
 def cricinfo_hint(v):
     """'cricinfo 1100812 — espncricinfo.com/cricketers/x-1100812' for an unresolved cricsheet row.
@@ -4942,6 +4970,16 @@ def load_new_players():
         for a in list(e.get("aliases", [])) + ([disp] if disp else []):
             if a:
                 ALIAS2PID.setdefault(norm(a), pid)
+        # ...and anchor the ID, not just the names. build_registry.py never reads this file, so
+        # this is the ONLY place these players can get a cricsheet_id -> pid index.
+        cs = anchor_ci_pid(pid)
+        if cs:
+            CS_ANCHORED.append((pid, cs))
+    if CS_ANCHORED:
+        print(f"  auto-anchored {len(CS_ANCHORED)} new_players pid(s) to a cricsheet id "
+              f"(no IDENTITY question needed): "
+              + ", ".join(f"{p}->{c}" for p, c in CS_ANCHORED[:6])
+              + (" …" if len(CS_ANCHORED) > 6 else ""))
     return NEW_PLAYERS_DATA.get("players", [])
 
 def register_new_player(pid, display, feed, team, role, tour, source):
@@ -4964,6 +5002,7 @@ def register_new_player(pid, display, feed, team, role, tour, source):
     for a in e["aliases"] + ([display] if display else []):
         if a:
             ALIAS2PID.setdefault(norm(a), pid)
+    anchor_ci_pid(pid)   # a pid minted/promoted mid-run resolves by ID for the REST of this run
     return e
 
 def find_silent_drops(perf, assigned, team_players):
@@ -5540,6 +5579,7 @@ def promote_new_players():
         for a in e.get("aliases", []):
             ALIAS2PID[norm(a)] = new_pid
         PID2DISP[new_pid] = e.get("display") or new_pid
+        anchor_ci_pid(new_pid)   # the new `ci:` pid gets its cricsheet anchor immediately too
         changed += 1
     if changed:
         _save_new_players(NEW_PLAYERS_DATA)
