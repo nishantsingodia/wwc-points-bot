@@ -975,5 +975,29 @@
    "matthew john fisher"
   ],
   "source": "Two different men are both announced \"Matthew Fisher\": MD Fisher (cricinfo 639080, cricsheet 8f2dfebf, England/Yorkshire — London Spirit in The Hundred Men's 2026 and the ENG v PAK Test squad) and MJ Fisher (cricinfo 1129635, cricsheet 7068c81e, New Zealand). The bare spelling resolved to MJ, so MD's one Hundred appearance (06 Aug, MTLSP v MTMILO, 38 pts) settled under BOTH pids. The squads now announce the full legal names and these two bridges anchor them; do NOT re-add the ambiguous \"matthew fisher\" to either."
+ },
+ "ci:527776": {
+  "cricinfo_id": "527776",
+  "names": [
+   "oliver edward robinson",
+   "ollie robinson"
+  ],
+  "source": "ENG v PAK Test 2026 (ESPN series 23806, event 1496582). athlete.id on the ESPN match roster IS the cricinfo id, and ESPN's own displayName for that id is the ANNOUNCED name the squad uses — so this binds a feed-supplied id to a feed-supplied spelling, not a guess. Needed because the squad name resolved to NOTHING, so the slot published a blank Player ID (did-not-play) while the same man was auto-added off the official cricsheet card under his full legal name and scored there. ⚠ TWO REAL PEOPLE are called 'Ollie Robinson': OE Robinson (this one, cricinfo 527776, cricsheet 0f3ee070, the England seamer) and OG Robinson (cricinfo 893955, cricsheet 60f4c586, the Kent keeper). Only OE is in any tour we score, which is why the bare spelling is safe to bridge TODAY. If OG ever enters a tour, SPLIT this bridge onto full legal names — do not widen it."
+ },
+ "ci:233901": {
+  "cricinfo_id": "233901",
+  "names": [
+   "shan masood",
+   "shan masood khan"
+  ],
+  "source": "ENG v PAK Test 2026 (ESPN series 23806, event 1496582). athlete.id on the ESPN match roster IS the cricinfo id, and ESPN's own displayName for that id is the ANNOUNCED name the squad uses — so this binds a feed-supplied id to a feed-supplied spelling, not a guess. Needed because the squad name resolved to NOTHING, so the slot published a blank Player ID (did-not-play) while the same man was auto-added off the official cricsheet card under his full legal name and scored there."
+ },
+ "ci:1148593": {
+  "cricinfo_id": "1148593",
+  "names": [
+   "emilio gay",
+   "emilio nico gay"
+  ],
+  "source": "ENG v PAK Test 2026 (ESPN series 23806, event 1496582). athlete.id on the ESPN match roster IS the cricinfo id, and ESPN's own displayName for that id is the ANNOUNCED name the squad uses — so this binds a feed-supplied id to a feed-supplied spelling, not a guess. Needed because the squad name resolved to NOTHING, so the slot published a blank Player ID (did-not-play) while the same man was auto-added off the official cricsheet card under his full legal name and scored there."
  }
 }

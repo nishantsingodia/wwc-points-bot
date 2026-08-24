@@ -265,6 +265,7 @@ RECON_ACK = set()       # (match_key, pid, param) approved + applied -> stop re-
 # self-maintaining loop build_registry uses — NOT to Recon Review, whose S1/S2 dropdown asks a
 # value question that makes no sense for "who is this player?".
 NEEDS_CRICINFO = []
+NO_PID_SEEN = set()     # (tour, team, announced name) already flagged as a pid-less squad slot
 # norm(name) of every player who APPEARED in a scored card this run. A pre-debut squad member has
 # no cricinfo id ANYWHERE — he is uncapped, so he is not in people.csv either and may not have a
 # cricinfo page at all — so asking a human for one is asking for something that does not exist.
@@ -3370,16 +3371,20 @@ def run_tour(tour):
             perf = cs_perf
             n_cs += 1; dots_final = True; status = "cricsheet · official"
         else:
-            # Not from cricsheet yet -> ESPN's own scorecard + ball-by-ball is the base. `dots` and
-            # `maidens` are single-sourced here with NO value-vs-value validator (RECON_L1_SINGLE):
-            # Cricbuzz does carry dots and cross-checks them at L1 where it has a card, but a
-            # Cricbuzz outage leaves them unwitnessed until cricsheet posts. Flag the whole row
-            # PROVISIONAL so it is clear these numbers may be revised once cricsheet lands
-            # (lags ~1-5 days), which then overwrites ESPN dots with exact figures.
+            # Not from cricsheet yet -> ESPN's own scorecard + ball-by-ball is the base. The row is
+            # PROVISIONAL either way: cricsheet (lags ~1-5 days) is the only OFFICIAL source and
+            # overwrites ESPN dots with exact figures when it lands.
+            #
+            # But whether `dots`/`maidens` are UNWITNESSED is a per-match fact, not a constant, and
+            # it is not known yet at this point in the loop — Cricbuzz witnesses both at L1 (they
+            # are in RECON_L1) and it has not run for this match until ~40 lines below. Saying
+            # "dots unverified" here printed it even on matches Cricbuzz had just cross-checked
+            # clean, so a single cell read "dots unverified, awaiting cricsheet · cricbuzz
+            # cross-checked (19 players)" — two halves contradicting each other. The dots clause is
+            # therefore appended AFTER the witness block, off `cb_diag["dots_source"]`.
             perf = espn_perf
             n_espn += 1; dots_final = True
-            status = ("ESPN scorecard · ⏳ provisional (dots unverified, awaiting cricsheet)"
-                      + (" · super-over excl" if super_over else ""))
+            status = "ESPN scorecard" + (" · super-over excl" if super_over else "")
 
         # Per-pid views of each RAW source, for L1 (witness vs ESPN, feed-against-feed).
         # NOTE: `_by_pid` is a strict id-only index and is correct HERE — L1 compares two raw
@@ -3923,6 +3928,42 @@ def run_tour(tour):
             # the draft can join by id instead of fuzzy-matching the name).
             pid = resolve_pid(name) or (resolve_pid(d["name"]) if d else "") or ""
             full = PID2DISP.get(pid, name) if pid else name
+            # A SQUAD MEMBER WHO PUBLISHES WITH NO PID IS AN INVISIBLE IDENTITY FAILURE.
+            # This was the one identity hole with no review row anywhere. Every other case is
+            # covered: a placeholder pid goes to Needs Cricinfo ID via promote_new_players, an
+            # unresolvable OFFICIAL row goes there via cs_orphans, and two names on one id go to
+            # Identity Anomalies. But a squad slot whose announced name resolves to NOTHING just
+            # published a blank Player ID and said nothing — and because the draft joins by pid,
+            # that slot cannot receive points at all.
+            #
+            # MEASURED on the live sheet, 24 Aug 2026 (ENG v PAK Test, the tour that exposed it):
+            # 11 of 35 rows had a blank pid, and for three of them the SAME man was simultaneously
+            # auto-added under his full legal name off the official card and scored there —
+            # "Ollie Robinson" (blank, did-not-play) beside "Oliver Edward Robinson" (ci:527776,
+            # 204 pts), plus Emilio Gay (69) and Shan Masood (70). 343 points sat on rows the
+            # drafted slot could never claim, with no flag on any tab.
+            #
+            # Named candidates, not a bare complaint: the players auto-added to this same team and
+            # tour are exactly who the slot is likely to be, and their pid IS a cricinfo id — so
+            # the fix is a copy into manual_ci_bridges.json, not a research task. The name is used
+            # only to ASK; the id still comes from the feed.
+            if not pid and in_squad == "Y" and (CURRENT_TOUR, short, name) not in NO_PID_SEEN:
+                NO_PID_SEEN.add((CURRENT_TOUR, short, name))
+                _cands = [e for e in NEW_PLAYERS_DATA.get("players", [])
+                          if e.get("source") == "auto" and e.get("team") == short
+                          and CURRENT_TOUR in (e.get("tours") or [])
+                          and str(e.get("pid", "")).startswith("ci:")]
+                NEEDS_CRICINFO.append({
+                    "player": name, "current_pid": "", "tour": CURRENT_TOUR, "team": short,
+                    "closest_guess": (
+                        "SQUAD MEMBER WITH NO PLAYER ID — the draft joins by pid, so this slot "
+                        "cannot receive points. " + (
+                            "auto-added off the official card for this team: "
+                            + "; ".join(f"{e.get('display')} [{e['pid']}]" for e in _cands[:6])
+                            + " — if one of these is him, bridge THIS announced name to that id"
+                            if _cands else
+                            f"no auto-added candidate on {short} yet ({label}, {mdate}) — he has "
+                            f"not appeared on a card, so bridge him before he plays"))})
             # ── Two-stage reconciliation ──────────────────────────────────────────
             # L1: witness ↔ ESPN agreement during the provisional cut (both live feeds).
             #     Value reads '<witness>/ESPN' — the legend is appended so the sheet is
