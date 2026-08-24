@@ -9,8 +9,13 @@ slot can never receive points.
 Measured on the live sheet, 24 Aug 2026 (ENG v PAK Test): 11 of 35 rows had a blank pid, and for
 three of them the same man was simultaneously auto-added off the official card under his full legal
 name and scored there — "Ollie Robinson" (blank, did-not-play) beside "Oliver Edward Robinson"
-(ci:527776, 204 pts), plus Emilio Gay (69) and Shan Masood (70). 343 points on rows the drafted
-slot could not claim, flagged nowhere.
+(ci:527776, 204 pts), plus Emilio Gay (69) and Shan Masood (70) — 343 points on a row bearing a
+different name from the one the squad announced, flagged on no tab.
+
+The money was not lost: the draft joins on the pid in its own players-raw.json, which already held
+all three ids, so both Test contests scored every XI slot. What the blank row costs is
+reconciliation — the tab shows one man twice, once as did-not-play and once as scored. The reason
+to flag it anyway is the other eight pid-less squad members who simply have not played yet.
 """
 import json
 import os

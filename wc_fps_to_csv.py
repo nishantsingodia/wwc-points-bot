@@ -3975,8 +3975,18 @@ def run_tour(tour):
             # 11 of 35 rows had a blank pid, and for three of them the SAME man was simultaneously
             # auto-added under his full legal name off the official card and scored there —
             # "Ollie Robinson" (blank, did-not-play) beside "Oliver Edward Robinson" (ci:527776,
-            # 204 pts), plus Emilio Gay (69) and Shan Masood (70). 343 points sat on rows the
-            # drafted slot could never claim, with no flag on any tab.
+            # 204 pts), plus Emilio Gay (69) and Shan Masood (70) — 343 points on a row bearing a
+            # different name from the one the squad announced, flagged on no tab.
+            #
+            # THE MONEY WAS NOT LOST — checked, not assumed. The draft joins on the pid in its own
+            # players-raw.json, which already held ci:527776 / ci:1148593 / ci:233901, so both Test
+            # contests scored every XI slot including these three. What the blank row actually
+            # costs is reconciliation: the tab shows one man twice, once as did-not-play and once
+            # as scored, so a per-squad-slot check on the sheet cannot balance. The reason to flag
+            # it anyway is the OTHER eight — Babar Azam, Shoaib Bashir, Sajid Khan, Aamir Jamal,
+            # Ubaid Shah, Awais Zafar, Ghazi Ghori — who are pid-less and simply have not played
+            # yet. Nothing guarantees the draft happens to hold their id too, and the day one of
+            # them plays is the wrong time to find out.
             #
             # Named candidates, not a bare complaint: the players auto-added to this same team and
             # tour are exactly who the slot is likely to be, and their pid IS a cricinfo id — so
