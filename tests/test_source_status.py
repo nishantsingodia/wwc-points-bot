@@ -74,3 +74,53 @@ def test_absence_is_never_read_as_a_witness():
     """A missing key and an explicit None must both mean "no witness" — the repo's costliest
     recurring bug is an absence presenting as a value."""
     assert "dots/maidens unverified" in s(cb_diag={"bridged": 5})
+
+
+# ── The per-player half: a witnessed MATCH can still hold an unwitnessed BOWLER ──────────────
+# Raised by the owner: "Shadab Khan is AR, he is bowling 4 overs." He is — and in CPL Matches 12
+# and 14 he bowled his full 4 (13 and 17 dots) while UNBRIDGED, so no second feed ever saw those
+# dots. dots_source is match-level; bridging is per player. 17 dots is 17 points on a settled row.
+from wc_fps_to_csv import unwitnessed_bowlers
+
+
+def test_a_bowler_the_witness_has_no_row_for_is_unwitnessed():
+    base = {"ci:1": {"name": "Shadab Khan", "balls": 24},
+            "ci:2": {"name": "Jayden Seales", "balls": 18}}
+    assert unwitnessed_bowlers(base, {"ci:2": {}}) == ["Shadab Khan"]
+
+
+def test_a_batter_the_witness_missed_is_not_a_dots_question():
+    """Only bowlers carry dots. An unbridged batter (Shadab in M15 — he did not bowl, the chase
+    ended in 9.5 overs) costs nothing and must not be named."""
+    base = {"ci:1": {"name": "Shadab Khan", "balls": 0, "r": 6}}
+    assert unwitnessed_bowlers(base, {}) == []
+
+
+def test_absence_of_a_witness_row_is_not_agreement():
+    base = {"ci:1": {"name": "A Bowler", "balls": 6}}
+    assert unwitnessed_bowlers(base, None) == ["A Bowler"]
+    assert unwitnessed_bowlers(None, {}) == []
+
+
+def test_an_unwitnessed_bowler_is_named_even_when_the_match_dots_parsed():
+    out = s(unwit_bowlers=["Shadab Khan"])
+    assert "dots/maidens cross-checked" not in out      # the over-claim this fixes
+    assert "1 unbridged bowler: Shadab Khan" in out
+    assert "cricbuzz cross-checked (19 players)" in out  # the witness that DID run still reported
+
+
+def test_several_unwitnessed_bowlers_are_counted_and_capped():
+    out = s(unwit_bowlers=["A", "B", "C", "D"])
+    assert "4 unbridged bowlers: A, B, C…" in out
+
+
+def test_the_match_level_gap_still_wins_when_dots_never_parsed():
+    """If Cricbuzz established no dots at all, say THAT — it is the broader fact."""
+    out = s(cb_diag={**BOTH, "dots_source": None}, unwit_bowlers=["Shadab Khan"])
+    assert "dots unverified, awaiting cricsheet" in out
+    assert "unbridged bowler" not in out
+
+
+def test_cpl_m15_is_genuinely_clean_because_nobody_unbridged_bowled():
+    out = s(unwit_bowlers=[])
+    assert "dots/maidens cross-checked · awaiting official cricsheet" in out

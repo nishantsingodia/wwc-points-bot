@@ -2619,7 +2619,27 @@ def identity_break(prov_pid, cs_pid, cs_orphans):
 # a per-match fact (Cricbuzz's completeness gate drops dots; The Hundred's maidens are corrupt),
 # and a constant can only be wrong on one side or the other.
 
-def source_status(cs_path, super_over, wit_pid, cb_diag, cb_note, cb_series):
+def unwitnessed_bowlers(base_pid, wit_pid):
+    """Names of bowlers whose `dots`/`maidens` NO second feed saw — they bowled, but the witness
+    has no row for them.
+
+    Dots are a BOWLING field, so "did Cricbuzz establish dots for this match?" is the wrong
+    question to answer on its own: it is match-level, while bridging is PER PLAYER. Cricbuzz can
+    parse a complete dots column and still be blind to one bowler because he is unbridged — and
+    the bridge is derived from played matches, so a mid-tour signing or an early-season fixture is
+    exactly where it happens. MEASURED on the live CPL tab, 4 such rows: Shadab Khan (AR, bowls his
+    full 4) went unwitnessed in Match 12 with 13 dots and Match 14 with **17 dots** — 17 points on
+    a settled row, described by the cell as cross-checked. Also Jeavor Royal M1, Saim Ayub M13.
+
+    Absence is never a value here either: a bowler missing from `wit_pid` is unwitnessed, which is
+    NOT the same as witnessed-and-agreeing, and must not be reported as the latter.
+    """
+    return sorted((v.get("name") or pid)
+                  for pid, v in (base_pid or {}).items()
+                  if (v.get("balls") or 0) and pid not in (wit_pid or {}))
+
+
+def source_status(cs_path, super_over, wit_pid, cb_diag, cb_note, cb_series, unwit_bowlers=()):
     """The `Source` column for one match — WHICH feeds produced it and what is still unverified.
 
     A pure function of the per-match facts, deliberately: it used to be assembled by three `status +=`
@@ -2656,10 +2676,18 @@ def source_status(cs_path, super_over, wit_pid, cb_diag, cb_note, cb_series):
     # lack one instead of asserting it about both every time.
     unwitnessed = [f for f in ("dots", "maidens")
                    if not (wit_pid and cb_diag.get(f + "_source"))]
-    return status + (
-        f" · ⏳ provisional ({'/'.join(unwitnessed)} unverified, awaiting cricsheet)"
-        if unwitnessed else
-        " · ⏳ provisional (dots/maidens cross-checked · awaiting official cricsheet)")
+    if unwitnessed:
+        return status + (f" · ⏳ provisional ({'/'.join(unwitnessed)} unverified, "
+                         f"awaiting cricsheet)")
+    # The witness established both fields for the match — but see unwitnessed_bowlers(): that is a
+    # match-level fact and bridging is per player, so a bowler it has no row for is still carrying
+    # unverified dots. Name him rather than let the match-level pass speak for him.
+    if unwit_bowlers:
+        who = ", ".join(unwit_bowlers[:3]) + ("…" if len(unwit_bowlers) > 3 else "")
+        return status + (f" · ⏳ provisional (dots unverified for {len(unwit_bowlers)} unbridged "
+                         f"bowler{'s' if len(unwit_bowlers) > 1 else ''}: {who} · "
+                         f"awaiting cricsheet)")
+    return status + " · ⏳ provisional (dots/maidens cross-checked · awaiting official cricsheet)"
 
 def classify_recon_state(cs_path, unresolved, unsourced, l2_pairs, l2_appr, unattributed=()):
     """The recon axis, orthogonal to Match Status.
@@ -3464,8 +3492,12 @@ def run_tour(tour):
         # approved S1 override, which is the same sanctioned route the previous witness had.
         wit_pid = cb_pid if cb_pid is not None else {}
         # Everything the Source column reports is known now — base feed, witness, what each feed
-        # could and could not establish. One call, one place, no later mutation.
-        status = source_status(cs_path, super_over, wit_pid, cb_diag, cb_note, CB_SERIES)
+        # could and could not establish, and WHICH BOWLERS the witness has no row for. One call,
+        # one place, no later mutation. `espn_pid` is reused rather than re-indexed: _by_pid runs
+        # resolve_perf_pid, which LEARNS aliases, and re-running it here would reorder identity
+        # resolution for everyone else (the ordering rule above _by_pid).
+        status = source_status(cs_path, super_over, wit_pid, cb_diag, cb_note, CB_SERIES,
+                               unwitnessed_bowlers(cs_pid if cs_path else espn_pid, wit_pid))
 
         team_players = []
         for tname in teams:
