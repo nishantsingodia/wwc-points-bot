@@ -11168,6 +11168,23 @@
   },
   {
    "match_key": "2026-07-23::london spirit|manchester super giants",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 3 — MTLSP v MTMSG",
+   "date": "2026-07-23",
+   "team": "MTLSP",
+   "pid": "ci:639080",
+   "full": "MD Fisher",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-24",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-07-23::london spirit|manchester super giants",
    "tour": "The Hundred Women's Competition 2026",
    "match": "Match 3 — WTLSP v WTMSG",
    "date": "2026-07-23",
@@ -22372,6 +22389,23 @@
   },
   {
    "match_key": "2026-07-26::london spirit|trent rockets",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 8 — MTTRR v MTLSP",
+   "date": "2026-07-26",
+   "team": "MTLSP",
+   "pid": "ci:639080",
+   "full": "MD Fisher",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-24",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-07-26::london spirit|trent rockets",
    "tour": "The Hundred Women's Competition 2026",
    "match": "Match 8 — WTTRR v WTLSP",
    "date": "2026-07-26",
@@ -29854,6 +29888,23 @@
    "status": "COMPLETED",
    "source": "cricsheet · official · cricbuzz cross-checked (21 players)",
    "frozen_at": "2026-08-14",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-07-29::london spirit|mi london",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 12 — MTMILO v MTLSP",
+   "date": "2026-07-29",
+   "team": "MTLSP",
+   "pid": "ci:639080",
+   "full": "MD Fisher",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-24",
    "provenance": "live",
    "fields": {
     "played": false
@@ -40559,6 +40610,23 @@
   },
   {
    "match_key": "2026-08-01::london spirit|southern brave",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 16 — MTLSP v MTSBR",
+   "date": "2026-08-01",
+   "team": "MTLSP",
+   "pid": "ci:639080",
+   "full": "MD Fisher",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-24",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-01::london spirit|southern brave",
    "tour": "The Hundred Women's Competition 2026",
    "match": "Match 16 — WTLSP v WTSBR",
    "date": "2026-08-01",
@@ -48739,6 +48807,23 @@
    "status": "COMPLETED_FLAGGED",
    "source": "cricsheet · official · cricbuzz cross-checked (21 players)",
    "frozen_at": "2026-08-14",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-04::london spirit|sunrisers leeds",
+   "tour": "The Hundred Men's Competition 2026",
+   "match": "Match 20 — MTSUNL v MTLSP",
+   "date": "2026-08-04",
+   "team": "MTLSP",
+   "pid": "ci:639080",
+   "full": "MD Fisher",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-24",
    "provenance": "live",
    "fields": {
     "played": false
@@ -89468,6 +89553,23 @@
     "bat_order": 9,
     "dismissal": "c Atkinson b Robinson",
     "dismissed": true
+   }
+  },
+  {
+   "match_key": "2026-08-19::england|pakistan",
+   "tour": "England vs Pakistan Men's Test 2026",
+   "match": "Match 1 — TENG v TPAK",
+   "date": "2026-08-19",
+   "team": "TENG",
+   "pid": "ci:639080",
+   "full": "MD Fisher",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "ESPN scorecard · ⏳ provisional (dots/maidens unverified, awaiting cricsheet)",
+   "frozen_at": "2026-08-24",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
