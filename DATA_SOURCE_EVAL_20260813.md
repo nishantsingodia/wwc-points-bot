@@ -1,3 +1,6 @@
+<!-- SUPERSEDED BANNER — added 24 Aug 2026 -->
+> ⚠️ **HISTORICAL — kept for rationale, not as current truth.** This document assumes cricapi as the incumbent being evaluated against. Its conclusion — adopt Cricbuzz — was acted on, and cricapi was then removed outright. Every feed is keyless and unmetered now, so any quota reasoning here is moot. **Current architecture: `CLAUDE.md`. Trust the code over this file.**
+
 # Free Cricket Data Source Evaluation — 13 Aug 2026
 
 Handoff context. Question asked: **is there any other free provider that supplies every field

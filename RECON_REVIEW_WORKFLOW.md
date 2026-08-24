@@ -1,3 +1,6 @@
+<!-- SUPERSEDED BANNER — added 24 Aug 2026 -->
+> ⚠️ **HISTORICAL — kept for rationale, not as current truth.** This document assumes S1 = cricapi. S1 is Cricbuzz now — note `recon_overrides.json` stores only the LETTER 'S1', so old approvals recorded against cricapi still read as 'S1'. Every feed is keyless and unmetered now, so any quota reasoning here is moot. **Current architecture: `CLAUDE.md`. Trust the code over this file.**
+
 # Recon Review — human-in-the-loop feed reconciliation
 
 > Feature spec + operator guide. Sibling to `NAME_MATCH_AND_ISSUES_CRITICAL.md`.

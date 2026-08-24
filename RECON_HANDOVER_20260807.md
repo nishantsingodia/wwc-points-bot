@@ -1,3 +1,6 @@
+<!-- SUPERSEDED BANNER — added 24 Aug 2026 -->
+> ⚠️ **HISTORICAL — kept for rationale, not as current truth.** This document assumes the cricapi↔ESPN dots investigation. cricapi is gone; Cricbuzz supplies dots and maidens at L1 on the tours that have it. Every feed is keyless and unmetered now, so any quota reasoning here is moot. **Current architecture: `CLAUDE.md`. Trust the code over this file.**
+
 # Recon / dots investigation — handover, 7 Aug 2026
 
 Written so this survives you being offline.

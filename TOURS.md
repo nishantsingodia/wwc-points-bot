@@ -3,32 +3,48 @@
 This bot can track **multiple tournaments at once** — each one writes its own tab in
 the Google Sheet, all from the single 2-hourly run. Tours are listed in **`tours.json`**.
 
-> ## Two ways in — pick deliberately
+> ## ⚠️ Updated 24 Aug 2026 — the two-paths split below is OBSOLETE
 >
-> **A. Type the name in Column A of the `TOUR CONTROL` tab** (no code, no cricapi). The daily
-> Tour Sync workflow (00:10 UTC, or `gh workflow run tour-sync.yml -f dry_run=false`) resolves it
-> on ESPN, builds fixtures + full squads, commits both repos and deploys the draft.
-> **The catch: the tour lands with `cricapi_series: ""`, so THIS BOT WILL NOT SCORE IT** — no
-> points tab, and no TOUR CONTROL approval row is created for a blank series id. The draft app
-> works fully (live H2H is scored in-app from ESPN, keyless). Use this when you want the tour
-> *draftable*; it is not enough for settled/official points.
+> cricapi was removed on 20 Aug 2026 (`ab8583d`). **There is no longer an A-path/B-path
+> distinction, and `cricapi_series` no longer exists** — it was deleted from all 13 tours in
+> `tours.json`. The single thing a tour needs in order to be scored is **`espn_series`**, which
+> Tour Sync resolves automatically.
 >
-> **B. The manual flow below** (cricapi series id → real points tab). Needed for money-settling
-> points, the SETTLEMENT AUDIT, and cricsheet L2 reconciliation.
+> **The one way in:** type the name in Column A of the `TOUR CONTROL` tab. The daily Tour Sync
+> workflow (`gh workflow run tour-sync.yml -f dry_run=false`) resolves it on ESPN, builds fixtures
+> + full squads, commits both repos and deploys the draft. Then flip the tour's `TOUR CONTROL` row
+> to `yes` — that human gate is what makes the bot score it and write its points tab.
 >
-> To upgrade an A-tour to a B-tour, add its `cricapi_series` to its existing `tours.json` entry
-> and flip its new TOUR CONTROL row to `yes`. See the CLAUDE.md section "The KEYLESS ESPN tour
-> path" for the full behaviour + gotchas (write-once fixture list, dropped TBA playoffs, the
-> season-less ESPN league name).
+> The gate is keyed on the tour **NAME**, not on a series id. That change is what killed the old
+> failure mode where a blank `cricapi_series` got no approval row at all, so the tour was
+> permanently un-approvable and silently skipped on every run.
+>
+> **What a tour still needs, in order:**
+> 1. `espn_series` — non-blank, or it cannot be scored at all (the ingest verify gate fails on this).
+> 2. `TOUR CONTROL` = `yes` — the human approval gate.
+> 3. `cricbuzz_series` — **OPTIONAL, and the only remaining two-tier distinction.** With it the tour
+>    gets a real L1 second witness on all 14 fields. Without it every match publishes
+>    `COMPLETED_FLAGGED · "single feed (ESPN only)"` and cricsheet at L2 is the first cross-check it
+>    ever gets. Set on 4 of 13 tours today (LPL 12316, CPL 12123, Hundred 11493 men / 11504 women).
+>    ⛔ Do NOT add it to a tour that already has approved S1 overrides — see CLAUDE.md, it moves
+>    settled points.
+> 4. `format` — `T20` (default) / `ODI` / `HUN` / `TEST`. Drives which scorer runs.
+>
+> The rest of this file is the manual flow, still valid except that step 1 asks for one id, not two.
 
 ## The flow — when Nishant says *"add &lt;tour&gt;'s points"*
 
 **All Claude needs from you is the tournament name** (plus squads only if it's for an
 auction). Claude does the rest:
 
-1. **Find the two series IDs**
-   - **cricketdata** (match list + scorecards): `GET https://api.cricapi.com/v1/series?apikey=<KEY>&search=<name>` → copy the `id`.
-   - **ESPN/cricinfo** (dot-balls, XI, team attribution): find the series page on espncricinfo — the URL is `.../series/<slug>-<SERIES_ID>/...`; the number is the id. (A web search for "espncricinfo &lt;tour&gt; scorecard" surfaces it.)
+1. **Find the series ID** (one, not two — the cricketdata/cricapi lookup is gone)
+   - **ESPN/cricinfo** — everything: match list, scorecards, ball-by-ball, XI, team attribution.
+     Find the series page on espncricinfo; the URL is `.../series/<slug>-<SERIES_ID>/...` and the
+     number is the id. (A web search for "espncricinfo &lt;tour&gt; scorecard" surfaces it.)
+     `tour_sync.py`'s `resolve_espn_series` does this automatically and VALIDATES the candidate
+     against its dated scoreboard by team-match, so prefer letting it resolve rather than pasting.
+   - **Cricbuzz (optional, for L1)** — the series page URL on cricbuzz.com carries the id. Only add
+     it if you want a second witness, and only on a tour with no approved S1 overrides yet.
 2. **Confirm two things with you**
    - **Tab name** (default: a short tour name).
    - **Squads?** — *full squad list* (needed for ownership / an auction → players get `In Squad List = Y` and DNP rows) **or** *featured-players-only* (no list; the sheet lists whoever actually played). For a full list, Claude sources the announced squads into `<tour>_squads.json` (same format as `squads.json`).
@@ -36,10 +52,11 @@ auction). Claude does the rest:
    ```json
    {
      "name": "Men's T20 WC 2026",
-     "cricapi_series": "<cricketdata series id>",
      "espn_series": "<espn series id>",
+     "cricbuzz_series": "<cricbuzz series id, OPTIONAL — enables L1>",
      "tab": "MT20WC POINTS",
-     "squads": "mt20wc_squads.json"
+     "squads": "mt20wc_squads.json",
+     "format": "T20"
    }
    ```
    - `squads` is optional — omit it for featured-players-only mode.
@@ -68,7 +85,8 @@ auction). Claude does the rest:
 | field | required | meaning |
 |-------|----------|---------|
 | `name` | yes | label (shown in logs) |
-| `cricapi_series` | yes | cricketdata series id (primary scorecard) |
+| ~~`cricapi_series`~~ | — | **REMOVED 20 Aug 2026.** Deleted from every tour; the field is dead. |
+| `cricbuzz_series` | no | cricbuzz series id. Present ⇒ the tour gets an L1 second witness on all 14 fields. Absent ⇒ single-feed (ESPN only) until cricsheet. |
 | `espn_series` | yes* | ESPN/cricinfo series id (dot-balls, +4 XI, team attribution). *Omit only if you accept no dots/XI. |
 | `tab` | yes | Google Sheet tab to write (created if missing) |
 | `gender` | yes | `male` or `female` — so cricsheet matches the right files |
@@ -95,9 +113,11 @@ and a failing tour **never blanks its tab** (the run aborts before writing).
 
 Source priority per completed match, recorded in the **Status** column:
 1. **cricsheet** (`official`) — exact everything; overrides when posted (lags ~days).
-2. **cricapi + ESPN dots/XI** (`provisional`) — cricapi scorecard + ESPN ball-by-ball
+2. **ESPN** (`provisional`) — full scorecard + ball-by-ball, cross-checked against Cricbuzz at L1
+   where the tour has a `cricbuzz_series`
    dots and the +4 in-XI; runs/wickets cross-checked (mismatches flagged).
-3. **cricapi · limited** — only if ESPN is unavailable (no dots/XI).
+3. *(there is no third tier — if ESPN has no card the match is SKIPPED and retried next run,
+   never published as a misleading all-zero COMPLETED row)*
 Super-overs excluded; feed joins tolerate ±1 day; same-surname / cross-source
 disagreements / unknown players are flagged in Status rather than silently guessed.
 
@@ -160,11 +180,14 @@ each tour shrinks Needs Review to just the genuinely-ambiguous handful.
 - **cricsheet's `t20s` archive only holds internationals** (men's & women's T20Is). A
   franchise league (e.g. MLC) or an ODI tour lives in its OWN cricsheet archive, which must
   be added to the download step in `.github/workflows/wwc-points.yml` for the *official*
-  source to kick in (MLC uses `mlc_json.zip`). The cricapi+ESPN path — including exact
-  dot-balls — works regardless, so a tour is fully scored even before its archive is wired.
+  source to kick in (MLC uses `mlc_json.zip`). The ESPN path — including exact dot-balls — works
+  regardless, so a tour is fully scored even before its archive is wired. It just never reaches
+  L2, so it stays on a provisional baseline until the archive is added.
 - **Squad name aliases**: the single place is now `registry/manual_aliases.json` (then re-run
   `build_registry.py`) — NOT the inline `ALIAS` dict in `wc_fps_to_csv.py` (kept only for legacy
-  cricapi-internal split canonicalization like "charlotte dean"→"charlie dean"). The registry is
+  feed-internal split canonicalization like "charlotte dean"→"charlie dean"). The registry is
   the once-and-for-all map; most names are auto-resolved from the auction DB / ESPN / cricsheet.
-- **API budget**: cricketdata free = 100 hits/day. Completed-match scorecards are cached,
-  so each extra tour adds only ~its new matches/day — comfortably within budget.
+- ~~**API budget**: cricketdata free = 100 hits/day.~~ **No longer applies** — every feed is
+  keyless and unmetered since 20 Aug 2026. Completed-match scorecards are still cached (they are
+  immutable, and it saves wall-clock), but there is no hit budget to stay inside. Adding a tour
+  costs run time, not quota.

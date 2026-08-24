@@ -1,3 +1,6 @@
+<!-- SUPERSEDED BANNER — added 24 Aug 2026 -->
+> ⚠️ **HISTORICAL — kept for rationale, not as current truth.** This document assumes a cricapi-primary architecture and an open 'should we adopt Cricbuzz?' question. Cricbuzz was adopted (13 Aug) and cricapi was removed (20 Aug, `ab8583d`). Every feed is keyless and unmetered now, so any quota reasoning here is moot. **Current architecture: `CLAUDE.md`. Trust the code over this file.**
+
 {'summary': 'Consolidate every open item across both repos into one tracked master plan, and settle the Cricbuzz question', 'agentCount': 7, 'logs': [], 'result': {'plan': '# THE MASTER PLAN — wwc-points-bot + wwc-draft
 **Baseline: BOT `5d0e6f2` (224 tests green) · APP `cd5ea4c` (5 suites + 8 integration green). Every line ref below was read in source this session unless marked SUSPECTED.**
 

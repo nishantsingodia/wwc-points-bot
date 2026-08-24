@@ -1,5 +1,9 @@
 # Name-Match & Points Issues — Critical Resolution Plan
 
+> ⚠️ **ALSO SUPERSEDED ON FEEDS (2026-08-20).** cricapi was removed (`ab8583d`); the live feeds are
+> ESPN (base) + Cricbuzz (L1 witness, 4 tours) + cricsheet (L2). Wherever this doc names a cricapi
+> spelling or a cricapi↔ESPN comparison, read it as history. Current architecture: `CLAUDE.md`.
+>
 > ⚠️ **SUPERSEDED (2026-07-25) — historical rationale only.** This doc proposed & delivered the
 > **cricsheet_id-anchored** registry. That registry was since migrated to **cricinfo-id anchoring**
 > (`pid = ci:<cricinfoId>`; `cricsheet_id` derived from `registry/crosswalk.json`; fuzzy matching is

@@ -1,12 +1,33 @@
 # wwc-points-bot — Working Notes
 
-D11 fantasy-points feed → auto-updating Google Sheet (GitHub Actions + service account). THREE
-feeds: **cricapi** (base card) + **ESPN** (full scorecard; the only LIVE source of `dots`/`maidens` — cricsheet supplies them too, at L2)
-cross-checked at L1, then **cricsheet** (official) reconciling at L2. Also produces the **shared
-player registry** (`registry/players.json`) consumed by the auction (`sync-registry`) and the draft.
-**Cricbuzz** (13 Aug 2026) can replace cricapi as the L1 second witness per tour — see
-"Cricbuzz as the L1 second witness" below. cricapi's code is untouched and is still the witness on
-every tour that doesn't opt in.
+D11 fantasy-points feed → auto-updating Google Sheet (GitHub Actions + service account). Also
+produces the **shared player registry** (`registry/players.json`) consumed by the auction
+(`sync-registry`) and the draft.
+
+## The three feeds (cricapi REMOVED 20 Aug 2026 — `ab8583d`)
+| role | feed | what it is |
+|---|---|---|
+| **base / provisional** | **ESPN** `site.api.espn.com` | full scorecard + ball-by-ball. Scores every LIVE and just-ended match. Keyless, unmetered. |
+| **L1 second witness** | **Cricbuzz** `www.cricbuzz.com` | carries the whole card, so all 14 `RECON_L1` fields get a real second number. Per tour, via `cricbuzz_series`. |
+| **L2 official** | **cricsheet** | the gold source. Reconciles against the frozen L1 baseline once it posts. |
+
+**cricapi is GONE — not deprecated, removed.** Zero executable references repo-wide; the old code
+is parked under `legacy/cricapi/` for reading only. No API keys exist anywhere in the repo or the
+workflows (`CRICKET_API_KEY`, `CRICKET_API_KEY2`, `TOUR_SYNC_API_KEY` are all deleted secrets).
+Consequences worth knowing, because a lot of older notes still assume otherwise:
+- **There is no quota to ration.** Every feed is keyless and unmetered. `frozen_tours.json` and the
+  dormancy window still exist, but they now only save wall-clock, not a hit budget.
+- **`frozen_tours.json` is keyed on `espn_series`**, migrated from cricapi's UUIDs in the same commit.
+- **A tour with no `cricbuzz_series` has NO second witness at all** — there is nothing to fall back
+  to. It publishes `COMPLETED_FLAGGED · "single feed (ESPN only)"` and waits for cricsheet to do the
+  first cross-check at L2. As of 24 Aug 2026 that is **9 of 13 tours**, including the live
+  ENG v PAK Test. Only LPL (12316), CPL (12123) and the two Hundreds (11493 / 11504) have L1.
+
+⚠️ **Docs written before 20 Aug 2026 describe a cricapi-primary architecture that no longer
+exists.** `ESPN_ONLY_MIGRATION.md` is the completed record of the removal; the design docs
+(`MASTER_PLAN.md`, `RECON_*.md`, `NAME_MATCH_AND_ISSUES_CRITICAL.md`, `STREAMLINE_PLAN.md`,
+`DATA_SOURCE_EVAL_20260813.md`) are kept as history and each carries a superseded banner. Trust the
+CODE over any of them.
 
 ## ⛔ RECON — the owner-locked model (7 Aug 2026). Authoritative; do NOT re-derive it.
 **`Match Status` and `Recon State` are two INDEPENDENT axes.** Never encode recon progress inside
@@ -18,9 +39,12 @@ COMPLETED  (never returns to LIVE)   cricsheet not posted yet      → "L1 recon
            cricsheet posted, diffs open → "L2 recon pending"  |  all clear → "L2 recon done"
 ```
 - **The L2 baseline is THE RECONCILED L1 VALUE** — exactly what was published and frozen as base
-  points after ALL approved L1 overrides were applied. An approval may be S1 (cricapi), S2 (ESPN) or
-  Manual, so the baseline can come from EITHER feed or from a hand-typed number. It is **NOT**
-  "ESPN's value", NOT cricapi's, NOT a value recomputed from raw feeds on a later run.
+  points after ALL approved L1 overrides were applied. An approval may be S1 (the second witness,
+  Cricbuzz), S2 (ESPN) or Manual, so the baseline can come from EITHER feed or from a hand-typed
+  number. It is **NOT** "ESPN's value" and NOT a value recomputed from raw feeds on a later run.
+  ⚠️ `recon_overrides.json` records only the LETTER "S1", not which feed S1 was — which is why
+  turning `cricbuzz_series` on for a tour that already has approved S1 overrides retroactively
+  changes what they resolve to. `run_tour` shouts about this.
   ⇒ **READ the baseline from the frozen record; never recompute the provisional cut.** That
   recomputation is the root cause of the phantom `dots 0→N` review rows that corrupted settled points.
 - **An unresolved L1 gap opens L1 only while there is NO official card** (refined 16 Aug 2026, and
@@ -34,15 +58,16 @@ COMPLETED  (never returns to LIVE)   cricsheet not posted yet      → "L1 recon
   could never reach L1_DONE ⇒ published forever with no baseline and nothing to click). Measured:
   15 matches / 496 rows / 36 players. `unsourced` and `unattributed` are NOT relaxed — cricsheet
   cannot un-drop a row the pipeline never attributed, and it cannot retro-measure a field nobody saw.
-- **Single-source fields = `dots` + `maidens`, ESPN ONLY** (cricapi supplies neither; cricsheet
-  supplies both). No second number at L1 ⇒ **no L1 comparison**; ESPN's value is accepted and does
-  NOT block COMPLETED. ESPN's value ABSENT for a bowler who bowled = unconsumed data ⇒ stays LIVE.
-  L2 reconciles these against the reconciled-L1 baseline above.
+- **Single-source fields.** On a tour WITH a Cricbuzz witness there are none — Cricbuzz carries the
+  whole card, so all 14 `RECON_L1` fields get a real second number. On a tour WITHOUT one, EVERY
+  field is single-sourced: ESPN's value is accepted and does NOT block COMPLETED, and L2 is the
+  first cross-check the match ever gets. (Historically this bullet named `dots` + `maidens`, the two
+  fields cricapi did not supply at all. That specific gap is closed; the general shape is not.)
+  ESPN's value ABSENT for a bowler who bowled = unconsumed data ⇒ stays LIVE.
 - **Nothing goes unconsumed.** Data the bot can't attribute, or a player it can't fully score ⇒ match
-  stays LIVE + a NAMED row in the Recon tab. No silent zeros, no dropped players. Corollary: a
-  single-feed (cricapi-only, no ESPN) match has no dots ⇒ unconsumed ⇒ **LIVE**. This SUPERSEDES the
-  old "COMPLETED but FLAGGED" decision, which `classify_match_status` still returns
-  (`wc_fps_to_csv.py:1418`).
+  stays LIVE + a NAMED row in the Recon tab. No silent zeros, no dropped players. (The old corollary
+  about a "cricapi-only, no ESPN" match is dead: ESPN IS the base now, so there is no such state.
+  A match with no ESPN scorecard in any source is skipped and retried, never emitted.)
 - **Identity NEVER appears in the Recon tab.** Recon answers "which value is right?"; identity
   answers "who is this?" → the **"Needs Cricinfo ID"** tab. No new tab is needed: ESPN's `athlete.id`
   IS the cricinfo id (`build_registry.py:336`), so "Needs ESPN PID" and "Needs Cricinfo ID" are the
@@ -50,19 +75,15 @@ COMPLETED  (never returns to LIVE)   cricsheet not posted yet      → "L1 recon
   this match ⇒ he played, cricsheet just spells him differently ⇒ IDENTITY failure ⇒ Needs Cricinfo
   ID, HOLD his provisional value. ESPN didn't see him either ⇒ he genuinely didn't play ⇒ score DNP,
   not an anomaly.
-- **Neither feed is "better" — do NOT flip the base to ESPN.** Measured against cricsheet ground
-  truth, 57 disputed fields / 42 player-matches:
-
-  | field | winner | right |
-  |---|---|---|
-  | runs | **cricapi** | 24/32 (75%) |
-  | wkts | **cricapi** | 7/11 (64%) |
-  | 4s | ESPN | 5/7 (71%) |
-  | 6s | ESPN | 6/6 (100%) |
-  | **overall** | **cricapi** | **33/56 (59%)** |
-
-  In fantasy points (what settles money) it's near a coin flip: cricapi 444 FP of error vs ESPN 312;
-  catastrophes ≥30 FP are 7 v 7. The owner's own L1 adjudications: **30/30 correct** vs cricsheet.
+- **HISTORICAL (superseded 20 Aug 2026): "neither feed is better — do NOT flip the base to ESPN."**
+  Measured against cricsheet on 57 disputed fields, cricapi won overall 33/56 (59%) — runs 75%,
+  wickets 64%; ESPN won 4s 71% and 6s 6/6. In fantasy points it was a coin flip (cricapi 444 FP of
+  error v ESPN 312; catastrophes ≥30 FP 7 v 7). **The base was flipped to ESPN anyway**, and the
+  accuracy argument is NOT why: cricapi returned a stub card (every stat 0) on the franchise leagues
+  and could not carry them at all, so on the tours that actually needed a base it was not a
+  contender. Keep the row here so nobody re-runs the comparison expecting it to settle anything.
+  The one number that still stands: the owner's own L1 adjudications were **30/30 correct** vs
+  cricsheet — the human gate is the most accurate component in the system.
 
 ## ⛔ Player identity / name-matching — READ before touching it
 This is the cross-project spine (auction + draft + bot all resolve names through the registry).
@@ -165,30 +186,34 @@ python3 identity_healthcheck.py "<tour name>"     # exit 1 on blockers
 
 ## Live-data source fallbacks (autopilot — the 22 Jul LPL/Hundred saga)
 The bot MUST produce points even when a feed is unreliable. Per-match source chain: cricsheet
-(official, when posted) → ESPN full scorecard → cricapi. Mechanisms in `wc_fps_to_csv.py`:
-- **Completion is time-based, NOT cricapi's `matchEnded` flag.** `is_over(m)` = matchEnded OR
-  (matchStarted AND started > OVER_HRS ago: T20 8h / ODI 12h). cricapi leaves matchEnded=False for
-  DAYS on franchise feeds (LPL, Hundred) — without this a finished match is scored "live" then
-  VANISHES once it ages out of the ±1-day near_today window. `ended`/`live` both use is_over.
-- **ESPN is a FULL scorecard source, not just dots/XI.** `elif espn_perf: perf = api_perf if
-  api_perf else espn_perf`. cricapi's match_scorecard returns "not found" for most franchise-league
-  matches; ESPN (keyless) carries them — so a tour needs its `espn_series` set (see below).
+(official, when posted) → ESPN full scorecard. **That is the whole chain — there is no third
+fallback below ESPN any more.** Mechanisms in `wc_fps_to_csv.py`:
+- **Completion is time-based, NOT the feed's `matchEnded` flag.** `is_over(m)` = matchEnded OR
+  (matchStarted AND started > OVER_HRS ago: T20 8h / ODI 12h). `matchStarted`/`matchEnded` are now
+  DERIVED from ESPN's event `state` (`_espn_event_to_match`: started = state in ("in","post")), not
+  read from a feed field — but the time-based guard stays, because a stale `post` transition has the
+  same failure mode cricapi's stuck flag had: a finished match scored "live" then VANISHING once it
+  ages out of the ±1-day `near_today` window. `ended`/`live` both use `is_over`.
+- **ESPN is THE scorecard source, not just dots/XI.** A tour therefore needs its `espn_series` set
+  or it cannot be scored at all — which is why the ingest verify gate fails on a blank one.
 - **No-data guard:** a match with no scorecard in ANY source is skipped (retried next run), never
   emitted as a misleading COMPLETED row where everyone scores just the +4 XI bonus.
 - **Central team identity:** `canon_team` (registry/team_aliases.json) + `team_key` strips gender
   qualifiers `(Men)`/`(Women)`/`Men`/`Women`. Ingestion resolves every feed team name to the squad's
-  canonical name via `canon_team` + `short_of`, so cricapi "MI London Women" → squad "MI London" and
-  ESPN "MI London (Men)" all collapse to one key. Fixes franchise-name + gender-suffix mismatches.
+  canonical name via `canon_team` + `short_of`, so a feed's "MI London Women" and ESPN's
+  "MI London (Men)" both collapse onto squad "MI London". Fixes franchise-name + gender-suffix
+  mismatches; still needed, because Cricbuzz and ESPN spell franchises differently too.
 - **The Hundred has its OWN scorer (`_score_hundred`, CURRENT_FMT `HUN`)** — NOT T20. Same core scale
   as T20 (run+1, four+4, six+6, wicket+30, dot+1, duck −2, fielding, +4 XI) but The Hundred awards
   **NO strike-rate, NO economy and NO maiden**, and wicket hauls tier from a 2-for (2w+4 / 3w+8 /
   4w+12 / 5w+16). Mirrors the auction ETL's `compute_fantasy_points_hundred` + the draft's
-  `d11-score.ts` HUN branch. Set via `tours.json` `"format": "HUN"` (`tour_sync` writes it — but
-  note cricapi buckets the Hundred under "T20" for *discovery* only; the SCORING format is HUN).
+  `d11-score.ts` HUN branch. Set via `tours.json` `"format": "HUN"` (`tour_sync` writes it).
   `is_fmt` still admits "hundred" matchTypes on the non-ODI branch (match admission is format-agnostic
   between T20/HUN — only the scorer differs).
-  ⚠️ Bowler balls: cricapi omits the `overs` field on 100-ball cards, so the ESPN merge backfills
-  bowler `balls` (else the `balls>0` bowling gate zeroes every wicket — the Gleeson 4-for → 4-pts bug).
+  ⚠️ Bowler `balls` must be non-zero or the `balls>0` bowling gate zeroes every wicket (the
+  Gleeson 4-for → 4-pts bug). This used to need an ESPN backfill because cricapi omitted `overs` on
+  100-ball cards; ESPN is the base now and supplies balls directly, but the gate is still there and
+  still unforgiving, so anything that returns a card with no ball counts reproduces the bug.
 
 ## Auto-ingest: the full new-tour pipeline (hardened 22 Jul — was manual, now automatic)
 `tour_sync.py` + `tour_sync_finalize.py` + `.github/workflows/tour-sync.yml` now do the WHOLE
@@ -198,16 +223,16 @@ with BLANK Player IDs). What now runs automatically:
 - **espn_series** — auto-resolved in `tour_sync.py` (`resolve_espn_series`: ESPN search → VALIDATE
   each candidate league id against its dated scoreboard by team-match → the confirmed id, never a
   guess; unresolved ⇒ "" which the gate then rejects). Fixes franchise leagues where cricsheet lags
-  + cricapi's scorecard is empty and ESPN is the only live source.
+  and ESPN is the only live source of a franchise-league scorecard.
 - **identity** — `tour_sync_finalize.py` runs `build_registry` → `backfill_draft_pids` so the sheet
   AND the draft carry the SAME `ci:` pid (join works even on a `cs:`/`uncapped:` fallback — sameness is
   all that matters). The 61MB auction DB is gitignored (absent in CI), so `build_registry.open_pool_con()`
   falls back to a committed players export (`registry/auction_players.json.gz`, ≈0.2MB) — the
   `players` table (name→cricsheet_id→cricinfo_id via the crosswalk + country/gender) is what anchoring needs. Regenerate
   it locally with `python3 registry/export_players_pool.py` whenever the auction player set materially
-  changes, then commit the .gz. This is what lets cricapi auto-tours anchor in CI.
+  changes, then commit the .gz. This is what lets auto-ingested tours anchor in CI.
 - **DRAFT LIVE POINTS (added 23 Jul)** — the draft scores a LIVE match's H2H in-app from ESPN
-  (`lib/d11-score.ts` + `getLiveMatchPoints`), zero cricapi/bot. Its two prerequisites are now
+  (`lib/d11-score.ts` + `getLiveMatchPoints`), with no dependency on the bot at all. Its two prerequisites are now
   auto-wired so a new tour "just works": (1) `apply_to_repos` writes the tour's `espn_series` into
   the draft's `data/espn-series.json` per gender (was manual in `lib/espn.ts` → the Hundred showed 0);
   (2) `tour_sync_finalize` copies `registry/players.json` → draft `lib/registry-players.json` (the
@@ -223,17 +248,23 @@ with BLANK Player IDs). What now runs automatically:
   bridge for a namesake (the Dale→Glenn merge is the mistake to avoid).
 - **TOUR INGEST REVIEW** tab (GSheet) — per-tour espn / coverage / health / verdict for a glance.
 
-PREREQUISITE — `TOUR_SYNC_API_KEY` must be a GENUINELY DEDICATED cricapi key (its own free 100/day).
-Discovery needs only ~20 hits/day, but if the key is SHARED with the auction/points pool it gets
-exhausted and discovery fails LOUD ("all N key(s) quota-blocked — NOT reporting '0 tours'") — correct
-(never silently ingest nothing) but it blocks the run. Cron is 00:10 UTC (right after the daily reset)
-for exactly this reason. A shared/exhausted key is the #1 reason a run won't fire.
+~~PREREQUISITE — `TOUR_SYNC_API_KEY` must be a dedicated cricapi key.~~ **GONE.** There is no API
+key. Discovery runs on ESPN search, which is keyless and unmetered, so "quota-blocked discovery" —
+historically the #1 reason a sync wouldn't fire — is no longer a failure mode. The 00:10 UTC cron
+was chosen to sit just after cricapi's daily quota reset and now has no reason to be at that hour;
+harmless, just don't read meaning into it.
 
 IF THE GATE FAILS: read the TOUR INGEST REVIEW tab / workflow log. espn UNRESOLVED → set it by hand
 (id from the espncricinfo series URL, e.g. `.../the-hundred-men-s-competition-2026-1521176`) + add a
-`registry/team_aliases.json` entry if cricapi vs ESPN names diverge; low coverage → build_registry
-didn't take (check the squad file / auction DB). Fix, then re-run the workflow (idempotent — skips
-already-ingested tours).
+`registry/team_aliases.json` entry if the feed and squad team names diverge; low coverage →
+build_registry didn't take (check the squad file / auction DB). Fix, then re-run the workflow
+(idempotent — skips already-ingested tours).
+
+⚠️ `build_registry.py` is SLOW — observed running >35 min with no progress output on 24 Aug 2026.
+It runs ONLY from `tour-sync.yml`, on manual dispatch, and only when a tour was actually applied. So
+a registry change (a new bridge, a renamed squad member) does NOT reach `players.json` on the normal
+4-hourly schedule. If you need an alias to take effect on the next scheduled run, add it to
+`registry/new_players.json` as well — `load_new_players()` reads that at startup, no rebuild needed.
 
 ## ⛔ NEVER send a browser User-Agent to ESPN (found 10 Aug 2026, cost a day of debugging)
 `site.api.espn.com` **403s browser-impersonating User-Agents**: `Mozilla/5.0` → 403, a full Chrome
@@ -243,11 +274,14 @@ fetcher swallows the error and returns `{}`/`null`, so a blanket 403 is **indist
 the single-source fields; announced XI; the full-scorecard fallback that carries franchise
 leagues), `build_registry` (roster `athlete.id` IS the cricinfo id → resolvable players pushed to
 "Needs Cricinfo ID"), `tour_sync`, and the draft's `lib/espn.ts` (XI + the whole live H2H scorer).
-Symptom in the log: `sources: N cricsheet(official), 0 cricapi+ESPN, 0 cricapi-only`.
+Symptom in the log: `sources: N cricsheet(official), 0 ESPN(provisional)` — i.e. cricsheet-only
+counts, with the ESPN count pinned at zero across every match.
 `site.web.api.espn.com` (SEARCH) accepts anything, so tour *discovery* keeps working while every
 fixture/scorecard call comes back empty — a very misleading combination. Both Python fetchers now
 warn-once on a distinct transport failure. **Do NOT put "Mozilla" back**, and when ESPN data goes
-quietly missing check the UA + status code BEFORE cricapi quota / cricsheet lag / identity.
+quietly missing check the UA + status code FIRST — before cricsheet lag or identity. (There is no
+quota to suspect any more, which removes the one benign explanation that used to compete with this.)
+`www.cricbuzz.com` is the OPPOSITE — it WANTS a browser UA. Never unify the two.
 
 ## ⛔ ESPN can serve an EMPTY scorecard that looks complete (found 13 Aug 2026)
 `playbyplay` intermittently returns HTTP 200 whose whole body is
@@ -269,18 +303,25 @@ recording live that is what FREEZES as the money baseline. Seen on CPL ev 153418
 - Swept `settlement_snapshots.json` (3119 rows / 87 settled matches) for the signature: **0 hits.**
   No settled money was affected — CPL was the only exposed tour and it was not being scored at all.
 
-## Cricbuzz as the L1 second witness (13 Aug 2026) — per-tour, fail-safe, identity-gated
-`cricapi` is a poor second witness on the franchise leagues: it returns a stub card (every stat 0),
-and the only fields it and ESPN both carry are `r/w/4s/6s`, so `dots`/`maidens` had NO validator at
-L1 at all. Cricbuzz carries the whole card. **MEASURED** over the two LPL matches with cached
+## Cricbuzz as the L1 second witness (13 Aug 2026; the ONLY witness since 20 Aug) — per-tour, fail-safe, identity-gated
+Why it exists: cricapi was a poor second witness on the franchise leagues — a stub card with every
+stat 0, and the only fields it and ESPN both carried were `r/w/4s/6s`, so `dots`/`maidens` had NO
+validator at L1 at all. Cricbuzz carries the whole card. cricapi is now removed entirely, so
+**Cricbuzz is not an alternative witness, it is the only one** — `L1_WITNESS = "cricbuzz"`,
+unconditionally. **MEASURED** over the two LPL matches with cached
 payloads (cb157138/ev1537349, cb157061/ev1537342), 48 player-rows joined by the DERIVED bridge:
 **48/48 agree on all 14 fields** — `r b 4s 6s w balls runs_conceded dots maidens catches stumpings
 runouts dro lbwb` (`RECON_L1_CB`). A real second opinion on ten fields that had none, with **0**
 Recon rows generated. Same machinery throughout: `compute_l1_gaps` / `build_recon_rows` /
 `apply_recon_overrides` / S1-S2-Manual / `recon_overrides.json`, just widened and re-pointed.
-- **Turn it on per tour**: `"cricbuzz_series": "<id>"` in `tours.json` (LPL 12316, CPL 12123,
-  Hundred 11493 men / 11504 women). Absent ⇒ cricapi stays the witness and behaviour is
-  byte-identical to before. **Nothing is enabled today** — deliberately, see the S1 warning below.
+- **Turn it on per tour**: `"cricbuzz_series": "<id>"` in `tours.json`. **LIVE on 4 tours as of
+  24 Aug 2026** — LPL 12316, CPL 12123, Hundred men 11493, Hundred women 11504. Absent ⇒ **no L1
+  witness at all**; the tour scores off ESPN alone and every match publishes
+  `COMPLETED_FLAGGED · "single feed (ESPN only)"` until cricsheet arrives. That is the state of the
+  other 9 tours, including the live ENG v PAK Test (all 35 rows flagged, L1 column blank) — a
+  standing gap against "nothing goes without L1 & L2", closable by finding that series' cricbuzz id.
+- ⛔ **Enabling it on a tour with existing approved S1 overrides moves settled points** — see the
+  S1-letter warning in the recon model above. `run_tour` shouts; read it.
 - **FAIL SAFE, always.** Module missing, series unset, match id not uniquely resolvable, HTTP
   204/403/timeout, unreadable card, empty bridge ⇒ `cb_match_perf` returns **None** (never `{}` —
   that would read as "Cricbuzz saw nobody play"), the tour scores off ESPN exactly as today, and the

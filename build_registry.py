@@ -21,7 +21,8 @@ tournament she ever plays — only her squad/team changes per tour. So this buil
 Identity is seeded from (a) every hand-built alias map already in the three repos
 (so the hard cases like Chamari Athapaththu = "AC Jayangani" are mapped from day one),
 (b) the auction DB (= cricsheet's people registry: cricsheet_id + initials spellings),
-(c) ESPN rosters (espn_id + fullName/displayName), (d) cached cricapi scorecards.
+(c) ESPN rosters (espn_id + fullName/displayName) — `athlete.id` IS the cricinfo id.
+(cricapi cached scorecards were a fourth seed until 20 Aug 2026; that source and its reader are gone.)
 
 Run:  python3 build_registry.py [tour-name-substring]      (default: all tours)
 Idempotent + additive: re-running only ADDS new identities / spellings, never drops.

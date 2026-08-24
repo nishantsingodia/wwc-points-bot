@@ -1,3 +1,6 @@
+<!-- SUPERSEDED BANNER — added 24 Aug 2026 -->
+> ⚠️ **HISTORICAL — kept for rationale, not as current truth.** This document assumes cricapi as the L1 second witness (S1). S1 is Cricbuzz now, and only on the 4 tours that set `cricbuzz_series`. Every feed is keyless and unmetered now, so any quota reasoning here is moot. **Current architecture: `CLAUDE.md`. Trust the code over this file.**
+
 # Recon / scoring — dev plan
 
 Spec is the owner's model (7 Aug). Everything below implements it.

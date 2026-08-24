@@ -27,25 +27,25 @@ For a season I was the human ETL — refreshing scorecards mid-match, keying num
 
 ## How it's built
 
-**Stack:** Python 3.11 (standard library — `urllib`, `json`, `csv`, `difflib`; the only third-party dep is `gspread`), GitHub Actions for scheduling/compute, a Google service account for Sheet writes, and three free data feeds — [cricsheet](https://cricsheet.org) ball-by-ball, [cricapi](https://cricketdata.org), and ESPN's public cricket endpoints.
+**Stack:** Python 3.11 (standard library — `urllib`, `json`, `csv`, `difflib`; the only third-party dep is `gspread`), GitHub Actions for scheduling/compute, a Google service account for Sheet writes, and three free, keyless data feeds — [cricsheet](https://cricsheet.org) ball-by-ball as the official source, ESPN's public cricket endpoints as the live base, and Cricbuzz as an independent second witness.
 
 A few decisions I'd call out:
 
-**1. A source hierarchy with explicit provisional vs. official states.** cricsheet ball-by-ball is the gold source, but it lags days — ESPN supplies dot balls and maidens in the live cut (cricapi has neither), and cricsheet reconciles them at L2, so when it posts (a 1–5 day lag) it *overrides everything*. Until then, a match is scored from the cricapi scorecard as the base, with ESPN ball-by-ball injected for the dots and the in-XI bonus that cricapi can't supply. The row is explicitly flagged **provisional** in that window, and a `dots_final` flag means an unverified source never fabricates a `0` in the dots column — it leaves it blank. When cricsheet later posts, the row silently upgrades to official.
+**1. A source hierarchy with explicit provisional vs. official states.** cricsheet ball-by-ball is the gold source, but it lags 1–5 days, and when it posts it *overrides everything*. Until then a match is scored from ESPN's full scorecard plus ball-by-ball, and the row is explicitly flagged **provisional** for that whole window. A `dots_final` flag means an unverified source never fabricates a `0` in the dots column — it leaves it blank. When cricsheet posts, the row upgrades to official and the difference is shown rather than swallowed.
 
-**2. A two-stage reconciliation trail (`L1 Recon` / `L2 Recon`).** Rather than trust one feed, every points tab carries two cross-check columns. **L1** compares the two live feeds (cricapi ↔ ESPN) on the fields they both carry — runs, wickets, fours, sixes — and prints `✓ clean` or a `⚠` gap. **L2** compares the official cricsheet figure against what the provisional row had scored, reading as `was → corrected` so any post-match revision is legible. The point is that source disagreement and official corrections are *surfaced in the product*, not buried.
+**2. A two-stage reconciliation trail (`L1 Recon` / `L2 Recon`).** Rather than trust one feed, every points tab carries two cross-check columns. **L1** compares the two live feeds (Cricbuzz ↔ ESPN) across all 14 scored fields and prints `✓ clean` or a `⚠` gap. **L2** compares the official cricsheet figure against what the provisional row had scored, reading as `was → corrected` so any post-match revision is legible. The point is that source disagreement and official corrections are *surfaced in the product*, not buried — and a tour with no second witness says so on every row rather than looking verified.
 
 **3. A global, ID-anchored Player Registry — the keystone.** The recurring failure mode in cricket data is the same player appearing under different spellings across feeds ("Smriti Mandhana" / "S Mandhana" / "SS Mandhana"), which silently splits one person's stats across two rows. `build_registry.py` builds one permanent `registry/players.json` keyed on a stable `pid` — the **ESPNcricinfo id** (`ci:<cricinfoId>`; migrated 25 Jul 2026 from the cricsheet id, which is now derived from a people.csv crosswalk), listing every feed spelling as an alias. The bot then resolves each feed name to a `pid` by dictionary lookup, not by gambling on fuzzy match per match; fuzzy matching survives only as a *logged* fallback that's surfaced as a CI warning so registry gaps get closed. The builder is rebuild-safe by construction — a `given_compatible` guard refuses to merge two people who merely share a surname (the bug that once collapsed two different "…Singh" players into one), so re-running it can only *add* identities and spellings, never re-corrupt them. Identity is global: resolve a player once and every future tournament reuses it.
 
 **4. No-code corrections from inside the Sheet.** The rare case that needs a human — a name that matched nobody, or two people that look merged — is written back to dedicated review tabs (`Needs Review`, `Identity Anomalies`) with a closest-match guess and a `Yes/No` cell. The next run reads those answers and persists them as aliases. So the one manual step in the whole system is editable by a non-engineer in a spreadsheet, with the live identity table kept read-only.
 
-**Operational guardrails worth noting:** completed-match scorecards are cached between runs (they're immutable) to stay under cricapi's 100-hits/day free cap, with optional key failover; the run *aborts before touching the Sheet* if the feed returns empty, so a bad fetch can never wipe good data; super-over deliveries are excluded; and feed-to-feed date joins tolerate a ±1-day offset to absorb timezone differences.
+**Operational guardrails worth noting:** completed-match scorecards are cached between runs because they're immutable; the run *aborts before touching the Sheet* if the feed returns empty, so a bad fetch can never wipe good data; a scorecard that comes back suspiciously complete-but-empty is refused by comparing ball-by-ball length against a different endpoint's ball counts; super-over deliveries are excluded; and feed-to-feed date joins tolerate a ±1-day offset to absorb timezone differences.
 
 ---
 
 ## Run it locally
 
-It runs as a plain script. With a cricapi key it computes points and writes a CSV; without Sheet credentials it simply skips the Sheet write, so it's safe to run on a laptop:
+It runs as a plain script with no API keys of any kind. Without Sheet credentials it simply skips the Sheet write, so it's safe to run on a laptop:
 
 ```bash
 pip install -r requirements.txt
@@ -58,7 +58,7 @@ Point it at a different tournament with no code change via `SERIES_ID` / `ESPN_S
 
 ## Honest limitations / scope
 
-- **It's personal-scale.** Built for one friends' league, not a multi-tenant product — config is committed JSON, the "database" is a Google Sheet, and the whole thing leans on free API tiers (cricapi's 100/day cap is a real constraint the caching is designed around).
+- **It's personal-scale.** Built for one friends' league, not a multi-tenant product — config is committed JSON, the "database" is a Google Sheet, and the whole thing leans on free public endpoints. It used to be shaped around a metered feed's 100-calls/day cap; that feed was removed in August 2026 and the caching now buys wall-clock rather than headroom.
 - **The registry needs occasional human tending.** New tournaments bring new name spellings; the bot flags them, but someone still has to confirm the review-tab guesses. It degrades gracefully (fuzzy fallback + a CI warning) rather than failing, but it isn't fully hands-off across a brand-new tour.
 - **Provisional rows can move.** Numbers scored before cricsheet posts are explicitly marked provisional and can be revised when the official ball-by-ball lands. That's by design and made visible, but it means a leaderboard built on the freshest data is not yet the final word.
 - **Coverage is what the feeds cover.** It handles T20 internationals and a couple of franchise leagues that publish to cricsheet; a format or competition that isn't in cricsheet loses the gold source and stays on the provisional path indefinitely.

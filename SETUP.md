@@ -7,8 +7,9 @@ Actions (no laptop needed) — on a schedule *and* from a button inside the Shee
 **Data fidelity**
 - **Cricsheet** (ball-by-ball) is the authoritative source → exact dots, maidens,
   run-outs, +4 in-XI. It posts internationals ~1–3 days after the match.
-- **cricapi** gives live coverage for matches cricsheet hasn't posted yet
-  (`Source` column says `cricapi (dots pending)`; **dots come from ESPN in the live cut** (cricapi has none) and are confirmed by cricsheet at L2; they stay blank only when NO source supplied them, never
+- **ESPN** gives live coverage for matches cricsheet hasn't posted yet (`Source` column says
+  `ESPN scorecard`; dots and maidens come from ESPN's ball-by-ball in the live cut and are
+  confirmed by cricsheet at L2; they stay blank only when NO source supplied them, never
   cricsheet confirms — never a fake 0).
 - When both exist, overlapping stats are **cross-checked** and any disagreement is
   flagged in the `Source` column.
@@ -65,7 +66,7 @@ Fantasy Points · Source · In Squad List · Bat Order · L1 Recon · L2 Recon �
 Match Status · Recon Flag`
 
 - **`Match Status`** — `LIVE` / `COMPLETED` / `COMPLETED_FLAGGED` (`SCHEDULED` for toss rows).
-  The draft app gates "match completed" on this: a match with an unresolved cricapi↔ESPN (L1)
+  The draft app gates "match completed" on this: a match with an unresolved Cricbuzz↔ESPN (L1)
   disagreement stays **LIVE** until you approve a value in the **`Recon Review`** tab. See
   **`RECON_REVIEW_WORKFLOW.md`**.
 - **`Recon Flag`** — the human reason (e.g. `⏳ pending recon approval`, `⚠ official revision

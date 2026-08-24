@@ -16,9 +16,12 @@ authoritative and arrives **1–5 days late**.
 - Every unverified or unresolvable case produces a named row, never a silent zero.
 
 **NOT achievable, by construction:**
-- "The number is correct the moment the match ends." Before cricsheet posts, every number is a
-  bet on cricapi vs ESPN. Measured against cricsheet on 57 disputed fields: cricapi right 59%,
-  ESPN 41%. Neither feed is trustworthy alone, and no amount of code changes that.
+- "The number is correct the moment the match ends." Before cricsheet posts, every number is
+  provisional. On a tour with a Cricbuzz witness it is at least a number two independent feeds
+  agree on across all 14 fields; on the other 9 of 13 tours it is a single feed's word.
+  (Historically this read "a bet on cricapi vs ESPN — cricapi right 59%, ESPN 41% on 57 disputed
+  fields". cricapi is gone since 20 Aug 2026; the conclusion — no single live feed is trustworthy
+  alone, and no amount of code changes that — is unchanged.)
 
 **So the money rule is:** settle on **cricsheet-verified** matches only. Everything before that is
 provisional, however confident it looks. The Settlement Audit exists to prove nothing moved
@@ -66,9 +69,13 @@ npm run check:tours          # in wwc-draft — unknown team codes / gender with
 Then, in the sheet: approve the tour in **TOUR CONTROL** (nothing is polled until you do).
 
 **Gotchas that have actually bitten:**
-- An ESPN-added tour has `cricapi_series: ""` → **the bot does not score it at all**. The draft
-  still works (live H2H is scored in-app from ESPN). Sheet points need a cricapi series id added
-  to `tours.json` by hand.
+- ~~An ESPN-added tour has `cricapi_series: ""` → the bot does not score it.~~ **FIXED and then
+  obsoleted.** `cricapi_series` no longer exists, and the TOUR CONTROL gate is keyed on the tour
+  NAME, so every tour gets an approval row and can be approved. What a tour DOES still need is a
+  non-blank `espn_series` (the ingest verify gate fails on a blank one) and a `yes` in TOUR CONTROL.
+- A tour with no `cricbuzz_series` has **no L1 second witness** — every match publishes
+  `COMPLETED_FLAGGED · "single feed (ESPN only)"`. Not a bug, but do not settle those before
+  cricsheet lands. 9 of 13 tours are in this state, including the live ENG v PAK Test.
 - Franchise leagues reuse 2-letter codes → add `TEAM_CODE_ALIASES` in the draft, or the board
   silently orders by seed instead of the scorecard.
 - Never send a browser User-Agent to ESPN — it 403s, and every fetcher swallows it, so it looks
@@ -93,8 +100,8 @@ Check the sheet when:
 
 1. Open **`/audit`** in the draft app.
 2. The match must show **neither** `⏳ recon open` **nor** `⚠ revised`.
-3. Its source must read `cricsheet · official`. If it says `ESPN scorecard (cricapi empty)` or
-   carries `⚠ unverified — single feed`, **it is not verified — do not settle it.**
+3. Its source must read `cricsheet · official`. If it says `ESPN scorecard` or carries
+   `⚠ unverified — single feed`, **it is not verified — do not settle it.**
 4. `Result changed` and `Results flipped` tiles must be **0** for that tour.
 5. If a match shows `? no settled baseline`, that means no trustworthy "before" was recorded —
    you cannot prove it didn't move. Treat as unverified.
@@ -113,17 +120,18 @@ gh run list --workflow="WWC T20 Points" --limit 5  # did the run even succeed?
 gh run view <id> --log | grep -E "quota|sources:|EMPTY scorecard|promote|REFUSED"
 ```
 
-Read in the log, in order: **UA/403 → cricapi quota → cricsheet lag → identity.** The ESPN 403
-failure mode is silent and mimics "no data" — check it first, it cost a day once.
+Read in the log, in order: **UA/403 → cricsheet lag → identity.** The ESPN 403 failure mode is
+silent and mimics "no data" — check it first, it cost a day once. (There is no "quota" step any
+more; every feed is keyless since 20 Aug 2026, so `grep quota` will find nothing.)
 
 ---
 
 ## 7. Known-open (not yet fixed)
 
-- **cricapi returns nothing for recent Hundred/LPL matches.** Cache-eviction for empty cards is in,
-  but the root cause is **not conclusively pinned** — it may be that cricapi's series feed simply
-  doesn't carry those fixtures. Until it's pinned, those matches are single-sourced off ESPN and
-  are now flagged as such. Do not settle them until cricsheet lands.
+- ~~**cricapi returns nothing for recent Hundred/LPL matches.**~~ **CLOSED by removal** (20 Aug
+  2026) rather than by diagnosis — the root cause was never pinned. Those tours now score off ESPN
+  as the base and are cross-checked by Cricbuzz at L1, which is strictly more coverage than the
+  flagged single-source state this entry described.
 - `RECON_DEV_PLAN.md` lists verified-but-unfixed defects (`xcheck` never read; `L1_RUN_TOL=1`
   hiding up to 7 pts/row; ESPN playbyplay `limit=600` with no pagination). Don't rediscover them.
 - The settlement baseline currently freezes on any COMPLETED publish; the locked spec wants it at

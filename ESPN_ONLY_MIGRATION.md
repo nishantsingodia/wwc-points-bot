@@ -1,3 +1,34 @@
+<!-- SUPERSEDED BANNER — added 24 Aug 2026 -->
+> # ✅ DONE — this migration COMPLETED on 20 Aug 2026 (`ab8583d`)
+>
+> **Do not read the blocker table below as open work. All four blockers were already fixed before
+> the flip, and the line references in this file have since drifted.** This document caused a
+> later session to report four live blockers that did not exist — if you are here to find out what
+> is left to do, the answer is *nothing*.
+>
+> | was | status |
+> |---|---|
+> | **B1** `dismissed` sourced from the wrong player | fixed |
+> | **B2** `bat_order` never set by ESPN | fixed |
+> | **B3** silent-drop auto-add dies (ESPN perfs carry no team) | fixed |
+> | **B4** `espn_id` discarded at 3 sites | fixed |
+> | **R1** discovery joins on team display names, not the series id | hardened |
+>
+> **What actually shipped**, beyond this plan:
+> - cricapi removed entirely (PR #1 → `ab8583d`); zero executable references repo-wide, old code
+>   parked in `legacy/cricapi/`. `CRICKET_API_KEY`, `CRICKET_API_KEY2` and `TOUR_SYNC_API_KEY`
+>   deleted from every workflow; `resolve-series.yml` deleted.
+> - `cricapi_series` **removed from all 13 tours** rather than kept as an informational field
+>   (§ at the end of this doc proposed keeping it — that is not what happened).
+> - `frozen_tours.json` re-keyed from cricapi UUIDs to `espn_series` ids.
+> - TOUR CONTROL gate re-keyed onto the tour **NAME**, which is what makes an ESPN-only tour
+>   approvable at all.
+> - Follow-on fixes the flip exposed: scoreboard cache poisoning (`902a41a`, recovered
+>   +4,604 FP / 136 rows), unanchored cricbuzz pins (`77d75c2`), a malformed bridge entry that
+>   had killed every run for ~2.5 days (`cabba80`).
+>
+> **Current architecture is in `CLAUDE.md`.** Trust that and the code, not this file.
+
 {'summary': 'Prove ESPN supplies every scoring input, then design the full cricapi removal + backfill plan', 'agentCount': 7, 'logs': [], 'result': {'plan': '# ESPN‑ONLY SCORING — THE MIGRATION PLAN
 
 **Repo:** `/Users/nishant-singodia/wwc-points-bot` · scorer `wc_fps_to_csv.py` · app `/Users/nishant-singodia/wwc-draft`

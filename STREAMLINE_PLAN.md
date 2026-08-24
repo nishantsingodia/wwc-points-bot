@@ -1,3 +1,6 @@
+<!-- SUPERSEDED BANNER — added 24 Aug 2026 -->
+> ⚠️ **HISTORICAL — kept for rationale, not as current truth.** This document assumes three feeds including cricapi. Every feed is keyless and unmetered now, so any quota reasoning here is moot. **Current architecture: `CLAUDE.md`. Trust the code over this file.**
+
 # Streamlining the points bot — gaps, POC results, and the target architecture
 
 Written 11 Aug 2026. Answers: *how do I get zero hiccups, how do player ids stay in sync across
