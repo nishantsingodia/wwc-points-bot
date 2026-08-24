@@ -2609,11 +2609,57 @@ def identity_break(prov_pid, cs_pid, cs_orphans):
     orphans = sorted((v.get("name") or "") for v in cs_orphans)
     return zeroed, orphans
 
-# Fields NO second live feed can validate: only ESPN supplies them during the provisional window
-# (cricapi carries neither), so there is no value-vs-value comparison to make at L1. They are
-# ACCEPTED at L1 and first validated at L2, when cricsheet posts. Absence is a different matter —
-# a bowler who bowled with no dots source is unconsumed data and holds the match LIVE.
-RECON_L1_SINGLE = ["dots", "maidens"]
+# RECON_L1_SINGLE (["dots", "maidens"]) lived here and is GONE (24 Aug 2026). It was dead — defined
+# once, referenced from no code path, cited only by a comment that used it to justify printing
+# "dots unverified" on every ESPN-based row. Its premise expired when Cricbuzz replaced cricapi as
+# the L1 witness: the docstring said "no second live feed can validate" these "(cricapi carries
+# neither)", but Cricbuzz carries both and `dots`/`maidens` are in RECON_L1, which is what
+# `wit_fields` is actually set to. Whether they were witnessed is now read per match off
+# cb_match_perf's dots_source / maidens_source. Do not reintroduce a constant to answer it: it is
+# a per-match fact (Cricbuzz's completeness gate drops dots; The Hundred's maidens are corrupt),
+# and a constant can only be wrong on one side or the other.
+
+def source_status(cs_path, super_over, wit_pid, cb_diag, cb_note, cb_series):
+    """The `Source` column for one match — WHICH feeds produced it and what is still unverified.
+
+    A pure function of the per-match facts, deliberately: it used to be assembled by three `status +=`
+    sites straddling the Cricbuzz fetch, and the first of them asserted "dots unverified" ~40 lines
+    BEFORE the witness that verifies dots had run. Nothing could contradict it afterwards, so a cell
+    could read "dots unverified, awaiting cricsheet · cricbuzz cross-checked (19 players)" — both
+    halves true of different scenarios and never of the same one. Assembling it in one place, after
+    everything is known, is what makes that shape impossible rather than merely fixed.
+
+    Ordering is narrative: base feed → who witnessed it → what is still open.
+    """
+    if cs_path:
+        return "cricsheet · official"          # the only OFFICIAL source; nothing is pending
+    status = "ESPN scorecard" + (" · super-over excl" if super_over else "")
+    # Gate on wit_pid — whether Cricbuzz ACTUALLY witnessed this match. The old gate was
+    # `witness == "cricbuzz"` against a variable assigned that literal four lines above, so it was
+    # always true: the "unavailable" arm was unreachable and a match with NO Cricbuzz card
+    # advertised itself as "cricbuzz cross-checked (0 players)". A cross-check that did not happen
+    # must never read like one that passed.
+    if wit_pid:
+        status += f" · cricbuzz cross-checked ({cb_diag.get('bridged', 0)} players)"
+        if cb_diag.get("unbridged"):
+            status += f", {cb_diag['unbridged']} unbridged"
+    elif cb_series:
+        # Configured but not witnessing THIS match. Say it on the row, not just in the log —
+        # a silently-missing cross-check is indistinguishable from a passing one.
+        status += " · ⚠ cricbuzz unavailable" + (f" ({cb_note})" if cb_note else "")
+    # Only cricsheet is OFFICIAL, so an ESPN-based row stays provisional either way. What VARIES is
+    # whether the two ESPN-only fields got a second pair of eyes: Cricbuzz carries both and
+    # witnesses them at L1 (they are in RECON_L1), but each can come back ABSENT — `dots` when its
+    # commentary-completeness gate fails, `maidens` on The Hundred, where Cricbuzz copies its dots
+    # column into them and we hard-ignore it. cb_match_perf reports exactly that per match as
+    # dots_source / maidens_source (None => no such witness), so name the fields that genuinely
+    # lack one instead of asserting it about both every time.
+    unwitnessed = [f for f in ("dots", "maidens")
+                   if not (wit_pid and cb_diag.get(f + "_source"))]
+    return status + (
+        f" · ⏳ provisional ({'/'.join(unwitnessed)} unverified, awaiting cricsheet)"
+        if unwitnessed else
+        " · ⏳ provisional (dots/maidens cross-checked · awaiting official cricsheet)")
 
 def classify_recon_state(cs_path, unresolved, unsourced, l2_pairs, l2_appr, unattributed=()):
     """The recon axis, orthogonal to Match Status.
@@ -3367,24 +3413,16 @@ def run_tour(tour):
         # from a man who PLAYED and still has no id (a real question).
         for _src in (cs_perf, espn_perf):
             note_appearance(_src)
+        # The `Source` string is NOT built here. It depends on whether Cricbuzz witnessed this
+        # match, which is not known until the witness block ~40 lines below, so it is assembled
+        # there in one shot by source_status(). Only the scoring base is chosen here.
         if cs_path:
             perf = cs_perf
-            n_cs += 1; dots_final = True; status = "cricsheet · official"
+            n_cs += 1; dots_final = True
         else:
-            # Not from cricsheet yet -> ESPN's own scorecard + ball-by-ball is the base. The row is
-            # PROVISIONAL either way: cricsheet (lags ~1-5 days) is the only OFFICIAL source and
-            # overwrites ESPN dots with exact figures when it lands.
-            #
-            # But whether `dots`/`maidens` are UNWITNESSED is a per-match fact, not a constant, and
-            # it is not known yet at this point in the loop — Cricbuzz witnesses both at L1 (they
-            # are in RECON_L1) and it has not run for this match until ~40 lines below. Saying
-            # "dots unverified" here printed it even on matches Cricbuzz had just cross-checked
-            # clean, so a single cell read "dots unverified, awaiting cricsheet · cricbuzz
-            # cross-checked (19 players)" — two halves contradicting each other. The dots clause is
-            # therefore appended AFTER the witness block, off `cb_diag["dots_source"]`.
+            # Not from cricsheet yet -> ESPN's own scorecard + ball-by-ball is the base.
             perf = espn_perf
             n_espn += 1; dots_final = True
-            status = "ESPN scorecard" + (" · super-over excl" if super_over else "")
 
         # Per-pid views of each RAW source, for L1 (witness vs ESPN, feed-against-feed).
         # NOTE: `_by_pid` is a strict id-only index and is correct HERE — L1 compares two raw
@@ -3425,12 +3463,9 @@ def run_tour(tour):
         # source: nothing here writes a Cricbuzz number onto a scored row except through an
         # approved S1 override, which is the same sanctioned route the previous witness had.
         wit_pid = cb_pid if cb_pid is not None else {}
-        if witness == "cricbuzz":
-            status += f" · cricbuzz cross-checked ({cb_diag.get('bridged', 0)} players)"
-        elif CB_SERIES:
-            # Configured but not witnessing THIS match. Say it on the row, not just in the log —
-            # a silently-missing cross-check is indistinguishable from a passing one.
-            status += " · ⚠ cricbuzz unavailable" + (f" ({cb_note})" if cb_note else "")
+        # Everything the Source column reports is known now — base feed, witness, what each feed
+        # could and could not establish. One call, one place, no later mutation.
+        status = source_status(cs_path, super_over, wit_pid, cb_diag, cb_note, CB_SERIES)
 
         team_players = []
         for tname in teams:
