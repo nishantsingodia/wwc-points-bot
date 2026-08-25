@@ -732,6 +732,206 @@
   "m nandu": {
    "pid": "ci:1195686",
    "display": "Matthew Nandu"
+  },
+  "r powell": {
+   "pid": "ci:820351",
+   "display": "Rovman Powell"
+  },
+  "vo lawes": {
+   "pid": "ci:1500757",
+   "display": "Vitel Lawes"
+  },
+  "tb robinson": {
+   "pid": "ci:1290929",
+   "display": "Tim Robinson"
+  },
+  "jn hamilton": {
+   "pid": "ci:332937",
+   "display": "Jahmar Hamilton"
+  },
+  "as joseph": {
+   "pid": "ci:670031",
+   "display": "Alzarri Joseph"
+  },
+  "ads fletcher": {
+   "pid": "ci:51862",
+   "display": "Andre Fletcher"
+  },
+  "mw tromp": {
+   "pid": "ci:1339100",
+   "display": "Matthew Tromp"
+  },
+  "sp narine": {
+   "pid": "ci:230558",
+   "display": "Sunil Narine"
+  },
+  "ka anderson": {
+   "pid": "ci:1209188",
+   "display": "Kevlon Anderson"
+  },
+  "ra clarke": {
+   "pid": "ci:1275938",
+   "display": "Rivaldo Clarke"
+  },
+  "sd hope": {
+   "pid": "ci:581379",
+   "display": "Shai Hope"
+  },
+  "s joseph": {
+   "pid": "ci:1356971",
+   "display": "Shamar Joseph"
+  },
+  "jm james": {
+   "pid": "ci:1209191",
+   "display": "Joshua James"
+  },
+  "k campbell": {
+   "pid": "ci:1443401",
+   "display": "Khari Campbell"
+  },
+  "mathurage don kusal janith perera": {
+   "pid": "ci:300631",
+   "display": "Kusal Perera"
+  },
+  "m louis": {
+   "pid": "ci:1078695",
+   "display": "Mikyle Louis"
+  },
+  "jd campbell": {
+   "pid": "ci:348026",
+   "display": "John Campbell"
+  },
+  "thomas benjamin abell": {
+   "pid": "ci:462727",
+   "display": "Tom Abell"
+  },
+  "mg bracewell": {
+   "pid": "ci:326968",
+   "display": "Michael Bracewell"
+  },
+  "dian lasith shenan croospulle": {
+   "pid": "ci:1027867",
+   "display": "Lasith Croospulle"
+  },
+  "lokumarakkalage dilshan madushanka": {
+   "pid": "ci:793007",
+   "display": "Dilshan Madushanka"
+  },
+  "traveen sashenka mathew": {
+   "pid": "ci:1282477",
+   "display": "Traveen Mathews"
+  },
+  "muthuthanthirige nuwanidu keshawa fernando": {
+   "pid": "ci:1074333",
+   "display": "Nuwanidu Fernando"
+  },
+  "weerahandige inol avishka fernando": {
+   "pid": "ci:784369",
+   "display": "Avishka Fernando"
+  },
+  "rajapaksha vidana pathiranalage kamil mishara": {
+   "pid": "ci:1075863",
+   "display": "Kamil Mishara"
+  },
+  "kiribathgala kankanamalage eshan malinga dharmasena": {
+   "pid": "ci:1306214",
+   "display": "Eshan Malinga"
+  },
+  "pramod bhanuka bandara rajapaksa": {
+   "pid": "ci:342619",
+   "display": "Bhanuka Rajapaksa"
+  },
+  "d kalupahana": {
+   "pid": "ci:1364326",
+   "display": "Dinura Kalupahana"
+  },
+  "lokuge dinesh chandimal": {
+   "pid": "ci:300628",
+   "display": "Dinesh Chandimal"
+  },
+  "dickwella patabendige dilantha niroshan dickwella": {
+   "pid": "ci:429754",
+   "display": "Niroshan Dickwella"
+  },
+  "ilandari dewage nuwan thushara": {
+   "pid": "ci:955235",
+   "display": "Nuwan Thushara"
+  },
+  "munasinghe arachchige dushan ishara hemantha": {
+   "pid": "ci:721041",
+   "display": "Dushan Hemantha"
+  },
+  "pothotuwa arachchige dhananjaya lakshan": {
+   "pid": "ci:792519",
+   "display": "Dhananjaya Lakshan"
+  },
+  "pathira vasan dushmantha chameera": {
+   "pid": "ci:552152",
+   "display": "Dushmantha Chameera"
+  },
+  "pvd chameera": {
+   "pid": "ci:552152",
+   "display": "Dushmantha Chameera"
+  },
+  "balapuwaduge kusal gimhan mendis": {
+   "pid": "ci:629074",
+   "display": "Kusal Mendis"
+  },
+  "wedagedara sadeera rashen samarawickrama": {
+   "pid": "ci:629076",
+   "display": "Sadeera Samarawickrama"
+  },
+  "pasqual handi kamindu dilanka mendis": {
+   "pid": "ci:784373",
+   "display": "Kamindu Mendis"
+  },
+  "kongala liyanage janith vimukthi": {
+   "pid": "ci:681681",
+   "display": "Janith Liyanage"
+  },
+  "phkd mendis": {
+   "pid": "ci:784373",
+   "display": "Kamindu Mendis"
+  },
+  "wanigamuni ramesh tarinda mendis": {
+   "pid": "ci:629084",
+   "display": "Ramesh Mendis"
+  },
+  "mahamarakkala kurukulasooriya patabendige akila dananjaya perera": {
+   "pid": "ci:574178",
+   "display": "Akila Dananjaya"
+  },
+  "rathnayaka mudiyanselage milan priyanath rathnayaka": {
+   "pid": "ci:1070229",
+   "display": "Milan Ratnayake"
+  },
+  "s shanmuganathan": {
+   "pid": "ci:1393938",
+   "display": "Sharujan Shanmuganathan"
+  },
+  "dewa pawan sandesh de silva": {
+   "pid": "ci:1253695",
+   "display": "Pawan Sandesh"
+  },
+  "konganige tharindu hasanka ratnayake": {
+   "pid": "ci:950405",
+   "display": "Tharindu Rathnayake"
+  },
+  "pramod madushan liyanagamage": {
+   "pid": "ci:826689",
+   "display": "Pramod Madushan"
+  },
+  "zahir khan pakteen": {
+   "pid": "ci:712219",
+   "display": "Zahir Khan"
+  },
+  "imayage don gayana geethaja weerasinghe": {
+   "pid": "ci:1379076",
+   "display": "Gayana Weerasinghe"
+  },
+  "g weerasinghe": {
+   "pid": "ci:1379076",
+   "display": "Gayana Weerasinghe"
   }
  }
 }
