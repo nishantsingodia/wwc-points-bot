@@ -793,6 +793,19 @@
         "Caribbean Premier League 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:1078694",
+      "display": "Shian Brathwaite",
+      "aliases": [
+        "shian brathwaite"
+      ],
+      "team": "MTBAR",
+      "role": "BAT",
+      "tours": [
+        "Caribbean Premier League 2026"
+      ],
+      "source": "auto"
     }
   ]
 }

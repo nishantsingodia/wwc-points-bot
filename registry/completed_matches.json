@@ -963,6 +963,15 @@
    "first_status": "COMPLETED",
    "first_seen": "2026-08-24",
    "provenance": "live"
+  },
+  {
+   "tour": "Caribbean Premier League 2026",
+   "match_key": "2026-08-25::antigua and barbuda falcons|barbados tridents",
+   "match": "Match 16 — MTANT v MTBAR",
+   "date": "2026-08-25",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-26",
+   "provenance": "live"
   }
  ]
 }
