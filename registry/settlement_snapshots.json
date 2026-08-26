@@ -75943,6 +75943,23 @@
    "tour": "Caribbean Premier League 2026",
    "match": "Match 4 — MTJAM v MTBAR",
    "date": "2026-08-12",
+   "team": "MTBAR",
+   "pid": "ci:1078694",
+   "full": "Shian Brathwaite",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-26",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-12::barbados tridents|jamaica kingsmen",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 4 — MTJAM v MTBAR",
+   "date": "2026-08-12",
    "team": "MTJAM",
    "pid": "uncapped:tayyab-arif",
    "full": "Tayyab Arif",
@@ -86017,6 +86034,23 @@
     "dismissed": true,
     "lbwb": 0,
     "dro": 0
+   }
+  },
+  {
+   "match_key": "2026-08-16::barbados tridents|st lucia kings",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 9 — MTSTL v MTBAR",
+   "date": "2026-08-16",
+   "team": "MTBAR",
+   "pid": "ci:1078694",
+   "full": "Shian Brathwaite",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-26",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
