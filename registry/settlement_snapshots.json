@@ -65336,6 +65336,23 @@
    "match": "Match 2 — MTSTK v MTTRI",
    "date": "2026-08-08",
    "team": "MTTRI",
+   "pid": "ci:1511916",
+   "full": "Abdul-Raheem Salafee Ibn Hassan Toppin",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-27",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-08::st kitts and nevis patriots|trinbago knight riders",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 2 — MTSTK v MTTRI",
+   "date": "2026-08-08",
+   "team": "MTTRI",
    "pid": "uncapped:abdul-raheem-toppin",
    "full": "Abdul-Raheem Toppin",
    "points": 0,
@@ -86127,6 +86144,23 @@
    "match": "Match 8 — MTJAM v MTTRI",
    "date": "2026-08-16",
    "team": "MTTRI",
+   "pid": "ci:1511916",
+   "full": "Abdul-Raheem Salafee Ibn Hassan Toppin",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-27",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-16::jamaica kingsmen|trinbago knight riders",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 8 — MTJAM v MTTRI",
+   "date": "2026-08-16",
+   "team": "MTTRI",
    "pid": "uncapped:abdul-raheem-toppin",
    "full": "Abdul-Raheem Toppin",
    "points": 0,
@@ -94211,6 +94245,23 @@
     "bat_order": 10,
     "dismissal": "run out (van Schalkwyk/†Seifert)",
     "dismissed": true
+   }
+  },
+  {
+   "match_key": "2026-08-22::antigua and barbuda falcons|trinbago knight riders",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 14 — MTANT v MTTRI",
+   "date": "2026-08-22",
+   "team": "MTTRI",
+   "pid": "ci:1511916",
+   "full": "Abdul-Raheem Salafee Ibn Hassan Toppin",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-27",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {

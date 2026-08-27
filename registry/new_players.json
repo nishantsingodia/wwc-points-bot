@@ -819,6 +819,19 @@
         "Caribbean Premier League 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:348144",
+      "display": "Mohammad Babar Azam",
+      "aliases": [
+        "mohammad babar azam"
+      ],
+      "team": "TPAK",
+      "role": "BAT",
+      "tours": [
+        "England vs Pakistan Men's Test 2026"
+      ],
+      "source": "auto"
     }
   ]
 }
