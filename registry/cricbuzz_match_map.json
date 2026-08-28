@@ -4,16 +4,17 @@
  "_rules": "PINS ARE READ, NOT RE-DERIVED — that is the point: a rename upstream cannot move or drop a pairing that is already recorded. A later derivation that finds NOTHING does not disturb a pin (absence is not evidence). A later derivation that finds a DIFFERENT cricbuzz match revokes BOTH claims; so does one cricbuzz match claimed by two different fixtures, and one key carrying two ESPN events. Never last-wins. A revoked key stays revoked until a human runs --forget.",
  "_note": "each pin's `confirmations` list IS the fact log; pins/revoked are a pure function of it (compile_pins o confirmations_log), and no clock is read anywhere. Regenerate, never hand-edit.",
  "counts": {
-  "confirmations": 142,
-  "pinned": 110,
+  "confirmations": 144,
+  "pinned": 112,
   "revoked": 0,
-  "series": 4
+  "series": 5
  },
  "series": [
   "11493",
   "11504",
   "12123",
-  "12316"
+  "12316",
+  "12870"
  ],
  "pins": {
   "11493|2026-07-21|mi london+sunrisers leeds": {
@@ -2509,6 +2510,48 @@
      "espn_event": "1537354",
      "cb_desc": "Final",
      "cb_date": "2026-08-08"
+    }
+   ]
+  },
+  "12870|2026-08-26|amsterdam flames+rotterdam dockers": {
+   "cricbuzz_match_id": "169250",
+   "series_id": "12870",
+   "date": "2026-08-26",
+   "teams": [
+    "amsterdam flames",
+    "rotterdam dockers"
+   ],
+   "espn_events": [
+    "1547872"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1547872",
+     "cb_desc": "1st Match",
+     "cb_date": "2026-08-26"
+    }
+   ]
+  },
+  "12870|2026-08-27|belfast wolves+dublin guardians": {
+   "cricbuzz_match_id": "169253",
+   "series_id": "12870",
+   "date": "2026-08-27",
+   "teams": [
+    "belfast wolves",
+    "dublin guardians"
+   ],
+   "espn_events": [
+    "1547873"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1547873",
+     "cb_desc": "2nd Match",
+     "cb_date": "2026-08-27"
     }
    ]
   }

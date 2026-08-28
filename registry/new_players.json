@@ -832,6 +832,19 @@
         "England vs Pakistan Men's Test 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:671805",
+      "display": "Henry George Munsey",
+      "aliases": [
+        "henry george munsey"
+      ],
+      "team": "MTGLA",
+      "role": "BAT",
+      "tours": [
+        "European T20 Premier League 2026"
+      ],
+      "source": "auto"
     }
   ]
 }
