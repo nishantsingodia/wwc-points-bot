@@ -1,6 +1,6 @@
 {
  "anchor": "cricinfo_id (ci:); cs:/uncapped: fallback; cricsheet_id derived from crosswalk",
- "count": 759,
+ "count": 810,
  "players": {
   "ci:597806": {
    "aliases": [
@@ -2973,7 +2973,8 @@
    ],
    "tours": [
     "Australia tour of Bangladesh 2026 (Men T20I)",
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "892749",
    "cricsheet_id": "f1f99156",
@@ -3560,7 +3561,8 @@
    ],
    "tours": [
     "Major League Cricket 2026",
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "277912",
    "cricsheet_id": "a818c1be",
@@ -3578,7 +3580,8 @@
     "rushil ugarkar"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "1441684",
    "cricsheet_id": "8a58f203",
@@ -3708,7 +3711,8 @@
    ],
    "tours": [
     "Major League Cricket 2026",
-    "Caribbean Premier League 2026"
+    "Caribbean Premier League 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "485379",
    "cricsheet_id": "d1305df0",
@@ -3725,7 +3729,8 @@
     "steven smith"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "267192",
    "cricsheet_id": "30a45b23",
@@ -3741,7 +3746,8 @@
     "glenn maxwell"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "325026",
    "cricsheet_id": "b681e71e",
@@ -3758,7 +3764,8 @@
    ],
    "tours": [
     "Major League Cricket 2026",
-    "New Zealand vs West Indies Men's ODI 2026"
+    "New Zealand vs West Indies Men's ODI 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "438563",
    "cricsheet_id": "7fa12533",
@@ -3857,7 +3864,8 @@
    ],
    "tours": [
     "Major League Cricket 2026",
-    "Caribbean Premier League 2026"
+    "Caribbean Premier League 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "398513",
    "cricsheet_id": "c8a3f688",
@@ -3987,7 +3995,8 @@
     "francois du plessis"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "44828",
    "cricsheet_id": "3355b542",
@@ -4018,7 +4027,8 @@
     "shubham subhash ranjane"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "554701",
    "cricsheet_id": "6c7a68d0",
@@ -4099,10 +4109,12 @@
   "ci:267724": {
    "aliases": [
     "ka maharaj",
+    "keshav athmanand maharaj",
     "keshav maharaj"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "267724",
    "cricsheet_id": "0b60eb09",
@@ -4357,7 +4369,8 @@
     "ravichandran ashwin"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "26421",
    "cricsheet_id": "495d42a5",
@@ -4373,7 +4386,8 @@
     "sp krishnamurthi"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "1277627",
    "cricsheet_id": "3b8e7647",
@@ -4616,7 +4630,8 @@
     "harmeet singh baddhan"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "422847",
    "cricsheet_id": "0bf15e52",
@@ -4963,10 +4978,12 @@
   "ci:481979": {
    "aliases": [
     "a nortje",
+    "anrich arno nortje",
     "anrich nortje"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "481979",
    "cricsheet_id": "acdc62f5",
@@ -5217,7 +5234,8 @@
     "ali khan"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "927119",
    "cricsheet_id": "b0eaaac6",
@@ -5532,7 +5550,8 @@
     "tim tector"
    ],
    "tours": [
-    "India tour of Ireland 2026 (Men T20I)"
+    "India tour of Ireland 2026 (Men T20I)",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "1195143",
    "cricsheet_id": "0348f9a5",
@@ -5546,7 +5565,8 @@
     "ross adair"
    ],
    "tours": [
-    "India tour of Ireland 2026 (Men T20I)"
+    "India tour of Ireland 2026 (Men T20I)",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "468573",
    "cricsheet_id": "4ec96094",
@@ -5561,7 +5581,8 @@
     "harry tom tector"
    ],
    "tours": [
-    "India tour of Ireland 2026 (Men T20I)"
+    "India tour of Ireland 2026 (Men T20I)",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "961407",
    "cricsheet_id": "59ea70a4",
@@ -5577,7 +5598,8 @@
     "lorcan tucker"
    ],
    "tours": [
-    "India tour of Ireland 2026 (Men T20I)"
+    "India tour of Ireland 2026 (Men T20I)",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "928057",
    "cricsheet_id": "3979b5e0",
@@ -5593,7 +5615,8 @@
     "bf calitz"
    ],
    "tours": [
-    "India tour of Ireland 2026 (Men T20I)"
+    "India tour of Ireland 2026 (Men T20I)",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "1193295",
    "cricsheet_id": "24ad97e7",
@@ -5608,7 +5631,8 @@
     "gareth james delany"
    ],
    "tours": [
-    "India tour of Ireland 2026 (Men T20I)"
+    "India tour of Ireland 2026 (Men T20I)",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "1099379",
    "cricsheet_id": "33b3d2df",
@@ -5624,7 +5648,8 @@
     "gh dockrell"
    ],
    "tours": [
-    "India tour of Ireland 2026 (Men T20I)"
+    "India tour of Ireland 2026 (Men T20I)",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "348034",
    "cricsheet_id": "99cddc5e",
@@ -5640,7 +5665,8 @@
     "mj humphreys"
    ],
    "tours": [
-    "India tour of Ireland 2026 (Men T20I)"
+    "India tour of Ireland 2026 (Men T20I)",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "1263361",
    "cricsheet_id": "2c54c49b",
@@ -5656,7 +5682,8 @@
     "matthew kyle hollard"
    ],
    "tours": [
-    "India tour of Ireland 2026 (Men T20I)"
+    "India tour of Ireland 2026 (Men T20I)",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "1490554",
    "cricsheet_id": "95b5bda3",
@@ -5685,7 +5712,8 @@
     "jai moondra"
    ],
    "tours": [
-    "India tour of Ireland 2026 (Men T20I)"
+    "India tour of Ireland 2026 (Men T20I)",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "1448923",
    "cricsheet_id": "3bea7ea9",
@@ -5714,7 +5742,8 @@
     "gavin hoey"
    ],
    "tours": [
-    "India tour of Ireland 2026 (Men T20I)"
+    "India tour of Ireland 2026 (Men T20I)",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "1195662",
    "cricsheet_id": "19d0a172",
@@ -6179,7 +6208,8 @@
     "daryl mitchell"
    ],
    "tours": [
-    "New Zealand vs West Indies Men's ODI 2026"
+    "New Zealand vs West Indies Men's ODI 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "381743",
    "cricsheet_id": "eade4650",
@@ -6210,7 +6240,8 @@
     "michael gordon bracewell"
    ],
    "tours": [
-    "New Zealand vs West Indies Men's ODI 2026"
+    "New Zealand vs West Indies Men's ODI 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "326968",
    "cricsheet_id": "e38bce7a",
@@ -6229,7 +6260,8 @@
    ],
    "tours": [
     "New Zealand vs West Indies Men's ODI 2026",
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "502714",
    "cricsheet_id": "e4a0deae",
@@ -6756,7 +6788,8 @@
     "david wiese"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "221140",
    "cricsheet_id": "aa8d28ae",
@@ -6819,7 +6852,8 @@
     "sandeep lamichhane"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "960361",
    "cricsheet_id": "b410bd3d",
@@ -7005,7 +7039,8 @@
     "br mcdermott"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "603410",
    "cricsheet_id": "c41043e6",
@@ -7041,7 +7076,8 @@
     "jimmy neesham"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "355269",
    "cricsheet_id": "9219eff0",
@@ -7365,7 +7401,8 @@
     "vijay shankar"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "477021",
    "cricsheet_id": "0994d0ae",
@@ -7504,7 +7541,8 @@
     "brandon mcmullen"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "949473",
    "cricsheet_id": "436c763a",
@@ -8208,10 +8246,12 @@
   },
   "ci:298438": {
    "aliases": [
+    "jason jonathan roy",
     "jason roy"
    ],
    "tours": [
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "298438",
    "cricsheet_id": "d1c36f5c",
@@ -8228,7 +8268,8 @@
     "jm vince"
    ],
    "tours": [
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "296597",
    "cricsheet_id": "a15618fe",
@@ -8241,10 +8282,12 @@
   },
   "ci:550235": {
    "aliases": [
+    "thomas kevin curran",
     "tom curran"
    ],
    "tours": [
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "550235",
    "cricsheet_id": "e86754b2",
@@ -8274,10 +8317,12 @@
   "ci:473191": {
    "aliases": [
     "richard gleeson",
+    "richard james gleeson",
     "rj gleeson"
    ],
    "tours": [
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "473191",
    "cricsheet_id": "402f8494",
@@ -8586,7 +8631,8 @@
     "david miller"
    ],
    "tours": [
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "321777",
    "cricsheet_id": "d67d5f00",
@@ -8633,10 +8679,12 @@
   },
   "ci:288992": {
    "aliases": [
-    "chris jordan"
+    "chris jordan",
+    "christopher james jordan"
    ],
    "tours": [
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "288992",
    "cricsheet_id": "ffe699c0",
@@ -8874,10 +8922,12 @@
   "ci:403902": {
    "aliases": [
     "liam livingstone",
+    "liam stephen livingstone",
     "ls livingstone"
    ],
    "tours": [
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "403902",
    "cricsheet_id": "50c6bc2b",
@@ -9024,7 +9074,8 @@
     "heinrich klaasen"
    ],
    "tours": [
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "436757",
    "cricsheet_id": "235c2bb6",
@@ -9191,10 +9242,12 @@
   },
   "ci:256956": {
    "aliases": [
-    "laurie evans"
+    "laurie evans",
+    "laurie john evans"
    ],
    "tours": [
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "256956",
    "cricsheet_id": "1c513d54",
@@ -9256,10 +9309,12 @@
   },
   "ci:310525": {
    "aliases": [
-    "chris wood"
+    "chris wood",
+    "christopher philip wood"
    ],
    "tours": [
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "310525",
    "cricsheet_id": "1cfac535",
@@ -9418,7 +9473,8 @@
     "aneurin donald"
    ],
    "tours": [
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "562281",
    "cricsheet_id": "72918338",
@@ -9434,7 +9490,8 @@
     "brad currie"
    ],
    "tours": [
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "European T20 Premier League 2026"
    ],
    "cricinfo_id": "1000791",
    "cricsheet_id": "2ecd844a",
@@ -12207,7 +12264,9 @@
    "auction_id": null,
    "cricinfo_id": "1209191",
    "cricsheet_id": "24f6e254",
-   "espn_id": "1209191"
+   "espn_id": "1209191",
+   "cricbuzz_id": "15810",
+   "cricbuzz_tier": 1
   },
   "ci:1398125": {
    "aliases": [
@@ -12265,7 +12324,9 @@
    "auction_id": null,
    "cricinfo_id": "1342545",
    "cricsheet_id": null,
-   "espn_id": "1342545"
+   "espn_id": "1342545",
+   "cricbuzz_id": "1477401",
+   "cricbuzz_tier": 1
   },
   "ci:1443401": {
    "aliases": [
@@ -12279,7 +12340,9 @@
    "cricsheet_id": "4f3ab93a",
    "espn_id": "1443401",
    "draft_id": 10821,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "1430289",
+   "cricbuzz_tier": 2
   },
   "ci:1209188": {
    "aliases": [
@@ -12309,6 +12372,714 @@
    "cricsheet_id": "de098678",
    "espn_id": "1275938",
    "draft_id": 10819,
+   "auction_id": null,
+   "cricbuzz_id": "23301",
+   "cricbuzz_tier": 2
+  },
+  "uncapped:jasper-davidson": {
+   "aliases": [
+    "jasper davidson"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Jasper Davidson",
+   "draft_id": 10824,
+   "auction_id": null
+  },
+  "uncapped:ryan-klein": {
+   "aliases": [
+    "ryan klein"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Ryan Klein",
+   "draft_id": 10827,
+   "auction_id": null
+  },
+  "ci:1071504": {
+   "aliases": [
+    "michael levitt"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Michael Levitt",
+   "cricinfo_id": "1071504",
+   "cricsheet_id": "6a71ba3a",
+   "espn_id": "1071504",
+   "draft_id": 10829,
+   "auction_id": null
+  },
+  "ci:1065115": {
+   "aliases": [
+    "ben manenti",
+    "benjamin andrew davey manenti"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Ben Manenti",
+   "cricinfo_id": "1065115",
+   "cricsheet_id": "ab21795b",
+   "espn_id": "1065115",
+   "draft_id": 10831,
+   "auction_id": null
+  },
+  "ci:526481": {
+   "aliases": [
+    "m saqib zulfiqar",
+    "saqib zulfiqar"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Saqib Zulfiqar",
+   "cricinfo_id": "526481",
+   "cricsheet_id": "5d38476c",
+   "espn_id": "526481",
+   "draft_id": 10835,
+   "auction_id": null
+  },
+  "ci:440522": {
+   "aliases": [
+    "logan van beek",
+    "logan verjus van beek"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Logan van Beek",
+   "cricinfo_id": "440522",
+   "cricsheet_id": "782fb776",
+   "espn_id": "440522",
+   "draft_id": 10836,
+   "auction_id": null
+  },
+  "ci:47850": {
+   "aliases": [
+    "roelof erasmus van der merwe",
+    "roelof van der merwe"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Roelof van der Merwe",
+   "cricinfo_id": "47850",
+   "cricsheet_id": "05c2ca46",
+   "espn_id": "47850",
+   "draft_id": 10837,
+   "auction_id": null
+  },
+  "ci:1153767": {
+   "aliases": [
+    "vikramjit singh"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Vikramjit Singh",
+   "cricinfo_id": "1153767",
+   "cricsheet_id": "2a9eee66",
+   "espn_id": "1153767",
+   "draft_id": 10838,
+   "auction_id": null
+  },
+  "ci:1127317": {
+   "aliases": [
+    "scott andrew edwards",
+    "scott edwards"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Scott Edwards",
+   "cricinfo_id": "1127317",
+   "cricsheet_id": "b59db04f",
+   "espn_id": "1127317",
+   "draft_id": 10840,
+   "auction_id": null
+  },
+  "ci:1323418": {
+   "aliases": [
+    "ali hasan"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Ali Hasan",
+   "cricinfo_id": "1323418",
+   "cricsheet_id": "cae17490",
+   "espn_id": "1323418",
+   "draft_id": 10841,
+   "auction_id": null
+  },
+  "ci:595921": {
+   "aliases": [
+    "curtis campher"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Curtis Campher",
+   "cricinfo_id": "595921",
+   "cricsheet_id": "478a63e7",
+   "espn_id": "595921",
+   "draft_id": 10843,
+   "auction_id": null
+  },
+  "ci:1036191": {
+   "aliases": [
+    "bas de leede"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Bas de Leede",
+   "cricinfo_id": "1036191",
+   "cricsheet_id": "fc4375ef",
+   "espn_id": "1036191",
+   "draft_id": 10845,
+   "auction_id": null
+  },
+  "ci:1195672": {
+   "aliases": [
+    "aryan dutt"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Aryan Dutt",
+   "cricinfo_id": "1195672",
+   "cricsheet_id": "803dbf1d",
+   "espn_id": "1195672",
+   "draft_id": 10846,
+   "auction_id": null
+  },
+  "ci:1195670": {
+   "aliases": [
+    "kyle klein"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Kyle Klein",
+   "cricinfo_id": "1195670",
+   "cricsheet_id": "374bb5e7",
+   "espn_id": "1195670",
+   "draft_id": 10848,
+   "auction_id": null
+  },
+  "uncapped:jordan-neill": {
+   "aliases": [
+    "jordan neill"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Jordan Neill",
+   "draft_id": 10849,
+   "auction_id": null
+  },
+  "ci:643197": {
+   "aliases": [
+    "max o dowd",
+    "maxwell patrick o dowd"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Max O'Dowd",
+   "cricinfo_id": "643197",
+   "cricsheet_id": "b699df47",
+   "espn_id": "643197",
+   "draft_id": 10850,
+   "auction_id": null
+  },
+  "ci:362710": {
+   "aliases": [
+    "david alan payne",
+    "david payne"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "David Payne",
+   "cricinfo_id": "362710",
+   "cricsheet_id": "6c79c098",
+   "espn_id": "362710",
+   "draft_id": 10851,
+   "auction_id": null
+  },
+  "ci:1193548": {
+   "aliases": [
+    "tim pringle",
+    "timothy james gerard pringle"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Tim Pringle",
+   "cricinfo_id": "1193548",
+   "cricsheet_id": "8ce2080b",
+   "espn_id": "1193548",
+   "draft_id": 10852,
+   "auction_id": null
+  },
+  "ci:277916": {
+   "aliases": [
+    "ajinkya rahane"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Ajinkya Rahane",
+   "cricinfo_id": "277916",
+   "cricsheet_id": "29e95537",
+   "espn_id": "277916",
+   "draft_id": 10853,
+   "auction_id": null
+  },
+  "ci:1419054": {
+   "aliases": [
+    "yuvraj samra",
+    "yuvraj singh samra"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Yuvraj Samra",
+   "cricinfo_id": "1419054",
+   "cricsheet_id": "d02c40ab",
+   "espn_id": "1419054",
+   "draft_id": 10854,
+   "auction_id": null
+  },
+  "ci:526441": {
+   "aliases": [
+    "mark adair",
+    "mark richard adair"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Mark Adair",
+   "cricinfo_id": "526441",
+   "cricsheet_id": "fc55ec67",
+   "espn_id": "526441",
+   "draft_id": 10857,
+   "auction_id": null
+  },
+  "ci:379140": {
+   "aliases": [
+    "devon conway",
+    "devon philip conway"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Devon Conway",
+   "cricinfo_id": "379140",
+   "cricsheet_id": "df5a6881",
+   "espn_id": "379140",
+   "draft_id": 10859,
+   "auction_id": null
+  },
+  "ci:1118836": {
+   "aliases": [
+    "crishan kalugamage"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Crishan Kalugamage",
+   "cricinfo_id": "1118836",
+   "cricsheet_id": "31c04b7b",
+   "espn_id": "1118836",
+   "draft_id": 10863,
+   "auction_id": null
+  },
+  "ci:1104703": {
+   "aliases": [
+    "fred klaassen",
+    "frederick jack klaassen"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Fred Klaassen",
+   "cricinfo_id": "1104703",
+   "cricsheet_id": "c042b412",
+   "espn_id": "1104703",
+   "draft_id": 10864,
+   "auction_id": null
+  },
+  "uncapped:harry-manenti": {
+   "aliases": [
+    "harry manenti"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Harry Manenti",
+   "draft_id": 10865,
+   "auction_id": null
+  },
+  "uncapped:alex-roy": {
+   "aliases": [
+    "alex roy"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Alex Roy",
+   "draft_id": 10868,
+   "auction_id": null
+  },
+  "ci:303427": {
+   "aliases": [
+    "paul robert stirling",
+    "paul stirling"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Paul Stirling",
+   "cricinfo_id": "303427",
+   "cricsheet_id": "cf494ffe",
+   "espn_id": "303427",
+   "draft_id": 10869,
+   "auction_id": null
+  },
+  "ci:1452277": {
+   "aliases": [
+    "zainullah ihsan"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Zainullah Ihsan",
+   "cricinfo_id": "1452277",
+   "cricsheet_id": "3cbdbdeb",
+   "espn_id": "1452277",
+   "draft_id": 10872,
+   "auction_id": null
+  },
+  "ci:1191381": {
+   "aliases": [
+    "noah croes"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Noah Croes",
+   "cricinfo_id": "1191381",
+   "cricsheet_id": "f427e63e",
+   "espn_id": "1191381",
+   "draft_id": 10875,
+   "auction_id": null
+  },
+  "uncapped:chris-greaves": {
+   "aliases": [
+    "chris greaves"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Chris Greaves",
+   "draft_id": 10877,
+   "auction_id": null
+  },
+  "ci:1191384": {
+   "aliases": [
+    "peter hatzoglou"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Peter Hatzoglou",
+   "cricinfo_id": "1191384",
+   "cricsheet_id": "6f95e5fa",
+   "espn_id": "1191384",
+   "draft_id": 10879,
+   "auction_id": null
+  },
+  "ci:928067": {
+   "aliases": [
+    "josh little",
+    "joshua brian little"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Josh Little",
+   "cricinfo_id": "928067",
+   "cricsheet_id": "9061a703",
+   "espn_id": "928067",
+   "draft_id": 10882,
+   "auction_id": null
+  },
+  "ci:1241277": {
+   "aliases": [
+    "muhammad waseem"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Muhammad Waseem",
+   "cricinfo_id": "1241277",
+   "cricsheet_id": "6f02fe2a",
+   "espn_id": "1241277",
+   "draft_id": 10884,
+   "auction_id": null
+  },
+  "uncapped:craig-young": {
+   "aliases": [
+    "craig young"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Craig Young",
+   "draft_id": 10889,
+   "auction_id": null
+  },
+  "ci:1278263": {
+   "aliases": [
+    "jack jarvis"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Jack Jarvis",
+   "cricinfo_id": "1278263",
+   "cricsheet_id": "ab54f9e7",
+   "espn_id": "1278263",
+   "draft_id": 10897,
+   "auction_id": null
+  },
+  "uncapped:ollie-jones": {
+   "aliases": [
+    "ollie jones"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Ollie Jones",
+   "draft_id": 10898,
+   "auction_id": null
+  },
+  "ci:964085": {
+   "aliases": [
+    "finlay mccreath"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Finlay McCreath",
+   "cricinfo_id": "964085",
+   "cricsheet_id": "bccead86",
+   "espn_id": "964085",
+   "draft_id": 10899,
+   "auction_id": null
+  },
+  "uncapped:safyaan-sharif": {
+   "aliases": [
+    "safyaan sharif"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Safyaan Sharif",
+   "draft_id": 10901,
+   "auction_id": null
+  },
+  "ci:280490": {
+   "aliases": [
+    "jj smuts",
+    "jon jon trevor smuts"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "JJ Smuts",
+   "cricinfo_id": "280490",
+   "cricsheet_id": "42172c3c",
+   "espn_id": "280490",
+   "draft_id": 10902,
+   "auction_id": null
+  },
+  "ci:707109": {
+   "aliases": [
+    "sean solia"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Sean Solia",
+   "cricinfo_id": "707109",
+   "cricsheet_id": "fd9f43bb",
+   "espn_id": "707109",
+   "draft_id": 10903,
+   "auction_id": null
+  },
+  "ci:459508": {
+   "aliases": [
+    "aj tye",
+    "andrew tye"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Andrew Tye",
+   "cricinfo_id": "459508",
+   "cricsheet_id": "7c7d63a2",
+   "espn_id": "459508",
+   "draft_id": 10904,
+   "auction_id": null,
+   "cricbuzz_id": "9617",
+   "cricbuzz_tier": 3
+  },
+  "ci:659081": {
+   "aliases": [
+    "mark robert james watt",
+    "mark watt"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Mark Watt",
+   "cricinfo_id": "659081",
+   "cricsheet_id": "1252f71a",
+   "espn_id": "659081",
+   "draft_id": 10906,
+   "auction_id": null
+  },
+  "ci:25490": {
+   "aliases": [
+    "richard douglas berrington",
+    "richie berrington"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Richie Berrington",
+   "cricinfo_id": "25490",
+   "cricsheet_id": "e21bc7f3",
+   "espn_id": "25490",
+   "draft_id": 10908,
+   "auction_id": null
+  },
+  "ci:417268": {
+   "aliases": [
+    "matthew cross",
+    "matthew henry cross"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Matthew Cross",
+   "cricinfo_id": "417268",
+   "cricsheet_id": "8b261d84",
+   "espn_id": "417268",
+   "draft_id": 10909,
+   "auction_id": null
+  },
+  "uncapped:oliver-davidson": {
+   "aliases": [
+    "oliver davidson"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Oliver Davidson",
+   "draft_id": 10911,
+   "auction_id": null
+  },
+  "ci:5961": {
+   "aliases": [
+    "moises constantino henriques",
+    "moises henriques"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Moises Henriques",
+   "cricinfo_id": "5961",
+   "cricsheet_id": "32198ae0",
+   "espn_id": "5961",
+   "draft_id": 10912,
+   "auction_id": null
+  },
+  "ci:414966": {
+   "aliases": [
+    "michael alexander leask",
+    "michael leask"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Michael Leask",
+   "cricinfo_id": "414966",
+   "cricsheet_id": "28131839",
+   "espn_id": "414966",
+   "draft_id": 10913,
+   "auction_id": null
+  },
+  "uncapped:george-munsey": {
+   "aliases": [
+    "george munsey"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "George Munsey",
+   "draft_id": 10916,
+   "auction_id": null
+  },
+  "ci:1195683": {
+   "aliases": [
+    "liam naylor"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Liam Naylor",
+   "cricinfo_id": "1195683",
+   "cricsheet_id": "1236044e",
+   "espn_id": "1195683",
+   "draft_id": 10917,
+   "auction_id": null
+  },
+  "ci:542023": {
+   "aliases": [
+    "lungi ngidi",
+    "lungisani true man ngidi"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Lungi Ngidi",
+   "cricinfo_id": "542023",
+   "cricsheet_id": "f834dcfc",
+   "espn_id": "542023",
+   "draft_id": 10919,
+   "auction_id": null
+  },
+  "ci:348109": {
+   "aliases": [
+    "paul adriaan van meekeren",
+    "paul van meekeren"
+   ],
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "display": "Paul van Meekeren",
+   "cricinfo_id": "348109",
+   "cricsheet_id": "4557dc54",
+   "espn_id": "348109",
+   "draft_id": 10921,
    "auction_id": null
   }
  }

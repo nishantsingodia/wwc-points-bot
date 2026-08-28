@@ -1,0 +1,428 @@
+{
+  "MTROT": {
+    "name": "Rotterdam Dockers",
+    "players": [
+      [
+        "Faf du Plessis",
+        "BAT"
+      ],
+      [
+        "Jasper Davidson",
+        "BOWL"
+      ],
+      [
+        "Aneurin Donald",
+        "BAT"
+      ],
+      [
+        "Heinrich Klaasen",
+        "BAT"
+      ],
+      [
+        "Ryan Klein",
+        "BOWL"
+      ],
+      [
+        "Sandeep Lamichhane",
+        "BOWL"
+      ],
+      [
+        "Michael Levitt",
+        "BAT"
+      ],
+      [
+        "Ben McDermott",
+        "BAT"
+      ],
+      [
+        "Ben Manenti",
+        "BOWL"
+      ],
+      [
+        "Jai Moondra",
+        "BOWL"
+      ],
+      [
+        "Anrich Nortje",
+        "BOWL"
+      ],
+      [
+        "Shubham Ranjane",
+        "AR"
+      ],
+      [
+        "Saqib Zulfiqar",
+        "BOWL"
+      ],
+      [
+        "Logan van Beek",
+        "BOWL"
+      ],
+      [
+        "Roelof van der Merwe",
+        "BOWL"
+      ],
+      [
+        "Vikramjit Singh",
+        "BAT"
+      ],
+      [
+        "David Wiese",
+        "AR"
+      ]
+    ]
+  },
+  "MTAMS": {
+    "name": "Amsterdam Flames",
+    "players": [
+      [
+        "Scott Edwards",
+        "BAT"
+      ],
+      [
+        "Ali Hasan",
+        "BOWL"
+      ],
+      [
+        "Michael Bracewell",
+        "BAT"
+      ],
+      [
+        "Curtis Campher",
+        "AR"
+      ],
+      [
+        "Tim David",
+        "BAT"
+      ],
+      [
+        "Bas de Leede",
+        "BAT"
+      ],
+      [
+        "Aryan Dutt",
+        "BOWL"
+      ],
+      [
+        "Richard Gleeson",
+        "BOWL"
+      ],
+      [
+        "Kyle Klein",
+        "BOWL"
+      ],
+      [
+        "Jordan Neill",
+        "BAT"
+      ],
+      [
+        "Max O'Dowd",
+        "BAT"
+      ],
+      [
+        "David Payne",
+        "BOWL"
+      ],
+      [
+        "Tim Pringle",
+        "AR"
+      ],
+      [
+        "Ajinkya Rahane",
+        "BAT"
+      ],
+      [
+        "Yuvraj Samra",
+        "BAT"
+      ],
+      [
+        "Steven Smith",
+        "BAT"
+      ]
+    ]
+  },
+  "MTBEL": {
+    "name": "Belfast Wolves",
+    "players": [
+      [
+        "Glenn Maxwell",
+        "BAT"
+      ],
+      [
+        "Mark Adair",
+        "BOWL"
+      ],
+      [
+        "Mark Chapman",
+        "AR"
+      ],
+      [
+        "Devon Conway",
+        "BAT"
+      ],
+      [
+        "Gavin Hoey",
+        "BOWL"
+      ],
+      [
+        "Matthew Humphreys",
+        "BOWL"
+      ],
+      [
+        "Chris Jordan",
+        "BOWL"
+      ],
+      [
+        "Crishan Kalugamage",
+        "BOWL"
+      ],
+      [
+        "Fred Klaassen",
+        "BOWL"
+      ],
+      [
+        "Harry Manenti",
+        "AR"
+      ],
+      [
+        "David Miller",
+        "BAT"
+      ],
+      [
+        "Saurabh Netravalkar",
+        "BOWL"
+      ],
+      [
+        "Alex Roy",
+        "AR"
+      ],
+      [
+        "Paul Stirling",
+        "BAT"
+      ],
+      [
+        "Tim Tector",
+        "BAT"
+      ],
+      [
+        "Lorcan Tucker",
+        "BAT"
+      ],
+      [
+        "Zainullah Ihsan",
+        "BOWL"
+      ]
+    ]
+  },
+  "MTDUB": {
+    "name": "Dublin Guardians",
+    "players": [
+      [
+        "Ravichandran Ashwin",
+        "BOWL"
+      ],
+      [
+        "Ben Calitz",
+        "BAT"
+      ],
+      [
+        "Noah Croes",
+        "BAT"
+      ],
+      [
+        "George Dockrell",
+        "AR"
+      ],
+      [
+        "Chris Greaves",
+        "BOWL"
+      ],
+      [
+        "Harmeet Singh",
+        "BOWL"
+      ],
+      [
+        "Peter Hatzoglou",
+        "BOWL"
+      ],
+      [
+        "Matt Hollard",
+        "BOWL"
+      ],
+      [
+        "Sanjay Krishnamurthi",
+        "AR"
+      ],
+      [
+        "Josh Little",
+        "BOWL"
+      ],
+      [
+        "Daryl Mitchell",
+        "BAT"
+      ],
+      [
+        "Muhammad Waseem",
+        "BAT"
+      ],
+      [
+        "Vijay Shankar",
+        "AR"
+      ],
+      [
+        "Harry Tector",
+        "BAT"
+      ],
+      [
+        "James Vince",
+        "BAT"
+      ],
+      [
+        "Chris Wood",
+        "BOWL"
+      ],
+      [
+        "Craig Young",
+        "BOWL"
+      ]
+    ]
+  },
+  "MTEDI": {
+    "name": "Edinburgh Castle Rockers",
+    "players": [
+      [
+        "Mitchell Santner",
+        "BOWL"
+      ],
+      [
+        "Ross Adair",
+        "BAT"
+      ],
+      [
+        "Trent Boult",
+        "BOWL"
+      ],
+      [
+        "Tom Curran",
+        "AR"
+      ],
+      [
+        "Gareth Delany",
+        "BAT"
+      ],
+      [
+        "Laurie Evans",
+        "BAT"
+      ],
+      [
+        "Andries Gous",
+        "BAT"
+      ],
+      [
+        "Jack Jarvis",
+        "BOWL"
+      ],
+      [
+        "Ollie Jones",
+        "BOWL"
+      ],
+      [
+        "Finlay McCreath",
+        "BAT"
+      ],
+      [
+        "Brandon McMullen",
+        "BAT"
+      ],
+      [
+        "Safyaan Sharif",
+        "BOWL"
+      ],
+      [
+        "JJ Smuts",
+        "BAT"
+      ],
+      [
+        "Sean Solia",
+        "AR"
+      ],
+      [
+        "Andrew Tye",
+        "BOWL"
+      ],
+      [
+        "Rushil Ugarkar",
+        "BOWL"
+      ],
+      [
+        "Mark Watt",
+        "BOWL"
+      ]
+    ]
+  },
+  "MTGLA": {
+    "name": "Glasgow Cosmic",
+    "players": [
+      [
+        "Ali Khan",
+        "BOWL"
+      ],
+      [
+        "Richie Berrington",
+        "BAT"
+      ],
+      [
+        "Matthew Cross",
+        "BAT"
+      ],
+      [
+        "Brad Currie",
+        "BOWL"
+      ],
+      [
+        "Oliver Davidson",
+        "BOWL"
+      ],
+      [
+        "Moises Henriques",
+        "AR"
+      ],
+      [
+        "Michael Leask",
+        "AR"
+      ],
+      [
+        "Liam Livingstone",
+        "BAT"
+      ],
+      [
+        "Keshav Maharaj",
+        "BOWL"
+      ],
+      [
+        "George Munsey",
+        "BAT"
+      ],
+      [
+        "Liam Naylor",
+        "AR"
+      ],
+      [
+        "James Neesham",
+        "BAT"
+      ],
+      [
+        "Lungi Ngidi",
+        "BOWL"
+      ],
+      [
+        "Jason Roy",
+        "BAT"
+      ],
+      [
+        "Paul van Meekeren",
+        "BOWL"
+      ]
+    ]
+  }
+}
