@@ -4,8 +4,8 @@
  "_rules": "PINS ARE READ, NOT RE-DERIVED — that is the point: a rename upstream cannot move or drop a pairing that is already recorded. A later derivation that finds NOTHING does not disturb a pin (absence is not evidence). A later derivation that finds a DIFFERENT cricbuzz match revokes BOTH claims; so does one cricbuzz match claimed by two different fixtures, and one key carrying two ESPN events. Never last-wins. A revoked key stays revoked until a human runs --forget.",
  "_note": "each pin's `confirmations` list IS the fact log; pins/revoked are a pure function of it (compile_pins o confirmations_log), and no clock is read anywhere. Regenerate, never hand-edit.",
  "counts": {
-  "confirmations": 146,
-  "pinned": 114,
+  "confirmations": 148,
+  "pinned": 116,
   "revoked": 0,
   "series": 5
  },
@@ -2594,6 +2594,48 @@
      "espn_event": "1547874",
      "cb_desc": "3rd Match",
      "cb_date": "2026-08-27"
+    }
+   ]
+  },
+  "12870|2026-08-29|belfast wolves+rotterdam dockers": {
+   "cricbuzz_match_id": "169273",
+   "series_id": "12870",
+   "date": "2026-08-29",
+   "teams": [
+    "belfast wolves",
+    "rotterdam dockers"
+   ],
+   "espn_events": [
+    "1547877"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1547877",
+     "cb_desc": "6th Match",
+     "cb_date": "2026-08-29"
+    }
+   ]
+  },
+  "12870|2026-08-29|dublin guardians+glasgow cosmic": {
+   "cricbuzz_match_id": "169270",
+   "series_id": "12870",
+   "date": "2026-08-29",
+   "teams": [
+    "dublin guardians",
+    "glasgow cosmic"
+   ],
+   "espn_events": [
+    "1547876"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1547876",
+     "cb_desc": "5th Match",
+     "cb_date": "2026-08-29"
     }
    ]
   }

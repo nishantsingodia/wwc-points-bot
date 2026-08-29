@@ -1026,6 +1026,24 @@
    "first_status": "COMPLETED_FLAGGED",
    "first_seen": "2026-08-29",
    "provenance": "live"
+  },
+  {
+   "tour": "European T20 Premier League 2026",
+   "match_key": "2026-08-29::belfast wolves|rotterdam dockers",
+   "match": "Match 6 — MTROT v MTBEL",
+   "date": "2026-08-29",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-29",
+   "provenance": "live"
+  },
+  {
+   "tour": "European T20 Premier League 2026",
+   "match_key": "2026-08-29::dublin guardians|glasgow cosmic",
+   "match": "Match 5 — MTGLA v MTDUB",
+   "date": "2026-08-29",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-29",
+   "provenance": "live"
   }
  ]
 }

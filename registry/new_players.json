@@ -845,6 +845,19 @@
         "European T20 Premier League 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:1323417",
+      "display": "Harry John Manenti",
+      "aliases": [
+        "harry john manenti"
+      ],
+      "team": "MTBEL",
+      "role": "BAT",
+      "tours": [
+        "European T20 Premier League 2026"
+      ],
+      "source": "auto"
     }
   ]
 }
