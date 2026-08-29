@@ -974,6 +974,15 @@
    "provenance": "live"
   },
   {
+   "tour": "Caribbean Premier League 2026",
+   "match_key": "2026-08-26::st lucia kings|trinbago knight riders",
+   "match": "Match 17 — MTTRI v MTSTL",
+   "date": "2026-08-26",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-08-29",
+   "provenance": "live"
+  },
+  {
    "tour": "European T20 Premier League 2026",
    "match_key": "2026-08-26::amsterdam flames|rotterdam dockers",
    "match": "Match 1 — MTROT v MTAMS",
@@ -1007,6 +1016,15 @@
    "date": "2026-08-27",
    "first_status": "COMPLETED_FLAGGED",
    "first_seen": "2026-08-28",
+   "provenance": "live"
+  },
+  {
+   "tour": "Caribbean Premier League 2026",
+   "match_key": "2026-08-29::barbados tridents|trinbago knight riders",
+   "match": "Match 19 — MTTRI v MTBAR",
+   "date": "2026-08-29",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-08-29",
    "provenance": "live"
   }
  ]
