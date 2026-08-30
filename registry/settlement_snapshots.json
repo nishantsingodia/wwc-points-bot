@@ -99812,6 +99812,23 @@
    "match": "Match 2 — MTBEL v MTDUB",
    "date": "2026-08-27",
    "team": "MTBEL",
+   "pid": "ci:1323417",
+   "full": "Harry John Manenti",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "ESPN scorecard · cricbuzz cross-checked (4 players), 18 unbridged · ⏳ provisional (dots unverified for 7 unbridged bowlers: Frederick Jack Klaassen, George Henry Dockrell, Joshua Brian Little… · awaiting cricsheet)",
+   "frozen_at": "2026-08-30",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-27::belfast wolves|dublin guardians",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 2 — MTBEL v MTDUB",
+   "date": "2026-08-27",
+   "team": "MTBEL",
    "pid": "uncapped:harry-manenti",
    "full": "Harry Manenti",
    "points": 0,
