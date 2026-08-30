@@ -1053,6 +1053,15 @@
    "first_status": "COMPLETED",
    "first_seen": "2026-08-29",
    "provenance": "live"
+  },
+  {
+   "tour": "European T20 Premier League 2026",
+   "match_key": "2026-08-30::amsterdam flames|belfast wolves",
+   "match": "Match 7 — MTAMS v MTBEL",
+   "date": "2026-08-30",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-08-30",
+   "provenance": "live"
   }
  ]
 }

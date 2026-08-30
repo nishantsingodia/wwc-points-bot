@@ -858,6 +858,32 @@
         "European T20 Premier League 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:595897",
+      "display": "David Rushmere",
+      "aliases": [
+        "david rushmere"
+      ],
+      "team": "MTAMS",
+      "role": "BAT",
+      "tours": [
+        "European T20 Premier League 2026"
+      ],
+      "source": "auto"
+    },
+    {
+      "pid": "ci:1394079",
+      "display": "Jordan Enno Neill",
+      "aliases": [
+        "jordan enno neill"
+      ],
+      "team": "MTAMS",
+      "role": "BAT",
+      "tours": [
+        "European T20 Premier League 2026"
+      ],
+      "source": "auto"
     }
   ]
 }
