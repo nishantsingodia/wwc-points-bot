@@ -4,10 +4,10 @@
  "_tiers": "tier = number of DISTINCT MATCHES confirming the pair. >=1 cross-check only; >=2 required before a CB-only field may CREATE points.",
  "_note": "each pair's `confirmations` list IS the fact log; bridge/revoked are a pure function of it (compile_bridge o confirmations_log). Regenerate, never hand-edit. A contradicted pair moves to `revoked` and is refused BOTH ways — there is no last-wins.",
  "counts": {
-  "confirmations": 2572,
-  "bridged": 471,
+  "confirmations": 2575,
+  "bridged": 472,
   "revoked": 0,
-  "tier2_plus": 419
+  "tier2_plus": 421
  },
  "bridge": {
   "466": {
@@ -9249,18 +9249,26 @@
   },
   "11448": {
    "cricinfo_id": "914467",
-   "tier": 1,
+   "tier": 2,
    "matches": [
-    "cb154474/espn1534194"
+    "cb154474/espn1534194",
+    "manual/owner-answer"
    ],
    "methods": [
-    "dismissal"
+    "dismissal",
+    "manual"
    ],
    "confirmations": [
     {
      "match": "cb154474/espn1534194",
      "method": "dismissal",
      "date": "2026-08-25"
+    },
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:cricbuzz player 11448"
     }
    ]
   },
@@ -17328,6 +17336,24 @@
     }
    ]
   },
+  "21826": {
+   "cricinfo_id": "727399",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Sachitha Jayathilake"
+    }
+   ]
+  },
   "22081": {
    "cricinfo_id": "1290929",
    "tier": 3,
@@ -17621,18 +17647,26 @@
   },
   "23116": {
    "cricinfo_id": "1278259",
-   "tier": 1,
+   "tier": 2,
    "matches": [
-    "cb169270/espn1547876"
+    "cb169270/espn1547876",
+    "manual/owner-answer"
    ],
    "methods": [
-    "dismissal"
+    "dismissal",
+    "manual"
    ],
    "confirmations": [
     {
      "match": "cb169270/espn1547876",
      "method": "dismissal",
      "date": "2026-08-29"
+    },
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:cricbuzz player 23116"
     }
    ]
   },

@@ -7093,6 +7093,208 @@
       "pid": "ci:1199304",
       "source": "S2",
       "status": "approved"
+    },
+    {
+      "match_key": "2026-08-09::antigua and barbuda falcons|st lucia kings",
+      "scope": "l2",
+      "pid": "ci:1209190",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-09::antigua and barbuda falcons|st lucia kings",
+      "scope": "l2",
+      "pid": "ci:332937",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-12::barbados tridents|jamaica kingsmen",
+      "scope": "l2",
+      "pid": "ci:1209197",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-26::st lucia kings|trinbago knight riders",
+      "scope": "player",
+      "pid": "ci:625964",
+      "field": "4s",
+      "status": "approved",
+      "witness": "espn",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-08-26::st lucia kings|trinbago knight riders",
+      "scope": "player",
+      "pid": "ci:906749",
+      "field": "dots",
+      "status": "approved",
+      "witness": "espn",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-08-29::barbados tridents|trinbago knight riders",
+      "scope": "player",
+      "pid": "ci:670045",
+      "field": "runs_conceded",
+      "status": "approved",
+      "witness": "espn",
+      "source": "S2"
+    },
+    {
+      "match_key": "2026-08-19::england|pakistan",
+      "scope": "l2",
+      "pid": "ci:521637",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-19::england|pakistan",
+      "scope": "l2",
+      "pid": "ci:1112537",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-19::england|pakistan",
+      "scope": "l2",
+      "pid": "ci:303669",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-19::england|pakistan",
+      "scope": "l2",
+      "pid": "ci:911707",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-19::england|pakistan",
+      "scope": "l2",
+      "pid": "ci:641423",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-19::england|pakistan",
+      "scope": "l2",
+      "pid": "ci:1096092",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-19::england|pakistan",
+      "scope": "l2",
+      "pid": "ci:1039481",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-19::england|pakistan",
+      "scope": "l2",
+      "pid": "ci:527776",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-19::england|pakistan",
+      "scope": "l2",
+      "pid": "ci:669855",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-19::england|pakistan",
+      "scope": "l2",
+      "pid": "ci:857975",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-09::sunrisers leeds|welsh fire",
+      "scope": "l2",
+      "pid": "ci:272450",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-09::sunrisers leeds|welsh fire",
+      "scope": "l2",
+      "pid": "ci:493773",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-11::manchester super giants|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:909225",
+      "source": "S1",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-11::manchester super giants|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:857975",
+      "source": "S1",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-14::manchester super giants|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:211855",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-14::manchester super giants|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:1191192",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-14::manchester super giants|sunrisers leeds",
+      "scope": "l2",
+      "pid": "ci:1264775",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-10::southern brave|trent rockets",
+      "scope": "l2",
+      "pid": "ci:1164537",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-10::southern brave|trent rockets",
+      "scope": "l2",
+      "pid": "ci:515905",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-07::colombo kaps|galle gallants",
+      "scope": "l2",
+      "pid": "ci:1306214",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-07::colombo kaps|galle gallants",
+      "scope": "l2",
+      "pid": "ci:1137283",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-07::colombo kaps|galle gallants",
+      "scope": "l2",
+      "pid": "ci:784367",
+      "source": "S2",
+      "status": "approved"
     }
   ]
 }

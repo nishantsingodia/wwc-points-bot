@@ -366,6 +366,36 @@
       "type": "duplicate id",
       "pid": "ci:233901",
       "answer": "No"
+    },
+    {
+      "type": "duplicate id",
+      "pid": "ci:1511916",
+      "answer": "No"
+    },
+    {
+      "type": "duplicate id",
+      "pid": "ci:1394079",
+      "answer": "No"
+    },
+    {
+      "type": "duplicate id",
+      "pid": "ci:1323417",
+      "answer": "No"
+    },
+    {
+      "type": "duplicate id",
+      "pid": "ci:348144",
+      "answer": "No"
+    },
+    {
+      "type": "duplicate id",
+      "pid": "ci:1364327",
+      "answer": "No"
+    },
+    {
+      "type": "duplicate id",
+      "pid": "ci:629080",
+      "answer": "No"
     }
   ]
 }
