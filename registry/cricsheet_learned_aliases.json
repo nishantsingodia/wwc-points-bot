@@ -935,11 +935,15 @@
   },
   "en gay": {
    "pid": "ci:1148593",
-   "display": "Emilio Nico Gay"
+   "display": "Emilio Gay"
   },
   "oe robinson": {
    "pid": "ci:527776",
-   "display": "Oliver Edward Robinson"
+   "display": "Ollie Robinson"
+  },
+  "agha salman": {
+   "pid": "ci:623977",
+   "display": "Salman Ali Agha"
   }
  }
 }

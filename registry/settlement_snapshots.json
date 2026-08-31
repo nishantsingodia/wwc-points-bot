@@ -41865,6 +41865,23 @@
   {
    "match_key": "2026-08-02::dambulla sixers|jaffna kings",
    "tour": "Lanka Premier League 2026",
+   "match": "Match 20 — DS v JK",
+   "date": "2026-08-02",
+   "team": "DS",
+   "pid": "ci:1364327",
+   "full": "Vishwa Lahiru Kumara",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-31",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-02::dambulla sixers|jaffna kings",
+   "tour": "Lanka Premier League 2026",
    "match": "Match 20 — JK v DS",
    "date": "2026-08-02",
    "team": "JK",
@@ -57303,6 +57320,23 @@
    "match": "Match 1 — MTANT v MTJAM",
    "date": "2026-08-07",
    "team": "MTANT",
+   "pid": "ci:1329697",
+   "full": "Sufyan Moqim",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-31",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-07::antigua and barbuda falcons|jamaica kingsmen",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 1 — MTANT v MTJAM",
+   "date": "2026-08-07",
+   "team": "MTANT",
    "pid": "ci:1079860",
    "full": "Tajinder Dhillon",
    "points": 112,
@@ -65727,6 +65761,23 @@
    "match": "Match 2 — MTSTK v MTTRI",
    "date": "2026-08-08",
    "team": "MTSTK",
+   "pid": "ci:775421",
+   "full": "Jeremiah Louis",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-31",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-08::st kitts and nevis patriots|trinbago knight riders",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 2 — MTSTK v MTTRI",
+   "date": "2026-08-08",
+   "team": "MTSTK",
    "pid": "ci:333066",
    "full": "Johnson Charles",
    "points": 33,
@@ -67365,6 +67416,23 @@
    "status": "COMPLETED_FLAGGED",
    "source": "ESPN scorecard (cricapi empty) · ⏳ provisional (dots unverified, awaiting cricsheet) · ⚠ cricbuzz unavailable",
    "frozen_at": "2026-08-14",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-09::antigua and barbuda falcons|st lucia kings",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 3 — MTANT v MTSTL",
+   "date": "2026-08-09",
+   "team": "MTANT",
+   "pid": "ci:1329697",
+   "full": "Sufyan Moqim",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-31",
    "provenance": "live",
    "fields": {
     "played": false
@@ -80261,6 +80329,23 @@
    "tour": "Caribbean Premier League 2026",
    "match": "Match 5 — MTSTL v MTSTK",
    "date": "2026-08-12",
+   "team": "MTSTK",
+   "pid": "ci:775421",
+   "full": "Jeremiah Louis",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-31",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-12::st kitts and nevis patriots|st lucia kings",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 5 — MTSTL v MTSTK",
+   "date": "2026-08-12",
    "team": "MTSTL",
    "pid": "ci:1394273",
    "full": "Jewel Andrew",
@@ -82019,6 +82104,23 @@
    "status": "COMPLETED",
    "source": "ESPN scorecard (cricapi empty) · ⏳ provisional (dots unverified, awaiting cricsheet) · cricbuzz cross-checked (19 players)",
    "frozen_at": "2026-08-15",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-14::antigua and barbuda falcons|st lucia kings",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 7 — MTSTL v MTANT",
+   "date": "2026-08-14",
+   "team": "MTANT",
+   "pid": "ci:1329697",
+   "full": "Sufyan Moqim",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-31",
    "provenance": "live",
    "fields": {
     "played": false
@@ -89102,6 +89204,23 @@
    "match": "Match 1 — TENG v TPAK",
    "date": "2026-08-19",
    "team": "TPAK",
+   "pid": "ci:793441",
+   "full": "Aamir Jamal",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-31",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-19::england|pakistan",
+   "tour": "England vs Pakistan Men's Test 2026",
+   "match": "Match 1 — TENG v TPAK",
+   "date": "2026-08-19",
+   "team": "TPAK",
    "pid": "ci:922941",
    "full": "Abdullah Shafique",
    "points": 128,
@@ -89162,6 +89281,23 @@
     "bat_order": 8,
     "dismissal": "lbw b Tongue",
     "dismissed": true
+   }
+  },
+  {
+   "match_key": "2026-08-19::england|pakistan",
+   "tour": "England vs Pakistan Men's Test 2026",
+   "match": "Match 1 — TENG v TPAK",
+   "date": "2026-08-19",
+   "team": "TPAK",
+   "pid": "ci:1161029",
+   "full": "Awais Zafar",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-31",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
@@ -89315,6 +89451,23 @@
     "bat_order": 2,
     "dismissal": "c Salman Agha b Mohammad Ali",
     "dismissed": true
+   }
+  },
+  {
+   "match_key": "2026-08-19::england|pakistan",
+   "tour": "England vs Pakistan Men's Test 2026",
+   "match": "Match 1 — TENG v TPAK",
+   "date": "2026-08-19",
+   "team": "TPAK",
+   "pid": "ci:1295902",
+   "full": "Ghazi Ghori",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-31",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
@@ -89833,6 +89986,23 @@
    "match": "Match 1 — TENG v TPAK",
    "date": "2026-08-19",
    "team": "TPAK",
+   "pid": "ci:1062812",
+   "full": "Sajid Khan",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-31",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-19::england|pakistan",
+   "tour": "England vs Pakistan Men's Test 2026",
+   "match": "Match 1 — TENG v TPAK",
+   "date": "2026-08-19",
+   "team": "TPAK",
    "pid": "ci:623977",
    "full": "Salman Ali Agha",
    "points": 57,
@@ -89927,6 +90097,40 @@
     "bat_order": 3,
     "dismissal": "lbw b Robinson",
     "dismissed": true
+   }
+  },
+  {
+   "match_key": "2026-08-19::england|pakistan",
+   "tour": "England vs Pakistan Men's Test 2026",
+   "match": "Match 1 — TENG v TPAK",
+   "date": "2026-08-19",
+   "team": "TENG",
+   "pid": "ci:1334872",
+   "full": "Shoaib Bashir",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-31",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-19::england|pakistan",
+   "tour": "England vs Pakistan Men's Test 2026",
+   "match": "Match 1 — TENG v TPAK",
+   "date": "2026-08-19",
+   "team": "TPAK",
+   "pid": "ci:1404712",
+   "full": "Ubaid Shah",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-31",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
@@ -91278,6 +91482,23 @@
    "match": "Match 10 — MTJAM v MTSTK",
    "date": "2026-08-19",
    "team": "MTSTK",
+   "pid": "ci:775421",
+   "full": "Jeremiah Louis",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-31",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-19::jamaica kingsmen|st kitts and nevis patriots",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 10 — MTJAM v MTSTK",
+   "date": "2026-08-19",
+   "team": "MTSTK",
    "pid": "ci:333066",
    "full": "Johnson Charles",
    "points": 21,
@@ -92485,6 +92706,23 @@
    "match": "Match 12 — MTANT v MTSTK",
    "date": "2026-08-20",
    "team": "MTSTK",
+   "pid": "ci:775421",
+   "full": "Jeremiah Louis",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-31",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-20::antigua and barbuda falcons|st kitts and nevis patriots",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 12 — MTANT v MTSTK",
+   "date": "2026-08-20",
+   "team": "MTSTK",
    "pid": "ci:333066",
    "full": "Johnson Charles",
    "points": 35,
@@ -93018,6 +93256,23 @@
    "status": "COMPLETED_FLAGGED",
    "source": "cricsheet · official · cricbuzz cross-checked (19 players)",
    "frozen_at": "2026-08-23",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-20::antigua and barbuda falcons|st kitts and nevis patriots",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 12 — MTANT v MTSTK",
+   "date": "2026-08-20",
+   "team": "MTANT",
+   "pid": "ci:1329697",
+   "full": "Sufyan Moqim",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-31",
    "provenance": "live",
    "fields": {
     "played": false
@@ -95185,6 +95440,23 @@
   {
    "match_key": "2026-08-22::antigua and barbuda falcons|trinbago knight riders",
    "tour": "Caribbean Premier League 2026",
+   "match": "Match 14 — MTANT v MTTRI",
+   "date": "2026-08-22",
+   "team": "MTANT",
+   "pid": "ci:1329697",
+   "full": "Sufyan Moqim",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-31",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-22::antigua and barbuda falcons|trinbago knight riders",
+   "tour": "Caribbean Premier League 2026",
    "match": "Match 12 — MTANT v MTTRI",
    "date": "2026-08-22",
    "team": "MTTRI",
@@ -96310,6 +96582,23 @@
    "match": "Match 15 — MTANT v MTGUY",
    "date": "2026-08-23",
    "team": "MTANT",
+   "pid": "ci:1329697",
+   "full": "Sufyan Moqim",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-08-31",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-23::antigua and barbuda falcons|guyana amazon warriors",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 15 — MTANT v MTGUY",
+   "date": "2026-08-23",
+   "team": "MTANT",
    "pid": "ci:1079860",
    "full": "Tajinder Dhillon",
    "points": 0,
@@ -97330,6 +97619,40 @@
    "match": "Match 16 — MTANT v MTBAR",
    "date": "2026-08-25",
    "team": "MTANT",
+   "pid": "ci:1329697",
+   "full": "Sufyan Moqim",
+   "points": 80,
+   "status": "COMPLETED",
+   "source": "ESPN scorecard · cricbuzz cross-checked (22 players) · ⏳ provisional (dots/maidens cross-checked · awaiting official cricsheet)",
+   "frozen_at": "2026-08-31",
+   "provenance": "live",
+   "fields": {
+    "r": 0,
+    "w": 2,
+    "4s": 0,
+    "6s": 0,
+    "dots": 8,
+    "maidens": 0,
+    "runs_conceded": 36,
+    "catches": 0,
+    "stumpings": 0,
+    "runouts": 0,
+    "b": 0,
+    "balls": 24,
+    "dro": 0,
+    "lbwb": 1,
+    "played": true,
+    "bat_order": 0,
+    "dismissal": "",
+    "dismissed": false
+   }
+  },
+  {
+   "match_key": "2026-08-25::antigua and barbuda falcons|barbados tridents",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 16 — MTANT v MTBAR",
+   "date": "2026-08-25",
+   "team": "MTANT",
    "pid": "ci:1079860",
    "full": "Tajinder Dhillon",
    "points": 0,
@@ -98152,6 +98475,23 @@
    "status": "COMPLETED",
    "source": "ESPN scorecard · cricbuzz cross-checked (6 players), 16 unbridged · ⏳ provisional (dots unverified for 11 unbridged bowlers: Anrich Arno Nortje, Bas de Leede, Benjamin Andrew Davey Manenti… · awaiting cricsheet)",
    "frozen_at": "2026-08-28",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-26::amsterdam flames|rotterdam dockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 1 — MTROT v MTAMS",
+   "date": "2026-08-26",
+   "team": "MTROT",
+   "pid": "ci:594996",
+   "full": "Ryan Klein",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "ESPN scorecard · cricbuzz cross-checked (22 players) · ⏳ provisional (dots/maidens cross-checked · awaiting official cricsheet)",
+   "frozen_at": "2026-08-31",
    "provenance": "live",
    "fields": {
     "played": false
@@ -101359,6 +101699,23 @@
    "match": "Match 2 — TENG v TPAK",
    "date": "2026-08-27",
    "team": "TPAK",
+   "pid": "ci:793441",
+   "full": "Aamir Jamal",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "ESPN scorecard · ⏳ provisional (dots/maidens unverified, awaiting cricsheet)",
+   "frozen_at": "2026-08-31",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-27::england|pakistan",
+   "tour": "England vs Pakistan Men's Test 2026",
+   "match": "Match 2 — TENG v TPAK",
+   "date": "2026-08-27",
+   "team": "TPAK",
    "pid": "ci:922941",
    "full": "Abdullah Shafique",
    "points": 5,
@@ -101419,6 +101776,23 @@
     "bat_order": 7,
     "dismissal": "b Archer",
     "dismissed": true
+   }
+  },
+  {
+   "match_key": "2026-08-27::england|pakistan",
+   "tour": "England vs Pakistan Men's Test 2026",
+   "match": "Match 2 — TENG v TPAK",
+   "date": "2026-08-27",
+   "team": "TPAK",
+   "pid": "ci:1161029",
+   "full": "Awais Zafar",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "ESPN scorecard · ⏳ provisional (dots/maidens unverified, awaiting cricsheet)",
+   "frozen_at": "2026-08-31",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
@@ -101572,6 +101946,23 @@
     "bat_order": 2,
     "dismissal": "c †Mohammad Rizwan b Mohammad Abbas",
     "dismissed": true
+   }
+  },
+  {
+   "match_key": "2026-08-27::england|pakistan",
+   "tour": "England vs Pakistan Men's Test 2026",
+   "match": "Match 2 — TENG v TPAK",
+   "date": "2026-08-27",
+   "team": "TPAK",
+   "pid": "ci:1295902",
+   "full": "Ghazi Ghori",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "ESPN scorecard · ⏳ provisional (dots/maidens unverified, awaiting cricsheet)",
+   "frozen_at": "2026-08-31",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
@@ -102090,6 +102481,23 @@
    "match": "Match 2 — TENG v TPAK",
    "date": "2026-08-27",
    "team": "TPAK",
+   "pid": "ci:1062812",
+   "full": "Sajid Khan",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "ESPN scorecard · ⏳ provisional (dots/maidens unverified, awaiting cricsheet)",
+   "frozen_at": "2026-08-31",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-27::england|pakistan",
+   "tour": "England vs Pakistan Men's Test 2026",
+   "match": "Match 2 — TENG v TPAK",
+   "date": "2026-08-27",
+   "team": "TPAK",
    "pid": "ci:623977",
    "full": "Salman Ali Agha",
    "points": 0,
@@ -102167,6 +102575,40 @@
     "bat_order": 1,
     "dismissal": "c †Smith b Archer",
     "dismissed": true
+   }
+  },
+  {
+   "match_key": "2026-08-27::england|pakistan",
+   "tour": "England vs Pakistan Men's Test 2026",
+   "match": "Match 2 — TENG v TPAK",
+   "date": "2026-08-27",
+   "team": "TENG",
+   "pid": "ci:1334872",
+   "full": "Shoaib Bashir",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "ESPN scorecard · ⏳ provisional (dots/maidens unverified, awaiting cricsheet)",
+   "frozen_at": "2026-08-31",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-27::england|pakistan",
+   "tour": "England vs Pakistan Men's Test 2026",
+   "match": "Match 2 — TENG v TPAK",
+   "date": "2026-08-27",
+   "team": "TPAK",
+   "pid": "ci:1404712",
+   "full": "Ubaid Shah",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "ESPN scorecard · ⏳ provisional (dots/maidens unverified, awaiting cricsheet)",
+   "frozen_at": "2026-08-31",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
@@ -102436,6 +102878,23 @@
    "status": "COMPLETED",
    "source": "ESPN scorecard · cricbuzz cross-checked (17 players), 5 unbridged · ⏳ provisional (dots unverified for 3 unbridged bowlers: Maaz Sadaqat, Naseem Shah, Saim Ayub · awaiting cricsheet)",
    "frozen_at": "2026-08-28",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-27::jamaica kingsmen|st kitts and nevis patriots",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 18 — MTSTK v MTJAM",
+   "date": "2026-08-27",
+   "team": "MTSTK",
+   "pid": "ci:775421",
+   "full": "Jeremiah Louis",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "ESPN scorecard · cricbuzz cross-checked (22 players) · ⏳ provisional (dots/maidens cross-checked · awaiting official cricsheet)",
+   "frozen_at": "2026-08-31",
    "provenance": "live",
    "fields": {
     "played": false
@@ -104986,6 +105445,40 @@
    "status": "COMPLETED",
    "source": "ESPN scorecard · cricbuzz cross-checked (5 players), 17 unbridged · ⏳ provisional (dots unverified for 7 unbridged bowlers: Anrich Arno Nortje, Benjamin Andrew Davey Manenti, Jai Moondra… · awaiting cricsheet)",
    "frozen_at": "2026-08-29",
+   "provenance": "live",
+   "fields": {
+    "r": 0,
+    "w": 0,
+    "4s": 0,
+    "6s": 0,
+    "dots": 2,
+    "maidens": 0,
+    "runs_conceded": 8,
+    "catches": 0,
+    "stumpings": 0,
+    "runouts": 0,
+    "b": 0,
+    "balls": 6,
+    "dro": 0,
+    "lbwb": 0,
+    "played": true,
+    "bat_order": 0,
+    "dismissal": "",
+    "dismissed": false
+   }
+  },
+  {
+   "match_key": "2026-08-29::belfast wolves|rotterdam dockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 6 — MTROT v MTBEL",
+   "date": "2026-08-29",
+   "team": "MTROT",
+   "pid": "ci:594996",
+   "full": "Ryan Klein",
+   "points": 6,
+   "status": "COMPLETED",
+   "source": "ESPN scorecard · cricbuzz cross-checked (22 players) · ⏳ provisional (dots/maidens cross-checked · awaiting official cricsheet)",
+   "frozen_at": "2026-08-31",
    "provenance": "live",
    "fields": {
     "r": 0,

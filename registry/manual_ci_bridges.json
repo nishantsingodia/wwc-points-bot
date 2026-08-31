@@ -308,9 +308,9 @@
  "ci:1364327": {
   "cricinfo_id": "1364327",
   "names": [
+   "vishva kumara",
    "vishwa lahiru",
-   "vishwa lahiru kumara",
-   "vishva kumara"
+   "vishwa lahiru kumara"
   ],
   "source": "ESPN athlete details: 1364327 = 'Vishwa Lahiru Kumara'; 784375 = 'Chandradasa Brahammana Ralalage Lahiru Sudesh Kumara' (CBRLS Kumara) — TWO DIFFERENT PEOPLE, distinct key_cricinfo AND distinct cricsheet ids in people.csv (26cd5968 vs 4751caa3), no key_cricinfo_2 linkage. Dambulla Sixers' announced squad spells him the ambiguous 'Vishva Kumara', which fuzzy-matched onto CBRLS Kumara; ESPN's cards for LPL events 1537336/1537338/1537342 carry ONLY athlete.id 1364327, and 784375 appears nowhere in the LPL. The announced spelling 'vishva kumara' is bridged here too, or the squad row keeps resolving to the wrong man and the split returns on every build."
  },
@@ -1043,6 +1043,12 @@
   "names": [
    "abdul raheem salafee ibn hassan toppin",
    "abdul raheem toppin"
+  ]
+ },
+ "ci:1161031": {
+  "cricinfo_id": "1161031",
+  "names": [
+   "saim ayub"
   ]
  }
 }

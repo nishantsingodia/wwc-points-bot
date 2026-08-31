@@ -4,10 +4,10 @@
  "_tiers": "tier = number of DISTINCT MATCHES confirming the pair. >=1 cross-check only; >=2 required before a CB-only field may CREATE points.",
  "_note": "each pair's `confirmations` list IS the fact log; bridge/revoked are a pure function of it (compile_bridge o confirmations_log). Regenerate, never hand-edit. A contradicted pair moves to `revoked` and is refused BOTH ways — there is no last-wins.",
  "counts": {
-  "confirmations": 2570,
+  "confirmations": 2572,
   "bridged": 471,
   "revoked": 0,
-  "tier2_plus": 418
+  "tier2_plus": 419
  },
  "bridge": {
   "466": {
@@ -14006,14 +14006,16 @@
   },
   "14241": {
    "cricinfo_id": "1161031",
-   "tier": 3,
+   "tier": 4,
    "matches": [
     "cb154441/espn1534191",
     "cb154491/espn1534196",
-    "cb154513/espn1534198"
+    "cb154513/espn1534198",
+    "manual/owner-answer"
    ],
    "methods": [
-    "fingerprint"
+    "fingerprint",
+    "manual"
    ],
    "confirmations": [
     {
@@ -14030,6 +14032,12 @@
      "match": "cb154513/espn1534198",
      "method": "fingerprint",
      "date": "2026-08-29"
+    },
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Saim Ayub"
     }
    ]
   },
@@ -16846,18 +16854,26 @@
   },
   "19761": {
    "cricinfo_id": "1078695",
-   "tier": 1,
+   "tier": 2,
    "matches": [
-    "cb154491/espn1534196"
+    "cb154491/espn1534196",
+    "manual/owner-answer"
    ],
    "methods": [
-    "fingerprint"
+    "fingerprint",
+    "manual"
    ],
    "confirmations": [
     {
      "match": "cb154491/espn1534196",
      "method": "fingerprint",
      "date": "2026-08-27"
+    },
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Mikyle Louis"
     }
    ]
   },
