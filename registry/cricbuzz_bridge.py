@@ -106,6 +106,18 @@ import urllib.error
 import urllib.request
 from collections import defaultdict, namedtuple
 
+# The SHARED name model, used by Layer C. Imported both ways because this module loads as
+# `from registry import cricbuzz_bridge` (repo root on sys.path) AND runs directly as
+# `python3 registry/cricbuzz_bridge.py --derive` (only registry/ on sys.path).
+# `_surname_of` / `_initial_of` are IMPORTED, never re-implemented: they define what a surname and
+# an initial ARE, and name_agrees() must answer that exactly as the model does or the filter would
+# reject pairs the matcher legitimately made. A second definition is the drift that file forbids.
+try:
+    from cricket_identity import fuzzy_match_name, norm_name, _surname_of, _initial_of
+except ImportError:  # pragma: no cover - direct-run path
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from cricket_identity import fuzzy_match_name, norm_name, _surname_of, _initial_of
+
 REG_DIR = os.path.dirname(os.path.abspath(__file__))
 BRIDGE_PATH = os.path.join(REG_DIR, "cricbuzz_bridge.json")
 PLAYERS_PATH = os.path.join(REG_DIR, "players.json")
@@ -157,7 +169,14 @@ _ESPN_SUB = "sub ("
 _CB_SUB = "(sub)"
 
 METHOD_FINGERPRINT = "fingerprint"
+METHOD_SPLIT = "split-fingerprint"   # batting OR bowling alone. Layer A2. Performance evidence.
 METHOD_DISMISSAL = "dismissal"
+METHOD_NAME = "name"            # Layer C. WITNESS-GRADE ONLY — see resolve()'s create gate.
+
+# Methods resting on what the two feeds INDEPENDENTLY OBSERVED someone do. A name is not one: it
+# is a label both feeds copied from the same source, so N matches of it is one fact repeated, not
+# N independent facts. resolve() counts only these toward the `create` bar.
+PERFORMANCE_METHODS = frozenset({METHOD_FINGERPRINT, METHOD_SPLIT, METHOD_DISMISSAL})
 METHOD_MANUAL = "manual"        # the OWNER answered a "Needs Cricinfo ID" row. See adopt().
 # A manual confirmation has no match, so it needs a match KEY that cannot collide with a real one
 # and cannot be mistaken for one. Because tier counts DISTINCT MATCHES, every manual answer for a
@@ -171,6 +190,7 @@ OK = "ok"
 UNKNOWN = "unknown"                    # never seen on any card we bridged
 REVOKED = "revoked"                    # contradicted; refused on purpose
 INSUFFICIENT_TIER = "insufficient_tier"  # known, but not enough independent matches for this use
+NAME_ONLY = "name_only"                # known by NAME alone — may witness, may never create
 
 PURPOSE_CROSSCHECK = "crosscheck"      # needs 1 confirming match
 PURPOSE_CREATE = "create"              # needs 2 independent confirming matches
@@ -532,6 +552,17 @@ def normalize_espn_card(pbp):
         bat = ((d.get("batsman") or {}).get("athlete") or {}).get("id")
         fld = ((d.get("fielder") or {}).get("athlete") or {}).get("id")
         bwl = ((d.get("bowler") or {}).get("athlete") or {}).get("id")
+        # RECORD THE NAME OF EVERYONE A DISMISSAL NAMES, not just batters and bowlers. A PURE
+        # FIELDER never appears in `batsman`/`bowler`, so his displayName was nowhere on this card
+        # — and Layer B exists precisely for that man. Without this, derive_match's name gate
+        # compares a real cricbuzz name against "" and reads the ABSENCE as disagreement: it
+        # rejected 35 of 51 sound pairs on the first cut. Names only — the fingerprint pools key
+        # off `batting`/`bowling`, so nobody new becomes matchable by Layer A/A2/C.
+        for _who in ("batsman", "fielder", "bowler"):
+            _ath = (d.get(_who) or {}).get("athlete") or {}
+            _aid = _ath.get("id")
+            if _aid and not names.get(str(_aid)):
+                names[str(_aid)] = _ath.get("displayName") or _ath.get("fullName") or ""
         rec = {"bat": str(bat) if bat else None, "type": (d.get("type") or "").lower(),
                "fielder": str(fld) if fld else None, "bowler": str(bwl) if bwl else None,
                "desc": d.get("text") or ""}
@@ -668,6 +699,128 @@ def _invert(fps):
     for pid, fp in sorted(fps.items()):
         inv[fp].append(pid)
     return inv
+
+
+def layer_a2_split(cb_card, espn_card, done_cb, done_ci):
+    """→ {cricbuzz_id: cricinfo_id}. Layer A, RE-RUN PER DISCIPLINE, on the residual only.
+
+    WHY (owner, 25 Aug 2026). Layer A welds batting and bowling into ONE key, so a disagreement in
+    EITHER discipline loses the whole player — even when the other is a perfect, unique match. Real
+    cases in the pinned corpus: Dani Gibson (Hundred-W, 2 Aug) has an exactly-matching batting line
+    and a disagreeing bowling line; same shape for Luke Wood, Gus Atkinson, Brydon Carse, Georgia
+    Elwiss. **+10 pairs over 100 matches, 0 conflicts.**
+
+    A SECOND PASS, never a replacement: splitting makes each key less unique, so run alone it scores
+    WORSE than the combined key (2015 vs 2053 on the same corpus). Combined first for precision,
+    split second for reach. Worth 10 pairs Layer C would also have caught — but caught HERE they
+    carry performance evidence, so they may create points, where a name-only bridge may not.
+
+    Min-ball guard per the owner's spec: a batting line counts only with >=1 ball FACED, a bowling
+    line only with >=1 ball BOWLED. A zero-ball line carries no discriminating information and
+    would collide with every other zero-ball line in the match.
+    """
+    pairs, conflicted = {}, set()
+    for discipline, ball_pos in (("batting", 1), ("bowling", 0)):
+        def index(card, skip):
+            out = defaultdict(list)
+            for pid, line in card[discipline].items():
+                if not line or line[ball_pos] < 1 or pid in skip:
+                    continue
+                out[line].append(pid)
+            return out
+        cb_idx, espn_idx = index(cb_card, done_cb), index(espn_card, done_ci)
+        for line, cb_ids in sorted(cb_idx.items(), key=lambda kv: str(kv[0])):
+            espn_ids = espn_idx.get(line, [])
+            if len(cb_ids) != 1 or len(espn_ids) != 1:
+                continue
+            prior = pairs.get(cb_ids[0])
+            if prior is not None and str(prior) != str(espn_ids[0]):
+                # His BATTING says he is one man, his BOWLING says another. A contradiction is not
+                # a choice — refuse both, as every other contradiction here is handled. (0 in the
+                # corpus; the rule is what keeps it safe when the first one arrives.)
+                conflicted.add(cb_ids[0])
+            else:
+                pairs[cb_ids[0]] = espn_ids[0]
+    for cb_id in conflicted:
+        pairs.pop(cb_id, None)
+    return pairs
+
+
+def name_agrees(a, b):
+    """Do these spellings denote one person, WITHOUT relying on the shared model's rung 5?
+
+    An ACCEPTANCE FILTER, not a matcher. The shared cricket-identity model still does the matching
+    (it is the owner's, ported verbatim, and must not be forked — see that file's header); this
+    only decides whether to KEEP what it proposed.
+
+    ⛔ WHY RUNG 5 IS EXCLUDED. Rung 5 accepts when a surname is UNIQUE AMONG THE CANDIDATES, and
+    uniqueness among candidates is not uniqueness in truth: a spelling variant removes the real man
+    from the count and leaves a namesake as sole holder. Measured, the ONLY error in 2126 players —
+    LPL 29 Jul, cricbuzz `Milan Priyanath Rathnayake`, whose true counterpart ESPN spells `Milan
+    Rathnayak-A-`; rung 5 saw exactly one `Rathnayak-E-` and returned **Pavan** Rathnayake. Same
+    family as the Milan/KTH Ratnayake merge in CLAUDE.md. Rungs 1-4 cost 2 pairs of 73 and take the
+    error rate to zero.
+    """
+    n, k = norm_name(a or ""), norm_name(b or "")
+    if not n or not k:
+        return False
+    if n == k:
+        return True                                                    # 1 exact
+    n_sur, k_sur = _surname_of(n), _surname_of(k)
+    n_ini, k_ini = _initial_of(n), _initial_of(k)
+    if n_sur == k_sur and n_ini == k_ini:
+        return True                                                    # 2 surname + initial
+    if (n_ini == k_ini and (k_sur.startswith(n_sur) or n_sur.startswith(k_sur))
+            and min(len(n_sur), len(k_sur)) >= 4):
+        return True                                                    # 3 surname prefix
+    if k.startswith(n) or n.startswith(k):
+        return True                                                    # 4 full-name prefix
+    return False                                                       # 5 territory -> refuse
+
+
+def layer_c_name(cb_card, espn_card, done_cb, done_ci):
+    """→ {cricbuzz_id: cricinfo_id}. LAST resort: name, on the residual only.
+
+    Performance evidence ALWAYS wins — this never sees a player Layers A/A2/B already placed. That
+    ordering is load-bearing: it is what makes the Rathnayake case unreachable here (Layer A
+    resolves Milan correctly, so he is never in this residual).
+
+    The pool is the two feeds' OWN participants in THIS match — ~22 people who provably played.
+    That is what makes names usable at all; the same matcher against a global 18k-name registry is
+    the Dale-into-Glenn machine.
+
+    Three refusals on top of the model's own null-on-ambiguity:
+      - name_agrees()  — nothing rung 5 alone could have produced (see there).
+      - SYMMETRY       — the match must survive a reverse lookup. The prefix rungs are directional,
+                         so A->B does not imply B->A, and a one-way match is one only one feed
+                         would recognise.
+      - ONE-TO-ONE     — an ESPN id claimed by two cricbuzz players refuses BOTH. Never last-wins.
+    """
+    cb_left = [x for x in fingerprints(cb_card) if x not in done_cb]
+    espn_left = [e for e in fingerprints(espn_card) if e not in done_ci]
+    if not cb_left or not espn_left:
+        return {}
+    espn_names = [espn_card["names"].get(e, "") for e in espn_left]
+    cb_names = [cb_card["names"].get(x, "") for x in cb_left]
+    by_espn_name = {}
+    for eid, nm in zip(espn_left, espn_names):
+        by_espn_name.setdefault(nm, eid)
+    proposed = {}
+    for cb_id in sorted(cb_left, key=_id_key):
+        cb_name = cb_card["names"].get(cb_id, "")
+        hit = fuzzy_match_name(cb_name, espn_names)
+        if not hit or not name_agrees(cb_name, hit):
+            continue
+        back = fuzzy_match_name(hit, cb_names)
+        if back is None or norm_name(back) != norm_name(cb_name):
+            continue
+        eid = by_espn_name.get(hit)
+        if eid is not None:
+            proposed[cb_id] = eid
+    claims = defaultdict(list)
+    for cb_id, eid in proposed.items():
+        claims[str(eid)].append(cb_id)
+    return {cb: ci for cb, ci in proposed.items() if len(claims[str(ci)]) == 1}
 
 
 def layer_a(cb_card, espn_card):
@@ -853,22 +1006,68 @@ def derive_match(cb_card, espn_card, cb_match_id, espn_event_id, date=""):
     if not ok:
         raise BridgeError("cb%s vs espn%s: %s" % (cb_match_id, espn_event_id, detail))
     b_pairs, unjoined = layer_b(cb_card, espn_card, a_pairs)
+    split_pairs = layer_a2_split(cb_card, espn_card, set(a_pairs), set(a_pairs.values()))
 
     confirmations = []
     for cb_id, ci_id in sorted(a_pairs.items(), key=lambda kv: _id_key(kv[0])):
         confirmations.append({"cricbuzz_id": cb_id, "cricinfo_id": ci_id,
                               "match": key, "method": METHOD_FINGERPRINT, "date": date})
+    for cb_id, ci_id in sorted(split_pairs.items(), key=lambda kv: _id_key(kv[0])):
+        confirmations.append({"cricbuzz_id": cb_id, "cricinfo_id": ci_id,
+                              "match": key, "method": METHOD_SPLIT, "date": date})
+
+    # ⛔ THE HOLE THE NAME GATE CLOSES (owner, 25 Aug 2026). layer_b keys on the BATSMAN and reads
+    # off who caught him, so if the two feeds credit the catch to DIFFERENT men it welds those two
+    # men into one identity. layer_b already refuses that when Layer A independently placed the
+    # fielder — but its whole reason to exist is the PURE FIELDER Layer A can never reach, and
+    # there nothing contradicts it. 51 such pairs stand in the pinned corpus with no cross-check of
+    # any kind. The four real disputes are in CLAUDE.md: `c Will Jacks`/`c Vince`, `c Lhuan-dre
+    # Pretorius`/`c Livingstone`, `c Grace Harris`/`c Higham`, `c Towhid Hridoy`/`c Mathew`.
+    name_rejected_dismissals, name_gate_abstained = [], []
     for cb_id, ci_id in sorted(b_pairs.items(), key=lambda kv: _id_key(kv[0])):
-        if a_pairs.get(cb_id) == ci_id:
-            continue      # already stated by Layer A in this same match — not new evidence
+        if a_pairs.get(cb_id) == ci_id or split_pairs.get(cb_id) == ci_id:
+            continue      # already stated by performance in this same match — not new evidence
+        if cb_id not in a_pairs and cb_id not in split_pairs:
+            cb_nm = cb_card["names"].get(cb_id, "")
+            espn_nm = (espn_card["names"].get(str(ci_id), "")
+                       or espn_card["names"].get(ci_id, ""))
+            # ⛔ ABSENCE IS NOT A CONTRADICTION — the rule this module already applies to pins and
+            # to Cricbuzz's None fields. Cricbuzz has NO name for a pure fielder unless he batted
+            # or bowled; his name lives only inside the free-text `out_desc` ("c Sadeera
+            # Samarawickrama b ..."), which is not something to parse for an identity decision.
+            # So this gate REFUTES and never confirms: both names present and disagreeing ->
+            # refuse; either missing -> it has nothing to say and the dismissal evidence stands
+            # exactly as before the gate existed. Abstentions are counted, so "not checked" can
+            # never be read as "checked and passed".
+            if not (cb_nm and espn_nm):
+                name_gate_abstained.append({"cricbuzz_id": cb_id, "cricinfo_id": ci_id,
+                                            "cb_name": cb_nm, "espn_name": espn_nm})
+            elif not name_agrees(cb_nm, espn_nm):
+                name_rejected_dismissals.append(
+                    {"cricbuzz_id": cb_id, "cricinfo_id": ci_id, "cb_name": cb_nm,
+                     "espn_name": espn_nm,
+                     "why": "dismissal join says these are one man but the feeds' names disagree "
+                            "— they credit the catch to different people (VALUE, -> Recon), which "
+                            "is not evidence of identity"})
+                continue
         confirmations.append({"cricbuzz_id": cb_id, "cricinfo_id": ci_id,
                               "match": key, "method": METHOD_DISMISSAL, "date": date})
+
+    placed_cb = set(a_pairs) | set(split_pairs) | {
+        c["cricbuzz_id"] for c in confirmations if c["method"] == METHOD_DISMISSAL}
+    placed_ci = set(a_pairs.values()) | set(split_pairs.values()) | {
+        c["cricinfo_id"] for c in confirmations if c["method"] == METHOD_DISMISSAL}
+    name_pairs = layer_c_name(cb_card, espn_card, placed_cb, placed_ci)
+    for cb_id, ci_id in sorted(name_pairs.items(), key=lambda kv: _id_key(kv[0])):
+        confirmations.append({"cricbuzz_id": cb_id, "cricinfo_id": ci_id,
+                              "match": key, "method": METHOD_NAME, "date": date})
     # Everyone Cricbuzz saw play whom NEITHER layer could pair. This is the residual a human has
     # to look at, and it goes to the "Needs Cricinfo ID" tab — it is an identity question, never
     # a Recon one. Name is carried for the human to read, not for the code to match on.
-    bridged = set(a_pairs) | set(b_pairs)
+    bridged = {c["cricbuzz_id"] for c in confirmations}
     unbridged = [{"cricbuzz_id": pid, "name": cb_card["names"].get(pid, ""),
-                  "why": "fingerprint not unique on both sides; no dismissal to join on"}
+                  "why": "fingerprint not unique on both sides (combined or per-discipline); no "
+                         "dismissal to join on; name ambiguous or absent on the other card"}
                  for pid in sorted(fingerprints(cb_card), key=_id_key) if pid not in bridged]
 
     # Layer B disagreeing with Layer A about the SAME cricbuzz id inside ONE match used to be
@@ -886,6 +1085,12 @@ def derive_match(cb_card, espn_card, cb_match_id, espn_event_id, date=""):
             "layer_b_new": sum(1 for k in b_pairs if k not in a_pairs),
             "layer_conflicts": conflicts,
             "fielder_disputes": fielder_disputes(unjoined),
+            # Per-layer counts, so a run log shows WHICH evidence carried the match and a drop in
+            # one layer cannot hide behind a rise in another.
+            "layer_a2_split": len(split_pairs),
+            "layer_c_name": len(name_pairs),
+            "dismissals_name_rejected": name_rejected_dismissals,
+            "dismissals_name_unverifiable": name_gate_abstained,
             "cb_players": len(fingerprints(cb_card)), "espn_players": len(fingerprints(espn_card)),
             "totals_delta": totals_delta(cb_card, espn_card),
             "unjoined": unjoined, "unbridged_cb": unbridged}
@@ -1091,6 +1296,37 @@ def resolve(store, cricbuzz_id, purpose=PURPOSE_CROSSCHECK):
                           "one of them, or his match is pinned but not yet derived (run "
                           "`registry/cricbuzz_bridge.py --derive --from-map`) | cricbuzz %s"
                           % (n, cb_url))
+    # ⛔ THE `create` BAR IS COUNTED IN PERFORMANCE MATCHES, NOT IN RAW TIER.
+    # `tier` counts DISTINCT MATCHES by any method — right for a cross-check, wrong for creating
+    # points. A name is not an observation: it is a label both feeds copied from the same source,
+    # so N matches of it is one fact repeated N times. Counting it toward `create` would let a
+    # spelling do the job two independent sightings are supposed to do.
+    # REAL CASE from the reference pair: cb:12071 -> ci:974109 carries `fingerprint` on
+    # cb157061/espn1537342 and `name` on cb157138/espn1537349. Raw tier is 2, so a tier-only gate
+    # would clear him to CREATE a Cricbuzz-only field off ONE actual observation. Counting
+    # performance matches gives 1 and refuses him — his cross-check rights are untouched.
+    # Scoped so a MANUAL answer keeps its own refusal: that is the owner's judgement, already and
+    # correctly stopped by tier, and calling it "bridged by NAME alone" would simply be untrue.
+    if purpose == PURPOSE_CREATE:
+        perf_matches = sorted({c["match"] for c in (rec.get("confirmations") or [])
+                               if c.get("method") in PERFORMANCE_METHODS})
+        if len(perf_matches) < MIN_MATCHES[PURPOSE_CREATE]:
+            if not perf_matches and set(rec.get("methods") or []) == {METHOD_NAME}:
+                return Resolution(None, rec["tier"], NAME_ONLY,
+                                  "candidate ci:%s is bridged by NAME alone across %d match(es) "
+                                  "(%s) — enough to cross-check a number ESPN already has, never "
+                                  "to create one. A performance or dismissal confirmation is "
+                                  "required for that. %s | cricbuzz %s"
+                                  % (rec["cricinfo_id"], rec["tier"], ", ".join(rec["matches"]),
+                                     cricinfo_profile_url(rec["cricinfo_id"]), cb_url))
+            return Resolution(None, rec["tier"], INSUFFICIENT_TIER,
+                              "candidate ci:%s has %d performance-confirmed match(es) (%s) of the "
+                              "%d %s needs; tier %d counts every method, including ones that "
+                              "cannot license creating points — %s | cricbuzz %s"
+                              % (rec["cricinfo_id"], len(perf_matches),
+                                 ", ".join(perf_matches) or "none", MIN_MATCHES[PURPOSE_CREATE],
+                                 purpose, rec["tier"],
+                                 cricinfo_profile_url(rec["cricinfo_id"]), cb_url))
     need = MIN_MATCHES[purpose]
     if rec["tier"] < need:
         return Resolution(None, rec["tier"], INSUFFICIENT_TIER,

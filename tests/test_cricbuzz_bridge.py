@@ -413,11 +413,24 @@ def test_reference_matches_reproduce_measured_coverage():
     c19, d19 = derive(M19)
     assert (d12["layer_a"], d12["layer_b"]) == (22, 5)
     assert (d19["layer_a"], d19["layer_b"]) == (22, 7)
+    # Layers A2 (split fingerprint) and C (name), added 25 Aug 2026. Neither fires on M12; C
+    # bridges one player on M19 whom the combined fingerprint could not place, which is why the
+    # unbridged residual below is 1 and not 2.
+    assert (d12["layer_a2_split"], d12["layer_c_name"]) == (0, 0)
+    assert (d19["layer_a2_split"], d19["layer_c_name"]) == (0, 1)
     store = cbb.build_store(cbb.merge_confirmations(c12, c19))
-    assert store["counts"] == {"confirmations": 46, "bridged": 38, "revoked": 0, "tier2_plus": 8}
-    # 48 cricbuzz players with an observation across the two matches, 46 bridged
+    # +1 confirmation and +1 tier2 vs the pre-Layer-C numbers (46 / 8): cb:12071 -> ci:974109 now
+    # carries `fingerprint` on cb157061 AND `name` on cb157138. `bridged` is UNCHANGED at 38 — no
+    # new human entered the store, an existing one gained a second confirming match.
+    # ⚠️ His raw tier is now 2 but he still may NOT create points: the `create` bar counts
+    # PERFORMANCE matches, of which he has 1. See test_bridge_layers.py's
+    # test_a_name_match_cannot_top_up_a_single_sighting_to_the_create_bar.
+    assert store["counts"] == {"confirmations": 47, "bridged": 38, "revoked": 0, "tier2_plus": 9}
+    assert cbb.resolve(store, "12071", cbb.PURPOSE_CROSSCHECK).status == cbb.OK
+    assert cbb.resolve(store, "12071", cbb.PURPOSE_CREATE).status == cbb.INSUFFICIENT_TIER
+    # 48 cricbuzz players with an observation across the two matches, 47 bridged
     assert sum(d["cb_players"] for d in (d12, d19)) == 48
-    assert sum(len(d["unbridged_cb"]) for d in (d12, d19)) == 2
+    assert sum(len(d["unbridged_cb"]) for d in (d12, d19)) == 1
 
 
 # ══ players.json mirror ═══════════════════════════════════════════════════════════════════════
