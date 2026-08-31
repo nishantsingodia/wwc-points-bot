@@ -163,21 +163,78 @@ def resolve_for_tour(tour, index):
     return "", "no cricsheet archive for this league (yet) — will retry next run"
 
 
-def plan(tours, index):
+_NATION_NAMES = """
+india | australia | england | pakistan | south africa | new zealand | sri lanka | bangladesh
+west indies | afghanistan | ireland | zimbabwe | scotland | netherlands | nepal | oman | namibia
+united arab emirates | uae | usa | united states of america | canada | papua new guinea | png
+jersey | guernsey | italy | germany | denmark | kenya | uganda | tanzania | nigeria | botswana
+malawi | bermuda | hong kong | singapore | malaysia | thailand | japan | indonesia | philippines
+china | bahrain | kuwait | qatar | saudi arabia | austria | belgium | france | spain | portugal
+norway | sweden | finland | czech republic | romania | bulgaria | croatia | serbia | gibraltar
+isle of man | luxembourg | malta | cyprus | greece | switzerland | estonia | hungary | slovenia
+turkey | israel | argentina | brazil | chile | peru | mexico | panama | costa rica | belize
+bahamas | cayman islands | rwanda | ghana | sierra leone | cameroon | mozambique | zambia
+lesotho | eswatini | mali | gambia | seychelles | maldives | bhutan | myanmar | cambodia
+south korea | mongolia | vanuatu | samoa | fiji | cook islands | suriname
+"""
+# ICC members. Used for ONE question: are this tour's teams national sides? cricsheet's
+# t20s/odis/tests archives hold internationals only, so the answer decides whether a tour with no
+# league archive is genuinely covered by its format archive or has no L2 source at all.
+NATIONS = frozenset(n.strip() for n in _NATION_NAMES.replace("\n", "|").split("|") if n.strip())
+
+
+def _squad_teams(tour, root):
+    """The tour's squad team display names, or [] if there is no readable squad file."""
+    sq = str(tour.get("squads") or "").strip()
+    if not sq:
+        return []
+    try:
+        with open(os.path.join(root, sq)) as fh:
+            data = json.load(fh)
+        return [str((v or {}).get("name") or k) for k, v in data.items()]
+    except Exception:
+        return []
+
+
+def _is_league(tour, root):
+    """True when the internationals archive for this format CANNOT cover the tour.
+
+    Team COUNT alone is not the test — the Women's T20 WC fields 12 teams and is pure
+    internationals, and flagging it would have reported a false gap on a tour t20s_json.zip covers
+    perfectly. The real question is whether the teams are NATIONS. A two-team tour is a bilateral
+    either way, so only look past that."""
+    teams = _squad_teams(tour, root)
+    if len(teams) <= 2:
+        return False, len(teams)
+    def national(n):
+        n = _norm(re.sub(r"\b(women|men)\b", " ", n or "", flags=re.I))
+        return n in NATIONS
+    return (not all(national(t) for t in teams)), len(teams)
+
+
+def plan(tours, index, root="."):
     """-> (ordered archive list, per-tour report rows)."""
     need, rows = [], []
     for t in tours:
         fmt = (t.get("format") or "T20").upper()
         base = FORMAT_ARCHIVE.get(fmt, "")
         arch, why = resolve_for_tour(t, index)
+        is_league, teams = _is_league(t, root)
         # A league tour needs its own archive; an international one is covered by the format zip.
         # We take BOTH when a league match exists and the format has a base archive, because the
         # format zip is cheap, shared across tours, and already downloaded for someone else.
         for a in (base, arch):
             if a and a not in need:
                 need.append(a)
-        rows.append({"tour": t.get("name", ""), "format": fmt,
-                     "base": base, "league": arch, "why": why})
+        # WHICH archive actually covers THIS tour — not merely which ones the run downloads.
+        # Crediting a 6-team league with t20s_json.zip because its format is T20 reports a green L2
+        # for a tour that will never reconcile: ETPL 2026 did exactly that on the first live run.
+        covers = arch or ("" if is_league else base)
+        rows.append({"tour": t.get("name", ""), "format": fmt, "teams": teams,
+                     "base": base, "league": arch, "covers": covers,
+                     "why": why if not (is_league and not arch) else
+                            f"{why}; the {base or 'internationals'} archive does NOT cover a "
+                            f"{teams}-team league, so this tour has NO L2 source"})
     return need, rows
 
 
@@ -229,16 +286,15 @@ def main():
               file=sys.stderr)
         index = {}
 
-    need, rows = plan(tours, index)
+    need, rows = plan(tours, index, root=os.path.dirname(os.path.abspath(args.tours)))
     width = max((len(r["tour"]) for r in rows), default=10)
     for r in rows:
         got = r["league"] or "—"
         print(f"  {r['tour']:{width}}  {r['format']:4}  base={r['base'] or '—':16} "
               f"league={got:24} {r['why']}", file=sys.stderr)
-    missing = [r for r in rows if not r["league"] and r["format"] == "HUN"]
-    for r in missing:
-        print(f"  ⚠ {r['tour']}: format HUN has NO international archive and no league match — "
-              f"this tour has NO L2 source at all", file=sys.stderr)
+    for r in rows:
+        if not r["covers"]:
+            print(f"  ⚠ {r['tour']}: NO L2 source — {r['why']}", file=sys.stderr)
 
     print(f"downloading {len(need)} archive(s) into {args.dir}: {', '.join(need)}", file=sys.stderr)
     ok, failed = download(need, args.dir, dry_run=args.dry_run)
@@ -249,10 +305,10 @@ def main():
     # index to ONE fetch per run and means the sheet reports what was actually downloaded, not a
     # second opinion that could disagree with it.
     try:
-        report = {r["tour"]: {"archive": r["league"] or r["base"] or "",
-                              "league": r["league"], "base": r["base"],
+        report = {r["tour"]: {"archive": r["covers"],
+                              "league": r["league"], "base": r["base"], "teams": r["teams"],
                               "why": r["why"],
-                              "downloaded": (r["league"] or r["base"] or "") in ok}
+                              "downloaded": bool(r["covers"]) and r["covers"] in ok}
                   for r in rows}
         with open(args.report, "w") as fh:
             json.dump(report, fh, indent=1, sort_keys=True)
