@@ -1608,9 +1608,22 @@ def main(argv=None):
                 continue
             confs.extend(c)
             diags.append(d)
-            print("%s  layerA=%d layerB=%d (new %d)  cb=%d espn=%d"
-                  % (d["match"], d["layer_a"], d["layer_b"], d["layer_b_new"],
-                     d["cb_players"], d["espn_players"]), file=sys.stderr)
+            # Every layer is named, including the ones that contributed 0. A layer that only
+            # appears when it fires is a layer nobody notices going silent.
+            print("%s  A=%d A2=%d B=%d (new %d) C=%d  cb=%d espn=%d  unbridged=%d"
+                  % (d["match"], d["layer_a"], d["layer_a2_split"], d["layer_b"],
+                     d["layer_b_new"], d["layer_c_name"], d["cb_players"], d["espn_players"],
+                     len(d["unbridged_cb"])), file=sys.stderr)
+            for x in d["dismissals_name_rejected"]:
+                print("   dismissal REFUSED by the name gate (the feeds credit the catch to "
+                      "different men — VALUE, -> Recon): cb%s %r vs espn ci:%s %r"
+                      % (x["cricbuzz_id"], x["cb_name"], x["cricinfo_id"], x["espn_name"]),
+                      file=sys.stderr)
+            if d["dismissals_name_unverifiable"]:
+                # Counted, never silent: "could not check" must not read as "checked and passed".
+                print("   %d dismissal pair(s) the name gate could not check (a name absent on one "
+                      "card); accepted on the dismissal evidence alone"
+                      % len(d["dismissals_name_unverifiable"]), file=sys.stderr)
             for x in d["layer_conflicts"]:
                 print("   ⚠ LAYER CONFLICT in one match: cb%s -> A says ci:%s, B says ci:%s"
                       % (x["cricbuzz_id"], x["layer_a"], x["layer_b"]), file=sys.stderr)
