@@ -14,13 +14,6 @@
   "closest_guess": "A Phillip"
  },
  {
-  "player": "Sufyan Moqim",
-  "team": "MTANT",
-  "tour": "Caribbean Premier League 2026",
-  "current_pid": "uncapped:sufyan-moqim",
-  "closest_guess": "Sufiyan Muqeem"
- },
- {
   "player": "Romaine Morris",
   "team": "MTJAM",
   "tour": "Caribbean Premier League 2026",
@@ -33,13 +26,6 @@
   "tour": "Caribbean Premier League 2026",
   "current_pid": "uncapped:tayyab-arif",
   "closest_guess": "Tayyab Arif"
- },
- {
-  "player": "Jeremiah Louis",
-  "team": "MTSTK",
-  "tour": "Caribbean Premier League 2026",
-  "current_pid": "uncapped:jeremiah-louis",
-  "closest_guess": "JS Louis"
  },
  {
   "player": "Micah McKenzie",
@@ -96,5 +82,61 @@
   "tour": "Caribbean Premier League 2026",
   "current_pid": "uncapped:jonathan-van-lange",
   "closest_guess": "Jonathan van Lange"
+ },
+ {
+  "player": "Jasper Davidson",
+  "team": "MTROT",
+  "tour": "European T20 Premier League 2026",
+  "current_pid": "uncapped:jasper-davidson",
+  "closest_guess": "JJ Davidson"
+ },
+ {
+  "player": "Alex Roy",
+  "team": "MTBEL",
+  "tour": "European T20 Premier League 2026",
+  "current_pid": "uncapped:alex-roy",
+  "closest_guess": "AS Roy"
+ },
+ {
+  "player": "Chris Greaves",
+  "team": "MTDUB",
+  "tour": "European T20 Premier League 2026",
+  "current_pid": "uncapped:chris-greaves",
+  "closest_guess": "CN Greaves"
+ },
+ {
+  "player": "Craig Young",
+  "team": "MTDUB",
+  "tour": "European T20 Premier League 2026",
+  "current_pid": "uncapped:craig-young",
+  "closest_guess": "CA Young"
+ },
+ {
+  "player": "Ollie Jones",
+  "team": "MTEDI",
+  "tour": "European T20 Premier League 2026",
+  "current_pid": "uncapped:ollie-jones",
+  "closest_guess": "O Jones"
+ },
+ {
+  "player": "Safyaan Sharif",
+  "team": "MTEDI",
+  "tour": "European T20 Premier League 2026",
+  "current_pid": "uncapped:safyaan-sharif",
+  "closest_guess": "SM Sharif"
+ },
+ {
+  "player": "Oliver Davidson",
+  "team": "MTGLA",
+  "tour": "European T20 Premier League 2026",
+  "current_pid": "uncapped:oliver-davidson",
+  "closest_guess": "O Davidson"
+ },
+ {
+  "player": "George Munsey",
+  "team": "MTGLA",
+  "tour": "European T20 Premier League 2026",
+  "current_pid": "uncapped:george-munsey",
+  "closest_guess": "HG Munsey"
  }
 ]

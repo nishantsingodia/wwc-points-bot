@@ -122,11 +122,11 @@ def norm(s):
 # player resolved in one tour is resolved in all future tours with zero rework.
 def load_registry():
     path = os.path.join(os.path.dirname(__file__), "registry", "players.json")
-    alias2pid, pid2disp, cs2pid = {}, {}, {}
+    alias2pid, pid2disp, cs2pid, pid2tours = {}, {}, {}, {}
     try:
         players = json.load(open(path)).get("players", {})
     except Exception:
-        return alias2pid, pid2disp, cs2pid
+        return alias2pid, pid2disp, cs2pid, pid2tours
     for pid, e in players.items():
         pid2disp[pid] = e.get("display") or pid
         for a in e.get("aliases", []):
@@ -136,9 +136,13 @@ def load_registry():
         cs = e.get("cricsheet_id")
         if cs:
             cs2pid.setdefault(str(cs), pid)
-    return alias2pid, pid2disp, cs2pid
+        # pid -> the tours the registry has him in. Read ONLY by the tab's retire-when-resolved
+        # rule: a `ci:` row asks "which squad is he on?", so squad membership in THAT tour is the
+        # positive evidence that the question is closed. Identity alone is not enough.
+        pid2tours[pid] = {norm(t) for t in (e.get("tours") or [])}
+    return alias2pid, pid2disp, cs2pid, pid2tours
 
-ALIAS2PID, PID2DISP, CS2PID = load_registry()
+ALIAS2PID, PID2DISP, CS2PID, PID2TOURS = load_registry()
 CS_ANCHORED = []        # (pid, cricsheet_id) auto-anchored from a `ci:` pid this run (for the log)
 
 def load_crosswalk():
@@ -6190,6 +6194,48 @@ def pending_registry_gaps():
               + (f", {skipped} already answered/anchored" if skipped else ""), file=sys.stderr)
     return rows
 
+def needs_ci_answered_since(pid, tour):
+    """Has the question one 'Needs Cricinfo ID' row asks been ANSWERED SINCE it was written?
+
+    POSITIVE EVIDENCE ONLY, per pid prefix. Anything not PROVEN resolved returns False and the row
+    stays: an absence must never read as "handled", which is how a review queue goes silent — the
+    same discipline `pending_registry_gaps` states for its two suppressions.
+
+      cs:<id>  the official-card row now JOINS. `CS2PID` maps that cricsheet id to an anchored
+               `ci:` pid, which is precisely what `resolve_perf_pid` does at scoring time, so the
+               row cannot be regenerated and there is nothing left to type.
+      ci:<id>  the pid is a real registry key AND the registry has him in THIS tour. The row asks
+               "he is in no squad — which side is he on?", so identity alone does NOT close it;
+               squad membership in that tour does.
+      cb:<id>  the derived cricbuzz bridge resolves it. Requires a LOADED store — with the module
+               unimportable or the store empty, every `cb:` row would look resolved at once, which
+               is the silent-queue failure in its purest form.
+
+    WHY IT EXISTS: the retire sweep in `write_needs_cricinfo_tab` only ever considered
+    `uncapped:`/`slug:` pids, so a `cs:`/`cb:`/`ci:` row could never be retired even once the
+    system had answered it by itself. Measured on the live tab 31 Aug 2026: 7 of 76 open rows —
+    KA Anderson, RA Clarke, JM James, K Campbell, M Louis, Hassan Nawaz (all `cs:`, all anchored
+    by cd2dd38) and Hasan Nawaz (`ci:1398125`) — were resolved and unretirable, sitting on top of
+    the rows that did need a human."""
+    pfx, _, ident = str(pid or "").partition(":")
+    ident = ident.strip()
+    if not ident:
+        return False
+    try:
+        if pfx == "cs":
+            return CS2PID.get(ident, "").startswith("ci:")
+        if pfx == "ci":
+            return pid in PID2DISP and norm(tour) in PID2TOURS.get(pid, set())
+        if pfx == "cb":
+            if _cb_bridge is None or not CB_STORE:
+                return False        # absence of a store is not evidence of resolution
+            return (_cb_bridge.resolve(CB_STORE, ident,
+                                       _cb_bridge.PURPOSE_CROSSCHECK).status == _cb_bridge.OK)
+    except Exception as e:
+        print(f"needs-cricinfo: could not test whether {pid} is resolved ({e}) — row KEPT",
+              file=sys.stderr)
+    return False
+
 def write_needs_cricinfo_tab():
     """Push identity gaps into the SAME 'Needs Cricinfo ID' tab build_registry/tour_sync_finalize
     use — one place, one habit: drop the cricinfo id in the last column and `manual_ci_bridges`
@@ -6263,30 +6309,56 @@ def write_needs_cricinfo_tab():
         # (its answer is in manual_ci_bridges by then); a player who HAS played and still has no id
         # is a real question and stays. This runs after scoring, so APPEARED is populated — in the
         # writer, not the reader, which runs first and would see it empty and retire everything.
+        # SECOND RETIREMENT CLASS — A ROW THE SYSTEM HAS SINCE ANSWERED ITSELF. The pre-debut rule
+        # above is gated on `uncapped:`/`slug:`, so a `cs:`/`cb:`/`ci:` row was unretirable by
+        # construction: once a later build anchored the player, nothing removed his row and it sat
+        # on the tab for good. See `needs_ci_answered_since` for the per-prefix evidence and the
+        # 7-of-76 measurement. Kept as a SEPARATE list from `stale` so the two log lines stay
+        # honest about which rule fired — they retire rows for opposite reasons (nobody can answer
+        # this vs somebody already did).
         ci_i = hdr.index("cricinfo_id_FILL_HERE") if "cricinfo_id_FILL_HERE" in hdr else -1
         pl_i = hdr.index("player") if "player" in hdr else -1
-        stale = []
-        if ci_i >= 0 and pl_i >= 0 and APPEARED:
+        tr_i = hdr.index("tour") if "tour" in hdr else -1
+        stale, resolved = [], []
+        if ci_i >= 0 and pl_i >= 0:
             for _ri, r in enumerate(existing[1:], start=2):
                 _pid = (r[pid_i].strip() if len(r) > pid_i else "")
                 _ans = (r[ci_i].strip() if len(r) > ci_i else "")
                 _nm = (r[pl_i].strip() if len(r) > pl_i else "")
-                if _ans or not _pid.startswith(("uncapped:", "slug:")):
+                _tr = (r[tr_i].strip() if tr_i >= 0 and len(r) > tr_i else "")
+                if _ans:
+                    continue        # an ANSWERED row is read_needs_cricinfo's to retire, not ours
+                if not _pid.startswith(("uncapped:", "slug:")):
+                    # not a squad-name placeholder -> the pre-debut rule cannot speak to it, but
+                    # the resolved-since rule can.
+                    if needs_ci_answered_since(_pid, _tr):
+                        resolved.append(_ri)
                     continue
+                # A placeholder can ALSO have been answered since (promoted to a real `ci:` pid),
+                # so test that before falling through to the pre-debut rule.
+                if needs_ci_answered_since(ALIAS2PID.get(norm(_nm), ""), _tr):
+                    resolved.append(_ri)
+                    continue
+                if not APPEARED:
+                    continue        # APPEARED empty (nothing scored) -> cannot judge pre-debut
                 _slug = norm(_pid.split(":", 1)[-1].replace("-", " "))
                 if norm(_nm) not in APPEARED and _slug not in APPEARED:
                     stale.append(_ri)
-        if stale:
+        if stale or resolved:
             try:
-                for _ri in sorted(stale, reverse=True):
+                for _ri in sorted(set(stale) | set(resolved), reverse=True):
                     ws.delete_rows(_ri)
                     del existing[_ri - 1]
-                print(f"'{NEEDS_CRICINFO_TAB}': retired {len(stale)} unanswerable row(s) — squad "
-                      f"names whose player has not debuted, so no cricinfo id exists to find yet; "
-                      f"they return automatically if he plays", file=sys.stderr)
+                if stale:
+                    print(f"'{NEEDS_CRICINFO_TAB}': retired {len(stale)} unanswerable row(s) — "
+                          f"squad names whose player has not debuted, so no cricinfo id exists to "
+                          f"find yet; they return automatically if he plays", file=sys.stderr)
+                if resolved:
+                    print(f"'{NEEDS_CRICINFO_TAB}': retired {len(resolved)} row(s) the system has "
+                          f"since answered itself (the pid now resolves to an anchored identity) — "
+                          f"nothing was left for a human to type", file=sys.stderr)
             except Exception as e:
-                print(f"'{NEEDS_CRICINFO_TAB}': could not retire pre-debut rows ({e})",
-                      file=sys.stderr)
+                print(f"'{NEEDS_CRICINFO_TAB}': could not retire rows ({e})", file=sys.stderr)
         have = {(r[pid_i].strip() if len(r) > pid_i else "") for r in existing[1:]}
         seen, rows, from_pending = set(), [], 0
         for i, e in enumerate(queue):

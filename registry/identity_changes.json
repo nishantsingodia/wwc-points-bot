@@ -42,6 +42,41 @@
    "at": "2026-08-23",
    "reason": "build_registry.promote",
    "evidence": "placeholder uncapped:usman-khan resolved to ci:1123428 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:harry-manenti",
+   "to": "ci:1323417",
+   "at": "2026-08-31",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:harry-manenti resolved to ci:1323417 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:jeremiah-louis",
+   "to": "ci:775421",
+   "at": "2026-08-31",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:jeremiah-louis resolved to ci:775421 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:ryan-klein",
+   "to": "ci:594996",
+   "at": "2026-08-31",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:ryan-klein resolved to ci:594996 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:sufyan-moqim",
+   "to": "ci:1329697",
+   "at": "2026-08-31",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:sufyan-moqim resolved to ci:1329697 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:jordan-neill",
+   "to": "ci:1394079",
+   "at": "2026-08-31",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:jordan-neill resolved to ci:1394079 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
   }
  ]
 }

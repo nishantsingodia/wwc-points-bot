@@ -256,6 +256,24 @@
           "display": "Nitish Kumar"
         }
       ]
+    },
+    {
+      "id": 16,
+      "ts": "2026-08-31",
+      "status": "confirmed",
+      "reason": "shared-name false merge — 'Lahiru'/'Kumara' in both legal names",
+      "players": [
+        {
+          "pid": "ci:784375",
+          "display": "Lahiru Kumara"
+        },
+        {
+          "pid": "ci:1364327",
+          "display": "Vishwa Lahiru Kumara"
+        }
+      ],
+      "evidence": "ESPN athlete details: 784375 = 'Chandradasa Brahammana Ralalage Lahiru Sudesh Kumara'; 1364327 = 'Vishwa Lahiru Kumara'. people.csv holds them as separate rows with distinct key_cricinfo AND distinct cricsheet ids (4751caa3 vs 26cd5968) and no key_cricinfo_2 link. ci:784375 had wrongly absorbed the aliases 'vishva kumara' / 'vishwa lahiru' / 'vishwa lahiru kumara' (Dambulla Sixers' announced squad spells him the ambiguous 'Vishva Kumara'), so the squad row resolved to the wrong man: 116 LPL 2026 points settled on ci:784375 across 8 Dambulla matches (4/4/38/52/9/9/0/0) while ci:1364327 published 0 in the same 8. ESPN's cards for events 1537336/1537338/1537342 carry ONLY athlete.id 1364327; 784375 appears nowhere in the LPL. Aliases stripped from ci:784375 and all three spellings bridged to ci:1364327.",
+      "settled_points_NOT_folded": "The 116 settled LPL points were deliberately NOT re-pointed. identity_changes -> pid_map is a GLOBAL old->new pid rewrite (the draft's lib/pid-map.json feeds resolvePid), so recording ci:784375 -> ci:1364327 would assert these are one human and would re-attribute the real Lahiru Kumara's FUTURE rows to Vishwa Lahiru. settlement_snapshots is write-once by design and the LPL is frozen (espn_series 1537330), so nothing moves on its own. Re-emitting the frozen LPL tab is the only faithful route and is the operation that cost 1074 rows on 14 Aug 2026 — owner's call, not this file's."
     }
   ],
   "acks": [

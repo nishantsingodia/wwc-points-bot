@@ -453,3 +453,112 @@ def test_nothing_is_retired_when_no_match_was_scored(wcmod, monkeypatch, tmp_pat
     wcmod.APPEARED.clear()
     wcmod.write_needs_cricinfo_tab()
     assert ws.deleted == []
+
+
+# ── a question the SYSTEM has since answered itself must stop being asked ────────────────────
+# The pre-debut rule above is gated on `uncapped:`/`slug:`, so a `cs:`/`cb:`/`ci:` row was
+# unretirable by construction. Measured on the live tab 31 Aug 2026: 7 of 76 open rows were
+# already resolved — six `cs:` CPL rows anchored by cd2dd38 plus `ci:1398125` — sitting on top of
+# the rows that did need a human.
+def _wire_retire(wcmod, monkeypatch, tmp_path, rows):
+    ws = _DelWS(rows)
+    monkeypatch.setattr(wcmod, "open_gsheet", lambda: _FakeSheet(ws))
+    p = tmp_path / "pending.json"; p.write_text("[]")
+    monkeypatch.setattr(wcmod, "PENDING_CI_PATH", str(p))
+    b = tmp_path / "bridges.json"; b.write_text("{}")
+    monkeypatch.setattr(wcmod, "CI_BRIDGES_PATH", str(b))
+    wcmod.NEEDS_CRICINFO[:] = []
+    wcmod.APPEARED.clear()
+    # `write_needs_cricinfo_tab` returns early when the queue is empty AND nothing was scored —
+    # deliberately, so a run that read no card never touches the tab. It runs AFTER scoring, so in
+    # a real invocation APPEARED is populated; one sentinel reproduces that context. None of these
+    # rows is an `uncapped:`/`slug:` placeholder, so the pre-debut rule cannot reach them.
+    wcmod.APPEARED.add(wcmod.norm("Somebody Who Batted"))
+    return ws
+
+
+def test_a_cs_row_the_registry_has_since_anchored_is_retired(wcmod, monkeypatch, tmp_path,
+                                                             fake_gspread):
+    """`resolve_perf_pid` resolves an official-card row through CS2PID, so once that cricsheet id
+    maps to an anchored `ci:` pid the row cannot even be regenerated — there is nothing to type."""
+    monkeypatch.setitem(wcmod.CS2PID, "abc12345", "ci:999001")
+    ws = _wire_retire(wcmod, monkeypatch, tmp_path, [
+        HEADER,
+        ["Anchored Man", "cs:abc12345", "T", "X", "", ""],
+        ["Unknown Man", "cs:deadbeef", "T", "X", "", ""],
+    ])
+    wcmod.write_needs_cricinfo_tab()
+    assert ws.deleted == [2], "the resolved cs: row was not retired"
+    assert [r[0] for r in ws.rows] == ["player", "Unknown Man"], "retired the wrong row"
+
+
+def test_a_cs_row_still_on_a_placeholder_is_not_retired(wcmod, monkeypatch, tmp_path,
+                                                        fake_gspread):
+    """CS2PID pointing at another PLACEHOLDER is not an anchor — the question is still open."""
+    monkeypatch.setitem(wcmod.CS2PID, "abc12345", "uncapped:anchored-man")
+    ws = _wire_retire(wcmod, monkeypatch, tmp_path,
+                      [HEADER, ["Anchored Man", "cs:abc12345", "T", "X", "", ""]])
+    wcmod.write_needs_cricinfo_tab()
+    assert ws.deleted == [] and len(ws.rows) == 2
+
+
+def test_a_ci_row_is_retired_only_once_he_is_in_THAT_tours_squad(wcmod, monkeypatch, tmp_path,
+                                                                 fake_gspread):
+    """A `ci:` row asks "he is in NO squad — which side is he on?". Identity alone does not answer
+    it: the pid IS the identity already (ESPN's athlete.id is the cricinfo id). Squad membership in
+    the row's own tour is the evidence, so the same pid stays open on a tour he is not in."""
+    monkeypatch.setitem(wcmod.PID2DISP, "ci:999002", "Folded Man")
+    monkeypatch.setitem(wcmod.PID2TOURS, "ci:999002", {wcmod.norm("Real Tour")})
+    ws = _wire_retire(wcmod, monkeypatch, tmp_path, [
+        HEADER,
+        ["Folded Man", "ci:999002", "Real Tour", "X", "", ""],
+        ["Folded Man", "ci:999002", "Other Tour", "X", "", ""],
+    ])
+    wcmod.write_needs_cricinfo_tab()
+    assert ws.deleted == [2], "the folded-in ci: row was not retired"
+    assert [r[2] for r in ws.rows] == ["tour", "Other Tour"], "retired the wrong tour's row"
+
+
+def test_a_cb_row_is_not_retired_while_the_bridge_store_is_empty(wcmod, monkeypatch, tmp_path,
+                                                                 fake_gspread):
+    """An absent/empty store is not evidence of resolution — it is the silent-queue failure in its
+    purest form: every cb: row would look answered at once."""
+    monkeypatch.setattr(wcmod, "CB_STORE", {})
+    ws = _wire_retire(wcmod, monkeypatch, tmp_path,
+                      [HEADER, ["Fielder", "cb:12345", "T", "X", "", ""]])
+    wcmod.write_needs_cricinfo_tab()
+    assert ws.deleted == [] and len(ws.rows) == 2
+
+
+def test_an_ANSWERED_resolved_row_is_still_left_for_the_reader(wcmod, monkeypatch, tmp_path,
+                                                              fake_gspread):
+    """Same rule as the pre-debut case: read_needs_cricinfo consumes the answer into
+    manual_ci_bridges first. Retiring here would throw a human's typing away."""
+    monkeypatch.setitem(wcmod.CS2PID, "abc12345", "ci:999001")
+    ws = _wire_retire(wcmod, monkeypatch, tmp_path,
+                      [HEADER, ["Anchored Man", "cs:abc12345", "T", "X", "", "1234567"]])
+    wcmod.write_needs_cricinfo_tab()
+    assert ws.deleted == [], "an answered row was retired before its answer was consumed"
+
+
+def test_the_seven_resolved_rows_on_the_live_tab_would_retire(wcmod):
+    """The real measurement, against the REAL registry — not a fixture. Every one of these was
+    anchored by cd2dd38 and then sat on the tab unretirable. Asserts the RULE, not a count: each
+    pid resolves through the live registry, so if one is ever un-anchored this fails honestly."""
+    live = [("cs:672d7379", "Caribbean Premier League 2026"),
+            ("cs:de098678", "Caribbean Premier League 2026"),
+            ("cs:24f6e254", "Caribbean Premier League 2026"),
+            ("cs:4f3ab93a", "Caribbean Premier League 2026"),
+            ("cs:1d8c298b", "Caribbean Premier League 2026"),
+            ("cs:26a8b2fe", "Caribbean Premier League 2026"),
+            ("ci:1398125",  "Caribbean Premier League 2026")]
+    unresolved = [p for p, t in live if not wcmod.needs_ci_answered_since(p, t)]
+    assert unresolved == [], f"no longer anchored in the live registry: {unresolved}"
+
+
+def test_an_unknown_prefix_is_never_retired(wcmod):
+    """Fail CLOSED. A pid shape this rule does not understand is a question, not a resolution."""
+    assert wcmod.needs_ci_answered_since("slug:someone", "T") is False
+    assert wcmod.needs_ci_answered_since("", "T") is False
+    assert wcmod.needs_ci_answered_since("ci:", "T") is False
+    assert wcmod.needs_ci_answered_since("weird:1234", "T") is False
