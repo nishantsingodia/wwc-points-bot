@@ -59,42 +59,14 @@ jobs:
       - name: Download cricsheet ball-by-ball (gold source - exact dots)
         continue-on-error: true   # non-fatal: if cricsheet is slow/down, matches stay PROVISIONAL
                                   # on ESPN (+Cricbuzz as L1 witness) until the next run gets it
+        # WHICH archives is DERIVED FROM tours.json, not written here. This used to be a hand-kept
+        # list of curl lines, which made cricsheet the only one of the three feeds a new tour could
+        # not get by itself (ESPN and Cricbuzz both resolve at ingest) — miss the edit and the tour
+        # rides ESPN-provisional for its whole run. It also could not pick up an archive cricsheet
+        # publishes AFTER a tour is ingested, which is exactly the case for any brand-new league.
+        # See cricsheet_archives.py.
         run: |
-          mkdir -p cricsheet
-          # International T20Is (men's & women's) — covers WWC + bilateral T20I tours.
-          curl -fsSL --retry 3 --retry-delay 5 --max-time 180 -o t20s.zip \
-            https://cricsheet.org/downloads/t20s_json.zip
-          unzip -o -q t20s.zip "*.json" -d cricsheet
-          # Major League Cricket (USA franchise T20) — its own archive; the internationals
-          # zip above does NOT contain league matches, so MLC needs this for its gold source.
-          curl -fsSL --retry 3 --retry-delay 5 --max-time 180 -o mlc.zip \
-            https://cricsheet.org/downloads/mlc_json.zip
-          unzip -o -q mlc.zip "*.json" -d cricsheet
-          # International ODIs (men's & women's) — for tours that set format: "ODI".
-          # Same target dir; the tour's match filter + (date, teams) key select the format.
-          curl -fsSL --retry 3 --retry-delay 5 --max-time 180 -o odis.zip \
-            https://cricsheet.org/downloads/odis_json.zip
-          unzip -o -q odis.zip "*.json" -d cricsheet
-          # Lanka Premier League (Sri Lanka franchise T20) — its own archive; the internationals
-          # zip above does NOT contain league matches, so LPL needs this for its gold source.
-          curl -fsSL --retry 3 --retry-delay 5 --max-time 180 -o lpl.zip \
-            https://cricsheet.org/downloads/lpl_json.zip
-          unzip -o -q lpl.zip "*.json" -d cricsheet
-          # The Hundred (England 100-ball, men's & women's in one archive) — its own archive; the
-          # internationals zip does NOT contain it. Without this the Hundred tours score PROVISIONAL
-          # off ESPN forever (cricsheet L2 reconciliation never fires → no official numbers). The
-          # cricsheet indexer is format-agnostic (gender + date/teams), so these cards resolve with
-          # no code change; the HUN scorer (tours.json format: HUN) scores from the ball-by-ball.
-          curl -fsSL --retry 3 --retry-delay 5 --max-time 180 -o hnd.zip \
-            https://cricsheet.org/downloads/hnd_json.zip
-          unzip -o -q hnd.zip "*.json" -d cricsheet
-          # Caribbean Premier League — its own archive, same reasoning as MLC/LPL above. CPL is
-          # scored off ESPN + Cricbuzz today and every one of its settled rows is still
-          # ESPN-provisional, so this archive is what lets the official L2 reconciliation fire
-          # instead of the tour riding ESPN-provisional forever.
-          curl -fsSL --retry 3 --retry-delay 5 --max-time 180 -o cpl.zip \
-            https://cricsheet.org/downloads/cpl_json.zip
-          unzip -o -q cpl.zip "*.json" -d cricsheet
+          python3 cricsheet_archives.py --dir cricsheet
 
       - name: Compute D11 points and write to Google Sheet(s)
         # Tours are defined in tours.json (each writes its own tab). See TOURS.md.

@@ -4378,6 +4378,40 @@ def in_toss_window():
 
 TOUR_CONTROL_TAB = "TOUR CONTROL"   # human gate: only tours marked "yes" here are scored
 
+CRICSHEET_REPORT = os.environ.get("CRICSHEET_REPORT", "cricsheet_resolved.json")
+
+def _load_cricsheet_report():
+    """cricsheet_archives.py's per-tour resolution from THIS run's download step, or {}.
+
+    Read rather than re-resolved: the download step already fetched cricsheet's index, and a second
+    opinion here could disagree with what was actually downloaded — the sheet would then report an
+    L2 source the run does not have."""
+    try:
+        with open(CRICSHEET_REPORT) as fh:
+            return json.load(fh)
+    except Exception:
+        return {}
+
+def _feeds_cell(tour, cs_report):
+    """One glance at whether this tour has all three feeds — the thumb rule, in the sheet.
+
+    ESPN is the base card, Cricbuzz the L1 second witness, cricsheet the L2 official source. A tour
+    missing L1 publishes every match COMPLETED_FLAGGED "single feed (ESPN only)"; one missing L2 is
+    never made official at all. Both are gaps you have to SEE, which is the whole point of putting
+    them here instead of in a run log nobody opens."""
+    espn = str(tour.get("espn_series") or "").strip()
+    cb = str(tour.get("cricbuzz_series") or "").strip()
+    rep = cs_report.get(tour.get("name", "")) or {}
+    parts = [f"ESPN {espn}" if espn else "ESPN ✗ NONE"]
+    parts.append(f"L1 cb {cb}" if cb else "L1 ✗ none")
+    if not cs_report:
+        parts.append("L2 ?")                       # no report: local run, or the step did not run
+    elif rep.get("archive"):
+        parts.append(("L2 " if rep.get("downloaded") else "L2 ✗ failed ") + rep["archive"])
+    else:
+        parts.append("L2 ✗ no archive")
+    return "  |  ".join(parts)
+
 def sync_tour_control(tours):
     """Human approval gate for SCORING a tour. Maintains the 'TOUR CONTROL' GSheet tab (one row per
     tour, a 'Score this tour?' cell = yes/no) and returns {tour_name: decision}. A tour that is NOT
@@ -4404,7 +4438,7 @@ def sync_tour_control(tours):
     # scoreboards, which is right but can still come back UNRESOLVED on an oddly-named tour — and
     # that fails the ingest gate. A pasted id removes the one step that can defeat the automation.
     header = ["Tour", "Tab", "espn_series", "Score this tour? (yes/no)", "Notes",
-              "espn_series (optional)"]
+              "espn_series (optional)", "Feeds: ESPN | L1 cricbuzz | L2 cricsheet"]
     try:
         ws = sh.worksheet(TOUR_CONTROL_TAB)
         existing = ws.get_all_values()
@@ -4418,20 +4452,42 @@ def sync_tour_control(tours):
     # set `espn_only` and skipped this gate entirely. With that bypass gone, a single-key lookup
     # would have read "pending" for CPL and silently stopped the live tour on a green run.
     ctrl, seen = {}, set()
+    cs_report = _load_cricsheet_report()
+    # WHERE the bot-owned Feeds column lives on THIS tab is found BY NAME, never assumed to be the
+    # 7th cell. Columns A-F are the historical bot layout and are safe to rewrite in place (that is
+    # what finally lands the 20 Aug rename), but anything past them may be a column the owner added
+    # himself — pinning Feeds to index 6 overwrote exactly such a column in test.
+    _cur_hdr = list(existing[0]) if existing else []
+    _new_hdr = list(_cur_hdr)
+    while len(_new_hdr) < len(header) - 1:
+        _new_hdr.append("")
+    _new_hdr[:len(header) - 1] = header[:len(header) - 1]
+    fi = next((i for i, c in enumerate(_new_hdr)
+               if str(c).strip().lower().startswith("feeds")), -1)
+    if fi < 0:
+        _new_hdr.append(header[-1])
+        fi = len(_new_hdr) - 1
     _key = lambda v: re.sub(r"[^a-z0-9]+", "", (v or "").lower())
+    tour_by_handle = {}
+    for _t in tours:
+        for _h in (_key(_t.get("name")), _key(_t.get("tab")),
+                   _key(str(_t.get("espn_series") or ""))):
+            if _h:
+                tour_by_handle.setdefault(_h, _t)
     if existing and len(existing) > 1:
         hdr = existing[0]
         # The decision cell: match on either the new wording ("Score this tour?") or the old
         # ("Poll cricapi?"), so an un-migrated tab keeps working on the first run after this change.
         di = next((i for i, h in enumerate(hdr)
                    if h.lower().startswith(("score this", "poll"))), 3)
-        ei = next((i for i, h in enumerate(hdr) if h.lower().startswith("espn_series")), -1)
+        eis = [i for i, h in enumerate(hdr) if h.lower().startswith("espn_series")]
+        ei = eis[0] if eis else -1
         for row in existing[1:]:
             if not (row and row[0].strip()):
                 continue
             dec = (row[di].strip().lower() if len(row) > di else "")
-            for h in (row[0], row[1] if len(row) > 1 else "",
-                      row[ei] if 0 <= ei < len(row) else ""):
+            for h in ([row[0], row[1] if len(row) > 1 else ""]
+                      + [row[i] for i in eis if i < len(row)]):
                 if _key(h):
                     ctrl[_key(h)] = dec          # name, tab and espn_series all point at it
                     seen.add(_key(h))
@@ -4466,8 +4522,12 @@ def sync_tour_control(tours):
             if h:
                 ctrl[h] = dec
                 seen.add(h)
-        new_rows.append([(t.get("name") or "").strip(), t.get("tab", ""),
-                         str(t.get("espn_series") or ""), dec, ""])
+        _row = [(t.get("name") or "").strip(), t.get("tab", ""),
+                str(t.get("espn_series") or ""), dec, "", ""]
+        while len(_row) < fi:
+            _row.append("")
+        _row.append(_feeds_cell(t, cs_report))
+        new_rows.append(_row)
         print(f"  TOUR CONTROL: '{t.get('name')}' had no matching row — seeded '{dec}' "
               f"({'active' if is_active(t) else 'dormant'}, "
               f"tab {'already published' if _has_tab else 'does not exist yet'})", file=sys.stderr)
@@ -4481,15 +4541,41 @@ def sync_tour_control(tours):
             # column added to `header` never appeared on the live tab — and an INPUT column nobody
             # can see is an input that does not exist. Writes row 1 only; every decision cell below
             # is untouched.
-            if existing and not any(str(h).strip().lower().startswith("espn_series")
-                                    for h in (existing[0] or [])):
+            # SYNC THE HEADER whenever it differs from `header` — never a one-shot test for one
+            # column. The previous guard asked "is there no column starting with espn_series?",
+            # which the column it was itself adding then satisfied forever: it fired once on
+            # 14 Aug 2026 and could never fire again, so the 20 Aug rename of C and D
+            # (cricapi_series -> espn_series, "Poll cricapi?" -> "Score this tour?") never reached
+            # the live tab and no later column could either. Row 1 ONLY; every decision cell below
+            # is untouched, and any extra column a human added to the right is preserved.
+            if _new_hdr != _cur_hdr:
                 try:
-                    ws.update(range_name="A1", values=[header], value_input_option="RAW")
-                    print(f"'{TOUR_CONTROL_TAB}': added the 'espn_series (optional)' column — "
-                          f"paste an ESPN series id there to skip name resolution for that tour",
-                          file=sys.stderr)
+                    ws.update(range_name="A1", values=[_new_hdr], value_input_option="RAW")
+                    print(f"'{TOUR_CONTROL_TAB}': header synced -> {_new_hdr}", file=sys.stderr)
                 except Exception as e:
-                    print(f"'{TOUR_CONTROL_TAB}': could not extend the header ({e})",
+                    print(f"'{TOUR_CONTROL_TAB}': could not sync the header ({e})",
+                          file=sys.stderr)
+            # Refresh the bot-owned Feeds column on the rows that were already there. This is the
+            # ONLY existing cell the bot ever writes in this tab — decisions, notes and pasted ids
+            # are his and stay untouched. A row we cannot match to a tour is left blank rather than
+            # guessed at.
+            if existing and len(existing) > 1:
+                col = []
+                for row in existing[1:]:
+                    t = None
+                    for h in ([row[0] if row else "", row[1] if len(row) > 1 else ""]
+                              + [row[i] for i in eis if i < len(row)]):
+                        t = t or tour_by_handle.get(_key(h))
+                    col.append([_feeds_cell(t, cs_report) if t else ""])
+                try:
+                    a1 = f"{chr(ord('A') + fi)}2:{chr(ord('A') + fi)}{len(existing)}"
+                    ws.update(range_name=a1, values=col, value_input_option="RAW")
+                    ws.update(range_name=f"C2:C{len(existing)}",
+                              values=[[str((tour_by_handle.get(_key(r[0] if r else "")) or {})
+                                           .get("espn_series") or "")] for r in existing[1:]],
+                              value_input_option="RAW")
+                except Exception as e:
+                    print(f"'{TOUR_CONTROL_TAB}': could not refresh the Feeds column ({e})",
                           file=sys.stderr)
             if new_rows:
                 ws.append_rows(new_rows, value_input_option="RAW")

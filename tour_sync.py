@@ -773,8 +773,13 @@ def status_sheet_new_names(state):
         if not rows:
             continue
         hdr = [h.strip().lower() for h in rows[0]]
-        ei = next((i for i, h in enumerate(hdr)
-                   if h.startswith("espn_series") or h.startswith("espn series")), -1)
+        # PREFER the human's paste-in column. Since the header sync, "espn_series" is ALSO the
+        # bot-written report column C, and a first-match-wins lookup would read that instead — it
+        # is blank on a row he just typed, so his pasted id would be silently ignored and the tour
+        # would fall back to name resolution, which is the one step that can fail the ingest gate.
+        _cands = [i for i, h in enumerate(hdr)
+                  if h.startswith("espn_series") or h.startswith("espn series")]
+        ei = next((i for i in _cands if "optional" in hdr[i]), _cands[0] if _cands else -1)
         for r in rows[1:]:
             nm = (r[0] if r else "").strip()
             if not nm:

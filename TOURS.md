@@ -22,12 +22,15 @@ the Google Sheet, all from the single 2-hourly run. Tours are listed in **`tours
 > **What a tour still needs, in order:**
 > 1. `espn_series` — non-blank, or it cannot be scored at all (the ingest verify gate fails on this).
 > 2. `TOUR CONTROL` = `yes` — the human approval gate.
-> 3. `cricbuzz_series` — **OPTIONAL, and the only remaining two-tier distinction.** With it the tour
->    gets a real L1 second witness on all 14 fields. Without it every match publishes
->    `COMPLETED_FLAGGED · "single feed (ESPN only)"` and cricsheet at L2 is the first cross-check it
->    ever gets. Set on 4 of 13 tours today (LPL 12316, CPL 12123, Hundred 11493 men / 11504 women).
->    ⛔ Do NOT add it to a tour that already has approved S1 overrides — see CLAUDE.md, it moves
->    settled points.
+> 3. `cricbuzz_series` — the L1 second witness on all 14 fields. **The thumb rule is that a tour
+>    ships with all THREE feeds — ESPN + cricbuzz L1 + cricsheet L2 — so treat this as required, not
+>    optional.** Without it every match publishes `COMPLETED_FLAGGED · "single feed (ESPN only)"`
+>    and cricsheet at L2 is the first cross-check it ever gets. You do not normally set it by hand:
+>    `tour_sync.resolve_cricbuzz_series` proposes it at ingest and adopts it only after validating
+>    the id against cricbuzz's own fixture DATES (ETPL 2026 → 12870, 21/21 dates matched). It stays
+>    in the committed `tours.json`, never a sheet cell, because flipping it is a settled-points
+>    mover. ⛔ Do NOT add it to a tour that already has approved S1 overrides — see CLAUDE.md.
+>    Every tour's three feeds are reported per-row in the **`Feeds`** column of `TOUR CONTROL`.
 > 4. `format` — `T20` (default) / `ODI` / `HUN` / `TEST`. Drives which scorer runs.
 >
 > The rest of this file is the manual flow, still valid except that step 1 asks for one id, not two.
@@ -43,8 +46,10 @@ auction). Claude does the rest:
      number is the id. (A web search for "espncricinfo &lt;tour&gt; scorecard" surfaces it.)
      `tour_sync.py`'s `resolve_espn_series` does this automatically and VALIDATES the candidate
      against its dated scoreboard by team-match, so prefer letting it resolve rather than pasting.
-   - **Cricbuzz (optional, for L1)** — the series page URL on cricbuzz.com carries the id. Only add
-     it if you want a second witness, and only on a tour with no approved S1 overrides yet.
+   - **Cricbuzz (the L1 witness — required in practice)** — normally resolved and date-validated
+     for you by `tour_sync.resolve_cricbuzz_series`. Only hand-resolve it (the series page URL on
+     cricbuzz.com carries the id, or `cricbuzz.series_candidates`) when that comes back empty, and
+     only on a tour with no approved S1 overrides yet.
 2. **Confirm two things with you**
    - **Tab name** (default: a short tour name).
    - **Squads?** — *full squad list* (needed for ownership / an auction → players get `In Squad List = Y` and DNP rows) **or** *featured-players-only* (no list; the sheet lists whoever actually played). For a full list, Claude sources the announced squads into `<tour>_squads.json` (same format as `squads.json`).
@@ -53,7 +58,7 @@ auction). Claude does the rest:
    {
      "name": "Men's T20 WC 2026",
      "espn_series": "<espn series id>",
-     "cricbuzz_series": "<cricbuzz series id, OPTIONAL — enables L1>",
+     "cricbuzz_series": "<cricbuzz series id — the L1 witness; auto-resolved at ingest>",
      "tab": "MT20WC POINTS",
      "squads": "mt20wc_squads.json",
      "format": "T20"
@@ -86,7 +91,8 @@ auction). Claude does the rest:
 |-------|----------|---------|
 | `name` | yes | label (shown in logs) |
 | ~~`cricapi_series`~~ | — | **REMOVED 20 Aug 2026.** Deleted from every tour; the field is dead. |
-| `cricbuzz_series` | no | cricbuzz series id. Present ⇒ the tour gets an L1 second witness on all 14 fields. Absent ⇒ single-feed (ESPN only) until cricsheet. |
+| `cricbuzz_series` | yes in practice | cricbuzz series id = the L1 second witness on all 14 fields. Auto-resolved and date-validated at ingest. Absent ⇒ single-feed (ESPN only) until cricsheet. |
+| `cricsheet_archive` | no | pins this tour's cricsheet zip (`"cpl_json.zip"`), or `"none"` when cricsheet does not cover the league. Omit and `cricsheet_archives.py` resolves it every run. |
 | `espn_series` | yes* | ESPN/cricinfo series id (dot-balls, +4 XI, team attribution). *Omit only if you accept no dots/XI. |
 | `tab` | yes | Google Sheet tab to write (created if missing) |
 | `gender` | yes | `male` or `female` — so cricsheet matches the right files |
@@ -177,12 +183,19 @@ not the sheet), run `python3 registry/fold_review_aliases.py` — it auto-folds 
 each tour shrinks Needs Review to just the genuinely-ambiguous handful.
 
 ## Gotchas
-- **cricsheet's `t20s` archive only holds internationals** (men's & women's T20Is). A
-  franchise league (e.g. MLC) or an ODI tour lives in its OWN cricsheet archive, which must
-  be added to the download step in `.github/workflows/wwc-points.yml` for the *official*
-  source to kick in (MLC uses `mlc_json.zip`). The ESPN path — including exact dot-balls — works
-  regardless, so a tour is fully scored even before its archive is wired. It just never reaches
-  L2, so it stays on a provisional baseline until the archive is added.
+- ~~**cricsheet's `t20s` archive only holds internationals**, so a league's own archive must be
+  added to the download step in `.github/workflows/wwc-points.yml`.~~ **AUTOMATIC since 31 Aug 2026.**
+  The first half is still true — `t20s`/`odis`/`tests` hold internationals only and a league lives
+  in its own archive — but nothing is hand-listed any more. `cricsheet_archives.py` reads
+  `tours.json`, resolves each tour against cricsheet's live index (format archive by `format`,
+  league archive by name, gender-checked and ranked so the men's CPL can never pick up the
+  women's), downloads what this run needs, and leaves `cricsheet_resolved.json` behind for the
+  sheet to report. Two consequences: adding a tour needs **no YAML edit**, and a league cricsheet
+  has not published yet — a brand-new one always — starts reconciling **by itself** on the first
+  run after the archive appears. `"cricsheet_archive": "cpl_json.zip"` on a tours.json entry pins
+  it; `"none"` says cricsheet does not cover this league and silences the report.
+  *(Wiring this surfaced that `tests_json.zip` was never in the old hand-kept list, so the ENG v PAK
+  Test tour had no L2 source at all.)*
 - **Squad name aliases**: the single place is now `registry/manual_aliases.json` (then re-run
   `build_registry.py`) — NOT the inline `ALIAS` dict in `wc_fps_to_csv.py` (kept only for legacy
   feed-internal split canonicalization like "charlotte dean"→"charlie dean"). The registry is
