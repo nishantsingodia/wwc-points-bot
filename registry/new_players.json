@@ -884,6 +884,39 @@
         "European T20 Premier League 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:1199306",
+      "display": "D Sween",
+      "aliases": [
+        "d sween"
+      ],
+      "team": "",
+      "role": "?",
+      "tours": [],
+      "source": "needs-cricinfo"
+    },
+    {
+      "pid": "ci:556531",
+      "display": "K Pooran",
+      "aliases": [
+        "k pooran"
+      ],
+      "team": "",
+      "role": "?",
+      "tours": [],
+      "source": "needs-cricinfo"
+    },
+    {
+      "pid": "ci:1108828",
+      "display": "D Nedd",
+      "aliases": [
+        "d nedd"
+      ],
+      "team": "",
+      "role": "?",
+      "tours": [],
+      "source": "needs-cricinfo"
     }
   ]
 }

@@ -72,6 +72,7 @@
  "ci:1108828": {
   "cricinfo_id": "1108828",
   "names": [
+   "d nedd",
    "darren nedd"
   ],
   "source": "ESPN athlete.id from a CPL match this player appeared in; the scorer had already bound this ESPN row to this squad slot and was scoring him from it, so recording the id encodes an identity we had already acted on rather than a new guess"
@@ -177,6 +178,7 @@
  "ci:1199306": {
   "cricinfo_id": "1199306",
   "names": [
+   "d sween",
    "dexter sween"
   ],
   "source": "ESPN athlete.id from a CPL match this player appeared in; the scorer had already bound this ESPN row to this squad slot and was scoring him from it, so recording the id encodes an identity we had already acted on rather than a new guess"
@@ -655,6 +657,7 @@
  "ci:556531": {
   "cricinfo_id": "556531",
   "names": [
+   "k pooran",
    "kamil pooran"
   ],
   "source": "ESPN athlete.id from a CPL match this player appeared in; the scorer had already bound this ESPN row to this squad slot and was scoring him from it, so recording the id encodes an identity we had already acted on rather than a new guess"
@@ -949,8 +952,9 @@
  "ci:1342545": {
   "cricinfo_id": "1342545",
   "names": [
-   "amari goodridge",
-   "amari alexandre goodridge"
+   "a goodridge",
+   "amari alexandre goodridge",
+   "amari goodridge"
   ],
   "source": "MTSTL. ESPNcricinfo id observed on the CPL 2026 (ESPN league 8623) match rosters — athlete.id IS the cricinfo id. Was minting uncapped:<slug>, which no feed can emit, so matchPlayerInXI judged the player not-in-XI every match he played."
  },

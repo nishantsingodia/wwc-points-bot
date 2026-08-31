@@ -7065,6 +7065,34 @@
       "status": "approved",
       "source": "S2",
       "witness": "espn"
+    },
+    {
+      "match_key": "2026-08-20::antigua and barbuda falcons|st kitts and nevis patriots",
+      "scope": "l2",
+      "pid": "ci:51862",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-20::antigua and barbuda falcons|st kitts and nevis patriots",
+      "scope": "l2",
+      "pid": "ci:391485",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-20::antigua and barbuda falcons|st kitts and nevis patriots",
+      "scope": "l2",
+      "pid": "ci:820681",
+      "source": "S2",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-20::antigua and barbuda falcons|st kitts and nevis patriots",
+      "scope": "l2",
+      "pid": "ci:1199304",
+      "source": "S2",
+      "status": "approved"
     }
   ]
 }
