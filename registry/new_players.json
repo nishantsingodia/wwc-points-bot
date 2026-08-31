@@ -941,6 +941,19 @@
       "role": "?",
       "tours": [],
       "source": "needs-cricinfo"
+    },
+    {
+      "pid": "ci:784375",
+      "display": "Lahiru Kumara",
+      "aliases": [
+        "chandradasa brahammana ralalage lahiru sudesh kumara"
+      ],
+      "team": "MTTRI",
+      "role": "BOWL",
+      "tours": [
+        "Caribbean Premier League 2026"
+      ],
+      "source": "auto"
     }
   ]
 }
