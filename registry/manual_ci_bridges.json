@@ -508,8 +508,10 @@
  "ci:301648": {
   "cricinfo_id": "301648",
   "names": [
+   "j clark",
    "jordan clark"
-  ]
+  ],
+  "source": "people.csv: 'J Clark' = ci:301648, cricsheet c672e80e (Jordan Clark). 'JM Clarke' = ci:571911, cricsheet 2eca67f5 (Joe Clarke) — a DIFFERENT person. A scoring run learned 'j clark' onto ci:571911 and it was committed (9bf600f); the Hundred Men's Welsh Fire row carries cs:c672e80e, whose crosswalk id is 301648, so the alias belonged here. Same shape as the Dale/Glenn merge: two real men sharing a surname and a first initial."
  },
  "ci:303669": {
   "cricinfo_id": "303669",
@@ -695,7 +697,6 @@
  "ci:571911": {
   "cricinfo_id": "571911",
   "names": [
-   "j clark",
    "joe clarke"
   ]
  },

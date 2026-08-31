@@ -1,957 +1,946 @@
 {
-  "note": "Sheet-driven NEW players (the no-code path for a player the squad list is missing). Each entry is a GLOBAL, tour-agnostic identity (pid + display + feed-spelling aliases) PLUS the tours/team it's a member of. read_review_confirmations adds entries when you mark a Needs Review row 'New'; match_squad_to_perf adds them (source:'auto') when a globally-known player plays a tour they're not squad-listed for (the silent-drop fix). The bot loads this at startup (merges identity into the registry) and injects membership into each tour's squad — so it works WITHOUT a build_registry rebuild. pid is reused if the feed already resolves, else a slug:<name> (upgradeable to a cricsheet_id by a later build_registry run). Committed back to git by the workflow so it persists. source: 'new' (you marked New) | 'auto' (silent-drop auto-add).",
-  "players": [
-    {
-      "pid": "ci:1229018",
-      "display": "Jane Maguire",
-      "aliases": [
-        "j maguire"
-      ],
-      "team": "Ireland",
-      "role": "BOWL",
-      "tours": [
-        "Women's T20 WC 2026",
-        "Ireland vs West Indies Women's ODI 2026"
-      ],
-      "source": "new"
-    },
-    {
-      "pid": "ci:670013",
-      "display": "Fabian Allen",
-      "aliases": [
-        "fa allen"
-      ],
-      "team": "Los Angeles Knight Riders",
-      "role": "AR",
-      "tours": [
-        "Major League Cricket 2026"
-      ],
-      "source": "new"
-    },
-    {
-      "pid": "ci:696471",
-      "display": "Dian Forrester",
-      "aliases": [
-        "dian forrester"
-      ],
-      "team": "Texas Super Kings",
-      "role": "AR",
-      "tours": [
-        "Major League Cricket 2026"
-      ],
-      "source": "new"
-    },
-    {
-      "pid": "ci:1539667",
-      "display": "Anirudh Immanuel",
-      "aliases": [
-        "anirudh immanuel"
-      ],
-      "team": "San Francisco Unicorns",
-      "role": "AR",
-      "tours": [
-        "Major League Cricket 2026"
-      ],
-      "source": "new"
-    },
-    {
-      "pid": "ci:56143",
-      "display": "Shakib Al Hasan",
-      "aliases": [
-        "shakib al hasan"
-      ],
-      "team": "MI New York",
-      "role": "BAT",
-      "tours": [
-        "Major League Cricket 2026"
-      ],
-      "source": "new"
-    },
-    {
-      "pid": "ci:1076721",
-      "display": "L Pope",
-      "aliases": [
-        "l pope"
-      ],
-      "team": "Los Angeles Knight Riders",
-      "role": "BOWL",
-      "tours": [
-        "Major League Cricket 2026"
-      ],
-      "source": "new"
-    },
-    {
-      "pid": "ci:474782",
-      "display": "Aakarshit Gomel",
-      "aliases": [
-        "aakarshit gomel"
-      ],
-      "team": "San Francisco Unicorns",
-      "role": "BAT",
-      "tours": [
-        "Major League Cricket 2026"
-      ],
-      "source": "new"
-    },
-    {
-      "pid": "ci:547092",
-      "display": "Ehsan Adil",
-      "aliases": [
-        "ehsan adil"
-      ],
-      "team": "MI New York",
-      "role": "BOWL",
-      "tours": [
-        "Major League Cricket 2026"
-      ],
-      "source": "new"
-    },
-    {
-      "pid": "ci:581160",
-      "display": "Khary Pierre",
-      "aliases": [
-        "k pierre",
-        "khary pierre"
-      ],
-      "team": "West Indies",
-      "role": "BOWL",
-      "tours": [
-        "New Zealand vs West Indies Men's ODI 2026"
-      ],
-      "source": "new"
-    },
-    {
-      "pid": "ci:1364327",
-      "display": "Vishwa Lahiru",
-      "aliases": [
-        "v lahiru",
-        "vishwa lahiru"
-      ],
-      "team": "dambulla sixers",
-      "role": "BOWL",
-      "tours": [
-        "Lanka Premier League 2026"
-      ],
-      "source": "new"
-    },
-    {
-      "pid": "ci:801817",
-      "display": "Katupulle Gedara Mohamed Shiraz Sahab",
-      "aliases": [
-        "katupulle gedara mohamed shiraz sahab"
-      ],
-      "team": "",
-      "role": "BOWL",
-      "tours": [
-        "Lanka Premier League 2026"
-      ],
-      "source": "new"
-    },
-    {
-      "pid": "9e5f4ad7",
-      "display": "Kayla Reyneke",
-      "aliases": [
-        "kayla reyneke"
-      ],
-      "team": "WTBPH",
-      "role": "BAT",
-      "tours": [
-        "The Hundred Women's Competition 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "bc969efb",
-      "display": "Ashleigh Gardner",
-      "aliases": [
-        "ashleigh gardner"
-      ],
-      "team": "WTTRR",
-      "role": "BAT",
-      "tours": [
-        "The Hundred Women's Competition 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "e1b9f3a9",
-      "display": "Ben Dwarshuis",
-      "aliases": [
-        "ben dwarshuis"
-      ],
-      "team": "MTBPH",
-      "role": "BAT",
-      "tours": [
-        "The Hundred Men's Competition 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:688141",
-      "display": "Sean Dickson",
-      "aliases": [
-        "sean dickson",
-        "sr dickson"
-      ],
-      "team": "Birmingham Phoenix",
-      "role": "BAT",
-      "tours": [
-        "The Hundred Men's Competition 2026"
-      ],
-      "source": "new"
-    },
-    {
-      "pid": "ci:859899",
-      "display": "Calvin Harrison",
-      "aliases": [
-        "calvin harrison",
-        "cg harrison"
-      ],
-      "team": "Trent Rockets",
-      "role": "BAT",
-      "tours": [
-        "The Hundred Men's Competition 2026"
-      ],
-      "source": "new"
-    },
-    {
-      "pid": "ci:1150021",
-      "display": "Matthew Revis",
-      "aliases": [
-        "matthew revis",
-        "ml revis"
-      ],
-      "team": "Sunrisers Leeds",
-      "role": "BAT",
-      "tours": [
-        "The Hundred Men's Competition 2026"
-      ],
-      "source": "new"
-    },
-    {
-      "pid": "ci:211855",
-      "display": "Liam Dawson",
-      "aliases": [],
-      "team": "London Spirit",
-      "role": "BAT",
-      "tours": [
-        "The Hundred Men's Competition 2026"
-      ],
-      "source": "new"
-    },
-    {
-      "pid": "ci:990031",
-      "display": "Towhid Hridoy",
-      "aliases": [
-        "towhid hridoy"
-      ],
-      "team": "JK",
-      "role": "BAT",
-      "tours": [
-        "Lanka Premier League 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:410765",
-      "display": "Nurul Hasan",
-      "aliases": [
-        "nurul hasan"
-      ],
-      "team": "GG",
-      "role": "BAT",
-      "tours": [
-        "Lanka Premier League 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:459508",
-      "display": "Andrew Tye",
-      "aliases": [
-        "aj tye",
-        "andrew tye"
-      ],
-      "team": "London Spirit",
-      "role": "BOWL",
-      "tours": [
-        "The Hundred Men's Competition 2026"
-      ],
-      "source": "new"
-    },
-    {
-      "pid": "ci:663613",
-      "display": "Saif Zaib",
-      "aliases": [
-        "sa zaib",
-        "saif zaib"
-      ],
-      "team": "Southern Brave",
-      "role": "BAT",
-      "tours": [
-        "The Hundred Men's Competition 2026"
-      ],
-      "source": "new"
-    },
-    {
-      "pid": "ci:1070229",
-      "display": "Milan Ratnayake",
-      "aliases": [
-        "kth ratnayake"
-      ],
-      "team": "GG",
-      "role": "BOWL",
-      "tours": [
-        "Lanka Premier League 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:299572",
-      "display": "Sikandar Raza",
-      "aliases": [
-        "sikandar raza",
-        "sikandar raza butt"
-      ],
-      "team": "DS",
-      "role": "AR",
-      "tours": [
-        "Lanka Premier League 2026",
-        "The Hundred Men's Competition 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:1124282",
-      "display": "Josh Philippe",
-      "aliases": [
-        "jr philippe"
-      ],
-      "team": "MTMILO",
-      "role": "BAT",
-      "tours": [
-        "The Hundred Men's Competition 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:1153148",
-      "display": "Sonal Dinusha",
-      "aliases": [
-        "gs dinusha"
-      ],
-      "team": "Dambulla Sixers",
-      "role": "BOWL",
-      "tours": [
-        "Lanka Premier League 2026"
-      ],
-      "source": "new"
-    },
-    {
-      "pid": "ci:469879",
-      "display": "Georgia Adams",
-      "aliases": [
-        "qaasim adams"
-      ],
-      "team": "Trent Rockets Women",
-      "role": "BAT",
-      "tours": [
-        "The Hundred Women's Competition 2026"
-      ],
-      "source": "new"
-    },
-    {
-      "pid": "ci:737833",
-      "display": "Kiran Carlson",
-      "aliases": [
-        "kiran carlson",
-        "ks carlson"
-      ],
-      "team": "London Spirit",
-      "role": "BAT",
-      "tours": [
-        "The Hundred Men's Competition 2026"
-      ],
-      "source": "new"
-    },
-    {
-      "pid": "ci:958691",
-      "display": "KNA Bandara",
-      "aliases": [
-        "kna bandara"
-      ],
-      "team": "",
-      "role": "?",
-      "tours": [
-        "Lanka Premier League 2026"
-      ],
-      "source": "needs-cricinfo"
-    },
-    {
-      "pid": "ci:1137283",
-      "display": "Thomas Fraser Rogers",
-      "aliases": [
-        "thomas fraser rogers"
-      ],
-      "team": "Galle Gallants",
-      "role": "BAT",
-      "tours": [
-        "Lanka Premier League 2026"
-      ],
-      "source": "new"
-    },
-    {
-      "pid": "ci:1276980",
-      "display": "Ripon Mondol",
-      "aliases": [
-        "ripon mondol"
-      ],
-      "team": "Colombo Kaps",
-      "role": "BOWL",
-      "tours": [
-        "Lanka Premier League 2026"
-      ],
-      "source": "new"
-    },
-    {
-      "pid": "ci:437316",
-      "display": "Dasun Shanaka",
-      "aliases": [
-        "ashen bandara"
-      ],
-      "team": "Colombo Kaps",
-      "role": "BAT",
-      "tours": [
-        "Lanka Premier League 2026"
-      ],
-      "source": "new"
-    },
-    {
-      "pid": "ci:8917",
-      "display": "Moeen Ali",
-      "aliases": [
-        "moeen ali"
-      ],
-      "team": "MTSBR",
-      "role": "BAT",
-      "tours": [
-        "The Hundred Men's Competition 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:1150585",
-      "display": "Orla Prendergast",
-      "aliases": [
-        "o prendergast",
-        "orla prendergast"
-      ],
-      "team": "WTWLF",
-      "role": "BAT",
-      "tours": [
-        "The Hundred Women's Competition 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:1329699",
-      "display": "Khawaja Nafay",
-      "aliases": [
-        "khawaja nafay"
-      ],
-      "team": "Jaffna Kings",
-      "role": "BAT",
-      "tours": [
-        "Lanka Premier League 2026"
-      ],
-      "source": "new"
-    },
-    {
-      "pid": "ci:926629",
-      "display": "Hasan Mahmud",
-      "aliases": [
-        "iftikhar ahmed"
-      ],
-      "team": "",
-      "role": "BAT",
-      "tours": [
-        "Lanka Premier League 2026"
-      ],
-      "source": "new"
-    },
-    {
-      "pid": "ci:1329699",
-      "display": "Khawaja Nafay",
-      "aliases": [
-        "khawaja nafay"
-      ],
-      "team": "",
-      "role": "?",
-      "tours": [],
-      "source": "needs-cricinfo"
-    },
-    {
-      "pid": "ci:1430324",
-      "display": "J Moores",
-      "aliases": [
-        "j moores",
-        "joseph henry alan moores"
-      ],
-      "team": "",
-      "role": "?",
-      "tours": [
-        "The Hundred Men's Competition 2026"
-      ],
-      "source": "needs-cricinfo"
-    },
-    {
-      "pid": "ci:639080",
-      "display": "MD Fisher",
-      "aliases": [
-        "matthew david fisher",
-        "md fisher"
-      ],
-      "team": "",
-      "role": "?",
-      "tours": [
-        "The Hundred Men's Competition 2026"
-      ],
-      "source": "needs-cricinfo"
-    },
-    {
-      "pid": "ci:1275938",
-      "display": "Rivaldo A Clarke",
-      "aliases": [
-        "rivaldo a clarke"
-      ],
-      "team": "MTBAR",
-      "role": "BAT",
-      "tours": [
-        "Caribbean Premier League 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:1209188",
-      "display": "Kevlon Alston Anderson",
-      "aliases": [
-        "kevlon alston anderson"
-      ],
-      "team": "MTBAR",
-      "role": "BAT",
-      "tours": [
-        "Caribbean Premier League 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:1164537",
-      "display": "Charli Rae Knott",
-      "aliases": [
-        "charli rae knott"
-      ],
-      "team": "WTSBR",
-      "role": "BAT",
-      "tours": [
-        "The Hundred Women's Competition 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:512907",
-      "display": "Thomas George Helm",
-      "aliases": [
-        "thomas george helm"
-      ],
-      "team": "MTBPH",
-      "role": "AR",
-      "tours": [
-        "The Hundred Men's Competition 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:297482",
-      "display": "Ben William Sanderson",
-      "aliases": [
-        "ben william sanderson"
-      ],
-      "team": "MTTRR",
-      "role": "BOWL",
-      "tours": [
-        "The Hundred Men's Competition 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:326968",
-      "display": "Michael Bracewell",
-      "aliases": [
-        "michael gordon bracewell"
-      ],
-      "team": "MTMSG",
-      "role": "AR",
-      "tours": [
-        "The Hundred Men's Competition 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:301648",
-      "display": "Jordan Clark",
-      "aliases": [
-        "jordan clark"
-      ],
-      "team": "MTWLF",
-      "role": "BOWL",
-      "tours": [
-        "The Hundred Men's Competition 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:748793",
-      "display": "Joe James Weatherley",
-      "aliases": [
-        "joe james weatherley"
-      ],
-      "team": "MTBPH",
-      "role": "BAT",
-      "tours": [
-        "The Hundred Men's Competition 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:1143809",
-      "display": "Henry Thomas Crocombe",
-      "aliases": [
-        "henry thomas crocombe"
-      ],
-      "team": "MTLSP",
-      "role": "BOWL",
-      "tours": [
-        "The Hundred Men's Competition 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:1488180",
-      "display": "Manny Lumsden",
-      "aliases": [
-        "manny lumsden"
-      ],
-      "team": "MTSBR",
-      "role": "BOWL",
-      "tours": [
-        "The Hundred Men's Competition 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:823509",
-      "display": "Dale Phillips",
-      "aliases": [
-        "glenn dominic phillips"
-      ],
-      "team": "MTGUY",
-      "role": "BOWL",
-      "tours": [
-        "Caribbean Premier League 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:1443401",
-      "display": "Khari Campbell",
-      "aliases": [
-        "khari campbell"
-      ],
-      "team": "MTSTL",
-      "role": "BOWL",
-      "tours": [
-        "Caribbean Premier League 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:1209191",
-      "display": "Joshua Michael James",
-      "aliases": [
-        "joshua michael james"
-      ],
-      "team": "MTANT",
-      "role": "BAT",
-      "tours": [
-        "Caribbean Premier League 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:820691",
-      "display": "Odean Fabian Smith",
-      "aliases": [
-        "odean fabian smith"
-      ],
-      "team": "MTJAM",
-      "role": "BOWL",
-      "tours": [
-        "Caribbean Premier League 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:1342545",
-      "display": "Amari Alexandre Goodridge",
-      "aliases": [
-        "amari alexandre goodridge"
-      ],
-      "team": "MTSTL",
-      "role": "BAT",
-      "tours": [
-        "Caribbean Premier League 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:527776",
-      "display": "Oliver Edward Robinson",
-      "aliases": [
-        "oliver edward robinson",
-        "ollie robinson"
-      ],
-      "team": "TENG",
-      "role": "BOWL",
-      "tours": [
-        "England vs Pakistan Men's Test 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:233901",
-      "display": "Shan Masood Khan",
-      "aliases": [
-        "shan masood",
-        "shan masood khan"
-      ],
-      "team": "TPAK",
-      "role": "BAT",
-      "tours": [
-        "England vs Pakistan Men's Test 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:1148593",
-      "display": "Emilio Nico Gay",
-      "aliases": [
-        "emilio gay",
-        "emilio nico gay"
-      ],
-      "team": "TENG",
-      "role": "BAT",
-      "tours": [
-        "England vs Pakistan Men's Test 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:1398125",
-      "display": "Hasan Nawaz",
-      "aliases": [
-        "hasan nawaz"
-      ],
-      "team": "MTANT",
-      "role": "BAT",
-      "tours": [
-        "Caribbean Premier League 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:348026",
-      "display": "John Campbell",
-      "aliases": [
-        "john dillon campbell"
-      ],
-      "team": "MTSTL",
-      "role": "BAT",
-      "tours": [
-        "Caribbean Premier League 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:328160",
-      "display": "Obus Pienaar",
-      "aliases": [
-        "abraham jacobus pienaar"
-      ],
-      "team": "MTSTL",
-      "role": "BAT",
-      "tours": [
-        "Caribbean Premier League 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:1078694",
-      "display": "Shian Brathwaite",
-      "aliases": [
-        "shian brathwaite"
-      ],
-      "team": "MTBAR",
-      "role": "BAT",
-      "tours": [
-        "Caribbean Premier League 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:1511916",
-      "display": "Abdul-Raheem Salafee Ibn Hassan Toppin",
-      "aliases": [
-        "abdul raheem salafee ibn hassan toppin"
-      ],
-      "team": "MTTRI",
-      "role": "BOWL",
-      "tours": [
-        "Caribbean Premier League 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:348144",
-      "display": "Mohammad Babar Azam",
-      "aliases": [
-        "mohammad babar azam"
-      ],
-      "team": "TPAK",
-      "role": "BAT",
-      "tours": [
-        "England vs Pakistan Men's Test 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:671805",
-      "display": "Henry George Munsey",
-      "aliases": [
-        "henry george munsey"
-      ],
-      "team": "MTGLA",
-      "role": "BAT",
-      "tours": [
-        "European T20 Premier League 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:1323417",
-      "display": "Harry John Manenti",
-      "aliases": [
-        "harry john manenti"
-      ],
-      "team": "MTBEL",
-      "role": "BAT",
-      "tours": [
-        "European T20 Premier League 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:595897",
-      "display": "David Rushmere",
-      "aliases": [
-        "david rushmere"
-      ],
-      "team": "MTAMS",
-      "role": "BAT",
-      "tours": [
-        "European T20 Premier League 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:1394079",
-      "display": "Jordan Enno Neill",
-      "aliases": [
-        "jordan enno neill"
-      ],
-      "team": "MTAMS",
-      "role": "BAT",
-      "tours": [
-        "European T20 Premier League 2026"
-      ],
-      "source": "auto"
-    },
-    {
-      "pid": "ci:1199306",
-      "display": "D Sween",
-      "aliases": [
-        "d sween"
-      ],
-      "team": "",
-      "role": "?",
-      "tours": [],
-      "source": "needs-cricinfo"
-    },
-    {
-      "pid": "ci:556531",
-      "display": "K Pooran",
-      "aliases": [
-        "k pooran"
-      ],
-      "team": "",
-      "role": "?",
-      "tours": [],
-      "source": "needs-cricinfo"
-    },
-    {
-      "pid": "ci:1108828",
-      "display": "D Nedd",
-      "aliases": [
-        "d nedd"
-      ],
-      "team": "",
-      "role": "?",
-      "tours": [],
-      "source": "needs-cricinfo"
-    },
-    {
-      "pid": "ci:571911",
-      "display": "J Clark",
-      "aliases": [
-        "j clark"
-      ],
-      "team": "",
-      "role": "?",
-      "tours": [],
-      "source": "needs-cricinfo"
-    },
-    {
-      "pid": "ci:1217156",
-      "display": "RS Fernando",
-      "aliases": [
-        "rs fernando"
-      ],
-      "team": "",
-      "role": "?",
-      "tours": [
-        "Lanka Premier League 2026"
-      ],
-      "source": "needs-cricinfo"
-    },
-    {
-      "pid": "ci:1078695",
-      "display": "M Louis",
-      "aliases": [
-        "m louis"
-      ],
-      "team": "",
-      "role": "?",
-      "tours": [],
-      "source": "needs-cricinfo"
-    }
-  ]
+ "note": "Sheet-driven NEW players (the no-code path for a player the squad list is missing). Each entry is a GLOBAL, tour-agnostic identity (pid + display + feed-spelling aliases) PLUS the tours/team it's a member of. read_review_confirmations adds entries when you mark a Needs Review row 'New'; match_squad_to_perf adds them (source:'auto') when a globally-known player plays a tour they're not squad-listed for (the silent-drop fix). The bot loads this at startup (merges identity into the registry) and injects membership into each tour's squad — so it works WITHOUT a build_registry rebuild. pid is reused if the feed already resolves, else a slug:<name> (upgradeable to a cricsheet_id by a later build_registry run). Committed back to git by the workflow so it persists. source: 'new' (you marked New) | 'auto' (silent-drop auto-add).",
+ "players": [
+  {
+   "pid": "ci:1229018",
+   "display": "Jane Maguire",
+   "aliases": [
+    "j maguire"
+   ],
+   "team": "Ireland",
+   "role": "BOWL",
+   "tours": [
+    "Women's T20 WC 2026",
+    "Ireland vs West Indies Women's ODI 2026"
+   ],
+   "source": "new"
+  },
+  {
+   "pid": "ci:670013",
+   "display": "Fabian Allen",
+   "aliases": [
+    "fa allen"
+   ],
+   "team": "Los Angeles Knight Riders",
+   "role": "AR",
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "source": "new"
+  },
+  {
+   "pid": "ci:696471",
+   "display": "Dian Forrester",
+   "aliases": [
+    "dian forrester"
+   ],
+   "team": "Texas Super Kings",
+   "role": "AR",
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "source": "new"
+  },
+  {
+   "pid": "ci:1539667",
+   "display": "Anirudh Immanuel",
+   "aliases": [
+    "anirudh immanuel"
+   ],
+   "team": "San Francisco Unicorns",
+   "role": "AR",
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "source": "new"
+  },
+  {
+   "pid": "ci:56143",
+   "display": "Shakib Al Hasan",
+   "aliases": [
+    "shakib al hasan"
+   ],
+   "team": "MI New York",
+   "role": "BAT",
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "source": "new"
+  },
+  {
+   "pid": "ci:1076721",
+   "display": "L Pope",
+   "aliases": [
+    "l pope"
+   ],
+   "team": "Los Angeles Knight Riders",
+   "role": "BOWL",
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "source": "new"
+  },
+  {
+   "pid": "ci:474782",
+   "display": "Aakarshit Gomel",
+   "aliases": [
+    "aakarshit gomel"
+   ],
+   "team": "San Francisco Unicorns",
+   "role": "BAT",
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "source": "new"
+  },
+  {
+   "pid": "ci:547092",
+   "display": "Ehsan Adil",
+   "aliases": [
+    "ehsan adil"
+   ],
+   "team": "MI New York",
+   "role": "BOWL",
+   "tours": [
+    "Major League Cricket 2026"
+   ],
+   "source": "new"
+  },
+  {
+   "pid": "ci:581160",
+   "display": "Khary Pierre",
+   "aliases": [
+    "k pierre",
+    "khary pierre"
+   ],
+   "team": "West Indies",
+   "role": "BOWL",
+   "tours": [
+    "New Zealand vs West Indies Men's ODI 2026"
+   ],
+   "source": "new"
+  },
+  {
+   "pid": "ci:1364327",
+   "display": "Vishwa Lahiru",
+   "aliases": [
+    "v lahiru",
+    "vishwa lahiru"
+   ],
+   "team": "dambulla sixers",
+   "role": "BOWL",
+   "tours": [
+    "Lanka Premier League 2026"
+   ],
+   "source": "new"
+  },
+  {
+   "pid": "ci:801817",
+   "display": "Katupulle Gedara Mohamed Shiraz Sahab",
+   "aliases": [
+    "katupulle gedara mohamed shiraz sahab"
+   ],
+   "team": "",
+   "role": "BOWL",
+   "tours": [
+    "Lanka Premier League 2026"
+   ],
+   "source": "new"
+  },
+  {
+   "pid": "9e5f4ad7",
+   "display": "Kayla Reyneke",
+   "aliases": [
+    "kayla reyneke"
+   ],
+   "team": "WTBPH",
+   "role": "BAT",
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "bc969efb",
+   "display": "Ashleigh Gardner",
+   "aliases": [
+    "ashleigh gardner"
+   ],
+   "team": "WTTRR",
+   "role": "BAT",
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "e1b9f3a9",
+   "display": "Ben Dwarshuis",
+   "aliases": [
+    "ben dwarshuis"
+   ],
+   "team": "MTBPH",
+   "role": "BAT",
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:688141",
+   "display": "Sean Dickson",
+   "aliases": [
+    "sean dickson",
+    "sr dickson"
+   ],
+   "team": "Birmingham Phoenix",
+   "role": "BAT",
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "source": "new"
+  },
+  {
+   "pid": "ci:859899",
+   "display": "Calvin Harrison",
+   "aliases": [
+    "calvin harrison",
+    "cg harrison"
+   ],
+   "team": "Trent Rockets",
+   "role": "BAT",
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "source": "new"
+  },
+  {
+   "pid": "ci:1150021",
+   "display": "Matthew Revis",
+   "aliases": [
+    "matthew revis",
+    "ml revis"
+   ],
+   "team": "Sunrisers Leeds",
+   "role": "BAT",
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "source": "new"
+  },
+  {
+   "pid": "ci:211855",
+   "display": "Liam Dawson",
+   "aliases": [],
+   "team": "London Spirit",
+   "role": "BAT",
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "source": "new"
+  },
+  {
+   "pid": "ci:990031",
+   "display": "Towhid Hridoy",
+   "aliases": [
+    "towhid hridoy"
+   ],
+   "team": "JK",
+   "role": "BAT",
+   "tours": [
+    "Lanka Premier League 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:410765",
+   "display": "Nurul Hasan",
+   "aliases": [
+    "nurul hasan"
+   ],
+   "team": "GG",
+   "role": "BAT",
+   "tours": [
+    "Lanka Premier League 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:459508",
+   "display": "Andrew Tye",
+   "aliases": [
+    "aj tye",
+    "andrew tye"
+   ],
+   "team": "London Spirit",
+   "role": "BOWL",
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "source": "new"
+  },
+  {
+   "pid": "ci:663613",
+   "display": "Saif Zaib",
+   "aliases": [
+    "sa zaib",
+    "saif zaib"
+   ],
+   "team": "Southern Brave",
+   "role": "BAT",
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "source": "new"
+  },
+  {
+   "pid": "ci:1070229",
+   "display": "Milan Ratnayake",
+   "aliases": [
+    "kth ratnayake"
+   ],
+   "team": "GG",
+   "role": "BOWL",
+   "tours": [
+    "Lanka Premier League 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:299572",
+   "display": "Sikandar Raza",
+   "aliases": [
+    "sikandar raza",
+    "sikandar raza butt"
+   ],
+   "team": "DS",
+   "role": "AR",
+   "tours": [
+    "Lanka Premier League 2026",
+    "The Hundred Men's Competition 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:1124282",
+   "display": "Josh Philippe",
+   "aliases": [
+    "jr philippe"
+   ],
+   "team": "MTMILO",
+   "role": "BAT",
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:1153148",
+   "display": "Sonal Dinusha",
+   "aliases": [
+    "gs dinusha"
+   ],
+   "team": "Dambulla Sixers",
+   "role": "BOWL",
+   "tours": [
+    "Lanka Premier League 2026"
+   ],
+   "source": "new"
+  },
+  {
+   "pid": "ci:469879",
+   "display": "Georgia Adams",
+   "aliases": [
+    "qaasim adams"
+   ],
+   "team": "Trent Rockets Women",
+   "role": "BAT",
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "source": "new"
+  },
+  {
+   "pid": "ci:737833",
+   "display": "Kiran Carlson",
+   "aliases": [
+    "kiran carlson",
+    "ks carlson"
+   ],
+   "team": "London Spirit",
+   "role": "BAT",
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "source": "new"
+  },
+  {
+   "pid": "ci:958691",
+   "display": "KNA Bandara",
+   "aliases": [
+    "kna bandara"
+   ],
+   "team": "",
+   "role": "?",
+   "tours": [
+    "Lanka Premier League 2026"
+   ],
+   "source": "needs-cricinfo"
+  },
+  {
+   "pid": "ci:1137283",
+   "display": "Thomas Fraser Rogers",
+   "aliases": [
+    "thomas fraser rogers"
+   ],
+   "team": "Galle Gallants",
+   "role": "BAT",
+   "tours": [
+    "Lanka Premier League 2026"
+   ],
+   "source": "new"
+  },
+  {
+   "pid": "ci:1276980",
+   "display": "Ripon Mondol",
+   "aliases": [
+    "ripon mondol"
+   ],
+   "team": "Colombo Kaps",
+   "role": "BOWL",
+   "tours": [
+    "Lanka Premier League 2026"
+   ],
+   "source": "new"
+  },
+  {
+   "pid": "ci:437316",
+   "display": "Dasun Shanaka",
+   "aliases": [
+    "ashen bandara"
+   ],
+   "team": "Colombo Kaps",
+   "role": "BAT",
+   "tours": [
+    "Lanka Premier League 2026"
+   ],
+   "source": "new"
+  },
+  {
+   "pid": "ci:8917",
+   "display": "Moeen Ali",
+   "aliases": [
+    "moeen ali"
+   ],
+   "team": "MTSBR",
+   "role": "BAT",
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:1150585",
+   "display": "Orla Prendergast",
+   "aliases": [
+    "o prendergast",
+    "orla prendergast"
+   ],
+   "team": "WTWLF",
+   "role": "BAT",
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:1329699",
+   "display": "Khawaja Nafay",
+   "aliases": [
+    "khawaja nafay"
+   ],
+   "team": "Jaffna Kings",
+   "role": "BAT",
+   "tours": [
+    "Lanka Premier League 2026"
+   ],
+   "source": "new"
+  },
+  {
+   "pid": "ci:926629",
+   "display": "Hasan Mahmud",
+   "aliases": [
+    "iftikhar ahmed"
+   ],
+   "team": "",
+   "role": "BAT",
+   "tours": [
+    "Lanka Premier League 2026"
+   ],
+   "source": "new"
+  },
+  {
+   "pid": "ci:1329699",
+   "display": "Khawaja Nafay",
+   "aliases": [
+    "khawaja nafay"
+   ],
+   "team": "",
+   "role": "?",
+   "tours": [],
+   "source": "needs-cricinfo"
+  },
+  {
+   "pid": "ci:1430324",
+   "display": "J Moores",
+   "aliases": [
+    "j moores",
+    "joseph henry alan moores"
+   ],
+   "team": "",
+   "role": "?",
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "source": "needs-cricinfo"
+  },
+  {
+   "pid": "ci:639080",
+   "display": "MD Fisher",
+   "aliases": [
+    "matthew david fisher",
+    "md fisher"
+   ],
+   "team": "",
+   "role": "?",
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "source": "needs-cricinfo"
+  },
+  {
+   "pid": "ci:1275938",
+   "display": "Rivaldo A Clarke",
+   "aliases": [
+    "rivaldo a clarke"
+   ],
+   "team": "MTBAR",
+   "role": "BAT",
+   "tours": [
+    "Caribbean Premier League 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:1209188",
+   "display": "Kevlon Alston Anderson",
+   "aliases": [
+    "kevlon alston anderson"
+   ],
+   "team": "MTBAR",
+   "role": "BAT",
+   "tours": [
+    "Caribbean Premier League 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:1164537",
+   "display": "Charli Rae Knott",
+   "aliases": [
+    "charli rae knott"
+   ],
+   "team": "WTSBR",
+   "role": "BAT",
+   "tours": [
+    "The Hundred Women's Competition 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:512907",
+   "display": "Thomas George Helm",
+   "aliases": [
+    "thomas george helm"
+   ],
+   "team": "MTBPH",
+   "role": "AR",
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:297482",
+   "display": "Ben William Sanderson",
+   "aliases": [
+    "ben william sanderson"
+   ],
+   "team": "MTTRR",
+   "role": "BOWL",
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:326968",
+   "display": "Michael Bracewell",
+   "aliases": [
+    "michael gordon bracewell"
+   ],
+   "team": "MTMSG",
+   "role": "AR",
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:301648",
+   "display": "Jordan Clark",
+   "aliases": [
+    "jordan clark"
+   ],
+   "team": "MTWLF",
+   "role": "BOWL",
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:748793",
+   "display": "Joe James Weatherley",
+   "aliases": [
+    "joe james weatherley"
+   ],
+   "team": "MTBPH",
+   "role": "BAT",
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:1143809",
+   "display": "Henry Thomas Crocombe",
+   "aliases": [
+    "henry thomas crocombe"
+   ],
+   "team": "MTLSP",
+   "role": "BOWL",
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:1488180",
+   "display": "Manny Lumsden",
+   "aliases": [
+    "manny lumsden"
+   ],
+   "team": "MTSBR",
+   "role": "BOWL",
+   "tours": [
+    "The Hundred Men's Competition 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:823509",
+   "display": "Dale Phillips",
+   "aliases": [
+    "glenn dominic phillips"
+   ],
+   "team": "MTGUY",
+   "role": "BOWL",
+   "tours": [
+    "Caribbean Premier League 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:1443401",
+   "display": "Khari Campbell",
+   "aliases": [
+    "khari campbell"
+   ],
+   "team": "MTSTL",
+   "role": "BOWL",
+   "tours": [
+    "Caribbean Premier League 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:1209191",
+   "display": "Joshua Michael James",
+   "aliases": [
+    "joshua michael james"
+   ],
+   "team": "MTANT",
+   "role": "BAT",
+   "tours": [
+    "Caribbean Premier League 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:820691",
+   "display": "Odean Fabian Smith",
+   "aliases": [
+    "odean fabian smith"
+   ],
+   "team": "MTJAM",
+   "role": "BOWL",
+   "tours": [
+    "Caribbean Premier League 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:1342545",
+   "display": "Amari Alexandre Goodridge",
+   "aliases": [
+    "amari alexandre goodridge"
+   ],
+   "team": "MTSTL",
+   "role": "BAT",
+   "tours": [
+    "Caribbean Premier League 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:527776",
+   "display": "Oliver Edward Robinson",
+   "aliases": [
+    "oliver edward robinson",
+    "ollie robinson"
+   ],
+   "team": "TENG",
+   "role": "BOWL",
+   "tours": [
+    "England vs Pakistan Men's Test 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:233901",
+   "display": "Shan Masood Khan",
+   "aliases": [
+    "shan masood",
+    "shan masood khan"
+   ],
+   "team": "TPAK",
+   "role": "BAT",
+   "tours": [
+    "England vs Pakistan Men's Test 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:1148593",
+   "display": "Emilio Nico Gay",
+   "aliases": [
+    "emilio gay",
+    "emilio nico gay"
+   ],
+   "team": "TENG",
+   "role": "BAT",
+   "tours": [
+    "England vs Pakistan Men's Test 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:1398125",
+   "display": "Hasan Nawaz",
+   "aliases": [
+    "hasan nawaz"
+   ],
+   "team": "MTANT",
+   "role": "BAT",
+   "tours": [
+    "Caribbean Premier League 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:348026",
+   "display": "John Campbell",
+   "aliases": [
+    "john dillon campbell"
+   ],
+   "team": "MTSTL",
+   "role": "BAT",
+   "tours": [
+    "Caribbean Premier League 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:328160",
+   "display": "Obus Pienaar",
+   "aliases": [
+    "abraham jacobus pienaar"
+   ],
+   "team": "MTSTL",
+   "role": "BAT",
+   "tours": [
+    "Caribbean Premier League 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:1078694",
+   "display": "Shian Brathwaite",
+   "aliases": [
+    "shian brathwaite"
+   ],
+   "team": "MTBAR",
+   "role": "BAT",
+   "tours": [
+    "Caribbean Premier League 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:1511916",
+   "display": "Abdul-Raheem Salafee Ibn Hassan Toppin",
+   "aliases": [
+    "abdul raheem salafee ibn hassan toppin"
+   ],
+   "team": "MTTRI",
+   "role": "BOWL",
+   "tours": [
+    "Caribbean Premier League 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:348144",
+   "display": "Mohammad Babar Azam",
+   "aliases": [
+    "mohammad babar azam"
+   ],
+   "team": "TPAK",
+   "role": "BAT",
+   "tours": [
+    "England vs Pakistan Men's Test 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:671805",
+   "display": "Henry George Munsey",
+   "aliases": [
+    "henry george munsey"
+   ],
+   "team": "MTGLA",
+   "role": "BAT",
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:1323417",
+   "display": "Harry John Manenti",
+   "aliases": [
+    "harry john manenti"
+   ],
+   "team": "MTBEL",
+   "role": "BAT",
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:595897",
+   "display": "David Rushmere",
+   "aliases": [
+    "david rushmere"
+   ],
+   "team": "MTAMS",
+   "role": "BAT",
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:1394079",
+   "display": "Jordan Enno Neill",
+   "aliases": [
+    "jordan enno neill"
+   ],
+   "team": "MTAMS",
+   "role": "BAT",
+   "tours": [
+    "European T20 Premier League 2026"
+   ],
+   "source": "auto"
+  },
+  {
+   "pid": "ci:1199306",
+   "display": "D Sween",
+   "aliases": [
+    "d sween"
+   ],
+   "team": "",
+   "role": "?",
+   "tours": [],
+   "source": "needs-cricinfo"
+  },
+  {
+   "pid": "ci:556531",
+   "display": "K Pooran",
+   "aliases": [
+    "k pooran"
+   ],
+   "team": "",
+   "role": "?",
+   "tours": [],
+   "source": "needs-cricinfo"
+  },
+  {
+   "pid": "ci:1108828",
+   "display": "D Nedd",
+   "aliases": [
+    "d nedd"
+   ],
+   "team": "",
+   "role": "?",
+   "tours": [],
+   "source": "needs-cricinfo"
+  },
+  {
+   "pid": "ci:1217156",
+   "display": "RS Fernando",
+   "aliases": [
+    "rs fernando"
+   ],
+   "team": "",
+   "role": "?",
+   "tours": [
+    "Lanka Premier League 2026"
+   ],
+   "source": "needs-cricinfo"
+  },
+  {
+   "pid": "ci:1078695",
+   "display": "M Louis",
+   "aliases": [
+    "m louis"
+   ],
+   "team": "",
+   "role": "?",
+   "tours": [],
+   "source": "needs-cricinfo"
+  }
+ ]
 }

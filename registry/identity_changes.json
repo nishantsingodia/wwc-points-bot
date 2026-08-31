@@ -77,6 +77,13 @@
    "at": "2026-08-31",
    "reason": "build_registry.promote",
    "evidence": "placeholder uncapped:jordan-neill resolved to ci:1394079 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:abdul-raheem-toppin",
+   "to": "ci:1511916",
+   "at": "2026-08-31",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:abdul-raheem-toppin resolved to ci:1511916 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
   }
  ]
 }
