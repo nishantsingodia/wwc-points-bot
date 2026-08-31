@@ -917,6 +917,41 @@
       "role": "?",
       "tours": [],
       "source": "needs-cricinfo"
+    },
+    {
+      "pid": "ci:571911",
+      "display": "J Clark",
+      "aliases": [
+        "j clark"
+      ],
+      "team": "",
+      "role": "?",
+      "tours": [],
+      "source": "needs-cricinfo"
+    },
+    {
+      "pid": "ci:1217156",
+      "display": "RS Fernando",
+      "aliases": [
+        "rs fernando"
+      ],
+      "team": "",
+      "role": "?",
+      "tours": [
+        "Lanka Premier League 2026"
+      ],
+      "source": "needs-cricinfo"
+    },
+    {
+      "pid": "ci:1078695",
+      "display": "M Louis",
+      "aliases": [
+        "m louis"
+      ],
+      "team": "",
+      "role": "?",
+      "tours": [],
+      "source": "needs-cricinfo"
     }
   ]
 }

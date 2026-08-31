@@ -87,7 +87,8 @@
  "ci:1143809": {
   "cricinfo_id": "1143809",
   "names": [
-   "henry thomas crocombe"
+   "henry thomas crocombe",
+   "ht crocombe"
   ]
  },
  "ci:1150021": {
@@ -130,7 +131,8 @@
  "ci:1164537": {
   "cricinfo_id": "1164537",
   "names": [
-   "charli rae knott"
+   "charli rae knott",
+   "cr knott"
   ]
  },
  "ci:1184028": {
@@ -439,6 +441,7 @@
  "ci:1488180": {
   "cricinfo_id": "1488180",
   "names": [
+   "m lumsden",
    "manny lumsden"
   ]
  },
@@ -689,6 +692,7 @@
  "ci:571911": {
   "cricinfo_id": "571911",
   "names": [
+   "j clark",
    "joe clarke"
   ]
  },
@@ -811,6 +815,7 @@
  "ci:748793": {
   "cricinfo_id": "748793",
   "names": [
+   "jj weatherley",
    "joe james weatherley"
   ]
  },
@@ -945,6 +950,7 @@
  "ci:1078695": {
   "cricinfo_id": "1078695",
   "names": [
+   "m louis",
    "mikyle louis"
   ],
   "source": "MTSTK. ESPNcricinfo id observed on the CPL 2026 (ESPN league 8623) match rosters — athlete.id IS the cricinfo id. Was minting uncapped:<slug>, which no feed can emit, so matchPlayerInXI judged the player not-in-XI every match he played."
@@ -1003,5 +1009,36 @@
    "emilio nico gay"
   ],
   "source": "ENG v PAK Test 2026 (ESPN series 23806, event 1496582). athlete.id on the ESPN match roster IS the cricinfo id, and ESPN's own displayName for that id is the ANNOUNCED name the squad uses — so this binds a feed-supplied id to a feed-supplied spelling, not a guess. Needed because the squad name resolved to NOTHING, so the slot published a blank Player ID (did-not-play) while the same man was auto-added off the official cricsheet card under his full legal name and scored there."
+ },
+ "ci:1217156": {
+  "cricinfo_id": "1217156",
+  "names": [
+   "rs fernando"
+  ]
+ },
+ "ci:328160": {
+  "cricinfo_id": "328160",
+  "names": [
+   "obus pienaar"
+  ]
+ },
+ "ci:1195686": {
+  "cricinfo_id": "1195686",
+  "names": [
+   "matthew nandu"
+  ]
+ },
+ "ci:1078694": {
+  "cricinfo_id": "1078694",
+  "names": [
+   "shian brathwaite"
+  ]
+ },
+ "ci:1511916": {
+  "cricinfo_id": "1511916",
+  "names": [
+   "abdul raheem salafee ibn hassan toppin",
+   "abdul raheem toppin"
+  ]
  }
 }
