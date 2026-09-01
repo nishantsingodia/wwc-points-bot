@@ -1080,6 +1080,15 @@
    "first_status": "COMPLETED",
    "first_seen": "2026-08-30",
    "provenance": "live"
+  },
+  {
+   "tour": "Caribbean Premier League 2026",
+   "match_key": "2026-08-31::guyana amazon warriors|trinbago knight riders",
+   "match": "Match 22 — MTTRI v MTGUY",
+   "date": "2026-08-31",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-09-01",
+   "provenance": "live"
   }
  ]
 }
