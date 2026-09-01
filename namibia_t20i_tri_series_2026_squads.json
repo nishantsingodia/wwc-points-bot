@@ -1,0 +1,193 @@
+{
+  "MTNAM": {
+    "name": "Namibia",
+    "players": [
+      [
+        "Gerhard Erasmus",
+        "AR"
+      ],
+      [
+        "Jan Balt",
+        "BAT"
+      ],
+      [
+        "Jack Brassell",
+        "BOWL"
+      ],
+      [
+        "Jan Frylinck",
+        "AR"
+      ],
+      [
+        "Zane Green",
+        "BAT"
+      ],
+      [
+        "Max Heingo",
+        "BOWL"
+      ],
+      [
+        "Malan Kruger",
+        "BAT"
+      ],
+      [
+        "Jan Nicol Loftie-Eaton",
+        "BAT"
+      ],
+      [
+        "Bernard Scholtz",
+        "BOWL"
+      ],
+      [
+        "JJ Smit",
+        "BOWL"
+      ],
+      [
+        "Waldo Smith",
+        "AR"
+      ],
+      [
+        "Louren Steenkamp",
+        "BAT"
+      ],
+      [
+        "Junior Taanyanda",
+        "AR"
+      ],
+      [
+        "Ruben Trumpelmann",
+        "BOWL"
+      ],
+      [
+        "Michael van Lingen",
+        "BAT"
+      ],
+      [
+        "Alexander Busing-Volschenk",
+        "AR"
+      ]
+    ]
+  },
+  "MTSOU": {
+    "name": "South Africa",
+    "players": [
+      [
+        "Bjorn Fortuin",
+        "BOWL"
+      ],
+      [
+        "Eathan Bosch",
+        "BOWL"
+      ],
+      [
+        "Dewald Brevis",
+        "BAT"
+      ],
+      [
+        "Tony de Zorzi",
+        "BAT"
+      ],
+      [
+        "Connor Esterhuizen",
+        "BAT"
+      ],
+      [
+        "Rubin Hermann",
+        "WK"
+      ],
+      [
+        "Jordan Hermann",
+        "BAT"
+      ],
+      [
+        "Duan Jansen",
+        "BOWL"
+      ],
+      [
+        "Kwena Maphaka",
+        "BOWL"
+      ],
+      [
+        "Nqobani Mokoena",
+        "BOWL"
+      ],
+      [
+        "Nqabayomzi Peter",
+        "BOWL"
+      ],
+      [
+        "Lhuan-dre Pretorius",
+        "BAT"
+      ],
+      [
+        "Prenelan Subrayen",
+        "AR"
+      ]
+    ]
+  },
+  "MTZIM2": {
+    "name": "Zimbabwe",
+    "players": [
+      [
+        "Sikandar Raza",
+        "BAT"
+      ],
+      [
+        "Brian Bennett",
+        "AR"
+      ],
+      [
+        "Ryan Burl",
+        "AR"
+      ],
+      [
+        "Graeme Cremer",
+        "BOWL"
+      ],
+      [
+        "Ben Curran",
+        "BAT"
+      ],
+      [
+        "Brad Evans",
+        "AR"
+      ],
+      [
+        "Innocent Kaia",
+        "BAT"
+      ],
+      [
+        "Wessly Madhevere",
+        "AR"
+      ],
+      [
+        "Tadiwanashe Marumani",
+        "BAT"
+      ],
+      [
+        "Wellington Masakadza",
+        "BOWL"
+      ],
+      [
+        "Kundai Matigimu",
+        "BOWL"
+      ],
+      [
+        "Blessing Muzarabani",
+        "BOWL"
+      ],
+      [
+        "Dion Myers",
+        "BAT"
+      ],
+      [
+        "Newman Nyamhuri",
+        "BOWL"
+      ],
+      [
+        "Tafadzwa Tsiga",
+        "BAT"
+      ]
+    ]
+  }
+}

@@ -130,5 +130,14 @@
     "squads": "european_t20_premier_league_2026_squads.json",
     "tab": "EUROPEAN T20 PREMIER LEAGUE 2026 POINTS",
     "cricbuzz_series": "12870"
+  },
+  {
+    "ends": "2026-09-06",
+    "espn_series": "1549518",
+    "format": "T20",
+    "gender": "male",
+    "name": "Namibia T20I Tri-Series 2026",
+    "squads": "namibia_t20i_tri_series_2026_squads.json",
+    "tab": "NAMIBIA T20I TRISERIES 2026 POINTS"
   }
 ]

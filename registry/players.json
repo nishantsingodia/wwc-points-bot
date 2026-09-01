@@ -1,6 +1,6 @@
 {
  "anchor": "cricinfo_id (ci:); cs:/uncapped: fallback; cricsheet_id derived from crosswalk",
- "count": 832,
+ "count": 859,
  "players": {
   "ci:597806": {
    "aliases": [
@@ -4318,7 +4318,8 @@
    ],
    "tours": [
     "Major League Cricket 2026",
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "Namibia T20I Tri-Series 2026"
    ],
    "cricinfo_id": "1385640",
    "cricsheet_id": "60aa2db3",
@@ -4335,7 +4336,8 @@
     "connor esterhuizen"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "Namibia T20I Tri-Series 2026"
    ],
    "cricinfo_id": "1070997",
    "cricsheet_id": "ef9acbcc",
@@ -7230,7 +7232,8 @@
     "rubin hermann"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Namibia T20I Tri-Series 2026"
    ],
    "cricinfo_id": "596097",
    "cricsheet_id": "9c821d2e",
@@ -8259,7 +8262,9 @@
    "espn_id": "727399",
    "display": "Sachitha Jayatilake",
    "draft_id": 10380,
-   "auction_id": 8734
+   "auction_id": 8734,
+   "cricbuzz_id": "21826",
+   "cricbuzz_tier": 1
   },
   "ci:784375": {
    "aliases": [
@@ -8964,7 +8969,8 @@
     "dewald brevis"
    ],
    "tours": [
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "Namibia T20I Tri-Series 2026"
    ],
    "cricinfo_id": "1070665",
    "cricsheet_id": "844e79d1",
@@ -10930,7 +10936,8 @@
     "sikandar raza butt"
    ],
    "tours": [
-    "India tour of Zimbabwe 2026 (T20I)"
+    "India tour of Zimbabwe 2026 (T20I)",
+    "Namibia T20I Tri-Series 2026"
    ],
    "cricinfo_id": "299572",
    "cricsheet_id": "26d041c4",
@@ -10948,7 +10955,8 @@
     "brian john bennett"
    ],
    "tours": [
-    "India tour of Zimbabwe 2026 (T20I)"
+    "India tour of Zimbabwe 2026 (T20I)",
+    "Namibia T20I Tri-Series 2026"
    ],
    "cricinfo_id": "1071484",
    "cricsheet_id": "eaa36b2a",
@@ -10964,7 +10972,8 @@
     "ryan ponsonby burl"
    ],
    "tours": [
-    "India tour of Zimbabwe 2026 (T20I)"
+    "India tour of Zimbabwe 2026 (T20I)",
+    "Namibia T20I Tri-Series 2026"
    ],
    "cricinfo_id": "495964",
    "cricsheet_id": "b08252b8",
@@ -10995,7 +11004,8 @@
     "bj curran"
    ],
    "tours": [
-    "India tour of Zimbabwe 2026 (T20I)"
+    "India tour of Zimbabwe 2026 (T20I)",
+    "Namibia T20I Tri-Series 2026"
    ],
    "cricinfo_id": "910695",
    "cricsheet_id": "1786a21b",
@@ -11010,7 +11020,8 @@
     "brad evans"
    ],
    "tours": [
-    "India tour of Zimbabwe 2026 (T20I)"
+    "India tour of Zimbabwe 2026 (T20I)",
+    "Namibia T20I Tri-Series 2026"
    ],
    "cricinfo_id": "696127",
    "cricsheet_id": "e7e86505",
@@ -11024,7 +11035,8 @@
     "innocent kaia"
    ],
    "tours": [
-    "India tour of Zimbabwe 2026 (T20I)"
+    "India tour of Zimbabwe 2026 (T20I)",
+    "Namibia T20I Tri-Series 2026"
    ],
    "cricinfo_id": "465327",
    "cricsheet_id": "5ad8c974",
@@ -11040,7 +11052,8 @@
     "wessly nyasha madhevere"
    ],
    "tours": [
-    "India tour of Zimbabwe 2026 (T20I)"
+    "India tour of Zimbabwe 2026 (T20I)",
+    "Namibia T20I Tri-Series 2026"
    ],
    "cricinfo_id": "938959",
    "cricsheet_id": "a879b92c",
@@ -11055,7 +11068,8 @@
     "tadiwanashe marumani"
    ],
    "tours": [
-    "India tour of Zimbabwe 2026 (T20I)"
+    "India tour of Zimbabwe 2026 (T20I)",
+    "Namibia T20I Tri-Series 2026"
    ],
    "cricinfo_id": "946507",
    "cricsheet_id": "3d5d51a5",
@@ -11070,7 +11084,8 @@
     "wellington pedzisai masakadza"
    ],
    "tours": [
-    "India tour of Zimbabwe 2026 (T20I)"
+    "India tour of Zimbabwe 2026 (T20I)",
+    "Namibia T20I Tri-Series 2026"
    ],
    "cricinfo_id": "571703",
    "cricsheet_id": "4bc0a378",
@@ -11084,7 +11099,8 @@
     "blessing muzarabani"
    ],
    "tours": [
-    "India tour of Zimbabwe 2026 (T20I)"
+    "India tour of Zimbabwe 2026 (T20I)",
+    "Namibia T20I Tri-Series 2026"
    ],
    "cricinfo_id": "827051",
    "cricsheet_id": "449f4e3c",
@@ -11100,7 +11116,8 @@
     "dion nephy myers"
    ],
    "tours": [
-    "India tour of Zimbabwe 2026 (T20I)"
+    "India tour of Zimbabwe 2026 (T20I)",
+    "Namibia T20I Tri-Series 2026"
    ],
    "cricinfo_id": "946517",
    "cricsheet_id": "d96165b5",
@@ -11131,7 +11148,8 @@
     "nt nyamhuri"
    ],
    "tours": [
-    "India tour of Zimbabwe 2026 (T20I)"
+    "India tour of Zimbabwe 2026 (T20I)",
+    "Namibia T20I Tri-Series 2026"
    ],
    "cricinfo_id": "1409283",
    "cricsheet_id": "943ca0cd",
@@ -11145,7 +11163,8 @@
     "tafadzwa tsiga"
    ],
    "tours": [
-    "India tour of Zimbabwe 2026 (T20I)"
+    "India tour of Zimbabwe 2026 (T20I)",
+    "Namibia T20I Tri-Series 2026"
    ],
    "cricinfo_id": "722321",
    "cricsheet_id": "a1dcb5b9",
@@ -11515,7 +11534,7 @@
    "draft_id": 10693,
    "auction_id": null,
    "cricbuzz_id": "14241",
-   "cricbuzz_tier": 3
+   "cricbuzz_tier": 4
   },
   "uncapped:tayyab-arif": {
    "aliases": [
@@ -12362,7 +12381,7 @@
    "cricsheet_id": "1d8c298b",
    "espn_id": "1078695",
    "cricbuzz_id": "19761",
-   "cricbuzz_tier": 1
+   "cricbuzz_tier": 2
   },
   "ci:1342545": {
    "aliases": [
@@ -13579,6 +13598,382 @@
    "espn_id": "1511916",
    "cricbuzz_id": "1477381",
    "cricbuzz_tier": 4
+  },
+  "uncapped:gerhard-erasmus": {
+   "aliases": [
+    "gerhard erasmus"
+   ],
+   "tours": [
+    "Namibia T20I Tri-Series 2026"
+   ],
+   "display": "Gerhard Erasmus",
+   "draft_id": 10922,
+   "auction_id": null
+  },
+  "ci:1178066": {
+   "aliases": [
+    "jan balt"
+   ],
+   "tours": [
+    "Namibia T20I Tri-Series 2026"
+   ],
+   "display": "Jan Balt",
+   "cricinfo_id": "1178066",
+   "cricsheet_id": "75be3b2a",
+   "espn_id": "1178066",
+   "draft_id": 10923,
+   "auction_id": null
+  },
+  "ci:1310415": {
+   "aliases": [
+    "jack brassell",
+    "jack thomas brassell"
+   ],
+   "tours": [
+    "Namibia T20I Tri-Series 2026"
+   ],
+   "display": "Jack Brassell",
+   "cricinfo_id": "1310415",
+   "cricsheet_id": "537021f5",
+   "espn_id": "1310415",
+   "draft_id": 10924,
+   "auction_id": null
+  },
+  "ci:482478": {
+   "aliases": [
+    "jan frylinck",
+    "jan nicolaas frylinck"
+   ],
+   "tours": [
+    "Namibia T20I Tri-Series 2026"
+   ],
+   "display": "Jan Frylinck",
+   "cricinfo_id": "482478",
+   "cricsheet_id": "3c87f0c3",
+   "espn_id": "482478",
+   "draft_id": 10925,
+   "auction_id": null
+  },
+  "ci:596664": {
+   "aliases": [
+    "zane edward green",
+    "zane green"
+   ],
+   "tours": [
+    "Namibia T20I Tri-Series 2026"
+   ],
+   "display": "Zane Green",
+   "cricinfo_id": "596664",
+   "cricsheet_id": "8716233e",
+   "espn_id": "596664",
+   "draft_id": 10926,
+   "auction_id": null
+  },
+  "ci:1495161": {
+   "aliases": [
+    "max heingo"
+   ],
+   "tours": [
+    "Namibia T20I Tri-Series 2026"
+   ],
+   "display": "Max Heingo",
+   "cricinfo_id": "1495161",
+   "cricsheet_id": "0abb2525",
+   "espn_id": "1495161",
+   "draft_id": 10927,
+   "auction_id": null
+  },
+  "ci:574638": {
+   "aliases": [
+    "malan kruger"
+   ],
+   "tours": [
+    "Namibia T20I Tri-Series 2026"
+   ],
+   "display": "Malan Kruger",
+   "cricinfo_id": "574638",
+   "cricsheet_id": "c51add25",
+   "espn_id": "574638",
+   "draft_id": 10928,
+   "auction_id": null
+  },
+  "ci:1071473": {
+   "aliases": [
+    "jan nicol loftie eaton"
+   ],
+   "tours": [
+    "Namibia T20I Tri-Series 2026"
+   ],
+   "display": "Jan Nicol Loftie-Eaton",
+   "cricinfo_id": "1071473",
+   "cricsheet_id": "f468293b",
+   "espn_id": "1071473",
+   "draft_id": 10929,
+   "auction_id": null
+  },
+  "ci:330223": {
+   "aliases": [
+    "bernard martinus scholtz",
+    "bernard scholtz"
+   ],
+   "tours": [
+    "Namibia T20I Tri-Series 2026"
+   ],
+   "display": "Bernard Scholtz",
+   "cricinfo_id": "330223",
+   "cricsheet_id": "e85d03d6",
+   "espn_id": "330223",
+   "draft_id": 10930,
+   "auction_id": null
+  },
+  "ci:553821": {
+   "aliases": [
+    "jj smit",
+    "johannes jonathan smit"
+   ],
+   "tours": [
+    "Namibia T20I Tri-Series 2026"
+   ],
+   "display": "JJ Smit",
+   "cricinfo_id": "553821",
+   "cricsheet_id": "bb134e5c",
+   "espn_id": "553821",
+   "draft_id": 10931,
+   "auction_id": null
+  },
+  "ci:1532519": {
+   "aliases": [
+    "waldo smith"
+   ],
+   "tours": [
+    "Namibia T20I Tri-Series 2026"
+   ],
+   "display": "Waldo Smith",
+   "cricinfo_id": "1532519",
+   "cricsheet_id": "cc9989f9",
+   "espn_id": "1532519",
+   "draft_id": 10932,
+   "auction_id": null
+  },
+  "ci:596087": {
+   "aliases": [
+    "louren steenkamp"
+   ],
+   "tours": [
+    "Namibia T20I Tri-Series 2026"
+   ],
+   "display": "Louren Steenkamp",
+   "cricinfo_id": "596087",
+   "cricsheet_id": "8bd9fd13",
+   "espn_id": "596087",
+   "draft_id": 10933,
+   "auction_id": null
+  },
+  "ci:1542041": {
+   "aliases": [
+    "junior taanyanda"
+   ],
+   "tours": [
+    "Namibia T20I Tri-Series 2026"
+   ],
+   "display": "Junior Taanyanda",
+   "cricinfo_id": "1542041",
+   "cricsheet_id": "c41ad06b",
+   "espn_id": "1542041",
+   "draft_id": 10934,
+   "auction_id": null
+  },
+  "ci:698317": {
+   "aliases": [
+    "ruben trumpelmann"
+   ],
+   "tours": [
+    "Namibia T20I Tri-Series 2026"
+   ],
+   "display": "Ruben Trumpelmann",
+   "cricinfo_id": "698317",
+   "cricsheet_id": "ff6a7ab5",
+   "espn_id": "698317",
+   "draft_id": 10935,
+   "auction_id": null
+  },
+  "ci:833777": {
+   "aliases": [
+    "michael van lingen"
+   ],
+   "tours": [
+    "Namibia T20I Tri-Series 2026"
+   ],
+   "display": "Michael van Lingen",
+   "cricinfo_id": "833777",
+   "cricsheet_id": "7eb36269",
+   "espn_id": "833777",
+   "draft_id": 10936,
+   "auction_id": null
+  },
+  "ci:1234278": {
+   "aliases": [
+    "alexander busing volschenk"
+   ],
+   "tours": [
+    "Namibia T20I Tri-Series 2026"
+   ],
+   "display": "Alexander Busing-Volschenk",
+   "cricinfo_id": "1234278",
+   "cricsheet_id": "e9e37173",
+   "espn_id": "1234278",
+   "draft_id": 10937,
+   "auction_id": null
+  },
+  "ci:553249": {
+   "aliases": [
+    "bjorn carl fortuin",
+    "bjorn fortuin"
+   ],
+   "tours": [
+    "Namibia T20I Tri-Series 2026"
+   ],
+   "display": "Bjorn Fortuin",
+   "cricinfo_id": "553249",
+   "cricsheet_id": "9a2fc964",
+   "espn_id": "553249",
+   "draft_id": 10938,
+   "auction_id": null
+  },
+  "ci:698343": {
+   "aliases": [
+    "eathan bosch"
+   ],
+   "tours": [
+    "Namibia T20I Tri-Series 2026"
+   ],
+   "display": "Eathan Bosch",
+   "cricinfo_id": "698343",
+   "cricsheet_id": "28d6c44d",
+   "espn_id": "698343",
+   "draft_id": 10939,
+   "auction_id": null
+  },
+  "ci:697183": {
+   "aliases": [
+    "tony de zorzi"
+   ],
+   "tours": [
+    "Namibia T20I Tri-Series 2026"
+   ],
+   "display": "Tony de Zorzi",
+   "cricinfo_id": "697183",
+   "cricsheet_id": "d3a1c63d",
+   "espn_id": "697183",
+   "draft_id": 10941,
+   "auction_id": null
+  },
+  "ci:1255248": {
+   "aliases": [
+    "jordan hermann"
+   ],
+   "tours": [
+    "Namibia T20I Tri-Series 2026"
+   ],
+   "display": "Jordan Hermann",
+   "cricinfo_id": "1255248",
+   "cricsheet_id": "e87aeca2",
+   "espn_id": "1255248",
+   "draft_id": 10944,
+   "auction_id": null
+  },
+  "ci:595954": {
+   "aliases": [
+    "duan jansen"
+   ],
+   "tours": [
+    "Namibia T20I Tri-Series 2026"
+   ],
+   "display": "Duan Jansen",
+   "cricinfo_id": "595954",
+   "cricsheet_id": "8dc152d1",
+   "espn_id": "595954",
+   "draft_id": 10945,
+   "auction_id": null
+  },
+  "ci:1294342": {
+   "aliases": [
+    "kwena maphaka",
+    "kwena tshegofatso maphaka"
+   ],
+   "tours": [
+    "Namibia T20I Tri-Series 2026"
+   ],
+   "display": "Kwena Maphaka",
+   "cricinfo_id": "1294342",
+   "cricsheet_id": "107c26fb",
+   "espn_id": "1294342",
+   "draft_id": 10946,
+   "auction_id": null
+  },
+  "ci:1414819": {
+   "aliases": [
+    "nqobani mokoena"
+   ],
+   "tours": [
+    "Namibia T20I Tri-Series 2026"
+   ],
+   "display": "Nqobani Mokoena",
+   "cricinfo_id": "1414819",
+   "cricsheet_id": "201facae",
+   "espn_id": "1414819",
+   "draft_id": 10947,
+   "auction_id": null
+  },
+  "ci:946483": {
+   "aliases": [
+    "nqabayomzi peter"
+   ],
+   "tours": [
+    "Namibia T20I Tri-Series 2026"
+   ],
+   "display": "Nqabayomzi Peter",
+   "cricinfo_id": "946483",
+   "cricsheet_id": "212aeedd",
+   "espn_id": "946483",
+   "draft_id": 10948,
+   "auction_id": null
+  },
+  "ci:437438": {
+   "aliases": [
+    "prenelan subrayen"
+   ],
+   "tours": [
+    "Namibia T20I Tri-Series 2026"
+   ],
+   "display": "Prenelan Subrayen",
+   "cricinfo_id": "437438",
+   "cricsheet_id": "7ec9711d",
+   "espn_id": "437438",
+   "draft_id": 10950,
+   "auction_id": null
+  },
+  "uncapped:graeme-cremer": {
+   "aliases": [
+    "graeme cremer"
+   ],
+   "tours": [
+    "Namibia T20I Tri-Series 2026"
+   ],
+   "display": "Graeme Cremer",
+   "draft_id": 10954,
+   "auction_id": null
+  },
+  "uncapped:kundai-matigimu": {
+   "aliases": [
+    "kundai matigimu"
+   ],
+   "tours": [
+    "Namibia T20I Tri-Series 2026"
+   ],
+   "display": "Kundai Matigimu",
+   "draft_id": 10961,
+   "auction_id": null
   }
  }
 }
