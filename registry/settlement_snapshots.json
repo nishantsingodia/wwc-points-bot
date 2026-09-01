@@ -65982,6 +65982,23 @@
    "match": "Match 2 — MTSTK v MTTRI",
    "date": "2026-08-08",
    "team": "MTTRI",
+   "pid": "ci:784375",
+   "full": "Lahiru Kumara",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-01",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-08::st kitts and nevis patriots|trinbago knight riders",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 2 — MTSTK v MTTRI",
+   "date": "2026-08-08",
+   "team": "MTTRI",
    "pid": "ci:595267",
    "full": "Matthew Breetzke",
    "points": 53,
@@ -86789,6 +86806,23 @@
    "tour": "Caribbean Premier League 2026",
    "match": "Match 8 — MTJAM v MTTRI",
    "date": "2026-08-16",
+   "team": "MTTRI",
+   "pid": "ci:784375",
+   "full": "Lahiru Kumara",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-01",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-16::jamaica kingsmen|trinbago knight riders",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 8 — MTJAM v MTTRI",
+   "date": "2026-08-16",
    "team": "MTJAM",
    "pid": "ci:1244154",
    "full": "Maaz Sadaqat",
@@ -95151,6 +95185,23 @@
   {
    "match_key": "2026-08-22::antigua and barbuda falcons|trinbago knight riders",
    "tour": "Caribbean Premier League 2026",
+   "match": "Match 14 — MTANT v MTTRI",
+   "date": "2026-08-22",
+   "team": "MTTRI",
+   "pid": "ci:784375",
+   "full": "Lahiru Kumara",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-01",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-22::antigua and barbuda falcons|trinbago knight riders",
+   "tour": "Caribbean Premier League 2026",
    "match": "Match 12 — MTANT v MTTRI",
    "date": "2026-08-22",
    "team": "MTTRI",
@@ -99362,6 +99413,23 @@
     "bat_order": 6,
     "dismissal": "c & b Forde",
     "dismissed": true
+   }
+  },
+  {
+   "match_key": "2026-08-26::st lucia kings|trinbago knight riders",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 17 — MTTRI v MTSTL",
+   "date": "2026-08-26",
+   "team": "MTTRI",
+   "pid": "ci:784375",
+   "full": "Lahiru Kumara",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "ESPN scorecard · cricbuzz cross-checked (22 players) · ⏳ provisional (dots/maidens cross-checked · awaiting official cricsheet)",
+   "frozen_at": "2026-09-01",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
@@ -104215,6 +104283,23 @@
    "match": "Match 19 — MTTRI v MTBAR",
    "date": "2026-08-29",
    "team": "MTTRI",
+   "pid": "ci:784375",
+   "full": "Lahiru Kumara",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "ESPN scorecard · cricbuzz cross-checked (22 players) · ⏳ provisional (dots/maidens cross-checked · awaiting official cricsheet)",
+   "frozen_at": "2026-09-01",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-29::barbados tridents|trinbago knight riders",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 19 — MTTRI v MTBAR",
+   "date": "2026-08-29",
+   "team": "MTTRI",
    "pid": "ci:595267",
    "full": "Matthew Breetzke",
    "points": 0,
@@ -107165,6 +107250,23 @@
     "bat_order": 2,
     "dismissal": "c Toppin b Goolie",
     "dismissed": true
+   }
+  },
+  {
+   "match_key": "2026-08-29::jamaica kingsmen|trinbago knight riders",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 20 — MTTRI v MTJAM",
+   "date": "2026-08-29",
+   "team": "MTTRI",
+   "pid": "ci:784375",
+   "full": "Lahiru Kumara",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "ESPN scorecard · cricbuzz cross-checked (22 players) · ⏳ provisional (dots/maidens cross-checked · awaiting official cricsheet)",
+   "frozen_at": "2026-09-01",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
