@@ -1,144 +1,144 @@
 [
- {
-  "name": "Women's T20 WC 2026",
-  "espn_series": "1483859",
-  "tab": "WWC T20 POINTS",
-  "gender": "female",
-  "squads": "squads.json",
-  "ends": "2026-07-05"
- },
- {
-  "name": "Australia tour of Bangladesh 2026 (Men T20I)",
-  "espn_series": "1532475",
-  "tab": "AUS v BAN T20 POINTS",
-  "gender": "male",
-  "squads": "aus_ban_squads.json",
-  "ends": "2026-06-21"
- },
- {
-  "name": "Major League Cricket 2026",
-  "espn_series": "1528556",
-  "tab": "MLC 2026 POINTS",
-  "gender": "male",
-  "squads": "mlc_squads.json",
-  "ends": "2026-07-18"
- },
- {
-  "name": "India tour of Ireland 2026 (Men T20I)",
-  "espn_series": "1528532",
-  "tab": "IND v IRE T20 POINTS",
-  "gender": "male",
-  "squads": "india_ireland_squads.json",
-  "ends": "2026-06-28"
- },
- {
-  "name": "India tour of England 2026 (Men T20I)",
-  "espn_series": "1496489",
-  "tab": "IND v ENG T20 POINTS",
-  "gender": "male",
-  "squads": "india_england_squads.json",
-  "ends": "2026-07-11"
- },
- {
-  "name": "Ireland vs West Indies Women's ODI 2026",
-  "espn_series": "1528524",
-  "tab": "IRE v WI W ODI POINTS",
-  "gender": "female",
-  "squads": "ire_wi_w_odi_squads.json",
-  "format": "ODI",
-  "ends": "2026-07-15"
- },
- {
-  "name": "New Zealand vs West Indies Men's ODI 2026",
-  "espn_series": "1538619",
-  "tab": "NZ v WI M ODI POINTS",
-  "gender": "male",
-  "squads": "nz_wi_men_odi_squads.json",
-  "format": "ODI",
-  "ends": "2026-07-21"
- },
- {
-  "name": "Lanka Premier League 2026",
-  "espn_series": "1537330",
-  "tab": "LPL 2026 POINTS",
-  "gender": "male",
-  "squads": "lpl_2026_squads.json",
-  "ends": "2026-08-08",
-  "cricbuzz_series": "12316",
-  "starts": "2026-07-15",
-  "active_until": "2026-09-30"
- },
- {
-  "ends": "2026-08-16",
-  "espn_series": "1521176",
-  "gender": "male",
-  "name": "The Hundred Men's Competition 2026",
-  "squads": "the_hundred_men_s_competition_2026_squads.json",
-  "tab": "THE HUNDRED MENS 2026 POINTS",
-  "format": "HUN",
-  "cricbuzz_series": "11493",
-  "starts": "2026-07-20",
-  "active_until": "2026-09-30"
- },
- {
-  "ends": "2026-08-16",
-  "espn_series": "1521193",
-  "gender": "female",
-  "name": "The Hundred Women's Competition 2026",
-  "squads": "the_hundred_women_s_competition_2026_squads.json",
-  "tab": "THE HUNDRED WOMENS 2026 POINTS",
-  "format": "HUN",
-  "cricbuzz_series": "11504",
-  "starts": "2026-07-20",
-  "active_until": "2026-09-30"
- },
- {
-  "ends": "2026-07-26",
-  "espn_series": "24301",
-  "gender": "male",
-  "name": "India tour of Zimbabwe 2026 (T20I)",
-  "squads": "india_tour_of_zimbabwe_2026_t20i_squads.json",
-  "tab": "ZIM V IND T20I POINTS"
- },
- {
-  "ends": "2026-09-20",
-  "espn_series": "8623",
-  "format": "T20",
-  "gender": "male",
-  "name": "Caribbean Premier League 2026",
-  "squads": "caribbean_premier_league_2026_squads.json",
-  "tab": "CARIBBEAN PREMIER LEAGUE 2026 POINTS",
-  "cricbuzz_series": "12123",
-  "starts": "2026-08-05"
- },
- {
-  "espn_series": "23806",
-  "format": "TEST",
-  "gender": "male",
-  "name": "England vs Pakistan Men's Test 2026",
-  "squads": "eng_pak_test_2026_squads.json",
-  "tab": "ENG v PAK TEST 2026 POINTS",
-  "starts": "2026-08-19",
-  "ends": "2026-09-13"
- },
- {
-  "ends": "2026-09-20",
-  "espn_series": "1547871",
-  "format": "T20",
-  "gender": "male",
-  "name": "European T20 Premier League 2026",
-  "squads": "european_t20_premier_league_2026_squads.json",
-  "tab": "EUROPEAN T20 PREMIER LEAGUE 2026 POINTS",
-  "cricbuzz_series": "12870"
- },
- {
-  "ends": "2026-09-06",
-  "espn_series": "1549518",
-  "format": "T20",
-  "gender": "male",
-  "name": "Namibia T20I Tri-Series 2026",
-  "squads": "namibia_t20i_tri_series_2026_squads.json",
-  "tab": "NAMIBIA T20I TRISERIES 2026 POINTS",
-  "cricbuzz_series": "12933"
- }
+  {
+    "name": "Women's T20 WC 2026",
+    "espn_series": "1483859",
+    "tab": "WWC T20 POINTS",
+    "gender": "female",
+    "squads": "squads.json",
+    "ends": "2026-07-05"
+  },
+  {
+    "name": "Australia tour of Bangladesh 2026 (Men T20I)",
+    "espn_series": "1532475",
+    "tab": "AUS v BAN T20 POINTS",
+    "gender": "male",
+    "squads": "aus_ban_squads.json",
+    "ends": "2026-06-21"
+  },
+  {
+    "name": "Major League Cricket 2026",
+    "espn_series": "1528556",
+    "tab": "MLC 2026 POINTS",
+    "gender": "male",
+    "squads": "mlc_squads.json",
+    "ends": "2026-07-18"
+  },
+  {
+    "name": "India tour of Ireland 2026 (Men T20I)",
+    "espn_series": "1528532",
+    "tab": "IND v IRE T20 POINTS",
+    "gender": "male",
+    "squads": "india_ireland_squads.json",
+    "ends": "2026-06-28"
+  },
+  {
+    "name": "India tour of England 2026 (Men T20I)",
+    "espn_series": "1496489",
+    "tab": "IND v ENG T20 POINTS",
+    "gender": "male",
+    "squads": "india_england_squads.json",
+    "ends": "2026-07-11"
+  },
+  {
+    "name": "Ireland vs West Indies Women's ODI 2026",
+    "espn_series": "1528524",
+    "tab": "IRE v WI W ODI POINTS",
+    "gender": "female",
+    "squads": "ire_wi_w_odi_squads.json",
+    "format": "ODI",
+    "ends": "2026-07-15"
+  },
+  {
+    "name": "New Zealand vs West Indies Men's ODI 2026",
+    "espn_series": "1538619",
+    "tab": "NZ v WI M ODI POINTS",
+    "gender": "male",
+    "squads": "nz_wi_men_odi_squads.json",
+    "format": "ODI",
+    "ends": "2026-07-21"
+  },
+  {
+    "name": "Lanka Premier League 2026",
+    "espn_series": "1537330",
+    "tab": "LPL 2026 POINTS",
+    "gender": "male",
+    "squads": "lpl_2026_squads.json",
+    "ends": "2026-08-08",
+    "cricbuzz_series": "12316",
+    "starts": "2026-07-15",
+    "active_until": "2026-09-30"
+  },
+  {
+    "ends": "2026-08-16",
+    "espn_series": "1521176",
+    "gender": "male",
+    "name": "The Hundred Men's Competition 2026",
+    "squads": "the_hundred_men_s_competition_2026_squads.json",
+    "tab": "THE HUNDRED MENS 2026 POINTS",
+    "format": "HUN",
+    "cricbuzz_series": "11493",
+    "starts": "2026-07-20",
+    "active_until": "2026-09-30"
+  },
+  {
+    "ends": "2026-08-16",
+    "espn_series": "1521193",
+    "gender": "female",
+    "name": "The Hundred Women's Competition 2026",
+    "squads": "the_hundred_women_s_competition_2026_squads.json",
+    "tab": "THE HUNDRED WOMENS 2026 POINTS",
+    "format": "HUN",
+    "cricbuzz_series": "11504",
+    "starts": "2026-07-20",
+    "active_until": "2026-09-30"
+  },
+  {
+    "ends": "2026-07-26",
+    "espn_series": "24301",
+    "gender": "male",
+    "name": "India tour of Zimbabwe 2026 (T20I)",
+    "squads": "india_tour_of_zimbabwe_2026_t20i_squads.json",
+    "tab": "ZIM V IND T20I POINTS"
+  },
+  {
+    "ends": "2026-09-20",
+    "espn_series": "8623",
+    "format": "T20",
+    "gender": "male",
+    "name": "Caribbean Premier League 2026",
+    "squads": "caribbean_premier_league_2026_squads.json",
+    "tab": "CARIBBEAN PREMIER LEAGUE 2026 POINTS",
+    "cricbuzz_series": "12123",
+    "starts": "2026-08-05"
+  },
+  {
+    "espn_series": "23806",
+    "format": "TEST",
+    "gender": "male",
+    "name": "England vs Pakistan Men's Test 2026",
+    "squads": "eng_pak_test_2026_squads.json",
+    "tab": "ENG v PAK TEST 2026 POINTS",
+    "starts": "2026-08-19",
+    "ends": "2026-09-13"
+  },
+  {
+    "ends": "2026-09-20",
+    "espn_series": "1547871",
+    "format": "T20",
+    "gender": "male",
+    "name": "European T20 Premier League 2026",
+    "squads": "european_t20_premier_league_2026_squads.json",
+    "tab": "EUROPEAN T20 PREMIER LEAGUE 2026 POINTS",
+    "cricbuzz_series": "12870"
+  },
+  {
+    "ends": "2026-09-06",
+    "espn_series": "1549518",
+    "format": "T20",
+    "gender": "male",
+    "name": "Namibia T20I Tri-Series 2026",
+    "squads": "namibia_t20i_tri_series_2026_squads.json",
+    "tab": "NAMIBIA T20I TRISERIES 2026 POINTS",
+    "cricbuzz_series": "12933"
+  }
 ]
