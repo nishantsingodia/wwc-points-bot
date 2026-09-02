@@ -954,6 +954,19 @@
         "Caribbean Premier League 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:698143",
+      "display": "Lutho Sipamla",
+      "aliases": [
+        "l sipamla"
+      ],
+      "team": "MTSOU",
+      "role": "BOWL",
+      "tours": [
+        "Namibia T20I Tri-Series 2026"
+      ],
+      "source": "auto"
     }
   ]
 }

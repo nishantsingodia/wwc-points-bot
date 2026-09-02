@@ -1028,6 +1028,15 @@
    "provenance": "live"
   },
   {
+   "tour": "Namibia T20I Tri-Series 2026",
+   "match_key": "2026-08-28::namibia|south africa",
+   "match": "Match 1 — MTNAM v MTSOU",
+   "date": "2026-08-28",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-09-02",
+   "provenance": "live"
+  },
+  {
    "tour": "Caribbean Premier League 2026",
    "match_key": "2026-08-29::barbados tridents|trinbago knight riders",
    "match": "Match 19 — MTTRI v MTBAR",
@@ -1064,6 +1073,15 @@
    "provenance": "live"
   },
   {
+   "tour": "Namibia T20I Tri-Series 2026",
+   "match_key": "2026-08-29::south africa|zimbabwe",
+   "match": "Match 2 — MTSOU v MTZIM2",
+   "date": "2026-08-29",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-09-02",
+   "provenance": "live"
+  },
+  {
    "tour": "European T20 Premier League 2026",
    "match_key": "2026-08-30::amsterdam flames|belfast wolves",
    "match": "Match 7 — MTAMS v MTBEL",
@@ -1091,12 +1109,30 @@
    "provenance": "live"
   },
   {
+   "tour": "Namibia T20I Tri-Series 2026",
+   "match_key": "2026-08-31::namibia|zimbabwe",
+   "match": "Match 3 — MTNAM v MTZIM2",
+   "date": "2026-08-31",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-09-02",
+   "provenance": "live"
+  },
+  {
    "tour": "European T20 Premier League 2026",
    "match_key": "2026-09-01::glasgow cosmic|rotterdam dockers",
    "match": "Match 9 — MTROT v MTGLA",
    "date": "2026-09-01",
    "first_status": "COMPLETED",
    "first_seen": "2026-09-01",
+   "provenance": "live"
+  },
+  {
+   "tour": "Namibia T20I Tri-Series 2026",
+   "match_key": "2026-09-01::south africa|zimbabwe",
+   "match": "Match 4 — MTSOU v MTZIM2",
+   "date": "2026-09-01",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-09-02",
    "provenance": "live"
   }
  ]
