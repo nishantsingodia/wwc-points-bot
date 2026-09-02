@@ -1118,6 +1118,15 @@
    "provenance": "live"
   },
   {
+   "tour": "Caribbean Premier League 2026",
+   "match_key": "2026-09-01::barbados tridents|st kitts and nevis patriots",
+   "match": "Match 23 — MTSTK v MTBAR",
+   "date": "2026-09-01",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-09-02",
+   "provenance": "live"
+  },
+  {
    "tour": "European T20 Premier League 2026",
    "match_key": "2026-09-01::glasgow cosmic|rotterdam dockers",
    "match": "Match 9 — MTROT v MTGLA",
@@ -1131,6 +1140,15 @@
    "match_key": "2026-09-01::south africa|zimbabwe",
    "match": "Match 4 — MTSOU v MTZIM2",
    "date": "2026-09-01",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-09-02",
+   "provenance": "live"
+  },
+  {
+   "tour": "European T20 Premier League 2026",
+   "match_key": "2026-09-02::belfast wolves|edinburgh castle rockers",
+   "match": "Match 11 — MTBEL v MTEDI",
+   "date": "2026-09-02",
    "first_status": "COMPLETED_FLAGGED",
    "first_seen": "2026-09-02",
    "provenance": "live"
