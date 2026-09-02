@@ -1134,6 +1134,15 @@
    "first_status": "COMPLETED_FLAGGED",
    "first_seen": "2026-09-02",
    "provenance": "live"
+  },
+  {
+   "tour": "European T20 Premier League 2026",
+   "match_key": "2026-09-02::dublin guardians|rotterdam dockers",
+   "match": "Match 10 — MTROT v MTDUB",
+   "date": "2026-09-02",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-09-02",
+   "provenance": "live"
   }
  ]
 }
