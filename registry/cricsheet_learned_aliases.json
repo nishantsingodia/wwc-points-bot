@@ -956,6 +956,146 @@
   "liam robert naylor": {
    "pid": "ci:1195683",
    "display": "Liam Naylor"
+  },
+  "sufiyan muqeem": {
+   "pid": "ci:1329697",
+   "display": "Sufyan Moqim"
+  },
+  "k gaston": {
+   "pid": "ci:1460142",
+   "display": "Keon Gaston"
+  },
+  "mp o dowd": {
+   "pid": "ci:643197",
+   "display": "Max O'Dowd"
+  },
+  "ys samra": {
+   "pid": "ci:1419054",
+   "display": "Yuvraj Samra"
+  },
+  "bfw de leede": {
+   "pid": "ci:1036191",
+   "display": "Bas de Leede"
+  },
+  "c campher": {
+   "pid": "ci:595921",
+   "display": "Curtis Campher"
+  },
+  "sa edwards": {
+   "pid": "ci:1127317",
+   "display": "Scott Edwards"
+  },
+  "tjg pringle": {
+   "pid": "ci:1193548",
+   "display": "Tim Pringle"
+  },
+  "k klein": {
+   "pid": "ci:1195670",
+   "display": "Kyle Klein"
+  },
+  "da payne": {
+   "pid": "ci:362710",
+   "display": "David Payne"
+  },
+  "m levitt": {
+   "pid": "ci:1071504",
+   "display": "Michael Levitt"
+  },
+  "bad manenti": {
+   "pid": "ci:1065115",
+   "display": "Ben Manenti"
+  },
+  "re van der merwe": {
+   "pid": "ci:47850",
+   "display": "Roelof van der Merwe"
+  },
+  "lv van beek": {
+   "pid": "ci:440522",
+   "display": "Logan van Beek"
+  },
+  "pr stirling": {
+   "pid": "ci:303427",
+   "display": "Paul Stirling"
+  },
+  "dp conway": {
+   "pid": "ci:379140",
+   "display": "Devon Conway"
+  },
+  "mr adair": {
+   "pid": "ci:526441",
+   "display": "Mark Adair"
+  },
+  "fj klaassen": {
+   "pid": "ci:1104703",
+   "display": "Fred Klaassen"
+  },
+  "waseem muhammad": {
+   "pid": "ci:1241277",
+   "display": "Muhammad Waseem"
+  },
+  "j little": {
+   "pid": "ci:928067",
+   "display": "Josh Little"
+  },
+  "hg munsey": {
+   "pid": "ci:671805",
+   "display": "Henry George Munsey"
+  },
+  "mh cross": {
+   "pid": "ci:417268",
+   "display": "Matthew Cross"
+  },
+  "mc henriques": {
+   "pid": "ci:5961",
+   "display": "Moises Henriques"
+  },
+  "rd berrington": {
+   "pid": "ci:25490",
+   "display": "Richie Berrington"
+  },
+  "ma leask": {
+   "pid": "ci:414966",
+   "display": "Michael Leask"
+  },
+  "pa van meekeren": {
+   "pid": "ci:348109",
+   "display": "Paul van Meekeren"
+  },
+  "l ngidi": {
+   "pid": "ci:542023",
+   "display": "Lungi Ngidi"
+  },
+  "jt smuts": {
+   "pid": "ci:280490",
+   "display": "JJ Smuts"
+  },
+  "mrj watt": {
+   "pid": "ci:659081",
+   "display": "Mark Watt"
+  },
+  "j jarvis": {
+   "pid": "ci:1278263",
+   "display": "Jack Jarvis"
+  },
+  "hj manenti": {
+   "pid": "ci:1323417",
+   "display": "Harry Manenti"
+  },
+  "r klein": {
+   "pid": "ci:594996",
+   "display": "Ryan Klein"
+  },
+  "j neill": {
+   "pid": "ci:1394079",
+   "display": "Jordan Neill"
+  },
+  "a dutt": {
+   "pid": "ci:1195672",
+   "display": "Aryan Dutt"
+  },
+  "lr naylor": {
+   "pid": "ci:1195683",
+   "display": "Liam Naylor"
   }
  }
 }
