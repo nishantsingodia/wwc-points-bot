@@ -980,6 +980,19 @@
         "European T20 Premier League 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:519070",
+      "display": "Merwe Gerhard Erasmus",
+      "aliases": [
+        "merwe gerhard erasmus"
+      ],
+      "team": "MTNAM",
+      "role": "BAT",
+      "tours": [
+        "Namibia T20I Tri-Series 2026"
+      ],
+      "source": "auto"
     }
   ]
 }
