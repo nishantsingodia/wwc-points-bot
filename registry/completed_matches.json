@@ -1170,6 +1170,15 @@
    "first_status": "COMPLETED",
    "first_seen": "2026-09-02",
    "provenance": "live"
+  },
+  {
+   "tour": "European T20 Premier League 2026",
+   "match_key": "2026-09-03::amsterdam flames|glasgow cosmic",
+   "match": "Match 12 — MTAMS v MTGLA",
+   "date": "2026-09-03",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-09-03",
+   "provenance": "live"
   }
  ]
 }

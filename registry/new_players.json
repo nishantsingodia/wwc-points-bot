@@ -967,6 +967,19 @@
         "Namibia T20I Tri-Series 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:1278259",
+      "display": "Oliver Forbes Davidson",
+      "aliases": [
+        "oliver forbes davidson"
+      ],
+      "team": "MTGLA",
+      "role": "AR",
+      "tours": [
+        "European T20 Premier League 2026"
+      ],
+      "source": "auto"
     }
   ]
 }
