@@ -4,8 +4,8 @@
  "_tiers": "tier = number of DISTINCT MATCHES confirming the pair. >=1 cross-check only; >=2 required before a CB-only field may CREATE points.",
  "_note": "each pair's `confirmations` list IS the fact log; bridge/revoked are a pure function of it (compile_bridge o confirmations_log). Regenerate, never hand-edit. A contradicted pair moves to `revoked` and is refused BOTH ways — there is no last-wins.",
  "counts": {
-  "confirmations": 2575,
-  "bridged": 472,
+  "confirmations": 2602,
+  "bridged": 499,
   "revoked": 0,
   "tier2_plus": 421
  },
@@ -2090,6 +2090,24 @@
     }
    ]
   },
+  "7973": {
+   "cricinfo_id": "519070",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Gerhard Erasmus"
+    }
+   ]
+  },
   "7990": {
    "cricinfo_id": "297628",
    "tier": 9,
@@ -3012,6 +3030,42 @@
     }
    ]
   },
+  "8454": {
+   "cricinfo_id": "495964",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Ryan Burl"
+    }
+   ]
+  },
+  "8460": {
+   "cricinfo_id": "571703",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Wellington Masakadza"
+    }
+   ]
+  },
   "8483": {
    "cricinfo_id": "574178",
    "tier": 3,
@@ -3264,6 +3318,24 @@
      "match": "cb154502/espn1534197",
      "method": "fingerprint",
      "date": "2026-08-29"
+    }
+   ]
+  },
+  "8522": {
+   "cricinfo_id": "482478",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Jan Frylinck"
     }
    ]
   },
@@ -6024,6 +6096,24 @@
     }
    ]
   },
+  "9885": {
+   "cricinfo_id": "553821",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:JJ Smit"
+    }
+   ]
+  },
   "9928": {
    "cricinfo_id": "659081",
    "tier": 2,
@@ -7235,6 +7325,24 @@
      "match": "cb144981/espn1521261",
      "method": "fingerprint",
      "date": "2026-08-12"
+    }
+   ]
+  },
+  "10676": {
+   "cricinfo_id": "553249",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Bjorn Fortuin"
     }
    ]
   },
@@ -8479,6 +8587,24 @@
     }
    ]
   },
+  "11196": {
+   "cricinfo_id": "697183",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Tony de Zorzi"
+    }
+   ]
+  },
   "11211": {
    "cricinfo_id": "914455",
    "tier": 6,
@@ -9244,6 +9370,24 @@
      "match": "cb154513/espn1534198",
      "method": "fingerprint",
      "date": "2026-08-29"
+    }
+   ]
+  },
+  "11447": {
+   "cricinfo_id": "775421",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Jeremiah Louis"
     }
    ]
   },
@@ -10832,6 +10976,24 @@
      "match": "cb145346/espn1521228",
      "method": "fingerprint",
      "date": "2026-08-12"
+    }
+   ]
+  },
+  "12319": {
+   "cricinfo_id": "465327",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Innocent Kaia"
     }
    ]
   },
@@ -12437,6 +12599,24 @@
     }
    ]
   },
+  "13098": {
+   "cricinfo_id": "698343",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Eathan Bosch"
+    }
+   ]
+  },
   "13162": {
    "cricinfo_id": "826901",
    "tier": 4,
@@ -12754,6 +12934,42 @@
      "match": "cb154326/espn1534180",
      "method": "fingerprint",
      "date": "2026-08-08"
+    }
+   ]
+  },
+  "13438": {
+   "cricinfo_id": "1071473",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Jan Nicol Loftie-Eaton"
+    }
+   ]
+  },
+  "13451": {
+   "cricinfo_id": "938959",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Wesley Madhavere"
     }
    ]
   },
@@ -13863,6 +14079,24 @@
     }
    ]
   },
+  "13957": {
+   "cricinfo_id": "910695",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Ben Curran"
+    }
+   ]
+  },
   "13958": {
    "cricinfo_id": "1152714",
    "tier": 3,
@@ -14227,6 +14461,24 @@
      "match": "cb145357/espn1521229",
      "method": "fingerprint",
      "date": "2026-08-14"
+    }
+   ]
+  },
+  "14431": {
+   "cricinfo_id": "698317",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Ruben Trumpelmann"
     }
    ]
   },
@@ -15101,6 +15353,24 @@
     }
    ]
   },
+  "15473": {
+   "cricinfo_id": "1153767",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Vikramjit Singh"
+    }
+   ]
+  },
   "15478": {
    "cricinfo_id": "1150021",
    "tier": 7,
@@ -15775,6 +16045,24 @@
     }
    ]
   },
+  "15877": {
+   "cricinfo_id": "946507",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Tadiwanashe Marumani"
+    }
+   ]
+  },
   "16119": {
    "cricinfo_id": "1193295",
    "tier": 3,
@@ -16401,6 +16689,24 @@
     }
    ]
   },
+  "18523": {
+   "cricinfo_id": "595954",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Duan Jansen"
+    }
+   ]
+  },
   "18568": {
    "cricinfo_id": "1213979",
    "tier": 8,
@@ -16762,6 +17068,24 @@
      "match": "cb169283/espn1547878",
      "method": "fingerprint",
      "date": "2026-08-30"
+    }
+   ]
+  },
+  "19592": {
+   "cricinfo_id": "696127",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Brad Evans"
     }
    ]
   },
@@ -17336,6 +17660,24 @@
     }
    ]
   },
+  "21386": {
+   "cricinfo_id": "1255248",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Jordan Hermann"
+    }
+   ]
+  },
   "21826": {
    "cricinfo_id": "727399",
    "tier": 1,
@@ -17845,6 +18187,24 @@
     }
    ]
   },
+  "23346": {
+   "cricinfo_id": "1294342",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Kwena Maphaka"
+    }
+   ]
+  },
   "23471": {
    "cricinfo_id": "1195143",
    "tier": 3,
@@ -17902,6 +18262,24 @@
      "match": "cb169283/espn1547878",
      "method": "fingerprint",
      "date": "2026-08-30"
+    }
+   ]
+  },
+  "23616": {
+   "cricinfo_id": "1071484",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Brian Bennett"
     }
    ]
   },
@@ -17985,6 +18363,24 @@
      "match": "cb154491/espn1534196",
      "method": "fingerprint",
      "date": "2026-08-27"
+    }
+   ]
+  },
+  "24622": {
+   "cricinfo_id": "1070997",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Connor Esterhuizen"
     }
    ]
   },
@@ -19519,6 +19915,60 @@
     }
    ]
   },
+  "53408": {
+   "cricinfo_id": "1414819",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Nqobani Mokoena"
+    }
+   ]
+  },
+  "53940": {
+   "cricinfo_id": "1234278",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Alexander Volschenk"
+    }
+   ]
+  },
+  "53954": {
+   "cricinfo_id": "1310415",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Jack Brassell"
+    }
+   ]
+  },
   "54287": {
    "cricinfo_id": "1394273",
    "tier": 4,
@@ -19719,6 +20169,24 @@
      "match": "cb154513/espn1534198",
      "method": "fingerprint",
      "date": "2026-08-29"
+    }
+   ]
+  },
+  "1423874": {
+   "cricinfo_id": "1178066",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:cricbuzz player 1423874"
     }
    ]
   },
@@ -20394,6 +20862,24 @@
      "match": "cb169293/espn1547879",
      "method": "fingerprint",
      "date": "2026-08-30"
+    }
+   ]
+  },
+  "1463330": {
+   "cricinfo_id": "1495161",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Max Heingo"
     }
    ]
   },

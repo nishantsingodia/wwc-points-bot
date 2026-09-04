@@ -1035,6 +1035,7 @@
  "ci:1078694": {
   "cricinfo_id": "1078694",
   "names": [
+   "s brathwaite",
    "shian brathwaite"
   ]
  },
@@ -1042,7 +1043,8 @@
   "cricinfo_id": "1511916",
   "names": [
    "abdul raheem salafee ibn hassan toppin",
-   "abdul raheem toppin"
+   "abdul raheem toppin",
+   "asih toppin"
   ]
  },
  "ci:1161031": {
@@ -1060,6 +1062,7 @@
  "ci:595897": {
   "cricinfo_id": "595897",
   "names": [
+   "d rushmere",
    "david rushmere"
   ]
  },
@@ -1078,7 +1081,172 @@
  "ci:1278259": {
   "cricinfo_id": "1278259",
   "names": [
-   "cricbuzz player 23116"
+   "cricbuzz player 23116",
+   "oliver forbes davidson"
+  ]
+ },
+ "ci:519070": {
+  "cricinfo_id": "519070",
+  "names": [
+   "gerhard erasmus",
+   "merwe gerhard erasmus"
+  ]
+ },
+ "ci:553249": {
+  "cricinfo_id": "553249",
+  "names": [
+   "bjorn fortuin"
+  ]
+ },
+ "ci:482478": {
+  "cricinfo_id": "482478",
+  "names": [
+   "jan frylinck"
+  ]
+ },
+ "ci:1414819": {
+  "cricinfo_id": "1414819",
+  "names": [
+   "nqobani mokoena"
+  ]
+ },
+ "ci:1070997": {
+  "cricinfo_id": "1070997",
+  "names": [
+   "connor esterhuizen"
+  ]
+ },
+ "ci:698317": {
+  "cricinfo_id": "698317",
+  "names": [
+   "ruben trumpelmann"
+  ]
+ },
+ "ci:1310415": {
+  "cricinfo_id": "1310415",
+  "names": [
+   "jack brassell"
+  ]
+ },
+ "ci:1495161": {
+  "cricinfo_id": "1495161",
+  "names": [
+   "max heingo"
+  ]
+ },
+ "ci:1178066": {
+  "cricinfo_id": "1178066",
+  "names": [
+   "cricbuzz player 1423874"
+  ]
+ },
+ "ci:55346": {
+  "cricinfo_id": "55346",
+  "names": [
+   "ag cremer",
+   "alexander graeme cremer"
+  ]
+ },
+ "ci:697183": {
+  "cricinfo_id": "697183",
+  "names": [
+   "tony de zorzi"
+  ]
+ },
+ "ci:698343": {
+  "cricinfo_id": "698343",
+  "names": [
+   "eathan bosch"
+  ]
+ },
+ "ci:1255248": {
+  "cricinfo_id": "1255248",
+  "names": [
+   "jordan hermann"
+  ]
+ },
+ "ci:495964": {
+  "cricinfo_id": "495964",
+  "names": [
+   "ryan burl"
+  ]
+ },
+ "ci:938959": {
+  "cricinfo_id": "938959",
+  "names": [
+   "wesley madhavere"
+  ]
+ },
+ "ci:910695": {
+  "cricinfo_id": "910695",
+  "names": [
+   "ben curran"
+  ]
+ },
+ "ci:1071484": {
+  "cricinfo_id": "1071484",
+  "names": [
+   "brian bennett"
+  ]
+ },
+ "ci:553821": {
+  "cricinfo_id": "553821",
+  "names": [
+   "jj smit"
+  ]
+ },
+ "ci:946507": {
+  "cricinfo_id": "946507",
+  "names": [
+   "tadiwanashe marumani"
+  ]
+ },
+ "ci:696127": {
+  "cricinfo_id": "696127",
+  "names": [
+   "brad evans"
+  ]
+ },
+ "ci:595954": {
+  "cricinfo_id": "595954",
+  "names": [
+   "duan jansen"
+  ]
+ },
+ "ci:1294342": {
+  "cricinfo_id": "1294342",
+  "names": [
+   "kwena maphaka"
+  ]
+ },
+ "ci:696135": {
+  "cricinfo_id": "696135",
+  "names": [
+   "kundai matigimu"
+  ]
+ },
+ "ci:1153767": {
+  "cricinfo_id": "1153767",
+  "names": [
+   "vikramjit singh"
+  ]
+ },
+ "ci:1234278": {
+  "cricinfo_id": "1234278",
+  "names": [
+   "alexander volschenk"
+  ]
+ },
+ "ci:1071473": {
+  "cricinfo_id": "1071473",
+  "names": [
+   "jan nicol loftie eaton"
+  ]
+ },
+ "ci:775421": {
+  "cricinfo_id": "775421",
+  "names": [
+   "jeremiah louis"
   ]
  }
 }

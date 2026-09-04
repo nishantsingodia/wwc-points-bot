@@ -993,6 +993,19 @@
         "Namibia T20I Tri-Series 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:55346",
+      "display": "AG Cremer",
+      "aliases": [
+        "ag cremer"
+      ],
+      "team": "",
+      "role": "?",
+      "tours": [
+        "Namibia T20I Tri-Series 2026"
+      ],
+      "source": "needs-cricinfo"
     }
   ]
 }
