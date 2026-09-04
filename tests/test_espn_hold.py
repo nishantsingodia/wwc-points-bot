@@ -118,7 +118,11 @@ def test_hold_row_names_the_match_and_carries_both_numbers(wcmod):
     assert row["pid"] == "espn:1534183"
     assert row["tier"] == "espn"
     assert row["match"] == "Match 6 — TKR v BR"
-    assert "200" in row["s1"] and "236" in row["s1"] and "36 missing" in row["s1"]
+    # The numbers live in the NAMED ESPN column now — it is ESPN's ball-by-ball against ESPN's
+    # own scorecard, so no other feed has anything to say and their columns stay empty.
+    assert "200" in row["espn"] and "236" in row["espn"] and "36 missing" in row["espn"]
+    assert row["cricbuzz"] == "" and row["cricsheet"] == ""
+    assert "Hold = keep holding" in row["verdict"]
 
 
 # ── the human's answer, and what it does ─────────────────────────────────────────────────
@@ -127,9 +131,26 @@ def test_approval_roundtrips_into_an_override(wcmod):
     o = wcmod._approval_to_override("2026-08-12::br|tkr", "espn:1534183", "ESPN CARD", "S2", "")
     assert o == {"match_key": "2026-08-12::br|tkr", "scope": "espn_card",
                  "pid": "espn:1534183", "source": "S2", "status": "approved",
+                 "answer": "S2",         # what the human typed, verbatim
                  "witness": "espn"}      # the slot names its feed, so it cannot drift silently
     assert wcmod._approval_to_override("k", "espn:1", "ESPN CARD", "S1", "")["source"] == "S1"
     assert wcmod._approval_to_override("k", "espn:1", "ESPN CARD", "", "") is None
+
+
+def test_the_named_answers_mean_the_same_as_the_old_letters(wcmod):
+    """The owner types a FEED NAME now. The ledger keeps storing letters, so every historical
+    reader keeps working — but the name he chose is stamped alongside, and a nonsense answer is
+    refused rather than silently coerced into one of them."""
+    score_it = wcmod._approval_to_override("k", "espn:1", "ESPN CARD", "ESPN", "")
+    assert score_it["source"] == "S2" and score_it["answer"] == "ESPN"
+    hold = wcmod._approval_to_override("k", "espn:1", "ESPN CARD", "Hold", "")
+    assert hold["source"] == "S1" and hold["answer"] == "Hold"
+    take_official = wcmod._approval_to_override("k", "ci:1", "L2", "Cricsheet", "")
+    assert take_official["source"] == "S2" and take_official["answer"] == "Cricsheet"
+    assert wcmod._approval_to_override("k", "ci:1", "L2", "ESPN", "")["source"] == "S1"
+    assert wcmod._approval_to_override("k", "ci:1", "runs", "Cricbuzz", "")["source"] == "S1"
+    assert wcmod._approval_to_override("k", "ci:1", "runs", "ESPN", "")["source"] == "S2"
+    assert wcmod._approval_to_override("k", "ci:1", "L2", "banana", "") is None
 
 
 def test_approved_short_card_scores_but_stays_flagged(wcmod, monkeypatch):

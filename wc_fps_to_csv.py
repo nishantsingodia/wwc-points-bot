@@ -2873,6 +2873,96 @@ def l2_approved_pids(match_key, overrides_idx):
     return {o.get("pid"): o.get("source", "S2")
             for o in overrides_idx.get(match_key, []) if o.get("scope") == "l2"}
 
+# ── The three feeds, named ───────────────────────────────────────────────────────────────────
+# S1/S2 are POSITIONAL SLOTS and they were the tab's original sin: on an L1 row S1 meant the
+# second witness and S2 meant ESPN; on an L2 row S1 meant the held provisional value and S2 meant
+# cricsheet. One header, four meanings, and a stored approval that records only the LETTER — so
+# turning `cricbuzz_series` on for a tour retroactively re-pointed approvals nobody had touched.
+# The feeds have names. Use them, everywhere, and the ambiguity cannot be expressed.
+FEEDS = ("espn", "cricbuzz", "cricsheet")
+FEED_LABEL = {"espn": "ESPN", "cricbuzz": "Cricbuzz", "cricsheet": "Cricsheet"}
+
+
+def feed_concurrence(values):
+    """Given {feed: value} for ONE field (absent/None = that feed did not measure it), decide what
+    the sources agree on. Returns (agreed_value, verdict, agreeing_feeds).
+
+    THE OWNER'S MODEL, stated 4 Sep 2026: "I don't treat cricsheet as source of truth, I see L1 &
+    L2 combined — 3 sources as source of truth." So a majority is an ANSWER, not a suggestion:
+    where two of three independent cards carry the same number there is no question left to ask a
+    human, whichever two they are. Where cricsheet dissents alone, or all three differ, there is —
+    and that is the only kind of row worth his time.
+
+    `agreed_value` is None precisely when a human still has to decide. Note the deliberate
+    asymmetry with a bare `len(...) >= 2` count: two feeds that AGREE settle it, but two feeds
+    that DISAGREE with no third to break the tie do not, and one feed alone never settles
+    anything it could simply be wrong about — it is just all we have."""
+    have = {f: v for f, v in values.items() if v is not None}
+    if not have:
+        return None, "no source measured this", ()
+    if len(have) == 1:
+        f, v = next(iter(have.items()))
+        return None, f"single source ({FEED_LABEL.get(f, f)} only) — nothing to cross-check", (f,)
+    tally = {}
+    for f, v in have.items():
+        tally.setdefault(v, []).append(f)
+    best_v, best_f = max(tally.items(), key=lambda kv: (len(kv[1]), -FEEDS.index(kv[1][0])))
+    names = "+".join(FEED_LABEL.get(f, f) for f in sorted(best_f, key=FEEDS.index))
+    if len(best_f) == len(have):
+        return best_v, f"all {len(have)} agree ({best_v})", tuple(best_f)
+    if len(best_f) >= 2:
+        odd = [f for f in have if f not in best_f]
+        odd_txt = ", ".join(f"{FEED_LABEL.get(f, f)} says {have[f]}" for f in sorted(odd, key=FEEDS.index))
+        return best_v, f"{len(best_f)} of {len(have)}: {best_v} ({names}) — {odd_txt}", tuple(best_f)
+    # NAME THE SHAPE OF THE DISAGREEMENT. "all sources differ" is actively misleading on the 9
+    # of 13 tours with no Cricbuzz witness, where there are only ever TWO cards: the honest line
+    # is that nothing is available to break the tie, which is also the reason the row exists.
+    if len(have) == 2:
+        a, b = sorted(have.items(), key=lambda kv: FEEDS.index(kv[0]))
+        missing = [f for f in FEEDS if f not in have]
+        return None, (f"{FEED_LABEL[a[0]]} {a[1]} vs {FEED_LABEL[b[0]]} {b[1]} — no "
+                      + (f"{FEED_LABEL[missing[0]]} to break the tie" if missing else "majority")), ()
+    return None, "all three differ — no majority", ()
+
+
+def three_feed_columns(feeds, fields):
+    """Render one player's disputed fields as THREE ALIGNED COLUMNS, one per named feed.
+
+    The tab used to carry two positional slots whose meaning changed per row type, so a reader
+    could not tell whether the number in front of him came from Cricbuzz or from ESPN without
+    decoding the header first. The complaint that started this — "why is L2 saying 25 when L1
+    already said 35" — was a reader doing exactly that decode and getting it right, against a tab
+    that made it hard. Three named columns, same field order down all three, so agreement is
+    visible at a glance instead of inferred.
+
+    A feed with no number for a field renders "·" rather than 0: ABSENCE IS NOT A VALUE is the
+    most expensive recurring bug in this file, and the tab must not be the place it comes back.
+
+    Returns (espn_col, cricbuzz_col, cricsheet_col, verdict_col)."""
+    cols = {f: [] for f in FEEDS}
+    verdicts = []
+    for field in fields:
+        vals = feeds.get(field) or {}
+        label = RECON_LABEL.get(field, field)
+        for feed in FEEDS:
+            v = vals.get(feed)
+            cols[feed].append(f"{label} {'·' if v is None else v}")
+        _, verdict, _ = feed_concurrence(vals)
+        verdicts.append(f"{label}: {verdict}")
+    return (" · ".join(cols["espn"]), " · ".join(cols["cricbuzz"]),
+            " · ".join(cols["cricsheet"]), " ; ".join(verdicts))
+
+
+def _l2_takes_official(src):
+    """Does this stored answer mean 'accept the official cricsheet card'?
+
+    Reads BOTH vocabularies on purpose. The ledger holds 1000+ rows written as the positional
+    letter "S2"; new rows are written as the feed's NAME. A reader that understood only one of
+    the two would silently un-answer half the owner's decisions — the exact failure this whole
+    change exists to end."""
+    return (src or "").strip().lower() in ("s2", "cricsheet")
+
+
 def recon_answered(pid, l2_appr, match_key, param, ack):
     """Has this review row been DECIDED? ANY stored answer counts — S1, S2 or Manual.
 
@@ -2930,11 +3020,20 @@ def build_recon_rows(match_key, label, mdate, tour, unresolved, wit_pid, espn_pi
         for field in fields:
             cv, ev = c.get(field, 0), e.get(field, 0)
             if _l1_field_material(field, cv, ev):
+                lbl = RECON_LABEL.get(field, field)
+                _, verdict, _ = feed_concurrence({"espn": ev, "cricbuzz": cv, "cricsheet": None})
                 rows.append({"match_key": match_key, "tour": tour, "match": label, "date": mdate,
                              "pid": pid, "full": PID2DISP.get(pid, pid),
-                             "param": RECON_LABEL.get(field, field), "field": field,
-                             "s1": f"{cv} ({witness})",
-                             "s2": ev, "tier": "player", "witness": witness})
+                             "param": lbl, "field": field,
+                             "espn": f"{lbl} {ev}", "cricbuzz": f"{lbl} {cv}",
+                             # Blank, not "·": at L1 the official card has not posted. An empty
+                             # cell reads as "not in yet", which is the truth; a dot would read
+                             # as "cricsheet measured nothing", which is a different claim.
+                             "cricsheet": "",
+                             "verdict": (f"{lbl}: {verdict}"
+                                         + ("" if witness == "cricbuzz"
+                                            else f"  [2nd witness is {witness}, not Cricbuzz]")),
+                             "tier": "player", "witness": witness})
     return rows
 
 def _espn_hold_row(hold):
@@ -2951,11 +3050,12 @@ def _espn_hold_row(hold):
             "match": hold.get("match", ""), "date": hold.get("date", ""),
             "pid": f"espn:{hold.get('event', '')}", "full": "— WHOLE MATCH: ESPN card —",
             "param": "ESPN CARD",
-            "s1": (f"ESPN ball-by-ball = {got} deliveries; ESPN's own scorecard = {exp} "
-                   f"({short} missing, {hold.get('kind', '?')}) — held {hrs:.0f}h after start. "
-                   f"Nothing has published or settled for this match."),
-            "s2": ("S1 = keep holding (nothing publishes) · "
-                   "S2 = score the short card anyway, permanently flagged"),
+            "espn": f"{got} of {exp} deliveries ({short} missing, {hold.get('kind', '?')})",
+            "cricbuzz": "", "cricsheet": "",
+            "verdict": (f"ESPN's ball-by-ball is short of ESPN's OWN scorecard — held "
+                        f"{hrs:.0f}h after start, nothing has published or settled for this "
+                        f"match. Hold = keep holding (nothing publishes) · "
+                        f"ESPN = score the short card anyway, permanently flagged"),
             "tier": "espn"}
 
 # ── Cricbuzz as the L1 second witness ────────────────────────────────────────────────────────
@@ -3763,13 +3863,45 @@ def run_tour(tour):
             return base
         l2_pairs = {}
         l2_unverified = {}
+        l2_concurred = {}     # pid -> {field: agreed_value} settled by 2-of-3, no human needed
+        l2_feeds = {}         # pid -> {field: {feed: value}} — the evidence the tab renders
         if cs_pid:
             for pid in cs_pid:
                 base = _l2_baseline(pid)
+                # ── THE THREE FEEDS, SIDE BY SIDE (4 Sep 2026) ────────────────────────────────
+                # The owner's model: L1 and L2 are not two courts of appeal, they are three
+                # cards, and where two of them carry the same number there is nothing to ask.
+                # Comparing only base-vs-cricsheet is what produced the complaint that started
+                # this: ETPL Match 11's ESPN card was truncated, Cricbuzz had it right, cricsheet
+                # confirmed Cricbuzz — and the tab still asked the owner to adjudicate 30 fields
+                # whose answer two independent sources already agreed on.
+                #
+                # AUTO-CLOSE ONLY WHEN THE MAJORITY INCLUDES CRICSHEET. A majority that EXCLUDES
+                # it (ESPN+Cricbuzz agree, the official card dissents alone) still gets a row:
+                # the two provisional feeds are not fully independent witnesses — they share
+                # scoring-feed lineage — so their agreement is weaker evidence than the arithmetic
+                # suggests, and on the ±1-run splits this actually produces (Duckett 75 v 74,
+                # Asalanka 60 v 59) cricsheet's ball-by-ball is usually the right one. Rejecting
+                # the official card is a money decision and stays the owner's.
+                _cb, _es, _cs = wit_pid.get(pid) or {}, espn_pid.get(pid) or {}, cs_pid[pid]
+                _feeds, _agreed = {}, {}
+                for _f in RECON_L2:
+                    vals = {"espn": _es.get(_f), "cricbuzz": _cb.get(_f), "cricsheet": _cs.get(_f)}
+                    if all(v is None for v in vals.values()):
+                        continue
+                    _feeds[_f] = vals
+                    val, _verdict, who = feed_concurrence(vals)
+                    if val is not None and "cricsheet" in who and len(who) >= 2:
+                        _agreed[_f] = val
+                if _feeds:
+                    l2_feeds[pid] = _feeds
+                if _agreed:
+                    l2_concurred[pid] = _agreed
                 # Collect the fields the frozen baseline cannot answer for, so "no gap" is not
                 # confused with "checked and clean" — see recon_gaps(unverified=...).
                 _unv = []
-                g = recon_gaps(base, cs_pid[pid], RECON_L2, sep="→", unverified=_unv)
+                _ask = [f for f in RECON_L2 if f not in _agreed]
+                g = recon_gaps(base, cs_pid[pid], _ask, sep="→", unverified=_unv)
                 if _unv:
                     l2_unverified[pid] = sorted(set(_unv))
                 if not g:
@@ -3819,14 +3951,22 @@ def run_tour(tour):
         if cs_path and l2_pairs:
             for pid in l2_pairs:
                 base = _l2_baseline(pid)
-                if l2_appr.get(pid) != "S2" and base:
+                if not _l2_takes_official(l2_appr.get(pid)) and base:
                     dd = perf_by_pid.get(pid)
                     if dd is not None:
+                        # A field 2 of 3 sources AGREE on is not held. The hold exists to stop a
+                        # result being revised under the owner without his say-so; it was never
+                        # meant to hold a number against the two independent cards that both
+                        # contradict it. Holding here is what kept ETPL Match 11 pinned to a
+                        # truncated ESPN card that Cricbuzz and cricsheet had already overruled.
+                        agreed = l2_concurred.get(pid) or {}
                         # `innings` alongside RECON_L2: on red ball the tiers live in the splits,
                         # so holding only the aggregates would leave cricsheet's innings list in
                         # place and score a HYBRID of the two cuts — neither the held value nor
                         # the official one. Absent on white ball, where it is a no-op.
                         for field in RECON_L2 + ["innings"]:
+                            if field in agreed:
+                                continue
                             pv = base.get(field)
                             if pv is not None:
                                 dd[field] = pv
@@ -3837,7 +3977,7 @@ def run_tour(tour):
         id_held = set()
         if cs_path and id_zeroed and cs_orphans:
             for pid in id_zeroed:
-                if l2_appr.get(pid) == "S2":
+                if _l2_takes_official(l2_appr.get(pid)):
                     continue          # human confirmed the official card: 0 is genuine
                 dd = perf_by_pid.get(pid)
                 base = _l2_baseline(pid)
@@ -3873,7 +4013,7 @@ def run_tour(tour):
             if pp:
                 player_recon[pp] = "⛔ no dot-ball source"
         for pid in id_zeroed:
-            if l2_appr.get(pid) != "S2":
+            if not _l2_takes_official(l2_appr.get(pid)):
                 player_recon[pid] = "⛔ identity unresolved"
         # NAME the un-attributable players on the match flag. A count alone ("1 performance not
         # attributed to a team") sends the reader looking for a scoring bug; the name plus the team
@@ -3944,6 +4084,15 @@ def run_tour(tour):
                                         wit_pid, espn_pid, fields=wit_fields, witness=witness)
             RECON_REVIEW.extend(r for r in new_rows
                                 if (mk, r.get("pid", ""), r.get("param", "")) not in RECON_ACK)
+        # Which fields is each player actually being asked about? (The gap string is for the
+        # points tab's audit column; the review row needs the field list to align its columns.)
+        _asked = {}
+        for pid in l2_pairs:
+            agreed = l2_concurred.get(pid) or {}
+            base_p = _l2_baseline(pid) or {}
+            _asked[pid] = [f for f in RECON_L2
+                           if f not in agreed and f in (l2_feeds.get(pid) or {})
+                           and (base_p.get(f) or 0) != ((cs_pid[pid] or {}).get(f) or 0)]
         for pid, g in l2_pairs.items():
             # ⛔ ANSWERED IS ANSWERED — `pid not in l2_appr`, never `!= "S2"`. The tab offers
             # THREE answers (S1 = keep what was settled, S2 = take cricsheet, Manual) and all
@@ -3955,10 +4104,11 @@ def run_tour(tour):
             # while the tab kept re-asking. The two neighbours that already read it this way —
             # `l2_dirty` above and player_recon_markers — are the correct precedent.
             if not recon_answered(pid, l2_appr, mk, "L2", RECON_ACK):
+                _e, _c, _s, _v = three_feed_columns(l2_feeds.get(pid) or {}, _asked.get(pid) or [])
                 RECON_REVIEW.append({"match_key": mk, "tour": CURRENT_TOUR, "match": label,
                                      "date": mdate, "pid": pid, "full": PID2DISP.get(pid, pid),
-                                     "param": "L2", "s1": g,
-                                     "s2": "S2 = take cricsheet's number · S1 = keep what was settled",
+                                     "param": "L2", "espn": _e, "cricbuzz": _c, "cricsheet": _s,
+                                     "verdict": _v or g, "published": g,
                                      "tier": "l2"})
         # IDENTITY. Two DIFFERENT questions, so they go to two different tabs — routing them by
         # what the human is actually being asked:
@@ -4016,9 +4166,13 @@ def run_tour(tour):
                 RECON_REVIEW.append({
                     "match_key": mk, "tour": CURRENT_TOUR, "match": label, "date": mdate,
                     "pid": pid, "full": disp, "param": "ID",
-                    "s1": f"played provisionally, absent from official card{held}",
-                    "s2": ("S2 = accept the official card (he did not feature, 0 stands); "
-                           "S1 = keep the held value"),
+                    # The three columns answer "did he play?", which is what an identity break
+                    # actually disputes — same shape as a value row, so the tab stays readable.
+                    "espn": "played", "cricbuzz": ("played" if (wit_pid.get(pid) or {}).get("played") else ""),
+                    "cricsheet": "ABSENT from the official card",
+                    "verdict": (f"played provisionally, absent from the official card{held}. "
+                                "Cricsheet = accept it (he did not feature, 0 stands) · "
+                                "ESPN = he DID play, keep the held value and fix the registry alias"),
                     "tier": "id"})
             # An unresolvable official row is an identity gap by definition: its points cannot
             # join ANY contest (the draft joins by pid and never fuzzy-falls-back for a pid'd
@@ -5481,19 +5635,52 @@ def overrides_by_match(data, known_pids=None):
               f"{', '.join(uniq[:10])}{' …' if len(uniq) > 10 else ''}", file=sys.stderr)
     return idx
 
+# What a NAMED answer means, per row type. The letters are kept as the ledger's storage
+# vocabulary — 1000+ rows already use them and re-keying live money decisions to gain nothing is
+# not a trade worth making — but the human never types one again, and `answer` below records the
+# name he actually chose so the record cannot be mis-read later.
+#   S1 = "keep what is already there"  (the 2nd witness at L1 / the settled baseline at L2 /
+#                                       keep holding on an ESPN-card row)
+#   S2 = "take the other one"          (ESPN at L1 / the official cricsheet card at L2 /
+#                                       score the short card anyway)
+_ANSWER_SLOT = {
+    "L2":        {"CRICSHEET": "S2", "ESPN": "S1", "CRICBUZZ": "S1", "KEEP": "S1"},
+    "ID":        {"CRICSHEET": "S2", "ESPN": "S1", "CRICBUZZ": "S1", "KEEP": "S1"},
+    "ESPN CARD": {"ESPN": "S2", "CRICSHEET": "S2", "HOLD": "S1", "KEEP": "S1"},
+    # A per-field L1 row: the two provisional cards, by name.
+    "_field":    {"ESPN": "S2", "CRICBUZZ": "S1", "KEEP": "S1"},
+}
+
+
+def _answer_to_slot(param, src):
+    """A named feed answer -> the ledger's storage letter. Legacy S1/S2/MANUAL pass through
+    untouched, so an answer typed into the old sheet on the morning of the rename still lands."""
+    if src in ("S1", "S2", "MANUAL"):
+        return src
+    table = _ANSWER_SLOT.get(param if param in _ANSWER_SLOT else "_field", {})
+    return table.get(src)
+
+
 def _approval_to_override(match_key, pid, param, correct, manual, s1_cell=""):
     """Turn one Recon Review answer into an override record (or None if blank/unset).
-    `correct` is the 'Correct Value' cell (S1/S2/Manual); `manual` the 'Manual Value' cell.
+    `correct` is the 'Correct Value' cell — a FEED NAME (ESPN / Cricbuzz / Cricsheet), or Manual,
+    or Hold on an ESPN-card row. The legacy positional S1/S2 are still accepted.
     Pure — unit-testable without the sheet."""
     correct = (correct or "").strip()
     if not correct:
         return None
-    src = correct.upper()
+    answer = correct
+    src = _answer_to_slot(param, correct.upper())
+    if src is None:
+        print(f"Recon: ignoring answer {correct!r} on a '{param}' row — not one of "
+              f"{sorted(set(_ANSWER_SLOT.get(param if param in _ANSWER_SLOT else '_field', {})))}",
+              file=sys.stderr)
+        return None
     if param == "ALL L1":               # match-level seed: use a whole feed
         if src not in ("S1", "S2"):
             return None
         return {"match_key": match_key, "scope": "match", "source": src,
-                "pid": "*", "field": "ALL_L1", "status": "approved"}
+                "pid": "*", "field": "ALL_L1", "status": "approved", "answer": answer}
     if param == "ESPN CARD":
         # A WHOLE-MATCH decision about the ESPN feed itself, keyed on the ESPN event
         # (pid = "espn:<eventId>"), not on a player. S2 = score the short card anyway, permanently
@@ -5501,16 +5688,18 @@ def _approval_to_override(match_key, pid, param, correct, manual, s1_cell=""):
         # that a human decided, not that the bot picked for him.
         return {"match_key": match_key, "scope": "espn_card", "pid": pid,
                 "source": ("S2" if src == "S2" else "S1"), "status": "approved",
-                "witness": _witness_name(src)}
+                "answer": answer, "witness": _witness_name(src)}
     if param == "L2":                   # accept official (S2) or keep provisional (S1)
         return {"match_key": match_key, "scope": "l2", "pid": pid,
-                "source": ("S2" if src == "S2" else "S1"), "status": "approved"}
+                "source": ("S2" if src == "S2" else "S1"), "status": "approved",
+                "answer": answer}
     if param == "ID":
         # Identity break. S2 = "the official card is right, he genuinely didn't feature" -> the 0
         # stands and the hold is released. S1 = keep the held provisional value while the registry
         # alias is added. Same 'l2' scope, so the existing hold/approval plumbing applies.
         return {"match_key": match_key, "scope": "l2", "pid": pid,
-                "source": ("S2" if src == "S2" else "S1"), "status": "approved"}
+                "source": ("S2" if src == "S2" else "S1"), "status": "approved",
+                "answer": answer}
     if param == "ID-ORPHAN":
         # Informational only: the real fix is a registry alias/bridge, not a per-match override.
         # Answering just acknowledges it so the row stops reappearing.
@@ -5651,12 +5840,29 @@ def read_recon_approvals():
     if not rows:
         return
     h = {c.strip(): i for i, c in enumerate(rows[0])}
-    pi = h.get("Player ID", 3); pm = h.get("Param", 5)
-    ci = h.get("Correct Value", 8); mi = h.get("Manual Value", 9); ki = h.get("Match Key", 11)
-    # The S1 column BY PREFIX: its header spells out which feed the slot currently means, so the
-    # wording changes whenever the witness does. Matching the prefix keeps that from breaking the
-    # read, and the cell's number is what an S1 answer is actually agreeing to.
-    s1i = next((i for c, i in h.items() if c.strip().upper().startswith("S1")), 6)
+    # ⛔ READ BOTH HEADERS. This function runs BEFORE write_recon_tab, so on the first run after
+    # the rename it is handed the OLD 12-column sheet with the owner's answers already typed into
+    # it. Resolving by NAME with the old name as a fallback — never by position — is what stops
+    # this migration eating a batch of answers, which is the one failure this whole change exists
+    # to stop happening again. Positional defaults are gone entirely: they were only ever right
+    # for one of the two layouts.
+    def col(*names):
+        for n in names:
+            if n in h:
+                return h[n]
+        return None
+    pi = col("Player ID"); pm = col("Field", "Param")
+    ci = col("Correct Value"); mi = col("Manual Value"); ki = col("Match Key")
+    if pi is None or ci is None or ki is None:
+        print(f"could not read '{RECON_TAB}': header has no Player ID / Correct Value / Match Key "
+              f"column — refusing to guess by position. Got: {list(h)}", file=sys.stderr)
+        return
+    # The witness cell, whose NUMBER an approval is agreeing to (stamped into the ledger so a
+    # stored answer can never drift when the witness changes). New layout: the named Cricbuzz
+    # column. Old layout: whichever header started with "S1".
+    s1i = col("Cricbuzz")
+    if s1i is None:
+        s1i = next((i for c, i in h.items() if c.strip().upper().startswith("S1")), None)
     data = _load_overrides()   # committed ledger (persisted across runs by the workflow)
     have = {(o.get("match_key"), o.get("pid"), o.get("field"), o.get("scope"))
             for o in data.get("overrides", [])}
@@ -6480,12 +6686,17 @@ def write_recon_tab():
     # tour with `cricbuzz_series` set. One header serves every tour in the run, so build_recon_rows
     # also stamps the feed name into the S1 CELL — a stored approval records only "S1", and a
     # number with no feed beside it is unanswerable.
-    header = ["Tour", "Match", "Date", "Player ID", "Full Name", "Param",
-              "S1 = 2nd witness: cricbuzz (L1) / held provisional (L2)",
-              "S2 = ESPN (L1) / OFFICIAL cricsheet (L2)",
+    # THE FEEDS HAVE NAMES. The old header carried two POSITIONAL slots — "S1" meant the second
+    # witness on an L1 row and the held provisional value on an L2 row, "S2" meant ESPN then
+    # cricsheet — so one header spelled four different things and the number under it could not
+    # be attributed without decoding the row type first. Three named columns, every row, always
+    # in the same order: an agreement is now something you SEE, not something you work out.
+    header = ["Tour", "Match", "Date", "Player ID", "Full Name", "Field",
+              "ESPN", "Cricbuzz", "Cricsheet", "What the sources say",
               "Correct Value", "Manual Value", "Status", "Match Key"]
-    status_text = {"player": "⚠ pick a value", "l2": "official revision — approve to apply",
-                   "id": "⛔ IDENTITY — fix the registry alias, or S2 to accept the official card",
+    status_text = {"player": "⚠ two feeds disagree — pick one",
+                   "l2": "the official card differs from what was settled — pick one",
+                   "id": "⛔ IDENTITY — fix the registry alias, or Cricsheet to accept the card",
                    "espn": "⛔ ESPN CARD INCOMPLETE — this match is NOT scored until you answer"}
     seen, rows = set(), []
     for r in RECON_REVIEW:
@@ -6494,12 +6705,15 @@ def write_recon_tab():
             continue
         seen.add(key)
         rows.append([r.get("tour", ""), r.get("match", ""), r.get("date", ""), r.get("pid", ""),
-                     r.get("full", ""), r.get("param", ""), str(r.get("s1", "")), str(r.get("s2", "")),
+                     r.get("full", ""), r.get("param", ""),
+                     str(r.get("espn", "")), str(r.get("cricbuzz", "")), str(r.get("cricsheet", "")),
+                     str(r.get("verdict", "")),
                      PRIOR_RECON.get(key, ""), PRIOR_MANUAL.get(key, ""),
                      status_text.get(r.get("tier", ""), "⚠ pick a value"), r["match_key"]])
     n_pending = len(rows)
     if not rows:
-        rows = [["—", "All feeds reconciled cleanly 🎉", "", "", "", "", "", "", "", "", "", ""]]
+        rows = [["—", "All three feeds reconciled cleanly 🎉", "", "", "", "", "", "", "", "",
+                 "", "", "", ""]]
     try:
         try:
             ws = sh.worksheet(RECON_TAB)
@@ -6511,8 +6725,12 @@ def write_recon_tab():
         # add_validation, degrade silently to free-text (readback accepts S1/S2/Manual as text).
         try:
             from gspread.utils import ValidationConditionType
-            ws.add_validation(f"I2:I{1 + len(rows)}", ValidationConditionType.one_of_list,
-                              ["S1", "S2", "Manual"], strict=False, showCustomUi=True)
+            # Column K now — three feed columns pushed 'Correct Value' two to the right.
+            # strict=False keeps the legacy S1/S2 answers typeable; read_recon_approvals still
+            # understands them, so an in-flight answer is never invalidated by this rename.
+            ws.add_validation(f"K2:K{1 + len(rows)}", ValidationConditionType.one_of_list,
+                              ["ESPN", "Cricbuzz", "Cricsheet", "Manual", "Hold"],
+                              strict=False, showCustomUi=True)
         except Exception as e:
             print(f"(recon dropdown skipped: {e})", file=sys.stderr)
         print(f"Wrote {n_pending} open recon item(s) to '{RECON_TAB}' "

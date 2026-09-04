@@ -144,13 +144,15 @@ def test_build_recon_rows_per_player_handles_mixed_match(wcmod, feed):
     espn = {"ferdous": feed(r=40, b=25, **{"4s": 2}), "cha": feed(w=2, balls=24, runs_conceded=30)}
     rows = wcmod.build_recon_rows("M", "IND v BAN", "d", "WWC", unresolved, wit, espn)
     assert all(r["tier"] == "player" for r in rows)            # NO whole-match collapse
-    got = {(r["pid"], r["param"]): (r["s1"], r["s2"]) for r in rows}
-    # The S1 cell NAMES its feed — always, now that cricbuzz is the only witness. The old bare
-    # number was the cricapi special case ("s1": cv if witness == "cricapi" else ...), and a
-    # sheet column whose meaning is implicit is exactly how "S1" changed feeds under 10 live
-    # approvals without a single row saying so.
-    assert got[("ferdous", "runs")] == ("33 (cricbuzz)", 40)
-    assert got[("cha", "wkts")] == ("1 (cricbuzz)", 2)
+    got = {(r["pid"], r["param"]): (r["espn"], r["cricbuzz"], r["cricsheet"]) for r in rows}
+    # THREE NAMED COLUMNS. A cell no longer has to say which feed it came from, because the
+    # column header does — that is the whole point of the rename. Cricsheet is blank rather than
+    # "·": at L1 the official card has not posted, which is "not in yet", not "measured nothing".
+    assert got[("ferdous", "runs")] == ("runs 40", "runs 33", "")
+    assert got[("cha", "wkts")] == ("wkts 2", "wkts 1", "")
+    # Two feeds and no tie-breaker YET — the verdict names the card that is missing, which is
+    # also the card that will close these rows for free when it posts.
+    assert all("no Cricsheet to break the tie" in r["verdict"] for r in rows)
     assert all(r["witness"] == "cricbuzz" for r in rows)
 
 
