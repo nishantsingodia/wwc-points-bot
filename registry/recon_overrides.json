@@ -7470,6 +7470,27 @@
       "pid": "ci:1158175",
       "source": "S2",
       "status": "approved"
+    },
+    {
+      "match_key": "2026-08-25::antigua and barbuda falcons|barbados tridents",
+      "scope": "l2",
+      "pid": "ci:1078694",
+      "source": "S1",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-29::barbados tridents|trinbago knight riders",
+      "scope": "l2",
+      "pid": "ci:1078694",
+      "source": "S1",
+      "status": "approved"
+    },
+    {
+      "match_key": "2026-08-30::amsterdam flames|belfast wolves",
+      "scope": "l2",
+      "pid": "ci:595897",
+      "source": "S1",
+      "status": "approved"
     }
   ]
 }
