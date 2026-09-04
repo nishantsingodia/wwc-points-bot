@@ -1006,6 +1006,19 @@
         "Namibia T20I Tri-Series 2026"
       ],
       "source": "needs-cricinfo"
+    },
+    {
+      "pid": "ci:1070754",
+      "display": "Andile Simelane",
+      "aliases": [
+        "andile simelane"
+      ],
+      "team": "MTSOU",
+      "role": "BOWL",
+      "tours": [
+        "Namibia T20I Tri-Series 2026"
+      ],
+      "source": "auto"
     }
   ]
 }

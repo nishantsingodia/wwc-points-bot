@@ -1197,6 +1197,15 @@
    "first_status": "COMPLETED",
    "first_seen": "2026-09-03",
    "provenance": "live"
+  },
+  {
+   "tour": "Namibia T20I Tri-Series 2026",
+   "match_key": "2026-09-04::namibia|south africa",
+   "match": "Match 6 — MTNAM v MTSOU",
+   "date": "2026-09-04",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-09-04",
+   "provenance": "live"
   }
  ]
 }
