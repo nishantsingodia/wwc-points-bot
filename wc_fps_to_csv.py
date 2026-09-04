@@ -2320,18 +2320,30 @@ def _hydrate_baseline(frozen):
     return p, ()
 
 
-def points_gap(a, b, role, sep="→"):
+def points_gap(a, b, role, sep="→", a_total=None):
     """BACKSTOP: did the SCORED TOTAL move, whatever fields did it?
 
     recon_gaps only compares an enumerated field list, so a change in a field nobody thought
     to list slips through as '✓ complete' while the points on screen quietly change — balls
     faced and balls bowled aren't in RECON_L2 yet they drive the SR and economy components
     (LPL: Dickwella 69 -> 63, flagged clean). Comparing the total closes the class for good:
-    any future field we forget is still caught, because points are what a contest settles on."""
+    any future field we forget is still caught, because points are what a contest settles on.
+
+    ⛔ `a_total` — PASS THE SETTLED TOTAL WHENEVER THERE IS ONE. Re-scoring the frozen baseline
+    assumes the perf dict can reproduce the number that was published, and for TEST it cannot:
+    the D11 red-ball tiers are evaluated INSIDE an innings (see _score_test), the per-innings
+    splits are not something `fields` could carry, so score() falls into its aggregate fallback
+    and awards a tier the published score never had. Measured on ENG v PAK 2026 — every one of
+    the 10 Test review rows was a phantom `pts X→X-4`: Root 20+8 collected an m25 (+4) that
+    per-innings scoring does not award, Azan Awais 0(out)+9 lost the -4 duck that aggregation
+    forgives. In every case `record_settlement`'s own `points` field already held the published
+    number and cricsheet AGREED with it. So read the total that was settled; only re-score when
+    there is no settled record to read. Generalises past Test: any future format whose scorer
+    needs a field the baseline cannot carry is covered by the same rule."""
     if not a or not b:
         return ""
     try:
-        pa = score(a, role)["total"]
+        pa = score(a, role)["total"] if a_total is None else int(a_total)
         pb = score(b, role)["total"]
     except KeyError as e:
         # A key the scorer indexes is absent — almost always a baseline frozen before that field
@@ -2860,6 +2872,23 @@ def l2_approved_pids(match_key, overrides_idx):
     official cricsheet; anything else = keep the held provisional value."""
     return {o.get("pid"): o.get("source", "S2")
             for o in overrides_idx.get(match_key, []) if o.get("scope") == "l2"}
+
+def recon_answered(pid, l2_appr, match_key, param, ack):
+    """Has this review row been DECIDED? ANY stored answer counts — S1, S2 or Manual.
+
+    SINGLE implementation on purpose: the L2 rows and the identity rows both ask the owner to
+    pick a value and both persist through the same 'l2' override scope, so they must agree on
+    what "answered" means. They did not. Both sites tested for the literal string "S2", which
+    made S1 ("keep what was settled" / "he DID play, hold the value") a decision the ledger
+    stored and the tab ignored: `ack` is rebuilt from the SHEET every run, so an S1 dropped the
+    row in the run it was typed and regenerated it — blank — on the next one, forever. Walter
+    (ci:909225) and Tongue (ci:857975) sat in recon_overrides.json as approved/S1 while the tab
+    re-asked; Brathwaite and Rushmere did the same on the identity side.
+
+    A row a human answered must never come back. If the answer is later found to be wrong that
+    is an amendment, made by editing the ledger — not by silently re-opening the question."""
+    return pid in l2_appr or (match_key, pid, param) in ack
+
 
 def player_recon_markers(unresolved, l2_pairs, l2_appr):
     """pid -> per-player marker for the draft UI, so it can flag exactly WHICH players aren't
@@ -3745,7 +3774,10 @@ def run_tour(tour):
                     l2_unverified[pid] = sorted(set(_unv))
                 if not g:
                     # Nothing in the compared field list moved — but did the SCORED TOTAL?
-                    g = points_gap(base, cs_pid[pid], role_by_pid.get(pid, "?") or "?")
+                    # Anchored on the SETTLED total, never a re-score of the baseline: see
+                    # points_gap's `a_total` note for the Test phantom-row class that fixes.
+                    g = points_gap(base, cs_pid[pid], role_by_pid.get(pid, "?") or "?",
+                                   a_total=settled_points(mk, pid))
                 if g:
                     l2_pairs[pid] = g
         if n_legacy:
@@ -3790,7 +3822,11 @@ def run_tour(tour):
                 if l2_appr.get(pid) != "S2" and base:
                     dd = perf_by_pid.get(pid)
                     if dd is not None:
-                        for field in RECON_L2:
+                        # `innings` alongside RECON_L2: on red ball the tiers live in the splits,
+                        # so holding only the aggregates would leave cricsheet's innings list in
+                        # place and score a HYBRID of the two cuts — neither the held value nor
+                        # the official one. Absent on white ball, where it is a no-op.
+                        for field in RECON_L2 + ["innings"]:
                             pv = base.get(field)
                             if pv is not None:
                                 dd[field] = pv
@@ -3909,7 +3945,16 @@ def run_tour(tour):
             RECON_REVIEW.extend(r for r in new_rows
                                 if (mk, r.get("pid", ""), r.get("param", "")) not in RECON_ACK)
         for pid, g in l2_pairs.items():
-            if l2_appr.get(pid) != "S2" and (mk, pid, "L2") not in RECON_ACK:
+            # ⛔ ANSWERED IS ANSWERED — `pid not in l2_appr`, never `!= "S2"`. The tab offers
+            # THREE answers (S1 = keep what was settled, S2 = take cricsheet, Manual) and all
+            # three are decisions the ledger stores. Testing for S2 meant only S2 ever closed a
+            # row: RECON_ACK is rebuilt each run from the SHEET, so an S1 dropped the row in the
+            # run it was typed and the row came back on the very next one, blank, forever. The
+            # owner answered Paul Walter (ci:909225) and Josh Tongue (ci:857975) on Hundred M
+            # Match 30 and both sat in recon_overrides.json as scope l2 / source S1 / approved
+            # while the tab kept re-asking. The two neighbours that already read it this way —
+            # `l2_dirty` above and player_recon_markers — are the correct precedent.
+            if not recon_answered(pid, l2_appr, mk, "L2", RECON_ACK):
                 RECON_REVIEW.append({"match_key": mk, "tour": CURRENT_TOUR, "match": label,
                                      "date": mdate, "pid": pid, "full": PID2DISP.get(pid, pid),
                                      "param": "L2", "s1": g,
@@ -3946,7 +3991,13 @@ def run_tour(tour):
                 paired[leftover_p[0]] = leftover_o[0]; taken.add(leftover_o[0]["name"])
 
             for pid in id_zeroed:
-                if l2_appr.get(pid) == "S2" or (mk, pid, "ID") in RECON_ACK:
+                # Same rule as the L2 rows above, and for the same reason: S1 ("he DID play —
+                # hold the value while I add the registry alias") is a decision, not silence.
+                # Testing for S2 alone re-opened Shian Brathwaite (CPL Matches 16 + 19) and
+                # David Rushmere (ETPL Match 7) on every single run no matter how often they
+                # were answered. An id_zeroed pid is by construction absent from cs_pid, so it
+                # can never also be in l2_pairs — the shared 'l2' override scope cannot collide.
+                if recon_answered(pid, l2_appr, mk, "ID", RECON_ACK):
                     continue
                 disp = PID2DISP.get(pid, pid)
                 if not pid.startswith("ci:"):
@@ -4918,8 +4969,14 @@ def save_settlements():
 # mis-split every run-out, MANUFACTURING an L2 gap on a match that settled correctly and inviting
 # someone to "correct" a right number. _hydrate_baseline names the missing fields instead, so those
 # rows read honestly unverifiable rather than silently wrong.
+# `innings` is RED BALL ONLY and is the one entry here that is not a scalar: it is the list of
+# per-innings splits _score_test needs, because the D11 Test tiers are evaluated INSIDE an innings
+# and the match aggregate provably cannot reproduce them. Without it a frozen Test baseline
+# re-scores through score()'s aggregate fallback and lands on a number that was never published
+# (see points_gap's `a_total` note). White-ball perfs have no such key, so `perf.get(f) is not
+# None` keeps it out of every other row at zero cost.
 SETTLED_FIELDS = RECON_L2 + ["b", "balls", "played", "bat_order", "dismissal", "dismissed",
-                             "lbwb", "dro"]
+                             "lbwb", "dro", "innings"]
 
 def record_settlement(match_key, tour, label, mdate, team, pid, full, points, status, source,
                       perf=None, field_sources=None):
