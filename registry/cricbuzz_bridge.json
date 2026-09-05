@@ -4,8 +4,8 @@
  "_tiers": "tier = number of DISTINCT MATCHES confirming the pair. >=1 cross-check only; >=2 required before a CB-only field may CREATE points.",
  "_note": "each pair's `confirmations` list IS the fact log; bridge/revoked are a pure function of it (compile_bridge o confirmations_log). Regenerate, never hand-edit. A contradicted pair moves to `revoked` and is refused BOTH ways — there is no last-wins.",
  "counts": {
-  "confirmations": 2602,
-  "bridged": 499,
+  "confirmations": 2604,
+  "bridged": 501,
   "revoked": 0,
   "tier2_plus": 421
  },
@@ -6111,6 +6111,24 @@
      "method": "manual",
      "date": "",
      "source": "Needs Cricinfo ID:JJ Smit"
+    }
+   ]
+  },
+  "9890": {
+   "cricinfo_id": "596664",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Zane Green"
     }
    ]
   },
@@ -12773,6 +12791,24 @@
      "match": "cb157149/espn1537350",
      "method": "dismissal",
      "date": "2026-08-02"
+    }
+   ]
+  },
+  "13213": {
+   "cricinfo_id": "974087",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Rahmanullah Gurbaz"
     }
    ]
   },
