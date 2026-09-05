@@ -1019,6 +1019,19 @@
         "Namibia T20I Tri-Series 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:364343",
+      "display": "Craig Alexander Young",
+      "aliases": [
+        "craig alexander young"
+      ],
+      "team": "MTDUB",
+      "role": "BOWL",
+      "tours": [
+        "European T20 Premier League 2026"
+      ],
+      "source": "auto"
     }
   ]
 }
