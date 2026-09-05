@@ -1199,6 +1199,15 @@
    "provenance": "live"
   },
   {
+   "tour": "Caribbean Premier League 2026",
+   "match_key": "2026-09-04::guyana amazon warriors|jamaica kingsmen",
+   "match": "Match 26 — MTGUY v MTJAM",
+   "date": "2026-09-04",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-09-05",
+   "provenance": "live"
+  },
+  {
    "tour": "European T20 Premier League 2026",
    "match_key": "2026-09-04::belfast wolves|glasgow cosmic",
    "match": "Match 13 — MTGLA v MTBEL",

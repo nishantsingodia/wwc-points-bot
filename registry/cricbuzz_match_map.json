@@ -4,8 +4,8 @@
  "_rules": "PINS ARE READ, NOT RE-DERIVED — that is the point: a rename upstream cannot move or drop a pairing that is already recorded. A later derivation that finds NOTHING does not disturb a pin (absence is not evidence). A later derivation that finds a DIFFERENT cricbuzz match revokes BOTH claims; so does one cricbuzz match claimed by two different fixtures, and one key carrying two ESPN events. Never last-wins. A revoked key stays revoked until a human runs --forget.",
  "_note": "each pin's `confirmations` list IS the fact log; pins/revoked are a pure function of it (compile_pins o confirmations_log), and no clock is read anywhere. Regenerate, never hand-edit.",
  "counts": {
-  "confirmations": 169,
-  "pinned": 134,
+  "confirmations": 170,
+  "pinned": 135,
   "revoked": 0,
   "series": 6
  },
@@ -2157,6 +2157,27 @@
      "espn_event": "1534203",
      "cb_desc": "25th Match",
      "cb_date": "2026-09-03"
+    }
+   ]
+  },
+  "12123|2026-09-04|guyana amazon warriors+jamaica kingsmen": {
+   "cricbuzz_match_id": "154573",
+   "series_id": "12123",
+   "date": "2026-09-04",
+   "teams": [
+    "guyana amazon warriors",
+    "jamaica kingsmen"
+   ],
+   "espn_events": [
+    "1534204"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1534204",
+     "cb_desc": "26th Match",
+     "cb_date": "2026-09-04"
     }
    ]
   },
