@@ -101052,6 +101052,23 @@
    "tour": "European T20 Premier League 2026",
    "match": "Match 3 — MTEDI v MTGLA",
    "date": "2026-08-27",
+   "team": "MTGLA",
+   "pid": "ci:959759",
+   "full": "Finn Allen",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-06",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-27::edinburgh castle rockers|glasgow cosmic",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 3 — MTEDI v MTGLA",
+   "date": "2026-08-27",
    "team": "MTEDI",
    "pid": "ci:1099379",
    "full": "Gareth Delany",
@@ -101657,6 +101674,23 @@
     "bat_order": 10,
     "dismissal": "c & b Boult",
     "dismissed": true
+   }
+  },
+  {
+   "match_key": "2026-08-27::edinburgh castle rockers|glasgow cosmic",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 3 — MTEDI v MTGLA",
+   "date": "2026-08-27",
+   "team": "MTGLA",
+   "pid": "ci:1295901",
+   "full": "Reuben Brian Wilson",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-06",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
@@ -107002,6 +107036,23 @@
    "tour": "European T20 Premier League 2026",
    "match": "Match 5 — MTGLA v MTDUB",
    "date": "2026-08-29",
+   "team": "MTGLA",
+   "pid": "ci:959759",
+   "full": "Finn Allen",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-06",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-29::dublin guardians|glasgow cosmic",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 5 — MTGLA v MTDUB",
+   "date": "2026-08-29",
    "team": "MTDUB",
    "pid": "ci:348034",
    "full": "George Dockrell",
@@ -107675,6 +107726,23 @@
     "bat_order": 8,
     "dismissal": "c Berrington b Ngidi",
     "dismissed": true
+   }
+  },
+  {
+   "match_key": "2026-08-29::dublin guardians|glasgow cosmic",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 5 — MTGLA v MTDUB",
+   "date": "2026-08-29",
+   "team": "MTGLA",
+   "pid": "ci:1295901",
+   "full": "Reuben Brian Wilson",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-06",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
@@ -114857,6 +114925,23 @@
    "match": "Match 9 — MTROT v MTGLA",
    "date": "2026-09-01",
    "team": "MTGLA",
+   "pid": "ci:959759",
+   "full": "Finn Allen",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-06",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-01::glasgow cosmic|rotterdam dockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 9 — MTROT v MTGLA",
+   "date": "2026-09-01",
+   "team": "MTGLA",
    "pid": "uncapped:george-munsey",
    "full": "George Munsey",
    "points": 0,
@@ -115376,6 +115461,23 @@
     "bat_order": 10,
     "dismissal": "",
     "dismissed": false
+   }
+  },
+  {
+   "match_key": "2026-09-01::glasgow cosmic|rotterdam dockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 9 — MTROT v MTGLA",
+   "date": "2026-09-01",
+   "team": "MTGLA",
+   "pid": "ci:1295901",
+   "full": "Reuben Brian Wilson",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-06",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
@@ -119651,6 +119753,23 @@
    "match": "Match 12 — MTAMS v MTGLA",
    "date": "2026-09-03",
    "team": "MTGLA",
+   "pid": "ci:959759",
+   "full": "Finn Allen",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "ESPN scorecard · cricbuzz cross-checked (21 players), 1 unbridged · ⏳ provisional (dots unverified for 1 unbridged bowler: Liam Robert Naylor · awaiting cricsheet)",
+   "frozen_at": "2026-09-06",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-03::amsterdam flames|glasgow cosmic",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 12 — MTAMS v MTGLA",
+   "date": "2026-09-03",
+   "team": "MTGLA",
    "pid": "uncapped:george-munsey",
    "full": "George Munsey",
    "points": 0,
@@ -120136,6 +120255,23 @@
     "bat_order": 0,
     "dismissal": "",
     "dismissed": false
+   }
+  },
+  {
+   "match_key": "2026-09-03::amsterdam flames|glasgow cosmic",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 12 — MTAMS v MTGLA",
+   "date": "2026-09-03",
+   "team": "MTGLA",
+   "pid": "ci:1295901",
+   "full": "Reuben Brian Wilson",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "ESPN scorecard · cricbuzz cross-checked (21 players), 1 unbridged · ⏳ provisional (dots unverified for 1 unbridged bowler: Liam Robert Naylor · awaiting cricsheet)",
+   "frozen_at": "2026-09-06",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
