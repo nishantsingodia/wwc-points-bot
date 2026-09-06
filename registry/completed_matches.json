@@ -1251,6 +1251,15 @@
    "first_status": "COMPLETED_FLAGGED",
    "first_seen": "2026-09-06",
    "provenance": "live"
+  },
+  {
+   "tour": "European T20 Premier League 2026",
+   "match_key": "2026-09-06::edinburgh castle rockers|glasgow cosmic",
+   "match": "Match 16 — MTGLA v MTEDI",
+   "date": "2026-09-06",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-09-06",
+   "provenance": "live"
   }
  ]
 }

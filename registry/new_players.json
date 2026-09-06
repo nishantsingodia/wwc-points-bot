@@ -1045,6 +1045,32 @@
         "Caribbean Premier League 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:959759",
+      "display": "Finn Allen",
+      "aliases": [
+        "finnley hugh allen"
+      ],
+      "team": "MTGLA",
+      "role": "BAT",
+      "tours": [
+        "European T20 Premier League 2026"
+      ],
+      "source": "auto"
+    },
+    {
+      "pid": "ci:1295901",
+      "display": "Reuben Brian Wilson",
+      "aliases": [
+        "reuben brian wilson"
+      ],
+      "team": "MTGLA",
+      "role": "BOWL",
+      "tours": [
+        "European T20 Premier League 2026"
+      ],
+      "source": "auto"
     }
   ]
 }
