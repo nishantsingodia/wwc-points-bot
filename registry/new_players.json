@@ -1032,6 +1032,19 @@
         "European T20 Premier League 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:1500761",
+      "display": "Jakeem Javier Pollard",
+      "aliases": [
+        "jakeem javier pollard"
+      ],
+      "team": "MTBAR",
+      "role": "BOWL",
+      "tours": [
+        "Caribbean Premier League 2026"
+      ],
+      "source": "auto"
     }
   ]
 }
