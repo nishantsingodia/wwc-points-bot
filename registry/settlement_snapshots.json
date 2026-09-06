@@ -75383,6 +75383,23 @@
    "match": "Match 4 — MTJAM v MTBAR",
    "date": "2026-08-12",
    "team": "MTBAR",
+   "pid": "ci:1500761",
+   "full": "Jakeem Javier Pollard",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-06",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-12::barbados tridents|jamaica kingsmen",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 4 — MTJAM v MTBAR",
+   "date": "2026-08-12",
+   "team": "MTBAR",
    "pid": "uncapped:jakeem-pollard",
    "full": "Jakeem Pollard",
    "points": 0,
@@ -85507,6 +85524,23 @@
     "dismissed": false,
     "lbwb": 2,
     "dro": 0
+   }
+  },
+  {
+   "match_key": "2026-08-16::barbados tridents|st lucia kings",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 9 — MTSTL v MTBAR",
+   "date": "2026-08-16",
+   "team": "MTBAR",
+   "pid": "ci:1500761",
+   "full": "Jakeem Javier Pollard",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-06",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
@@ -97041,6 +97075,23 @@
    "match": "Match 16 — MTANT v MTBAR",
    "date": "2026-08-25",
    "team": "MTBAR",
+   "pid": "ci:1500761",
+   "full": "Jakeem Javier Pollard",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-06",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-25::antigua and barbuda falcons|barbados tridents",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 16 — MTANT v MTBAR",
+   "date": "2026-08-25",
+   "team": "MTBAR",
    "pid": "uncapped:jakeem-pollard",
    "full": "Jakeem Pollard",
    "points": 0,
@@ -105040,6 +105091,23 @@
     "bat_order": 7,
     "dismissal": "b Narine",
     "dismissed": true
+   }
+  },
+  {
+   "match_key": "2026-08-29::barbados tridents|trinbago knight riders",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 19 — MTTRI v MTBAR",
+   "date": "2026-08-29",
+   "team": "MTBAR",
+   "pid": "ci:1500761",
+   "full": "Jakeem Javier Pollard",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-06",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
@@ -113795,6 +113863,23 @@
     "bat_order": 0,
     "dismissal": "",
     "dismissed": false
+   }
+  },
+  {
+   "match_key": "2026-09-01::barbados tridents|st kitts and nevis patriots",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 23 — MTSTK v MTBAR",
+   "date": "2026-09-01",
+   "team": "MTBAR",
+   "pid": "ci:1500761",
+   "full": "Jakeem Javier Pollard",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-06",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
