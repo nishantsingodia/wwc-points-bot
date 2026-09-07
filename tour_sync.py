@@ -996,6 +996,18 @@ def gen_tour(series_info, fmt, gender, state, league_squads):
         tour_name = f"{info['name']} ({fmt_label})"
         tab = f"{shorts[teams[0]]} v {shorts[teams[1]]} {fmt_label} POINTS".upper()
 
+    # Stable slug for the draft's tour filter (data/matches.json "tour"). A tour is NOT
+    # recoverable from a match on the draft side — franchise leagues namespace their key prefix
+    # and bilaterals namespace their team codes, but a multi-team event (a World Cup) shatters
+    # into one bucket per fixture — so it has to be stamped here, at the one place that knows.
+    # The draft maps the slug to a display name in lib/tours.ts; an unregistered one still
+    # filters correctly, wearing a humanized version of the slug.
+    # Apostrophes are dropped rather than separated, so "Men's" slugs to "mens" and not to a
+    # stray one-letter "-s-" segment.
+    tour_slug = re.sub(
+        r"-+", "-", re.sub(r"[^a-z0-9]+", "-", re.sub(r"['‘’]", "", tour_name.lower()))
+    ).strip("-")
+
     # ---- matches (skip TBC/unresolved knockouts) ----
     matches, toss, mi = [], [], 0
     for m in ml:
@@ -1021,6 +1033,9 @@ def gen_tour(series_info, fmt, gender, state, league_squads):
             # key-regex would mis-score them as T20 — this field is authoritative. "HUN" for The
             # Hundred (scored on its own ruleset), NOT the "T20" discovery bucket.
             "format": score_fmt,
+            # Which tour this match belongs to — drives the draft lobby's Completed-tab filter.
+            # See tour_slug above for why it can't be derived downstream.
+            "tour": tour_slug,
         })
         toss.append(to_utc_z(dt))
         state["next_match_num"] += 1
