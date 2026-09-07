@@ -138,3 +138,25 @@ def test_partly_answered_is_not_answered(wcmod):
     es = {"p": wcmod.blank_perf("x") | {"r": 20, "w": 1}}
     cs = {"p": wcmod.blank_perf("x") | {"r": 35, "w": 9}}
     assert wcmod.l1_auto_resolved({"p": "g"}, cb, es, cs, ["r", "w"]) == {}
+
+
+def test_a_player_already_frozen_does_not_re_open_L1(wcmod, monkeypatch, tmp_path):
+    """THE 16 AUG WOUND, not re-opened. Restoring the ordering must not put the draft's
+    "⏳ L1 recon open — this result is not final yet" banner back onto results that ARE final.
+
+    The settlement store is write-once, so an answer given now cannot move an already-frozen
+    number: the gate has nothing left to gate. 15 matches / 496 rows sat in exactly that state on
+    16 Aug and it is why the relaxation happened at all."""
+    wcmod.RECON_REVIEW[:] = []
+    tour, out = _with_feeds(wcmod, monkeypatch, tmp_path, cb_runs=35, cs_runs=99)
+    # Alpha One settled on a previous run; everyone else is clean, so he is the only gap.
+    wcmod.SETTLEMENTS[("2026-08-01::alpha kings|beta giants", "ci:910001")] = {
+        "match_key": "2026-08-01::alpha kings|beta giants", "pid": "ci:910001",
+        "tour": "Freeze Tour", "points": 24, "fields": {"r": 20}}
+    wcmod.run_tour(tour)
+
+    states = {r["Recon State"] for r in csv.DictReader(open(out))}
+    assert wcmod.RECON_STATE_LABEL["L1_OPEN"] not in states, \
+        "a settled result went back to 'not final yet' — the exact 16 Aug regression"
+    assert not any(r["param"] == "runs" for r in wcmod.RECON_REVIEW), \
+        "raised an L1 row nobody's answer could act on"

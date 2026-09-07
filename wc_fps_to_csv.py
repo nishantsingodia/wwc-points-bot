@@ -3891,6 +3891,20 @@ def run_tour(tour):
             _n = sum(len(v) for v in l1_auto.values())
             print(f"  {label}: L1 — the official card broke the tie on {_n} field(s) across "
                   f"{len(l1_auto)} player(s); no row raised for those", file=sys.stderr)
+        # ⛔ L1 IS A GATE ON THE FREEZE, AND A GATE ONLY BITES BEFORE IT. A player whose baseline
+        # is ALREADY frozen has passed through it: the store is write-once, so no answer given now
+        # could move his settled number, and holding L1 open for him buys nothing while costing
+        # the draft's "⏳ L1 recon open — this result is not final yet" banner on a result that IS
+        # final. That banner on 15 settled matches is what forced the 16 Aug relaxation in the
+        # first place; restoring the ordering without this bound would earn it straight back.
+        # Scoped per PLAYER, not per match: a match can be half-frozen (players emitted before an
+        # identity break), and the un-frozen half must still be able to hold the gate.
+        _settled_already = [pid for pid in unresolved if settled_points(mk, pid) is not None]
+        if _settled_already:
+            unresolved = {pid: g for pid, g in unresolved.items() if pid not in _settled_already}
+            print(f"  {label}: L1 — {len(_settled_already)} player(s) already have a frozen "
+                  f"baseline, so their gap can no longer gate anything; left as history",
+                  file=sys.stderr)
         # L2 baseline = the L1-RECONCILED provisional cut (raw cricapi+ESPN with the approved L1
         # override applied) — exactly what people saw. Comparing cricsheet against THIS (not raw
         # cricapi) keeps an official figure that confirms an approved correction silent, and flags
