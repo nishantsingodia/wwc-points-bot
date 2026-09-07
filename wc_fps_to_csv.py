@@ -3964,7 +3964,15 @@ def run_tour(tour):
                         # so holding only the aggregates would leave cricsheet's innings list in
                         # place and score a HYBRID of the two cuts — neither the held value nor
                         # the official one. Absent on white ball, where it is a no-op.
-                        for field in RECON_L2 + ["innings"]:
+                        # RED BALL: the per-innings splits drive the milestone/haul/duck tiers,
+                        # so they must come from ONE card. The moment a majority has backed
+                        # cricsheet on any field for this player, cricsheet is that card — holding
+                        # the baseline's innings on top of accepted cricsheet aggregates would
+                        # score a hybrid of the two, which is neither the held value nor the
+                        # official one. Unreachable while no red-ball tour has a cricbuzz_series;
+                        # pinned here so it stays unreachable.
+                        hold_fields = RECON_L2 + ([] if agreed else ["innings"])
+                        for field in hold_fields:
                             if field in agreed:
                                 continue
                             pv = base.get(field)
@@ -4090,9 +4098,21 @@ def run_tour(tour):
         for pid in l2_pairs:
             agreed = l2_concurred.get(pid) or {}
             base_p = _l2_baseline(pid) or {}
+            cs_p = cs_pid[pid] or {}
+            # MIRROR recon_gaps, do not re-derive it. It skips a field ABSENT on either side
+            # (reported as unverified, never compared against a zero) and skips a None. Using
+            # `or 0` here instead would list a field the gate deliberately did NOT count as
+            # disputed, and the row would then render three columns for a comparison nobody
+            # made — a guard on one side without its mirror, which is this file's recurring
+            # shape of defect.
+            def _disputed(f):
+                if f not in base_p or f not in cs_p:
+                    return False
+                av, bv = base_p.get(f), cs_p.get(f)
+                return av is not None and bv is not None and (av or 0) != (bv or 0)
             _asked[pid] = [f for f in RECON_L2
                            if f not in agreed and f in (l2_feeds.get(pid) or {})
-                           and (base_p.get(f) or 0) != ((cs_pid[pid] or {}).get(f) or 0)]
+                           and _disputed(f)]
         for pid, g in l2_pairs.items():
             # ⛔ ANSWERED IS ANSWERED — `pid not in l2_appr`, never `!= "S2"`. The tab offers
             # THREE answers (S1 = keep what was settled, S2 = take cricsheet, Manual) and all
