@@ -160,3 +160,26 @@ def test_a_player_already_frozen_does_not_re_open_L1(wcmod, monkeypatch, tmp_pat
         "a settled result went back to 'not final yet' — the exact 16 Aug regression"
     assert not any(r["param"] == "runs" for r in wcmod.RECON_REVIEW), \
         "raised an L1 row nobody's answer could act on"
+
+
+def test_concurrence_never_overturns_an_answer_the_owner_gave(wcmod, monkeypatch, tmp_path):
+    """You adjudicated L1 — "ESPN's 20, not Cricbuzz's 35" — and THEN cricsheet posted 35.
+
+    Cricbuzz + cricsheet now form a majority against your decision. It must not close itself:
+    that would publish 35, raise no row, and leave nothing on the tab or in the audit to say your
+    call had been reversed. Cricsheet is still free to disagree with you — it just has to ASK, as
+    an ordinary L2 row, exactly like any other official revision.
+    """
+    wcmod.RECON_REVIEW[:] = []
+    tour, out = _with_feeds(wcmod, monkeypatch, tmp_path, cb_runs=35, cs_runs=35)
+    mk = "2026-08-01::alpha kings|beta giants"
+    monkeypatch.setattr(wcmod, "RECON_OVERRIDES", {mk: [
+        {"match_key": mk, "scope": "player", "pid": "ci:910001", "field": "r",
+         "source": "S2", "status": "approved"}]})     # S2 at L1 = ESPN = your 20
+    wcmod.run_tour(tour)
+
+    params = [(r["pid"], r["param"]) for r in wcmod.RECON_REVIEW]
+    assert ("ci:910001", "L2") in params, \
+        "a majority silently overturned an answer the owner gave — no row, no audit trail"
+    rows = {r["Full Name"]: r for r in csv.DictReader(open(out))}
+    assert rows["Alpha One"]["Runs"] == "20", "published cricsheet over the owner's own decision"

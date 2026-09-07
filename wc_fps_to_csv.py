@@ -3976,6 +3976,15 @@ def run_tour(tour):
                 # Asalanka 60 v 59) cricsheet's ball-by-ball is usually the right one. Rejecting
                 # the official card is a money decision and stays the owner's.
                 _cb, _es, _cs = wit_pid.get(pid) or {}, espn_pid.get(pid) or {}, cs_pid[pid]
+                # ⛔ A FIELD THE OWNER ADJUDICATED IS NOT AUTO-CLOSABLE. Concurrence exists to
+                # answer questions NOBODY answered; it must never quietly overturn one he did.
+                # Without this, picking "ESPN's 25, not Cricbuzz's 35" at L1 and then watching
+                # cricsheet post 35 would form a 2-of-3 majority against his own decision, publish
+                # 35, and raise no row — his call reversed with nothing on the tab and nothing in
+                # the audit to say so. That is precisely what the L2 hold exists to prevent, and
+                # an auto-close is not exempt from it. Cricsheet may still disagree with him: it
+                # just has to ASK, as an ordinary L2 row, the way any other revision does.
+                _adjudicated = override_sources.get(pid) or {}
                 _feeds, _agreed = {}, {}
                 for _f in RECON_L2:
                     vals = {"espn": _es.get(_f), "cricbuzz": _cb.get(_f), "cricsheet": _cs.get(_f)}
@@ -3983,7 +3992,8 @@ def run_tour(tour):
                         continue
                     _feeds[_f] = vals
                     val, _verdict, who = feed_concurrence(vals)
-                    if val is not None and "cricsheet" in who and len(who) >= 2:
+                    if (val is not None and "cricsheet" in who and len(who) >= 2
+                            and _f not in _adjudicated):
                         _agreed[_f] = val
                 if _feeds:
                     l2_feeds[pid] = _feeds
