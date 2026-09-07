@@ -27,6 +27,26 @@ def _norm(s):
     return re.sub(r"[^a-z0-9]+", "", (s or "").lower())
 
 
+def _tour_key(s):
+    """Year-agnostic identity key for a tour NAME, for matching a TYPED Column-A entry against an
+    ingested tour. Drops the "(Men T20I)" parenthetical and the season year, so a name typed
+    without the year still matches the year-stamped one written at ingest."""
+    s = re.sub(r"\([^)]*\)", " ", s or "")
+    s = re.sub(r"\b(?:19|20)\d{2}\b", " ", s)
+    return _norm(s)
+
+
+def _same_tour(a, b):
+    """True when two tour NAMES denote the same tour. Mirrors tour_sync.same_tour: equality on the
+    year-agnostic key, plus an explicit-year check so NEXT season's typed entry is not erased as
+    "already ingested" while this season's edition is still in tours.json."""
+    if _tour_key(a) != _tour_key(b):
+        return False
+    ya = re.findall(r"\b(?:19|20)\d{2}\b", a or "")
+    yb = re.findall(r"\b(?:19|20)\d{2}\b", b or "")
+    return not (ya and yb and ya[-1] != yb[-1])
+
+
 def _load(p, default=None):
     try:
         return json.load(open(p, encoding="utf-8"))
@@ -108,6 +128,7 @@ def main():
               "Verdict / gaps"]
     today = date.today().isoformat()
     rows = []
+    ingested_names = []          # FULL names — rows[0] below is truncated to 34 chars
     for t in tours:
         name, tab = t.get("name", ""), t.get("tab", "")
         gender = t.get("gender", "")
@@ -187,6 +208,7 @@ def main():
                 gaps.append("mirror stale/thin")
 
         verdict = "✅ READY" if not gaps else "⚠ " + "; ".join(gaps)
+        ingested_names.append(name)
         rows.append([name[:34], f"{fmt}/{gkey}", "Y", espn or "✗", cbz or "✗ none",
                      squads_cell, dm_cell, dp_cell, "Y" if espn_in_draft else "✗",
                      mirror_cell, tab_cell, team_cell, pid_cell, verdict])
@@ -194,8 +216,13 @@ def main():
     # ---- Column A is the INPUT: preserve names Nishant typed that aren't ingested yet ----
     # (the next `tour_sync --from-status-sheet` run ESPN-builds them). Never lose a typed name on the
     # clear+rewrite; show it as ⏳ pending so the sheet is add-surface AND dashboard in one.
+    # EQUALITY against the FULL ingested names, never substring containment against the TRUNCATED
+    # first cell. Containment deleted any typed name that CONTAINS an ingested one — "Women's
+    # Caribbean Premier League 2026" contains "Caribbean Premier League 2026" — so this tab, which
+    # is cleared and rewritten every run, ERASED the entry as fast as it could be typed. That is
+    # why WCPL 2026 left no trace in Column A at all (7 Sep 2026).
     for typed in _status_col_a_names():
-        if not any(_norm(typed) in _norm(r[0]) or _norm(r[0]) in _norm(typed) for r in rows):
+        if not any(_same_tour(typed, n) for n in ingested_names):
             rows.append([typed[:40]] + [""] * (len(header) - 2) +
                         ["⏳ typed in Column A — builds on next run (or not found on ESPN — recheck name)"])
 

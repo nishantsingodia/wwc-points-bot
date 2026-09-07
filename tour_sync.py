@@ -100,9 +100,21 @@ ESPN_LEAGUE_CLASS = {
     "3": "T20",    # T20 Internationals          (measured: IND v ZIM 24301, IND v ENG 1496489)
     "6": "T20",    # domestic Twenty20           (measured: CPL 8623, Hundred M 1521176)
     "10": "T20",   # Women's T20 Internationals  (measured: WWC 1483859)
+    "17": "T20",   # Women's domestic Twenty20   (measured: WCPL 20898)
     "1": "SKIP",   # Test                        (measured: ENG v PAK 23806, with 11)
     "11": "SKIP",  # First class                 (measured: ENG v PAK 23806, with 1)
 }
+
+def _fmt_tok(s):
+    """One token of ESPN's class vocabulary, APOSTROPHE-FOLDED, ready for an ESPN_FMT_* lookup.
+
+    ESPN writes "Women's T20"; ESPN_FMT_BUCKET is keyed "womens t20". The lookup is an exact dict
+    hit, so it missed on the apostrophe ALONE — and a miss here is not a wrong format, it is NO
+    format: every fixture falls through to _declared_fmt and, for a league whose classId we have
+    not measured and whose name carries no format token, gets DROPPED. That is how WCPL 2026 —
+    the first women's franchise league through the keyless path — ingested 0 of its 8 fixtures
+    (7 Sep 2026). Folds the curly apostrophe too; ESPN uses both."""
+    return re.sub(r"[\u2019']", "", (s or "").strip().lower())
 
 def _fmt_stated(m):
     """The format ESPN STATES for this one fixture — 'T20' | 'ODI' | None. No series fallback.
@@ -111,7 +123,7 @@ def _fmt_stated(m):
     description e.g. "3rd T20I"). Returns None both for "ESPN said Test" and for "ESPN said
     nothing" — use _fmt_skipped to tell those apart."""
     for tok in ((m.get("espn_event_type") or ""), (m.get("espn_class_card") or "")):
-        tok = tok.strip().lower()
+        tok = _fmt_tok(tok)
         if tok in ESPN_FMT_BUCKET:
             return ESPN_FMT_BUCKET[tok]
         if tok in ESPN_FMT_SKIP:
@@ -127,8 +139,7 @@ def _fmt_stated(m):
 
 def _fmt_skipped(m):
     """True when ESPN states a format we deliberately do not ingest (Test / first class)."""
-    toks = [(m.get("espn_event_type") or "").strip().lower(),
-            (m.get("espn_class_card") or "").strip().lower()]
+    toks = [_fmt_tok(m.get("espn_event_type")), _fmt_tok(m.get("espn_class_card"))]
     return any(t in ESPN_FMT_SKIP for t in toks) or "test" in (m.get("name") or "").lower()
 
 def _fmt_of(m):
@@ -298,6 +309,34 @@ def _clean_tour_name(s):
 
 def norm(s):
     return re.sub(r"[^a-z ]", "", (s or "").lower()).strip()
+
+def tour_key(s):
+    """Year-agnostic identity key for a tour NAME. norm() already drops the season year, so the
+    year stamped on at ingest ("Namibia T20I Tri-Series" -> "... 2026") still compares equal;
+    whitespace is collapsed because dropping the year leaves a double space behind."""
+    return re.sub(r"\s+", " ", norm(_clean_tour_name(s))).strip()
+
+def _year_of(s):
+    y = re.findall(r"\b(?:19|20)\d{2}\b", s or "")
+    return y[-1] if y else ""
+
+def same_tour(a, b):
+    """True when two tour NAMES denote the same tour.
+
+    EQUALITY on the year-agnostic key — never substring containment. Containment was the rule
+    until 7 Sep 2026 and it silently swallowed every tour whose name CONTAINS an ingested one:
+    "Women's Caribbean Premier League" contains "Caribbean Premier League", so WCPL 2026 was
+    read as the men's CPL, never entered the new-names list, and NOTHING was logged — the run
+    went green with the tour missing. (cricsheet_archives.py already knew this collision: its
+    longest-wins matcher picked the women's archive for the men's CPL.)
+
+    The explicit-year check is the other half: keys are year-agnostic so a name typed WITHOUT the
+    year still matches, but when both names state a year and the years DIFFER they are different
+    editions — otherwise next season's tour is skipped forever as "already ingested"."""
+    if tour_key(a) != tour_key(b):
+        return False
+    ya, yb = _year_of(a), _year_of(b)
+    return not (ya and yb and ya != yb)
 
 def norm_role(r):
     return ROLE_MAP.get((r or "").strip().lower(), "BAT")
@@ -788,18 +827,27 @@ def status_sheet_new_names(state):
             if ei >= 0 and len(r) > ei:
                 v = re.sub(r"\D", "", (r[ei] or ""))     # tolerate a pasted ESPN URL
                 if v:
-                    ids[norm(_clean_tour_name(nm))] = v
-    existing = {norm(_clean_tour_name(t.get("name", ""))) for t in json.load(open(f"{BOT}/tours.json"))}
-    out, seen = [], set()
+                    ids[tour_key(nm)] = v
+    existing = [t.get("name", "") for t in json.load(open(f"{BOT}/tours.json"))]
+    out, seen, skipped = [], set(), []
     for raw in col_a:
         c = (raw or "").strip()
-        key = norm(_clean_tour_name(c))          # ignore the (Men T20I)/(ODI) suffix for matching
+        key = tour_key(c)                        # ignores the (Men T20I)/(ODI) suffix + the year
         if not key or key in seen:
             continue
         seen.add(key)
-        if key in existing or any(key in en or en in key for en in existing):
-            continue                              # already ingested
+        hit = next((en for en in existing if same_tour(c, en)), None)
+        if hit:
+            skipped.append(f"{c!r} == {hit!r}")
+            continue
         out.append((c, ids.get(key, "")))
+    # ALWAYS say what was skipped. The swallow that lost WCPL 2026 was invisible precisely because
+    # a skip printed nothing: "0 new name(s)" reads identical whether the sheet is empty or a tour
+    # was wrongly matched to another. A wrong rule you can SEE costs one glance; a silent one costs
+    # a season.
+    if skipped:
+        print(f"  from-status-sheet: {len(skipped)} name(s) already ingested, skipped: "
+              f"{'; '.join(skipped)}", file=sys.stderr)
     return out
 
 
