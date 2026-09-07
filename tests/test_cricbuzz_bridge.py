@@ -710,6 +710,15 @@ def test_the_derive_corpus_does_not_lag_the_pin_ledger():
     want = {cbb.match_key(p["cricbuzz_match_id"], ev)
             for p in pins.values() for ev in (p.get("espn_events") or [])}
     assert want, "the pin ledger carries no ESPN event ids at all"
-    assert want - derived == {"cb145088/espn1521203"}, sorted(want - derived)
+    # ⛔ IF THIS IS RED, THE CORPUS IS BEHIND — DO NOT RELAX THE ASSERTION, RUN THE DERIVE.
+    #     python3 registry/cricbuzz_bridge.py --derive --from-map
+    # It is offline wherever the api_cache is warm (CI restores it), because a --derive reads the
+    # ESPN play-by-play the bot already fetched. Left red, the cost is not cosmetic: an underived
+    # pairing means Cricbuzz's rows never resolve to pids for that match, so the L1 SECOND WITNESS
+    # silently goes missing — and with only two cards there is no majority, so every disagreement
+    # that would have closed itself becomes a question for the owner instead.
+    lag = sorted(want - derived - {"cb145088/espn1521203"})
+    assert not lag, (f"{len(lag)} pinned pairing(s) never entered the derive corpus — "
+                     f"run `python3 registry/cricbuzz_bridge.py --derive --from-map`: {lag}")
     # and every pin must carry its event, or the pairing cannot enter the corpus at all
     assert [k for k, p in pins.items() if not p.get("espn_events")] == []

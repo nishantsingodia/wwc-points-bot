@@ -135,16 +135,28 @@ def test_an_empty_dismissal_text_means_not_out(monkeypatch):
 
 
 def test_the_real_lpl_partial_rows_split_into_the_two_expected_shapes():
-    # Regression on live data: 48 rows need only lbwb/dro/dismissed, and 40 are DNPs
-    # (played: False, 0 points) which the L2 loop never reaches at all.
+    """Regression on live data: a partial LPL row is EITHER missing only lbwb/dro/dismissed (a
+    scored row frozen before those joined SETTLED_FIELDS) or missing everything (a DNP the L2 loop
+    never reaches at all). Two shapes, nothing in between — that is the claim.
+
+    ⚠ ASSERT THE SHAPE, NOT THE CENSUS. This used to pin `== 48` and `== 40` exactly, and the
+    write-once store legitimately GROWS: a 41st DNP row appeared on 2026-08-31 when the Lahiru
+    Kumara identity fix gave the corrected pid its own settlement row (the points stayed on the
+    old pid — that fold is still open). An equality on a count turns every such correction into a
+    red build, and a permanently red build is how the next real break goes unread. Floors keep
+    this honest against the live store while still failing if a THIRD shape appears, which is the
+    thing that would actually mean the baseline model had broken."""
     import json, collections, os
     path = os.path.join(os.path.dirname(wc.__file__), "registry", "settlement_snapshots.json")
     rows = [r for r in json.load(open(path))["settlements"]
             if "Lanka" in (r.get("tour") or "") and r.get("fields")]
     shapes = collections.Counter(tuple(k for k in CRIT if k not in r["fields"]) for r in rows)
-    assert shapes[("lbwb", "dro", "dismissed")] == 48
-    dnp = [s for s in shapes if len(s) == 15]
-    assert len(dnp) == 1 and shapes[dnp[0]] == 40
+    partial = {sh: n for sh, n in shapes.items() if sh}
+    assert set(partial) == {("lbwb", "dro", "dismissed")} | {s for s in partial if len(s) == 15}, \
+        f"an unexpected partial shape appeared: {sorted(set(partial))}"
+    assert partial[("lbwb", "dro", "dismissed")] >= 48
+    dnp = [s for s in partial if len(s) == 15]
+    assert len(dnp) == 1 and partial[dnp[0]] >= 40
     for r in rows:
         if tuple(k for k in CRIT if k not in r["fields"]) == dnp[0]:
             assert r["fields"].get("played") is False and r["points"] == 0
