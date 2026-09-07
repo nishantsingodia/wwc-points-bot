@@ -1245,11 +1245,38 @@
   },
   {
    "tour": "Caribbean Premier League 2026",
+   "match_key": "2026-09-06::barbados tridents|st lucia kings",
+   "match": "Match 29 — MTBAR v MTSTL",
+   "date": "2026-09-06",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-09-07",
+   "provenance": "live"
+  },
+  {
+   "tour": "Caribbean Premier League 2026",
    "match_key": "2026-09-06::barbados tridents|trinbago knight riders",
    "match": "Match 27 — MTBAR v MTTRI",
    "date": "2026-09-06",
    "first_status": "COMPLETED_FLAGGED",
    "first_seen": "2026-09-06",
+   "provenance": "live"
+  },
+  {
+   "tour": "Caribbean Premier League 2026",
+   "match_key": "2026-09-06::guyana amazon warriors|st kitts and nevis patriots",
+   "match": "Match 28 — MTGUY v MTSTK",
+   "date": "2026-09-06",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-09-07",
+   "provenance": "live"
+  },
+  {
+   "tour": "European T20 Premier League 2026",
+   "match_key": "2026-09-06::amsterdam flames|rotterdam dockers",
+   "match": "Match 17 — MTAMS v MTROT",
+   "date": "2026-09-06",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-09-07",
    "provenance": "live"
   },
   {
