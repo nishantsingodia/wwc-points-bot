@@ -128,17 +128,25 @@ def test_the_provisional_publish_that_froze_913_rows_no_longer_freezes(wcmod):
     assert wcmod.classify_recon_state(False, {}, (), {}, {}) == "L1_DONE"
 
 
-def test_an_l1_gap_stops_blocking_once_the_official_card_is_in(wcmod):
-    """A gap that can never be answered must never be able to block. The Recon tab only queues an
-    L1 row `if unresolved and not cs_path`, and apply_recon_overrides writes into the perf dicts
-    emit() scores — which on a cricsheet run hold the OFFICIAL figures, so an answer given after
-    cricsheet lands would overwrite the official card with a provisional feed. Left as L1_OPEN,
-    those 15 matches / 496 rows (measured 16 Aug 2026) would publish COMPLETED and never freeze a
-    baseline, forever, with nothing for a human to click."""
+def test_an_open_l1_stays_open_even_once_the_official_card_is_in(wcmod):
+    """RESTORED 8 Sep 2026, reverting the 16 Aug relaxation. The stages run in order: L1 closes,
+    base points freeze on the RECONCILED value, then cricsheet is measured against it.
+
+    16 Aug had two real objections to holding L1 open on a cricsheet run, and both are answered:
+      • "an answer would overwrite the official card" — apply_recon_overrides now runs on a COPY
+        once cs_path is set, so an L1 answer feeds the BASELINE and never the emitted figures.
+      • "L1_OPEN with no row to click" — build_recon_rows is called whether or not cricsheet is
+        in, and l1_auto_resolved silently closes every gap the official card has already settled,
+        so a gap that survives to the tab is one a human can actually answer.
+    Skipping L1 is what let ETPL Match 11 freeze on a truncated ESPN cut and then bill the owner
+    for the difference at L2, against a baseline nobody was ever shown."""
     gaps = {"ci:1": "runs 38/57"}
     assert wcmod.classify_recon_state(False, gaps, (), {}, {}) == "L1_OPEN"      # no card yet
-    assert wcmod.classify_recon_state("cs.json", gaps, (), {}, {}) == "L2_DONE"  # card in: moot
-    # ...but the two things cricsheet CANNOT answer still hold L1 open on a cricsheet run.
+    assert wcmod.classify_recon_state("cs.json", gaps, (), {}, {}) == "L1_OPEN"  # card in: STILL open
+    # L1 done + card in -> the L2 axis takes over, exactly as before.
+    assert wcmod.classify_recon_state("cs.json", {}, (), {}, {}) == "L2_DONE"
+    assert wcmod.classify_recon_state("cs.json", {}, (), {"ci:1": "d"}, {}) == "L2_PENDING"
+    # ...and the two things cricsheet CANNOT answer still hold L1 open on a cricsheet run.
     assert wcmod.classify_recon_state("cs.json", {}, {("A", "X")}, {}, {}) == "L1_OPEN"
     assert wcmod.classify_recon_state("cs.json", {}, (), {}, {},
                                       unattributed=[("ci:9", {})]) == "L1_OPEN"

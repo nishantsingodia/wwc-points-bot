@@ -199,12 +199,13 @@ def test_empty_unattributed_leaves_recon_state_identical(wcmod):
     for (cs, unres, uns, pairs, appr) in itertools.product(
             ["", "cs.json"], [{}, {"p": "g"}], [set(), {("A", "X")}],
             [{}, {"ci:1": "d"}], [{}, {"ci:1": "S2"}]):
-        # `unres and not cs`, not `unres`: 16 Aug 2026, an unresolved L1 gap stopped opening L1
-        # once the official card is in — the Recon tab refuses to queue that row on a cricsheet
-        # run and an answer to it would overwrite cricsheet with a provisional feed, so it was an
-        # open question with no row and no safe answer. See classify_recon_state. This test's own
-        # claim is unchanged: passing `unattributed=()` must be identical to not passing it.
-        legacy = ("L1_OPEN" if ((unres and not cs) or uns) else
+        # `unres`, not `unres and not cs`: the 16 Aug relaxation was REVERTED on 8 Sep 2026 and
+        # an open L1 gap opens L1 again whether or not the official card is in — the stages run
+        # in order, and both objections that forced the relaxation are answered (an answer can no
+        # longer overwrite the official card, and a surviving gap always has a row). See
+        # classify_recon_state. This test's own claim is unchanged either way: passing
+        # `unattributed=()` must be identical to not passing it.
+        legacy = ("L1_OPEN" if (unres or uns) else
                   "L1_DONE" if not cs else
                   ("L2_PENDING" if any(p not in appr for p in pairs) else "L2_DONE"))
         assert wcmod.classify_recon_state(cs, unres, uns, pairs, appr) == legacy

@@ -2742,8 +2742,19 @@ def classify_recon_state(cs_path, unresolved, unsourced, l2_pairs, l2_appr, unat
     the sheet at all, and cricsheet posting cannot un-drop a player the pipeline never attributed."""
     if unsourced or unattributed:
         return "L1_OPEN"
+    # AN OPEN L1 IS OPEN, cricsheet or no cricsheet (restored 8 Sep 2026). The stages run in
+    # order: L1 closes, base points freeze on the reconciled value, THEN cricsheet is measured
+    # against it. Letting cs_path skip straight past L1 is what froze baselines on unreconciled
+    # provisional cuts and then raised L2 rows against them.
+    # The two objections that forced the 16 Aug relaxation are both answered now: an answer given
+    # after cricsheet lands no longer overwrites the official card (apply_recon_overrides runs on
+    # a COPY once cs_path is set), and L1_OPEN is no longer announced with nothing to click —
+    # build_recon_rows is called whether or not cricsheet is in, and l1_auto_resolved silently
+    # closes every gap the official card has already settled, so what is left is answerable.
+    if unresolved:
+        return "L1_OPEN"
     if not cs_path:
-        return "L1_OPEN" if unresolved else "L1_DONE"
+        return "L1_DONE"
     return "L2_PENDING" if any(pid not in l2_appr for pid in l2_pairs) else "L2_DONE"
 
 RECON_STATE_LABEL = {"L1_OPEN": "⏳ L1 recon open", "L1_DONE": "✅ L1 recon done",
@@ -2953,6 +2964,41 @@ def three_feed_columns(feeds, fields):
             " · ".join(cols["cricsheet"]), " ; ".join(verdicts))
 
 
+def l1_auto_resolved(unresolved, wit_pid, espn_pid, cs_pid, fields):
+    """L1 disagreements the OFFICIAL CARD has already broken the tie on. {pid: {field: value}}.
+
+    At L1 there are two provisional cards and, by definition of an L1 gap, they differ. cricsheet
+    is the third: it either matches one of them — a majority, and the question is answered — or it
+    matches neither, which is a real three-way split and the only kind worth the owner's time.
+
+    THIS IS WHAT MAKES THE ORDERING AFFORDABLE. Restoring "L1 must close before L2 opens" without
+    it would put 225 field-comparisons across 74 matches back on the tab in one go, which is the
+    same 496-row pile-up the 16 Aug escape hatch was fleeing from, just wearing a different coat.
+    With it, the same backlog is 5 rows — every other one has a third card agreeing with a side.
+
+    A player is only dropped from `unresolved` when EVERY one of his material gaps is settled.
+    Partly-answered is not answered: he keeps his row, and it carries all three numbers."""
+    out = {}
+    for pid in unresolved:
+        c, e = wit_pid.get(pid) or {}, espn_pid.get(pid) or {}
+        o = cs_pid.get(pid) or {}
+        if not o:
+            continue                       # no official card for this player: nothing to break the tie
+        settled, all_settled = {}, True
+        for f in fields:
+            cv, ev = c.get(f, 0), e.get(f, 0)
+            if not _l1_field_material(f, cv, ev):
+                continue
+            val, _, who = feed_concurrence({"espn": ev, "cricbuzz": cv, "cricsheet": o.get(f)})
+            if val is None or "cricsheet" not in who:
+                all_settled = False
+                break
+            settled[f] = val
+        if all_settled and settled:
+            out[pid] = settled
+    return out
+
+
 def _l2_takes_official(src):
     """Does this stored answer mean 'accept the official cricsheet card'?
 
@@ -3003,7 +3049,7 @@ def reconciled_provisional(prov_pid, wit_pid, espn_pid, l1_gaps, match_key, over
     return recon
 
 def build_recon_rows(match_key, label, mdate, tour, unresolved, wit_pid, espn_pid,
-                     fields=None, witness="cricbuzz"):
+                     fields=None, witness="cricbuzz", cs_pid=None):
     """ONE row per (player, differing field) — NO whole-match collapse. A match where neither
     feed is wholly right (some players' correct value is the witness, others ESPN — e.g. Match 23)
     can only be resolved per-player, and even a 'whole-match freeze' flags just the handful of
@@ -3021,15 +3067,19 @@ def build_recon_rows(match_key, label, mdate, tour, unresolved, wit_pid, espn_pi
             cv, ev = c.get(field, 0), e.get(field, 0)
             if _l1_field_material(field, cv, ev):
                 lbl = RECON_LABEL.get(field, field)
-                _, verdict, _ = feed_concurrence({"espn": ev, "cricbuzz": cv, "cricsheet": None})
+                # The official card, WHEN IT IS IN. An L1 row can now outlive cricsheet's arrival
+                # (it survives only when all three differ), and a row that hid the third number
+                # while the tab has a column for it would be the old two-slot problem back again.
+                ov = ((cs_pid or {}).get(pid) or {}).get(field)
+                _, verdict, _ = feed_concurrence({"espn": ev, "cricbuzz": cv, "cricsheet": ov})
                 rows.append({"match_key": match_key, "tour": tour, "match": label, "date": mdate,
                              "pid": pid, "full": PID2DISP.get(pid, pid),
                              "param": lbl, "field": field,
                              "espn": f"{lbl} {ev}", "cricbuzz": f"{lbl} {cv}",
-                             # Blank, not "·": at L1 the official card has not posted. An empty
-                             # cell reads as "not in yet", which is the truth; a dot would read
-                             # as "cricsheet measured nothing", which is a different claim.
-                             "cricsheet": "",
+                             # Blank when the official card has not posted — that reads as "not
+                             # in yet", which is the truth. A dot would say "cricsheet measured
+                             # nothing", a different claim. Once it IS in, show the number.
+                             "cricsheet": ("" if ov is None else f"{lbl} {ov}"),
                              "verdict": (f"{lbl}: {verdict}"
                                          + ("" if witness == "cricbuzz"
                                             else f"  [2nd witness is {witness}, not Cricbuzz]")),
@@ -3817,10 +3867,30 @@ def run_tour(tour):
             if pp and pp not in role_by_pid:
                 role_by_pid[pp] = role_ if role_ != "?" else (ROLE_OVERRIDE.get(norm(name_)) or "?")
         override_sources = {}   # pid -> {field: 'S1'|'S2'|'Manual'}, frozen with the settled row
-        applied = apply_recon_overrides(perf_by_pid, wit_pid, espn_pid, l1_gaps, mk,
+        # ⛔ TWO JOBS, AND THEY MUST COME APART ONCE CRICSHEET IS IN (restored 8 Sep 2026).
+        # apply_recon_overrides both (a) establishes the reconciled-L1 value and (b) MUTATES the
+        # perf dicts emit() scores. While cricsheet has not posted those are the same thing — the
+        # reconciled value IS what ships. Once it has, `perf_by_pid` holds the OFFICIAL figures,
+        # and (b) becomes destructive: an L1 answer would write a provisional feed's number over
+        # the official card.
+        # Unable to separate them, the 16 Aug change stopped asking L1 at all once cs_path was
+        # set. That is what let a match freeze on a raw, sometimes TRUNCATED ESPN cut (ETPL Match
+        # 11) and then bill the owner for the difference at L2, against a baseline nobody was
+        # ever shown. Applying to a COPY keeps (a) — `applied`, `override_sources`, and therefore
+        # the freeze gate — exactly as before, and drops (b) precisely where it does damage.
+        _apply_to = (perf_by_pid if not cs_path
+                     else {k: dict(v) for k, v in perf_by_pid.items() if v})
+        applied = apply_recon_overrides(_apply_to, wit_pid, espn_pid, l1_gaps, mk,
                                         RECON_OVERRIDES, sources_out=override_sources,
                                         fields=wit_fields)
         unresolved = {pid: g for pid, g in l1_gaps.items() if pid not in applied}
+        # ...and the official card answers the rest of them for free.
+        l1_auto = l1_auto_resolved(unresolved, wit_pid, espn_pid, cs_pid, wit_fields) if cs_pid else {}
+        if l1_auto:
+            unresolved = {pid: g for pid, g in unresolved.items() if pid not in l1_auto}
+            _n = sum(len(v) for v in l1_auto.values())
+            print(f"  {label}: L1 — the official card broke the tie on {_n} field(s) across "
+                  f"{len(l1_auto)} player(s); no row raised for those", file=sys.stderr)
         # L2 baseline = the L1-RECONCILED provisional cut (raw cricapi+ESPN with the approved L1
         # override applied) — exactly what people saw. Comparing cricsheet against THIS (not raw
         # cricapi) keeps an official figure that confirms an approved correction silent, and flags
@@ -3865,7 +3935,15 @@ def run_tour(tour):
         l2_unverified = {}
         l2_concurred = {}     # pid -> {field: agreed_value} settled by 2-of-3, no human needed
         l2_feeds = {}         # pid -> {field: {feed: value}} — the evidence the tab renders
-        if cs_pid:
+        # ⛔ NOT MERELY THE ROWS — THE WHOLE L2 STAGE WAITS FOR L1 (caught by the ordering
+        # integration test, 8 Sep 2026). Gating only the review rows left `l2_pairs` populated,
+        # and the L2 HOLD below fires on `if cs_path and l2_pairs`. So while L1 was still open the
+        # hold wrote the un-reconciled provisional value straight over cricsheet's figures in
+        # `perf_by_pid` — and because those perf dicts are SHARED with cs_pid, it corrupted the
+        # official card in place: the surviving L1 row then displayed ESPN's number in its
+        # Cricsheet column. L2 measures movement away from a SETTLED baseline; until L1 closes
+        # there is no such baseline, so there is nothing for L2 to measure and nothing to hold.
+        if cs_pid and not unresolved:
             for pid in cs_pid:
                 base = _l2_baseline(pid)
                 # ── THE THREE FEEDS, SIDE BY SIDE (4 Sep 2026) ────────────────────────────────
@@ -3905,11 +3983,19 @@ def run_tour(tour):
                 if _unv:
                     l2_unverified[pid] = sorted(set(_unv))
                 if not g:
-                    # Nothing in the compared field list moved — but did the SCORED TOTAL?
-                    # Anchored on the SETTLED total, never a re-score of the baseline: see
-                    # points_gap's `a_total` note for the Test phantom-row class that fixes.
-                    g = points_gap(base, cs_pid[pid], role_by_pid.get(pid, "?") or "?",
-                                   a_total=settled_points(mk, pid))
+                    # Nothing LEFT in the compared field list moved — but did the SCORED TOTAL?
+                    # The backstop exists to catch a move driven by a field nobody thought to
+                    # list. It must NOT re-raise the moves concurrence just adopted: those fields
+                    # are excluded from `_ask`, so the totals differ by exactly the correction two
+                    # sources agreed on, and comparing raw would hand back a "pts X→Y" row with an
+                    # EMPTY field list — a question with nothing in it to answer.
+                    # So adopt the agreed values into the baseline first. Once they are adopted,
+                    # the settled total no longer describes that dict and the re-score is the only
+                    # honest comparison; with nothing adopted, the settled total still wins (see
+                    # points_gap's `a_total` note and the Test phantom-row class).
+                    _base_cmp = dict(base, **_agreed) if (base and _agreed) else base
+                    g = points_gap(_base_cmp, cs_pid[pid], role_by_pid.get(pid, "?") or "?",
+                                   a_total=(None if _agreed else settled_points(mk, pid)))
                 if g:
                     l2_pairs[pid] = g
         if n_legacy:
@@ -4087,9 +4173,10 @@ def run_tour(tour):
                   + ". Answer the Recon Review row(s) and the baseline freezes on the next run.",
                   file=sys.stderr)
         # Queue review rows for UNRESOLVED gaps (skip ones already approved+acked).
-        if unresolved and not cs_path and not is_live:
+        if unresolved and not is_live:
             new_rows = build_recon_rows(mk, label, mdate, CURRENT_TOUR, unresolved,
-                                        wit_pid, espn_pid, fields=wit_fields, witness=witness)
+                                        wit_pid, espn_pid, fields=wit_fields, witness=witness,
+                                        cs_pid=cs_pid)
             RECON_REVIEW.extend(r for r in new_rows
                                 if (mk, r.get("pid", ""), r.get("param", "")) not in RECON_ACK)
         # Which fields is each player actually being asked about? (The gap string is for the
@@ -4113,7 +4200,12 @@ def run_tour(tour):
             _asked[pid] = [f for f in RECON_L2
                            if f not in agreed and f in (l2_feeds.get(pid) or {})
                            and _disputed(f)]
-        for pid, g in l2_pairs.items():
+        # ⇒⇒ L2 OPENS ONLY ONCE L1 HAS CLOSED ⇐⇐. "What does the official card change?" is a
+        # question about a SETTLED number, so it cannot be asked before there is one. Asking both
+        # at once is how the owner ended up adjudicating the same field twice — once as
+        # "cricbuzz 35 or espn 25", then again as "was 25, now 35" — with the second ask quoting
+        # a baseline that only existed because the first was never answered.
+        for pid, g in (l2_pairs.items() if not unresolved else ()):
             # ⛔ ANSWERED IS ANSWERED — `pid not in l2_appr`, never `!= "S2"`. The tab offers
             # THREE answers (S1 = keep what was settled, S2 = take cricsheet, Manual) and all
             # three are decisions the ledger stores. Testing for S2 meant only S2 ever closed a
