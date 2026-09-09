@@ -1071,6 +1071,45 @@
         "European T20 Premier League 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:1161031",
+      "display": "Saim Ayub",
+      "aliases": [
+        "saim ayub"
+      ],
+      "team": "TPAK",
+      "role": "BAT",
+      "tours": [
+        "England vs Pakistan Men's Test 2026"
+      ],
+      "source": "auto"
+    },
+    {
+      "pid": "ci:916727",
+      "display": "Mohammad Imran Randhawa",
+      "aliases": [
+        "mohammad imran randhawa"
+      ],
+      "team": "TPAK",
+      "role": "AR",
+      "tours": [
+        "England vs Pakistan Men's Test 2026"
+      ],
+      "source": "auto"
+    },
+    {
+      "pid": "ci:1510715",
+      "display": "Razaullah",
+      "aliases": [
+        "razaullah"
+      ],
+      "team": "TPAK",
+      "role": "AR",
+      "tours": [
+        "England vs Pakistan Men's Test 2026"
+      ],
+      "source": "auto"
     }
   ]
 }
