@@ -132,3 +132,66 @@ def test_no_ball_detection_reads_the_marker_not_the_commentary(wcmod, monkeypatc
 
     assert perf[wcmod.norm("Test Bowler")]["balls"] == (1 if legal else 0)
     assert perf[wcmod.norm("Bat One")]["r"] == (1 if legal else 0)
+
+
+# ── RED BALL: a batter is dismissed ONCE PER INNINGS ──────────────────────────────────────────
+def test_a_second_innings_dismissal_is_credited_too(wcmod, monkeypatch):
+    """WHAT WENT WRONG — ENG v PAK 2026, Tests 1 and 2. `card[k]` carries only the FIRST innings
+    a batter batted in (espn_batting_card keeps the rest in `innings`), and the credit loop read
+    `c` alone. So every dismissal in a side's SECOND innings was credited to nobody:
+
+        ev1496582  catches  Lawrence 0/2, Cox 0/2, Root 0/1, Smith 0/1, Duckett 0/1, Brook 1/2
+                   wickets  Robinson 5/8, Tongue 5/8, Archer 0/3, Atkinson 0/1
+        ev1496583  a further 7 catches, and Mohammad Abbas published 4 wickets of 9
+
+    The catches are POINTS — _test_fielding reads them off this row — and the two Tests published
+    120 FP light. The wickets are the published column only (the per-innings buckets, filled from
+    the same `innings` list, are what _score_test bills bowling from), but a Wickets column that
+    reads 5 next to a 8-wicket match is its own kind of wrong, and L2 recon compares it.
+    """
+    summary = _summary([
+        # out in innings 1 (c Slip b Seamer) and AGAIN in innings 3 (lbw b Spinner)
+        _player(1, "Twice Out", [
+            _bat_ls_full(3, "c", "c Slip b Seamer", bowler=(900, "Test Bowler"),
+                         fielders=[(701, "First Slip", False)], period=1),
+            _bat_ls_full(3, "lbw", "lbw b Test Bowler", bowler=(900, "Test Bowler"), period=3),
+        ]),
+        _player(701, "First Slip", []),
+        _player(900, "Test Bowler", [_bowl_ls(6, period=1)]),
+    ])
+    items = [_ball(i, "Twice Out", "Test Bowler") for i in range(5)]
+    items.append(_ball(5, "Twice Out", "Test Bowler", dismissal=("caught", "Twice Out")))
+    _install(wcmod, monkeypatch, items, summary)
+
+    prev = wcmod.CURRENT_FMT
+    wcmod.CURRENT_FMT = "TEST"
+    try:
+        perf, _ = wcmod.parse_espn("ev-red-ball-two-innings")
+    finally:
+        wcmod.CURRENT_FMT = prev
+
+    bowler = perf[wcmod.norm("Test Bowler")]
+    assert bowler["w"] == 2, "the second-innings wicket never reached the match row"
+    assert bowler["lbwb"] == 1, "the lbw bonus is per dismissal, not per player"
+    assert perf[wcmod.norm("First Slip")]["catches"] == 1
+    # and the per-innings buckets _score_test actually bills bowling from still hold one each
+    assert [i["w"] for i in bowler["innings"]] == [1, 1]
+
+
+def test_white_ball_credit_is_unchanged_by_the_per_innings_loop(wcmod, monkeypatch):
+    """The same loop runs for T20/ODI, where `innings` is a 1-element list holding exactly the
+    top-level entry. One dismissal in, one credit out — no double-count."""
+    summary = _summary([
+        _player(1, "Bat One", [_bat_ls_full(1, "c", "c Keeper b Test Bowler",
+                                            bowler=(900, "Test Bowler"),
+                                            fielders=[(702, "The Keeper", False)])]),
+        _player(900, "Test Bowler", [_bowl_ls(6, period=2)]),
+    ])
+    items = [_ball(i, "Bat One", "Test Bowler") for i in range(5)]
+    items.append(_ball(5, "Bat One", "Test Bowler", dismissal=("caught", "Bat One")))
+    _install(wcmod, monkeypatch, items, summary)
+
+    perf, _ = wcmod.parse_espn("ev-white-ball-single-innings")
+
+    assert perf[wcmod.norm("Test Bowler")]["w"] == 1
+    assert perf[wcmod.norm("The Keeper")]["catches"] == 1

@@ -1526,48 +1526,68 @@ def _apply_dismissal_credit(event_id, get, card, pbp_credit):
     fallback fires 0 times — every one of 837 'c', 234 'bowled', 82 'lbw' and 38 'st' carries its
     bowler id, and every 'c'/'st' exactly one fielder id (11 of which are SUBSTITUTES, who own no
     other row in the payload and were previously resolved by name similarity alone)."""
-    fell_back = set()
+    # ⛔ ONE DISMISSAL PER INNINGS, NOT ONE PER PLAYER. `card[k]` describes only the FIRST innings
+    # the batter batted in — espn_batting_card says so in as many words and keeps the rest in
+    # `innings` — so reading `c` alone credited the first innings and SILENTLY DROPPED every
+    # dismissal in the second. White ball cannot reach a second innings (`innings` is a 1-element
+    # list holding exactly the top-level entry), so this loop is byte-identical there; red ball is
+    # where it bites, and it bit hard. ENG v PAK Test 1 (ev1496582), before → after:
+    #   catches   Lawrence 0→2, Cox 0→2, Brook 1→2, Root 0→1, Smith 0→1, Duckett 0→1   (+64 FP)
+    #   wickets   Robinson 5→8, Tongue 5→8, Archer 0→3, Atkinson 0→1
+    # Test 2 (ev1496583) lost a further 56 FP of catches the same way. The WICKETS above are the
+    # published column, not the points: _score_test bills bowling off the per-innings buckets,
+    # which the red-ball pass in parse_espn fills correctly from this same `innings` list. The
+    # CATCHES *are* points — _test_fielding reads them off the match row, which is this row.
+    fell_back = {}          # victim key -> {index of each dismissal the card could not adjudicate}
     for k, c in card.items():
-        cd = (c.get("card") or "").strip().lower()
-        if cd in ESPN_NOT_OUT_CARDS or not c.get("dismissed"):
-            continue
-        if cd not in ESPN_KNOWN_CARDS:
-            print(f"  espn {event_id}: unknown dismissalCard {cd!r} for {c['name']} — keeping the "
-                  f"ball-by-ball's credit for it", file=sys.stderr)
-            fell_back.add(k)
-            continue
-        if cd in ESPN_BOWLER_WKT_CARDS:
-            bw = c.get("bowler")
-            if not bw:
-                fell_back.add(k)
-                print(f"  espn {event_id}: scorecard says {c['name']} was out {cd!r} but names no "
-                      f"bowler — falling back to the ball-by-ball for this dismissal",
-                      file=sys.stderr)
+        for _i, ent in enumerate(c.get("innings") or [c]):
+            cd = (ent.get("card") or "").strip().lower()
+            if cd in ESPN_NOT_OUT_CARDS or not ent.get("dismissed"):
                 continue
-            p = get(bw[0], bw[1]); p["played"] = True; p["w"] += 1   # he bowled the delivery
-            if cd in ("bowled", "lbw"):
-                p["lbwb"] += 1
-        if cd in ("c", "st"):
-            fl = c.get("fielders") or []
-            if not fl:
-                print(f"  espn {event_id}: scorecard says {c['name']} was out {cd!r} but names no "
-                      f"fielder — the catch/stumping is UNATTRIBUTED", file=sys.stderr)
-            for fn, fid in fl:
-                # ⛔ NO `played = True` HERE. `played` is the +4 in-XI bonus, and 11 of the
-                # fielders this loop credits across the cached corpus are SUBSTITUTES with no
-                # roster entry at all (ev1521240: "c sub (EG Barnard) b Ellis", athlete id
-                # 578769). A sub fields but is not in the XI: setting played gave Barnard +4 he
-                # had not earned, against cricsheet, and the ball-by-ball path it replaces never
-                # set it either. The catch itself is scored unconditionally.
-                get(fn, fid)["catches" if cd == "c" else "stumpings"] += 1
+            if cd not in ESPN_KNOWN_CARDS:
+                print(f"  espn {event_id}: unknown dismissalCard {cd!r} for {c['name']} — keeping the "
+                      f"ball-by-ball's credit for it", file=sys.stderr)
+                fell_back.setdefault(k, set()).add(_i)
+                continue
+            if cd in ESPN_BOWLER_WKT_CARDS:
+                bw = ent.get("bowler")
+                if not bw:
+                    fell_back.setdefault(k, set()).add(_i)
+                    print(f"  espn {event_id}: scorecard says {c['name']} was out {cd!r} but names no "
+                          f"bowler — falling back to the ball-by-ball for this dismissal",
+                          file=sys.stderr)
+                    continue
+                p = get(bw[0], bw[1]); p["played"] = True; p["w"] += 1   # he bowled the delivery
+                if cd in ("bowled", "lbw"):
+                    p["lbwb"] += 1
+            if cd in ("c", "st"):
+                fl = ent.get("fielders") or []
+                if not fl:
+                    print(f"  espn {event_id}: scorecard says {c['name']} was out {cd!r} but names no "
+                          f"fielder — the catch/stumping is UNATTRIBUTED", file=sys.stderr)
+                for fn, fid in fl:
+                    # ⛔ NO `played = True` HERE. `played` is the +4 in-XI bonus, and 11 of the
+                    # fielders this loop credits across the cached corpus are SUBSTITUTES with no
+                    # roster entry at all (ev1521240: "c sub (EG Barnard) b Ellis", athlete id
+                    # 578769). A sub fields but is not in the XI: setting played gave Barnard +4 he
+                    # had not earned, against cricsheet, and the ball-by-ball path it replaces never
+                    # set it either. The catch itself is scored unconditionally.
+                    get(fn, fid)["catches" if cd == "c" else "stumpings"] += 1
     # Dismissals the scorecard could not adjudicate keep exactly what the ball-by-ball gave them.
     for k, crs in pbp_credit.items():
-        if k in card and k not in fell_back:
+        _fb = fell_back.get(k)
+        if k in card and not _fb:
             continue
         if k not in card and card:
             print(f"  espn {event_id}: ball-by-ball has a dismissal for {k!r} that the scorecard "
                   f"does not carry — keeping its ball-by-ball credit", file=sys.stderr)
-        for cr in crs:
+        for _i, cr in enumerate(crs):
+            # PER DISMISSAL, not per player. `crs` and the card's `innings` are both in dismissal
+            # order, so index i is the same dismissal in both: a batter the card answered for in
+            # one innings and not the other must keep the ball-by-ball's credit for ONLY the
+            # innings it could not answer, or the answered one is credited twice.
+            if k in card and _i not in _fb:
+                continue
             if cr["wkt"]:
                 nm, aid, lbwb = cr["wkt"]
                 p = get(nm, aid); p["w"] += 1
@@ -3267,6 +3287,14 @@ ESPN_LIST_FORWARD   = 14     # days ahead to list upcoming fixtures (for the ann
 # until late August. White-ball tours play every few days and never hit this. The scan is still
 # bounded by the tour's own `ends`, so the wider window costs only a few scoreboard reads.
 ESPN_LIST_FORWARD_TEST = 45
+# ...and the SAME GAP EXISTS BACKWARDS, which is the half that was missed. The back-scan walks day
+# by day from today and gives up after ESPN_LIST_BACK_STOP empty ones — 8. ENG v PAK's 2nd Test
+# ended 30 Aug and the 3rd began 9 Sep: nine empty days. So from 7 Sep the scan hit 8 empties at
+# 1 Sep and stopped one day short of the 2nd Test, the fixture list collapsed from 3 to 1, and
+# because emit() clears the tab before writing, Tests 1 and 2 were ERASED from the sheet and the
+# 3rd was relabelled "Match 1" (labels are the list index). A wider stop is the fallback; the real
+# bound is the tour's own declared `starts`, honoured below.
+ESPN_LIST_BACK_STOP_TEST = 20
 
 def _espn_event_to_match(e):
     """One ESPN scoreboard event -> one cricapi-matchList-shaped dict (minus the cricapi id)."""
@@ -3343,10 +3371,18 @@ def espn_match_list(tour, squad_team_names):
         floor_d = date.fromisoformat(tour.get("starts") or "")
     except ValueError:
         floor_d = None
+    # ⛔ A DECLARED `starts` IS THE BOUND, AND THE EMPTY-RUN STOP MUST NOT PRE-EMPT IT. tours.json
+    # states when this competition began; an empty day inside that window is a rest day, not
+    # evidence the tour has not started. The stop exists only for tours that declare no `starts`,
+    # where there is nothing else to bound the walk (ESPN_LIST_MAX_BACK still caps it). Honouring
+    # the floor costs one scoreboard read per rest day and buys back every multi-week gap —
+    # see ESPN_LIST_BACK_STOP_TEST for the one that erased two Tests from a live sheet.
+    back_stop = (ESPN_LIST_BACK_STOP_TEST if (CURRENT_FMT or "").upper() == "TEST"
+                 else ESPN_LIST_BACK_STOP)
     d = min(today, end_d)
     for _ in range(ESPN_LIST_MAX_BACK):
         empty_run = 0 if scan(d) else empty_run + 1
-        if empty_run >= ESPN_LIST_BACK_STOP:
+        if not floor_d and empty_run >= back_stop:
             break
         d -= timedelta(days=1)
         if floor_d and d < floor_d:
