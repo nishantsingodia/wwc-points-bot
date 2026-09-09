@@ -89969,6 +89969,23 @@
    "match": "Match 1 — TENG v TPAK",
    "date": "2026-08-19",
    "team": "TPAK",
+   "pid": "ci:916727",
+   "full": "Mohammad Imran Randhawa",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-09",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-19::england|pakistan",
+   "tour": "England vs Pakistan Men's Test 2026",
+   "match": "Match 1 — TENG v TPAK",
+   "date": "2026-08-19",
+   "team": "TPAK",
    "pid": "ci:323389",
    "full": "Mohammad Rizwan",
    "points": 101,
@@ -90043,6 +90060,40 @@
    "status": "COMPLETED_FLAGGED",
    "source": "ESPN scorecard · ⏳ provisional (dots unverified, awaiting cricsheet) · cricbuzz cross-checked (0 players)",
    "frozen_at": "2026-08-23",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-19::england|pakistan",
+   "tour": "England vs Pakistan Men's Test 2026",
+   "match": "Match 1 — TENG v TPAK",
+   "date": "2026-08-19",
+   "team": "TPAK",
+   "pid": "ci:1510715",
+   "full": "Razaullah",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-09",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-19::england|pakistan",
+   "tour": "England vs Pakistan Men's Test 2026",
+   "match": "Match 1 — TENG v TPAK",
+   "date": "2026-08-19",
+   "team": "TPAK",
+   "pid": "ci:1161031",
+   "full": "Saim Ayub",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-09",
    "provenance": "live",
    "fields": {
     "played": false
@@ -102583,6 +102634,23 @@
    "match": "Match 2 — TENG v TPAK",
    "date": "2026-08-27",
    "team": "TPAK",
+   "pid": "ci:916727",
+   "full": "Mohammad Imran Randhawa",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-09",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-27::england|pakistan",
+   "tour": "England vs Pakistan Men's Test 2026",
+   "match": "Match 2 — TENG v TPAK",
+   "date": "2026-08-27",
+   "team": "TPAK",
    "pid": "ci:323389",
    "full": "Mohammad Rizwan",
    "points": 30,
@@ -102657,6 +102725,40 @@
    "status": "COMPLETED_FLAGGED",
    "source": "ESPN scorecard · ⏳ provisional (dots/maidens unverified, awaiting cricsheet)",
    "frozen_at": "2026-08-30",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-27::england|pakistan",
+   "tour": "England vs Pakistan Men's Test 2026",
+   "match": "Match 2 — TENG v TPAK",
+   "date": "2026-08-27",
+   "team": "TPAK",
+   "pid": "ci:1510715",
+   "full": "Razaullah",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-09",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-27::england|pakistan",
+   "tour": "England vs Pakistan Men's Test 2026",
+   "match": "Match 2 — TENG v TPAK",
+   "date": "2026-08-27",
+   "team": "TPAK",
+   "pid": "ci:1161031",
+   "full": "Saim Ayub",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-09",
    "provenance": "live",
    "fields": {
     "played": false
