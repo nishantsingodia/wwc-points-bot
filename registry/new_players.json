@@ -1110,6 +1110,19 @@
         "England vs Pakistan Men's Test 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:308251",
+      "display": "David Willey",
+      "aliases": [
+        "david jonathan willey"
+      ],
+      "team": "MTDUB",
+      "role": "AR",
+      "tours": [
+        "European T20 Premier League 2026"
+      ],
+      "source": "auto"
     }
   ]
 }
