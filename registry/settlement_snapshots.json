@@ -98452,6 +98452,23 @@
    "match": "Match 1 — MTROT v MTAMS",
    "date": "2026-08-26",
    "team": "MTROT",
+   "pid": "ci:337790",
+   "full": "Hendrik Erasmus van der Dussen",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-10",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-26::amsterdam flames|rotterdam dockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 1 — MTROT v MTAMS",
+   "date": "2026-08-26",
+   "team": "MTROT",
    "pid": "ci:1448923",
    "full": "Jai Moondra",
    "points": 7,
@@ -102116,6 +102133,23 @@
     "bat_order": 0,
     "dismissal": "",
     "dismissed": false
+   }
+  },
+  {
+   "match_key": "2026-08-27::edinburgh castle rockers|glasgow cosmic",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 3 — MTEDI v MTGLA",
+   "date": "2026-08-27",
+   "team": "MTGLA",
+   "pid": "ci:459257",
+   "full": "Tymal Mills",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-10",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
@@ -106595,6 +106629,23 @@
    "match": "Match 6 — MTROT v MTBEL",
    "date": "2026-08-29",
    "team": "MTROT",
+   "pid": "ci:337790",
+   "full": "Hendrik Erasmus van der Dussen",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-10",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-29::belfast wolves|rotterdam dockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 6 — MTROT v MTBEL",
+   "date": "2026-08-29",
+   "team": "MTROT",
    "pid": "ci:1448923",
    "full": "Jai Moondra",
    "points": 24,
@@ -108117,6 +108168,23 @@
     "bat_order": 5,
     "dismissal": "c Leask b Maharaj",
     "dismissed": true
+   }
+  },
+  {
+   "match_key": "2026-08-29::dublin guardians|glasgow cosmic",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 5 — MTGLA v MTDUB",
+   "date": "2026-08-29",
+   "team": "MTGLA",
+   "pid": "ci:459257",
+   "full": "Tymal Mills",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-10",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
@@ -115332,6 +115400,23 @@
    "tour": "European T20 Premier League 2026",
    "match": "Match 9 — MTROT v MTGLA",
    "date": "2026-09-01",
+   "team": "MTROT",
+   "pid": "ci:337790",
+   "full": "Hendrik Erasmus van der Dussen",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-10",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-01::glasgow cosmic|rotterdam dockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 9 — MTROT v MTGLA",
+   "date": "2026-09-01",
    "team": "MTGLA",
    "pid": "ci:671805",
    "full": "Henry George Munsey",
@@ -115968,6 +116053,23 @@
    "status": "COMPLETED",
    "source": "ESPN scorecard · cricbuzz cross-checked (20 players), 2 unbridged · ⏳ provisional (dots unverified for 2 unbridged bowlers: Liam Robert Naylor, Vikramjit Singh · awaiting cricsheet)",
    "frozen_at": "2026-09-01",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-01::glasgow cosmic|rotterdam dockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 9 — MTROT v MTGLA",
+   "date": "2026-09-01",
+   "team": "MTGLA",
+   "pid": "ci:459257",
+   "full": "Tymal Mills",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-10",
    "provenance": "live",
    "fields": {
     "played": false
@@ -119493,6 +119595,23 @@
    "match": "Match 10 — MTROT v MTDUB",
    "date": "2026-09-02",
    "team": "MTROT",
+   "pid": "ci:337790",
+   "full": "Hendrik Erasmus van der Dussen",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-10",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-02::dublin guardians|rotterdam dockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 10 — MTROT v MTDUB",
+   "date": "2026-09-02",
+   "team": "MTROT",
    "pid": "ci:1448923",
    "full": "Jai Moondra",
    "points": 4,
@@ -120964,6 +121083,23 @@
     "bat_order": 0,
     "dismissal": "",
     "dismissed": false
+   }
+  },
+  {
+   "match_key": "2026-09-03::amsterdam flames|glasgow cosmic",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 12 — MTAMS v MTGLA",
+   "date": "2026-09-03",
+   "team": "MTGLA",
+   "pid": "ci:459257",
+   "full": "Tymal Mills",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-10",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
@@ -123939,6 +124075,23 @@
     "bat_order": 2,
     "dismissal": "c †Cross b Ali Khan",
     "dismissed": true
+   }
+  },
+  {
+   "match_key": "2026-09-04::belfast wolves|glasgow cosmic",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 13 — MTGLA v MTBEL",
+   "date": "2026-09-04",
+   "team": "MTGLA",
+   "pid": "ci:459257",
+   "full": "Tymal Mills",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-10",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
@@ -127261,6 +127414,23 @@
    "tour": "European T20 Premier League 2026",
    "match": "Match 14 — MTROT v MTEDI",
    "date": "2026-09-05",
+   "team": "MTROT",
+   "pid": "ci:337790",
+   "full": "Hendrik Erasmus van der Dussen",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-10",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-05::edinburgh castle rockers|rotterdam dockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 14 — MTROT v MTEDI",
+   "date": "2026-09-05",
    "team": "MTEDI",
    "pid": "ci:280490",
    "full": "JJ Smuts",
@@ -128240,6 +128410,23 @@
     "bat_order": 5,
     "dismissal": "c Smith b Bracewell",
     "dismissed": true
+   }
+  },
+  {
+   "match_key": "2026-09-06::amsterdam flames|rotterdam dockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 17 — MTAMS v MTROT",
+   "date": "2026-09-06",
+   "team": "MTROT",
+   "pid": "ci:337790",
+   "full": "Hendrik Erasmus van der Dussen",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-10",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
@@ -131912,6 +132099,23 @@
     "bat_order": 0,
     "dismissal": "",
     "dismissed": false
+   }
+  },
+  {
+   "match_key": "2026-09-06::edinburgh castle rockers|glasgow cosmic",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 16 — MTGLA v MTEDI",
+   "date": "2026-09-06",
+   "team": "MTGLA",
+   "pid": "ci:459257",
+   "full": "Tymal Mills",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-10",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
