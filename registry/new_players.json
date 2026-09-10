@@ -1123,6 +1123,32 @@
         "European T20 Premier League 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:629063",
+      "display": "Mehidy Hasan Miraz",
+      "aliases": [
+        "mehidy hasan miraz"
+      ],
+      "team": "MTGUY",
+      "role": "AR",
+      "tours": [
+        "Caribbean Premier League 2026"
+      ],
+      "source": "auto"
+    },
+    {
+      "pid": "ci:677075",
+      "display": "Kemol Savory",
+      "aliases": [
+        "kemol savory"
+      ],
+      "team": "MTSTL",
+      "role": "BAT",
+      "tours": [
+        "Caribbean Premier League 2026"
+      ],
+      "source": "auto"
     }
   ]
 }
