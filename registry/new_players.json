@@ -1149,6 +1149,32 @@
         "Caribbean Premier League 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:337790",
+      "display": "Hendrik Erasmus van der Dussen",
+      "aliases": [
+        "hendrik erasmus van der dussen"
+      ],
+      "team": "MTROT",
+      "role": "BAT",
+      "tours": [
+        "European T20 Premier League 2026"
+      ],
+      "source": "auto"
+    },
+    {
+      "pid": "ci:459257",
+      "display": "Tymal Mills",
+      "aliases": [
+        "tymal solomon mills"
+      ],
+      "team": "MTGLA",
+      "role": "AR",
+      "tours": [
+        "European T20 Premier League 2026"
+      ],
+      "source": "auto"
     }
   ]
 }
