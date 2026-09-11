@@ -1326,6 +1326,15 @@
   },
   {
    "tour": "European T20 Premier League 2026",
+   "match_key": "2026-09-10::amsterdam flames|belfast wolves",
+   "match": "Match 20 — MTBEL v MTAMS",
+   "date": "2026-09-10",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-09-11",
+   "provenance": "live"
+  },
+  {
+   "tour": "European T20 Premier League 2026",
    "match_key": "2026-09-10::glasgow cosmic|rotterdam dockers",
    "match": "Match 19 — MTROT v MTGLA",
    "date": "2026-09-10",

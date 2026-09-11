@@ -1175,6 +1175,19 @@
         "European T20 Premier League 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:1326798",
+      "display": "Allah Ghazanfar",
+      "aliases": [
+        "am ghazanfar"
+      ],
+      "team": "MTBAR",
+      "role": "BOWL",
+      "tours": [
+        "Caribbean Premier League 2026"
+      ],
+      "source": "auto"
     }
   ]
 }
