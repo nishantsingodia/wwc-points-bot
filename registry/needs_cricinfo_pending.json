@@ -1,135 +1,226 @@
 [
- {
-  "player": "Anderson Mahase",
-  "team": "MTANT",
-  "tour": "Caribbean Premier League 2026",
-  "current_pid": "uncapped:anderson-mahase",
-  "closest_guess": "Anderson Mahase"
- },
- {
-  "player": "Anderson Phillip",
-  "team": "MTANT",
-  "tour": "Caribbean Premier League 2026",
-  "current_pid": "uncapped:anderson-phillip",
-  "closest_guess": "A Phillip"
- },
- {
-  "player": "Romaine Morris",
-  "team": "MTJAM",
-  "tour": "Caribbean Premier League 2026",
-  "current_pid": "uncapped:romaine-morris",
-  "closest_guess": "Romaine Morris"
- },
- {
-  "player": "Tayyab Arif",
-  "team": "MTJAM",
-  "tour": "Caribbean Premier League 2026",
-  "current_pid": "uncapped:tayyab-arif",
-  "closest_guess": "Tayyab Arif"
- },
- {
-  "player": "Micah McKenzie",
-  "team": "MTSTK",
-  "tour": "Caribbean Premier League 2026",
-  "current_pid": "uncapped:micah-mckenzie",
-  "closest_guess": "Micah McKenzie"
- },
- {
-  "player": "Damion Joachim",
-  "team": "MTSTL",
-  "tour": "Caribbean Premier League 2026",
-  "current_pid": "uncapped:damion-joachim",
-  "closest_guess": "Damion Joachim"
- },
- {
-  "player": "Kofi James",
-  "team": "MTBAR",
-  "tour": "Caribbean Premier League 2026",
-  "current_pid": "uncapped:kofi-james",
-  "closest_guess": "KHM James"
- },
- {
-  "player": "Jakeem Pollard",
-  "team": "MTBAR",
-  "tour": "Caribbean Premier League 2026",
-  "current_pid": "uncapped:jakeem-pollard",
-  "closest_guess": "Jakeem Pollard"
- },
- {
-  "player": "Ronaldo Alimohamed",
-  "team": "MTGUY",
-  "tour": "Caribbean Premier League 2026",
-  "current_pid": "uncapped:ronaldo-alimohamed",
-  "closest_guess": "Ronaldo Alimohamed"
- },
- {
-  "player": "Isai Thorne",
-  "team": "MTGUY",
-  "tour": "Caribbean Premier League 2026",
-  "current_pid": "uncapped:isai-thorne",
-  "closest_guess": "Isai Thorne"
- },
- {
-  "player": "Jonathan van Lange",
-  "team": "MTGUY",
-  "tour": "Caribbean Premier League 2026",
-  "current_pid": "uncapped:jonathan-van-lange",
-  "closest_guess": "Jonathan van Lange"
- },
- {
-  "player": "Jasper Davidson",
-  "team": "MTROT",
-  "tour": "European T20 Premier League 2026",
-  "current_pid": "uncapped:jasper-davidson",
-  "closest_guess": "JJ Davidson"
- },
- {
-  "player": "Alex Roy",
-  "team": "MTBEL",
-  "tour": "European T20 Premier League 2026",
-  "current_pid": "uncapped:alex-roy",
-  "closest_guess": "AS Roy"
- },
- {
-  "player": "Chris Greaves",
-  "team": "MTDUB",
-  "tour": "European T20 Premier League 2026",
-  "current_pid": "uncapped:chris-greaves",
-  "closest_guess": "CN Greaves"
- },
- {
-  "player": "Craig Young",
-  "team": "MTDUB",
-  "tour": "European T20 Premier League 2026",
-  "current_pid": "uncapped:craig-young",
-  "closest_guess": "CA Young"
- },
- {
-  "player": "Ollie Jones",
-  "team": "MTEDI",
-  "tour": "European T20 Premier League 2026",
-  "current_pid": "uncapped:ollie-jones",
-  "closest_guess": "O Jones"
- },
- {
-  "player": "Safyaan Sharif",
-  "team": "MTEDI",
-  "tour": "European T20 Premier League 2026",
-  "current_pid": "uncapped:safyaan-sharif",
-  "closest_guess": "SM Sharif"
- },
- {
-  "player": "Oliver Davidson",
-  "team": "MTGLA",
-  "tour": "European T20 Premier League 2026",
-  "current_pid": "uncapped:oliver-davidson",
-  "closest_guess": "O Davidson"
- },
- {
-  "player": "George Munsey",
-  "team": "MTGLA",
-  "tour": "European T20 Premier League 2026",
-  "current_pid": "uncapped:george-munsey",
-  "closest_guess": "HG Munsey"
- }
+  {
+    "player": "Anderson Mahase",
+    "team": "MTANT",
+    "tour": "Caribbean Premier League 2026",
+    "current_pid": "uncapped:anderson-mahase",
+    "closest_guess": "Anderson Mahase"
+  },
+  {
+    "player": "Anderson Phillip",
+    "team": "MTANT",
+    "tour": "Caribbean Premier League 2026",
+    "current_pid": "uncapped:anderson-phillip",
+    "closest_guess": "A Phillip"
+  },
+  {
+    "player": "Romaine Morris",
+    "team": "MTJAM",
+    "tour": "Caribbean Premier League 2026",
+    "current_pid": "uncapped:romaine-morris",
+    "closest_guess": "Romaine Morris"
+  },
+  {
+    "player": "Tayyab Arif",
+    "team": "MTJAM",
+    "tour": "Caribbean Premier League 2026",
+    "current_pid": "uncapped:tayyab-arif",
+    "closest_guess": "Tayyab Arif"
+  },
+  {
+    "player": "Micah McKenzie",
+    "team": "MTSTK",
+    "tour": "Caribbean Premier League 2026",
+    "current_pid": "uncapped:micah-mckenzie",
+    "closest_guess": "Micah McKenzie"
+  },
+  {
+    "player": "Damion Joachim",
+    "team": "MTSTL",
+    "tour": "Caribbean Premier League 2026",
+    "current_pid": "uncapped:damion-joachim",
+    "closest_guess": "Damion Joachim"
+  },
+  {
+    "player": "Kofi James",
+    "team": "MTBAR",
+    "tour": "Caribbean Premier League 2026",
+    "current_pid": "uncapped:kofi-james",
+    "closest_guess": "KHM James"
+  },
+  {
+    "player": "Jakeem Pollard",
+    "team": "MTBAR",
+    "tour": "Caribbean Premier League 2026",
+    "current_pid": "uncapped:jakeem-pollard",
+    "closest_guess": "Jakeem Pollard"
+  },
+  {
+    "player": "Ronaldo Alimohamed",
+    "team": "MTGUY",
+    "tour": "Caribbean Premier League 2026",
+    "current_pid": "uncapped:ronaldo-alimohamed",
+    "closest_guess": "Ronaldo Alimohamed"
+  },
+  {
+    "player": "Isai Thorne",
+    "team": "MTGUY",
+    "tour": "Caribbean Premier League 2026",
+    "current_pid": "uncapped:isai-thorne",
+    "closest_guess": "Isai Thorne"
+  },
+  {
+    "player": "Jonathan van Lange",
+    "team": "MTGUY",
+    "tour": "Caribbean Premier League 2026",
+    "current_pid": "uncapped:jonathan-van-lange",
+    "closest_guess": "Jonathan van Lange"
+  },
+  {
+    "player": "Jasper Davidson",
+    "team": "MTROT",
+    "tour": "European T20 Premier League 2026",
+    "current_pid": "uncapped:jasper-davidson",
+    "closest_guess": "JJ Davidson"
+  },
+  {
+    "player": "Alex Roy",
+    "team": "MTBEL",
+    "tour": "European T20 Premier League 2026",
+    "current_pid": "uncapped:alex-roy",
+    "closest_guess": "AS Roy"
+  },
+  {
+    "player": "Chris Greaves",
+    "team": "MTDUB",
+    "tour": "European T20 Premier League 2026",
+    "current_pid": "uncapped:chris-greaves",
+    "closest_guess": "CN Greaves"
+  },
+  {
+    "player": "Craig Young",
+    "team": "MTDUB",
+    "tour": "European T20 Premier League 2026",
+    "current_pid": "uncapped:craig-young",
+    "closest_guess": "CA Young"
+  },
+  {
+    "player": "Ollie Jones",
+    "team": "MTEDI",
+    "tour": "European T20 Premier League 2026",
+    "current_pid": "uncapped:ollie-jones",
+    "closest_guess": "O Jones"
+  },
+  {
+    "player": "Safyaan Sharif",
+    "team": "MTEDI",
+    "tour": "European T20 Premier League 2026",
+    "current_pid": "uncapped:safyaan-sharif",
+    "closest_guess": "SM Sharif"
+  },
+  {
+    "player": "Oliver Davidson",
+    "team": "MTGLA",
+    "tour": "European T20 Premier League 2026",
+    "current_pid": "uncapped:oliver-davidson",
+    "closest_guess": "O Davidson"
+  },
+  {
+    "player": "George Munsey",
+    "team": "MTGLA",
+    "tour": "European T20 Premier League 2026",
+    "current_pid": "uncapped:george-munsey",
+    "closest_guess": "HG Munsey"
+  },
+  {
+    "player": "Cherry-Ann Fraser",
+    "team": "WTBAR",
+    "tour": "Women's Caribbean Premier League 2026",
+    "current_pid": "uncapped:cherry-ann-fraser",
+    "closest_guess": "CS Fraser"
+  },
+  {
+    "player": "Asabi Callender",
+    "team": "WTBAR",
+    "tour": "Women's Caribbean Premier League 2026",
+    "current_pid": "uncapped:asabi-callender",
+    "closest_guess": "Asabi Callender"
+  },
+  {
+    "player": "Amrita Ramtahal",
+    "team": "WTBAR",
+    "tour": "Women's Caribbean Premier League 2026",
+    "current_pid": "uncapped:amrita-ramtahal",
+    "closest_guess": "Amrita Ramtahal"
+  },
+  {
+    "player": "Brianna Harricharan",
+    "team": "WTTKR",
+    "tour": "Women's Caribbean Premier League 2026",
+    "current_pid": "uncapped:brianna-harricharan",
+    "closest_guess": "Brianna Harricharan"
+  },
+  {
+    "player": "Earnisha Fontaine",
+    "team": "WTTKR",
+    "tour": "Women's Caribbean Premier League 2026",
+    "current_pid": "uncapped:earnisha-fontaine",
+    "closest_guess": "Earnisha Fontaine"
+  },
+  {
+    "player": "Amelia Khan",
+    "team": "WTTKR",
+    "tour": "Women's Caribbean Premier League 2026",
+    "current_pid": "uncapped:amelia-khan",
+    "closest_guess": "Amelia Khan"
+  },
+  {
+    "player": "Sainavi Kambapalli",
+    "team": "WTTKR",
+    "tour": "Women's Caribbean Premier League 2026",
+    "current_pid": "uncapped:sainavi-kambapalli",
+    "closest_guess": "Sainavi Kambapalli"
+  },
+  {
+    "player": "Tilleya Madramootoo",
+    "team": "WTGUY",
+    "tour": "Women's Caribbean Premier League 2026",
+    "current_pid": "uncapped:tilleya-madramootoo",
+    "closest_guess": "Tilleya Madramootoo"
+  },
+  {
+    "player": "Reniece Boyce",
+    "team": "WTGUY",
+    "tour": "Women's Caribbean Premier League 2026",
+    "current_pid": "uncapped:reniece-boyce",
+    "closest_guess": "R Boyce"
+  },
+  {
+    "player": "Latoya Williams",
+    "team": "WTGUY",
+    "tour": "Women's Caribbean Premier League 2026",
+    "current_pid": "uncapped:latoya-williams",
+    "closest_guess": "Latoya Williams"
+  },
+  {
+    "player": "Kate Wilmott",
+    "team": "WTJAM",
+    "tour": "Women's Caribbean Premier League 2026",
+    "current_pid": "uncapped:kate-wilmott",
+    "closest_guess": "Kate Wilmott"
+  },
+  {
+    "player": "Shriya Jairam",
+    "team": "WTJAM",
+    "tour": "Women's Caribbean Premier League 2026",
+    "current_pid": "uncapped:shriya-jairam",
+    "closest_guess": "Shriya Jairam"
+  },
+  {
+    "player": "Celina Whyte",
+    "team": "WTJAM",
+    "tour": "Women's Caribbean Premier League 2026",
+    "current_pid": "uncapped:celina-whyte",
+    "closest_guess": "Celina Whyte"
+  }
 ]

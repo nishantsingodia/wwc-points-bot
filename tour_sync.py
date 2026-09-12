@@ -682,7 +682,13 @@ def espn_build(lid, name, now, horizon, state, seeds=None):
     # Merge across events until every team in the fixture list is covered — stopping at the first
     # event with squads collapses an N-team league into a 2-team bilateral (CPL 2026 ingested as
     # "JAM v BAR", 2 of 7 franchises, 2 of 39 matches).
-    want = {t for m in matchlist for t in m["teams"]}
+    # ESPN lists an unresolved knockout as "TBA" — a placeholder, not a team. gen_tour drops its
+    # fixtures regardless, but counting it as a team makes every complete squad source look PARTIAL:
+    # a curated auction seed covering all 4 WCPL franchises read as "4 of 5" and was discarded in
+    # favour of ESPN's own squads (12 Sep 2026), losing the hand-verified identity anchoring that is
+    # the whole point of the seed. It also defeats the early exit below, so a league whose knockouts
+    # aren't drawn yet paid the full MAX_SQUAD_EVENTS scan on every run.
+    want = {t for m in matchlist for t in m["teams"] if norm(t) not in TBC_NAMES}
     sqmap = {}
     for ev in event_ids[:MAX_SQUAD_EVENTS]:
         for team, players in _espn_squads(lid, ev).items():

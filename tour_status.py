@@ -209,7 +209,12 @@ def main():
 
         verdict = "✅ READY" if not gaps else "⚠ " + "; ".join(gaps)
         ingested_names.append(name)
-        rows.append([name[:34], f"{fmt}/{gkey}", "Y", espn or "✗", cbz or "✗ none",
+        # FULL name, never truncated: these same rows are what gets WRITTEN to Column A, and
+        # Column A is read back as the typed-name input next run. A chopped name ("India tour of
+        # Ireland 2026 (Men T2") can never match its own tour again, so it sat ⏳ pending forever
+        # AND tour_sync re-resolved it against ESPN every single day (3 of the 4 "new names" on
+        # 12 Sep 2026 were these ghosts). Truncation is a DISPLAY concern — see fmt_row below.
+        rows.append([name, f"{fmt}/{gkey}", "Y", espn or "✗", cbz or "✗ none",
                      squads_cell, dm_cell, dp_cell, "Y" if espn_in_draft else "✗",
                      mirror_cell, tab_cell, team_cell, pid_cell, verdict])
 
@@ -222,15 +227,25 @@ def main():
     # is cleared and rewritten every run, ERASED the entry as fast as it could be typed. That is
     # why WCPL 2026 left no trace in Column A at all (7 Sep 2026).
     for typed in _status_col_a_names():
-        if not any(_same_tour(typed, n) for n in ingested_names):
-            rows.append([typed[:40]] + [""] * (len(header) - 2) +
-                        ["⏳ typed in Column A — builds on next run (or not found on ESPN — recheck name)"])
+        if any(_same_tour(typed, n) for n in ingested_names):
+            continue
+        # A TRUNCATION GHOST: an earlier run wrote this cell itself, chopped mid-token, and it is
+        # now unmatchable against the tour it came from. Cutting at a word boundary is what a human
+        # typing a short name looks like, so only a cut INSIDE a token is treated as a ghost —
+        # "Namibia T20I Tri-Series" (a real typed name) survives, "... (Men T2" does not.
+        if any(n.startswith(typed) and len(n) > len(typed) and n[len(typed)] != " "
+               for n in ingested_names):
+            continue
+        rows.append([typed] + [""] * (len(header) - 2) +
+                    ["⏳ typed in Column A — builds on next run (or not found on ESPN — recheck name)"])
 
     # ---- print (always) ----
     print(f"\nTOUR STATUS — {len(rows)} tour(s)  (sheet_id={'set' if sid else 'MISSING'})\n")
     widths = [max(len(str(r[i])) for r in ([header] + rows)) for i in range(len(header))]
+    widths[0] = min(widths[0], 34)          # console only; the sheet gets the full name
     def fmt_row(r):
-        return " | ".join(str(c).ljust(widths[i]) for i, c in enumerate(r))
+        return " | ".join(str(c)[:widths[i]].ljust(widths[i]) if i == 0 else str(c).ljust(widths[i])
+                          for i, c in enumerate(r))
     print(fmt_row(header))
     print("-+-".join("-" * w for w in widths))
     for r in rows:

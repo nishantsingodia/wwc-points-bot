@@ -1,6 +1,6 @@
 {
  "anchor": "cricinfo_id (ci:); cs:/uncapped: fallback; cricsheet_id derived from crosswalk",
- "count": 859,
+ "count": 890,
  "players": {
   "ci:597806": {
    "aliases": [
@@ -192,7 +192,8 @@
     "yastika harish bhatia"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Women's Caribbean Premier League 2026"
    ],
    "cricinfo_id": "960715",
    "cricsheet_id": "9c3d4e8a",
@@ -804,7 +805,8 @@
     "tazmin brits"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Women's Caribbean Premier League 2026"
    ],
    "cricinfo_id": "600731",
    "cricsheet_id": "06659caa",
@@ -838,7 +840,8 @@
    ],
    "tours": [
     "Women's T20 WC 2026",
-    "The Hundred Women's Competition 2026"
+    "The Hundred Women's Competition 2026",
+    "Women's Caribbean Premier League 2026"
    ],
    "cricinfo_id": "351836",
    "cricsheet_id": "63e3b6b3",
@@ -889,7 +892,8 @@
    ],
    "tours": [
     "Women's T20 WC 2026",
-    "The Hundred Women's Competition 2026"
+    "The Hundred Women's Competition 2026",
+    "Women's Caribbean Premier League 2026"
    ],
    "cricinfo_id": "939249",
    "cricsheet_id": "ea544967",
@@ -907,7 +911,8 @@
     "cl tryon"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Women's Caribbean Premier League 2026"
    ],
    "cricinfo_id": "453370",
    "cricsheet_id": "4d4605e6",
@@ -952,7 +957,8 @@
     "shabnim ismail"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Women's Caribbean Premier League 2026"
    ],
    "cricinfo_id": "276997",
    "cricsheet_id": "108c4c09",
@@ -967,7 +973,8 @@
     "nonkululeko mlaba"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Women's Caribbean Premier League 2026"
    ],
    "cricinfo_id": "971203",
    "cricsheet_id": "686362af",
@@ -1133,7 +1140,8 @@
     "ml green"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Women's Caribbean Premier League 2026"
    ],
    "cricinfo_id": "438265",
    "cricsheet_id": "865eae1f",
@@ -1164,7 +1172,8 @@
     "sw bates"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Women's Caribbean Premier League 2026"
    ],
    "cricinfo_id": "54565",
    "cricsheet_id": "89bbc67a",
@@ -1196,7 +1205,8 @@
     "rosemary mair"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Women's Caribbean Premier League 2026"
    ],
    "cricinfo_id": "701751",
    "cricsheet_id": "d5eb8b84",
@@ -1292,7 +1302,8 @@
    "tours": [
     "Women's T20 WC 2026",
     "Ireland vs West Indies Women's ODI 2026",
-    "The Hundred Women's Competition 2026"
+    "The Hundred Women's Competition 2026",
+    "Women's Caribbean Premier League 2026"
    ],
    "cricinfo_id": "474308",
    "cricsheet_id": "d32cf49a",
@@ -1310,7 +1321,8 @@
    ],
    "tours": [
     "Women's T20 WC 2026",
-    "Ireland vs West Indies Women's ODI 2026"
+    "Ireland vs West Indies Women's ODI 2026",
+    "Women's Caribbean Premier League 2026"
    ],
    "cricinfo_id": "769485",
    "cricsheet_id": "d6164dc0",
@@ -1327,7 +1339,8 @@
    ],
    "tours": [
     "Women's T20 WC 2026",
-    "Ireland vs West Indies Women's ODI 2026"
+    "Ireland vs West Indies Women's ODI 2026",
+    "Women's Caribbean Premier League 2026"
    ],
    "cricinfo_id": "1352172",
    "cricsheet_id": "e22f8ec1",
@@ -1344,7 +1357,8 @@
    ],
    "tours": [
     "Women's T20 WC 2026",
-    "Ireland vs West Indies Women's ODI 2026"
+    "Ireland vs West Indies Women's ODI 2026",
+    "Women's Caribbean Premier League 2026"
    ],
    "cricinfo_id": "355359",
    "cricsheet_id": "92cf79a8",
@@ -1362,7 +1376,8 @@
    "tours": [
     "Women's T20 WC 2026",
     "Ireland vs West Indies Women's ODI 2026",
-    "The Hundred Women's Competition 2026"
+    "The Hundred Women's Competition 2026",
+    "Women's Caribbean Premier League 2026"
    ],
    "cricinfo_id": "355349",
    "cricsheet_id": "53bee17f",
@@ -1381,7 +1396,8 @@
    ],
    "tours": [
     "Women's T20 WC 2026",
-    "The Hundred Women's Competition 2026"
+    "The Hundred Women's Competition 2026",
+    "Women's Caribbean Premier League 2026"
    ],
    "cricinfo_id": "474190",
    "cricsheet_id": "75820733",
@@ -1400,7 +1416,8 @@
    ],
    "tours": [
     "Women's T20 WC 2026",
-    "Ireland vs West Indies Women's ODI 2026"
+    "Ireland vs West Indies Women's ODI 2026",
+    "Women's Caribbean Premier League 2026"
    ],
    "cricinfo_id": "424631",
    "cricsheet_id": "a7cd72b2",
@@ -1416,7 +1433,8 @@
    ],
    "tours": [
     "Women's T20 WC 2026",
-    "Ireland vs West Indies Women's ODI 2026"
+    "Ireland vs West Indies Women's ODI 2026",
+    "Women's Caribbean Premier League 2026"
    ],
    "cricinfo_id": "1268602",
    "cricsheet_id": "a2632c7c",
@@ -1433,7 +1451,8 @@
    ],
    "tours": [
     "Women's T20 WC 2026",
-    "Ireland vs West Indies Women's ODI 2026"
+    "Ireland vs West Indies Women's ODI 2026",
+    "Women's Caribbean Premier League 2026"
    ],
    "cricinfo_id": "661441",
    "cricsheet_id": "4b0e3049",
@@ -1450,7 +1469,8 @@
    ],
    "tours": [
     "Women's T20 WC 2026",
-    "Ireland vs West Indies Women's ODI 2026"
+    "Ireland vs West Indies Women's ODI 2026",
+    "Women's Caribbean Premier League 2026"
    ],
    "cricinfo_id": "355351",
    "cricsheet_id": "42d9dd09",
@@ -1466,7 +1486,8 @@
    ],
    "tours": [
     "Women's T20 WC 2026",
-    "Ireland vs West Indies Women's ODI 2026"
+    "Ireland vs West Indies Women's ODI 2026",
+    "Women's Caribbean Premier League 2026"
    ],
    "cricinfo_id": "769517",
    "cricsheet_id": "321c980e",
@@ -1482,7 +1503,8 @@
    ],
    "tours": [
     "Women's T20 WC 2026",
-    "Ireland vs West Indies Women's ODI 2026"
+    "Ireland vs West Indies Women's ODI 2026",
+    "Women's Caribbean Premier League 2026"
    ],
    "cricinfo_id": "1352168",
    "cricsheet_id": "a811cb83",
@@ -1499,7 +1521,8 @@
    ],
    "tours": [
     "Women's T20 WC 2026",
-    "Ireland vs West Indies Women's ODI 2026"
+    "Ireland vs West Indies Women's ODI 2026",
+    "Women's Caribbean Premier League 2026"
    ],
    "cricinfo_id": "1268281",
    "cricsheet_id": "816af623",
@@ -1515,7 +1538,8 @@
    ],
    "tours": [
     "Women's T20 WC 2026",
-    "Ireland vs West Indies Women's ODI 2026"
+    "Ireland vs West Indies Women's ODI 2026",
+    "Women's Caribbean Premier League 2026"
    ],
    "cricinfo_id": "907733",
    "cricsheet_id": "b9fec7a5",
@@ -1531,7 +1555,8 @@
    ],
    "tours": [
     "Women's T20 WC 2026",
-    "Ireland vs West Indies Women's ODI 2026"
+    "Ireland vs West Indies Women's ODI 2026",
+    "Women's Caribbean Premier League 2026"
    ],
    "cricinfo_id": "1204928",
    "cricsheet_id": "3faa312e",
@@ -2194,7 +2219,8 @@
    ],
    "tours": [
     "Women's T20 WC 2026",
-    "Ireland vs West Indies Women's ODI 2026"
+    "Ireland vs West Indies Women's ODI 2026",
+    "Women's Caribbean Premier League 2026"
    ],
    "cricinfo_id": "1229014",
    "cricsheet_id": "e8fa03ed",
@@ -4344,7 +4370,9 @@
    "espn_id": "1070997",
    "display": "Connor Esterhuizen",
    "draft_id": 10090,
-   "auction_id": 7471
+   "auction_id": 7471,
+   "cricbuzz_id": "24622",
+   "cricbuzz_tier": 1
   },
   "ci:384518": {
    "aliases": [
@@ -6194,7 +6222,8 @@
     "realeanna margot ann u grimmond"
    ],
    "tours": [
-    "Ireland vs West Indies Women's ODI 2026"
+    "Ireland vs West Indies Women's ODI 2026",
+    "Women's Caribbean Premier League 2026"
    ],
    "cricinfo_id": "1352170",
    "cricsheet_id": "5215d4c3",
@@ -10399,7 +10428,8 @@
     "mm lanning"
    ],
    "tours": [
-    "The Hundred Women's Competition 2026"
+    "The Hundred Women's Competition 2026",
+    "Women's Caribbean Premier League 2026"
    ],
    "cricinfo_id": "329336",
    "cricsheet_id": "27e003ce",
@@ -10963,7 +10993,9 @@
    "espn_id": "1071484",
    "display": "Brian Bennett",
    "draft_id": 10628,
-   "auction_id": 2644
+   "auction_id": 2644,
+   "cricbuzz_id": "23616",
+   "cricbuzz_tier": 1
   },
   "ci:495964": {
    "aliases": [
@@ -10980,7 +11012,9 @@
    "espn_id": "495964",
    "display": "Ryan Burl",
    "draft_id": 10629,
-   "auction_id": 1559
+   "auction_id": 1559,
+   "cricbuzz_id": "8454",
+   "cricbuzz_tier": 1
   },
   "ci:1059122": {
    "aliases": [
@@ -11012,7 +11046,9 @@
    "espn_id": "910695",
    "display": "Ben Curran",
    "draft_id": 10631,
-   "auction_id": 8344
+   "auction_id": 8344,
+   "cricbuzz_id": "13957",
+   "cricbuzz_tier": 1
   },
   "ci:696127": {
    "aliases": [
@@ -11028,7 +11064,9 @@
    "espn_id": "696127",
    "display": "Brad Evans",
    "draft_id": 10632,
-   "auction_id": 3412
+   "auction_id": 3412,
+   "cricbuzz_id": "19592",
+   "cricbuzz_tier": 1
   },
   "ci:465327": {
    "aliases": [
@@ -11043,7 +11081,9 @@
    "espn_id": "465327",
    "display": "Innocent Kaia",
    "draft_id": 10633,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "12319",
+   "cricbuzz_tier": 1
   },
   "ci:938959": {
    "aliases": [
@@ -11060,7 +11100,9 @@
    "espn_id": "938959",
    "display": "Wessly Madhevere",
    "draft_id": 10634,
-   "auction_id": 2819
+   "auction_id": 2819,
+   "cricbuzz_id": "13451",
+   "cricbuzz_tier": 1
   },
   "ci:946507": {
    "aliases": [
@@ -11076,7 +11118,9 @@
    "espn_id": "946507",
    "display": "Tadiwanashe Marumani",
    "draft_id": 10635,
-   "auction_id": 1555
+   "auction_id": 1555,
+   "cricbuzz_id": "15877",
+   "cricbuzz_tier": 1
   },
   "ci:571703": {
    "aliases": [
@@ -11092,7 +11136,9 @@
    "espn_id": "571703",
    "display": "Wellington Masakadza",
    "draft_id": 10636,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "8460",
+   "cricbuzz_tier": 1
   },
   "ci:827051": {
    "aliases": [
@@ -12108,7 +12154,9 @@
    "cricsheet_id": "0bacade8",
    "espn_id": "974087",
    "draft_id": 10780,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "13213",
+   "cricbuzz_tier": 1
   },
   "ci:1342550": {
    "aliases": [
@@ -12558,7 +12606,9 @@
    "cricsheet_id": "2a9eee66",
    "espn_id": "1153767",
    "draft_id": 10838,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "15473",
+   "cricbuzz_tier": 1
   },
   "ci:1127317": {
    "aliases": [
@@ -13247,7 +13297,9 @@
    "auction_id": null,
    "cricinfo_id": "775421",
    "cricsheet_id": "8ae98a8e",
-   "espn_id": "775421"
+   "espn_id": "775421",
+   "cricbuzz_id": "11447",
+   "cricbuzz_tier": 1
   },
   "ci:1148593": {
    "aliases": [
@@ -13622,7 +13674,9 @@
    "cricsheet_id": "75be3b2a",
    "espn_id": "1178066",
    "draft_id": 10923,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "1423874",
+   "cricbuzz_tier": 1
   },
   "ci:1310415": {
    "aliases": [
@@ -13637,7 +13691,9 @@
    "cricsheet_id": "537021f5",
    "espn_id": "1310415",
    "draft_id": 10924,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "53954",
+   "cricbuzz_tier": 1
   },
   "ci:482478": {
    "aliases": [
@@ -13652,7 +13708,9 @@
    "cricsheet_id": "3c87f0c3",
    "espn_id": "482478",
    "draft_id": 10925,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "8522",
+   "cricbuzz_tier": 1
   },
   "ci:596664": {
    "aliases": [
@@ -13667,7 +13725,9 @@
    "cricsheet_id": "8716233e",
    "espn_id": "596664",
    "draft_id": 10926,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "9890",
+   "cricbuzz_tier": 1
   },
   "ci:1495161": {
    "aliases": [
@@ -13681,7 +13741,9 @@
    "cricsheet_id": "0abb2525",
    "espn_id": "1495161",
    "draft_id": 10927,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "1463330",
+   "cricbuzz_tier": 1
   },
   "ci:574638": {
    "aliases": [
@@ -13709,7 +13771,9 @@
    "cricsheet_id": "f468293b",
    "espn_id": "1071473",
    "draft_id": 10929,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "13438",
+   "cricbuzz_tier": 1
   },
   "ci:330223": {
    "aliases": [
@@ -13739,7 +13803,9 @@
    "cricsheet_id": "bb134e5c",
    "espn_id": "553821",
    "draft_id": 10931,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "9885",
+   "cricbuzz_tier": 1
   },
   "ci:1532519": {
    "aliases": [
@@ -13795,7 +13861,9 @@
    "cricsheet_id": "ff6a7ab5",
    "espn_id": "698317",
    "draft_id": 10935,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "14431",
+   "cricbuzz_tier": 1
   },
   "ci:833777": {
    "aliases": [
@@ -13823,7 +13891,9 @@
    "cricsheet_id": "e9e37173",
    "espn_id": "1234278",
    "draft_id": 10937,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "53940",
+   "cricbuzz_tier": 1
   },
   "ci:553249": {
    "aliases": [
@@ -13838,7 +13908,9 @@
    "cricsheet_id": "9a2fc964",
    "espn_id": "553249",
    "draft_id": 10938,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "10676",
+   "cricbuzz_tier": 1
   },
   "ci:698343": {
    "aliases": [
@@ -13852,7 +13924,9 @@
    "cricsheet_id": "28d6c44d",
    "espn_id": "698343",
    "draft_id": 10939,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "13098",
+   "cricbuzz_tier": 1
   },
   "ci:697183": {
    "aliases": [
@@ -13866,7 +13940,9 @@
    "cricsheet_id": "d3a1c63d",
    "espn_id": "697183",
    "draft_id": 10941,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "11196",
+   "cricbuzz_tier": 1
   },
   "ci:1255248": {
    "aliases": [
@@ -13880,7 +13956,9 @@
    "cricsheet_id": "e87aeca2",
    "espn_id": "1255248",
    "draft_id": 10944,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "21386",
+   "cricbuzz_tier": 1
   },
   "ci:595954": {
    "aliases": [
@@ -13894,7 +13972,9 @@
    "cricsheet_id": "8dc152d1",
    "espn_id": "595954",
    "draft_id": 10945,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "18523",
+   "cricbuzz_tier": 1
   },
   "ci:1294342": {
    "aliases": [
@@ -13909,7 +13989,9 @@
    "cricsheet_id": "107c26fb",
    "espn_id": "1294342",
    "draft_id": 10946,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "23346",
+   "cricbuzz_tier": 1
   },
   "ci:1414819": {
    "aliases": [
@@ -13923,7 +14005,9 @@
    "cricsheet_id": "201facae",
    "espn_id": "1414819",
    "draft_id": 10947,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "53408",
+   "cricbuzz_tier": 1
   },
   "ci:946483": {
    "aliases": [
@@ -13973,6 +14057,412 @@
    ],
    "display": "Kundai Matigimu",
    "draft_id": 10961,
+   "auction_id": null
+  },
+  "ci:1289983": {
+   "aliases": [
+    "kiran navgire",
+    "kiran prabhu navgire"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Kiran Navgire",
+   "cricinfo_id": "1289983",
+   "cricsheet_id": "617a0b79",
+   "espn_id": "1289983",
+   "draft_id": 10969,
+   "auction_id": null
+  },
+  "ci:1199630": {
+   "aliases": [
+    "shabika gajnabi"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Shabika Gajnabi",
+   "cricinfo_id": "1199630",
+   "cricsheet_id": "c35739a1",
+   "espn_id": "1199630",
+   "draft_id": 10971,
+   "auction_id": null
+  },
+  "ci:883413": {
+   "aliases": [
+    "pooja vastrakar"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Pooja Vastrakar",
+   "cricinfo_id": "883413",
+   "cricsheet_id": "8026ea72",
+   "espn_id": "883413",
+   "draft_id": 10972,
+   "auction_id": null
+  },
+  "uncapped:cherry-ann-fraser": {
+   "aliases": [
+    "cherry ann fraser"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Cherry-Ann Fraser",
+   "draft_id": 10974,
+   "auction_id": null
+  },
+  "ci:1352171": {
+   "aliases": [
+    "naijanni cumberbatch",
+    "naijanni rhema cumberbatch"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Naijanni Cumberbatch",
+   "cricinfo_id": "1352171",
+   "cricsheet_id": "da4f9274",
+   "espn_id": "1352171",
+   "draft_id": 10977,
+   "auction_id": null
+  },
+  "uncapped:asabi-callender": {
+   "aliases": [
+    "asabi callender"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Asabi Callender",
+   "draft_id": 10978,
+   "auction_id": null
+  },
+  "uncapped:amrita-ramtahal": {
+   "aliases": [
+    "amrita ramtahal"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Amrita Ramtahal",
+   "draft_id": 10979,
+   "auction_id": null
+  },
+  "ci:951163": {
+   "aliases": [
+    "laura harris"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Laura Harris",
+   "cricinfo_id": "951163",
+   "cricsheet_id": "36e2dc83",
+   "espn_id": "951163",
+   "draft_id": 10982,
+   "auction_id": null
+  },
+  "ci:1268282": {
+   "aliases": [
+    "steffi soogrim",
+    "steffie soogrim"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Steffi Soogrim",
+   "cricinfo_id": "1268282",
+   "cricsheet_id": "00547789",
+   "espn_id": "1268282",
+   "draft_id": 10985,
+   "auction_id": null
+  },
+  "ci:442145": {
+   "aliases": [
+    "shikha pandey",
+    "shikha subas pandey"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Shikha Pandey",
+   "cricinfo_id": "442145",
+   "cricsheet_id": "5463cb7a",
+   "espn_id": "442145",
+   "draft_id": 10987,
+   "auction_id": null
+  },
+  "ci:310961": {
+   "aliases": [
+    "samara ramnath"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Samara Ramnath",
+   "cricinfo_id": "310961",
+   "cricsheet_id": "7796dd75",
+   "espn_id": "310961",
+   "draft_id": 10988,
+   "auction_id": null
+  },
+  "ci:1201476": {
+   "aliases": [
+    "madeline marie penna",
+    "madeline penna"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Madeline Penna",
+   "cricinfo_id": "1201476",
+   "cricsheet_id": "36453b99",
+   "espn_id": "1201476",
+   "draft_id": 10990,
+   "auction_id": null
+  },
+  "uncapped:brianna-harricharan": {
+   "aliases": [
+    "brianna harricharan"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Brianna Harricharan",
+   "draft_id": 10991,
+   "auction_id": null
+  },
+  "uncapped:earnisha-fontaine": {
+   "aliases": [
+    "earnisha fontaine"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Earnisha Fontaine",
+   "draft_id": 10992,
+   "auction_id": null
+  },
+  "uncapped:amelia-khan": {
+   "aliases": [
+    "amelia khan"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Amelia Khan",
+   "draft_id": 10993,
+   "auction_id": null
+  },
+  "uncapped:sainavi-kambapalli": {
+   "aliases": [
+    "sainavi kambapalli"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Sainavi Kambapalli",
+   "draft_id": 10994,
+   "auction_id": null
+  },
+  "ci:355355": {
+   "aliases": [
+    "chedean nation"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Chedean Nation",
+   "cricinfo_id": "355355",
+   "cricsheet_id": "639000b6",
+   "espn_id": "355355",
+   "draft_id": 11000,
+   "auction_id": null
+  },
+  "ci:909779": {
+   "aliases": [
+    "sheneta grimmond",
+    "sheneta shanata grimmond"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Sheneta Grimmond",
+   "cricinfo_id": "909779",
+   "cricsheet_id": "6bebf334",
+   "espn_id": "909779",
+   "draft_id": 11002,
+   "auction_id": null
+  },
+  "ci:474191": {
+   "aliases": [
+    "shamilia connell",
+    "shamilia shontell connell"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Shamilia Connell",
+   "cricinfo_id": "474191",
+   "cricsheet_id": "2f9a6bd1",
+   "espn_id": "474191",
+   "draft_id": 11003,
+   "auction_id": null
+  },
+  "ci:275447": {
+   "aliases": [
+    "erin alexandra burns",
+    "erin burns"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Erin Burns",
+   "cricinfo_id": "275447",
+   "cricsheet_id": "2e0b6638",
+   "espn_id": "275447",
+   "draft_id": 11005,
+   "auction_id": null
+  },
+  "uncapped:tilleya-madramootoo": {
+   "aliases": [
+    "tilleya madramootoo"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Tilleya Madramootoo",
+   "draft_id": 11006,
+   "auction_id": null
+  },
+  "uncapped:reniece-boyce": {
+   "aliases": [
+    "reniece boyce"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Reniece Boyce",
+   "draft_id": 11007,
+   "auction_id": null
+  },
+  "uncapped:latoya-williams": {
+   "aliases": [
+    "latoya williams"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Latoya Williams",
+   "draft_id": 11008,
+   "auction_id": null
+  },
+  "ci:1526007": {
+   "aliases": [
+    "eboni brathwaite"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Eboni Brathwaite",
+   "cricinfo_id": "1526007",
+   "cricsheet_id": "3d42a82b",
+   "espn_id": "1526007",
+   "draft_id": 11009,
+   "auction_id": null
+  },
+  "ci:769427": {
+   "aliases": [
+    "rashada shieka williams",
+    "rashada williams"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Rashada Williams",
+   "cricinfo_id": "769427",
+   "cricsheet_id": "406de451",
+   "espn_id": "769427",
+   "draft_id": 11013,
+   "auction_id": null
+  },
+  "uncapped:kate-wilmott": {
+   "aliases": [
+    "kate wilmott"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Kate Wilmott",
+   "draft_id": 11019,
+   "auction_id": null
+  },
+  "ci:1204960": {
+   "aliases": [
+    "syeda aroob shah"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Syeda Aroob Shah",
+   "cricinfo_id": "1204960",
+   "cricsheet_id": "4cf8708b",
+   "espn_id": "1204960",
+   "draft_id": 11020,
+   "auction_id": null
+  },
+  "uncapped:shriya-jairam": {
+   "aliases": [
+    "shriya jairam"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Shriya Jairam",
+   "draft_id": 11021,
+   "auction_id": null
+  },
+  "ci:1349230": {
+   "aliases": [
+    "djenaba faith allison joseph",
+    "djenaba joseph"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Djenaba Joseph",
+   "cricinfo_id": "1349230",
+   "cricsheet_id": "6d7ca3e6",
+   "espn_id": "1349230",
+   "draft_id": 11022,
+   "auction_id": null
+  },
+  "uncapped:celina-whyte": {
+   "aliases": [
+    "celina whyte"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Celina Whyte",
+   "draft_id": 11023,
+   "auction_id": null
+  },
+  "ci:1469056": {
+   "aliases": [
+    "abigail bryce",
+    "abigail cashena bryce"
+   ],
+   "tours": [
+    "Women's Caribbean Premier League 2026"
+   ],
+   "display": "Abigail Bryce",
+   "cricinfo_id": "1469056",
+   "cricsheet_id": "5b929395",
+   "espn_id": "1469056",
+   "draft_id": 11024,
    "auction_id": null
   }
  }

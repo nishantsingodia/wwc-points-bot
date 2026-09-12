@@ -140,5 +140,16 @@
     "squads": "namibia_t20i_tri_series_2026_squads.json",
     "tab": "NAMIBIA T20I TRISERIES 2026 POINTS",
     "cricbuzz_series": "12933"
+  },
+  {
+    "ends": "2026-09-17",
+    "espn_series": "20898",
+    "format": "T20",
+    "gender": "female",
+    "name": "Women's Caribbean Premier League 2026",
+    "squads": "women_s_caribbean_premier_league_2026_squads.json",
+    "tab": "WOMENS CARIBBEAN PREMIER LEAGUE 2026 POINTS",
+    "cricbuzz_series": "12595",
+    "starts": "2026-09-05"
   }
 ]

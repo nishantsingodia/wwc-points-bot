@@ -1,0 +1,73 @@
+{
+ "tour": "Women's Caribbean Premier League 2026",
+ "slug": "womens_caribbean_premier_league_2026_points",
+ "teams": {
+  "WTBAR": [
+   "ci:474308",
+   "ci:54565",
+   "ci:769485",
+   "ci:1289983",
+   "ci:438265",
+   "ci:1199630",
+   "ci:883413",
+   "ci:355351",
+   "uncapped:cherry-ann-fraser",
+   "ci:1204928",
+   "ci:907733",
+   "ci:1352171",
+   "uncapped:asabi-callender",
+   "uncapped:amrita-ramtahal"
+  ],
+  "WTTKR": [
+   "ci:355349",
+   "ci:960715",
+   "ci:951163",
+   "ci:351836",
+   "ci:1268602",
+   "ci:1268282",
+   "ci:769517",
+   "ci:442145",
+   "ci:310961",
+   "ci:1352172",
+   "ci:1201476",
+   "uncapped:brianna-harricharan",
+   "uncapped:earnisha-fontaine",
+   "uncapped:amelia-khan",
+   "uncapped:sainavi-kambapalli"
+  ],
+  "WTGUY": [
+   "ci:600731",
+   "ci:1352170",
+   "ci:424631",
+   "ci:453370",
+   "ci:939249",
+   "ci:355355",
+   "ci:1352168",
+   "ci:909779",
+   "ci:474191",
+   "ci:276997",
+   "ci:275447",
+   "uncapped:tilleya-madramootoo",
+   "uncapped:reniece-boyce",
+   "uncapped:latoya-williams",
+   "ci:1526007"
+  ],
+  "WTJAM": [
+   "ci:1229014",
+   "ci:329336",
+   "ci:355359",
+   "ci:769427",
+   "ci:474190",
+   "ci:1268281",
+   "ci:661441",
+   "ci:701751",
+   "ci:971203",
+   "uncapped:kate-wilmott",
+   "ci:1204960",
+   "uncapped:shriya-jairam",
+   "ci:1349230",
+   "uncapped:celina-whyte",
+   "ci:1469056"
+  ]
+ }
+}
