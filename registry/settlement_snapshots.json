@@ -100339,6 +100339,23 @@
    "match": "Match 2 — MTBEL v MTDUB",
    "date": "2026-08-27",
    "team": "MTDUB",
+   "pid": "ci:873199",
+   "full": "Christopher Nicholas Greaves",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-12",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-27::belfast wolves|dublin guardians",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 2 — MTBEL v MTDUB",
+   "date": "2026-08-27",
+   "team": "MTDUB",
    "pid": "ci:364343",
    "full": "Craig Alexander Young",
    "points": 0,
@@ -107377,6 +107394,23 @@
    "match": "Match 5 — MTGLA v MTDUB",
    "date": "2026-08-29",
    "team": "MTDUB",
+   "pid": "ci:873199",
+   "full": "Christopher Nicholas Greaves",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-12",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-29::dublin guardians|glasgow cosmic",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 5 — MTGLA v MTDUB",
+   "date": "2026-08-29",
+   "team": "MTDUB",
    "pid": "ci:364343",
    "full": "Craig Alexander Young",
    "points": 0,
@@ -111364,6 +111398,23 @@
     "bat_order": 9,
     "dismissal": "",
     "dismissed": false
+   }
+  },
+  {
+   "match_key": "2026-08-30::dublin guardians|edinburgh castle rockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 8 — MTEDI v MTDUB",
+   "date": "2026-08-30",
+   "team": "MTDUB",
+   "pid": "ci:873199",
+   "full": "Christopher Nicholas Greaves",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-12",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
@@ -119391,6 +119442,23 @@
    "match": "Match 10 — MTROT v MTDUB",
    "date": "2026-09-02",
    "team": "MTDUB",
+   "pid": "ci:873199",
+   "full": "Christopher Nicholas Greaves",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-12",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-02::dublin guardians|rotterdam dockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 10 — MTROT v MTDUB",
+   "date": "2026-09-02",
+   "team": "MTDUB",
    "pid": "ci:364343",
    "full": "Craig Alexander Young",
    "points": 0,
@@ -126299,6 +126367,23 @@
    "status": "COMPLETED",
    "source": "ESPN scorecard · cricbuzz cross-checked (20 players), 3 unbridged · ⏳ provisional (dots unverified for 1 unbridged bowler: Craig Alexander Young · awaiting cricsheet)",
    "frozen_at": "2026-09-05",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-05::amsterdam flames|dublin guardians",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 15 — MTAMS v MTDUB",
+   "date": "2026-09-05",
+   "team": "MTDUB",
+   "pid": "ci:873199",
+   "full": "Christopher Nicholas Greaves",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-12",
    "provenance": "live",
    "fields": {
     "played": false
@@ -135286,6 +135371,23 @@
    "match": "Match 18 — MTDUB v MTBEL",
    "date": "2026-09-09",
    "team": "MTDUB",
+   "pid": "ci:873199",
+   "full": "Christopher Nicholas Greaves",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-12",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-09::belfast wolves|dublin guardians",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 18 — MTDUB v MTBEL",
+   "date": "2026-09-09",
+   "team": "MTDUB",
    "pid": "ci:364343",
    "full": "Craig Alexander Young",
    "points": 185,
@@ -142715,6 +142817,23 @@
    "points": 0,
    "status": "COMPLETED_FLAGGED",
    "source": "ESPN scorecard · ⚠ cricbuzz unavailable · ⏳ provisional (dots/maidens unverified, awaiting cricsheet)",
+   "frozen_at": "2026-09-12",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-11::dublin guardians|edinburgh castle rockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 21 — MTDUB v MTEDI",
+   "date": "2026-09-11",
+   "team": "MTDUB",
+   "pid": "ci:873199",
+   "full": "Christopher Nicholas Greaves",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "ESPN scorecard · cricbuzz cross-checked (21 players), 1 unbridged · ⏳ provisional (dots unverified for 1 unbridged bowler: Craig Alexander Young · awaiting cricsheet)",
    "frozen_at": "2026-09-12",
    "provenance": "live",
    "fields": {
