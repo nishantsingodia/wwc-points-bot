@@ -1316,6 +1316,15 @@
    "provenance": "live"
   },
   {
+   "tour": "England vs Pakistan Men's Test 2026",
+   "match_key": "2026-09-09::england|pakistan",
+   "match": "Match 3 — TENG v TPAK",
+   "date": "2026-09-09",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-09-12",
+   "provenance": "live"
+  },
+  {
    "tour": "European T20 Premier League 2026",
    "match_key": "2026-09-09::belfast wolves|dublin guardians",
    "match": "Match 18 — MTDUB v MTBEL",
@@ -1357,6 +1366,24 @@
    "match": "Match 33 — MTGUY v MTTRI",
    "date": "2026-09-11",
    "first_status": "COMPLETED",
+   "first_seen": "2026-09-12",
+   "provenance": "live"
+  },
+  {
+   "tour": "European T20 Premier League 2026",
+   "match_key": "2026-09-11::dublin guardians|edinburgh castle rockers",
+   "match": "Match 21 — MTDUB v MTEDI",
+   "date": "2026-09-11",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-09-12",
+   "provenance": "live"
+  },
+  {
+   "tour": "European T20 Premier League 2026",
+   "match_key": "2026-09-12::belfast wolves|rotterdam dockers",
+   "match": "Match 22 — MTBEL v MTROT",
+   "date": "2026-09-12",
+   "first_status": "COMPLETED_FLAGGED",
    "first_seen": "2026-09-12",
    "provenance": "live"
   }
