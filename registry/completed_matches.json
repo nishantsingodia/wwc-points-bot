@@ -1386,6 +1386,15 @@
    "first_status": "COMPLETED_FLAGGED",
    "first_seen": "2026-09-12",
    "provenance": "live"
+  },
+  {
+   "tour": "European T20 Premier League 2026",
+   "match_key": "2026-09-12::dublin guardians|glasgow cosmic",
+   "match": "Match 23 — MTDUB v MTGLA",
+   "date": "2026-09-12",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-09-12",
+   "provenance": "live"
   }
  ]
 }
