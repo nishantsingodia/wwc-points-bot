@@ -1188,6 +1188,19 @@
         "Caribbean Premier League 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:873199",
+      "display": "Christopher Nicholas Greaves",
+      "aliases": [
+        "christopher nicholas greaves"
+      ],
+      "team": "MTDUB",
+      "role": "BAT",
+      "tours": [
+        "European T20 Premier League 2026"
+      ],
+      "source": "auto"
     }
   ]
 }
