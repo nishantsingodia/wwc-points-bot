@@ -7491,6 +7491,22 @@
       "pid": "ci:595897",
       "source": "S1",
       "status": "approved"
+    },
+    {
+      "match_key": "2026-09-06::barbados tridents|trinbago knight riders",
+      "scope": "l2",
+      "pid": "ci:1500761",
+      "source": "S1",
+      "status": "approved",
+      "answer": "ESPN"
+    },
+    {
+      "match_key": "2026-09-06::barbados tridents|st lucia kings",
+      "scope": "l2",
+      "pid": "ci:1500761",
+      "source": "S1",
+      "status": "approved",
+      "answer": "ESPN"
     }
   ]
 }

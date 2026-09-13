@@ -4,8 +4,8 @@
  "_tiers": "tier = number of DISTINCT MATCHES confirming the pair. >=1 cross-check only; >=2 required before a CB-only field may CREATE points.",
  "_note": "each pair's `confirmations` list IS the fact log; bridge/revoked are a pure function of it (compile_bridge o confirmations_log). Regenerate, never hand-edit. A contradicted pair moves to `revoked` and is refused BOTH ways — there is no last-wins.",
  "counts": {
-  "confirmations": 2604,
-  "bridged": 501,
+  "confirmations": 2613,
+  "bridged": 510,
   "revoked": 0,
   "tier2_plus": 421
  },
@@ -2628,6 +2628,24 @@
     }
    ]
   },
+  "8312": {
+   "cricinfo_id": "274921",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Veerasammy Permaul"
+    }
+   ]
+  },
   "8313": {
    "cricinfo_id": "391485",
    "tier": 5,
@@ -2939,6 +2957,24 @@
      "match": "cb154485/espn1534195",
      "method": "fingerprint",
      "date": "2026-08-26"
+    }
+   ]
+  },
+  "8433": {
+   "cricinfo_id": "510823",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Justin Greaves"
     }
    ]
   },
@@ -5465,6 +5501,24 @@
     }
    ]
   },
+  "9554": {
+   "cricinfo_id": "337790",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Rassie van der Dussen"
+    }
+   ]
+  },
   "9582": {
    "cricinfo_id": "600498",
    "tier": 5,
@@ -7697,6 +7751,24 @@
      "match": "cb157171/espn1537352",
      "method": "fingerprint",
      "date": "2026-08-05"
+    }
+   ]
+  },
+  "10928": {
+   "cricinfo_id": "784375",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Lahiru Kumara"
     }
    ]
   },
@@ -19492,6 +19564,24 @@
     }
    ]
   },
+  "45666": {
+   "cricinfo_id": "1191381",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Noah Croes"
+    }
+   ]
+  },
   "46681": {
    "cricinfo_id": "1339100",
    "tier": 3,
@@ -19590,6 +19680,24 @@
      "match": "cb157193/espn1537354",
      "method": "fingerprint",
      "date": "2026-08-08"
+    }
+   ]
+  },
+  "46965": {
+   "cricinfo_id": "1342699",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Sadrack Descarte"
     }
    ]
   },
@@ -20002,6 +20110,24 @@
      "method": "manual",
      "date": "",
      "source": "Needs Cricinfo ID:Jack Brassell"
+    }
+   ]
+  },
+  "54252": {
+   "cricinfo_id": "1394079",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Jordan Neill"
     }
    ]
   },
@@ -21015,6 +21141,24 @@
     }
    ]
   },
+  "1467524": {
+   "cricinfo_id": "1500761",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Jakeem Pollard"
+    }
+   ]
+  },
   "1468866": {
    "cricinfo_id": "1253695",
    "tier": 4,
@@ -21141,6 +21285,24 @@
      "match": "cb145335/espn1521227",
      "method": "fingerprint",
      "date": "2026-08-12"
+    }
+   ]
+  },
+  "1477333": {
+   "cricinfo_id": "1199306",
+   "tier": 1,
+   "matches": [
+    "manual/owner-answer"
+   ],
+   "methods": [
+    "manual"
+   ],
+   "confirmations": [
+    {
+     "match": "manual/owner-answer",
+     "method": "manual",
+     "date": "",
+     "source": "Needs Cricinfo ID:Dexter Sween"
     }
    ]
   },
