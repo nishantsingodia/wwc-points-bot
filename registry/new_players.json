@@ -1201,6 +1201,19 @@
         "European T20 Premier League 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:914517",
+      "display": "Ronaldo Jonathan Alimohamed",
+      "aliases": [
+        "ronaldo jonathan alimohamed"
+      ],
+      "team": "MTGUY",
+      "role": "AR",
+      "tours": [
+        "Caribbean Premier League 2026"
+      ],
+      "source": "auto"
     }
   ]
 }

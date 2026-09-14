@@ -1398,6 +1398,15 @@
   },
   {
    "tour": "Caribbean Premier League 2026",
+   "match_key": "2026-09-13::barbados tridents|guyana amazon warriors",
+   "match": "Match 35 — MTBAR v MTGUY",
+   "date": "2026-09-13",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-09-14",
+   "provenance": "live"
+  },
+  {
+   "tour": "Caribbean Premier League 2026",
    "match_key": "2026-09-13::barbados tridents|jamaica kingsmen",
    "match": "Match 34 — MTBAR v MTJAM",
    "date": "2026-09-13",
