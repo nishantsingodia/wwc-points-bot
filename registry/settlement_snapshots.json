@@ -83100,6 +83100,23 @@
    "tour": "Caribbean Premier League 2026",
    "match": "Match 6 — MTJAM v MTGUY",
    "date": "2026-08-14",
+   "team": "MTGUY",
+   "pid": "ci:914517",
+   "full": "Ronaldo Jonathan Alimohamed",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-14",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-14::guyana amazon warriors|jamaica kingsmen",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 6 — MTJAM v MTGUY",
+   "date": "2026-08-14",
    "team": "MTJAM",
    "pid": "ci:820351",
    "full": "Rovman Powell",
@@ -91260,6 +91277,23 @@
    "tour": "Caribbean Premier League 2026",
    "match": "Match 11 — MTSTL v MTGUY",
    "date": "2026-08-19",
+   "team": "MTGUY",
+   "pid": "ci:914517",
+   "full": "Ronaldo Jonathan Alimohamed",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-14",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-19::guyana amazon warriors|st lucia kings",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 11 — MTSTL v MTGUY",
+   "date": "2026-08-19",
    "team": "MTSTL",
    "pid": "ci:391832",
    "full": "Roston Chase",
@@ -96707,6 +96741,23 @@
    "status": "COMPLETED",
    "source": "ESPN scorecard · ⏳ provisional (dots unverified, awaiting cricsheet) · cricbuzz cross-checked (19 players)",
    "frozen_at": "2026-08-24",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-23::antigua and barbuda falcons|guyana amazon warriors",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 15 — MTANT v MTGUY",
+   "date": "2026-08-23",
+   "team": "MTGUY",
+   "pid": "ci:914517",
+   "full": "Ronaldo Jonathan Alimohamed",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-14",
    "provenance": "live",
    "fields": {
     "played": false
@@ -113055,6 +113106,23 @@
    "match": "Match 22 — MTTRI v MTGUY",
    "date": "2026-08-31",
    "team": "MTGUY",
+   "pid": "ci:914517",
+   "full": "Ronaldo Jonathan Alimohamed",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-14",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-31::guyana amazon warriors|trinbago knight riders",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 22 — MTTRI v MTGUY",
+   "date": "2026-08-31",
+   "team": "MTGUY",
    "pid": "ci:581379",
    "full": "Shai Hope",
    "points": 34,
@@ -125017,6 +125085,23 @@
    "tour": "Caribbean Premier League 2026",
    "match": "Match 26 — MTGUY v MTJAM",
    "date": "2026-09-04",
+   "team": "MTGUY",
+   "pid": "ci:914517",
+   "full": "Ronaldo Jonathan Alimohamed",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-14",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-04::guyana amazon warriors|jamaica kingsmen",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 26 — MTGUY v MTJAM",
+   "date": "2026-09-04",
    "team": "MTJAM",
    "pid": "ci:820351",
    "full": "Rovman Powell",
@@ -133143,6 +133228,23 @@
    "tour": "Caribbean Premier League 2026",
    "match": "Match 28 — MTGUY v MTSTK",
    "date": "2026-09-06",
+   "team": "MTGUY",
+   "pid": "ci:914517",
+   "full": "Ronaldo Jonathan Alimohamed",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-14",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-06::guyana amazon warriors|st kitts and nevis patriots",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 28 — MTGUY v MTSTK",
+   "date": "2026-09-06",
    "team": "MTSTK",
    "pid": "ci:398513",
    "full": "Saurabh Netravalkar",
@@ -135003,6 +135105,23 @@
    "status": "COMPLETED",
    "source": "ESPN scorecard · cricbuzz cross-checked (22 players) · ⏳ provisional (dots/maidens cross-checked · awaiting official cricsheet)",
    "frozen_at": "2026-09-09",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-08::antigua and barbuda falcons|guyana amazon warriors",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 30 — MTGUY v MTANT",
+   "date": "2026-09-08",
+   "team": "MTGUY",
+   "pid": "ci:914517",
+   "full": "Ronaldo Jonathan Alimohamed",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-14",
    "provenance": "live",
    "fields": {
     "played": false
@@ -139452,6 +139571,23 @@
    "status": "COMPLETED",
    "source": "ESPN scorecard · cricbuzz cross-checked (21 players), 1 unbridged · ⏳ provisional (dots/maidens cross-checked · awaiting official cricsheet)",
    "frozen_at": "2026-09-10",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-09::guyana amazon warriors|st lucia kings",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 31 — MTGUY v MTSTL",
+   "date": "2026-09-09",
+   "team": "MTGUY",
+   "pid": "ci:914517",
+   "full": "Ronaldo Jonathan Alimohamed",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "ESPN scorecard · cricbuzz cross-checked (21 players), 1 unbridged · ⏳ provisional (dots/maidens cross-checked · awaiting official cricsheet)",
+   "frozen_at": "2026-09-14",
    "provenance": "live",
    "fields": {
     "played": false
@@ -144467,6 +144603,23 @@
    "status": "COMPLETED",
    "source": "ESPN scorecard · cricbuzz cross-checked (19 players), 3 unbridged · ⏳ provisional (dots unverified for 3 unbridged bowlers: Chandradasa Brahammana Ralalage Lahiru Sudesh Kumara, Justin Pierre Greaves, Veerasammy Permaul · awaiting cricsheet)",
    "frozen_at": "2026-09-12",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-11::guyana amazon warriors|trinbago knight riders",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 33 — MTGUY v MTTRI",
+   "date": "2026-09-11",
+   "team": "MTGUY",
+   "pid": "ci:914517",
+   "full": "Ronaldo Jonathan Alimohamed",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "ESPN scorecard · cricbuzz cross-checked (22 players) · ⏳ provisional (dots/maidens cross-checked · awaiting official cricsheet)",
+   "frozen_at": "2026-09-14",
    "provenance": "live",
    "fields": {
     "played": false
