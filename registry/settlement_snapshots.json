@@ -98366,6 +98366,23 @@
    "tour": "European T20 Premier League 2026",
    "match": "Match 1 — MTROT v MTAMS",
    "date": "2026-08-26",
+   "team": "MTROT",
+   "pid": "ci:232359",
+   "full": "Colin Munro",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-15",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-26::amsterdam flames|rotterdam dockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 1 — MTROT v MTAMS",
+   "date": "2026-08-26",
    "team": "MTAMS",
    "pid": "ci:595921",
    "full": "Curtis Campher",
@@ -98611,6 +98628,23 @@
    "status": "COMPLETED",
    "source": "ESPN scorecard · cricbuzz cross-checked (6 players), 16 unbridged · ⏳ provisional (dots unverified for 11 unbridged bowlers: Anrich Arno Nortje, Bas de Leede, Benjamin Andrew Davey Manenti… · awaiting cricsheet)",
    "frozen_at": "2026-08-28",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-26::amsterdam flames|rotterdam dockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 1 — MTROT v MTAMS",
+   "date": "2026-08-26",
+   "team": "MTROT",
+   "pid": "ci:1195676",
+   "full": "Jasper John Davidson",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-15",
    "provenance": "live",
    "fields": {
     "played": false
@@ -102048,6 +102082,23 @@
     "bat_order": 10,
     "dismissal": "c & b Boult",
     "dismissed": true
+   }
+  },
+  {
+   "match_key": "2026-08-27::edinburgh castle rockers|glasgow cosmic",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 3 — MTEDI v MTGLA",
+   "date": "2026-08-27",
+   "team": "MTEDI",
+   "pid": "ci:461632",
+   "full": "Reece Topley",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-15",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
@@ -106458,6 +106509,23 @@
    "tour": "European T20 Premier League 2026",
    "match": "Match 6 — MTROT v MTBEL",
    "date": "2026-08-29",
+   "team": "MTROT",
+   "pid": "ci:232359",
+   "full": "Colin Munro",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-15",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-29::belfast wolves|rotterdam dockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 6 — MTROT v MTBEL",
+   "date": "2026-08-29",
    "team": "MTBEL",
    "pid": "ci:1118836",
    "full": "Crishan Kalugamage",
@@ -106822,6 +106890,23 @@
    "status": "COMPLETED",
    "source": "ESPN scorecard · cricbuzz cross-checked (5 players), 17 unbridged · ⏳ provisional (dots unverified for 7 unbridged bowlers: Anrich Arno Nortje, Benjamin Andrew Davey Manenti, Jai Moondra… · awaiting cricsheet)",
    "frozen_at": "2026-08-29",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-29::belfast wolves|rotterdam dockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 6 — MTROT v MTBEL",
+   "date": "2026-08-29",
+   "team": "MTROT",
+   "pid": "ci:1195676",
+   "full": "Jasper John Davidson",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-15",
    "provenance": "live",
    "fields": {
     "played": false
@@ -112086,6 +112171,23 @@
    "match": "Match 8 — MTEDI v MTDUB",
    "date": "2026-08-30",
    "team": "MTEDI",
+   "pid": "ci:461632",
+   "full": "Reece Topley",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-15",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-30::dublin guardians|edinburgh castle rockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 8 — MTEDI v MTDUB",
+   "date": "2026-08-30",
+   "team": "MTEDI",
    "pid": "ci:468573",
    "full": "Ross Adair",
    "points": 60,
@@ -115469,6 +115571,23 @@
    "match": "Match 9 — MTROT v MTGLA",
    "date": "2026-09-01",
    "team": "MTROT",
+   "pid": "ci:232359",
+   "full": "Colin Munro",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-15",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-01::glasgow cosmic|rotterdam dockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 9 — MTROT v MTGLA",
+   "date": "2026-09-01",
+   "team": "MTROT",
    "pid": "ci:221140",
    "full": "David Wiese",
    "points": 130,
@@ -115730,6 +115849,23 @@
    "status": "COMPLETED",
    "source": "ESPN scorecard · cricbuzz cross-checked (20 players), 2 unbridged · ⏳ provisional (dots unverified for 2 unbridged bowlers: Liam Robert Naylor, Vikramjit Singh · awaiting cricsheet)",
    "frozen_at": "2026-09-01",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-01::glasgow cosmic|rotterdam dockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 9 — MTROT v MTGLA",
+   "date": "2026-09-01",
+   "team": "MTROT",
+   "pid": "ci:1195676",
+   "full": "Jasper John Davidson",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-15",
    "provenance": "live",
    "fields": {
     "played": false
@@ -119074,6 +119210,23 @@
    "match": "Match 11 — MTBEL v MTEDI",
    "date": "2026-09-02",
    "team": "MTEDI",
+   "pid": "ci:461632",
+   "full": "Reece Topley",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-15",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-02::belfast wolves|edinburgh castle rockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 11 — MTBEL v MTEDI",
+   "date": "2026-09-02",
+   "team": "MTEDI",
    "pid": "ci:468573",
    "full": "Ross Adair",
    "points": 33,
@@ -119526,6 +119679,23 @@
    "tour": "European T20 Premier League 2026",
    "match": "Match 10 — MTROT v MTDUB",
    "date": "2026-09-02",
+   "team": "MTROT",
+   "pid": "ci:232359",
+   "full": "Colin Munro",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-15",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-02::dublin guardians|rotterdam dockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 10 — MTROT v MTDUB",
+   "date": "2026-09-02",
    "team": "MTDUB",
    "pid": "ci:364343",
    "full": "Craig Alexander Young",
@@ -119907,6 +120077,23 @@
    "status": "COMPLETED",
    "source": "ESPN scorecard · cricbuzz cross-checked (19 players), 3 unbridged · ⏳ provisional (dots unverified for 2 unbridged bowlers: Harmeet Singh Baddhan, Vikramjit Singh · awaiting cricsheet)",
    "frozen_at": "2026-09-02",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-02::dublin guardians|rotterdam dockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 10 — MTROT v MTDUB",
+   "date": "2026-09-02",
+   "team": "MTROT",
+   "pid": "ci:1195676",
+   "full": "Jasper John Davidson",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-15",
    "provenance": "live",
    "fields": {
     "played": false
@@ -127517,6 +127704,23 @@
    "match": "Match 14 — MTROT v MTEDI",
    "date": "2026-09-05",
    "team": "MTROT",
+   "pid": "ci:232359",
+   "full": "Colin Munro",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-15",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-05::edinburgh castle rockers|rotterdam dockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 14 — MTROT v MTEDI",
+   "date": "2026-09-05",
+   "team": "MTROT",
    "pid": "ci:221140",
    "full": "David Wiese",
    "points": 158,
@@ -127805,6 +128009,23 @@
    "tour": "European T20 Premier League 2026",
    "match": "Match 14 — MTROT v MTEDI",
    "date": "2026-09-05",
+   "team": "MTROT",
+   "pid": "ci:1195676",
+   "full": "Jasper John Davidson",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-15",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-05::edinburgh castle rockers|rotterdam dockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 14 — MTROT v MTEDI",
+   "date": "2026-09-05",
    "team": "MTEDI",
    "pid": "ci:256956",
    "full": "Laurie Evans",
@@ -127965,6 +128186,23 @@
    "status": "COMPLETED",
    "source": "ESPN scorecard · cricbuzz cross-checked (22 players) · ⏳ provisional (dots/maidens cross-checked · awaiting official cricsheet)",
    "frozen_at": "2026-09-05",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-05::edinburgh castle rockers|rotterdam dockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 14 — MTROT v MTEDI",
+   "date": "2026-09-05",
+   "team": "MTEDI",
+   "pid": "ci:461632",
+   "full": "Reece Topley",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-15",
    "provenance": "live",
    "fields": {
     "played": false
@@ -128502,6 +128740,23 @@
    "tour": "European T20 Premier League 2026",
    "match": "Match 17 — MTAMS v MTROT",
    "date": "2026-09-06",
+   "team": "MTROT",
+   "pid": "ci:232359",
+   "full": "Colin Munro",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-15",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-06::amsterdam flames|rotterdam dockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 17 — MTAMS v MTROT",
+   "date": "2026-09-06",
    "team": "MTAMS",
    "pid": "ci:595921",
    "full": "Curtis Campher",
@@ -128730,6 +128985,23 @@
    "status": "COMPLETED",
    "source": "ESPN scorecard · cricbuzz cross-checked (21 players), 1 unbridged · ⏳ provisional (dots/maidens cross-checked · awaiting official cricsheet)",
    "frozen_at": "2026-09-07",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-06::amsterdam flames|rotterdam dockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 17 — MTAMS v MTROT",
+   "date": "2026-09-06",
+   "team": "MTROT",
+   "pid": "ci:1195676",
+   "full": "Jasper John Davidson",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-15",
    "provenance": "live",
    "fields": {
     "played": false
@@ -132167,6 +132439,23 @@
     "bat_order": 0,
     "dismissal": "",
     "dismissed": false
+   }
+  },
+  {
+   "match_key": "2026-09-06::edinburgh castle rockers|glasgow cosmic",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 16 — MTGLA v MTEDI",
+   "date": "2026-09-06",
+   "team": "MTEDI",
+   "pid": "ci:461632",
+   "full": "Reece Topley",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-15",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
@@ -141945,6 +142234,23 @@
    "match": "Match 19 — MTROT v MTGLA",
    "date": "2026-09-10",
    "team": "MTROT",
+   "pid": "ci:232359",
+   "full": "Colin Munro",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "ESPN scorecard · cricbuzz cross-checked (22 players) · ⏳ provisional (dots/maidens cross-checked · awaiting official cricsheet)",
+   "frozen_at": "2026-09-15",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-10::glasgow cosmic|rotterdam dockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 19 — MTROT v MTGLA",
+   "date": "2026-09-10",
+   "team": "MTROT",
    "pid": "ci:221140",
    "full": "David Wiese",
    "points": 97,
@@ -142223,6 +142529,23 @@
    "status": "COMPLETED",
    "source": "ESPN scorecard · cricbuzz cross-checked (21 players), 1 unbridged · ⏳ provisional (dots/maidens cross-checked · awaiting official cricsheet)",
    "frozen_at": "2026-09-10",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-10::glasgow cosmic|rotterdam dockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 19 — MTROT v MTGLA",
+   "date": "2026-09-10",
+   "team": "MTROT",
+   "pid": "ci:1195676",
+   "full": "Jasper John Davidson",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "ESPN scorecard · cricbuzz cross-checked (22 players) · ⏳ provisional (dots/maidens cross-checked · awaiting official cricsheet)",
+   "frozen_at": "2026-09-15",
    "provenance": "live",
    "fields": {
     "played": false
@@ -143611,6 +143934,23 @@
    "match": "Match 21 — MTDUB v MTEDI",
    "date": "2026-09-11",
    "team": "MTEDI",
+   "pid": "ci:461632",
+   "full": "Reece Topley",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "ESPN scorecard · cricbuzz cross-checked (21 players), 1 unbridged · ⏳ provisional (dots unverified for 1 unbridged bowler: Craig Alexander Young · awaiting cricsheet)",
+   "frozen_at": "2026-09-15",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-11::dublin guardians|edinburgh castle rockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 21 — MTDUB v MTEDI",
+   "date": "2026-09-11",
+   "team": "MTEDI",
    "pid": "ci:468573",
    "full": "Ross Adair",
    "points": 18,
@@ -144987,6 +145327,23 @@
    "tour": "European T20 Premier League 2026",
    "match": "Match 22 — MTBEL v MTROT",
    "date": "2026-09-12",
+   "team": "MTROT",
+   "pid": "ci:232359",
+   "full": "Colin Munro",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "ESPN scorecard · cricbuzz cross-checked (21 players), 1 unbridged · ⏳ provisional (dots unverified for 1 unbridged bowler: Shubham Subhash Ranjane · awaiting cricsheet)",
+   "frozen_at": "2026-09-15",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-12::belfast wolves|rotterdam dockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 22 — MTBEL v MTROT",
+   "date": "2026-09-12",
    "team": "MTBEL",
    "pid": "ci:1118836",
    "full": "Crishan Kalugamage",
@@ -145351,6 +145708,23 @@
    "status": "COMPLETED_FLAGGED",
    "source": "ESPN scorecard · ⚠ cricbuzz unavailable · ⏳ provisional (dots/maidens unverified, awaiting cricsheet)",
    "frozen_at": "2026-09-12",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-12::belfast wolves|rotterdam dockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 22 — MTBEL v MTROT",
+   "date": "2026-09-12",
+   "team": "MTROT",
+   "pid": "ci:1195676",
+   "full": "Jasper John Davidson",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "ESPN scorecard · cricbuzz cross-checked (21 players), 1 unbridged · ⏳ provisional (dots unverified for 1 unbridged bowler: Shubham Subhash Ranjane · awaiting cricsheet)",
+   "frozen_at": "2026-09-15",
    "provenance": "live",
    "fields": {
     "played": false
@@ -147493,6 +147867,23 @@
    "status": "COMPLETED",
    "source": "ESPN scorecard · cricbuzz cross-checked (22 players) · ⏳ provisional (dots/maidens cross-checked · awaiting official cricsheet)",
    "frozen_at": "2026-09-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-13::amsterdam flames|edinburgh castle rockers",
+   "tour": "European T20 Premier League 2026",
+   "match": "Match 24 — MTEDI v MTAMS",
+   "date": "2026-09-13",
+   "team": "MTEDI",
+   "pid": "ci:461632",
+   "full": "Reece Topley",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "ESPN scorecard · cricbuzz cross-checked (22 players) · ⏳ provisional (dots/maidens cross-checked · awaiting official cricsheet)",
+   "frozen_at": "2026-09-15",
    "provenance": "live",
    "fields": {
     "played": false
