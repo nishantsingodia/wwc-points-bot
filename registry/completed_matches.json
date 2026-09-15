@@ -1431,6 +1431,15 @@
    "first_status": "COMPLETED",
    "first_seen": "2026-09-13",
    "provenance": "live"
+  },
+  {
+   "tour": "European T20 Premier League 2026",
+   "match_key": "2026-09-15::amsterdam flames|dublin guardians",
+   "match": "Match 26 — MTDUB v MTAMS",
+   "date": "2026-09-15",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-09-15",
+   "provenance": "live"
   }
  ]
 }

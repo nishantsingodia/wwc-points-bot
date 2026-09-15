@@ -1214,6 +1214,45 @@
         "Caribbean Premier League 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:232359",
+      "display": "Colin Munro",
+      "aliases": [
+        "colin munro"
+      ],
+      "team": "MTROT",
+      "role": "BAT",
+      "tours": [
+        "European T20 Premier League 2026"
+      ],
+      "source": "auto"
+    },
+    {
+      "pid": "ci:461632",
+      "display": "Reece Topley",
+      "aliases": [
+        "reece james william topley"
+      ],
+      "team": "MTEDI",
+      "role": "BOWL",
+      "tours": [
+        "European T20 Premier League 2026"
+      ],
+      "source": "auto"
+    },
+    {
+      "pid": "ci:1195676",
+      "display": "Jasper John Davidson",
+      "aliases": [
+        "jasper john davidson"
+      ],
+      "team": "MTROT",
+      "role": "BOWL",
+      "tours": [
+        "European T20 Premier League 2026"
+      ],
+      "source": "auto"
     }
   ]
 }
