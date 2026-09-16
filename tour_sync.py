@@ -1114,6 +1114,131 @@ def _dump(p, obj):
     json.dump(obj, open(p, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
     json.load(open(p, encoding="utf-8"))  # re-parse: fail loudly on any corruption
 
+def _ist_dt(ist_iso):
+    """An IST "...+05:30" stamp from matches.json back into a datetime, for time comparisons."""
+    return datetime.fromisoformat(ist_iso)
+
+
+def _round_label(espn_name):
+    """ESPN's event description -> a knockout's NAME, or "" for an ordinary numbered league game.
+
+    "Eliminator (N), Caribbean Premier League at Bridgetown, Sep 16 2026" -> "Eliminator";
+    "35th Match (N), ..." -> "" (that one is numbered, not named)."""
+    head = (espn_name or "").split(",")[0]
+    head = re.sub(r"\s*\((?:D/N|N|D)\)\s*$", "", head).strip()
+    return "" if re.match(r"^\d+(?:st|nd|rd|th)\s+Match$", head, re.I) else head
+
+
+def refixture(name, state, apply=False):
+    """Re-scan an ALREADY-INGESTED tour and APPEND the fixtures that have since resolved.
+
+    A league ingested mid-season has TBA-vs-TBA knockouts, and gen_tour rightly drops them — a
+    fixture with no teams is not a fixture. But nothing ever looked again, so the playoffs simply
+    never arrived: CPL and WCPL both sat frozen at the end of their league phase with the
+    eliminator hours away (16 Sep 2026). This is the missing second half.
+
+    ONLY matches.json + toss_windows.json are touched — never the squads, the roster or the
+    tours.json entry — and only ever by APPEND, so every fixture already in the draft keeps its
+    key, its matchNum, and any contest built on it. Identity comes from the tour's OWN existing
+    rows (slug, gender, format, key prefix, numbering), never re-derived: CPL's slug is "cpl-2026"
+    from the era before tour_sync stamped its own, and recomputing it would fork the tour in two.
+    """
+    tj = json.load(open(f"{BOT}/tours.json"))
+    hit = [t for t in tj if same_tour(name, t.get("name", ""))]
+    if len(hit) != 1:
+        print(f"refixture: {name!r} matches {len(hit)} tours.json entries — ingest it first "
+              f"(--espn-tour) or name it exactly", file=sys.stderr)
+        return []
+    entry = hit[0]
+    lid = str(entry.get("espn_series") or "").strip()
+    if not lid:
+        print(f"refixture: {entry['name']!r} has no espn_series — nothing to re-scan", file=sys.stderr)
+        return []
+
+    # Team names come from the tour's OWN squads file, so "Barbados Tridents" can never resolve to
+    # the men's MTBAR while re-fixturing the women's tour. ESPN suffixes a women's side ("... Women"),
+    # the squads file does not, so both spellings map to the same code.
+    squads = json.load(open(f"{BOT}/{entry['squads']}"))
+    code_of = {}
+    for c, v in squads.items():
+        nm = v.get("name") if isinstance(v, dict) else None
+        if nm:
+            code_of[norm(nm)] = c
+            code_of[norm(nm + " Women")] = c
+
+    prefix = "".join(w[0] for w in re.findall(r"[A-Za-z]+", entry["name"]))[:6].upper()
+    existing = [m for m in state["matches"] if m["key"].startswith(prefix + "_")]
+    if not existing:
+        print(f"refixture: no draft matches under the {prefix}_ key prefix — refusing to append, "
+              f"because appending to nothing is an ingest, not a re-fixture", file=sys.stderr)
+        return []
+    gl, slug, score_fmt = existing[0]["gender"], existing[0].get("tour"), existing[0]["format"]
+    # Same pair, within 36 HOURS — not "same calendar day". ESPN moved CPL's Guyana v St Kitts by
+    # five hours, which crossed midnight IST, and a day-keyed dedupe read the moved fixture as a
+    # brand-new one and would have appended a duplicate of a match already played (16 Sep 2026).
+    # A double round-robin does repeat a pair, but never inside a day and a half.
+    played = [(frozenset((m["team1"], m["team2"])), _ist_dt(m["date"]), m) for m in existing]
+    nums = [int(n.group(1)) for m in existing
+            if (n := re.match(rf"{re.escape(prefix)}_{gl}(\d+)_", m["key"]))]
+    nxt = max(nums, default=len(existing)) + 1
+
+    now = datetime.now(timezone.utc)
+    ml, _ = _espn_matchlist(lid, now, entry["name"])
+    added, toss, drift = [], [], []
+    for m in sorted(ml, key=lambda r: r.get("dateTimeGMT") or ""):
+        raw = (m.get("teams") or [None, None])[:2]
+        if len(raw) < 2:
+            continue
+        c1, c2 = code_of.get(norm(raw[0] or "")), code_of.get(norm(raw[1] or ""))
+        dt = m.get("dateTimeGMT")
+        if not (c1 and c2) or c1 == c2 or not dt:
+            continue                      # still TBA (or a team this tour doesn't know) — look again next run
+        ist = to_ist_iso(dt)
+        when = _ist_dt(ist)
+        prior = next((m for pair, t, m in played
+                      if pair == frozenset((c1, c2)) and abs((t - when).total_seconds()) <= 36 * 3600), None)
+        if prior is not None:
+            # Already in the draft. If ESPN has since MOVED it, say so and leave it alone: the
+            # draft denormalizes match_deadline into every contest at creation, so rewriting a time
+            # here would silently disagree with the contests already built on it.
+            if abs((_ist_dt(prior["date"]) - when).total_seconds()) > 1800:
+                drift.append((prior, ist))
+            continue
+        rnd = _round_label(m.get("name"))
+        added.append({
+            "matchNum": state["next_match_num"], "key": f"{prefix}_{gl}{nxt}_{c1}_{c2}_{mmm_dd(dt)}",
+            "gender": gl, "team1": c1, "team2": c2,
+            # A knockout wears ESPN's name for it. "Match 36" is true but tells a drafter nothing
+            # about what they are drafting; "Final" does.
+            "label": f"{rnd}: {c1} v {c2}" if rnd else f"Match {nxt}: {c1} v {c2}",
+            "date": ist, "format": score_fmt, "tour": slug,
+        })
+        toss.append(to_utc_z(dt))
+        state["next_match_num"] += 1
+        nxt += 1
+
+    unresolved = sum(1 for m in ml
+                     if len((m.get("teams") or [])[:2]) == 2
+                     and not (code_of.get(norm(m["teams"][0] or "")) and code_of.get(norm(m["teams"][1] or ""))))
+    print(f"refixture {entry['name']!r}: ESPN has {len(ml)} fixture(s); {len(added)} new, "
+          f"{unresolved} still unresolved (TBA)", file=sys.stderr)
+    for a in added:
+        print(f"    + {a['label']:34} {a['date'][:16]}  key={a['key']}", file=sys.stderr)
+    for prior, ist in drift:
+        ahead = "UPCOMING" if _ist_dt(ist) > datetime.now(IST) else "past"
+        print(f"    ⚠ TIME MOVED ({ahead}): {prior['label']:28} {prior['date'][:16]} -> {ist[:16]} "
+              f"  key={prior['key']} (left as-is: contests denormalize match_deadline)", file=sys.stderr)
+
+    if added and apply:
+        dm = json.load(open(f"{DRAFT}/data/matches.json"))
+        dm.extend(added)
+        _dump(f"{DRAFT}/data/matches.json", dm)
+        tw = json.load(open(f"{BOT}/toss_windows.json"))
+        _dump(f"{BOT}/toss_windows.json", sorted(set(tw) | set(toss)))
+        print(f"  [apply] appended {len(added)} fixture(s) to the draft + toss windows", file=sys.stderr)
+    return added
+
+
 def apply_to_repos(tours):
     """Append each generated tour into the draft + bot files. Idempotent-ish: skips a
     tour whose tab is already registered. Re-parses every file it writes."""
@@ -1194,11 +1319,22 @@ def main():
                          "ingested yet (an optional espn_series column skips name resolution).")
     ap.add_argument("--espn-tour", help="add ONE named tour: name -> ESPN league id -> fixtures + "
                     "full squads. e.g. --espn-tour 'India tour of Zimbabwe 2026'")
+    ap.add_argument("--refixture", action="append", metavar="TOUR",
+                    help="a tour ALREADY in tours.json: re-scan ESPN and append any fixture that "
+                         "has since resolved (knockouts drawn after the league was ingested). "
+                         "Repeatable. Matches + toss windows only — never squads or rosters.")
     ap.add_argument("--discover", action="store_true",
                     help="ESPN watchlist auto-discovery (search -> league id -> fixtures). "
                          "BEST-EFFORT only: ESPN's search buries a near-term bilateral behind older "
                          "editions of the same tour, so it complements Column A, never replaces it.")
     args = ap.parse_args()
+    if args.refixture:
+        # Re-fixturing is its own errand: it needs no squads, no seeds and no discovery, and it
+        # must be runnable for a tour that every other path deliberately skips as "already there".
+        state = load_state()
+        n = sum(len(refixture(t, state, apply=args.apply and not args.dry_run)) for t in args.refixture)
+        print(f"\n::refixtured::{n}")
+        return
     if not (args.from_status_sheet or args.espn_tour or args.discover):
         # Deliberately an error, not a default. The old default ran cricapi discovery; with that
         # gone, quietly picking a path (or quietly doing nothing) is how a missed tour hides.
