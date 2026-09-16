@@ -4,8 +4,8 @@
  "_rules": "PINS ARE READ, NOT RE-DERIVED — that is the point: a rename upstream cannot move or drop a pairing that is already recorded. A later derivation that finds NOTHING does not disturb a pin (absence is not evidence). A later derivation that finds a DIFFERENT cricbuzz match revokes BOTH claims; so does one cricbuzz match claimed by two different fixtures, and one key carrying two ESPN events. Never last-wins. A revoked key stays revoked until a human runs --forget.",
  "_note": "each pin's `confirmations` list IS the fact log; pins/revoked are a pure function of it (compile_pins o confirmations_log), and no clock is read anywhere. Regenerate, never hand-edit.",
  "counts": {
-  "confirmations": 193,
-  "pinned": 158,
+  "confirmations": 194,
+  "pinned": 159,
   "revoked": 0,
   "series": 6
  },
@@ -3395,6 +3395,27 @@
      "method": "teams+date",
      "espn_event": "1547897",
      "cb_desc": "26th Match",
+     "cb_date": "2026-09-15"
+    }
+   ]
+  },
+  "12870|2026-09-15|edinburgh castle rockers+rotterdam dockers": {
+   "cricbuzz_match_id": "169403",
+   "series_id": "12870",
+   "date": "2026-09-15",
+   "teams": [
+    "edinburgh castle rockers",
+    "rotterdam dockers"
+   ],
+   "espn_events": [
+    "1547898"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1547898",
+     "cb_desc": "27th Match",
      "cb_date": "2026-09-15"
     }
    ]

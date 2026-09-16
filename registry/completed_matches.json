@@ -1440,6 +1440,15 @@
    "first_status": "COMPLETED",
    "first_seen": "2026-09-15",
    "provenance": "live"
+  },
+  {
+   "tour": "European T20 Premier League 2026",
+   "match_key": "2026-09-15::edinburgh castle rockers|rotterdam dockers",
+   "match": "Match 27 — MTEDI v MTROT",
+   "date": "2026-09-15",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-09-16",
+   "provenance": "live"
   }
  ]
 }
