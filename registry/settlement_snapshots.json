@@ -57133,6 +57133,23 @@
    "match": "Match 1 — MTANT v MTJAM",
    "date": "2026-08-07",
    "team": "MTJAM",
+   "pid": "ci:1124724",
+   "full": "Romaine Romario Morris",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-17",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-07::antigua and barbuda falcons|jamaica kingsmen",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 1 — MTANT v MTJAM",
+   "date": "2026-08-07",
+   "team": "MTJAM",
    "pid": "ci:820351",
    "full": "Rovman Powell",
    "points": 109,
@@ -75944,6 +75961,23 @@
    "match": "Match 4 — MTJAM v MTBAR",
    "date": "2026-08-12",
    "team": "MTJAM",
+   "pid": "ci:1124724",
+   "full": "Romaine Romario Morris",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-17",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-12::barbados tridents|jamaica kingsmen",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 4 — MTJAM v MTBAR",
+   "date": "2026-08-12",
+   "team": "MTJAM",
    "pid": "ci:820351",
    "full": "Rovman Powell",
    "points": 74,
@@ -83049,6 +83083,23 @@
    "tour": "Caribbean Premier League 2026",
    "match": "Match 6 — MTJAM v MTGUY",
    "date": "2026-08-14",
+   "team": "MTJAM",
+   "pid": "ci:1124724",
+   "full": "Romaine Romario Morris",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-17",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-14::guyana amazon warriors|jamaica kingsmen",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 6 — MTJAM v MTGUY",
+   "date": "2026-08-14",
    "team": "MTGUY",
    "pid": "ci:677077",
    "full": "Romario Shepherd",
@@ -87255,6 +87306,23 @@
    "status": "COMPLETED",
    "source": "ESPN scorecard (cricapi empty) · ⏳ provisional (dots unverified, awaiting cricsheet) · cricbuzz cross-checked (18 players)",
    "frozen_at": "2026-08-16",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-16::jamaica kingsmen|trinbago knight riders",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 8 — MTJAM v MTTRI",
+   "date": "2026-08-16",
+   "team": "MTJAM",
+   "pid": "ci:1124724",
+   "full": "Romaine Romario Morris",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-17",
    "provenance": "live",
    "fields": {
     "played": false
@@ -92298,6 +92366,23 @@
    "match": "Match 10 — MTJAM v MTSTK",
    "date": "2026-08-19",
    "team": "MTJAM",
+   "pid": "ci:1124724",
+   "full": "Romaine Romario Morris",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-17",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-19::jamaica kingsmen|st kitts and nevis patriots",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 10 — MTJAM v MTSTK",
+   "date": "2026-08-19",
+   "team": "MTJAM",
    "pid": "ci:820351",
    "full": "Rovman Powell",
    "points": 91,
@@ -94514,6 +94599,23 @@
    "status": "COMPLETED",
    "source": "ESPN scorecard · ⏳ provisional (dots unverified, awaiting cricsheet) · cricbuzz cross-checked (18 players)",
    "frozen_at": "2026-08-23",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-21::jamaica kingsmen|st lucia kings",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 13 — MTSTL v MTJAM",
+   "date": "2026-08-21",
+   "team": "MTJAM",
+   "pid": "ci:1124724",
+   "full": "Romaine Romario Morris",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-17",
    "provenance": "live",
    "fields": {
     "played": false
@@ -104062,6 +104164,23 @@
    "match": "Match 18 — MTSTK v MTJAM",
    "date": "2026-08-27",
    "team": "MTJAM",
+   "pid": "ci:1124724",
+   "full": "Romaine Romario Morris",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-17",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-27::jamaica kingsmen|st kitts and nevis patriots",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 18 — MTSTK v MTJAM",
+   "date": "2026-08-27",
+   "team": "MTJAM",
    "pid": "ci:820351",
    "full": "Rovman Powell",
    "points": 43,
@@ -109219,6 +109338,23 @@
    "status": "COMPLETED",
    "source": "ESPN scorecard · cricbuzz cross-checked (17 players), 5 unbridged · ⏳ provisional (dots unverified for 2 unbridged bowlers: Abdul-Raheem Salafee Ibn Hassan Toppin, Saim Ayub · awaiting cricsheet)",
    "frozen_at": "2026-08-30",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-29::jamaica kingsmen|trinbago knight riders",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 20 — MTTRI v MTJAM",
+   "date": "2026-08-29",
+   "team": "MTJAM",
+   "pid": "ci:1124724",
+   "full": "Romaine Romario Morris",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-17",
    "provenance": "live",
    "fields": {
     "played": false
@@ -125211,6 +125347,23 @@
    "status": "COMPLETED",
    "source": "ESPN scorecard · cricbuzz cross-checked (21 players), 1 unbridged · ⏳ provisional (dots/maidens cross-checked · awaiting official cricsheet)",
    "frozen_at": "2026-09-05",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-04::guyana amazon warriors|jamaica kingsmen",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 26 — MTGUY v MTJAM",
+   "date": "2026-09-04",
+   "team": "MTJAM",
+   "pid": "ci:1124724",
+   "full": "Romaine Romario Morris",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-17",
    "provenance": "live",
    "fields": {
     "played": false
@@ -150043,6 +150196,23 @@
    "status": "COMPLETED",
    "source": "ESPN scorecard · cricbuzz cross-checked (19 players), 3 unbridged · ⏳ provisional (dots unverified for 3 unbridged bowlers: AM Ghazanfar, Jakeem Javier Pollard, Shadrack Descarte · awaiting cricsheet)",
    "frozen_at": "2026-09-13",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-13::barbados tridents|jamaica kingsmen",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 34 — MTBAR v MTJAM",
+   "date": "2026-09-13",
+   "team": "MTJAM",
+   "pid": "ci:1124724",
+   "full": "Romaine Romario Morris",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "ESPN scorecard · cricbuzz cross-checked (21 players), 1 unbridged · ⏳ provisional (dots unverified for 1 unbridged bowler: AM Ghazanfar · awaiting cricsheet)",
+   "frozen_at": "2026-09-17",
    "provenance": "live",
    "fields": {
     "played": false
