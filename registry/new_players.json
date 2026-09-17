@@ -1253,6 +1253,19 @@
         "European T20 Premier League 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:1124724",
+      "display": "Romaine Romario Morris",
+      "aliases": [
+        "romaine romario morris"
+      ],
+      "team": "MTJAM",
+      "role": "BAT",
+      "tours": [
+        "Caribbean Premier League 2026"
+      ],
+      "source": "auto"
     }
   ]
 }
