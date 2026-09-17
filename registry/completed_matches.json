@@ -1451,9 +1451,36 @@
    "provenance": "live"
   },
   {
+   "tour": "Caribbean Premier League 2026",
+   "match_key": "2026-09-16::barbados tridents|jamaica kingsmen",
+   "match": "Match 36 — MTBAR v MTJAM",
+   "date": "2026-09-16",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-09-17",
+   "provenance": "live"
+  },
+  {
+   "tour": "European T20 Premier League 2026",
+   "match_key": "2026-09-16::amsterdam flames|glasgow cosmic",
+   "match": "Match 28 — MTGLA v MTAMS",
+   "date": "2026-09-16",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-09-17",
+   "provenance": "live"
+  },
+  {
    "tour": "European T20 Premier League 2026",
    "match_key": "2026-09-17::belfast wolves|edinburgh castle rockers",
    "match": "Match 29 — MTBEL v MTEDI",
+   "date": "2026-09-17",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-09-17",
+   "provenance": "live"
+  },
+  {
+   "tour": "European T20 Premier League 2026",
+   "match_key": "2026-09-17::dublin guardians|rotterdam dockers",
+   "match": "Match 30 — MTDUB v MTROT",
    "date": "2026-09-17",
    "first_status": "COMPLETED_FLAGGED",
    "first_seen": "2026-09-17",
