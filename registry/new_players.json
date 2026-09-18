@@ -1266,6 +1266,19 @@
         "Caribbean Premier League 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:1205559",
+      "display": "Mohammad Haris",
+      "aliases": [
+        "mohammad haris"
+      ],
+      "team": "MTGUY",
+      "role": "BAT",
+      "tours": [
+        "Caribbean Premier League 2026"
+      ],
+      "source": "auto"
     }
   ]
 }
