@@ -82914,6 +82914,23 @@
    "match": "Match 6 — MTJAM v MTGUY",
    "date": "2026-08-14",
    "team": "MTGUY",
+   "pid": "ci:1205559",
+   "full": "Mohammad Haris",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-18",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-14::guyana amazon warriors|jamaica kingsmen",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 6 — MTJAM v MTGUY",
+   "date": "2026-08-14",
+   "team": "MTGUY",
    "pid": "ci:25913",
    "full": "Mohammad Nabi",
    "points": 198,
@@ -91176,6 +91193,23 @@
    "match": "Match 11 — MTSTL v MTGUY",
    "date": "2026-08-19",
    "team": "MTGUY",
+   "pid": "ci:1205559",
+   "full": "Mohammad Haris",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-18",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-19::guyana amazon warriors|st lucia kings",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 11 — MTSTL v MTGUY",
+   "date": "2026-08-19",
+   "team": "MTGUY",
    "pid": "ci:25913",
    "full": "Mohammad Nabi",
    "points": 23,
@@ -96676,6 +96710,23 @@
     "bat_order": 7,
     "dismissal": "c Joseph b Shepherd",
     "dismissed": true
+   }
+  },
+  {
+   "match_key": "2026-08-23::antigua and barbuda falcons|guyana amazon warriors",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 15 — MTANT v MTGUY",
+   "date": "2026-08-23",
+   "team": "MTGUY",
+   "pid": "ci:1205559",
+   "full": "Mohammad Haris",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-18",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
@@ -113157,6 +113208,23 @@
    "match": "Match 22 — MTTRI v MTGUY",
    "date": "2026-08-31",
    "team": "MTGUY",
+   "pid": "ci:1205559",
+   "full": "Mohammad Haris",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-18",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-08-31::guyana amazon warriors|trinbago knight riders",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 22 — MTTRI v MTGUY",
+   "date": "2026-08-31",
+   "team": "MTGUY",
    "pid": "ci:25913",
    "full": "Mohammad Nabi",
    "points": 125,
@@ -125188,6 +125256,23 @@
    "match": "Match 26 — MTGUY v MTJAM",
    "date": "2026-09-04",
    "team": "MTGUY",
+   "pid": "ci:1205559",
+   "full": "Mohammad Haris",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-18",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-04::guyana amazon warriors|jamaica kingsmen",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 26 — MTGUY v MTJAM",
+   "date": "2026-09-04",
+   "team": "MTGUY",
    "pid": "ci:25913",
    "full": "Mohammad Nabi",
    "points": 60,
@@ -133416,6 +133501,23 @@
    "match": "Match 28 — MTGUY v MTSTK",
    "date": "2026-09-06",
    "team": "MTGUY",
+   "pid": "ci:1205559",
+   "full": "Mohammad Haris",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-18",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-06::guyana amazon warriors|st kitts and nevis patriots",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 28 — MTGUY v MTSTK",
+   "date": "2026-09-06",
+   "team": "MTGUY",
    "pid": "ci:25913",
    "full": "Mohammad Nabi",
    "points": 215,
@@ -135380,6 +135482,23 @@
     "bat_order": 5,
     "dismissal": "c Pretorius b Shepherd",
     "dismissed": true
+   }
+  },
+  {
+   "match_key": "2026-09-08::antigua and barbuda falcons|guyana amazon warriors",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 30 — MTGUY v MTANT",
+   "date": "2026-09-08",
+   "team": "MTGUY",
+   "pid": "ci:1205559",
+   "full": "Mohammad Haris",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-18",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
@@ -139846,6 +139965,23 @@
     "bat_order": 5,
     "dismissal": "c Asalanka b Chase",
     "dismissed": true
+   }
+  },
+  {
+   "match_key": "2026-09-09::guyana amazon warriors|st lucia kings",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 31 — MTGUY v MTSTL",
+   "date": "2026-09-09",
+   "team": "MTGUY",
+   "pid": "ci:1205559",
+   "full": "Mohammad Haris",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-18",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
@@ -144937,6 +145073,23 @@
    "match": "Match 33 — MTGUY v MTTRI",
    "date": "2026-09-11",
    "team": "MTGUY",
+   "pid": "ci:1205559",
+   "full": "Mohammad Haris",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-18",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-11::guyana amazon warriors|trinbago knight riders",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 33 — MTGUY v MTTRI",
+   "date": "2026-09-11",
+   "team": "MTGUY",
    "pid": "ci:25913",
    "full": "Mohammad Nabi",
    "points": 0,
@@ -148941,6 +149094,23 @@
     "bat_order": 5,
     "dismissal": "c Descarte b Layne",
     "dismissed": true
+   }
+  },
+  {
+   "match_key": "2026-09-13::barbados tridents|guyana amazon warriors",
+   "tour": "Caribbean Premier League 2026",
+   "match": "Match 35 — MTBAR v MTGUY",
+   "date": "2026-09-13",
+   "team": "MTGUY",
+   "pid": "ci:1205559",
+   "full": "Mohammad Haris",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "cricsheet · official",
+   "frozen_at": "2026-09-18",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
