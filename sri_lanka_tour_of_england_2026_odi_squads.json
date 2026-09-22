@@ -1,0 +1,140 @@
+{
+  "MOENG": {
+    "name": "England",
+    "players": [
+      [
+        "Harry Brook",
+        "BAT"
+      ],
+      [
+        "Rehan Ahmed",
+        "BOWL"
+      ],
+      [
+        "Jofra Archer",
+        "BOWL"
+      ],
+      [
+        "Gus Atkinson",
+        "BOWL"
+      ],
+      [
+        "Sonny Baker",
+        "BOWL"
+      ],
+      [
+        "Tom Banton",
+        "BAT"
+      ],
+      [
+        "Jos Buttler",
+        "BAT"
+      ],
+      [
+        "Jordan Cox",
+        "BAT"
+      ],
+      [
+        "Henry Crocombe",
+        "BOWL"
+      ],
+      [
+        "Liam Dawson",
+        "AR"
+      ],
+      [
+        "Ben Duckett",
+        "BAT"
+      ],
+      [
+        "Will Jacks",
+        "BAT"
+      ],
+      [
+        "Jamie Overton",
+        "BOWL"
+      ],
+      [
+        "Adil Rashid",
+        "BOWL"
+      ],
+      [
+        "Joe Root",
+        "BAT"
+      ],
+      [
+        "Josh Tongue",
+        "BOWL"
+      ]
+    ]
+  },
+  "MOSRI": {
+    "name": "Sri Lanka",
+    "players": [
+      [
+        "Kusal Mendis",
+        "BAT"
+      ],
+      [
+        "Charith Asalanka",
+        "BAT"
+      ],
+      [
+        "Dushmantha Chameera",
+        "BOWL"
+      ],
+      [
+        "Sachindu Colombage",
+        "BOWL"
+      ],
+      [
+        "Asitha Fernando",
+        "BOWL"
+      ],
+      [
+        "Wanindu Hasaranga",
+        "AR"
+      ],
+      [
+        "Janith Liyanage",
+        "BAT"
+      ],
+      [
+        "Dilshan Madushanka",
+        "BOWL"
+      ],
+      [
+        "Eshan Malinga",
+        "BOWL"
+      ],
+      [
+        "Kamindu Mendis",
+        "AR"
+      ],
+      [
+        "Kamil Mishara",
+        "BAT"
+      ],
+      [
+        "Pathum Nissanka",
+        "BAT"
+      ],
+      [
+        "Pavan Rathnayake",
+        "BAT"
+      ],
+      [
+        "Dasun Shanaka",
+        "AR"
+      ],
+      [
+        "Maheesh Theekshana",
+        "BOWL"
+      ],
+      [
+        "Dunith Wellalage",
+        "BOWL"
+      ]
+    ]
+  }
+}

@@ -1,6 +1,6 @@
 {
  "anchor": "cricinfo_id (ci:); cs:/uncapped: fallback; cricsheet_id derived from crosswalk",
- "count": 890,
+ "count": 900,
  "players": {
   "ci:597806": {
    "aliases": [
@@ -2932,7 +2932,8 @@
    ],
    "tours": [
     "Australia tour of Bangladesh 2026 (Men T20I)",
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "Australia tour of South Africa 2026/27 (ODI)"
    ],
    "cricinfo_id": "272450",
    "cricsheet_id": "3d8feaf8",
@@ -2950,7 +2951,8 @@
     "jp inglis"
    ],
    "tours": [
-    "Australia tour of Bangladesh 2026 (Men T20I)"
+    "Australia tour of Bangladesh 2026 (Men T20I)",
+    "Australia tour of South Africa 2026/27 (ODI)"
    ],
    "cricinfo_id": "662235",
    "cricsheet_id": "989889ff",
@@ -2966,7 +2968,8 @@
     "cooper patrick leonard connolly"
    ],
    "tours": [
-    "Australia tour of Bangladesh 2026 (Men T20I)"
+    "Australia tour of Bangladesh 2026 (Men T20I)",
+    "Australia tour of South Africa 2026/27 (ODI)"
    ],
    "cricinfo_id": "1210488",
    "cricsheet_id": "fe366f34",
@@ -2982,7 +2985,8 @@
     "mt renshaw"
    ],
    "tours": [
-    "Australia tour of Bangladesh 2026 (Men T20I)"
+    "Australia tour of Bangladesh 2026 (Men T20I)",
+    "Australia tour of South Africa 2026/27 (ODI)"
    ],
    "cricinfo_id": "722303",
    "cricsheet_id": "218d4d78",
@@ -3036,7 +3040,8 @@
     "joel derek davies"
    ],
    "tours": [
-    "Australia tour of Bangladesh 2026 (Men T20I)"
+    "Australia tour of Bangladesh 2026 (Men T20I)",
+    "Australia tour of South Africa 2026/27 (ODI)"
    ],
    "cricinfo_id": "1295851",
    "cricsheet_id": "5cdf8304",
@@ -3052,7 +3057,8 @@
    ],
    "tours": [
     "Australia tour of Bangladesh 2026 (Men T20I)",
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "Australia tour of South Africa 2026/27 (ODI)"
    ],
    "cricinfo_id": "1050545",
    "cricsheet_id": "3b53243a",
@@ -3068,7 +3074,8 @@
    ],
    "tours": [
     "Australia tour of Bangladesh 2026 (Men T20I)",
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "Australia tour of South Africa 2026/27 (ODI)"
    ],
    "cricinfo_id": "826915",
    "cricsheet_id": "9eb1455b",
@@ -3085,7 +3092,8 @@
     "spencer johnson"
    ],
    "tours": [
-    "Australia tour of Bangladesh 2026 (Men T20I)"
+    "Australia tour of Bangladesh 2026 (Men T20I)",
+    "Australia tour of South Africa 2026/27 (ODI)"
    ],
    "cricinfo_id": "1123718",
    "cricsheet_id": "83c3e8e3",
@@ -3101,7 +3109,8 @@
    ],
    "tours": [
     "Australia tour of Bangladesh 2026 (Men T20I)",
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "Australia tour of South Africa 2026/27 (ODI)"
    ],
    "cricinfo_id": "379504",
    "cricsheet_id": "14f96089",
@@ -3118,7 +3127,8 @@
     "cameron green"
    ],
    "tours": [
-    "Australia tour of Bangladesh 2026 (Men T20I)"
+    "Australia tour of Bangladesh 2026 (Men T20I)",
+    "Australia tour of South Africa 2026/27 (ODI)"
    ],
    "cricinfo_id": "1076713",
    "cricsheet_id": "eaa76d3c",
@@ -3437,7 +3447,8 @@
    ],
    "tours": [
     "Major League Cricket 2026",
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "Australia tour of South Africa 2026/27 (ODI)"
    ],
    "cricinfo_id": "605661",
    "cricsheet_id": "e66732f8",
@@ -3455,7 +3466,8 @@
    ],
    "tours": [
     "Major League Cricket 2026",
-    "Caribbean Premier League 2026"
+    "Caribbean Premier League 2026",
+    "Australia tour of South Africa 2026/27 (ODI)"
    ],
    "cricinfo_id": "379143",
    "cricsheet_id": "372455c4",
@@ -3540,7 +3552,8 @@
     "corbin bosch"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "Australia tour of South Africa 2026/27 (ODI)"
    ],
    "cricinfo_id": "594322",
    "cricsheet_id": "172dff15",
@@ -3845,7 +3858,8 @@
    ],
    "tours": [
     "Major League Cricket 2026",
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "Australia tour of South Africa 2026/27 (ODI)"
    ],
    "cricinfo_id": "696401",
    "cricsheet_id": "81c36ee9",
@@ -3952,7 +3966,8 @@
     "jack richard edwards"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "Australia tour of South Africa 2026/27 (ODI)"
    ],
    "cricinfo_id": "1088610",
    "cricsheet_id": "f787e0eb",
@@ -4150,7 +4165,8 @@
    ],
    "tours": [
     "Major League Cricket 2026",
-    "European T20 Premier League 2026"
+    "European T20 Premier League 2026",
+    "Australia tour of South Africa 2026/27 (ODI)"
    ],
    "cricinfo_id": "267724",
    "cricsheet_id": "0b60eb09",
@@ -4492,7 +4508,8 @@
     "oliver peake"
    ],
    "tours": [
-    "Major League Cricket 2026"
+    "Major League Cricket 2026",
+    "Australia tour of South Africa 2026/27 (ODI)"
    ],
    "cricinfo_id": "1418371",
    "cricsheet_id": "9c8448ba",
@@ -4588,7 +4605,8 @@
    ],
    "tours": [
     "Major League Cricket 2026",
-    "Caribbean Premier League 2026"
+    "Caribbean Premier League 2026",
+    "Australia tour of South Africa 2026/27 (ODI)"
    ],
    "cricinfo_id": "595267",
    "cricsheet_id": "35f173a0",
@@ -4741,7 +4759,9 @@
    "tours": [
     "Major League Cricket 2026",
     "Lanka Premier League 2026",
-    "Caribbean Premier League 2026"
+    "Caribbean Premier League 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "cricinfo_id": "437316",
    "cricsheet_id": "3ff033bb",
@@ -5864,7 +5884,9 @@
    "tours": [
     "India tour of England 2026 (Men T20I)",
     "The Hundred Men's Competition 2026",
-    "England vs Pakistan Men's Test 2026"
+    "England vs Pakistan Men's Test 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "cricinfo_id": "911707",
    "cricsheet_id": "4ae1755b",
@@ -5902,7 +5924,9 @@
    ],
    "tours": [
     "India tour of England 2026 (Men T20I)",
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "cricinfo_id": "308967",
    "cricsheet_id": "99b75528",
@@ -5920,7 +5944,9 @@
    ],
    "tours": [
     "India tour of England 2026 (Men T20I)",
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "cricinfo_id": "877051",
    "cricsheet_id": "25f7b7d6",
@@ -5940,7 +5966,9 @@
    "tours": [
     "India tour of England 2026 (Men T20I)",
     "The Hundred Men's Competition 2026",
-    "England vs Pakistan Men's Test 2026"
+    "England vs Pakistan Men's Test 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "cricinfo_id": "1112537",
    "cricsheet_id": "ff154ecd",
@@ -5976,7 +6004,9 @@
    ],
    "tours": [
     "India tour of England 2026 (Men T20I)",
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "cricinfo_id": "897549",
    "cricsheet_id": "9caf69a1",
@@ -6014,7 +6044,9 @@
    ],
    "tours": [
     "India tour of England 2026 (Men T20I)",
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "cricinfo_id": "211855",
    "cricsheet_id": "4a461c24",
@@ -6031,7 +6063,9 @@
    ],
    "tours": [
     "India tour of England 2026 (Men T20I)",
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "cricinfo_id": "1263691",
    "cricsheet_id": "0ecb4de6",
@@ -6067,7 +6101,9 @@
    ],
    "tours": [
     "India tour of England 2026 (Men T20I)",
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "cricinfo_id": "244497",
    "cricsheet_id": "249d60c9",
@@ -6087,7 +6123,9 @@
    "tours": [
     "India tour of England 2026 (Men T20I)",
     "The Hundred Men's Competition 2026",
-    "England vs Pakistan Men's Test 2026"
+    "England vs Pakistan Men's Test 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "cricinfo_id": "669855",
    "cricsheet_id": "5574750c",
@@ -6124,7 +6162,9 @@
    "tours": [
     "India tour of England 2026 (Men T20I)",
     "The Hundred Men's Competition 2026",
-    "England vs Pakistan Men's Test 2026"
+    "England vs Pakistan Men's Test 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "cricinfo_id": "857975",
    "cricsheet_id": "1f1b4c89",
@@ -6160,7 +6200,9 @@
    ],
    "tours": [
     "India tour of England 2026 (Men T20I)",
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "cricinfo_id": "1191192",
    "cricsheet_id": "78c12883",
@@ -6581,7 +6623,9 @@
    "espn_id": "510823",
    "display": "Justin Greaves",
    "draft_id": 10244,
-   "auction_id": 4707
+   "auction_id": 4707,
+   "cricbuzz_id": "8433",
+   "cricbuzz_tier": 1
   },
   "ci:677081": {
    "aliases": [
@@ -6752,7 +6796,9 @@
     "kamil mishara"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "cricinfo_id": "1075863",
    "cricsheet_id": "65cebd5d",
@@ -6819,7 +6865,9 @@
     "dunith wellalage"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "cricinfo_id": "1152427",
    "cricsheet_id": "736123bb",
@@ -6902,7 +6950,9 @@
     "dilshan madushanka"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "cricinfo_id": "793007",
    "cricsheet_id": "de7d833e",
@@ -7070,7 +7120,9 @@
     "kusal mendis"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "cricinfo_id": "629074",
    "cricsheet_id": "5d1e7582",
@@ -7103,7 +7155,9 @@
     "kamindu mendis"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "cricinfo_id": "784373",
    "cricsheet_id": "08548b13",
@@ -7139,7 +7193,9 @@
     "janith liyanage"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "cricinfo_id": "681681",
    "cricsheet_id": "84212ffb",
@@ -7449,7 +7505,9 @@
    ],
    "tours": [
     "Lanka Premier League 2026",
-    "Caribbean Premier League 2026"
+    "Caribbean Premier League 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "cricinfo_id": "784379",
    "cricsheet_id": "a97c8ec2",
@@ -7557,7 +7615,9 @@
     "asitha madusanka fernando"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "cricinfo_id": "786925",
    "cricsheet_id": "de3d549a",
@@ -7779,7 +7839,9 @@
    ],
    "tours": [
     "Lanka Premier League 2026",
-    "Caribbean Premier League 2026"
+    "Caribbean Premier League 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "cricinfo_id": "784367",
    "cricsheet_id": "732c038e",
@@ -7862,7 +7924,9 @@
     "eshan malinga"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "cricinfo_id": "1306214",
    "cricsheet_id": "5750bcb4",
@@ -8016,7 +8080,9 @@
     "sachindu maduwantha colombage"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "cricinfo_id": "1175296",
    "cricsheet_id": "4b6f6b73",
@@ -8099,7 +8165,9 @@
     "pavan rathnayake"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "cricinfo_id": "1171180",
    "cricsheet_id": "c1fdfb46",
@@ -8169,7 +8237,9 @@
    ],
    "tours": [
     "Lanka Premier League 2026",
-    "Caribbean Premier League 2026"
+    "Caribbean Premier League 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "cricinfo_id": "1138316",
    "cricsheet_id": "f24c6701",
@@ -8202,7 +8272,9 @@
     "dushmantha chameera"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "cricinfo_id": "552152",
    "cricsheet_id": "327b58d3",
@@ -8304,7 +8376,9 @@
    "cricsheet_id": "4751caa3",
    "espn_id": "784375",
    "display": "Lahiru Kumara",
-   "auction_id": 1653
+   "auction_id": 1653,
+   "cricbuzz_id": "10928",
+   "cricbuzz_tier": 1
   },
   "ci:902447": {
    "aliases": [
@@ -8702,7 +8776,8 @@
     "tristan stubbs"
    ],
    "tours": [
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "Australia tour of South Africa 2026/27 (ODI)"
    ],
    "cricinfo_id": "595978",
    "cricsheet_id": "85b3fab2",
@@ -8720,7 +8795,8 @@
    ],
    "tours": [
     "The Hundred Men's Competition 2026",
-    "European T20 Premier League 2026"
+    "European T20 Premier League 2026",
+    "Australia tour of South Africa 2026/27 (ODI)"
    ],
    "cricinfo_id": "321777",
    "cricsheet_id": "d67d5f00",
@@ -8854,7 +8930,9 @@
    ],
    "tours": [
     "The Hundred Men's Competition 2026",
-    "England vs Pakistan Men's Test 2026"
+    "England vs Pakistan Men's Test 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "cricinfo_id": "303669",
    "cricsheet_id": "a343262c",
@@ -9066,7 +9144,9 @@
     "jamie overton"
    ],
    "tours": [
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "cricinfo_id": "510530",
    "cricsheet_id": "59559bc2",
@@ -9132,7 +9212,8 @@
     "ak markram"
    ],
    "tours": [
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "Australia tour of South Africa 2026/27 (ODI)"
    ],
    "cricinfo_id": "600498",
    "cricsheet_id": "6a26221c",
@@ -9438,7 +9519,9 @@
    ],
    "tours": [
     "The Hundred Men's Competition 2026",
-    "England vs Pakistan Men's Test 2026"
+    "England vs Pakistan Men's Test 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "cricinfo_id": "521637",
    "cricsheet_id": "5f26f677",
@@ -11953,7 +12036,9 @@
    "cricsheet_id": "b7b09ba5",
    "espn_id": "1342699",
    "draft_id": 10756,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "46965",
+   "cricbuzz_tier": 1
   },
   "uncapped:kofi-james": {
    "aliases": [
@@ -12124,7 +12209,9 @@
    "cricsheet_id": "78dfe704",
    "espn_id": "274921",
    "draft_id": 10776,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "8312",
+   "cricbuzz_tier": 1
   },
   "ci:581160": {
    "aliases": [
@@ -12209,7 +12296,9 @@
    "cricsheet_id": "025c7a63",
    "espn_id": "1199306",
    "draft_id": 10730,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "1477333",
+   "cricbuzz_tier": 1
   },
   "ci:1108828": {
    "aliases": [
@@ -12320,7 +12409,9 @@
    ],
    "tours": [
     "The Hundred Men's Competition 2026",
-    "England vs Pakistan Men's Test 2026"
+    "England vs Pakistan Men's Test 2026",
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
    ],
    "display": "Gus Atkinson",
    "cricinfo_id": "1039481",
@@ -12906,7 +12997,9 @@
    "cricsheet_id": "f427e63e",
    "espn_id": "1191381",
    "draft_id": 10875,
-   "auction_id": null
+   "auction_id": null,
+   "cricbuzz_id": "45666",
+   "cricbuzz_tier": 1
   },
   "uncapped:chris-greaves": {
    "aliases": [
@@ -13632,7 +13725,9 @@
    "auction_id": null,
    "cricinfo_id": "1394079",
    "cricsheet_id": "8bb34d86",
-   "espn_id": "1394079"
+   "espn_id": "1394079",
+   "cricbuzz_id": "54252",
+   "cricbuzz_tier": 1
   },
   "ci:1511916": {
    "aliases": [
@@ -13901,7 +13996,8 @@
     "bjorn fortuin"
    ],
    "tours": [
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Australia tour of South Africa 2026/27 (ODI)"
    ],
    "display": "Bjorn Fortuin",
    "cricinfo_id": "553249",
@@ -13933,7 +14029,8 @@
     "tony de zorzi"
    ],
    "tours": [
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Australia tour of South Africa 2026/27 (ODI)"
    ],
    "display": "Tony de Zorzi",
    "cricinfo_id": "697183",
@@ -13965,7 +14062,8 @@
     "duan jansen"
    ],
    "tours": [
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Australia tour of South Africa 2026/27 (ODI)"
    ],
    "display": "Duan Jansen",
    "cricinfo_id": "595954",
@@ -13982,7 +14080,8 @@
     "kwena tshegofatso maphaka"
    ],
    "tours": [
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Australia tour of South Africa 2026/27 (ODI)"
    ],
    "display": "Kwena Maphaka",
    "cricinfo_id": "1294342",
@@ -13998,7 +14097,8 @@
     "nqobani mokoena"
    ],
    "tours": [
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Australia tour of South Africa 2026/27 (ODI)"
    ],
    "display": "Nqobani Mokoena",
    "cricinfo_id": "1414819",
@@ -14463,6 +14563,144 @@
    "cricsheet_id": "5b929395",
    "espn_id": "1469056",
    "draft_id": 11024,
+   "auction_id": null
+  },
+  "ci:1143809": {
+   "aliases": [
+    "henry crocombe",
+    "henry thomas crocombe",
+    "ht crocombe"
+   ],
+   "tours": [
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
+   ],
+   "display": "Henry Crocombe",
+   "cricinfo_id": "1143809",
+   "cricsheet_id": "27fc5808",
+   "espn_id": "1143809",
+   "draft_id": 11033,
+   "auction_id": null,
+   "cricbuzz_id": "18190",
+   "cricbuzz_tier": 2
+  },
+  "ci:1028655": {
+   "aliases": [
+    "pathum nissanka",
+    "pathum nissanka silva"
+   ],
+   "tours": [
+    "Sri Lanka tour of England 2026 (ODI)",
+    "Sri Lanka tour of England 2026 (T20I)"
+   ],
+   "display": "Pathum Nissanka",
+   "cricinfo_id": "1028655",
+   "cricsheet_id": "8ee36b18",
+   "espn_id": "1028655",
+   "draft_id": 11052,
+   "auction_id": null
+  },
+  "ci:372116": {
+   "aliases": [
+    "temba bavuma"
+   ],
+   "tours": [
+    "Australia tour of South Africa 2026/27 (ODI)"
+   ],
+   "display": "Temba Bavuma",
+   "cricinfo_id": "372116",
+   "cricsheet_id": "9ffd1ac1",
+   "espn_id": "372116",
+   "draft_id": 11089,
+   "auction_id": null
+  },
+  "uncapped:gerald-coetzee": {
+   "aliases": [
+    "gerald coetzee"
+   ],
+   "tours": [
+    "Australia tour of South Africa 2026/27 (ODI)"
+   ],
+   "display": "Gerald Coetzee",
+   "draft_id": 11092,
+   "auction_id": null
+  },
+  "uncapped:alex-carey": {
+   "aliases": [
+    "alex carey"
+   ],
+   "tours": [
+    "Australia tour of South Africa 2026/27 (ODI)"
+   ],
+   "display": "Alex Carey",
+   "draft_id": 11106,
+   "auction_id": null
+  },
+  "ci:489889": {
+   "aliases": [
+    "pat cummins"
+   ],
+   "tours": [
+    "Australia tour of South Africa 2026/27 (ODI)"
+   ],
+   "display": "Pat Cummins",
+   "cricinfo_id": "489889",
+   "cricsheet_id": "ded9240e",
+   "espn_id": "489889",
+   "draft_id": 11108,
+   "auction_id": null
+  },
+  "ci:288284": {
+   "aliases": [
+    "josh hazlewood"
+   ],
+   "tours": [
+    "Australia tour of South Africa 2026/27 (ODI)"
+   ],
+   "display": "Josh Hazlewood",
+   "cricinfo_id": "288284",
+   "cricsheet_id": "03806cf8",
+   "espn_id": "288284",
+   "draft_id": 11112,
+   "auction_id": null
+  },
+  "ci:530011": {
+   "aliases": [
+    "travis head"
+   ],
+   "tours": [
+    "Australia tour of South Africa 2026/27 (ODI)"
+   ],
+   "display": "Travis Head",
+   "cricinfo_id": "530011",
+   "cricsheet_id": "12b610c2",
+   "espn_id": "530011",
+   "draft_id": 11113,
+   "auction_id": null
+  },
+  "uncapped:billy-stanlake": {
+   "aliases": [
+    "billy stanlake"
+   ],
+   "tours": [
+    "Australia tour of South Africa 2026/27 (ODI)"
+   ],
+   "display": "Billy Stanlake",
+   "draft_id": 11118,
+   "auction_id": null
+  },
+  "ci:311592": {
+   "aliases": [
+    "mitchell starc"
+   ],
+   "tours": [
+    "Australia tour of South Africa 2026/27 (ODI)"
+   ],
+   "display": "Mitchell Starc",
+   "cricinfo_id": "311592",
+   "cricsheet_id": "3fb19989",
+   "espn_id": "311592",
+   "draft_id": 11119,
    "auction_id": null
   }
  }

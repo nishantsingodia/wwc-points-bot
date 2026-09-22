@@ -151,5 +151,34 @@
     "tab": "WOMENS CARIBBEAN PREMIER LEAGUE 2026 POINTS",
     "cricbuzz_series": "12595",
     "starts": "2026-09-05"
+  },
+  {
+    "ends": "2026-09-27",
+    "espn_series": "23802",
+    "format": "ODI",
+    "gender": "male",
+    "name": "Sri Lanka tour of England 2026 (ODI)",
+    "squads": "sri_lanka_tour_of_england_2026_odi_squads.json",
+    "tab": "ENG V SRI ODI POINTS",
+    "cricbuzz_series": "10576"
+  },
+  {
+    "ends": "2026-09-19",
+    "espn_series": "23802",
+    "format": "T20",
+    "gender": "male",
+    "name": "Sri Lanka tour of England 2026 (T20I)",
+    "squads": "sri_lanka_tour_of_england_2026_t20i_squads.json",
+    "tab": "SRI V ENG T20I POINTS",
+    "cricbuzz_series": "10576"
+  },
+  {
+    "ends": "2026-09-30",
+    "espn_series": "24203",
+    "format": "ODI",
+    "gender": "male",
+    "name": "Australia tour of South Africa 2026/27 (ODI)",
+    "squads": "australia_tour_of_south_africa_2026_27_odi_squads.json",
+    "tab": "SOU V AUS ODI POINTS"
   }
 ]

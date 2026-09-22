@@ -1,0 +1,154 @@
+{
+ "Australia tour of Bangladesh 2026 (Men T20I)": {
+  "archive": "t20s_json.zip",
+  "base": "t20s_json.zip",
+  "downloaded": true,
+  "league": "",
+  "teams": 2,
+  "why": "no cricsheet archive for this league (yet) \u2014 will retry next run"
+ },
+ "Australia tour of South Africa 2026/27 (ODI)": {
+  "archive": "odis_json.zip",
+  "base": "odis_json.zip",
+  "downloaded": true,
+  "league": "",
+  "teams": 2,
+  "why": "no cricsheet archive for this league (yet) \u2014 will retry next run"
+ },
+ "Caribbean Premier League 2026": {
+  "archive": "cpl_json.zip",
+  "base": "t20s_json.zip",
+  "downloaded": true,
+  "league": "cpl_json.zip",
+  "teams": 7,
+  "why": "matched cricsheet league 'caribbean premier league'"
+ },
+ "England vs Pakistan Men's Test 2026": {
+  "archive": "tests_json.zip",
+  "base": "tests_json.zip",
+  "downloaded": true,
+  "league": "",
+  "teams": 2,
+  "why": "no cricsheet archive for this league (yet) \u2014 will retry next run"
+ },
+ "European T20 Premier League 2026": {
+  "archive": "etpl_json.zip",
+  "base": "t20s_json.zip",
+  "downloaded": true,
+  "league": "etpl_json.zip",
+  "teams": 6,
+  "why": "matched cricsheet league 'european t20 premier league'"
+ },
+ "India tour of England 2026 (Men T20I)": {
+  "archive": "t20s_json.zip",
+  "base": "t20s_json.zip",
+  "downloaded": true,
+  "league": "",
+  "teams": 2,
+  "why": "no cricsheet archive for this league (yet) \u2014 will retry next run"
+ },
+ "India tour of Ireland 2026 (Men T20I)": {
+  "archive": "t20s_json.zip",
+  "base": "t20s_json.zip",
+  "downloaded": true,
+  "league": "",
+  "teams": 2,
+  "why": "no cricsheet archive for this league (yet) \u2014 will retry next run"
+ },
+ "India tour of Zimbabwe 2026 (T20I)": {
+  "archive": "t20s_json.zip",
+  "base": "t20s_json.zip",
+  "downloaded": true,
+  "league": "",
+  "teams": 2,
+  "why": "no cricsheet archive for this league (yet) \u2014 will retry next run"
+ },
+ "Ireland vs West Indies Women's ODI 2026": {
+  "archive": "odis_json.zip",
+  "base": "odis_json.zip",
+  "downloaded": true,
+  "league": "",
+  "teams": 2,
+  "why": "no cricsheet archive for this league (yet) \u2014 will retry next run"
+ },
+ "Lanka Premier League 2026": {
+  "archive": "lpl_json.zip",
+  "base": "t20s_json.zip",
+  "downloaded": true,
+  "league": "lpl_json.zip",
+  "teams": 5,
+  "why": "matched cricsheet league 'lanka premier league'"
+ },
+ "Major League Cricket 2026": {
+  "archive": "mlc_json.zip",
+  "base": "t20s_json.zip",
+  "downloaded": true,
+  "league": "mlc_json.zip",
+  "teams": 6,
+  "why": "matched cricsheet league 'major league cricket'"
+ },
+ "Namibia T20I Tri-Series 2026": {
+  "archive": "t20s_json.zip",
+  "base": "t20s_json.zip",
+  "downloaded": true,
+  "league": "",
+  "teams": 3,
+  "why": "no cricsheet archive for this league (yet) \u2014 will retry next run"
+ },
+ "New Zealand vs West Indies Men's ODI 2026": {
+  "archive": "odis_json.zip",
+  "base": "odis_json.zip",
+  "downloaded": true,
+  "league": "",
+  "teams": 2,
+  "why": "no cricsheet archive for this league (yet) \u2014 will retry next run"
+ },
+ "Sri Lanka tour of England 2026 (ODI)": {
+  "archive": "odis_json.zip",
+  "base": "odis_json.zip",
+  "downloaded": true,
+  "league": "",
+  "teams": 2,
+  "why": "no cricsheet archive for this league (yet) \u2014 will retry next run"
+ },
+ "Sri Lanka tour of England 2026 (T20I)": {
+  "archive": "t20s_json.zip",
+  "base": "t20s_json.zip",
+  "downloaded": true,
+  "league": "",
+  "teams": 2,
+  "why": "no cricsheet archive for this league (yet) \u2014 will retry next run"
+ },
+ "The Hundred Men's Competition 2026": {
+  "archive": "hnd_json.zip",
+  "base": "",
+  "downloaded": true,
+  "league": "hnd_json.zip",
+  "teams": 8,
+  "why": "matched cricsheet league 'the hundred' (score 2, gender-specific=False)"
+ },
+ "The Hundred Women's Competition 2026": {
+  "archive": "hnd_json.zip",
+  "base": "",
+  "downloaded": true,
+  "league": "hnd_json.zip",
+  "teams": 8,
+  "why": "matched cricsheet league 'the hundred' (score 2, gender-specific=False)"
+ },
+ "Women's Caribbean Premier League 2026": {
+  "archive": "wcl_json.zip",
+  "base": "t20s_json.zip",
+  "downloaded": true,
+  "league": "wcl_json.zip",
+  "teams": 4,
+  "why": "matched cricsheet league 'women s caribbean premier league' (score 1, gender-specific=True)"
+ },
+ "Women's T20 WC 2026": {
+  "archive": "t20s_json.zip",
+  "base": "t20s_json.zip",
+  "downloaded": true,
+  "league": "",
+  "teams": 12,
+  "why": "no cricsheet archive for this league (yet) \u2014 will retry next run"
+ }
+}

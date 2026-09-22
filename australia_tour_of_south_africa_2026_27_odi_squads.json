@@ -1,0 +1,140 @@
+{
+  "MOSOU": {
+    "name": "South Africa",
+    "players": [
+      [
+        "Aiden Markram",
+        "BAT"
+      ],
+      [
+        "Bjorn Fortuin",
+        "BOWL"
+      ],
+      [
+        "Corbin Bosch",
+        "AR"
+      ],
+      [
+        "David Miller",
+        "BAT"
+      ],
+      [
+        "Duan Jansen",
+        "BOWL"
+      ],
+      [
+        "Gerald Coetzee",
+        "BOWL"
+      ],
+      [
+        "Keshav Maharaj",
+        "BOWL"
+      ],
+      [
+        "Kwena Maphaka",
+        "BOWL"
+      ],
+      [
+        "Marco Jansen",
+        "BOWL"
+      ],
+      [
+        "Matthew Breetzke",
+        "BAT"
+      ],
+      [
+        "Nqobani Mokoena",
+        "BOWL"
+      ],
+      [
+        "Quinton de Kock",
+        "BAT"
+      ],
+      [
+        "Ryan Rickelton",
+        "BAT"
+      ],
+      [
+        "Temba Bavuma",
+        "BAT"
+      ],
+      [
+        "Tony de Zorzi",
+        "BAT"
+      ],
+      [
+        "Tristan Stubbs",
+        "BAT"
+      ]
+    ]
+  },
+  "MOAUS": {
+    "name": "Australia",
+    "players": [
+      [
+        "Adam Zampa",
+        "BOWL"
+      ],
+      [
+        "Alex Carey",
+        "BAT"
+      ],
+      [
+        "Cameron Green",
+        "BAT"
+      ],
+      [
+        "Cooper Connolly",
+        "BAT"
+      ],
+      [
+        "Jack Edwards",
+        "AR"
+      ],
+      [
+        "Joel Davies",
+        "BOWL"
+      ],
+      [
+        "Josh Hazlewood",
+        "BOWL"
+      ],
+      [
+        "Josh Inglis",
+        "BAT"
+      ],
+      [
+        "Matt Renshaw",
+        "BAT"
+      ],
+      [
+        "Mitchell Marsh",
+        "BAT"
+      ],
+      [
+        "Mitchell Starc",
+        "BOWL"
+      ],
+      [
+        "Nathan Ellis",
+        "BOWL"
+      ],
+      [
+        "Oliver Peake",
+        "BAT"
+      ],
+      [
+        "Pat Cummins",
+        "BOWL"
+      ],
+      [
+        "Travis Head",
+        "BAT"
+      ],
+      [
+        "Xavier Bartlett",
+        "BOWL"
+      ]
+    ]
+  }
+}
