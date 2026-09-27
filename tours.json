@@ -180,5 +180,45 @@
     "name": "Australia tour of South Africa 2026/27 (ODI)",
     "squads": "australia_tour_of_south_africa_2026_27_odi_squads.json",
     "tab": "SOU V AUS ODI POINTS"
+  },
+  {
+    "ends": "2026-09-30",
+    "espn_series": "24796",
+    "format": "ODI",
+    "gender": "female",
+    "name": "West Indies Women tour of Zimbabwe 2026 (ODI)",
+    "squads": "west_indies_women_tour_of_zimbabwe_2026_odi_squads.json",
+    "tab": "ZIM V WES ODI POINTS",
+    "cricbuzz_series": "13217"
+  },
+  {
+    "ends": "2026-10-07",
+    "espn_series": "24796",
+    "format": "T20",
+    "gender": "female",
+    "name": "West Indies Women tour of Zimbabwe 2026 (T20I)",
+    "squads": "west_indies_women_tour_of_zimbabwe_2026_t20i_squads.json",
+    "tab": "ZIM V WES T20I POINTS",
+    "cricbuzz_series": "13217"
+  },
+  {
+    "ends": "2026-10-03",
+    "espn_series": "24289",
+    "format": "ODI",
+    "gender": "male",
+    "name": "West Indies tour of India 2026 (ODI)",
+    "squads": "west_indies_tour_of_india_2026_odi_squads.json",
+    "tab": "IND V WES ODI POINTS",
+    "cricbuzz_series": "11902"
+  },
+  {
+    "ends": "2026-10-17",
+    "espn_series": "24289",
+    "format": "T20",
+    "gender": "male",
+    "name": "West Indies tour of India 2026 (T20I)",
+    "squads": "west_indies_tour_of_india_2026_t20i_squads.json",
+    "tab": "IND V WES T20I POINTS",
+    "cricbuzz_series": "11902"
   }
 ]
