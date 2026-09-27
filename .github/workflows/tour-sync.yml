@@ -80,8 +80,8 @@ jobs:
       - name: Generate tours
         id: gen
         env:
-          # No feed key: this step only ever runs tour_sync.py --from-status-sheet, which is the
-          # keyless Column-A -> ESPN path and never touches a metered API.
+          # No feed key anywhere in this step: BOTH paths are keyless. Column A -> ESPN, and
+          # Cricbuzz-discovery -> ESPN. Neither touches a metered API.
           DRAFT_REPO: ${{ github.workspace }}/wwc-draft
           SYNC_SHEET_ID: ${{ secrets.GSHEET_ID }}
           GSHEET_ID: ${{ secrets.GSHEET_ID }}
@@ -90,15 +90,35 @@ jobs:
         run: |
           set -o pipefail   # so a crashed generator fails the step (tee was masking it)
           pip install -r requirements.txt   # gspread — needed to READ Column A of the TOUR STATUS tab
-          # KEYLESS, Column-A-driven: read the tour names Nishant typed in the TOUR STATUS tab and
-          # ESPN-add any new ones (name → league id → fixtures → full squads). ESPN only.
+          MODE=--apply
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
-            echo "DRY RUN — read Column A + resolve on ESPN, nothing written/committed/deployed"
-            python3 tour_sync.py --dry-run --from-status-sheet | tee /tmp/sync.out
-          else
-            python3 tour_sync.py --apply --from-status-sheet | tee /tmp/sync.out
+            MODE=--dry-run
+            echo "DRY RUN — resolve only; nothing written, committed or deployed"
           fi
-          echo "applied=$(grep -oP '(?<=::applied::).*' /tmp/sync.out || echo '[]')" >> "$GITHUB_OUTPUT"
+          # 1. COLUMN A FIRST, and that order is the whole contract: a name typed by hand is an
+          #    explicit instruction and must win. --apply writes tours.json, and step 2 is a fresh
+          #    process that re-reads it, so anything Column A just added is already "ingested" by
+          #    the time discovery looks — discovery can only ever fill the gaps it leaves.
+          python3 tour_sync.py $MODE --from-status-sheet | tee /tmp/sync.sheet.out
+          # 2. AUTO-ADD: Cricbuzz enumerates what is coming (internationals, women's and marquee
+          #    leagues), ESPN confirms each by teams+date. ESPN cannot enumerate on its own, which
+          #    is why this needed a second feed rather than a wider search.
+          python3 tour_sync.py $MODE --discover-cricbuzz | tee /tmp/sync.disc.out
+          # Merge both runs' applied lists. Two greps would emit two LINES into $GITHUB_OUTPUT,
+          # which silently truncates the value at the newline and strands the second batch
+          # un-finalized: ingested, but never anchored, gated or deployed.
+          python3 - <<'MERGE' >> "$GITHUB_OUTPUT"
+          import json, re
+          out = []
+          for f in ("/tmp/sync.sheet.out", "/tmp/sync.disc.out"):
+              try:
+                  txt = open(f, encoding="utf-8").read()
+              except OSError:
+                  continue
+              for m in re.findall(r"^::applied::(.*)$", txt, re.M):
+                  out += [t for t in json.loads(m) if t not in out]
+          print("applied=" + json.dumps(out))
+          MERGE
 
       # Finish what tour_sync alone cannot: anchor the new squads to pids (build_registry) and
       # sync them into the draft roster (backfill_draft_pids), write the "TOUR INGEST REVIEW" tab,
