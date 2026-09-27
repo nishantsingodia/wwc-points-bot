@@ -663,6 +663,85 @@ def espn_discover(now, horizon):
             print(f"  espn/search[{term!r}]: KEEP {name!r} (lid {lid}, {kind}, next={evs[0].get('date','?')[:10] if evs else '?'})", file=sys.stderr)
     return hits
 
+# ── DISCOVERY: Cricbuzz enumerates, ESPN builds ──────────────────────────────────
+# Categories Cricbuzz files a series under. "Domestic" is never ingested (County Championship,
+# Irani Cup, the A/U19 tours); "Women" is a PEER of "International", not a subset — Cricbuzz files
+# every women's series there, internationals included, so dropping it would drop the women's game.
+CB_CATEGORIES = ("international", "women", "league")
+# A/U19 sides that Cricbuzz files under International or Women rather than Domestic. The bare-word
+# boundary is load-bearing: "india tour of england" must NOT match on the "a" ending "india".
+CB_SECOND_XI_RE = re.compile(r"\ba\s+(?:women\s+)?tour\s+of\b", re.I)
+CB_WINDOW_DAYS = int(os.environ.get("SYNC_CB_WINDOW_DAYS", "10"))
+
+
+def cricbuzz_discover(now, horizon):
+    """Enumerate upcoming tours on Cricbuzz and resolve each to an ESPN league id.
+
+    THIS IS THE PIECE THE PIPELINE NEVER HAD. ESPN cannot enumerate: it has no fixtures/calendar
+    endpoint (only a per-known-league-id scoreboard, one date per call) and its keyword search
+    ranks historical editions above the near-term one — proven 23 Jul 2026, which is why adding a
+    tour has meant typing its name into Column A ever since. Cricbuzz's own schedule pages DO
+    enumerate, and they carry the category, the formats, the dates and the two teams.
+
+    The ESPN name-search weakness does not carry over, because we no longer search on a name alone:
+    Cricbuzz gives the exact teams and the exact fixture date, and `resolve_espn_series` CONFIRMS a
+    candidate league id against its dated scoreboard by team-match before returning it. A wrong
+    edition cannot survive that check.
+
+    Returns [(espn_league_id, tour_name, cricbuzz_series_id)]. Every rejection prints its reason:
+    a discovery feed that silently returns fewer tours than it saw is the failure mode this whole
+    module has been bitten by twice.
+    """
+    try:
+        import cricbuzz
+    except Exception as exc:
+        print(f"  cricbuzz-discover: cricbuzz module unavailable ({exc}) — no discovery this run",
+              file=sys.stderr)
+        return []
+    try:
+        rows = cricbuzz.upcoming_all(CB_CATEGORIES)
+    except Exception as exc:
+        # RAISE-equivalent: never report "nothing upcoming" when the feed simply failed.
+        print(f"  ⚠ cricbuzz-discover: schedule unreadable ({exc}) — NOT reporting 0 tours",
+              file=sys.stderr)
+        return []
+    floor = now - timedelta(days=2)
+    cap = min(horizon, now + timedelta(days=CB_WINDOW_DAYS))
+    print(f"  cricbuzz-discover: {len(rows)} upcoming series across {CB_CATEGORIES}", file=sys.stderr)
+    out = []
+    for r in rows:
+        name = re.sub(r",\s*(?=\d{4})", " ", r["name"]).strip()   # "X tour of Y, 2026" -> "... 2026"
+        cat, low = r.get("category") or "", name.lower()
+        def drop(why):
+            print(f"    skip  {name!r} ({cat}): {why}", file=sys.stderr)
+        if cat.lower() == "domestic":
+            drop("domestic"); continue
+        if any(d in low for d in DENY) or CB_SECOND_XI_RE.search(low):
+            drop("denylisted (A/U19/warm-up/development)"); continue
+        # A league must be one we actually run an auction for; an international needs no allowlist.
+        if cat.lower() == "league" and not any(lg in low for lg in MAJOR_LEAGUES):
+            drop("league not on the marquee allowlist (MAJOR_LEAGUES)"); continue
+        fmts = {f for f in r["formats"] if f in ("T20", "ODI", "T20I", "HUN")}
+        if not fmts:
+            drop(f"no T20/ODI fixture (formats={r['formats'] or 'none'})"); continue
+        if r["start"] is None:
+            drop("no start date"); continue
+        start = datetime.fromtimestamp(r["start"], tz=timezone.utc)
+        if not (floor <= start <= cap):
+            drop(f"starts {start:%Y-%m-%d}, outside {floor:%Y-%m-%d}..{cap:%Y-%m-%d}"); continue
+        teams = [t for t in r["teams"] if t]
+        if len(teams) < 2:
+            drop(f"only {len(teams)} named team(s) yet — squads/fixtures not posted"); continue
+        lid = resolve_espn_series(name, teams[:2], start.strftime("%Y-%m-%dT%H:%M:%S"))
+        if not lid:
+            drop("no ESPN league confirmed on the fixture date (ESPN is the only base feed)")
+            continue
+        print(f"    KEEP  {name!r} ({cat}) -> espn {lid}, cricbuzz {r['series_id']}, "
+              f"{'/'.join(r['formats'])}, starts {start:%Y-%m-%d}", file=sys.stderr)
+        out.append((lid, name, str(r["series_id"])))
+    return out
+
+
 def espn_build(lid, name, now, horizon, state, seeds=None):
     """Build a tour ENTIRELY from ESPN → (series_info, gender, league_squads) for gen_tour, or None.
 
@@ -1085,7 +1164,14 @@ def gen_tour(series_info, fmt, gender, state, league_squads):
               file=sys.stderr)
     # cricbuzz_series — the L1 SECOND WITNESS. Written only when it VALIDATES on fixture dates;
     # the key is omitted entirely otherwise, so nothing downstream can mistake a guess for an id.
-    cb_id, cb_why = resolve_cricbuzz_series(tour_name, ml)
+    # A caller that DISCOVERED this tour on Cricbuzz already holds its series id — that id is the
+    # discovery key itself, so it is better evidence than any name match this end could make.
+    # Only fall back to resolve_cricbuzz_series (a name match) when nobody handed one over.
+    cb_id = str(info.get("cricbuzz_id") or "").strip()
+    if cb_id:
+        cb_why = f"series {cb_id} carried over from Cricbuzz discovery (no name match needed)"
+    else:
+        cb_id, cb_why = resolve_cricbuzz_series(tour_name, ml)
     print(f"  cricbuzz: {cb_why}", file=sys.stderr)
     tours_entry = {
         "ends": ends, "espn_series": espn_id, "format": score_fmt, "gender": gender,
@@ -1323,6 +1409,10 @@ def main():
                     help="a tour ALREADY in tours.json: re-scan ESPN and append any fixture that "
                          "has since resolved (knockouts drawn after the league was ingested). "
                          "Repeatable. Matches + toss windows only — never squads or rosters.")
+    ap.add_argument("--discover-cricbuzz", action="store_true",
+                    help="AUTO-ADD: enumerate upcoming tours on Cricbuzz (internationals, women's "
+                         "and marquee leagues), confirm each on ESPN by teams+date, and ingest. "
+                         "The only path that needs no name typed anywhere — ESPN cannot enumerate.")
     ap.add_argument("--discover", action="store_true",
                     help="ESPN watchlist auto-discovery (search -> league id -> fixtures). "
                          "BEST-EFFORT only: ESPN's search buries a near-term bilateral behind older "
@@ -1335,10 +1425,11 @@ def main():
         n = sum(len(refixture(t, state, apply=args.apply and not args.dry_run)) for t in args.refixture)
         print(f"\n::refixtured::{n}")
         return
-    if not (args.from_status_sheet or args.espn_tour or args.discover):
+    if not (args.from_status_sheet or args.espn_tour or args.discover or args.discover_cricbuzz):
         # Deliberately an error, not a default. The old default ran cricapi discovery; with that
         # gone, quietly picking a path (or quietly doing nothing) is how a missed tour hides.
-        ap.error("pick a path: --from-status-sheet (what CI runs), --espn-tour NAME, or --discover")
+        ap.error("pick a path: --from-status-sheet (what CI runs), --discover-cricbuzz "
+                 "(auto-add), --espn-tour NAME, or --discover")
     state = load_state()
     seeds = json.load(open(args.auction_squads)) if args.auction_squads else []
     if seeds:
@@ -1358,6 +1449,21 @@ def main():
                 print(f"  '{nm}': using the espn_series {espn_id} you supplied — skipping "
                       f"name resolution", file=sys.stderr)
             tours += espn_add_named(nm, now, horizon, state, espn_id=espn_id, seeds=seeds)
+    elif args.discover_cricbuzz:
+        horizon = now + timedelta(days=CB_WINDOW_DAYS)
+        for lid, name, cb_id in cricbuzz_discover(now, horizon):
+            if lid in state["existing_espn"]:
+                print(f"  skip (already ingested): {name[:50]}", file=sys.stderr)
+                continue
+            built = espn_build(lid, name, now, horizon, state, seeds)
+            if not built:
+                continue
+            si, gender, lg = built
+            si["info"]["cricbuzz_id"] = cb_id     # free L1 witness, straight from discovery
+            for fmt in ("ODI", "T20"):
+                t = gen_tour(si, fmt, gender, state, lg)
+                if t and t["tours_entry"]["tab"] not in state["existing_tabs"]:
+                    tours.append(t)
     elif args.espn_tour:
         horizon = now + timedelta(days=45)
         tours += espn_add_named(args.espn_tour, now, horizon, state, seeds=seeds)

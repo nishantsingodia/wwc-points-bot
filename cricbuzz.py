@@ -1304,6 +1304,81 @@ def series_index(year, fresh=False):
     return out
 
 
+# Cricbuzz's own upcoming-schedule pages, one per category. THE enumeration feed: ESPN has no
+# fixtures/calendar endpoint at all (only a per-known-league-id scoreboard, one date at a time),
+# and its keyword search ranks historical editions above the near-term one — so nothing on the
+# ESPN side can answer "what starts in the next week?". Cricbuzz can, and categorises the answer.
+CB_SCHEDULE_CATEGORIES = ("international", "league", "women", "domestic")
+
+
+def upcoming_series(category, fresh=False):
+    """[{series_id, name, category, formats, teams, start, end, matches}] for one schedule
+    category, newest first. Keyless, and cached like every other page in this module.
+
+    The category pages are SERVER-rendered: /international and /league return genuinely different
+    matchScheduleMaps. Do not try to read the category off the page's links — the nav lists every
+    category on all four pages, so link-scraping returns the same set four times.
+
+    A series spans several days and so appears once per match day; the days are MERGED here, which
+    is what makes `start`/`end`/`formats` describe the series rather than one date's slice.
+    """
+    html = cb_fetch("%s/cricket-schedule/upcoming-series/%s" % (CB_HOST, category),
+                    "upcoming_%s.html" % category, fresh=fresh)
+    sched = _extract(flight_payload(html), "matchScheduleMap", "[")
+    out = {}
+    for day in sched:
+        for s in ((day.get("scheduleAdWrapper") or {}).get("matchScheduleList") or []):
+            sid = s.get("seriesId")
+            if not sid:
+                continue
+            rec = out.setdefault(int(sid), {
+                "series_id": int(sid), "name": (s.get("seriesName") or "").strip(),
+                "category": (s.get("seriesCategory") or "").strip(),
+                "formats": set(), "teams": [], "start": None, "end": None, "matches": 0,
+            })
+            for mi in (s.get("matchInfo") or []):
+                rec["matches"] += 1
+                if mi.get("matchFormat"):
+                    rec["formats"].add(mi["matchFormat"].strip().upper())
+                for side in ("team1", "team2"):
+                    nm = ((mi.get(side) or {}).get("teamName") or "").strip()
+                    # TBC placeholders carry no real team; a knockout slot must not become a team.
+                    if nm and nm.upper() not in ("TBC", "TBA") and nm not in rec["teams"]:
+                        rec["teams"].append(nm)
+                for k, fld in (("start", "startDate"), ("end", "endDate")):
+                    try:
+                        v = int(mi[fld]) // 1000
+                    except (KeyError, TypeError, ValueError):
+                        continue
+                    cur = rec[k]
+                    rec[k] = v if cur is None else (min(cur, v) if k == "start" else max(cur, v))
+    for rec in out.values():
+        rec["formats"] = sorted(rec["formats"])
+    return sorted(out.values(), key=lambda r: (r["start"] is None, r["start"] or 0))
+
+
+def upcoming_all(categories=CB_SCHEDULE_CATEGORIES, fresh=False):
+    """Every upcoming series across `categories`, de-duplicated by series id.
+
+    One page failing must not blank the discovery run — a category that raises is reported and
+    skipped, because returning "nothing is coming up" is indistinguishable from a quiet week and
+    that is exactly how a missed tour hides.
+    """
+    out, errs = {}, []
+    for cat in categories:
+        try:
+            for rec in upcoming_series(cat, fresh=fresh):
+                out.setdefault(rec["series_id"], rec)
+        except Exception as exc:
+            errs.append("%s (%s)" % (cat, exc))
+    if errs:
+        print("  cricbuzz: schedule page unreadable for %s — those categories contribute nothing "
+              "to this discovery run" % ", ".join(errs), file=sys.stderr)
+    if not out and not errs:
+        raise CricbuzzParseError("no upcoming series on any of %s" % (categories,))
+    return sorted(out.values(), key=lambda r: (r["start"] is None, r["start"] or 0))
+
+
 def series_candidates(tour_name, year, fresh=False):
     """Ranked [(extra_words, series_id, slug)] whose slug contains every meaningful tour token.
 
