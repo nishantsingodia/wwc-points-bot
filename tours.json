@@ -220,5 +220,15 @@
     "squads": "west_indies_tour_of_india_2026_t20i_squads.json",
     "tab": "IND V WES T20I POINTS",
     "cricbuzz_series": "11902"
+  },
+  {
+    "ends": "2026-10-03",
+    "espn_series": "22547",
+    "format": "T20",
+    "gender": "male",
+    "name": "Asian Games 2026",
+    "squads": "asian_games_2026_squads.json",
+    "tab": "ASIAN GAMES 2026 POINTS",
+    "cricbuzz_series": "12563"
   }
 ]

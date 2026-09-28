@@ -1,0 +1,388 @@
+{
+  "MTMAL": {
+    "name": "Malaysia",
+    "players": [
+      [
+        "Ainool Hafizs",
+        "BAT"
+      ],
+      [
+        "Amir Khan",
+        "BAT"
+      ],
+      [
+        "Aslam Khan",
+        "BAT"
+      ],
+      [
+        "Azri Azhar",
+        "BAT"
+      ],
+      [
+        "Muhamad Syahadat",
+        "BAT"
+      ],
+      [
+        "Muhammad Haziq Aiman",
+        "BAT"
+      ],
+      [
+        "Muhammad Akram",
+        "AR"
+      ],
+      [
+        "Muhammad Amir",
+        "BAT"
+      ],
+      [
+        "Muhammad Wafiq",
+        "BAT"
+      ],
+      [
+        "Sharvin Muniandy",
+        "BOWL"
+      ],
+      [
+        "Pavandeep Singh",
+        "BOWL"
+      ],
+      [
+        "Rahim Khan",
+        "BAT"
+      ],
+      [
+        "Syed Aziz",
+        "BAT"
+      ],
+      [
+        "Vijay Unni",
+        "BOWL"
+      ],
+      [
+        "Virandeep Singh",
+        "AR"
+      ]
+    ]
+  },
+  "MTNEP": {
+    "name": "Nepal",
+    "players": [
+      [
+        "Dipendra Singh Airee",
+        "AR"
+      ],
+      [
+        "Aarif Sheikh",
+        "BAT"
+      ],
+      [
+        "Aasif Sheikh",
+        "BAT"
+      ],
+      [
+        "Kushal Bhurtel",
+        "BAT"
+      ],
+      [
+        "Gulsan Jha",
+        "AR"
+      ],
+      [
+        "Sundeep Jora",
+        "BAT"
+      ],
+      [
+        "Karan KC",
+        "AR"
+      ],
+      [
+        "Kushal Malla",
+        "BAT"
+      ],
+      [
+        "Sandeep Lamichhane",
+        "BOWL"
+      ],
+      [
+        "Lokesh Bam",
+        "BAT"
+      ],
+      [
+        "Sher Malla",
+        "BOWL"
+      ],
+      [
+        "Rohit Paudel",
+        "BAT"
+      ],
+      [
+        "Lalit Rajbanshi",
+        "BOWL"
+      ],
+      [
+        "Sompal Kami",
+        "BOWL"
+      ],
+      [
+        "Nandan Yadav",
+        "BOWL"
+      ]
+    ]
+  },
+  "MTPAK": {
+    "name": "Pakistan",
+    "players": [
+      [
+        "Sahibzada Farhan",
+        "BAT"
+      ],
+      [
+        "Abdul Samad",
+        "BAT"
+      ],
+      [
+        "Abrar Ahmed",
+        "BOWL"
+      ],
+      [
+        "Ahmed Daniyal",
+        "BOWL"
+      ],
+      [
+        "Akif Javed",
+        "BOWL"
+      ],
+      [
+        "Ali Raza",
+        "BOWL"
+      ],
+      [
+        "Arafat Minhas",
+        "AR"
+      ],
+      [
+        "Haider Ali",
+        "BAT"
+      ],
+      [
+        "Hasan Nawaz",
+        "BAT"
+      ],
+      [
+        "Maaz Sadaqat",
+        "BAT"
+      ],
+      [
+        "Mohammad Wasim",
+        "BOWL"
+      ],
+      [
+        "Saad Masood",
+        "AR"
+      ],
+      [
+        "Saim Ayub",
+        "AR"
+      ],
+      [
+        "Sufyan Moqim",
+        "BOWL"
+      ],
+      [
+        "Usman Khan",
+        "BAT"
+      ]
+    ]
+  },
+  "MTIND3": {
+    "name": "India",
+    "players": [
+      [
+        "Shreyas Iyer",
+        "BAT"
+      ],
+      [
+        "Tilak Varma",
+        "BAT"
+      ],
+      [
+        "Abhishek Sharma",
+        "BAT"
+      ],
+      [
+        "Arshdeep Singh",
+        "BOWL"
+      ],
+      [
+        "Jasprit Bumrah",
+        "BOWL"
+      ],
+      [
+        "Shivam Dube",
+        "AR"
+      ],
+      [
+        "Ishan Kishan",
+        "BAT"
+      ],
+      [
+        "Vipraj Nigam",
+        "BOWL"
+      ],
+      [
+        "Axar Patel",
+        "AR"
+      ],
+      [
+        "Ravi Bishnoi",
+        "BOWL"
+      ],
+      [
+        "Sanju Samson",
+        "BAT"
+      ],
+      [
+        "Vaibhav Sooryavanshi",
+        "BAT"
+      ],
+      [
+        "Yash Thakur",
+        "BOWL"
+      ],
+      [
+        "Washington Sundar",
+        "BOWL"
+      ]
+    ]
+  },
+  "MTSRI2": {
+    "name": "Sri Lanka",
+    "players": [
+      [
+        "Sahan Arachchige",
+        "BAT"
+      ],
+      [
+        "Ashen Bandara",
+        "BAT"
+      ],
+      [
+        "Lasith Croospulle",
+        "BAT"
+      ],
+      [
+        "Sohan de Livera",
+        "WK"
+      ],
+      [
+        "Niroshan Dickwella",
+        "BAT"
+      ],
+      [
+        "Binura Fernando",
+        "BOWL"
+      ],
+      [
+        "Nuwanidu Fernando",
+        "BAT"
+      ],
+      [
+        "Dushan Hemantha",
+        "AR"
+      ],
+      [
+        "Chamika Karunaratne",
+        "BOWL"
+      ],
+      [
+        "Tharindu Ratnayake",
+        "BOWL"
+      ],
+      [
+        "Wanuja Sahan",
+        "AR"
+      ],
+      [
+        "Garuka Sanketh",
+        "BOWL"
+      ],
+      [
+        "Sineth Jayawardena",
+        "BAT"
+      ],
+      [
+        "Nuwan Thushara",
+        "BOWL"
+      ],
+      [
+        "Vijayakanth Viyaskanth",
+        "BOWL"
+      ]
+    ]
+  },
+  "MTBAN": {
+    "name": "Bangladesh",
+    "players": [
+      [
+        "Litton Das",
+        "BAT"
+      ],
+      [
+        "Towhid Hridoy",
+        "BAT"
+      ],
+      [
+        "Al Islam",
+        "BOWL"
+      ],
+      [
+        "Hasan Mahmud",
+        "BOWL"
+      ],
+      [
+        "Mahedi Hasan",
+        "AR"
+      ],
+      [
+        "Mosaddek Hossain",
+        "AR"
+      ],
+      [
+        "Mustafizur Rahman",
+        "BOWL"
+      ],
+      [
+        "Nasum Ahmed",
+        "BOWL"
+      ],
+      [
+        "Najmul Hossain Shanto",
+        "BAT"
+      ],
+      [
+        "Parvez Hossain Emon",
+        "BAT"
+      ],
+      [
+        "Rishad Hossain",
+        "AR"
+      ],
+      [
+        "Saif Hassan",
+        "AR"
+      ],
+      [
+        "Shoriful Islam",
+        "BOWL"
+      ],
+      [
+        "Tanzid Hasan",
+        "BAT"
+      ],
+      [
+        "Yasir Ali",
+        "BAT"
+      ]
+    ]
+  }
+}

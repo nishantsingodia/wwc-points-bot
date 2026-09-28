@@ -1,6 +1,6 @@
 {
  "anchor": "cricinfo_id (ci:); cs:/uncapped: fallback; cricsheet_id derived from crosswalk",
- "count": 929,
+ "count": 970,
  "players": {
   "ci:597806": {
    "aliases": [
@@ -3230,7 +3230,8 @@
     "tanzid hasan tamim"
    ],
    "tours": [
-    "Australia tour of Bangladesh 2026 (Men T20I)"
+    "Australia tour of Bangladesh 2026 (Men T20I)",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "990023",
    "cricsheet_id": "80fe764d",
@@ -3259,7 +3260,8 @@
     "saif hassan"
    ],
    "tours": [
-    "Australia tour of Bangladesh 2026 (Men T20I)"
+    "Australia tour of Bangladesh 2026 (Men T20I)",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "821749",
    "cricsheet_id": "bb95564b",
@@ -3274,7 +3276,8 @@
     "parvez hossain emon"
    ],
    "tours": [
-    "Australia tour of Bangladesh 2026 (Men T20I)"
+    "Australia tour of Bangladesh 2026 (Men T20I)",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "1139511",
    "cricsheet_id": "489aaf0a",
@@ -3289,7 +3292,8 @@
     "towhid hridoy"
    ],
    "tours": [
-    "Australia tour of Bangladesh 2026 (Men T20I)"
+    "Australia tour of Bangladesh 2026 (Men T20I)",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "990031",
    "cricsheet_id": "9e52a414",
@@ -3320,7 +3324,8 @@
     "mahedi hasan"
    ],
    "tours": [
-    "Australia tour of Bangladesh 2026 (Men T20I)"
+    "Australia tour of Bangladesh 2026 (Men T20I)",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "833087",
    "cricsheet_id": "9dad0f2e",
@@ -3335,7 +3340,8 @@
     "rishad hossain"
    ],
    "tours": [
-    "Australia tour of Bangladesh 2026 (Men T20I)"
+    "Australia tour of Bangladesh 2026 (Men T20I)",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "1139523",
    "cricsheet_id": "5935d694",
@@ -3350,7 +3356,8 @@
     "shoriful islam"
    ],
    "tours": [
-    "Australia tour of Bangladesh 2026 (Men T20I)"
+    "Australia tour of Bangladesh 2026 (Men T20I)",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "990039",
    "cricsheet_id": "bb34fd31",
@@ -3379,7 +3386,8 @@
    ],
    "tours": [
     "Australia tour of Bangladesh 2026 (Men T20I)",
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "330902",
    "cricsheet_id": "0a8fce53",
@@ -3395,7 +3403,8 @@
    ],
    "tours": [
     "Australia tour of Bangladesh 2026 (Men T20I)",
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "536936",
    "cricsheet_id": "0404d43c",
@@ -3438,7 +3447,8 @@
     "nasum ahmed"
    ],
    "tours": [
-    "Australia tour of Bangladesh 2026 (Men T20I)"
+    "Australia tour of Bangladesh 2026 (Men T20I)",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "348049",
    "cricsheet_id": "37654b75",
@@ -5407,7 +5417,8 @@
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
     "India tour of England 2026 (Men T20I)",
-    "India tour of Zimbabwe 2026 (T20I)"
+    "India tour of Zimbabwe 2026 (T20I)",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "1070183",
    "cricsheet_id": "f29185a1",
@@ -5427,7 +5438,8 @@
    ],
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "425943",
    "cricsheet_id": "a4cc73aa",
@@ -5444,7 +5456,8 @@
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
     "India tour of England 2026 (Men T20I)",
-    "India tour of Zimbabwe 2026 (T20I)"
+    "India tour of Zimbabwe 2026 (T20I)",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "720471",
    "cricsheet_id": "752f7486",
@@ -5461,7 +5474,8 @@
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
     "India tour of England 2026 (Men T20I)",
-    "India tour of Zimbabwe 2026 (T20I)"
+    "India tour of Zimbabwe 2026 (T20I)",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "642519",
    "cricsheet_id": "85ec8e33",
@@ -5477,7 +5491,8 @@
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
     "India tour of England 2026 (Men T20I)",
-    "India tour of Zimbabwe 2026 (T20I)"
+    "India tour of Zimbabwe 2026 (T20I)",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "1170265",
    "cricsheet_id": "b0482a1d",
@@ -5492,7 +5507,8 @@
    ],
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "719715",
    "cricsheet_id": "f19ccfad",
@@ -5509,7 +5525,8 @@
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
     "India tour of England 2026 (Men T20I)",
-    "India tour of Zimbabwe 2026 (T20I)"
+    "India tour of Zimbabwe 2026 (T20I)",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "714451",
    "cricsheet_id": "a4e37e47",
@@ -5525,7 +5542,8 @@
    ],
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "554691",
    "cricsheet_id": "2e171977",
@@ -5540,7 +5558,8 @@
    ],
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "1125976",
    "cricsheet_id": "244048f6",
@@ -5588,7 +5607,8 @@
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
     "India tour of England 2026 (Men T20I)",
-    "India tour of Zimbabwe 2026 (T20I)"
+    "India tour of Zimbabwe 2026 (T20I)",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "1408688",
    "cricsheet_id": "470f446b",
@@ -5637,7 +5657,8 @@
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
     "India tour of England 2026 (Men T20I)",
-    "India tour of Zimbabwe 2026 (T20I)"
+    "India tour of Zimbabwe 2026 (T20I)",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "1175441",
    "cricsheet_id": "df064e1a",
@@ -7041,7 +7062,8 @@
    ],
    "tours": [
     "Lanka Premier League 2026",
-    "European T20 Premier League 2026"
+    "European T20 Premier League 2026",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "960361",
    "cricsheet_id": "b410bd3d",
@@ -7108,7 +7130,8 @@
     "nuwanidu fernando"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "1074333",
    "cricsheet_id": "ba603555",
@@ -7306,7 +7329,8 @@
     "hasan mahmud"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "926629",
    "cricsheet_id": "80ad39ac",
@@ -7355,7 +7379,8 @@
     "binura fernando"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "629080",
    "cricsheet_id": "dabbd0ae",
@@ -7391,7 +7416,8 @@
     "kushal bhurtel"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "794713",
    "cricsheet_id": "e3386c8a",
@@ -7460,7 +7486,8 @@
     "wanuja sahan kumara"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "1282476",
    "cricsheet_id": "d86d276e",
@@ -7690,7 +7717,8 @@
     "garuka sanketh"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "1364328",
    "cricsheet_id": "40db4769",
@@ -7707,7 +7735,8 @@
     "nuwan thushara"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "955235",
    "cricsheet_id": "ee1b6c27",
@@ -7777,7 +7806,8 @@
     "madi hemantha"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "721041",
    "cricsheet_id": "58431ca0",
@@ -7859,7 +7889,8 @@
     "lasith croospulle"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "1027867",
    "cricsheet_id": "e30c9b2d",
@@ -7930,7 +7961,8 @@
     "chamika karunaratne"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "623695",
    "cricsheet_id": "fb3e0d39",
@@ -7999,7 +8031,8 @@
     "vijayakanth viyaskanth"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "1153149",
    "cricsheet_id": "03a83c50",
@@ -8048,10 +8081,12 @@
   "ci:633660": {
    "aliases": [
     "cricbuzz player 12163",
-    "virandeep singh"
+    "virandeep singh",
+    "virandeep singh jagjit singh"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "633660",
    "cricsheet_id": "415d30b6",
@@ -8067,7 +8102,8 @@
     "akif javed"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "1203669",
    "cricsheet_id": "99d7d5b7",
@@ -8100,7 +8136,8 @@
     "ssd arachchige"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "693975",
    "cricsheet_id": "c05f9d20",
@@ -8118,7 +8155,8 @@
     "tharindu ratnayake"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "950405",
    "cricsheet_id": "4eb02f2e",
@@ -8168,7 +8206,8 @@
     "sahibzada farhan"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "647785",
    "cricsheet_id": "1aba45cd",
@@ -8185,7 +8224,8 @@
     "niroshan dickwella"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "429754",
    "cricsheet_id": "45963d9e",
@@ -8362,7 +8402,8 @@
     "mohammad wasim"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "1185538",
    "cricsheet_id": "9e9af5f2",
@@ -8716,7 +8757,8 @@
     "abrar ahmed"
    ],
    "tours": [
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "734459",
    "cricsheet_id": "abb7c76c",
@@ -11421,7 +11463,8 @@
     "yash thakur"
    ],
    "tours": [
-    "India tour of Zimbabwe 2026 (T20I)"
+    "India tour of Zimbabwe 2026 (T20I)",
+    "Asian Games 2026"
    ],
    "cricinfo_id": "1070196",
    "cricsheet_id": "4b31f3a3",
@@ -11619,7 +11662,8 @@
     "maaz sadaqat"
    ],
    "tours": [
-    "Caribbean Premier League 2026"
+    "Caribbean Premier League 2026",
+    "Asian Games 2026"
    ],
    "display": "Maaz Sadaqat",
    "cricinfo_id": "1244154",
@@ -11710,7 +11754,8 @@
     "saim ayub"
    ],
    "tours": [
-    "Caribbean Premier League 2026"
+    "Caribbean Premier League 2026",
+    "Asian Games 2026"
    ],
    "display": "Saim Ayub",
    "cricinfo_id": "1161031",
@@ -12538,7 +12583,8 @@
     "hassan nawaz"
    ],
    "tours": [
-    "Caribbean Premier League 2026"
+    "Caribbean Premier League 2026",
+    "Asian Games 2026"
    ],
    "display": "Hasan Nawaz",
    "cricinfo_id": "1398125",
@@ -12554,7 +12600,8 @@
     "usman khan"
    ],
    "tours": [
-    "Caribbean Premier League 2026"
+    "Caribbean Premier League 2026",
+    "Asian Games 2026"
    ],
    "display": "Usman Khan",
    "draft_id": 10697,
@@ -13426,7 +13473,8 @@
     "sufyan moqim"
    ],
    "tours": [
-    "Caribbean Premier League 2026"
+    "Caribbean Premier League 2026",
+    "Asian Games 2026"
    ],
    "display": "Sufyan Moqim",
    "draft_id": 10675,
@@ -15199,6 +15247,575 @@
    "cricsheet_id": "740742ef",
    "espn_id": "34102",
    "draft_id": 11197,
+   "auction_id": null
+  },
+  "ci:701227": {
+   "aliases": [
+    "ainool hafizs",
+    "ainool hafizs yatim"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Ainool Hafizs",
+   "cricinfo_id": "701227",
+   "cricsheet_id": "1bada9da",
+   "espn_id": "701227",
+   "draft_id": 11243,
+   "auction_id": null
+  },
+  "ci:1021021": {
+   "aliases": [
+    "amir khan",
+    "anas khan"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Amir Khan",
+   "cricinfo_id": "1021021",
+   "cricsheet_id": "a7bc0f3d",
+   "espn_id": "1021021",
+   "draft_id": 11244,
+   "auction_id": null
+  },
+  "ci:1037535": {
+   "aliases": [
+    "aslam khan"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Aslam Khan",
+   "cricinfo_id": "1037535",
+   "cricsheet_id": "31080a88",
+   "espn_id": "1037535",
+   "draft_id": 11245,
+   "auction_id": null
+  },
+  "ci:1448905": {
+   "aliases": [
+    "azri azhar"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Azri Azhar",
+   "cricinfo_id": "1448905",
+   "cricsheet_id": "23f37c09",
+   "espn_id": "1448905",
+   "draft_id": 11246,
+   "auction_id": null
+  },
+  "ci:453266": {
+   "aliases": [
+    "muhamad syahadat",
+    "muhamad syahadat ramli"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Muhamad Syahadat",
+   "cricinfo_id": "453266",
+   "cricsheet_id": "5efa8af3",
+   "espn_id": "453266",
+   "cricinfo_alt": [
+    "348125"
+   ],
+   "draft_id": 11247,
+   "auction_id": null
+  },
+  "ci:1495256": {
+   "aliases": [
+    "muhammad haziq aiman",
+    "muhammad haziq aiman mohd hafiz"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Muhammad Haziq Aiman",
+   "cricinfo_id": "1495256",
+   "cricsheet_id": "1f13eba1",
+   "espn_id": "1495256",
+   "draft_id": 11248,
+   "auction_id": null
+  },
+  "ci:1515147": {
+   "aliases": [
+    "muhammad akram",
+    "muhammad akram abd malek"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Muhammad Akram",
+   "cricinfo_id": "1515147",
+   "cricsheet_id": "20b90232",
+   "espn_id": "1515147",
+   "draft_id": 11249,
+   "auction_id": null
+  },
+  "ci:1021025": {
+   "aliases": [
+    "muhammad amir",
+    "muhammad amir azim abdul shukor"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Muhammad Amir",
+   "cricinfo_id": "1021025",
+   "cricsheet_id": "60bec5c3",
+   "espn_id": "1021025",
+   "draft_id": 11250,
+   "auction_id": null
+  },
+  "ci:568452": {
+   "aliases": [
+    "muhammad wafiq",
+    "muhammad wafiq irfan zarbani"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Muhammad Wafiq",
+   "cricinfo_id": "568452",
+   "cricsheet_id": "f104c434",
+   "espn_id": "568452",
+   "draft_id": 11251,
+   "auction_id": null
+  },
+  "ci:633638": {
+   "aliases": [
+    "sharvin muniandy"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Sharvin Muniandy",
+   "cricinfo_id": "633638",
+   "cricsheet_id": "57fcfd3b",
+   "espn_id": "633638",
+   "draft_id": 11252,
+   "auction_id": null
+  },
+  "ci:633641": {
+   "aliases": [
+    "pavandeep singh",
+    "pavandeep singh jagjit singh"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Pavandeep Singh",
+   "cricinfo_id": "633641",
+   "cricsheet_id": "78fcc740",
+   "espn_id": "633641",
+   "draft_id": 11253,
+   "auction_id": null
+  },
+  "ci:1037533": {
+   "aliases": [
+    "rahim khan",
+    "rahim khan bin malik"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Rahim Khan",
+   "cricinfo_id": "1037533",
+   "cricsheet_id": "95dc5adc",
+   "espn_id": "1037533",
+   "draft_id": 11254,
+   "auction_id": null
+  },
+  "ci:868003": {
+   "aliases": [
+    "syed aziz",
+    "syed aziz syed mubarak"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Syed Aziz",
+   "cricinfo_id": "868003",
+   "cricsheet_id": "6667067e",
+   "espn_id": "868003",
+   "draft_id": 11255,
+   "auction_id": null
+  },
+  "ci:1090866": {
+   "aliases": [
+    "vijay unni",
+    "vijay unni suresh unni"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Vijay Unni",
+   "cricinfo_id": "1090866",
+   "cricsheet_id": "f737ab44",
+   "espn_id": "1090866",
+   "draft_id": 11256,
+   "auction_id": null
+  },
+  "ci:794707": {
+   "aliases": [
+    "dipendra singh airee"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Dipendra Singh Airee",
+   "cricinfo_id": "794707",
+   "cricsheet_id": "1747ea18",
+   "espn_id": "794707",
+   "draft_id": 11258,
+   "auction_id": null
+  },
+  "ci:701217": {
+   "aliases": [
+    "aarif sheikh",
+    "aasif sheikh"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Aarif Sheikh",
+   "cricinfo_id": "701217",
+   "cricsheet_id": "cd4d7695",
+   "espn_id": "701217",
+   "draft_id": 11259,
+   "auction_id": null
+  },
+  "ci:1253822": {
+   "aliases": [
+    "gulsan jha"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Gulsan Jha",
+   "cricinfo_id": "1253822",
+   "cricsheet_id": "9811e35e",
+   "espn_id": "1253822",
+   "draft_id": 11262,
+   "auction_id": null
+  },
+  "ci:1161022": {
+   "aliases": [
+    "sundeep jora"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Sundeep Jora",
+   "cricinfo_id": "1161022",
+   "cricsheet_id": "156378d8",
+   "espn_id": "1161022",
+   "draft_id": 11263,
+   "auction_id": null
+  },
+  "ci:800675": {
+   "aliases": [
+    "karan kc"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Karan KC",
+   "cricinfo_id": "800675",
+   "cricsheet_id": "f53b3e1d",
+   "espn_id": "800675",
+   "draft_id": 11264,
+   "auction_id": null
+  },
+  "ci:1141934": {
+   "aliases": [
+    "kushal malla"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Kushal Malla",
+   "cricinfo_id": "1141934",
+   "cricsheet_id": "7e9f1cde",
+   "espn_id": "1141934",
+   "draft_id": 11265,
+   "auction_id": null
+  },
+  "ci:1090625": {
+   "aliases": [
+    "lokesh bam"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Lokesh Bam",
+   "cricinfo_id": "1090625",
+   "cricsheet_id": "75c8a26b",
+   "espn_id": "1090625",
+   "draft_id": 11267,
+   "auction_id": null
+  },
+  "uncapped:sher-malla": {
+   "aliases": [
+    "sher malla"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Sher Malla",
+   "draft_id": 11268,
+   "auction_id": null
+  },
+  "ci:1072488": {
+   "aliases": [
+    "rohit kumar paudel",
+    "rohit paudel"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Rohit Paudel",
+   "cricinfo_id": "1072488",
+   "cricsheet_id": "1a3cc554",
+   "espn_id": "1072488",
+   "draft_id": 11269,
+   "auction_id": null
+  },
+  "ci:913853": {
+   "aliases": [
+    "lalit narayan rajbanshi",
+    "lalit rajbanshi"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Lalit Rajbanshi",
+   "cricinfo_id": "913853",
+   "cricsheet_id": "6ad2d5f7",
+   "espn_id": "913853",
+   "draft_id": 11270,
+   "auction_id": null
+  },
+  "ci:701215": {
+   "aliases": [
+    "sompal kami"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Sompal Kami",
+   "cricinfo_id": "701215",
+   "cricsheet_id": "1adb8ee8",
+   "espn_id": "701215",
+   "draft_id": 11271,
+   "auction_id": null
+  },
+  "uncapped:nandan-yadav": {
+   "aliases": [
+    "nandan yadav"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Nandan Yadav",
+   "draft_id": 11272,
+   "auction_id": null
+  },
+  "ci:1073106": {
+   "aliases": [
+    "abdul samad"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Abdul Samad",
+   "cricinfo_id": "1073106",
+   "cricsheet_id": "8e554b6b",
+   "espn_id": "1073106",
+   "draft_id": 11274,
+   "auction_id": null
+  },
+  "ci:1249564": {
+   "aliases": [
+    "ahmed daniyal"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Ahmed Daniyal",
+   "cricinfo_id": "1249564",
+   "cricsheet_id": "9656afbf",
+   "espn_id": "1249564",
+   "draft_id": 11276,
+   "auction_id": null
+  },
+  "uncapped:ali-raza": {
+   "aliases": [
+    "ali raza"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Ali Raza",
+   "draft_id": 11278,
+   "auction_id": null
+  },
+  "ci:1332783": {
+   "aliases": [
+    "arafat minhas"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Arafat Minhas",
+   "cricinfo_id": "1332783",
+   "cricsheet_id": "f2e8b37c",
+   "espn_id": "1332783",
+   "draft_id": 11279,
+   "auction_id": null
+  },
+  "ci:1168651": {
+   "aliases": [
+    "haider ali"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Haider Ali",
+   "cricinfo_id": "1168651",
+   "cricsheet_id": "c13e34f4",
+   "espn_id": "1168651",
+   "draft_id": 11280,
+   "auction_id": null
+  },
+  "ci:1339104": {
+   "aliases": [
+    "saad masood"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Saad Masood",
+   "cricinfo_id": "1339104",
+   "cricsheet_id": "b2498b5d",
+   "espn_id": "1339104",
+   "draft_id": 11284,
+   "auction_id": null
+  },
+  "ci:625383": {
+   "aliases": [
+    "jasprit bumrah",
+    "jasprit jasbirsingh bumrah",
+    "jj bumrah"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Jasprit Bumrah",
+   "cricinfo_id": "625383",
+   "cricsheet_id": "462411b3",
+   "espn_id": "625383",
+   "draft_id": 11292,
+   "auction_id": null
+  },
+  "ci:1449074": {
+   "aliases": [
+    "vipraj nigam"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Vipraj Nigam",
+   "cricinfo_id": "1449074",
+   "cricsheet_id": "5ffc0565",
+   "espn_id": "1449074",
+   "draft_id": 11295,
+   "auction_id": null
+  },
+  "uncapped:ashen-bandara": {
+   "aliases": [
+    "ashen bandara"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Ashen Bandara",
+   "draft_id": 11303,
+   "auction_id": null
+  },
+  "uncapped:sohan-de-livera": {
+   "aliases": [
+    "sohan de livera"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Sohan de Livera",
+   "draft_id": 11305,
+   "auction_id": null
+  },
+  "uncapped:sineth-jayawardena": {
+   "aliases": [
+    "sineth jayawardena"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Sineth Jayawardena",
+   "draft_id": 11314,
+   "auction_id": null
+  },
+  "uncapped:al-islam": {
+   "aliases": [
+    "al islam"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Al Islam",
+   "draft_id": 11319,
+   "auction_id": null
+  },
+  "ci:550133": {
+   "aliases": [
+    "mosaddek hossain"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Mosaddek Hossain",
+   "cricinfo_id": "550133",
+   "cricsheet_id": "8919756f",
+   "espn_id": "550133",
+   "draft_id": 11322,
+   "auction_id": null
+  },
+  "uncapped:najmul-hossain-shanto": {
+   "aliases": [
+    "najmul hossain shanto"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Najmul Hossain Shanto",
+   "draft_id": 11325,
+   "auction_id": null
+  },
+  "ci:629059": {
+   "aliases": [
+    "yasir ali"
+   ],
+   "tours": [
+    "Asian Games 2026"
+   ],
+   "display": "Yasir Ali",
+   "cricinfo_id": "629059",
+   "cricsheet_id": "5791b840",
+   "espn_id": "629059",
+   "draft_id": 11331,
    "auction_id": null
   }
  }
