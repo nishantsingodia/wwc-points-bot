@@ -1,0 +1,38 @@
+{
+ "tour": "Bangladesh Women tour of Australia 2026 (ODI)",
+ "slug": "aus_v_ban_odi_points",
+ "teams": {
+  "WOAUS": [
+   "ci:381311",
+   "ci:858809",
+   "ci:381217",
+   "ci:418423",
+   "ci:944393",
+   "ci:1176132",
+   "ci:381258",
+   "ci:275487",
+   "ci:420314",
+   "ci:1071705",
+   "ci:1215360",
+   "ci:946057"
+  ],
+  "WOBAN": [
+   "ci:924183",
+   "ci:1346729",
+   "uncapped:disha-biswas",
+   "ci:486995",
+   "ci:1429513",
+   "ci:1332561",
+   "ci:1145089",
+   "ci:1080264",
+   "ci:924177",
+   "ci:1204964",
+   "ci:478808",
+   "ci:1205142",
+   "uncapped:sarmin-sultana",
+   "ci:535868",
+   "ci:1352206",
+   "ci:1371855"
+  ]
+ }
+}

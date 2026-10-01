@@ -230,5 +230,15 @@
     "squads": "asian_games_2026_squads.json",
     "tab": "ASIAN GAMES 2026 POINTS",
     "cricbuzz_series": "12563"
+  },
+  {
+    "ends": "2026-10-14",
+    "espn_series": "24276",
+    "format": "ODI",
+    "gender": "female",
+    "name": "Bangladesh Women tour of Australia 2026 (ODI)",
+    "squads": "bangladesh_women_tour_of_australia_2026_odi_squads.json",
+    "tab": "AUS V BAN ODI POINTS",
+    "cricbuzz_series": "11898"
   }
 ]

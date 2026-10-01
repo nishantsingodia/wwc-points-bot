@@ -1,0 +1,124 @@
+{
+  "WOAUS": {
+    "name": "Australia Women",
+    "players": [
+      [
+        "Tahlia McGrath",
+        "AR"
+      ],
+      [
+        "Ashleigh Gardner",
+        "AR"
+      ],
+      [
+        "Nicola Carey",
+        "BOWL"
+      ],
+      [
+        "Kim Garth",
+        "AR"
+      ],
+      [
+        "Alana King",
+        "BOWL"
+      ],
+      [
+        "Phoebe Litchfield",
+        "BAT"
+      ],
+      [
+        "Beth Mooney",
+        "BAT"
+      ],
+      [
+        "Ellyse Perry",
+        "AR"
+      ],
+      [
+        "Megan Schutt",
+        "BOWL"
+      ],
+      [
+        "Annabel Sutherland",
+        "AR"
+      ],
+      [
+        "Georgia Voll",
+        "BAT"
+      ],
+      [
+        "Georgia Wareham",
+        "BOWL"
+      ]
+    ]
+  },
+  "WOBAN": {
+    "name": "Bangladesh Women",
+    "players": [
+      [
+        "Nahida Akter",
+        "BOWL"
+      ],
+      [
+        "Dilara Akter",
+        "BAT"
+      ],
+      [
+        "Disha Biswas",
+        "AR"
+      ],
+      [
+        "Fargana Hoque",
+        "BAT"
+      ],
+      [
+        "Habiba Islam",
+        "BOWL"
+      ],
+      [
+        "Marufa Akter",
+        "BOWL"
+      ],
+      [
+        "Sobhana Mostary",
+        "BAT"
+      ],
+      [
+        "Murshida Khatun",
+        "BAT"
+      ],
+      [
+        "Nigar Sultana",
+        "BAT"
+      ],
+      [
+        "Rabeya Khan",
+        "AR"
+      ],
+      [
+        "Ritu Moni",
+        "AR"
+      ],
+      [
+        "Sanjida Akter Meghla",
+        "BOWL"
+      ],
+      [
+        "Sarmin Sultana",
+        "BAT"
+      ],
+      [
+        "Sharmin Akhter",
+        "BAT"
+      ],
+      [
+        "Shorna Akter",
+        "AR"
+      ],
+      [
+        "Sultana Khatun",
+        "BOWL"
+      ]
+    ]
+  }
+}
