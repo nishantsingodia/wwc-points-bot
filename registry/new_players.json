@@ -378,12 +378,14 @@
       "pid": "ci:958691",
       "display": "KNA Bandara",
       "aliases": [
-        "kna bandara"
+        "kna bandara",
+        "koralegedera nadeeja ashen bandara"
       ],
       "team": "",
       "role": "?",
       "tours": [
-        "Lanka Premier League 2026"
+        "Lanka Premier League 2026",
+        "Asian Games 2026"
       ],
       "source": "needs-cricinfo"
     },
@@ -1277,6 +1279,45 @@
       "role": "BAT",
       "tours": [
         "Caribbean Premier League 2026"
+      ],
+      "source": "auto"
+    },
+    {
+      "pid": "ci:1302642",
+      "display": "Mahabalage Sineth Lakvan Mario Jayawardena",
+      "aliases": [
+        "mahabalage sineth lakvan mario jayawardena"
+      ],
+      "team": "MTSRI2",
+      "role": "BAT",
+      "tours": [
+        "Asian Games 2026"
+      ],
+      "source": "auto"
+    },
+    {
+      "pid": "ci:1214967",
+      "display": "Moothamerengnga Kavindu Sohan Thathsara de Livera",
+      "aliases": [
+        "moothamerengnga kavindu sohan thathsara de livera"
+      ],
+      "team": "MTSRI2",
+      "role": "WK",
+      "tours": [
+        "Asian Games 2026"
+      ],
+      "source": "auto"
+    },
+    {
+      "pid": "ci:1171289",
+      "display": "Aliss Al Islam",
+      "aliases": [
+        "aliss al islam"
+      ],
+      "team": "MTBAN",
+      "role": "AR",
+      "tours": [
+        "Asian Games 2026"
       ],
       "source": "auto"
     }

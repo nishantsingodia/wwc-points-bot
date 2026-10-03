@@ -1530,6 +1530,51 @@
    "first_status": "COMPLETED",
    "first_seen": "2026-09-20",
    "provenance": "live"
+  },
+  {
+   "tour": "West Indies tour of India 2026 (ODI)",
+   "match_key": "2026-09-27::india|west indies",
+   "match": "Match 1 — MOIND v MOWES",
+   "date": "2026-09-27",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-10-03",
+   "provenance": "live"
+  },
+  {
+   "tour": "West Indies tour of India 2026 (ODI)",
+   "match_key": "2026-09-30::india|west indies",
+   "match": "Match 2 — MOIND v MOWES",
+   "date": "2026-09-30",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-10-03",
+   "provenance": "live"
+  },
+  {
+   "tour": "Asian Games 2026",
+   "match_key": "2026-10-01::bangladesh|pakistan",
+   "match": "Match 9 — MTBAN v MTPAK",
+   "date": "2026-10-01",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-10-03",
+   "provenance": "live"
+  },
+  {
+   "tour": "Asian Games 2026",
+   "match_key": "2026-10-01::india|sri lanka",
+   "match": "Match 10 — MTIND3 v MTSRI2",
+   "date": "2026-10-01",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-10-03",
+   "provenance": "live"
+  },
+  {
+   "tour": "Asian Games 2026",
+   "match_key": "2026-10-03::bangladesh|sri lanka",
+   "match": "Match 11 — MTBAN v MTSRI2",
+   "date": "2026-10-03",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-10-03",
+   "provenance": "live"
   }
  ]
 }
