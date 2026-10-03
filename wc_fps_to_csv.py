@@ -4881,10 +4881,21 @@ def sync_tour_control(tours):
         _live_tabs = set()
         print(f"  TOUR CONTROL: could not list existing tabs ({e}) — unmatched tours default to "
               f"'pending'", file=sys.stderr)
+    # An ESPN series id SHARED by several tours (a tour's ODI and T20I legs both live under one
+    # ESPN series) is not a handle for any one of them. Matching on it meant the first leg's row
+    # "claimed" the second, which was never seeded — no row to approve, and the gate silently
+    # read the OTHER leg's decision (IND v WI ODI rode on the T20I row's 'pending' for a week).
+    _espn_count = {}
+    for _t in tours:
+        _e = _key(str(_t.get("espn_series") or ""))
+        if _e:
+            _espn_count[_e] = _espn_count.get(_e, 0) + 1
     new_rows = []
     for t in tours:
-        handles = [_key(t.get("name")), _key(t.get("tab")), _key(str(t.get("espn_series") or ""))]
-        if any(h and h in seen for h in handles):
+        _e = _key(str(t.get("espn_series") or ""))
+        handles = [_key(t.get("name")), _key(t.get("tab")), _e]
+        match_handles = handles[:2] + ([_e] if _espn_count.get(_e, 0) == 1 else [])
+        if any(h and h in seen for h in match_handles):
             continue
         # A TOUR WE CANNOT MATCH IS SEEDED, NOT SKIPPED. The DEFAULT turns on one question:
         # is this tour ALREADY PUBLISHING?
@@ -4899,7 +4910,7 @@ def sync_tour_control(tours):
         # has ruled on yet.
         _has_tab = _key(t.get("tab")) in _live_tabs
         dec = "yes" if (is_active(t) and _has_tab) else "pending"
-        for h in handles:
+        for h in match_handles:
             if h:
                 ctrl[h] = dec
                 seen.add(h)
