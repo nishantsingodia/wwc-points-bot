@@ -4,8 +4,8 @@
  "_rules": "PINS ARE READ, NOT RE-DERIVED — that is the point: a rename upstream cannot move or drop a pairing that is already recorded. A later derivation that finds NOTHING does not disturb a pin (absence is not evidence). A later derivation that finds a DIFFERENT cricbuzz match revokes BOTH claims; so does one cricbuzz match claimed by two different fixtures, and one key carrying two ESPN events. Never last-wins. A revoked key stays revoked until a human runs --forget.",
  "_note": "each pin's `confirmations` list IS the fact log; pins/revoked are a pure function of it (compile_pins o confirmations_log), and no clock is read anywhere. Regenerate, never hand-edit.",
  "counts": {
-  "confirmations": 210,
-  "pinned": 175,
+  "confirmations": 211,
+  "pinned": 176,
   "revoked": 0,
   "series": 8
  },
@@ -3103,6 +3103,27 @@
      "method": "teams+date",
      "espn_event": "1552778",
      "cb_desc": "Bronze Medal Match",
+     "cb_date": "2026-10-03"
+    }
+   ]
+  },
+  "12563|2026-10-03|india+pakistan": {
+   "cricbuzz_match_id": "171070",
+   "series_id": "12563",
+   "date": "2026-10-03",
+   "teams": [
+    "india",
+    "pakistan"
+   ],
+   "espn_events": [
+    "1552779"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1552779",
+     "cb_desc": "Gold Medal Match",
      "cb_date": "2026-10-03"
     }
    ]
