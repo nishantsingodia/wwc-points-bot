@@ -164945,6 +164945,23 @@
    "tour": "Asian Games 2026",
    "match": "Match 9 — MTBAN v MTPAK",
    "date": "2026-10-01",
+   "team": "MTBAN",
+   "pid": "ci:1171289",
+   "full": "Aliss Al Islam",
+   "points": 0,
+   "status": "COMPLETED_FLAGGED",
+   "source": "ESPN scorecard · ⚠ cricbuzz unavailable · ⏳ provisional (dots/maidens unverified, awaiting cricsheet)",
+   "frozen_at": "2026-10-03",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-10-01::bangladesh|pakistan",
+   "tour": "Asian Games 2026",
+   "match": "Match 9 — MTBAN v MTPAK",
+   "date": "2026-10-01",
    "team": "MTPAK",
    "pid": "ci:1332783",
    "full": "Arafat Minhas",
