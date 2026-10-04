@@ -163093,6 +163093,23 @@
    "match": "Match 1 — MOIND v MOWES",
    "date": "2026-09-27",
    "team": "MOIND",
+   "pid": "ci:1175428",
+   "full": "Anshul Kamboj",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "ESPN scorecard · cricbuzz cross-checked (11 players), 11 unbridged · ⏳ provisional (dots unverified for 6 unbridged bowlers: Gurnoor Brar, Kaki Nitish Kumar Reddy, Kuldeep Yadav… · awaiting cricsheet)",
+   "frozen_at": "2026-10-04",
+   "provenance": "live",
+   "fields": {
+    "played": false
+   }
+  },
+  {
+   "match_key": "2026-09-27::india|west indies",
+   "tour": "West Indies tour of India 2026 (ODI)",
+   "match": "Match 1 — MOIND v MOWES",
+   "date": "2026-09-27",
+   "team": "MOIND",
    "pid": "uncapped:auqib-nabi",
    "full": "Auqib Nabi",
    "points": 0,
@@ -163969,6 +163986,23 @@
     "bat_order": 4,
     "dismissal": "c Gaikwad b Jadeja",
     "dismissed": true
+   }
+  },
+  {
+   "match_key": "2026-09-30::india|west indies",
+   "tour": "West Indies tour of India 2026 (ODI)",
+   "match": "Match 2 — MOIND v MOWES",
+   "date": "2026-09-30",
+   "team": "MOIND",
+   "pid": "ci:1175428",
+   "full": "Anshul Kamboj",
+   "points": 0,
+   "status": "COMPLETED",
+   "source": "ESPN scorecard · cricbuzz cross-checked (11 players), 12 unbridged · ⏳ provisional (dots unverified for 6 unbridged bowlers: Auqib Nabi, Gurnoor Brar, Kuldeep Yadav… · awaiting cricsheet)",
+   "frozen_at": "2026-10-04",
+   "provenance": "live",
+   "fields": {
+    "played": false
    }
   },
   {
