@@ -1320,6 +1320,19 @@
         "Asian Games 2026"
       ],
       "source": "auto"
+    },
+    {
+      "pid": "ci:1175428",
+      "display": "Anshul Kamboj",
+      "aliases": [
+        "anshul kamboj"
+      ],
+      "team": "MOIND",
+      "role": "AR",
+      "tours": [
+        "West Indies tour of India 2026 (ODI)"
+      ],
+      "source": "auto"
     }
   ]
 }
