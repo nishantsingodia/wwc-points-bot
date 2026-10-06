@@ -742,20 +742,16 @@ def cricbuzz_discover(now, horizon):
     return out
 
 
-def espn_build(lid, name, now, horizon, state, seeds=None):
-    """Build a tour ENTIRELY from ESPN → (series_info, gender, league_squads) for gen_tour, or None.
+def _espn_league_squads(lid, name, matchlist, event_ids, fmt, seeds=None):
+    """ONE format's league_squads (gen_tour's shape) from the ESPN events of THAT format, or None.
 
-    espn_series = lid. `seeds` (--auction-squads) is an OPTIONAL curated override for ESPN's squads,
-    adopted only when a seed covers EVERY team in the fixture list — a partially-covering seed would
-    silently drop the uncovered teams' matches (gen_tour's canonical() returns None for them), which
-    is a worse outcome than ESPN's own squads."""
-    matchlist, event_ids = _espn_matchlist(lid, now, name)
-    def _soon(m):
-        try:
-            return datetime.fromisoformat((m["dateTimeGMT"] or "").replace("Z", "")).replace(tzinfo=timezone.utc) <= horizon
-        except Exception:
-            return True
-    if not matchlist or not any(_soon(m) for m in matchlist):
+    Per format, because ESPN files a combined tour — "West Indies tour of India 2026": 3 ODIs then
+    5 T20Is — under ONE league id. Merging squads across every event with first-wins handed the
+    T20I tour the ODI squad (Rohit/Kohli/Jadeja in a T20I pool, Abhishek/Samson missing; ingested
+    27 Sep 2026, caught on T20I match day). Never borrow a squad from another format: a format whose
+    squads aren't posted yet is skipped, and a later run picks it up (its tab won't exist yet)."""
+    evs = [e for m, e in zip(matchlist, event_ids) if _fmt_of(m) == fmt]
+    if not evs:
         return None
     # Squads live on the EVENT summary, so one event only ever yields the 2 teams playing it.
     # Merge across events until every team in the fixture list is covered — stopping at the first
@@ -767,20 +763,22 @@ def espn_build(lid, name, now, horizon, state, seeds=None):
     # favour of ESPN's own squads (12 Sep 2026), losing the hand-verified identity anchoring that is
     # the whole point of the seed. It also defeats the early exit below, so a league whose knockouts
     # aren't drawn yet paid the full MAX_SQUAD_EVENTS scan on every run.
-    want = {t for m in matchlist for t in m["teams"] if norm(t) not in TBC_NAMES}
+    want = {t for m in matchlist if _fmt_of(m) == fmt
+            for t in m["teams"] if norm(t) not in TBC_NAMES}
     sqmap = {}
-    for ev in event_ids[:MAX_SQUAD_EVENTS]:
+    for ev in evs[:MAX_SQUAD_EVENTS]:
         for team, players in _espn_squads(lid, ev).items():
             sqmap.setdefault(team, players)
         if want <= set(sqmap):
             break
     if len(sqmap) < 2:
-        print(f"  espn: {name!r} — squads not posted yet (skip; will catch on a later run)", file=sys.stderr)
+        print(f"  espn: {name!r} {fmt} — squads not posted yet (skip; will catch on a later run)",
+              file=sys.stderr)
         return None
     if missing := want - set(sqmap):
         # Not fatal: gen_tour's canonical() drops an unmapped team, so those fixtures fall out.
         # Loud, because it silently shrinks the tour.
-        print(f"  espn: {name!r} — no squad posted for {len(missing)} team(s): "
+        print(f"  espn: {name!r} {fmt} — no squad posted for {len(missing)} team(s): "
               f"{', '.join(sorted(missing))} — their matches will be dropped", file=sys.stderr)
     gender = "female" if re.search(r"\bwomen\b", name, re.I) else "male"
     squads = {t: {"short": (re.sub(r"[^A-Za-z]", "", t)[:3] or t[:3]).upper(),
@@ -798,6 +796,32 @@ def espn_build(lid, name, now, horizon, state, seeds=None):
             print(f"  squads: auction seed covers only {len(seeded['canon'])} of {len(want)} teams "
                   f"— keeping ESPN's squads (a partial seed would DROP the uncovered teams' "
                   f"matches)", file=sys.stderr)
+    return league_squads
+
+def espn_build(lid, name, now, horizon, state, seeds=None):
+    """Build a tour ENTIRELY from ESPN → (series_info, gender, {fmt: league_squads}) for gen_tour,
+    or None. Squads are keyed BY FORMAT — see _espn_league_squads; feed each format's gen_tour its
+    own entry via gen_formats().
+
+    espn_series = lid. `seeds` (--auction-squads) is an OPTIONAL curated override for ESPN's squads,
+    adopted only when a seed covers EVERY team in the fixture list — a partially-covering seed would
+    silently drop the uncovered teams' matches (gen_tour's canonical() returns None for them), which
+    is a worse outcome than ESPN's own squads."""
+    matchlist, event_ids = _espn_matchlist(lid, now, name)
+    def _soon(m):
+        try:
+            return datetime.fromisoformat((m["dateTimeGMT"] or "").replace("Z", "")).replace(tzinfo=timezone.utc) <= horizon
+        except Exception:
+            return True
+    if not matchlist or not any(_soon(m) for m in matchlist):
+        return None
+    by_fmt = {}
+    for fmt in ("ODI", "T20"):
+        if lg := _espn_league_squads(lid, name, matchlist, event_ids, fmt, seeds):
+            by_fmt[fmt] = lg
+    if not by_fmt:
+        return None
+    gender = "female" if re.search(r"\bwomen\b", name, re.I) else "male"
     # ESPN's LEAGUE name is season-less ("Caribbean Premier League"), but gen_tour derives the tour
     # name AND the sheet tab from it — so next season would mint the same tab, and apply_to_repos
     # skips a tab that already exists (the 2027 edition would silently never ingest). Stamp the
@@ -808,7 +832,18 @@ def espn_build(lid, name, now, horizon, state, seeds=None):
             name = f"{name} {max(set(years), key=years.count)}"
     # No feed id beyond ESPN's: `espn_id` IS the tour's series identity now.
     series_info = {"info": {"name": name, "espn_id": str(lid)}, "matchList": matchlist}
-    return series_info, gender, league_squads
+    return series_info, gender, by_fmt
+
+def gen_formats(si, gender, state, by_fmt):
+    """gen_tour for each format that has ITS OWN squads → [new tour dicts] (existing tabs skipped)."""
+    out = []
+    for fmt, lg in by_fmt.items():
+        t = gen_tour(si, fmt, gender, state, lg)
+        if t and t["tours_entry"]["tab"] not in state["existing_tabs"]:
+            out.append(t)
+        elif t:
+            print(f"  skip (tab exists): {t['tours_entry']['tab']}", file=sys.stderr)
+    return out
 
 def espn_add_named(query, now, horizon, state, espn_id="", seeds=None):
     """Resolve a tour on ESPN and build it KEYLESS → [tour dicts] (empty if not found).
@@ -832,12 +867,7 @@ def espn_add_named(query, now, horizon, state, espn_id="", seeds=None):
                   f"search run.", file=sys.stderr)
             return []
         si, gender, lg = built
-        out = []
-        for fmt in ("ODI", "T20"):
-            t = gen_tour(si, fmt, gender, state, lg)
-            if t and t["tours_entry"]["tab"] not in state["existing_tabs"]:
-                out.append(t)
-        return out
+        return gen_formats(si, gender, state, lg)
     cands = _espn_search_leagues(clean)
     if not cands and (bare := re.sub(r"\s*\b(19|20)\d{2}\b", "", clean).strip()) != clean:
         # A season-less league ("Caribbean Premier League") is a ZERO-result search once a year is
@@ -858,12 +888,7 @@ def espn_add_named(query, now, horizon, state, espn_id="", seeds=None):
     if not built:
         return []
     si, gender, lg = built
-    out = []
-    for fmt in ("ODI", "T20"):
-        t = gen_tour(si, fmt, gender, state, lg)
-        if t and t["tours_entry"]["tab"] not in state["existing_tabs"]:
-            out.append(t)
-    return out
+    return gen_formats(si, gender, state, lg)
 
 def status_sheet_new_names(state):
     """Read the 'TOUR STATUS' tab's Column A and return the tour names Nishant typed that are NOT
@@ -1460,10 +1485,7 @@ def main():
                 continue
             si, gender, lg = built
             si["info"]["cricbuzz_id"] = cb_id     # free L1 witness, straight from discovery
-            for fmt in ("ODI", "T20"):
-                t = gen_tour(si, fmt, gender, state, lg)
-                if t and t["tours_entry"]["tab"] not in state["existing_tabs"]:
-                    tours.append(t)
+            tours += gen_formats(si, gender, state, lg)
     elif args.espn_tour:
         horizon = now + timedelta(days=45)
         tours += espn_add_named(args.espn_tour, now, horizon, state, seeds=seeds)
@@ -1480,12 +1502,7 @@ def main():
             if not built:
                 continue
             si, gender, lg = built
-            for fmt in ("ODI", "T20"):
-                t = gen_tour(si, fmt, gender, state, lg)
-                if t and t["tours_entry"]["tab"] not in state["existing_tabs"]:
-                    tours.append(t)
-                elif t:
-                    print(f"  skip (tab exists): {t['tours_entry']['tab']}", file=sys.stderr)
+            tours += gen_formats(si, gender, state, lg)
 
     # ---- output ----
     for t in tours:

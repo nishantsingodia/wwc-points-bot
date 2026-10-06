@@ -1,6 +1,6 @@
 {
  "anchor": "cricinfo_id (ci:); cs:/uncapped: fallback; cricsheet_id derived from crosswalk",
- "count": 975,
+ "count": 976,
  "players": {
   "ci:597806": {
    "aliases": [
@@ -3693,7 +3693,8 @@
    ],
    "tours": [
     "Major League Cricket 2026",
-    "Caribbean Premier League 2026"
+    "Caribbean Premier League 2026",
+    "West Indies tour of India 2026 (T20I)"
    ],
    "cricinfo_id": "677077",
    "cricsheet_id": "c5aef772",
@@ -4203,7 +4204,8 @@
    ],
    "tours": [
     "Major League Cricket 2026",
-    "Caribbean Premier League 2026"
+    "Caribbean Premier League 2026",
+    "West Indies tour of India 2026 (T20I)"
    ],
    "cricinfo_id": "530812",
    "cricsheet_id": "4d7f517e",
@@ -4700,7 +4702,8 @@
    ],
    "tours": [
     "Major League Cricket 2026",
-    "Caribbean Premier League 2026"
+    "Caribbean Premier League 2026",
+    "West Indies tour of India 2026 (T20I)"
    ],
    "cricinfo_id": "670025",
    "cricsheet_id": "48a1d7b7",
@@ -5125,7 +5128,8 @@
    ],
    "tours": [
     "Major League Cricket 2026",
-    "Caribbean Premier League 2026"
+    "Caribbean Premier League 2026",
+    "West Indies tour of India 2026 (T20I)"
    ],
    "cricinfo_id": "820351",
    "cricsheet_id": "650d5e49",
@@ -5441,7 +5445,8 @@
     "India tour of Ireland 2026 (Men T20I)",
     "India tour of England 2026 (Men T20I)",
     "India tour of Zimbabwe 2026 (T20I)",
-    "Asian Games 2026"
+    "Asian Games 2026",
+    "West Indies tour of India 2026 (T20I)"
    ],
    "cricinfo_id": "1070183",
    "cricsheet_id": "f29185a1",
@@ -5462,7 +5467,8 @@
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
     "India tour of England 2026 (Men T20I)",
-    "Asian Games 2026"
+    "Asian Games 2026",
+    "West Indies tour of India 2026 (T20I)"
    ],
    "cricinfo_id": "425943",
    "cricsheet_id": "a4cc73aa",
@@ -5480,7 +5486,8 @@
     "India tour of Ireland 2026 (Men T20I)",
     "India tour of England 2026 (Men T20I)",
     "India tour of Zimbabwe 2026 (T20I)",
-    "Asian Games 2026"
+    "Asian Games 2026",
+    "West Indies tour of India 2026 (T20I)"
    ],
    "cricinfo_id": "720471",
    "cricsheet_id": "752f7486",
@@ -5498,7 +5505,8 @@
     "India tour of Ireland 2026 (Men T20I)",
     "India tour of England 2026 (Men T20I)",
     "India tour of Zimbabwe 2026 (T20I)",
-    "Asian Games 2026"
+    "Asian Games 2026",
+    "West Indies tour of India 2026 (T20I)"
    ],
    "cricinfo_id": "642519",
    "cricsheet_id": "85ec8e33",
@@ -5515,7 +5523,8 @@
     "India tour of Ireland 2026 (Men T20I)",
     "India tour of England 2026 (Men T20I)",
     "India tour of Zimbabwe 2026 (T20I)",
-    "Asian Games 2026"
+    "Asian Games 2026",
+    "West Indies tour of India 2026 (T20I)"
    ],
    "cricinfo_id": "1170265",
    "cricsheet_id": "b0482a1d",
@@ -5549,7 +5558,8 @@
     "India tour of Ireland 2026 (Men T20I)",
     "India tour of England 2026 (Men T20I)",
     "India tour of Zimbabwe 2026 (T20I)",
-    "Asian Games 2026"
+    "Asian Games 2026",
+    "West Indies tour of India 2026 (T20I)"
    ],
    "cricinfo_id": "714451",
    "cricsheet_id": "a4e37e47",
@@ -5566,7 +5576,8 @@
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
     "India tour of England 2026 (Men T20I)",
-    "Asian Games 2026"
+    "Asian Games 2026",
+    "West Indies tour of India 2026 (T20I)"
    ],
    "cricinfo_id": "554691",
    "cricsheet_id": "2e171977",
@@ -5582,7 +5593,8 @@
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
     "India tour of England 2026 (Men T20I)",
-    "Asian Games 2026"
+    "Asian Games 2026",
+    "West Indies tour of India 2026 (T20I)"
    ],
    "cricinfo_id": "1125976",
    "cricsheet_id": "244048f6",
@@ -5614,7 +5626,8 @@
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
     "India tour of England 2026 (Men T20I)",
-    "India tour of Zimbabwe 2026 (T20I)"
+    "India tour of Zimbabwe 2026 (T20I)",
+    "West Indies tour of India 2026 (T20I)"
    ],
    "cricinfo_id": "1350768",
    "cricsheet_id": "80b2fb19",
@@ -5631,7 +5644,8 @@
     "India tour of Ireland 2026 (Men T20I)",
     "India tour of England 2026 (Men T20I)",
     "India tour of Zimbabwe 2026 (T20I)",
-    "Asian Games 2026"
+    "Asian Games 2026",
+    "West Indies tour of India 2026 (T20I)"
    ],
    "cricinfo_id": "1408688",
    "cricsheet_id": "470f446b",
@@ -5681,7 +5695,8 @@
     "India tour of Ireland 2026 (Men T20I)",
     "India tour of England 2026 (Men T20I)",
     "India tour of Zimbabwe 2026 (T20I)",
-    "Asian Games 2026"
+    "Asian Games 2026",
+    "West Indies tour of India 2026 (T20I)"
    ],
    "cricinfo_id": "1175441",
    "cricsheet_id": "df064e1a",
@@ -11502,7 +11517,8 @@
     "mayank yadav"
    ],
    "tours": [
-    "India tour of Zimbabwe 2026 (T20I)"
+    "India tour of Zimbabwe 2026 (T20I)",
+    "West Indies tour of India 2026 (T20I)"
    ],
    "cricinfo_id": "1292563",
    "cricsheet_id": "b1ad996b",
@@ -11621,7 +11637,8 @@
     "shamar springer"
    ],
    "tours": [
-    "Caribbean Premier League 2026"
+    "Caribbean Premier League 2026",
+    "West Indies tour of India 2026 (T20I)"
    ],
    "display": "Shamar Springer",
    "cricinfo_id": "820689",
@@ -12376,7 +12393,8 @@
     "quentin sampson"
    ],
    "tours": [
-    "Caribbean Premier League 2026"
+    "Caribbean Premier League 2026",
+    "West Indies tour of India 2026 (T20I)"
    ],
    "display": "Quentin Sampson",
    "cricinfo_id": "1342550",
@@ -12449,7 +12467,8 @@
     "kamil pooran"
    ],
    "tours": [
-    "Caribbean Premier League 2026"
+    "Caribbean Premier League 2026",
+    "West Indies tour of India 2026 (T20I)"
    ],
    "display": "Kamil Pooran",
    "cricinfo_id": "556531",
@@ -15005,18 +15024,6 @@
    "draft_id": 11133,
    "auction_id": null
   },
-  "uncapped:christine-mutasa": {
-   "aliases": [
-    "christine mutasa"
-   ],
-   "tours": [
-    "West Indies Women tour of Zimbabwe 2026 (ODI)",
-    "West Indies Women tour of Zimbabwe 2026 (T20I)"
-   ],
-   "display": "Christine Mutasa",
-   "draft_id": 11134,
-   "auction_id": null
-  },
   "ci:1250707": {
    "aliases": [
     "kelis ndhlovu",
@@ -15035,6 +15042,7 @@
   },
   "ci:1135025": {
    "aliases": [
+    "loryn ntandoyenkosi munashe phiri",
     "loryn phiri"
    ],
    "tours": [
@@ -15904,6 +15912,35 @@
    "display": "Sarmin Sultana",
    "draft_id": 11356,
    "auction_id": null
+  },
+  "ci:1119417": {
+   "aliases": [
+    "francisca chipare"
+   ],
+   "tours": [
+    "West Indies Women tour of Zimbabwe 2026 (T20I)"
+   ],
+   "display": "Francisca Chipare",
+   "cricinfo_id": "1119417",
+   "cricsheet_id": "c0dc015b",
+   "espn_id": "1119417",
+   "draft_id": 11394,
+   "auction_id": null
+  },
+  "ci:1306917": {
+   "aliases": [
+    "christine mutasa"
+   ],
+   "tours": [
+    "West Indies Women tour of Zimbabwe 2026 (ODI)",
+    "West Indies Women tour of Zimbabwe 2026 (T20I)"
+   ],
+   "display": "Christine Mutasa",
+   "draft_id": 11134,
+   "auction_id": null,
+   "cricinfo_id": "1306917",
+   "cricsheet_id": "1ba50005",
+   "espn_id": "1306917"
   }
  }
 }

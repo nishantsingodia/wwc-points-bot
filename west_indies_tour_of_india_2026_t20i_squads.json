@@ -3,47 +3,31 @@
     "name": "India",
     "players": [
       [
-        "Shubman Gill",
+        "Shreyas Iyer",
         "BAT"
       ],
       [
-        "KL Rahul",
+        "Tilak Varma",
         "BAT"
       ],
       [
-        "Auqib Nabi",
+        "Abhishek Sharma",
+        "BAT"
+      ],
+      [
+        "Arshdeep Singh",
         "BOWL"
       ],
       [
-        "Ruturaj Gaikwad",
-        "BAT"
-      ],
-      [
-        "Gurnoor Brar",
-        "BOWL"
-      ],
-      [
-        "Ravindra Jadeja",
+        "Shivam Dube",
         "AR"
       ],
       [
-        "Yashasvi Jaiswal",
-        "BAT"
-      ],
-      [
-        "Dhruv Jurel",
-        "BAT"
-      ],
-      [
-        "Virat Kohli",
+        "Ishan Kishan",
         "BAT"
       ],
       [
         "Kuldeep Yadav",
-        "BOWL"
-      ],
-      [
-        "Mohammed Siraj",
         "BOWL"
       ],
       [
@@ -55,12 +39,28 @@
         "BAT"
       ],
       [
-        "Prasidh Krishna",
+        "Axar Patel",
+        "AR"
+      ],
+      [
+        "Prince Yadav",
         "BOWL"
       ],
       [
-        "Rohit Sharma",
+        "Ravi Bishnoi",
+        "BOWL"
+      ],
+      [
+        "Sanju Samson",
         "BAT"
+      ],
+      [
+        "Vaibhav Sooryavanshi",
+        "BAT"
+      ],
+      [
+        "Mayank Yadav",
+        "BOWL"
       ]
     ]
   },
@@ -76,14 +76,6 @@
         "BAT"
       ],
       [
-        "John Campbell",
-        "BAT"
-      ],
-      [
-        "Keacy Carty",
-        "BAT"
-      ],
-      [
         "Roston Chase",
         "AR"
       ],
@@ -92,27 +84,19 @@
         "BOWL"
       ],
       [
-        "Justin Greaves",
-        "AR"
+        "Shimron Hetmyer",
+        "BAT"
+      ],
+      [
+        "Akeal Hosein",
+        "BOWL"
       ],
       [
         "Amir Jangoo",
         "BAT"
       ],
       [
-        "Jayden Seales",
-        "BOWL"
-      ],
-      [
-        "Alzarri Joseph",
-        "BOWL"
-      ],
-      [
         "Shamar Joseph",
-        "BOWL"
-      ],
-      [
-        "Vitel Lawes",
         "BOWL"
       ],
       [
@@ -124,8 +108,28 @@
         "AR"
       ],
       [
+        "Kamil Pooran",
+        "BAT"
+      ],
+      [
+        "Rovman Powell",
+        "BAT"
+      ],
+      [
         "Sherfane Rutherford",
         "BAT"
+      ],
+      [
+        "Quentin Sampson",
+        "BAT"
+      ],
+      [
+        "Romario Shepherd",
+        "BOWL"
+      ],
+      [
+        "Shamar Springer",
+        "AR"
       ]
     ]
   }

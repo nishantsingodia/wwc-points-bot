@@ -84,6 +84,13 @@
    "at": "2026-08-31",
    "reason": "build_registry.promote",
    "evidence": "placeholder uncapped:abdul-raheem-toppin resolved to ci:1511916 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:christine-mutasa",
+   "to": "ci:1306917",
+   "at": "2026-10-06",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:christine-mutasa resolved to ci:1306917 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
   }
  ]
 }
