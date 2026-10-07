@@ -1532,6 +1532,15 @@
    "provenance": "live"
   },
   {
+   "tour": "Asian Games 2026",
+   "match_key": "2026-09-26::japan|nepal",
+   "match": "Match 3 — Japan v MTNEP",
+   "date": "2026-09-26",
+   "first_status": "COMPLETED_FLAGGED",
+   "first_seen": "2026-10-07",
+   "provenance": "live"
+  },
+  {
    "tour": "West Indies tour of India 2026 (ODI)",
    "match_key": "2026-09-27::india|west indies",
    "match": "Match 1 — MOIND v MOWES",
