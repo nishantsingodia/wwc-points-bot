@@ -1,0 +1,132 @@
+{
+  "MTPAK2": {
+    "name": "Pakistan",
+    "players": [
+      [
+        "Sahibzada Farhan",
+        "BAT"
+      ],
+      [
+        "Abdul Samad",
+        "BAT"
+      ],
+      [
+        "Abrar Ahmed",
+        "BOWL"
+      ],
+      [
+        "Arafat Minhas",
+        "AR"
+      ],
+      [
+        "Fakhar Zaman",
+        "BAT"
+      ],
+      [
+        "Hasan Nawaz",
+        "BAT"
+      ],
+      [
+        "Khawaja Nafay",
+        "BAT"
+      ],
+      [
+        "Maaz Sadaqat",
+        "BAT"
+      ],
+      [
+        "Mohammad Imran",
+        "AR"
+      ],
+      [
+        "Naseem Shah",
+        "BOWL"
+      ],
+      [
+        "Razaullah",
+        "BOWL"
+      ],
+      [
+        "Saim Ayub",
+        "AR"
+      ],
+      [
+        "Salman Mirza",
+        "BOWL"
+      ],
+      [
+        "Shadab Khan",
+        "AR"
+      ],
+      [
+        "Sufyan Moqim",
+        "BOWL"
+      ]
+    ]
+  },
+  "MTSRI3": {
+    "name": "Sri Lanka",
+    "players": [
+      [
+        "Kusal Mendis",
+        "BAT"
+      ],
+      [
+        "Sahan Arachchige",
+        "BAT"
+      ],
+      [
+        "Dushmantha Chameera",
+        "BOWL"
+      ],
+      [
+        "Binura Fernando",
+        "BOWL"
+      ],
+      [
+        "Lahiru Udara",
+        "BAT"
+      ],
+      [
+        "Eshan Malinga",
+        "BOWL"
+      ],
+      [
+        "Kamindu Mendis",
+        "AR"
+      ],
+      [
+        "Kamil Mishara",
+        "BAT"
+      ],
+      [
+        "Dasun Shanaka",
+        "AR"
+      ],
+      [
+        "Sineth Jayawardena",
+        "BAT"
+      ],
+      [
+        "Maheesh Theekshana",
+        "BOWL"
+      ],
+      [
+        "Nuwan Thushara",
+        "BOWL"
+      ],
+      [
+        "Vijayakanth Viyaskanth",
+        "BOWL"
+      ],
+      [
+        "Dunith Wellalage",
+        "BOWL"
+      ],
+      [
+        "Chamindu Wickramasinghe",
+        "BAT"
+      ]
+    ]
+  }
+}

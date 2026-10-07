@@ -240,5 +240,15 @@
     "squads": "bangladesh_women_tour_of_australia_2026_odi_squads.json",
     "tab": "AUS V BAN ODI POINTS",
     "cricbuzz_series": "11898"
+  },
+  {
+    "ends": "2026-10-13",
+    "espn_series": "24707",
+    "format": "T20",
+    "gender": "male",
+    "name": "Sri Lanka tour of Pakistan 2026 (T20I)",
+    "squads": "sri_lanka_tour_of_pakistan_2026_t20i_squads.json",
+    "tab": "PAK V SRI T20I POINTS",
+    "cricbuzz_series": "13037"
   }
 ]

@@ -1,6 +1,6 @@
 {
  "anchor": "cricinfo_id (ci:); cs:/uncapped: fallback; cricsheet_id derived from crosswalk",
- "count": 976,
+ "count": 981,
  "players": {
   "ci:597806": {
    "aliases": [
@@ -4821,7 +4821,8 @@
     "Lanka Premier League 2026",
     "Caribbean Premier League 2026",
     "Sri Lanka tour of England 2026 (ODI)",
-    "Sri Lanka tour of England 2026 (T20I)"
+    "Sri Lanka tour of England 2026 (T20I)",
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
    ],
    "cricinfo_id": "437316",
    "cricsheet_id": "3ff033bb",
@@ -6913,7 +6914,8 @@
    "tours": [
     "Lanka Premier League 2026",
     "Sri Lanka tour of England 2026 (ODI)",
-    "Sri Lanka tour of England 2026 (T20I)"
+    "Sri Lanka tour of England 2026 (T20I)",
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
    ],
    "cricinfo_id": "1075863",
    "cricsheet_id": "65cebd5d",
@@ -6982,7 +6984,8 @@
    "tours": [
     "Lanka Premier League 2026",
     "Sri Lanka tour of England 2026 (ODI)",
-    "Sri Lanka tour of England 2026 (T20I)"
+    "Sri Lanka tour of England 2026 (T20I)",
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
    ],
    "cricinfo_id": "1152427",
    "cricsheet_id": "736123bb",
@@ -6999,7 +7002,8 @@
     "chamindu wickramasinghe"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
    ],
    "cricinfo_id": "1186658",
    "cricsheet_id": "a5c48ed1",
@@ -7239,7 +7243,8 @@
    "tours": [
     "Lanka Premier League 2026",
     "Sri Lanka tour of England 2026 (ODI)",
-    "Sri Lanka tour of England 2026 (T20I)"
+    "Sri Lanka tour of England 2026 (T20I)",
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
    ],
    "cricinfo_id": "629074",
    "cricsheet_id": "5d1e7582",
@@ -7274,7 +7279,8 @@
    "tours": [
     "Lanka Premier League 2026",
     "Sri Lanka tour of England 2026 (ODI)",
-    "Sri Lanka tour of England 2026 (T20I)"
+    "Sri Lanka tour of England 2026 (T20I)",
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
    ],
    "cricinfo_id": "784373",
    "cricsheet_id": "08548b13",
@@ -7418,7 +7424,8 @@
    ],
    "tours": [
     "Lanka Premier League 2026",
-    "Asian Games 2026"
+    "Asian Games 2026",
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
    ],
    "cricinfo_id": "629080",
    "cricsheet_id": "dabbd0ae",
@@ -7774,7 +7781,8 @@
    ],
    "tours": [
     "Lanka Premier League 2026",
-    "Asian Games 2026"
+    "Asian Games 2026",
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
    ],
    "cricinfo_id": "955235",
    "cricsheet_id": "ee1b6c27",
@@ -7827,7 +7835,8 @@
     "lu igalagamage"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
    ],
    "cricinfo_id": "704693",
    "cricsheet_id": "07b6c3c1",
@@ -8052,7 +8061,8 @@
    "tours": [
     "Lanka Premier League 2026",
     "Sri Lanka tour of England 2026 (ODI)",
-    "Sri Lanka tour of England 2026 (T20I)"
+    "Sri Lanka tour of England 2026 (T20I)",
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
    ],
    "cricinfo_id": "1306214",
    "cricsheet_id": "5750bcb4",
@@ -8070,7 +8080,8 @@
    ],
    "tours": [
     "Lanka Premier League 2026",
-    "Asian Games 2026"
+    "Asian Games 2026",
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
    ],
    "cricinfo_id": "1153149",
    "cricsheet_id": "03a83c50",
@@ -8175,7 +8186,8 @@
    ],
    "tours": [
     "Lanka Premier League 2026",
-    "Asian Games 2026"
+    "Asian Games 2026",
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
    ],
    "cricinfo_id": "693975",
    "cricsheet_id": "c05f9d20",
@@ -8245,7 +8257,8 @@
    ],
    "tours": [
     "Lanka Premier League 2026",
-    "Asian Games 2026"
+    "Asian Games 2026",
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
    ],
    "cricinfo_id": "647785",
    "cricsheet_id": "1aba45cd",
@@ -8373,7 +8386,8 @@
     "Lanka Premier League 2026",
     "Caribbean Premier League 2026",
     "Sri Lanka tour of England 2026 (ODI)",
-    "Sri Lanka tour of England 2026 (T20I)"
+    "Sri Lanka tour of England 2026 (T20I)",
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
    ],
    "cricinfo_id": "1138316",
    "cricsheet_id": "f24c6701",
@@ -8408,7 +8422,8 @@
    "tours": [
     "Lanka Premier League 2026",
     "Sri Lanka tour of England 2026 (ODI)",
-    "Sri Lanka tour of England 2026 (T20I)"
+    "Sri Lanka tour of England 2026 (T20I)",
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
    ],
    "cricinfo_id": "552152",
    "cricsheet_id": "327b58d3",
@@ -8796,7 +8811,8 @@
    ],
    "tours": [
     "The Hundred Men's Competition 2026",
-    "Asian Games 2026"
+    "Asian Games 2026",
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
    ],
    "cricinfo_id": "734459",
    "cricsheet_id": "abb7c76c",
@@ -11620,7 +11636,8 @@
     "shadab khan"
    ],
    "tours": [
-    "Caribbean Premier League 2026"
+    "Caribbean Premier League 2026",
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
    ],
    "display": "Shadab Khan",
    "cricinfo_id": "922943",
@@ -11703,7 +11720,8 @@
    ],
    "tours": [
     "Caribbean Premier League 2026",
-    "Asian Games 2026"
+    "Asian Games 2026",
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
    ],
    "display": "Maaz Sadaqat",
    "cricinfo_id": "1244154",
@@ -11795,7 +11813,8 @@
    ],
    "tours": [
     "Caribbean Premier League 2026",
-    "Asian Games 2026"
+    "Asian Games 2026",
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
    ],
    "display": "Saim Ayub",
    "cricinfo_id": "1161031",
@@ -11915,7 +11934,8 @@
     "naseem shah"
    ],
    "tours": [
-    "Caribbean Premier League 2026"
+    "Caribbean Premier League 2026",
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
    ],
    "display": "Naseem Shah",
    "cricinfo_id": "1158088",
@@ -12626,7 +12646,8 @@
    ],
    "tours": [
     "Caribbean Premier League 2026",
-    "Asian Games 2026"
+    "Asian Games 2026",
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
    ],
    "display": "Hasan Nawaz",
    "cricinfo_id": "1398125",
@@ -13516,7 +13537,8 @@
    ],
    "tours": [
     "Caribbean Premier League 2026",
-    "Asian Games 2026"
+    "Asian Games 2026",
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
    ],
    "display": "Sufyan Moqim",
    "draft_id": 10675,
@@ -15660,7 +15682,8 @@
     "abdul samad"
    ],
    "tours": [
-    "Asian Games 2026"
+    "Asian Games 2026",
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
    ],
    "display": "Abdul Samad",
    "cricinfo_id": "1073106",
@@ -15699,7 +15722,8 @@
     "arafat minhas"
    ],
    "tours": [
-    "Asian Games 2026"
+    "Asian Games 2026",
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
    ],
    "display": "Arafat Minhas",
    "cricinfo_id": "1332783",
@@ -15793,7 +15817,8 @@
     "sineth jayawardena"
    ],
    "tours": [
-    "Asian Games 2026"
+    "Asian Games 2026",
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
    ],
    "display": "Sineth Jayawardena",
    "draft_id": 11314,
@@ -15941,6 +15966,78 @@
    "cricinfo_id": "1306917",
    "cricsheet_id": "1ba50005",
    "espn_id": "1306917"
+  },
+  "ci:512191": {
+   "aliases": [
+    "fakhar zaman"
+   ],
+   "tours": [
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
+   ],
+   "display": "Fakhar Zaman",
+   "cricinfo_id": "512191",
+   "cricsheet_id": "1777c020",
+   "espn_id": "512191",
+   "draft_id": 11424,
+   "auction_id": null
+  },
+  "ci:1329699": {
+   "aliases": [
+    "khawaja nafay"
+   ],
+   "tours": [
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
+   ],
+   "display": "Khawaja Nafay",
+   "cricinfo_id": "1329699",
+   "cricsheet_id": "3cf54e77",
+   "espn_id": "1329699",
+   "draft_id": 11426,
+   "auction_id": null,
+   "cricbuzz_id": "37579",
+   "cricbuzz_tier": 2
+  },
+  "ci:429981": {
+   "aliases": [
+    "mohammad imran"
+   ],
+   "tours": [
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
+   ],
+   "display": "Mohammad Imran",
+   "cricinfo_id": "429981",
+   "cricsheet_id": "a8e3170f",
+   "espn_id": "429981",
+   "draft_id": 11428,
+   "auction_id": null
+  },
+  "ci:1510715": {
+   "aliases": [
+    "razaullah"
+   ],
+   "tours": [
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
+   ],
+   "display": "Razaullah",
+   "cricinfo_id": "1510715",
+   "cricsheet_id": "91b35a29",
+   "espn_id": "1510715",
+   "draft_id": 11430,
+   "auction_id": null
+  },
+  "ci:1252522": {
+   "aliases": [
+    "salman mirza"
+   ],
+   "tours": [
+    "Sri Lanka tour of Pakistan 2026 (T20I)"
+   ],
+   "display": "Salman Mirza",
+   "cricinfo_id": "1252522",
+   "cricsheet_id": "7ab1eab7",
+   "espn_id": "1252522",
+   "draft_id": 11432,
+   "auction_id": null
   }
  }
 }
