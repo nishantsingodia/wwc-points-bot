@@ -1593,6 +1593,15 @@
    "first_status": "COMPLETED",
    "first_seen": "2026-10-04",
    "provenance": "live"
+  },
+  {
+   "tour": "West Indies tour of India 2026 (T20I)",
+   "match_key": "2026-10-06::india|west indies",
+   "match": "Match 1 — MTIND2 v MTWES",
+   "date": "2026-10-06",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-10-07",
+   "provenance": "live"
   }
  ]
 }
