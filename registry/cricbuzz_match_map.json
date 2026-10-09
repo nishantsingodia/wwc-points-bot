@@ -4,14 +4,15 @@
  "_rules": "PINS ARE READ, NOT RE-DERIVED — that is the point: a rename upstream cannot move or drop a pairing that is already recorded. A later derivation that finds NOTHING does not disturb a pin (absence is not evidence). A later derivation that finds a DIFFERENT cricbuzz match revokes BOTH claims; so does one cricbuzz match claimed by two different fixtures, and one key carrying two ESPN events. Never last-wins. A revoked key stays revoked until a human runs --forget.",
  "_note": "each pin's `confirmations` list IS the fact log; pins/revoked are a pure function of it (compile_pins o confirmations_log), and no clock is read anywhere. Regenerate, never hand-edit.",
  "counts": {
-  "confirmations": 213,
-  "pinned": 178,
+  "confirmations": 214,
+  "pinned": 179,
   "revoked": 0,
-  "series": 8
+  "series": 9
  },
  "series": [
   "11493",
   "11504",
+  "11898",
   "11902",
   "12123",
   "12316",
@@ -1577,6 +1578,27 @@
      "espn_event": "1521230",
      "cb_desc": "Final",
      "cb_date": "2026-08-16"
+    }
+   ]
+  },
+  "11898|2026-10-09|australia+bangladesh": {
+   "cricbuzz_match_id": "151389",
+   "series_id": "11898",
+   "date": "2026-10-09",
+   "teams": [
+    "australia",
+    "bangladesh"
+   ],
+   "espn_events": [
+    "1528716"
+   ],
+   "also_keyed_as": [],
+   "confirmations": [
+    {
+     "method": "teams+date",
+     "espn_event": "1528716",
+     "cb_desc": "1st ODI",
+     "cb_date": "2026-10-09"
     }
    ]
   },
