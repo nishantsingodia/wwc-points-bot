@@ -1,0 +1,132 @@
+{
+  "WTIND": {
+    "name": "India Women",
+    "players": [
+      [
+        "Smriti Mandhana",
+        "BAT"
+      ],
+      [
+        "Shafali Verma",
+        "AR"
+      ],
+      [
+        "Richa Ghosh",
+        "BAT"
+      ],
+      [
+        "Kranti Gaud",
+        "BOWL"
+      ],
+      [
+        "Jintimani Kalita",
+        "BOWL"
+      ],
+      [
+        "Gunalan Kamalini",
+        "BAT"
+      ],
+      [
+        "Harmanpreet Kaur",
+        "BAT"
+      ],
+      [
+        "Minnu Mani",
+        "BOWL"
+      ],
+      [
+        "Niki Prasad",
+        "BAT"
+      ],
+      [
+        "Prema Rawat",
+        "BOWL"
+      ],
+      [
+        "Arundhati Reddy",
+        "BOWL"
+      ],
+      [
+        "Anushka Sharma",
+        "AR"
+      ],
+      [
+        "Deepti Sharma",
+        "AR"
+      ],
+      [
+        "Nandani Sharma",
+        "BOWL"
+      ],
+      [
+        "Shree Charani",
+        "BOWL"
+      ]
+    ]
+  },
+  "WTZIM2": {
+    "name": "Zimbabwe Women",
+    "players": [
+      [
+        "Josephine Nkomo",
+        "AR"
+      ],
+      [
+        "Beloved Biza",
+        "AR"
+      ],
+      [
+        "Olinder Chare",
+        "BOWL"
+      ],
+      [
+        "Kudzai Chigora",
+        "BOWL"
+      ],
+      [
+        "Francisca Chipare",
+        "BOWL"
+      ],
+      [
+        "Chiedza Dhururu",
+        "WK"
+      ],
+      [
+        "Nyasha Gwanzura",
+        "AR"
+      ],
+      [
+        "Tendai Makusha",
+        "BOWL"
+      ],
+      [
+        "Michelle Mavunga",
+        "BOWL"
+      ],
+      [
+        "Sharne Mayers",
+        "BAT"
+      ],
+      [
+        "Chipo Mugeri-Tiripano",
+        "AR"
+      ],
+      [
+        "Modester Mupachikwa",
+        "BAT"
+      ],
+      [
+        "Kelis Ndhlovu",
+        "AR"
+      ],
+      [
+        "Loryn Phiri",
+        "BOWL"
+      ],
+      [
+        "Nomvelo Sibanda",
+        "BOWL"
+      ]
+    ]
+  }
+}

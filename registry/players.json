@@ -1,6 +1,6 @@
 {
  "anchor": "cricinfo_id (ci:); cs:/uncapped: fallback; cricsheet_id derived from crosswalk",
- "count": 981,
+ "count": 986,
  "players": {
   "ci:597806": {
    "aliases": [
@@ -10,7 +10,8 @@
    ],
    "tours": [
     "Women's T20 WC 2026",
-    "The Hundred Women's Competition 2026"
+    "The Hundred Women's Competition 2026",
+    "Zimbabwe Women tour of India 2026 (T20I)"
    ],
    "cricinfo_id": "597806",
    "cricsheet_id": "5d2eda89",
@@ -27,7 +28,8 @@
     "shafali verma"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Zimbabwe Women tour of India 2026 (T20I)"
    ],
    "cricinfo_id": "597821",
    "cricsheet_id": "185e6c0c",
@@ -62,7 +64,8 @@
     "harmanpreet kaur bhullar"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Zimbabwe Women tour of India 2026 (T20I)"
    ],
    "cricinfo_id": "372317",
    "cricsheet_id": "53cd8da6",
@@ -79,7 +82,8 @@
    ],
    "tours": [
     "Women's T20 WC 2026",
-    "The Hundred Women's Competition 2026"
+    "The Hundred Women's Competition 2026",
+    "Zimbabwe Women tour of India 2026 (T20I)"
    ],
    "cricinfo_id": "1212830",
    "cricsheet_id": "721e0199",
@@ -98,7 +102,8 @@
    ],
    "tours": [
     "Women's T20 WC 2026",
-    "The Hundred Women's Competition 2026"
+    "The Hundred Women's Competition 2026",
+    "Zimbabwe Women tour of India 2026 (T20I)"
    ],
    "cricinfo_id": "597811",
    "cricsheet_id": "201fef33",
@@ -116,7 +121,8 @@
     "arundhati reddy"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Zimbabwe Women tour of India 2026 (T20I)"
    ],
    "cricinfo_id": "54172",
    "cricsheet_id": "a3ead8da",
@@ -132,7 +138,8 @@
     "shree charani"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Zimbabwe Women tour of India 2026 (T20I)"
    ],
    "cricinfo_id": "1464461",
    "cricsheet_id": "583ce32c",
@@ -177,7 +184,8 @@
     "kranti gaud"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Zimbabwe Women tour of India 2026 (T20I)"
    ],
    "cricinfo_id": "1464471",
    "cricsheet_id": "4d622fee",
@@ -225,7 +233,8 @@
     "nandni sharma"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Zimbabwe Women tour of India 2026 (T20I)"
    ],
    "cricinfo_id": "1289676",
    "cricsheet_id": "5f22ccae",
@@ -5213,13 +5222,14 @@
     "prema rawat"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "Zimbabwe Women tour of India 2026 (T20I)"
    ],
    "cricinfo_id": "1464463",
    "cricsheet_id": "34b8cd68",
    "espn_id": "1464463",
    "display": "Prema Rawat",
-   "draft_id": null,
+   "draft_id": 11459,
    "auction_id": null
   },
   "ci:1444444": {
@@ -14884,7 +14894,8 @@
    ],
    "tours": [
     "West Indies Women tour of Zimbabwe 2026 (ODI)",
-    "West Indies Women tour of Zimbabwe 2026 (T20I)"
+    "West Indies Women tour of Zimbabwe 2026 (T20I)",
+    "Zimbabwe Women tour of India 2026 (T20I)"
    ],
    "display": "Josephine Nkomo",
    "cricinfo_id": "638256",
@@ -14899,7 +14910,8 @@
    ],
    "tours": [
     "West Indies Women tour of Zimbabwe 2026 (ODI)",
-    "West Indies Women tour of Zimbabwe 2026 (T20I)"
+    "West Indies Women tour of Zimbabwe 2026 (T20I)",
+    "Zimbabwe Women tour of India 2026 (T20I)"
    ],
    "display": "Beloved Biza",
    "cricinfo_id": "1302686",
@@ -14914,7 +14926,8 @@
    ],
    "tours": [
     "West Indies Women tour of Zimbabwe 2026 (ODI)",
-    "West Indies Women tour of Zimbabwe 2026 (T20I)"
+    "West Indies Women tour of Zimbabwe 2026 (T20I)",
+    "Zimbabwe Women tour of India 2026 (T20I)"
    ],
    "display": "Olinder Chare",
    "cricinfo_id": "1302697",
@@ -14929,7 +14942,8 @@
    ],
    "tours": [
     "West Indies Women tour of Zimbabwe 2026 (ODI)",
-    "West Indies Women tour of Zimbabwe 2026 (T20I)"
+    "West Indies Women tour of Zimbabwe 2026 (T20I)",
+    "Zimbabwe Women tour of India 2026 (T20I)"
    ],
    "display": "Kudzai Chigora",
    "cricinfo_id": "1302575",
@@ -14945,7 +14959,8 @@
    ],
    "tours": [
     "West Indies Women tour of Zimbabwe 2026 (ODI)",
-    "West Indies Women tour of Zimbabwe 2026 (T20I)"
+    "West Indies Women tour of Zimbabwe 2026 (T20I)",
+    "Zimbabwe Women tour of India 2026 (T20I)"
    ],
    "display": "Chiedza Dhururu",
    "cricinfo_id": "1094714",
@@ -14960,7 +14975,8 @@
    ],
    "tours": [
     "West Indies Women tour of Zimbabwe 2026 (ODI)",
-    "West Indies Women tour of Zimbabwe 2026 (T20I)"
+    "West Indies Women tour of Zimbabwe 2026 (T20I)",
+    "Zimbabwe Women tour of India 2026 (T20I)"
    ],
    "display": "Nyasha Gwanzura",
    "cricinfo_id": "922491",
@@ -14975,7 +14991,8 @@
    ],
    "tours": [
     "West Indies Women tour of Zimbabwe 2026 (ODI)",
-    "West Indies Women tour of Zimbabwe 2026 (T20I)"
+    "West Indies Women tour of Zimbabwe 2026 (T20I)",
+    "Zimbabwe Women tour of India 2026 (T20I)"
    ],
    "display": "Tendai Makusha",
    "cricinfo_id": "1446941",
@@ -14990,7 +15007,8 @@
    ],
    "tours": [
     "West Indies Women tour of Zimbabwe 2026 (ODI)",
-    "West Indies Women tour of Zimbabwe 2026 (T20I)"
+    "West Indies Women tour of Zimbabwe 2026 (T20I)",
+    "Zimbabwe Women tour of India 2026 (T20I)"
    ],
    "display": "Michelle Mavunga",
    "cricinfo_id": "1273947",
@@ -15006,7 +15024,8 @@
    ],
    "tours": [
     "West Indies Women tour of Zimbabwe 2026 (ODI)",
-    "West Indies Women tour of Zimbabwe 2026 (T20I)"
+    "West Indies Women tour of Zimbabwe 2026 (T20I)",
+    "Zimbabwe Women tour of India 2026 (T20I)"
    ],
    "display": "Sharne Mayers",
    "cricinfo_id": "317144",
@@ -15022,7 +15041,8 @@
    ],
    "tours": [
     "West Indies Women tour of Zimbabwe 2026 (ODI)",
-    "West Indies Women tour of Zimbabwe 2026 (T20I)"
+    "West Indies Women tour of Zimbabwe 2026 (T20I)",
+    "Zimbabwe Women tour of India 2026 (T20I)"
    ],
    "display": "Chipo Mugeri-Tiripano",
    "cricinfo_id": "317148",
@@ -15037,7 +15057,8 @@
    ],
    "tours": [
     "West Indies Women tour of Zimbabwe 2026 (ODI)",
-    "West Indies Women tour of Zimbabwe 2026 (T20I)"
+    "West Indies Women tour of Zimbabwe 2026 (T20I)",
+    "Zimbabwe Women tour of India 2026 (T20I)"
    ],
    "display": "Modester Mupachikwa",
    "cricinfo_id": "538591",
@@ -15053,7 +15074,8 @@
    ],
    "tours": [
     "West Indies Women tour of Zimbabwe 2026 (ODI)",
-    "West Indies Women tour of Zimbabwe 2026 (T20I)"
+    "West Indies Women tour of Zimbabwe 2026 (T20I)",
+    "Zimbabwe Women tour of India 2026 (T20I)"
    ],
    "display": "Kelis Ndhlovu",
    "cricinfo_id": "1250707",
@@ -15069,7 +15091,8 @@
    ],
    "tours": [
     "West Indies Women tour of Zimbabwe 2026 (ODI)",
-    "West Indies Women tour of Zimbabwe 2026 (T20I)"
+    "West Indies Women tour of Zimbabwe 2026 (T20I)",
+    "Zimbabwe Women tour of India 2026 (T20I)"
    ],
    "display": "Loryn Phiri",
    "cricinfo_id": "1135025",
@@ -15084,7 +15107,8 @@
    ],
    "tours": [
     "West Indies Women tour of Zimbabwe 2026 (ODI)",
-    "West Indies Women tour of Zimbabwe 2026 (T20I)"
+    "West Indies Women tour of Zimbabwe 2026 (T20I)",
+    "Zimbabwe Women tour of India 2026 (T20I)"
    ],
    "display": "Nomvelo Sibanda",
    "cricinfo_id": "1080012",
@@ -15943,7 +15967,8 @@
     "francisca chipare"
    ],
    "tours": [
-    "West Indies Women tour of Zimbabwe 2026 (T20I)"
+    "West Indies Women tour of Zimbabwe 2026 (T20I)",
+    "Zimbabwe Women tour of India 2026 (T20I)"
    ],
    "display": "Francisca Chipare",
    "cricinfo_id": "1119417",
@@ -16037,6 +16062,67 @@
    "cricsheet_id": "7ab1eab7",
    "espn_id": "1252522",
    "draft_id": 11432,
+   "auction_id": null
+  },
+  "uncapped:jintimani-kalita": {
+   "aliases": [
+    "jintimani kalita"
+   ],
+   "tours": [
+    "Zimbabwe Women tour of India 2026 (T20I)"
+   ],
+   "display": "Jintimani Kalita",
+   "draft_id": 11454,
+   "auction_id": null
+  },
+  "ci:1427355": {
+   "aliases": [
+    "gunalan kamalini"
+   ],
+   "tours": [
+    "Zimbabwe Women tour of India 2026 (T20I)"
+   ],
+   "display": "Gunalan Kamalini",
+   "cricinfo_id": "1427355",
+   "cricsheet_id": "2a5ed897",
+   "espn_id": "1427355",
+   "draft_id": 11455,
+   "auction_id": null
+  },
+  "ci:960949": {
+   "aliases": [
+    "minnu mani"
+   ],
+   "tours": [
+    "Zimbabwe Women tour of India 2026 (T20I)"
+   ],
+   "display": "Minnu Mani",
+   "cricinfo_id": "960949",
+   "cricsheet_id": "8d1ade08",
+   "espn_id": "960949",
+   "draft_id": 11457,
+   "auction_id": null
+  },
+  "uncapped:niki-prasad": {
+   "aliases": [
+    "niki prasad"
+   ],
+   "tours": [
+    "Zimbabwe Women tour of India 2026 (T20I)"
+   ],
+   "display": "Niki Prasad",
+   "draft_id": 11458,
+   "auction_id": null
+  },
+  "uncapped:anushka-sharma": {
+   "aliases": [
+    "anushka sharma"
+   ],
+   "tours": [
+    "Zimbabwe Women tour of India 2026 (T20I)"
+   ],
+   "display": "Anushka Sharma",
+   "draft_id": 11461,
    "auction_id": null
   }
  }

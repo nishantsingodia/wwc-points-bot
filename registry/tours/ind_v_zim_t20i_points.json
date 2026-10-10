@@ -1,0 +1,40 @@
+{
+ "tour": "Zimbabwe Women tour of India 2026 (T20I)",
+ "slug": "ind_v_zim_t20i_points",
+ "teams": {
+  "WTIND": [
+   "ci:597806",
+   "ci:597821",
+   "ci:1212830",
+   "ci:1464471",
+   "uncapped:jintimani-kalita",
+   "ci:1427355",
+   "ci:372317",
+   "ci:960949",
+   "uncapped:niki-prasad",
+   "ci:1464463",
+   "ci:54172",
+   "uncapped:anushka-sharma",
+   "ci:597811",
+   "ci:1289676",
+   "ci:1464461"
+  ],
+  "WTZIM2": [
+   "ci:638256",
+   "ci:1302686",
+   "ci:1302697",
+   "ci:1302575",
+   "ci:1119417",
+   "ci:1094714",
+   "ci:922491",
+   "ci:1446941",
+   "ci:1273947",
+   "ci:317144",
+   "ci:317148",
+   "ci:538591",
+   "ci:1250707",
+   "ci:1135025",
+   "ci:1080012"
+  ]
+ }
+}

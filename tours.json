@@ -250,5 +250,15 @@
     "squads": "sri_lanka_tour_of_pakistan_2026_t20i_squads.json",
     "tab": "PAK V SRI T20I POINTS",
     "cricbuzz_series": "13037"
+  },
+  {
+    "ends": "2026-10-20",
+    "espn_series": "24371",
+    "format": "T20",
+    "gender": "female",
+    "name": "Zimbabwe Women tour of India 2026 (T20I)",
+    "squads": "zimbabwe_women_tour_of_india_2026_t20i_squads.json",
+    "tab": "IND V ZIM T20I POINTS",
+    "cricbuzz_series": "12200"
   }
 ]
