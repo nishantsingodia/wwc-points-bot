@@ -1611,6 +1611,15 @@
    "first_status": "COMPLETED",
    "first_seen": "2026-10-07",
    "provenance": "live"
+  },
+  {
+   "tour": "Bangladesh Women tour of Australia 2026 (ODI)",
+   "match_key": "2026-10-11::australia|bangladesh",
+   "match": "Match 3 — WOAUS v WOBAN",
+   "date": "2026-10-11",
+   "first_status": "COMPLETED",
+   "first_seen": "2026-10-11",
+   "provenance": "live"
   }
  ]
 }
