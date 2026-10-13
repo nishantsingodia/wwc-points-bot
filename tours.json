@@ -260,5 +260,15 @@
     "squads": "zimbabwe_women_tour_of_india_2026_t20i_squads.json",
     "tab": "IND V ZIM T20I POINTS",
     "cricbuzz_series": "12200"
+  },
+  {
+    "ends": "2026-10-22",
+    "espn_series": "24268",
+    "format": "T20",
+    "gender": "female",
+    "name": "New Zealand Women tour of Australia 2026 (T20I)",
+    "squads": "new_zealand_women_tour_of_australia_2026_t20i_squads.json",
+    "tab": "AUS V NEW T20I POINTS",
+    "cricbuzz_series": "11859"
   }
 ]

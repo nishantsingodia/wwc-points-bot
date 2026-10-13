@@ -1,0 +1,128 @@
+{
+  "WTAUS": {
+    "name": "Australia Women",
+    "players": [
+      [
+        "Sophie Molineux",
+        "BOWL"
+      ],
+      [
+        "Ashleigh Gardner",
+        "AR"
+      ],
+      [
+        "Tahlia McGrath",
+        "AR"
+      ],
+      [
+        "Nicola Carey",
+        "BOWL"
+      ],
+      [
+        "Kim Garth",
+        "AR"
+      ],
+      [
+        "Lucy Hamilton",
+        "AR"
+      ],
+      [
+        "Alana King",
+        "BOWL"
+      ],
+      [
+        "Phoebe Litchfield",
+        "BAT"
+      ],
+      [
+        "Beth Mooney",
+        "BAT"
+      ],
+      [
+        "Ellyse Perry",
+        "AR"
+      ],
+      [
+        "Megan Schutt",
+        "BOWL"
+      ],
+      [
+        "Annabel Sutherland",
+        "AR"
+      ],
+      [
+        "Georgia Voll",
+        "BAT"
+      ],
+      [
+        "Georgia Wareham",
+        "BOWL"
+      ]
+    ]
+  },
+  "WTNEW": {
+    "name": "New Zealand Women",
+    "players": [
+      [
+        "Melie Kerr",
+        "AR"
+      ],
+      [
+        "Rosemary Mair",
+        "BOWL"
+      ],
+      [
+        "Eden Carson",
+        "BOWL"
+      ],
+      [
+        "Flora Devonshire",
+        "AR"
+      ],
+      [
+        "Maddy Green",
+        "BAT"
+      ],
+      [
+        "Brooke Halliday",
+        "AR"
+      ],
+      [
+        "Bree Illing",
+        "BOWL"
+      ],
+      [
+        "Polly Inglis",
+        "BAT"
+      ],
+      [
+        "Bella James",
+        "BAT"
+      ],
+      [
+        "Jess Kerr",
+        "BOWL"
+      ],
+      [
+        "Nensi Patel",
+        "AR"
+      ],
+      [
+        "Molly Penfold",
+        "BOWL"
+      ],
+      [
+        "Georgia Plimmer",
+        "BAT"
+      ],
+      [
+        "Hannah Rowe",
+        "BOWL"
+      ],
+      [
+        "Izzy Sharp",
+        "BAT"
+      ]
+    ]
+  }
+}

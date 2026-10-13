@@ -1,6 +1,6 @@
 {
  "anchor": "cricinfo_id (ci:); cs:/uncapped: fallback; cricsheet_id derived from crosswalk",
- "count": 986,
+ "count": 990,
  "players": {
   "ci:597806": {
    "aliases": [
@@ -268,7 +268,8 @@
    "tours": [
     "Women's T20 WC 2026",
     "The Hundred Women's Competition 2026",
-    "Bangladesh Women tour of Australia 2026 (ODI)"
+    "Bangladesh Women tour of Australia 2026 (ODI)",
+    "New Zealand Women tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "381258",
    "cricsheet_id": "52d1dbc8",
@@ -287,7 +288,8 @@
    "tours": [
     "Women's T20 WC 2026",
     "The Hundred Women's Competition 2026",
-    "Bangladesh Women tour of Australia 2026 (ODI)"
+    "Bangladesh Women tour of Australia 2026 (ODI)",
+    "New Zealand Women tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "1215360",
    "cricsheet_id": "5c30d455",
@@ -306,7 +308,8 @@
    "tours": [
     "Women's T20 WC 2026",
     "The Hundred Women's Competition 2026",
-    "Bangladesh Women tour of Australia 2026 (ODI)"
+    "Bangladesh Women tour of Australia 2026 (ODI)",
+    "New Zealand Women tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "1176132",
    "cricsheet_id": "4e6ef14f",
@@ -326,7 +329,8 @@
    "tours": [
     "Women's T20 WC 2026",
     "The Hundred Women's Competition 2026",
-    "Bangladesh Women tour of Australia 2026 (ODI)"
+    "Bangladesh Women tour of Australia 2026 (ODI)",
+    "New Zealand Women tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "275487",
    "cricsheet_id": "be150fc8",
@@ -344,7 +348,8 @@
    ],
    "tours": [
     "Women's T20 WC 2026",
-    "Bangladesh Women tour of Australia 2026 (ODI)"
+    "Bangladesh Women tour of Australia 2026 (ODI)",
+    "New Zealand Women tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "381311",
    "cricsheet_id": "ca5acfa4",
@@ -363,7 +368,8 @@
    "tours": [
     "Women's T20 WC 2026",
     "The Hundred Women's Competition 2026",
-    "Bangladesh Women tour of Australia 2026 (ODI)"
+    "Bangladesh Women tour of Australia 2026 (ODI)",
+    "New Zealand Women tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "858809",
    "cricsheet_id": "bc969efb",
@@ -382,7 +388,8 @@
    "tours": [
     "Women's T20 WC 2026",
     "The Hundred Women's Competition 2026",
-    "Bangladesh Women tour of Australia 2026 (ODI)"
+    "Bangladesh Women tour of Australia 2026 (ODI)",
+    "New Zealand Women tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "1071705",
    "cricsheet_id": "65d9b6b6",
@@ -400,7 +407,8 @@
    ],
    "tours": [
     "Women's T20 WC 2026",
-    "The Hundred Women's Competition 2026"
+    "The Hundred Women's Competition 2026",
+    "New Zealand Women tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "944373",
    "cricsheet_id": "99e23670",
@@ -420,7 +428,8 @@
    "tours": [
     "Women's T20 WC 2026",
     "The Hundred Women's Competition 2026",
-    "Bangladesh Women tour of Australia 2026 (ODI)"
+    "Bangladesh Women tour of Australia 2026 (ODI)",
+    "New Zealand Women tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "946057",
    "cricsheet_id": "f0b4e47d",
@@ -440,7 +449,8 @@
    "tours": [
     "Women's T20 WC 2026",
     "The Hundred Women's Competition 2026",
-    "Bangladesh Women tour of Australia 2026 (ODI)"
+    "Bangladesh Women tour of Australia 2026 (ODI)",
+    "New Zealand Women tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "944393",
    "cricsheet_id": "83558266",
@@ -458,7 +468,8 @@
    ],
    "tours": [
     "Women's T20 WC 2026",
-    "Bangladesh Women tour of Australia 2026 (ODI)"
+    "Bangladesh Women tour of Australia 2026 (ODI)",
+    "New Zealand Women tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "420314",
    "cricsheet_id": "17608a6f",
@@ -495,7 +506,8 @@
    "tours": [
     "Women's T20 WC 2026",
     "The Hundred Women's Competition 2026",
-    "Bangladesh Women tour of Australia 2026 (ODI)"
+    "Bangladesh Women tour of Australia 2026 (ODI)",
+    "New Zealand Women tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "381217",
    "cricsheet_id": "dff806f4",
@@ -515,7 +527,8 @@
    "tours": [
     "Women's T20 WC 2026",
     "The Hundred Women's Competition 2026",
-    "Bangladesh Women tour of Australia 2026 (ODI)"
+    "Bangladesh Women tour of Australia 2026 (ODI)",
+    "New Zealand Women tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "418423",
    "cricsheet_id": "0b69a844",
@@ -532,7 +545,8 @@
     "lucy kay hamilton"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "New Zealand Women tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "1343643",
    "cricsheet_id": "c347ffe6",
@@ -1073,7 +1087,8 @@
     "georgia plimmer"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "New Zealand Women tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "1208951",
    "cricsheet_id": "575494db",
@@ -1108,7 +1123,8 @@
    ],
    "tours": [
     "Women's T20 WC 2026",
-    "The Hundred Women's Competition 2026"
+    "The Hundred Women's Competition 2026",
+    "New Zealand Women tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "803971",
    "cricsheet_id": "7673c908",
@@ -1145,7 +1161,8 @@
     "brooke maree halliday"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "New Zealand Women tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "594654",
    "cricsheet_id": "efb6cb2a",
@@ -1162,7 +1179,8 @@
    ],
    "tours": [
     "Women's T20 WC 2026",
-    "Women's Caribbean Premier League 2026"
+    "Women's Caribbean Premier League 2026",
+    "New Zealand Women tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "438265",
    "cricsheet_id": "865eae1f",
@@ -1177,7 +1195,8 @@
     "izzy sharp"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "New Zealand Women tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "1294098",
    "cricsheet_id": "4de0779a",
@@ -1210,7 +1229,8 @@
     "jm kerr"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "New Zealand Women tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "1068933",
    "cricsheet_id": "9af58032",
@@ -1227,7 +1247,8 @@
    ],
    "tours": [
     "Women's T20 WC 2026",
-    "Women's Caribbean Premier League 2026"
+    "Women's Caribbean Premier League 2026",
+    "New Zealand Women tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "701751",
    "cricsheet_id": "d5eb8b84",
@@ -1243,7 +1264,8 @@
     "breearne g illing"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "New Zealand Women tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "1251598",
    "cricsheet_id": "80a0cd77",
@@ -1258,7 +1280,8 @@
     "flora devonshire"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "New Zealand Women tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "1346697",
    "cricsheet_id": "c8b0b64c",
@@ -1273,7 +1296,8 @@
     "polly inglis"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "New Zealand Women tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "592594",
    "cricsheet_id": "e4a71d18",
@@ -1289,7 +1313,8 @@
     "nh patel"
    ],
    "tours": [
-    "Women's T20 WC 2026"
+    "Women's T20 WC 2026",
+    "New Zealand Women tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "1068284",
    "cricsheet_id": "d945db3e",
@@ -16123,6 +16148,59 @@
    ],
    "display": "Anushka Sharma",
    "draft_id": 11461,
+   "auction_id": null
+  },
+  "ci:1169661": {
+   "aliases": [
+    "eden carson"
+   ],
+   "tours": [
+    "New Zealand Women tour of Australia 2026 (T20I)"
+   ],
+   "display": "Eden Carson",
+   "cricinfo_id": "1169661",
+   "cricsheet_id": "7693851c",
+   "espn_id": "1169661",
+   "draft_id": 11496,
+   "auction_id": null
+  },
+  "uncapped:bella-james": {
+   "aliases": [
+    "bella james"
+   ],
+   "tours": [
+    "New Zealand Women tour of Australia 2026 (T20I)"
+   ],
+   "display": "Bella James",
+   "draft_id": 11502,
+   "auction_id": null
+  },
+  "ci:1239671": {
+   "aliases": [
+    "molly penfold"
+   ],
+   "tours": [
+    "New Zealand Women tour of Australia 2026 (T20I)"
+   ],
+   "display": "Molly Penfold",
+   "cricinfo_id": "1239671",
+   "cricsheet_id": "645b2a2f",
+   "espn_id": "1239671",
+   "draft_id": 11505,
+   "auction_id": null
+  },
+  "ci:543550": {
+   "aliases": [
+    "hannah rowe"
+   ],
+   "tours": [
+    "New Zealand Women tour of Australia 2026 (T20I)"
+   ],
+   "display": "Hannah Rowe",
+   "cricinfo_id": "543550",
+   "cricsheet_id": "8ca1f93a",
+   "espn_id": "543550",
+   "draft_id": 11507,
    "auction_id": null
   }
  }
