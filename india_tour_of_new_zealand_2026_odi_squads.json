@@ -1,0 +1,132 @@
+{
+  "MONEW": {
+    "name": "New Zealand",
+    "players": [
+      [
+        "Mitchell Santner",
+        "BOWL"
+      ],
+      [
+        "Michael Bracewell",
+        "BAT"
+      ],
+      [
+        "Mark Chapman",
+        "AR"
+      ],
+      [
+        "Devon Conway",
+        "BAT"
+      ],
+      [
+        "Jacob Duffy",
+        "BOWL"
+      ],
+      [
+        "Matt Henry",
+        "BOWL"
+      ],
+      [
+        "Kyle Jamieson",
+        "BOWL"
+      ],
+      [
+        "Tom Latham",
+        "BAT"
+      ],
+      [
+        "Daryl Mitchell",
+        "BAT"
+      ],
+      [
+        "Glenn Phillips",
+        "AR"
+      ],
+      [
+        "Rachin Ravindra",
+        "BAT"
+      ],
+      [
+        "Nathan Smith",
+        "BOWL"
+      ],
+      [
+        "Blair Tickner",
+        "BOWL"
+      ],
+      [
+        "Will Young",
+        "BAT"
+      ]
+    ]
+  },
+  "MOIND2": {
+    "name": "India",
+    "players": [
+      [
+        "Shubman Gill",
+        "BAT"
+      ],
+      [
+        "Shreyas Iyer",
+        "BAT"
+      ],
+      [
+        "Arshdeep Singh",
+        "BOWL"
+      ],
+      [
+        "Ruturaj Gaikwad",
+        "BAT"
+      ],
+      [
+        "Gurnoor Brar",
+        "BOWL"
+      ],
+      [
+        "Ishan Kishan",
+        "BAT"
+      ],
+      [
+        "Anshul Kamboj",
+        "BOWL"
+      ],
+      [
+        "Virat Kohli",
+        "BAT"
+      ],
+      [
+        "Kuldeep Yadav",
+        "BOWL"
+      ],
+      [
+        "Mohammed Siraj",
+        "BOWL"
+      ],
+      [
+        "Naman Dhir",
+        "BAT"
+      ],
+      [
+        "Nitish Kumar Reddy",
+        "BAT"
+      ],
+      [
+        "Axar Patel",
+        "AR"
+      ],
+      [
+        "Prasidh Krishna",
+        "BOWL"
+      ],
+      [
+        "KL Rahul",
+        "BAT"
+      ],
+      [
+        "Rohit Sharma",
+        "BAT"
+      ]
+    ]
+  }
+}

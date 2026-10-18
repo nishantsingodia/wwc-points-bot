@@ -1,0 +1,140 @@
+{
+  "MTNEW": {
+    "name": "New Zealand",
+    "players": [
+      [
+        "Mitchell Santner",
+        "BOWL"
+      ],
+      [
+        "Finn Allen",
+        "BAT"
+      ],
+      [
+        "Michael Bracewell",
+        "BAT"
+      ],
+      [
+        "Josh Clarkson",
+        "BAT"
+      ],
+      [
+        "Devon Conway",
+        "BAT"
+      ],
+      [
+        "Jacob Duffy",
+        "BOWL"
+      ],
+      [
+        "Lockie Ferguson",
+        "BOWL"
+      ],
+      [
+        "Matt Henry",
+        "BOWL"
+      ],
+      [
+        "Bevon Jacobs",
+        "BAT"
+      ],
+      [
+        "Kyle Jamieson",
+        "BOWL"
+      ],
+      [
+        "Adam Milne",
+        "BOWL"
+      ],
+      [
+        "Daryl Mitchell",
+        "BAT"
+      ],
+      [
+        "Glenn Phillips",
+        "AR"
+      ],
+      [
+        "Tim Seifert",
+        "BAT"
+      ],
+      [
+        "Nathan Smith",
+        "BOWL"
+      ],
+      [
+        "Blair Tickner",
+        "BOWL"
+      ]
+    ]
+  },
+  "MTIND4": {
+    "name": "India",
+    "players": [
+      [
+        "Shreyas Iyer",
+        "BAT"
+      ],
+      [
+        "Tilak Varma",
+        "BAT"
+      ],
+      [
+        "Abhishek Sharma",
+        "BAT"
+      ],
+      [
+        "Arshdeep Singh",
+        "BOWL"
+      ],
+      [
+        "Shivam Dube",
+        "AR"
+      ],
+      [
+        "Ishan Kishan",
+        "BAT"
+      ],
+      [
+        "Kuldeep Yadav",
+        "BOWL"
+      ],
+      [
+        "Bhuvneshwar Kumar",
+        "BOWL"
+      ],
+      [
+        "Naman Dhir",
+        "BAT"
+      ],
+      [
+        "Nitish Kumar Reddy",
+        "BAT"
+      ],
+      [
+        "Axar Patel",
+        "AR"
+      ],
+      [
+        "Prince Yadav",
+        "BOWL"
+      ],
+      [
+        "Sanju Samson",
+        "BAT"
+      ],
+      [
+        "Vaibhav Sooryavanshi",
+        "BAT"
+      ],
+      [
+        "Varun Chakravarthy",
+        "BOWL"
+      ],
+      [
+        "Mayank Yadav",
+        "BOWL"
+      ]
+    ]
+  }
+}

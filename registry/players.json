@@ -1,6 +1,6 @@
 {
  "anchor": "cricinfo_id (ci:); cs:/uncapped: fallback; cricsheet_id derived from crosswalk",
- "count": 990,
+ "count": 996,
  "players": {
   "ci:597806": {
    "aliases": [
@@ -3900,7 +3900,8 @@
    "tours": [
     "Major League Cricket 2026",
     "New Zealand vs West Indies Men's ODI 2026",
-    "European T20 Premier League 2026"
+    "European T20 Premier League 2026",
+    "India tour of New Zealand 2026 (ODI)"
    ],
    "cricinfo_id": "438563",
    "cricsheet_id": "7fa12533",
@@ -4023,7 +4024,8 @@
    ],
    "tours": [
     "Major League Cricket 2026",
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "India tour of New Zealand 2026 (ODI)"
    ],
    "cricinfo_id": "959767",
    "cricsheet_id": "ba5e1069",
@@ -4041,7 +4043,8 @@
    ],
    "tours": [
     "Major League Cricket 2026",
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "India tour of New Zealand 2026 (T20I)"
    ],
    "cricinfo_id": "493773",
    "cricsheet_id": "2f9d0389",
@@ -4278,7 +4281,8 @@
    ],
    "tours": [
     "Major League Cricket 2026",
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "India tour of New Zealand 2026 (T20I)"
    ],
    "cricinfo_id": "450860",
    "cricsheet_id": "350bb1b1",
@@ -4416,7 +4420,8 @@
    ],
    "tours": [
     "Major League Cricket 2026",
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "India tour of New Zealand 2026 (T20I)"
    ],
    "cricinfo_id": "959759",
    "cricsheet_id": "bf74b130",
@@ -4679,7 +4684,8 @@
    "tours": [
     "Major League Cricket 2026",
     "The Hundred Men's Competition 2026",
-    "Caribbean Premier League 2026"
+    "Caribbean Premier League 2026",
+    "India tour of New Zealand 2026 (T20I)"
    ],
    "cricinfo_id": "625964",
    "cricsheet_id": "4663bd23",
@@ -5482,7 +5488,8 @@
     "India tour of England 2026 (Men T20I)",
     "India tour of Zimbabwe 2026 (T20I)",
     "Asian Games 2026",
-    "West Indies tour of India 2026 (T20I)"
+    "West Indies tour of India 2026 (T20I)",
+    "India tour of New Zealand 2026 (T20I)"
    ],
    "cricinfo_id": "1070183",
    "cricsheet_id": "f29185a1",
@@ -5504,7 +5511,8 @@
     "India tour of Ireland 2026 (Men T20I)",
     "India tour of England 2026 (Men T20I)",
     "Asian Games 2026",
-    "West Indies tour of India 2026 (T20I)"
+    "West Indies tour of India 2026 (T20I)",
+    "India tour of New Zealand 2026 (T20I)"
    ],
    "cricinfo_id": "425943",
    "cricsheet_id": "a4cc73aa",
@@ -5523,7 +5531,9 @@
     "India tour of England 2026 (Men T20I)",
     "India tour of Zimbabwe 2026 (T20I)",
     "Asian Games 2026",
-    "West Indies tour of India 2026 (T20I)"
+    "West Indies tour of India 2026 (T20I)",
+    "India tour of New Zealand 2026 (ODI)",
+    "India tour of New Zealand 2026 (T20I)"
    ],
    "cricinfo_id": "720471",
    "cricsheet_id": "752f7486",
@@ -5542,7 +5552,9 @@
     "India tour of England 2026 (Men T20I)",
     "India tour of Zimbabwe 2026 (T20I)",
     "Asian Games 2026",
-    "West Indies tour of India 2026 (T20I)"
+    "West Indies tour of India 2026 (T20I)",
+    "India tour of New Zealand 2026 (ODI)",
+    "India tour of New Zealand 2026 (T20I)"
    ],
    "cricinfo_id": "642519",
    "cricsheet_id": "85ec8e33",
@@ -5560,7 +5572,8 @@
     "India tour of England 2026 (Men T20I)",
     "India tour of Zimbabwe 2026 (T20I)",
     "Asian Games 2026",
-    "West Indies tour of India 2026 (T20I)"
+    "West Indies tour of India 2026 (T20I)",
+    "India tour of New Zealand 2026 (T20I)"
    ],
    "cricinfo_id": "1170265",
    "cricsheet_id": "b0482a1d",
@@ -5595,7 +5608,8 @@
     "India tour of England 2026 (Men T20I)",
     "India tour of Zimbabwe 2026 (T20I)",
     "Asian Games 2026",
-    "West Indies tour of India 2026 (T20I)"
+    "West Indies tour of India 2026 (T20I)",
+    "India tour of New Zealand 2026 (T20I)"
    ],
    "cricinfo_id": "714451",
    "cricsheet_id": "a4e37e47",
@@ -5613,7 +5627,9 @@
     "India tour of Ireland 2026 (Men T20I)",
     "India tour of England 2026 (Men T20I)",
     "Asian Games 2026",
-    "West Indies tour of India 2026 (T20I)"
+    "West Indies tour of India 2026 (T20I)",
+    "India tour of New Zealand 2026 (ODI)",
+    "India tour of New Zealand 2026 (T20I)"
    ],
    "cricinfo_id": "554691",
    "cricsheet_id": "2e171977",
@@ -5630,7 +5646,9 @@
     "India tour of Ireland 2026 (Men T20I)",
     "India tour of England 2026 (Men T20I)",
     "Asian Games 2026",
-    "West Indies tour of India 2026 (T20I)"
+    "West Indies tour of India 2026 (T20I)",
+    "India tour of New Zealand 2026 (ODI)",
+    "India tour of New Zealand 2026 (T20I)"
    ],
    "cricinfo_id": "1125976",
    "cricsheet_id": "244048f6",
@@ -5663,7 +5681,8 @@
     "India tour of Ireland 2026 (Men T20I)",
     "India tour of England 2026 (Men T20I)",
     "India tour of Zimbabwe 2026 (T20I)",
-    "West Indies tour of India 2026 (T20I)"
+    "West Indies tour of India 2026 (T20I)",
+    "India tour of New Zealand 2026 (T20I)"
    ],
    "cricinfo_id": "1350768",
    "cricsheet_id": "80b2fb19",
@@ -5681,7 +5700,8 @@
     "India tour of England 2026 (Men T20I)",
     "India tour of Zimbabwe 2026 (T20I)",
     "Asian Games 2026",
-    "West Indies tour of India 2026 (T20I)"
+    "West Indies tour of India 2026 (T20I)",
+    "India tour of New Zealand 2026 (T20I)"
    ],
    "cricinfo_id": "1408688",
    "cricsheet_id": "470f446b",
@@ -5714,7 +5734,8 @@
     "India tour of Ireland 2026 (Men T20I)",
     "India tour of England 2026 (Men T20I)",
     "West Indies tour of India 2026 (ODI)",
-    "West Indies tour of India 2026 (T20I)"
+    "West Indies tour of India 2026 (T20I)",
+    "India tour of New Zealand 2026 (ODI)"
    ],
    "cricinfo_id": "917159",
    "cricsheet_id": "85e0cf10",
@@ -5991,7 +6012,8 @@
     "varun chakravarthy vinod"
    ],
    "tours": [
-    "India tour of England 2026 (Men T20I)"
+    "India tour of England 2026 (Men T20I)",
+    "India tour of New Zealand 2026 (T20I)"
    ],
    "cricinfo_id": "1108375",
    "cricsheet_id": "5b7ab5a9",
@@ -6408,7 +6430,8 @@
     "william alexander young"
    ],
    "tours": [
-    "New Zealand vs West Indies Men's ODI 2026"
+    "New Zealand vs West Indies Men's ODI 2026",
+    "India tour of New Zealand 2026 (ODI)"
    ],
    "cricinfo_id": "547749",
    "cricsheet_id": "8afe73e2",
@@ -6424,7 +6447,8 @@
     "twm latham"
    ],
    "tours": [
-    "New Zealand vs West Indies Men's ODI 2026"
+    "New Zealand vs West Indies Men's ODI 2026",
+    "India tour of New Zealand 2026 (ODI)"
    ],
    "cricinfo_id": "388802",
    "cricsheet_id": "e824e6ee",
@@ -6456,7 +6480,9 @@
    ],
    "tours": [
     "New Zealand vs West Indies Men's ODI 2026",
-    "European T20 Premier League 2026"
+    "European T20 Premier League 2026",
+    "India tour of New Zealand 2026 (ODI)",
+    "India tour of New Zealand 2026 (T20I)"
    ],
    "cricinfo_id": "381743",
    "cricsheet_id": "eade4650",
@@ -6490,7 +6516,9 @@
    ],
    "tours": [
     "New Zealand vs West Indies Men's ODI 2026",
-    "European T20 Premier League 2026"
+    "European T20 Premier League 2026",
+    "India tour of New Zealand 2026 (ODI)",
+    "India tour of New Zealand 2026 (T20I)"
    ],
    "cricinfo_id": "326968",
    "cricsheet_id": "e38bce7a",
@@ -6510,7 +6538,9 @@
    "tours": [
     "New Zealand vs West Indies Men's ODI 2026",
     "The Hundred Men's Competition 2026",
-    "European T20 Premier League 2026"
+    "European T20 Premier League 2026",
+    "India tour of New Zealand 2026 (ODI)",
+    "India tour of New Zealand 2026 (T20I)"
    ],
    "cricinfo_id": "502714",
    "cricsheet_id": "e4a0deae",
@@ -6528,7 +6558,9 @@
     "ng smith"
    ],
    "tours": [
-    "New Zealand vs West Indies Men's ODI 2026"
+    "New Zealand vs West Indies Men's ODI 2026",
+    "India tour of New Zealand 2026 (ODI)",
+    "India tour of New Zealand 2026 (T20I)"
    ],
    "cricinfo_id": "959771",
    "cricsheet_id": "05b1aef8",
@@ -6544,7 +6576,9 @@
     "jacob duffy"
    ],
    "tours": [
-    "New Zealand vs West Indies Men's ODI 2026"
+    "New Zealand vs West Indies Men's ODI 2026",
+    "India tour of New Zealand 2026 (ODI)",
+    "India tour of New Zealand 2026 (T20I)"
    ],
    "cricinfo_id": "547766",
    "cricsheet_id": "dadbdb68",
@@ -7925,7 +7959,9 @@
    ],
    "tours": [
     "Caribbean Premier League 2026",
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "India tour of New Zealand 2026 (ODI)",
+    "India tour of New Zealand 2026 (T20I)"
    ],
    "cricinfo_id": "823509",
    "cricsheet_id": "9a46c4e5",
@@ -9789,7 +9825,9 @@
     "matt henry"
    ],
    "tours": [
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "India tour of New Zealand 2026 (ODI)",
+    "India tour of New Zealand 2026 (T20I)"
    ],
    "cricinfo_id": "506612",
    "cricsheet_id": "e84ac20c",
@@ -11569,7 +11607,8 @@
    ],
    "tours": [
     "India tour of Zimbabwe 2026 (T20I)",
-    "West Indies tour of India 2026 (T20I)"
+    "West Indies tour of India 2026 (T20I)",
+    "India tour of New Zealand 2026 (T20I)"
    ],
    "cricinfo_id": "1292563",
    "cricsheet_id": "b1ad996b",
@@ -13106,7 +13145,9 @@
     "devon philip conway"
    ],
    "tours": [
-    "European T20 Premier League 2026"
+    "European T20 Premier League 2026",
+    "India tour of New Zealand 2026 (ODI)",
+    "India tour of New Zealand 2026 (T20I)"
    ],
    "display": "Devon Conway",
    "cricinfo_id": "379140",
@@ -15148,7 +15189,8 @@
    ],
    "tours": [
     "West Indies tour of India 2026 (ODI)",
-    "West Indies tour of India 2026 (T20I)"
+    "West Indies tour of India 2026 (T20I)",
+    "India tour of New Zealand 2026 (ODI)"
    ],
    "display": "Shubman Gill",
    "cricinfo_id": "1070173",
@@ -15163,7 +15205,8 @@
    ],
    "tours": [
     "West Indies tour of India 2026 (ODI)",
-    "West Indies tour of India 2026 (T20I)"
+    "West Indies tour of India 2026 (T20I)",
+    "India tour of New Zealand 2026 (ODI)"
    ],
    "display": "KL Rahul",
    "cricinfo_id": "422108",
@@ -15190,7 +15233,8 @@
    ],
    "tours": [
     "West Indies tour of India 2026 (ODI)",
-    "West Indies tour of India 2026 (T20I)"
+    "West Indies tour of India 2026 (T20I)",
+    "India tour of New Zealand 2026 (ODI)"
    ],
    "display": "Ruturaj Gaikwad",
    "cricinfo_id": "1060380",
@@ -15205,7 +15249,8 @@
    ],
    "tours": [
     "West Indies tour of India 2026 (ODI)",
-    "West Indies tour of India 2026 (T20I)"
+    "West Indies tour of India 2026 (T20I)",
+    "India tour of New Zealand 2026 (ODI)"
    ],
    "display": "Gurnoor Brar",
    "cricinfo_id": "1287033",
@@ -15266,7 +15311,8 @@
    ],
    "tours": [
     "West Indies tour of India 2026 (ODI)",
-    "West Indies tour of India 2026 (T20I)"
+    "West Indies tour of India 2026 (T20I)",
+    "India tour of New Zealand 2026 (ODI)"
    ],
    "display": "Virat Kohli",
    "cricinfo_id": "253802",
@@ -15281,7 +15327,9 @@
    ],
    "tours": [
     "West Indies tour of India 2026 (ODI)",
-    "West Indies tour of India 2026 (T20I)"
+    "West Indies tour of India 2026 (T20I)",
+    "India tour of New Zealand 2026 (ODI)",
+    "India tour of New Zealand 2026 (T20I)"
    ],
    "display": "Kuldeep Yadav",
    "cricinfo_id": "559235",
@@ -15296,7 +15344,8 @@
    ],
    "tours": [
     "West Indies tour of India 2026 (ODI)",
-    "West Indies tour of India 2026 (T20I)"
+    "West Indies tour of India 2026 (T20I)",
+    "India tour of New Zealand 2026 (ODI)"
    ],
    "display": "Mohammed Siraj",
    "cricinfo_id": "940973",
@@ -15311,7 +15360,9 @@
    ],
    "tours": [
     "West Indies tour of India 2026 (ODI)",
-    "West Indies tour of India 2026 (T20I)"
+    "West Indies tour of India 2026 (T20I)",
+    "India tour of New Zealand 2026 (ODI)",
+    "India tour of New Zealand 2026 (T20I)"
    ],
    "display": "Naman Dhir",
    "cricinfo_id": "1287032",
@@ -15326,7 +15377,9 @@
    ],
    "tours": [
     "West Indies tour of India 2026 (ODI)",
-    "West Indies tour of India 2026 (T20I)"
+    "West Indies tour of India 2026 (T20I)",
+    "India tour of New Zealand 2026 (ODI)",
+    "India tour of New Zealand 2026 (T20I)"
    ],
    "display": "Nitish Kumar Reddy",
    "cricinfo_id": "1175496",
@@ -15342,7 +15395,8 @@
    ],
    "tours": [
     "West Indies tour of India 2026 (ODI)",
-    "West Indies tour of India 2026 (T20I)"
+    "West Indies tour of India 2026 (T20I)",
+    "India tour of New Zealand 2026 (ODI)"
    ],
    "display": "Rohit Sharma",
    "cricinfo_id": "34102",
@@ -16201,6 +16255,89 @@
    "cricsheet_id": "8ca1f93a",
    "espn_id": "543550",
    "draft_id": 11507,
+   "auction_id": null
+  },
+  "ci:625960": {
+   "aliases": [
+    "kyle jamieson"
+   ],
+   "tours": [
+    "India tour of New Zealand 2026 (ODI)",
+    "India tour of New Zealand 2026 (T20I)"
+   ],
+   "display": "Kyle Jamieson",
+   "cricinfo_id": "625960",
+   "cricsheet_id": "68c56d09",
+   "espn_id": "625960",
+   "draft_id": 11515,
+   "auction_id": null
+  },
+  "ci:854909": {
+   "aliases": [
+    "blair tickner"
+   ],
+   "tours": [
+    "India tour of New Zealand 2026 (ODI)",
+    "India tour of New Zealand 2026 (T20I)"
+   ],
+   "display": "Blair Tickner",
+   "cricinfo_id": "854909",
+   "cricsheet_id": "48ad3373",
+   "espn_id": "854909",
+   "draft_id": 11521,
+   "auction_id": null
+  },
+  "ci:1175428": {
+   "aliases": [
+    "anshul kamboj"
+   ],
+   "tours": [
+    "India tour of New Zealand 2026 (ODI)"
+   ],
+   "display": "Anshul Kamboj",
+   "cricinfo_id": "1175428",
+   "cricsheet_id": "fcc21ace",
+   "espn_id": "1175428",
+   "draft_id": 11529,
+   "auction_id": null
+  },
+  "ci:928015": {
+   "aliases": [
+    "josh clarkson"
+   ],
+   "tours": [
+    "India tour of New Zealand 2026 (T20I)"
+   ],
+   "display": "Josh Clarkson",
+   "cricinfo_id": "928015",
+   "cricsheet_id": "bed90114",
+   "espn_id": "928015",
+   "draft_id": 11542,
+   "auction_id": null
+  },
+  "ci:1410577": {
+   "aliases": [
+    "bevon jacobs"
+   ],
+   "tours": [
+    "India tour of New Zealand 2026 (T20I)"
+   ],
+   "display": "Bevon Jacobs",
+   "cricinfo_id": "1410577",
+   "cricsheet_id": "972f217b",
+   "espn_id": "1410577",
+   "draft_id": 11547,
+   "auction_id": null
+  },
+  "uncapped:bhuvneshwar-kumar": {
+   "aliases": [
+    "bhuvneshwar kumar"
+   ],
+   "tours": [
+    "India tour of New Zealand 2026 (T20I)"
+   ],
+   "display": "Bhuvneshwar Kumar",
+   "draft_id": 11562,
    "auction_id": null
   }
  }
