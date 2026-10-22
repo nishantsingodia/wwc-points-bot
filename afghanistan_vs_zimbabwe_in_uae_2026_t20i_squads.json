@@ -1,0 +1,128 @@
+{
+  "MTAFG": {
+    "name": "Afghanistan",
+    "players": [
+      [
+        "Ibrahim Zadran",
+        "BAT"
+      ],
+      [
+        "Abdollah Ahmadzai",
+        "BOWL"
+      ],
+      [
+        "Abdullah Tarakhail",
+        "BAT"
+      ],
+      [
+        "Azmatullah Omarzai",
+        "AR"
+      ],
+      [
+        "Fareed Ahmad",
+        "BOWL"
+      ],
+      [
+        "Fazalhaq Farooqi",
+        "BOWL"
+      ],
+      [
+        "Ijaz Ahmad Ahmadzai",
+        "AR"
+      ],
+      [
+        "Mohammad Akram",
+        "BAT"
+      ],
+      [
+        "Mujeeb Ur Rahman",
+        "BOWL"
+      ],
+      [
+        "Noor Ahmad",
+        "BOWL"
+      ],
+      [
+        "Noor ul Rahman",
+        "BAT"
+      ],
+      [
+        "Rahmanullah Gurbaz",
+        "BAT"
+      ],
+      [
+        "Rashid Khan",
+        "BOWL"
+      ],
+      [
+        "Sediqullah Atal",
+        "BAT"
+      ],
+      [
+        "Shahidullah",
+        "BAT"
+      ]
+    ]
+  },
+  "MTZIM3": {
+    "name": "Zimbabwe",
+    "players": [
+      [
+        "Sikandar Raza",
+        "BAT"
+      ],
+      [
+        "Brian Bennett",
+        "AR"
+      ],
+      [
+        "Ryan Burl",
+        "AR"
+      ],
+      [
+        "Ben Curran",
+        "BAT"
+      ],
+      [
+        "Brad Evans",
+        "AR"
+      ],
+      [
+        "Innocent Kaia",
+        "BAT"
+      ],
+      [
+        "Wessly Madhevere",
+        "AR"
+      ],
+      [
+        "Tadiwanashe Marumani",
+        "BAT"
+      ],
+      [
+        "Wellington Masakadza",
+        "BOWL"
+      ],
+      [
+        "Vincent Masekesa",
+        "BOWL"
+      ],
+      [
+        "Kundai Matigimu",
+        "BOWL"
+      ],
+      [
+        "Blessing Muzarabani",
+        "BOWL"
+      ],
+      [
+        "Newman Nyamhuri",
+        "BOWL"
+      ],
+      [
+        "Tafadzwa Tsiga",
+        "BAT"
+      ]
+    ]
+  }
+}

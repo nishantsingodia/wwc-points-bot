@@ -1,0 +1,39 @@
+{
+ "tour": "Afghanistan vs Zimbabwe in UAE 2026 (T20I)",
+ "slug": "afg_v_zim_t20i_points",
+ "teams": {
+  "MTAFG": [
+   "ci:921509",
+   "uncapped:abdollah-ahmadzai",
+   "uncapped:abdullah-tarakhail",
+   "ci:819429",
+   "uncapped:fareed-ahmad",
+   "ci:974175",
+   "uncapped:ijaz-ahmad-ahmadzai",
+   "uncapped:mohammad-akram",
+   "ci:974109",
+   "ci:1182529",
+   "uncapped:noor-ul-rahman",
+   "ci:974087",
+   "ci:793463",
+   "ci:1161050",
+   "uncapped:shahidullah"
+  ],
+  "MTZIM3": [
+   "ci:299572",
+   "ci:1071484",
+   "ci:495964",
+   "ci:910695",
+   "ci:696127",
+   "ci:465327",
+   "ci:938959",
+   "ci:946507",
+   "ci:571703",
+   "uncapped:vincent-masekesa",
+   "ci:696135",
+   "ci:827051",
+   "ci:1409283",
+   "ci:722321"
+  ]
+ }
+}

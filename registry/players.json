@@ -1,6 +1,6 @@
 {
  "anchor": "cricinfo_id (ci:); cs:/uncapped: fallback; cricsheet_id derived from crosswalk",
- "count": 996,
+ "count": 1009,
  "players": {
   "ci:597806": {
    "aliases": [
@@ -5804,7 +5804,8 @@
    ],
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
-    "European T20 Premier League 2026"
+    "European T20 Premier League 2026",
+    "Ireland tour of Namibia 2026 (ODI)"
    ],
    "cricinfo_id": "961407",
    "cricsheet_id": "59ea70a4",
@@ -5823,7 +5824,8 @@
    ],
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
-    "European T20 Premier League 2026"
+    "European T20 Premier League 2026",
+    "Ireland tour of Namibia 2026 (ODI)"
    ],
    "cricinfo_id": "928057",
    "cricsheet_id": "3979b5e0",
@@ -5842,7 +5844,8 @@
    ],
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
-    "European T20 Premier League 2026"
+    "European T20 Premier League 2026",
+    "Ireland tour of Namibia 2026 (ODI)"
    ],
    "cricinfo_id": "1193295",
    "cricsheet_id": "24ad97e7",
@@ -5879,7 +5882,8 @@
    ],
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
-    "European T20 Premier League 2026"
+    "European T20 Premier League 2026",
+    "Ireland tour of Namibia 2026 (ODI)"
    ],
    "cricinfo_id": "348034",
    "cricsheet_id": "99cddc5e",
@@ -5898,7 +5902,8 @@
    ],
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
-    "European T20 Premier League 2026"
+    "European T20 Premier League 2026",
+    "Ireland tour of Namibia 2026 (ODI)"
    ],
    "cricinfo_id": "1263361",
    "cricsheet_id": "2c54c49b",
@@ -5949,7 +5954,8 @@
    ],
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
-    "European T20 Premier League 2026"
+    "European T20 Premier League 2026",
+    "Ireland tour of Namibia 2026 (ODI)"
    ],
    "cricinfo_id": "1448923",
    "cricsheet_id": "3bea7ea9",
@@ -5981,7 +5987,8 @@
    ],
    "tours": [
     "India tour of Ireland 2026 (Men T20I)",
-    "European T20 Premier League 2026"
+    "European T20 Premier League 2026",
+    "Ireland tour of Namibia 2026 (ODI)"
    ],
    "cricinfo_id": "1195662",
    "cricsheet_id": "19d0a172",
@@ -5995,7 +6002,8 @@
     "liam mccarthy"
    ],
    "tours": [
-    "India tour of Ireland 2026 (Men T20I)"
+    "India tour of Ireland 2026 (Men T20I)",
+    "Ireland tour of Namibia 2026 (ODI)"
    ],
    "cricinfo_id": "1278203",
    "cricsheet_id": "8eb2e2e6",
@@ -7000,7 +7008,8 @@
     "ibrahim zadran"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Afghanistan vs Zimbabwe in UAE 2026 (T20I)"
    ],
    "cricinfo_id": "921509",
    "cricsheet_id": "d4550956",
@@ -7475,7 +7484,8 @@
    ],
    "tours": [
     "Lanka Premier League 2026",
-    "Caribbean Premier League 2026"
+    "Caribbean Premier League 2026",
+    "Afghanistan vs Zimbabwe in UAE 2026 (T20I)"
    ],
    "cricinfo_id": "974109",
    "cricsheet_id": "7d92277a",
@@ -7648,7 +7658,8 @@
     "sediqullah atal"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Afghanistan vs Zimbabwe in UAE 2026 (T20I)"
    ],
    "cricinfo_id": "1161050",
    "cricsheet_id": "3c28853f",
@@ -8543,7 +8554,8 @@
     "fazalhaq farooqi"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "Afghanistan vs Zimbabwe in UAE 2026 (T20I)"
    ],
    "cricinfo_id": "974175",
    "cricsheet_id": "e9c7f0d0",
@@ -8679,7 +8691,8 @@
     "rashid khan"
    ],
    "tours": [
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "Afghanistan vs Zimbabwe in UAE 2026 (T20I)"
    ],
    "cricinfo_id": "793463",
    "cricsheet_id": "5f547c8b",
@@ -9530,7 +9543,8 @@
    ],
    "tours": [
     "The Hundred Men's Competition 2026",
-    "Caribbean Premier League 2026"
+    "Caribbean Premier League 2026",
+    "Afghanistan vs Zimbabwe in UAE 2026 (T20I)"
    ],
    "cricinfo_id": "1182529",
    "cricsheet_id": "efc04be7",
@@ -11275,7 +11289,8 @@
    ],
    "tours": [
     "India tour of Zimbabwe 2026 (T20I)",
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Afghanistan vs Zimbabwe in UAE 2026 (T20I)"
    ],
    "cricinfo_id": "299572",
    "cricsheet_id": "26d041c4",
@@ -11294,7 +11309,8 @@
    ],
    "tours": [
     "India tour of Zimbabwe 2026 (T20I)",
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Afghanistan vs Zimbabwe in UAE 2026 (T20I)"
    ],
    "cricinfo_id": "1071484",
    "cricsheet_id": "eaa36b2a",
@@ -11313,7 +11329,8 @@
    ],
    "tours": [
     "India tour of Zimbabwe 2026 (T20I)",
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Afghanistan vs Zimbabwe in UAE 2026 (T20I)"
    ],
    "cricinfo_id": "495964",
    "cricsheet_id": "b08252b8",
@@ -11347,7 +11364,8 @@
    ],
    "tours": [
     "India tour of Zimbabwe 2026 (T20I)",
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Afghanistan vs Zimbabwe in UAE 2026 (T20I)"
    ],
    "cricinfo_id": "910695",
    "cricsheet_id": "1786a21b",
@@ -11365,7 +11383,8 @@
    ],
    "tours": [
     "India tour of Zimbabwe 2026 (T20I)",
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Afghanistan vs Zimbabwe in UAE 2026 (T20I)"
    ],
    "cricinfo_id": "696127",
    "cricsheet_id": "e7e86505",
@@ -11382,7 +11401,8 @@
    ],
    "tours": [
     "India tour of Zimbabwe 2026 (T20I)",
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Afghanistan vs Zimbabwe in UAE 2026 (T20I)"
    ],
    "cricinfo_id": "465327",
    "cricsheet_id": "5ad8c974",
@@ -11396,12 +11416,14 @@
   "ci:938959": {
    "aliases": [
     "w madhevere",
+    "wesley madhavere",
     "wessly madhevere",
     "wessly nyasha madhevere"
    ],
    "tours": [
     "India tour of Zimbabwe 2026 (T20I)",
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Afghanistan vs Zimbabwe in UAE 2026 (T20I)"
    ],
    "cricinfo_id": "938959",
    "cricsheet_id": "a879b92c",
@@ -11419,7 +11441,8 @@
    ],
    "tours": [
     "India tour of Zimbabwe 2026 (T20I)",
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Afghanistan vs Zimbabwe in UAE 2026 (T20I)"
    ],
    "cricinfo_id": "946507",
    "cricsheet_id": "3d5d51a5",
@@ -11437,7 +11460,8 @@
    ],
    "tours": [
     "India tour of Zimbabwe 2026 (T20I)",
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Afghanistan vs Zimbabwe in UAE 2026 (T20I)"
    ],
    "cricinfo_id": "571703",
    "cricsheet_id": "4bc0a378",
@@ -11454,7 +11478,8 @@
    ],
    "tours": [
     "India tour of Zimbabwe 2026 (T20I)",
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Afghanistan vs Zimbabwe in UAE 2026 (T20I)"
    ],
    "cricinfo_id": "827051",
    "cricsheet_id": "449f4e3c",
@@ -11503,7 +11528,8 @@
    ],
    "tours": [
     "India tour of Zimbabwe 2026 (T20I)",
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Afghanistan vs Zimbabwe in UAE 2026 (T20I)"
    ],
    "cricinfo_id": "1409283",
    "cricsheet_id": "943ca0cd",
@@ -11518,7 +11544,8 @@
    ],
    "tours": [
     "India tour of Zimbabwe 2026 (T20I)",
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Afghanistan vs Zimbabwe in UAE 2026 (T20I)"
    ],
    "cricinfo_id": "722321",
    "cricsheet_id": "a1dcb5b9",
@@ -12471,7 +12498,8 @@
     "rahmanullah gurbaz"
    ],
    "tours": [
-    "Caribbean Premier League 2026"
+    "Caribbean Premier League 2026",
+    "Afghanistan vs Zimbabwe in UAE 2026 (T20I)"
    ],
    "display": "Rahmanullah Gurbaz",
    "cricinfo_id": "974087",
@@ -12981,7 +13009,8 @@
     "curtis campher"
    ],
    "tours": [
-    "European T20 Premier League 2026"
+    "European T20 Premier League 2026",
+    "Ireland tour of Namibia 2026 (ODI)"
    ],
    "display": "Curtis Campher",
    "cricinfo_id": "595921",
@@ -13128,7 +13157,8 @@
     "mark richard adair"
    ],
    "tours": [
-    "European T20 Premier League 2026"
+    "European T20 Premier League 2026",
+    "Ireland tour of Namibia 2026 (ODI)"
    ],
    "display": "Mark Adair",
    "cricinfo_id": "526441",
@@ -13206,7 +13236,8 @@
     "paul stirling"
    ],
    "tours": [
-    "European T20 Premier League 2026"
+    "European T20 Premier League 2026",
+    "Ireland tour of Namibia 2026 (ODI)"
    ],
    "display": "Paul Stirling",
    "cricinfo_id": "303427",
@@ -13966,7 +13997,8 @@
     "jordan neill"
    ],
    "tours": [
-    "European T20 Premier League 2026"
+    "European T20 Premier League 2026",
+    "Ireland tour of Namibia 2026 (ODI)"
    ],
    "display": "Jordan Neill",
    "draft_id": 10849,
@@ -13994,23 +14026,14 @@
    "cricbuzz_id": "1477381",
    "cricbuzz_tier": 4
   },
-  "uncapped:gerhard-erasmus": {
-   "aliases": [
-    "gerhard erasmus"
-   ],
-   "tours": [
-    "Namibia T20I Tri-Series 2026"
-   ],
-   "display": "Gerhard Erasmus",
-   "draft_id": 10922,
-   "auction_id": null
-  },
   "ci:1178066": {
    "aliases": [
+    "cricbuzz player 1423874",
     "jan balt"
    ],
    "tours": [
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Ireland tour of Namibia 2026 (ODI)"
    ],
    "display": "Jan Balt",
    "cricinfo_id": "1178066",
@@ -14027,7 +14050,8 @@
     "jack thomas brassell"
    ],
    "tours": [
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Ireland tour of Namibia 2026 (ODI)"
    ],
    "display": "Jack Brassell",
    "cricinfo_id": "1310415",
@@ -14044,7 +14068,8 @@
     "jan nicolaas frylinck"
    ],
    "tours": [
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Ireland tour of Namibia 2026 (ODI)"
    ],
    "display": "Jan Frylinck",
    "cricinfo_id": "482478",
@@ -14061,7 +14086,8 @@
     "zane green"
    ],
    "tours": [
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Ireland tour of Namibia 2026 (ODI)"
    ],
    "display": "Zane Green",
    "cricinfo_id": "596664",
@@ -14077,7 +14103,8 @@
     "max heingo"
    ],
    "tours": [
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Ireland tour of Namibia 2026 (ODI)"
    ],
    "display": "Max Heingo",
    "cricinfo_id": "1495161",
@@ -14093,7 +14120,8 @@
     "malan kruger"
    ],
    "tours": [
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Ireland tour of Namibia 2026 (ODI)"
    ],
    "display": "Malan Kruger",
    "cricinfo_id": "574638",
@@ -14107,7 +14135,8 @@
     "jan nicol loftie eaton"
    ],
    "tours": [
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Ireland tour of Namibia 2026 (ODI)"
    ],
    "display": "Jan Nicol Loftie-Eaton",
    "cricinfo_id": "1071473",
@@ -14124,7 +14153,8 @@
     "bernard scholtz"
    ],
    "tours": [
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Ireland tour of Namibia 2026 (ODI)"
    ],
    "display": "Bernard Scholtz",
    "cricinfo_id": "330223",
@@ -14139,7 +14169,8 @@
     "johannes jonathan smit"
    ],
    "tours": [
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Ireland tour of Namibia 2026 (ODI)"
    ],
    "display": "JJ Smit",
    "cricinfo_id": "553821",
@@ -14155,7 +14186,8 @@
     "waldo smith"
    ],
    "tours": [
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Ireland tour of Namibia 2026 (ODI)"
    ],
    "display": "Waldo Smith",
    "cricinfo_id": "1532519",
@@ -14169,7 +14201,8 @@
     "louren steenkamp"
    ],
    "tours": [
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Ireland tour of Namibia 2026 (ODI)"
    ],
    "display": "Louren Steenkamp",
    "cricinfo_id": "596087",
@@ -14183,7 +14216,8 @@
     "junior taanyanda"
    ],
    "tours": [
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Ireland tour of Namibia 2026 (ODI)"
    ],
    "display": "Junior Taanyanda",
    "cricinfo_id": "1542041",
@@ -14197,7 +14231,8 @@
     "ruben trumpelmann"
    ],
    "tours": [
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Ireland tour of Namibia 2026 (ODI)"
    ],
    "display": "Ruben Trumpelmann",
    "cricinfo_id": "698317",
@@ -14213,7 +14248,8 @@
     "michael van lingen"
    ],
    "tours": [
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Ireland tour of Namibia 2026 (ODI)"
    ],
    "display": "Michael van Lingen",
    "cricinfo_id": "833777",
@@ -14224,10 +14260,12 @@
   },
   "ci:1234278": {
    "aliases": [
-    "alexander busing volschenk"
+    "alexander busing volschenk",
+    "alexander volschenk"
    ],
    "tours": [
-    "Namibia T20I Tri-Series 2026"
+    "Namibia T20I Tri-Series 2026",
+    "Ireland tour of Namibia 2026 (ODI)"
    ],
    "display": "Alexander Busing-Volschenk",
    "cricinfo_id": "1234278",
@@ -14394,17 +14432,6 @@
    ],
    "display": "Graeme Cremer",
    "draft_id": 10954,
-   "auction_id": null
-  },
-  "uncapped:kundai-matigimu": {
-   "aliases": [
-    "kundai matigimu"
-   ],
-   "tours": [
-    "Namibia T20I Tri-Series 2026"
-   ],
-   "display": "Kundai Matigimu",
-   "draft_id": 10961,
    "auction_id": null
   },
   "ci:1289983": {
@@ -16339,6 +16366,194 @@
    "display": "Bhuvneshwar Kumar",
    "draft_id": 11562,
    "auction_id": null
+  },
+  "ci:519070": {
+   "aliases": [
+    "gerhard erasmus",
+    "merwe gerhard erasmus"
+   ],
+   "tours": [
+    "Namibia T20I Tri-Series 2026",
+    "Ireland tour of Namibia 2026 (ODI)"
+   ],
+   "display": "Gerhard Erasmus",
+   "draft_id": 10922,
+   "auction_id": null,
+   "cricinfo_id": "519070",
+   "cricsheet_id": "95a5e066",
+   "espn_id": "519070",
+   "cricbuzz_id": "7973",
+   "cricbuzz_tier": 1
+  },
+  "ci:303423": {
+   "aliases": [
+    "andy balbirnie"
+   ],
+   "tours": [
+    "Ireland tour of Namibia 2026 (ODI)"
+   ],
+   "display": "Andy Balbirnie",
+   "cricinfo_id": "303423",
+   "cricsheet_id": "6ef13460",
+   "espn_id": "303423",
+   "draft_id": 11590,
+   "auction_id": null
+  },
+  "ci:946283": {
+   "aliases": [
+    "cade carmichael"
+   ],
+   "tours": [
+    "Ireland tour of Namibia 2026 (ODI)"
+   ],
+   "display": "Cade Carmichael",
+   "cricinfo_id": "946283",
+   "cricsheet_id": "f3b158d9",
+   "espn_id": "946283",
+   "draft_id": 11593,
+   "auction_id": null
+  },
+  "ci:417381": {
+   "aliases": [
+    "andy mcbrine"
+   ],
+   "tours": [
+    "Ireland tour of Namibia 2026 (ODI)"
+   ],
+   "display": "Andy McBrine",
+   "cricinfo_id": "417381",
+   "cricsheet_id": "e957b38f",
+   "espn_id": "417381",
+   "draft_id": 11597,
+   "auction_id": null
+  },
+  "uncapped:byron-mcdonough": {
+   "aliases": [
+    "byron mcdonough"
+   ],
+   "tours": [
+    "Ireland tour of Namibia 2026 (ODI)"
+   ],
+   "display": "Byron McDonough",
+   "draft_id": 11599,
+   "auction_id": null
+  },
+  "uncapped:abdollah-ahmadzai": {
+   "aliases": [
+    "abdollah ahmadzai"
+   ],
+   "tours": [
+    "Afghanistan vs Zimbabwe in UAE 2026 (T20I)"
+   ],
+   "display": "Abdollah Ahmadzai",
+   "draft_id": 11604,
+   "auction_id": null
+  },
+  "uncapped:abdullah-tarakhail": {
+   "aliases": [
+    "abdullah tarakhail"
+   ],
+   "tours": [
+    "Afghanistan vs Zimbabwe in UAE 2026 (T20I)"
+   ],
+   "display": "Abdullah Tarakhail",
+   "draft_id": 11605,
+   "auction_id": null
+  },
+  "ci:819429": {
+   "aliases": [
+    "azmatullah omarzai"
+   ],
+   "tours": [
+    "Afghanistan vs Zimbabwe in UAE 2026 (T20I)"
+   ],
+   "display": "Azmatullah Omarzai",
+   "cricinfo_id": "819429",
+   "cricsheet_id": "8f6dd463",
+   "espn_id": "819429",
+   "draft_id": 11606,
+   "auction_id": null
+  },
+  "uncapped:fareed-ahmad": {
+   "aliases": [
+    "fareed ahmad"
+   ],
+   "tours": [
+    "Afghanistan vs Zimbabwe in UAE 2026 (T20I)"
+   ],
+   "display": "Fareed Ahmad",
+   "draft_id": 11607,
+   "auction_id": null
+  },
+  "uncapped:ijaz-ahmad-ahmadzai": {
+   "aliases": [
+    "ijaz ahmad ahmadzai"
+   ],
+   "tours": [
+    "Afghanistan vs Zimbabwe in UAE 2026 (T20I)"
+   ],
+   "display": "Ijaz Ahmad Ahmadzai",
+   "draft_id": 11609,
+   "auction_id": null
+  },
+  "uncapped:mohammad-akram": {
+   "aliases": [
+    "mohammad akram"
+   ],
+   "tours": [
+    "Afghanistan vs Zimbabwe in UAE 2026 (T20I)"
+   ],
+   "display": "Mohammad Akram",
+   "draft_id": 11610,
+   "auction_id": null
+  },
+  "uncapped:noor-ul-rahman": {
+   "aliases": [
+    "noor ul rahman"
+   ],
+   "tours": [
+    "Afghanistan vs Zimbabwe in UAE 2026 (T20I)"
+   ],
+   "display": "Noor ul Rahman",
+   "draft_id": 11613,
+   "auction_id": null
+  },
+  "uncapped:shahidullah": {
+   "aliases": [
+    "shahidullah"
+   ],
+   "tours": [
+    "Afghanistan vs Zimbabwe in UAE 2026 (T20I)"
+   ],
+   "display": "Shahidullah",
+   "draft_id": 11617,
+   "auction_id": null
+  },
+  "uncapped:vincent-masekesa": {
+   "aliases": [
+    "vincent masekesa"
+   ],
+   "tours": [
+    "Afghanistan vs Zimbabwe in UAE 2026 (T20I)"
+   ],
+   "display": "Vincent Masekesa",
+   "draft_id": 11627,
+   "auction_id": null
+  },
+  "ci:696135": {
+   "aliases": [
+    "kundai matigimu"
+   ],
+   "tours": [
+    "Namibia T20I Tri-Series 2026",
+    "Afghanistan vs Zimbabwe in UAE 2026 (T20I)"
+   ],
+   "display": "Kundai Matigimu",
+   "draft_id": 10961,
+   "auction_id": null,
+   "cricinfo_id": "696135",
+   "cricsheet_id": "f8929fe0",
+   "espn_id": "696135"
   }
  }
 }

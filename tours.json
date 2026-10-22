@@ -290,5 +290,25 @@
     "squads": "india_tour_of_new_zealand_2026_t20i_squads.json",
     "tab": "NEW V IND T20I POINTS",
     "cricbuzz_series": "12543"
+  },
+  {
+    "ends": "2026-11-01",
+    "espn_series": "24830",
+    "format": "ODI",
+    "gender": "male",
+    "name": "Ireland tour of Namibia 2026 (ODI)",
+    "squads": "ireland_tour_of_namibia_2026_odi_squads.json",
+    "tab": "NAM V IRE ODI POINTS",
+    "cricbuzz_series": "13313"
+  },
+  {
+    "ends": "2026-11-01",
+    "espn_series": "24798",
+    "format": "T20",
+    "gender": "male",
+    "name": "Afghanistan vs Zimbabwe in UAE 2026 (T20I)",
+    "squads": "afghanistan_vs_zimbabwe_in_uae_2026_t20i_squads.json",
+    "tab": "AFG V ZIM T20I POINTS",
+    "cricbuzz_series": "13201"
   }
 ]

@@ -1,0 +1,140 @@
+{
+  "MONAM": {
+    "name": "Namibia",
+    "players": [
+      [
+        "Gerhard Erasmus",
+        "AR"
+      ],
+      [
+        "Jan Balt",
+        "BAT"
+      ],
+      [
+        "Jack Brassell",
+        "BOWL"
+      ],
+      [
+        "Jan Frylinck",
+        "AR"
+      ],
+      [
+        "Zane Green",
+        "BAT"
+      ],
+      [
+        "Max Heingo",
+        "BOWL"
+      ],
+      [
+        "Malan Kruger",
+        "BAT"
+      ],
+      [
+        "Jan Nicol Loftie-Eaton",
+        "BAT"
+      ],
+      [
+        "Bernard Scholtz",
+        "BOWL"
+      ],
+      [
+        "JJ Smit",
+        "BOWL"
+      ],
+      [
+        "Waldo Smith",
+        "AR"
+      ],
+      [
+        "Louren Steenkamp",
+        "BAT"
+      ],
+      [
+        "Junior Taanyanda",
+        "AR"
+      ],
+      [
+        "Ruben Trumpelmann",
+        "BOWL"
+      ],
+      [
+        "Michael van Lingen",
+        "BAT"
+      ],
+      [
+        "Alexander Busing-Volschenk",
+        "AR"
+      ]
+    ]
+  },
+  "MOIRE": {
+    "name": "Ireland",
+    "players": [
+      [
+        "Paul Stirling",
+        "BAT"
+      ],
+      [
+        "Lorcan Tucker",
+        "BAT"
+      ],
+      [
+        "Mark Adair",
+        "BOWL"
+      ],
+      [
+        "Andy Balbirnie",
+        "BAT"
+      ],
+      [
+        "Ben Calitz",
+        "BAT"
+      ],
+      [
+        "Curtis Campher",
+        "AR"
+      ],
+      [
+        "Cade Carmichael",
+        "BAT"
+      ],
+      [
+        "George Dockrell",
+        "AR"
+      ],
+      [
+        "Gavin Hoey",
+        "BOWL"
+      ],
+      [
+        "Matthew Humphreys",
+        "BOWL"
+      ],
+      [
+        "Andy McBrine",
+        "BOWL"
+      ],
+      [
+        "Liam McCarthy",
+        "BOWL"
+      ],
+      [
+        "Byron McDonough",
+        "BOWL"
+      ],
+      [
+        "Jai Moondra",
+        "BOWL"
+      ],
+      [
+        "Jordan Neill",
+        "BAT"
+      ],
+      [
+        "Harry Tector",
+        "BAT"
+      ]
+    ]
+  }
+}
