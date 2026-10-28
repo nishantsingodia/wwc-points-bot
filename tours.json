@@ -310,5 +310,15 @@
     "squads": "afghanistan_vs_zimbabwe_in_uae_2026_t20i_squads.json",
     "tab": "AFG V ZIM T20I POINTS",
     "cricbuzz_series": "13201"
+  },
+  {
+    "ends": "2026-12-05",
+    "espn_series": "21284",
+    "format": "T20",
+    "gender": "male",
+    "name": "Womens Big Bash League 2026",
+    "squads": "womens_big_bash_league_2026_squads.json",
+    "tab": "WOMENS BIG BASH LEAGUE 2026 POINTS",
+    "cricbuzz_series": "12677"
   }
 ]

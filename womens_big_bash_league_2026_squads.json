@@ -1,0 +1,514 @@
+{
+  "MTMEL": {
+    "name": "Melbourne Renegades Women",
+    "players": [
+      [
+        "Deandra Dottin",
+        "AR"
+      ],
+      [
+        "Nicole Faltum",
+        "BAT"
+      ],
+      [
+        "Tess Flintoff",
+        "BOWL"
+      ],
+      [
+        "Milly Illingworth",
+        "AR"
+      ],
+      [
+        "Sara Kennedy",
+        "BOWL"
+      ],
+      [
+        "Hayley Matthews",
+        "AR"
+      ],
+      [
+        "Sophie Molineux",
+        "BOWL"
+      ],
+      [
+        "Olivia Porter",
+        "BAT"
+      ],
+      [
+        "Sophie Reid",
+        "BAT"
+      ],
+      [
+        "Chloe Tryon",
+        "AR"
+      ],
+      [
+        "Tayla Vlaeminck",
+        "BOWL"
+      ],
+      [
+        "Georgia Wareham",
+        "BOWL"
+      ],
+      [
+        "Courtney Webb",
+        "BAT"
+      ],
+      [
+        "Annie Wikman",
+        "BAT"
+      ]
+    ]
+  },
+  "MTSYD": {
+    "name": "Sydney Thunder Women",
+    "players": [
+      [
+        "Jemma Barsby",
+        "AR"
+      ],
+      [
+        "Sam Bates",
+        "BAT"
+      ],
+      [
+        "Lauren Bell",
+        "BOWL"
+      ],
+      [
+        "Hannah Darlington",
+        "BOWL"
+      ],
+      [
+        "Nadine de Klerk",
+        "AR"
+      ],
+      [
+        "Lucy Finn",
+        "AR"
+      ],
+      [
+        "Nicola Hancock",
+        "AR"
+      ],
+      [
+        "Laura Harris",
+        "BAT"
+      ],
+      [
+        "Hasrat Gill",
+        "BOWL"
+      ],
+      [
+        "Heather Knight",
+        "BAT"
+      ],
+      [
+        "Anika Learoyd",
+        "BAT"
+      ],
+      [
+        "Phoebe Litchfield",
+        "BAT"
+      ],
+      [
+        "Claire Moore",
+        "BAT"
+      ],
+      [
+        "Georgia Voll",
+        "BAT"
+      ],
+      [
+        "Tahlia Wilson",
+        "BAT"
+      ]
+    ]
+  },
+  "MTMEL2": {
+    "name": "Melbourne Stars Women",
+    "players": [
+      [
+        "Sophie Day",
+        "AR"
+      ],
+      [
+        "Charlie Dean",
+        "BOWL"
+      ],
+      [
+        "Kim Garth",
+        "AR"
+      ],
+      [
+        "Dani Gibson",
+        "BOWL"
+      ],
+      [
+        "Maisy Gibson",
+        "BOWL"
+      ],
+      [
+        "Amy Jones",
+        "BAT"
+      ],
+      [
+        "Meg Lanning",
+        "BAT"
+      ],
+      [
+        "Carly Leeson",
+        "AR"
+      ],
+      [
+        "Rhys McKenna",
+        "AR"
+      ],
+      [
+        "Indigo Noble",
+        "BAT"
+      ],
+      [
+        "Georgia Prestwidge",
+        "BOWL"
+      ],
+      [
+        "Zoe Samuel",
+        "BAT"
+      ],
+      [
+        "Naomi Stalenberg",
+        "AR"
+      ],
+      [
+        "Annabel Sutherland",
+        "AR"
+      ]
+    ]
+  },
+  "MTHOB": {
+    "name": "Hobart Hurricanes Women",
+    "players": [
+      [
+        "Chamari Athapaththu",
+        "BAT"
+      ],
+      [
+        "Nicola Carey",
+        "BOWL"
+      ],
+      [
+        "Heather Graham",
+        "AR"
+      ],
+      [
+        "Ella Hayward",
+        "AR"
+      ],
+      [
+        "Chinelle Henry",
+        "AR"
+      ],
+      [
+        "Ruth Johnston",
+        "AR"
+      ],
+      [
+        "Lizelle Lee",
+        "BAT"
+      ],
+      [
+        "Kate Pelle",
+        "BAT"
+      ],
+      [
+        "Hayley Silver-Holmes",
+        "BOWL"
+      ],
+      [
+        "Amy Smith",
+        "BOWL"
+      ],
+      [
+        "Linsey Smith",
+        "BOWL"
+      ],
+      [
+        "Lauren Smith",
+        "BOWL"
+      ],
+      [
+        "Molly Strano",
+        "BOWL"
+      ],
+      [
+        "Rachel Trenaman",
+        "AR"
+      ],
+      [
+        "Callie Wilson",
+        "BOWL"
+      ]
+    ]
+  },
+  "MTBRI": {
+    "name": "Brisbane Heat Women",
+    "players": [
+      [
+        "Orla Prendergast",
+        "AR"
+      ],
+      [
+        "Lily Bassingthwaighte",
+        "BOWL"
+      ],
+      [
+        "Bonnie Berry",
+        "BOWL"
+      ],
+      [
+        "Lucinda Bourke",
+        "BAT"
+      ],
+      [
+        "Sianna Ginger",
+        "AR"
+      ],
+      [
+        "Sarah Glenn",
+        "BOWL"
+      ],
+      [
+        "Lucy Hamilton",
+        "AR"
+      ],
+      [
+        "Grace Harris",
+        "AR"
+      ],
+      [
+        "Jess Jonassen",
+        "AR"
+      ],
+      [
+        "Charli Knott",
+        "BAT"
+      ],
+      [
+        "Annie O'Neil",
+        "BAT"
+      ],
+      [
+        "Grace Parsons",
+        "BOWL"
+      ],
+      [
+        "Georgia Redmayne",
+        "BAT"
+      ],
+      [
+        "Catherine White",
+        "BOWL"
+      ],
+      [
+        "Mikayla Wrigley",
+        "BAT"
+      ]
+    ]
+  },
+  "MTSYD2": {
+    "name": "Sydney Sixers Women",
+    "players": [
+      [
+        "Caoimhe Bray",
+        "AR"
+      ],
+      [
+        "Maitlan Brown",
+        "BOWL"
+      ],
+      [
+        "Erin Burns",
+        "AR"
+      ],
+      [
+        "Alice Capsey",
+        "BAT"
+      ],
+      [
+        "Lauren Cheatle",
+        "BOWL"
+      ],
+      [
+        "Sarah Coyte",
+        "BOWL"
+      ],
+      [
+        "Sophia Dunkley",
+        "BAT"
+      ],
+      [
+        "Elsa Hunter",
+        "BAT"
+      ],
+      [
+        "Ashleigh Gardner",
+        "AR"
+      ],
+      [
+        "Melie Kerr",
+        "AR"
+      ],
+      [
+        "Grace Lyons",
+        "BAT"
+      ],
+      [
+        "Frankie Nicklin",
+        "BOWL"
+      ],
+      [
+        "Ellyse Perry",
+        "AR"
+      ],
+      [
+        "Eva Ragg",
+        "BAT"
+      ],
+      [
+        "Courtney Grace Sippel",
+        "BOWL"
+      ]
+    ]
+  },
+  "MTADE": {
+    "name": "Adelaide Strikers Women",
+    "players": [
+      [
+        "Maia Bouchier",
+        "BAT"
+      ],
+      [
+        "Darcie Brown",
+        "BOWL"
+      ],
+      [
+        "Maggie Clark",
+        "BOWL"
+      ],
+      [
+        "Emma de Broughe",
+        "BAT"
+      ],
+      [
+        "Sophie Ecclestone",
+        "BOWL"
+      ],
+      [
+        "Ellie Johnston",
+        "AR"
+      ],
+      [
+        "Eleanor Larosa",
+        "AR"
+      ],
+      [
+        "Tahlia McGrath",
+        "AR"
+      ],
+      [
+        "Anesu Mushangwe",
+        "BOWL"
+      ],
+      [
+        "Bridget Patterson",
+        "BAT"
+      ],
+      [
+        "Madeline Penna",
+        "BOWL"
+      ],
+      [
+        "Megan Schutt",
+        "BOWL"
+      ],
+      [
+        "Amanda-Jade Wellington",
+        "BOWL"
+      ],
+      [
+        "Ella Wilson",
+        "AR"
+      ],
+      [
+        "Laura Wolvaardt",
+        "BAT"
+      ]
+    ]
+  },
+  "MTPER": {
+    "name": "Perth Scorchers Women",
+    "players": [
+      [
+        "Chloe Ainsworth",
+        "BOWL"
+      ],
+      [
+        "Sophie Devine",
+        "BAT"
+      ],
+      [
+        "Amy Edgar",
+        "BOWL"
+      ],
+      [
+        "Fatima Sana",
+        "BOWL"
+      ],
+      [
+        "Mikayla Hinkley",
+        "BAT"
+      ],
+      [
+        "Ebony Hoskin",
+        "BOWL"
+      ],
+      [
+        "Freya Kemp",
+        "AR"
+      ],
+      [
+        "Alana King",
+        "BOWL"
+      ],
+      [
+        "Katie Mack",
+        "BAT"
+      ],
+      [
+        "Ines Mckeon",
+        "BAT"
+      ],
+      [
+        "Lilly Mills",
+        "BOWL"
+      ],
+      [
+        "Beth Mooney",
+        "BAT"
+      ],
+      [
+        "Taneale Peschel",
+        "AR"
+      ],
+      [
+        "Chloe Piparo",
+        "BAT"
+      ],
+      [
+        "Ruby Strange",
+        "AR"
+      ]
+    ]
+  }
+}
