@@ -1,6 +1,6 @@
 {
  "anchor": "cricinfo_id (ci:); cs:/uncapped: fallback; cricsheet_id derived from crosswalk",
- "count": 1081,
+ "count": 1083,
  "players": {
   "ci:597806": {
    "aliases": [
@@ -201,7 +201,8 @@
    ],
    "tours": [
     "Women's T20 WC 2026",
-    "Women's Caribbean Premier League 2026"
+    "Women's Caribbean Premier League 2026",
+    "Womens Big Bash League 2026"
    ],
    "cricinfo_id": "960715",
    "cricsheet_id": "9c3d4e8a",
@@ -347,6 +348,7 @@
   },
   "ci:381311": {
    "aliases": [
+    "tahlia may mcgrath",
     "tahlia mcgrath",
     "tm mcgrath"
    ],
@@ -766,6 +768,7 @@
   },
   "ci:517577": {
    "aliases": [
+    "lauren georgia smith",
     "lcn smith",
     "linsey claire neale smith",
     "linsey smith"
@@ -1204,13 +1207,15 @@
   "ci:438265": {
    "aliases": [
     "maddy green",
+    "madeline green",
     "madeline lee green",
     "ml green"
    ],
    "tours": [
     "Women's T20 WC 2026",
     "Women's Caribbean Premier League 2026",
-    "New Zealand Women tour of Australia 2026 (T20I)"
+    "New Zealand Women tour of Australia 2026 (T20I)",
+    "Womens Big Bash League 2026"
    ],
    "cricinfo_id": "438265",
    "cricsheet_id": "865eae1f",
@@ -11196,11 +11201,13 @@
   },
   "ci:537440": {
    "aliases": [
+    "sam bates",
     "samantha bates",
     "samantha lee bates"
    ],
    "tours": [
-    "The Hundred Women's Competition 2026"
+    "The Hundred Women's Competition 2026",
+    "Womens Big Bash League 2026"
    ],
    "cricinfo_id": "537440",
    "cricsheet_id": "0816fb1e",
@@ -16601,7 +16608,7 @@
    "cricsheet_id": "f8929fe0",
    "espn_id": "696135"
   },
-  "uncapped:nicole-faltum": {
+  "ci:1074185": {
    "aliases": [
     "nicole faltum"
    ],
@@ -16610,9 +16617,12 @@
    ],
    "display": "Nicole Faltum",
    "draft_id": 11633,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1074185",
+   "cricsheet_id": "9a56c670",
+   "espn_id": "1074185"
   },
-  "uncapped:tess-flintoff": {
+  "ci:1201479": {
    "aliases": [
     "tess flintoff"
    ],
@@ -16621,10 +16631,14 @@
    ],
    "display": "Tess Flintoff",
    "draft_id": 11634,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1201479",
+   "cricsheet_id": "5471b94a",
+   "espn_id": "1201479"
   },
-  "uncapped:milly-illingworth": {
+  "ci:1351911": {
    "aliases": [
+    "milly hall illingworth",
     "milly illingworth"
    ],
    "tours": [
@@ -16632,9 +16646,12 @@
    ],
    "display": "Milly Illingworth",
    "draft_id": 11635,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1351911",
+   "cricsheet_id": "99dc3877",
+   "espn_id": "1351911"
   },
-  "uncapped:sara-kennedy": {
+  "ci:1351915": {
    "aliases": [
     "sara kennedy"
    ],
@@ -16643,9 +16660,12 @@
    ],
    "display": "Sara Kennedy",
    "draft_id": 11636,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1351915",
+   "cricsheet_id": "73d09f44",
+   "espn_id": "1351915"
   },
-  "uncapped:olivia-porter": {
+  "ci:1208159": {
    "aliases": [
     "olivia porter"
    ],
@@ -16654,9 +16674,12 @@
    ],
    "display": "Olivia Porter",
    "draft_id": 11639,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1208159",
+   "cricsheet_id": "9ac15b90",
+   "espn_id": "1208159"
   },
-  "uncapped:sophie-reid": {
+  "ci:1303225": {
    "aliases": [
     "sophie reid"
    ],
@@ -16665,10 +16688,14 @@
    ],
    "display": "Sophie Reid",
    "draft_id": 11640,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1303225",
+   "cricsheet_id": "1380c4c2",
+   "espn_id": "1303225"
   },
-  "uncapped:tayla-vlaeminck": {
+  "ci:1071711": {
    "aliases": [
+    "tayla jade vlaeminck",
     "tayla vlaeminck"
    ],
    "tours": [
@@ -16676,10 +16703,14 @@
    ],
    "display": "Tayla Vlaeminck",
    "draft_id": 11642,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1071711",
+   "cricsheet_id": "ef70a34b",
+   "espn_id": "1071711"
   },
-  "uncapped:courtney-webb": {
+  "ci:1123362": {
    "aliases": [
+    "courtney anne webb",
     "courtney webb"
    ],
    "tours": [
@@ -16687,10 +16718,14 @@
    ],
    "display": "Courtney Webb",
    "draft_id": 11644,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1123362",
+   "cricsheet_id": "1f4a8a2a",
+   "espn_id": "1123362"
   },
-  "uncapped:annie-wikman": {
+  "ci:1302181": {
    "aliases": [
+    "annie sylvia wikman",
     "annie wikman"
    ],
    "tours": [
@@ -16698,42 +16733,42 @@
    ],
    "display": "Annie Wikman",
    "draft_id": 11645,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1302181",
+   "cricsheet_id": "a3b7bcbd",
+   "espn_id": "1302181"
   },
-  "uncapped:jemma-barsby": {
+  "ci:381263": {
    "aliases": [
-    "jemma barsby"
+    "jemma barsby",
+    "jemma louise barsby"
    ],
    "tours": [
     "Womens Big Bash League 2026"
    ],
    "display": "Jemma Barsby",
    "draft_id": 11646,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "381263",
+   "cricsheet_id": "47bcaf7a",
+   "espn_id": "381263"
   },
-  "uncapped:sam-bates": {
+  "ci:1128781": {
    "aliases": [
-    "sam bates"
-   ],
-   "tours": [
-    "Womens Big Bash League 2026"
-   ],
-   "display": "Sam Bates",
-   "draft_id": 11647,
-   "auction_id": null
-  },
-  "uncapped:hannah-darlington": {
-   "aliases": [
-    "hannah darlington"
+    "hannah darlington",
+    "hannah joy darlington"
    ],
    "tours": [
     "Womens Big Bash League 2026"
    ],
    "display": "Hannah Darlington",
    "draft_id": 11649,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1128781",
+   "cricsheet_id": "50b558d2",
+   "espn_id": "1128781"
   },
-  "uncapped:lucy-finn": {
+  "ci:1427047": {
    "aliases": [
     "lucy finn"
    ],
@@ -16742,9 +16777,12 @@
    ],
    "display": "Lucy Finn",
    "draft_id": 11651,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1427047",
+   "cricsheet_id": "579e3965",
+   "espn_id": "1427047"
   },
-  "uncapped:nicola-hancock": {
+  "ci:767597": {
    "aliases": [
     "nicola hancock"
    ],
@@ -16753,9 +16791,12 @@
    ],
    "display": "Nicola Hancock",
    "draft_id": 11652,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "767597",
+   "cricsheet_id": "af8c3a85",
+   "espn_id": "767597"
   },
-  "uncapped:hasrat-gill": {
+  "ci:1339695": {
    "aliases": [
     "hasrat gill"
    ],
@@ -16764,10 +16805,14 @@
    ],
    "display": "Hasrat Gill",
    "draft_id": 11654,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1339695",
+   "cricsheet_id": "95a055e0",
+   "espn_id": "1339695"
   },
-  "uncapped:anika-learoyd": {
+  "ci:1231570": {
    "aliases": [
+    "anika bella learoyd",
     "anika learoyd"
    ],
    "tours": [
@@ -16775,21 +16820,14 @@
    ],
    "display": "Anika Learoyd",
    "draft_id": 11656,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1231570",
+   "cricsheet_id": "1757bedf",
+   "espn_id": "1231570"
   },
-  "uncapped:claire-moore": {
+  "ci:1142969": {
    "aliases": [
-    "claire moore"
-   ],
-   "tours": [
-    "Womens Big Bash League 2026"
-   ],
-   "display": "Claire Moore",
-   "draft_id": 11658,
-   "auction_id": null
-  },
-  "uncapped:tahlia-wilson": {
-   "aliases": [
+    "tahlia beverly wilson",
     "tahlia wilson"
    ],
    "tours": [
@@ -16797,43 +16835,59 @@
    ],
    "display": "Tahlia Wilson",
    "draft_id": 11660,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1142969",
+   "cricsheet_id": "32100b2d",
+   "espn_id": "1142969"
   },
-  "uncapped:sophie-day": {
+  "ci:1184973": {
    "aliases": [
-    "sophie day"
+    "sophie day",
+    "sophie fitzpatrick day"
    ],
    "tours": [
     "Womens Big Bash League 2026"
    ],
    "display": "Sophie Day",
    "draft_id": 11661,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1184973",
+   "cricsheet_id": "c3d27d76",
+   "espn_id": "1184973"
   },
-  "uncapped:maisy-gibson": {
+  "ci:947807": {
    "aliases": [
-    "maisy gibson"
+    "maisy gibson",
+    "maisy leigh gibson"
    ],
    "tours": [
     "Womens Big Bash League 2026"
    ],
    "display": "Maisy Gibson",
    "draft_id": 11665,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "947807",
+   "cricsheet_id": "27fa592f",
+   "espn_id": "947807"
   },
-  "uncapped:carly-leeson": {
+  "ci:1071702": {
    "aliases": [
-    "carly leeson"
+    "carly leeson",
+    "carly may leeson"
    ],
    "tours": [
     "Womens Big Bash League 2026"
    ],
    "display": "Carly Leeson",
    "draft_id": 11668,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1071702",
+   "cricsheet_id": "d71e33bb",
+   "espn_id": "1071702"
   },
-  "uncapped:rhys-mckenna": {
+  "ci:1282067": {
    "aliases": [
+    "rhys macarthur mckenna",
     "rhys mckenna"
    ],
    "tours": [
@@ -16841,20 +16895,12 @@
    ],
    "display": "Rhys McKenna",
    "draft_id": 11669,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1282067",
+   "cricsheet_id": "f7e41cd8",
+   "espn_id": "1282067"
   },
-  "uncapped:indigo-noble": {
-   "aliases": [
-    "indigo noble"
-   ],
-   "tours": [
-    "Womens Big Bash League 2026"
-   ],
-   "display": "Indigo Noble",
-   "draft_id": 11670,
-   "auction_id": null
-  },
-  "uncapped:georgia-prestwidge": {
+  "ci:792417": {
    "aliases": [
     "georgia prestwidge"
    ],
@@ -16863,21 +16909,14 @@
    ],
    "display": "Georgia Prestwidge",
    "draft_id": 11671,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "792417",
+   "cricsheet_id": "c218e4e7",
+   "espn_id": "792417"
   },
-  "uncapped:zoe-samuel": {
+  "ci:592588": {
    "aliases": [
-    "zoe samuel"
-   ],
-   "tours": [
-    "Womens Big Bash League 2026"
-   ],
-   "display": "Zoe Samuel",
-   "draft_id": 11672,
-   "auction_id": null
-  },
-  "uncapped:naomi-stalenberg": {
-   "aliases": [
+    "naomi elizabeth stalenberg",
     "naomi stalenberg"
    ],
    "tours": [
@@ -16885,20 +16924,12 @@
    ],
    "display": "Naomi Stalenberg",
    "draft_id": 11673,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "592588",
+   "cricsheet_id": "609c519e",
+   "espn_id": "592588"
   },
-  "uncapped:ella-hayward": {
-   "aliases": [
-    "ella hayward"
-   ],
-   "tours": [
-    "Womens Big Bash League 2026"
-   ],
-   "display": "Ella Hayward",
-   "draft_id": 11678,
-   "auction_id": null
-  },
-  "uncapped:ruth-johnston": {
+  "ci:1282061": {
    "aliases": [
     "ruth johnston"
    ],
@@ -16907,9 +16938,12 @@
    ],
    "display": "Ruth Johnston",
    "draft_id": 11680,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1282061",
+   "cricsheet_id": "3cd107a7",
+   "espn_id": "1282061"
   },
-  "uncapped:kate-pelle": {
+  "ci:1351913": {
    "aliases": [
     "kate pelle"
    ],
@@ -16918,10 +16952,14 @@
    ],
    "display": "Kate Pelle",
    "draft_id": 11682,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1351913",
+   "cricsheet_id": "ae28c962",
+   "espn_id": "1351913"
   },
-  "uncapped:hayley-silver-holmes": {
+  "ci:1142973": {
    "aliases": [
+    "hayley imogen silver holmes",
     "hayley silver holmes"
    ],
    "tours": [
@@ -16929,20 +16967,12 @@
    ],
    "display": "Hayley Silver-Holmes",
    "draft_id": 11683,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1142973",
+   "cricsheet_id": "2bfc7199",
+   "espn_id": "1142973"
   },
-  "uncapped:amy-smith": {
-   "aliases": [
-    "amy smith"
-   ],
-   "tours": [
-    "Womens Big Bash League 2026"
-   ],
-   "display": "Amy Smith",
-   "draft_id": 11684,
-   "auction_id": null
-  },
-  "uncapped:lauren-smith": {
+  "ci:788623": {
    "aliases": [
     "lauren smith"
    ],
@@ -16951,9 +16981,12 @@
    ],
    "display": "Lauren Smith",
    "draft_id": 11686,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "788623",
+   "cricsheet_id": "9c515112",
+   "espn_id": "788623"
   },
-  "uncapped:molly-strano": {
+  "ci:382231": {
    "aliases": [
     "molly strano"
    ],
@@ -16962,9 +16995,12 @@
    ],
    "display": "Molly Strano",
    "draft_id": 11687,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "382231",
+   "cricsheet_id": "f57d5dbb",
+   "espn_id": "382231"
   },
-  "uncapped:rachel-trenaman": {
+  "ci:1065982": {
    "aliases": [
     "rachel trenaman"
    ],
@@ -16973,20 +17009,12 @@
    ],
    "display": "Rachel Trenaman",
    "draft_id": 11688,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1065982",
+   "cricsheet_id": "877dd709",
+   "espn_id": "1065982"
   },
-  "uncapped:callie-wilson": {
-   "aliases": [
-    "callie wilson"
-   ],
-   "tours": [
-    "Womens Big Bash League 2026"
-   ],
-   "display": "Callie Wilson",
-   "draft_id": 11689,
-   "auction_id": null
-  },
-  "uncapped:lily-bassingthwaighte": {
+  "ci:1453529": {
    "aliases": [
     "lily bassingthwaighte"
    ],
@@ -16995,21 +17023,14 @@
    ],
    "display": "Lily Bassingthwaighte",
    "draft_id": 11691,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1453529",
+   "cricsheet_id": "b7d7164e",
+   "espn_id": "1453529"
   },
-  "uncapped:bonnie-berry": {
+  "ci:1454734": {
    "aliases": [
-    "bonnie berry"
-   ],
-   "tours": [
-    "Womens Big Bash League 2026"
-   ],
-   "display": "Bonnie Berry",
-   "draft_id": 11692,
-   "auction_id": null
-  },
-  "uncapped:lucinda-bourke": {
-   "aliases": [
+    "lucinda b bourke",
     "lucinda bourke"
    ],
    "tours": [
@@ -17017,42 +17038,61 @@
    ],
    "display": "Lucinda Bourke",
    "draft_id": 11693,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1454734",
+   "cricsheet_id": "e28011d6",
+   "espn_id": "1454734"
   },
-  "uncapped:sianna-ginger": {
+  "ci:1351910": {
    "aliases": [
-    "sianna ginger"
+    "sianna ginger",
+    "sianna ushandi ginger"
    ],
    "tours": [
     "Womens Big Bash League 2026"
    ],
    "display": "Sianna Ginger",
    "draft_id": 11694,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1351910",
+   "cricsheet_id": "803af9e0",
+   "espn_id": "1351910"
   },
-  "uncapped:charli-knott": {
+  "ci:1164537": {
    "aliases": [
-    "charli knott"
+    "charli knott",
+    "charli rae knott",
+    "cr knott"
    ],
    "tours": [
     "Womens Big Bash League 2026"
    ],
    "display": "Charli Knott",
    "draft_id": 11699,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1164537",
+   "cricsheet_id": "d7ff1adc",
+   "espn_id": "1164537"
   },
-  "uncapped:annie-o-neil": {
+  "ci:1128748": {
    "aliases": [
-    "annie o neil"
+    "annie o neil",
+    "annie v o neil"
    ],
    "tours": [
     "Womens Big Bash League 2026"
    ],
    "display": "Annie O'Neil",
    "draft_id": 11700,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1128748",
+   "cricsheet_id": "4f2cf3ed",
+   "espn_id": "1128748",
+   "cricinfo_alt": [
+    "1173523"
+   ]
   },
-  "uncapped:grace-parsons": {
+  "ci:1303894": {
    "aliases": [
     "grace parsons"
    ],
@@ -17061,10 +17101,14 @@
    ],
    "display": "Grace Parsons",
    "draft_id": 11701,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1303894",
+   "cricsheet_id": "0ded1af1",
+   "espn_id": "1303894"
   },
-  "uncapped:georgia-redmayne": {
+  "ci:381197": {
    "aliases": [
+    "georgia prue redmayne",
     "georgia redmayne"
    ],
    "tours": [
@@ -17072,20 +17116,12 @@
    ],
    "display": "Georgia Redmayne",
    "draft_id": 11702,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "381197",
+   "cricsheet_id": "324b9eee",
+   "espn_id": "381197"
   },
-  "uncapped:catherine-white": {
-   "aliases": [
-    "catherine white"
-   ],
-   "tours": [
-    "Womens Big Bash League 2026"
-   ],
-   "display": "Catherine White",
-   "draft_id": 11703,
-   "auction_id": null
-  },
-  "uncapped:mikayla-wrigley": {
+  "ci:1452796": {
    "aliases": [
     "mikayla wrigley"
    ],
@@ -17094,9 +17130,12 @@
    ],
    "display": "Mikayla Wrigley",
    "draft_id": 11704,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1452796",
+   "cricsheet_id": "0b71685d",
+   "espn_id": "1452796"
   },
-  "uncapped:caoimhe-bray": {
+  "ci:1454764": {
    "aliases": [
     "caoimhe bray"
    ],
@@ -17105,56 +17144,27 @@
    ],
    "display": "Caoimhe Bray",
    "draft_id": 11705,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1454764",
+   "cricsheet_id": "b54cc792",
+   "espn_id": "1454764"
   },
-  "uncapped:lauren-cheatle": {
+  "ci:858811": {
    "aliases": [
-    "lauren cheatle"
+    "lauren cheatle",
+    "lauren roma cheatle"
    ],
    "tours": [
     "Womens Big Bash League 2026"
    ],
    "display": "Lauren Cheatle",
    "draft_id": 11709,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "858811",
+   "cricsheet_id": "275dff85",
+   "espn_id": "858811"
   },
-  "ci:4886": {
-   "aliases": [
-    "sarah coyte"
-   ],
-   "tours": [
-    "Womens Big Bash League 2026"
-   ],
-   "display": "Sarah Coyte",
-   "cricinfo_id": "4886",
-   "cricsheet_id": "36769c31",
-   "espn_id": "4886",
-   "draft_id": 11710,
-   "auction_id": null
-  },
-  "uncapped:elsa-hunter": {
-   "aliases": [
-    "elsa hunter"
-   ],
-   "tours": [
-    "Womens Big Bash League 2026"
-   ],
-   "display": "Elsa Hunter",
-   "draft_id": 11712,
-   "auction_id": null
-  },
-  "uncapped:grace-lyons": {
-   "aliases": [
-    "grace lyons"
-   ],
-   "tours": [
-    "Womens Big Bash League 2026"
-   ],
-   "display": "Grace Lyons",
-   "draft_id": 11715,
-   "auction_id": null
-  },
-  "uncapped:frankie-nicklin": {
+  "ci:1354671": {
    "aliases": [
     "frankie nicklin"
    ],
@@ -17163,20 +17173,12 @@
    ],
    "display": "Frankie Nicklin",
    "draft_id": 11716,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1354671",
+   "cricsheet_id": "30058fe5",
+   "espn_id": "1354671"
   },
-  "uncapped:eva-ragg": {
-   "aliases": [
-    "eva ragg"
-   ],
-   "tours": [
-    "Womens Big Bash League 2026"
-   ],
-   "display": "Eva Ragg",
-   "draft_id": 11718,
-   "auction_id": null
-  },
-  "uncapped:courtney-grace-sippel": {
+  "ci:1167399": {
    "aliases": [
     "courtney grace sippel"
    ],
@@ -17185,31 +17187,12 @@
    ],
    "display": "Courtney Grace Sippel",
    "draft_id": 11719,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1167399",
+   "cricsheet_id": "c2ac0db5",
+   "espn_id": "1167399"
   },
-  "uncapped:darcie-brown": {
-   "aliases": [
-    "darcie brown"
-   ],
-   "tours": [
-    "Womens Big Bash League 2026"
-   ],
-   "display": "Darcie Brown",
-   "draft_id": 11721,
-   "auction_id": null
-  },
-  "uncapped:maggie-clark": {
-   "aliases": [
-    "maggie clark"
-   ],
-   "tours": [
-    "Womens Big Bash League 2026"
-   ],
-   "display": "Maggie Clark",
-   "draft_id": 11722,
-   "auction_id": null
-  },
-  "uncapped:emma-de-broughe": {
+  "ci:1201485": {
    "aliases": [
     "emma de broughe"
    ],
@@ -17218,20 +17201,27 @@
    ],
    "display": "Emma de Broughe",
    "draft_id": 11723,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1201485",
+   "cricsheet_id": "5b8826e0",
+   "espn_id": "1201485"
   },
-  "uncapped:ellie-johnston": {
+  "ci:1249772": {
    "aliases": [
-    "ellie johnston"
+    "ellie johnston",
+    "ellie renee johnston"
    ],
    "tours": [
     "Womens Big Bash League 2026"
    ],
    "display": "Ellie Johnston",
    "draft_id": 11725,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1249772",
+   "cricsheet_id": "3785e30d",
+   "espn_id": "1249772"
   },
-  "uncapped:eleanor-larosa": {
+  "ci:1351912": {
    "aliases": [
     "eleanor larosa"
    ],
@@ -17240,10 +17230,14 @@
    ],
    "display": "Eleanor Larosa",
    "draft_id": 11726,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1351912",
+   "cricsheet_id": "2433382a",
+   "espn_id": "1351912"
   },
-  "uncapped:anesu-mushangwe": {
+  "ci:922493": {
    "aliases": [
+    "anesu catherine mushangwe",
     "anesu mushangwe"
    ],
    "tours": [
@@ -17251,10 +17245,14 @@
    ],
    "display": "Anesu Mushangwe",
    "draft_id": 11728,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "922493",
+   "cricsheet_id": "db873292",
+   "espn_id": "922493"
   },
-  "uncapped:bridget-patterson": {
+  "ci:381308": {
    "aliases": [
+    "bridget e patterson",
     "bridget patterson"
    ],
    "tours": [
@@ -17262,9 +17260,12 @@
    ],
    "display": "Bridget Patterson",
    "draft_id": 11729,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "381308",
+   "cricsheet_id": "7dfbcfff",
+   "espn_id": "381308"
   },
-  "uncapped:amanda-jade-wellington": {
+  "ci:381305": {
    "aliases": [
     "amanda jade wellington"
    ],
@@ -17273,43 +17274,44 @@
    ],
    "display": "Amanda-Jade Wellington",
    "draft_id": 11732,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "381305",
+   "cricsheet_id": "9b3bcca4",
+   "espn_id": "381305"
   },
-  "uncapped:ella-wilson": {
+  "ci:1350560": {
    "aliases": [
-    "ella wilson"
-   ],
-   "tours": [
-    "Womens Big Bash League 2026"
-   ],
-   "display": "Ella Wilson",
-   "draft_id": 11733,
-   "auction_id": null
-  },
-  "uncapped:chloe-ainsworth": {
-   "aliases": [
-    "chloe ainsworth"
+    "chloe ainsworth",
+    "chloe cathryn ainsworth"
    ],
    "tours": [
     "Womens Big Bash League 2026"
    ],
    "display": "Chloe Ainsworth",
    "draft_id": 11735,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1350560",
+   "cricsheet_id": "4b69c598",
+   "espn_id": "1350560"
   },
-  "uncapped:amy-edgar": {
+  "ci:1160200": {
    "aliases": [
-    "amy edgar"
+    "amy edgar",
+    "amy louise edgar"
    ],
    "tours": [
     "Womens Big Bash League 2026"
    ],
    "display": "Amy Edgar",
    "draft_id": 11737,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1160200",
+   "cricsheet_id": "795ff893",
+   "espn_id": "1160200"
   },
-  "uncapped:mikayla-hinkley": {
+  "ci:944419": {
    "aliases": [
+    "mikayla carolyn hinkley",
     "mikayla hinkley"
    ],
    "tours": [
@@ -17317,9 +17319,12 @@
    ],
    "display": "Mikayla Hinkley",
    "draft_id": 11739,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "944419",
+   "cricsheet_id": "3812165d",
+   "espn_id": "944419"
   },
-  "uncapped:ebony-hoskin": {
+  "ci:1336105": {
    "aliases": [
     "ebony hoskin"
    ],
@@ -17328,20 +17333,27 @@
    ],
    "display": "Ebony Hoskin",
    "draft_id": 11740,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1336105",
+   "cricsheet_id": "cd2ad878",
+   "espn_id": "1336105"
   },
-  "uncapped:katie-mack": {
+  "ci:678831": {
    "aliases": [
-    "katie mack"
+    "katie mack",
+    "katie maree mack"
    ],
    "tours": [
     "Womens Big Bash League 2026"
    ],
    "display": "Katie Mack",
    "draft_id": 11743,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "678831",
+   "cricsheet_id": "ef13bd20",
+   "espn_id": "678831"
   },
-  "uncapped:ines-mckeon": {
+  "ci:338257": {
    "aliases": [
     "ines mckeon"
    ],
@@ -17350,10 +17362,14 @@
    ],
    "display": "Ines Mckeon",
    "draft_id": 11744,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "338257",
+   "cricsheet_id": "59ff3c57",
+   "espn_id": "338257"
   },
-  "uncapped:lilly-mills": {
+  "ci:1203888": {
    "aliases": [
+    "lilly grace mills",
     "lilly mills"
    ],
    "tours": [
@@ -17361,9 +17377,12 @@
    ],
    "display": "Lilly Mills",
    "draft_id": 11745,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "1203888",
+   "cricsheet_id": "c35a0b8a",
+   "espn_id": "1203888"
   },
-  "uncapped:taneale-peschel": {
+  "ci:679171": {
    "aliases": [
     "taneale peschel"
    ],
@@ -17372,9 +17391,12 @@
    ],
    "display": "Taneale Peschel",
    "draft_id": 11747,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "679171",
+   "cricsheet_id": "923402d8",
+   "espn_id": "679171"
   },
-  "uncapped:chloe-piparo": {
+  "ci:437274": {
    "aliases": [
     "chloe piparo"
    ],
@@ -17383,9 +17405,12 @@
    ],
    "display": "Chloe Piparo",
    "draft_id": 11748,
-   "auction_id": null
+   "auction_id": null,
+   "cricinfo_id": "437274",
+   "cricsheet_id": "276f3dde",
+   "espn_id": "437274"
   },
-  "uncapped:ruby-strange": {
+  "ci:1454732": {
    "aliases": [
     "ruby strange"
    ],
@@ -17394,7 +17419,265 @@
    ],
    "display": "Ruby Strange",
    "draft_id": 11749,
+   "auction_id": null,
+   "cricinfo_id": "1454732",
+   "cricsheet_id": "3a3bd526",
+   "espn_id": "1454732"
+  },
+  "ci:1282719": {
+   "aliases": [
+    "claire moore"
+   ],
+   "tours": [
+    "Womens Big Bash League 2026"
+   ],
+   "display": "Claire Moore",
+   "draft_id": 11658,
+   "auction_id": null,
+   "cricinfo_id": "1282719",
+   "cricsheet_id": "284cd027",
+   "espn_id": "1282719"
+  },
+  "ci:1454791": {
+   "aliases": [
+    "indigo noble"
+   ],
+   "tours": [
+    "Womens Big Bash League 2026"
+   ],
+   "display": "Indigo Noble",
+   "draft_id": 11670,
+   "auction_id": null,
+   "cricinfo_id": "1454791",
+   "cricsheet_id": null,
+   "espn_id": "1454791"
+  },
+  "ci:1454793": {
+   "aliases": [
+    "zoe samuel"
+   ],
+   "tours": [
+    "Womens Big Bash League 2026"
+   ],
+   "display": "Zoe Samuel",
+   "draft_id": 11672,
+   "auction_id": null,
+   "cricinfo_id": "1454793",
+   "cricsheet_id": null,
+   "espn_id": "1454793"
+  },
+  "ci:1236786": {
+   "aliases": [
+    "ella hayward"
+   ],
+   "tours": [
+    "Womens Big Bash League 2026"
+   ],
+   "display": "Ella Hayward",
+   "draft_id": 11678,
+   "auction_id": null,
+   "cricinfo_id": "1236786",
+   "cricsheet_id": "eacd9bb1",
+   "espn_id": "1236786"
+  },
+  "ci:1173526": {
+   "aliases": [
+    "amy smith"
+   ],
+   "tours": [
+    "Womens Big Bash League 2026"
+   ],
+   "display": "Amy Smith",
+   "draft_id": 11684,
+   "auction_id": null,
+   "cricinfo_id": "1173526",
+   "cricsheet_id": "b125ce63",
+   "espn_id": "1173526"
+  },
+  "ci:1452731": {
+   "aliases": [
+    "callie wilson"
+   ],
+   "tours": [
+    "Womens Big Bash League 2026"
+   ],
+   "display": "Callie Wilson",
+   "draft_id": 11689,
+   "auction_id": null,
+   "cricinfo_id": "1452731",
+   "cricsheet_id": "44b2bacc",
+   "espn_id": "1452731"
+  },
+  "ci:1358118": {
+   "aliases": [
+    "isabella malgioglio"
+   ],
+   "tours": [
+    "Womens Big Bash League 2026"
+   ],
+   "display": "Isabella Malgioglio",
+   "cricinfo_id": "1358118",
+   "cricsheet_id": null,
+   "espn_id": "1358118",
+   "draft_id": 11753,
    "auction_id": null
+  },
+  "ci:1503496": {
+   "aliases": [
+    "ira aery"
+   ],
+   "tours": [
+    "Womens Big Bash League 2026"
+   ],
+   "display": "Ira Aery",
+   "cricinfo_id": "1503496",
+   "cricsheet_id": null,
+   "espn_id": "1503496",
+   "draft_id": 11754,
+   "auction_id": null
+  },
+  "ci:1427044": {
+   "aliases": [
+    "bonnie berry"
+   ],
+   "tours": [
+    "Womens Big Bash League 2026"
+   ],
+   "display": "Bonnie Berry",
+   "draft_id": 11692,
+   "auction_id": null,
+   "cricinfo_id": "1427044",
+   "cricsheet_id": null,
+   "espn_id": "1427044"
+  },
+  "ci:1556109": {
+   "aliases": [
+    "catherine white"
+   ],
+   "tours": [
+    "Womens Big Bash League 2026"
+   ],
+   "display": "Catherine White",
+   "draft_id": 11703,
+   "auction_id": null,
+   "cricinfo_id": "1556109",
+   "cricsheet_id": null,
+   "espn_id": "1556109"
+  },
+  "ci:1486804": {
+   "aliases": [
+    "ayaka kato stafford",
+    "ayaka kato-stafford"
+   ],
+   "tours": [
+    "Womens Big Bash League 2026"
+   ],
+   "display": "Ayaka Kato-Stafford",
+   "cricinfo_id": "1486804",
+   "cricsheet_id": "034e7939",
+   "espn_id": "1486804",
+   "draft_id": 11751,
+   "auction_id": null
+  },
+  "ci:374934": {
+   "aliases": [
+    "sarah coyte",
+    "sarah jane coyte"
+   ],
+   "tours": [
+    "Womens Big Bash League 2026"
+   ],
+   "display": "Sarah Coyte",
+   "cricinfo_id": "374934",
+   "cricsheet_id": "a5f488bc",
+   "espn_id": "374934",
+   "draft_id": 11710,
+   "auction_id": null
+  },
+  "ci:1171524": {
+   "aliases": [
+    "elsa hunter"
+   ],
+   "tours": [
+    "Womens Big Bash League 2026"
+   ],
+   "display": "Elsa Hunter",
+   "draft_id": 11712,
+   "auction_id": null,
+   "cricinfo_id": "1171524",
+   "cricsheet_id": "686b7194",
+   "espn_id": "1171524"
+  },
+  "ci:1302182": {
+   "aliases": [
+    "grace lyons"
+   ],
+   "tours": [
+    "Womens Big Bash League 2026"
+   ],
+   "display": "Grace Lyons",
+   "draft_id": 11715,
+   "auction_id": null,
+   "cricinfo_id": "1302182",
+   "cricsheet_id": null,
+   "espn_id": "1302182"
+  },
+  "ci:1454760": {
+   "aliases": [
+    "eva ragg"
+   ],
+   "tours": [
+    "Womens Big Bash League 2026"
+   ],
+   "display": "Eva Ragg",
+   "draft_id": 11718,
+   "auction_id": null,
+   "cricinfo_id": "1454760",
+   "cricsheet_id": null,
+   "espn_id": "1454760"
+  },
+  "ci:388845": {
+   "aliases": [
+    "darcie brown"
+   ],
+   "tours": [
+    "Womens Big Bash League 2026"
+   ],
+   "display": "Darcie Brown",
+   "draft_id": 11721,
+   "auction_id": null,
+   "cricinfo_id": "388845",
+   "cricsheet_id": "2e81be88",
+   "espn_id": "388845"
+  },
+  "ci:1351909": {
+   "aliases": [
+    "maggie clark"
+   ],
+   "tours": [
+    "Womens Big Bash League 2026"
+   ],
+   "display": "Maggie Clark",
+   "draft_id": 11722,
+   "auction_id": null,
+   "cricinfo_id": "1351909",
+   "cricsheet_id": null,
+   "espn_id": "1351909"
+  },
+  "ci:1283342": {
+   "aliases": [
+    "ella wilson",
+    "ellajosephine wilson"
+   ],
+   "tours": [
+    "Womens Big Bash League 2026"
+   ],
+   "display": "Ella Wilson",
+   "draft_id": 11733,
+   "auction_id": null,
+   "cricinfo_id": "1283342",
+   "cricsheet_id": null,
+   "espn_id": "1283342"
   }
  }
 }

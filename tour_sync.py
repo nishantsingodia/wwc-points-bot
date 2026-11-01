@@ -341,6 +341,12 @@ def same_tour(a, b):
 def norm_role(r):
     return ROLE_MAP.get((r or "").strip().lower(), "BAT")
 
+# "Women", "Women's" and the apostrophe-less "Womens" (ESPN's "Womens Big Bash League"). A bare
+# r"\bwomen\b" fails the last one -- the word boundary sits after "women" only if nothing follows --
+# and that is how WBBL 2026 was ingested as a MEN's tour: build_registry then searched only male
+# records and left 71 of 118 players on uncapped: placeholders.
+WOMEN_RE = re.compile(r"\bwom[ae]n(?:'?s)?\b", re.I)
+
 def infer_gender(name, teams):
     blob = (name + " " + " ".join(teams)).lower()
     return "female" if "women" in blob or " (w)" in blob else "male"
@@ -780,7 +786,7 @@ def _espn_league_squads(lid, name, matchlist, event_ids, fmt, seeds=None):
         # Loud, because it silently shrinks the tour.
         print(f"  espn: {name!r} {fmt} — no squad posted for {len(missing)} team(s): "
               f"{', '.join(sorted(missing))} — their matches will be dropped", file=sys.stderr)
-    gender = "female" if re.search(r"\bwomen\b", name, re.I) else "male"
+    gender = "female" if WOMEN_RE.search(name) else "male"
     squads = {t: {"short": (re.sub(r"[^A-Za-z]", "", t)[:3] or t[:3]).upper(),
                   "players": [list(p) for p in players]}
               for t, players in sqmap.items()}
@@ -821,7 +827,7 @@ def espn_build(lid, name, now, horizon, state, seeds=None):
             by_fmt[fmt] = lg
     if not by_fmt:
         return None
-    gender = "female" if re.search(r"\bwomen\b", name, re.I) else "male"
+    gender = "female" if WOMEN_RE.search(name) else "male"
     # ESPN's LEAGUE name is season-less ("Caribbean Premier League"), but gen_tour derives the tour
     # name AND the sheet tab from it — so next season would mint the same tab, and apply_to_repos
     # skips a tab that already exists (the 2027 edition would silently never ingest). Stamp the

@@ -91,6 +91,503 @@
    "at": "2026-10-06",
    "reason": "build_registry.promote",
    "evidence": "placeholder uncapped:christine-mutasa resolved to ci:1306917 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:amanda-jade-wellington",
+   "to": "ci:381305",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:amanda-jade-wellington resolved to ci:381305 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:amy-edgar",
+   "to": "ci:1160200",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:amy-edgar resolved to ci:1160200 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:anesu-mushangwe",
+   "to": "ci:922493",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:anesu-mushangwe resolved to ci:922493 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:anika-learoyd",
+   "to": "ci:1231570",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:anika-learoyd resolved to ci:1231570 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:annie-o-neil",
+   "to": "ci:1128748",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:annie-o-neil resolved to ci:1128748 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:annie-wikman",
+   "to": "ci:1302181",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:annie-wikman resolved to ci:1302181 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:bridget-patterson",
+   "to": "ci:381308",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:bridget-patterson resolved to ci:381308 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:caoimhe-bray",
+   "to": "ci:1454764",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:caoimhe-bray resolved to ci:1454764 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:carly-leeson",
+   "to": "ci:1071702",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:carly-leeson resolved to ci:1071702 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:charli-knott",
+   "to": "ci:1164537",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:charli-knott resolved to ci:1164537 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:chloe-ainsworth",
+   "to": "ci:1350560",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:chloe-ainsworth resolved to ci:1350560 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:chloe-piparo",
+   "to": "ci:437274",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:chloe-piparo resolved to ci:437274 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:courtney-grace-sippel",
+   "to": "ci:1167399",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:courtney-grace-sippel resolved to ci:1167399 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:courtney-webb",
+   "to": "ci:1123362",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:courtney-webb resolved to ci:1123362 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:ebony-hoskin",
+   "to": "ci:1336105",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:ebony-hoskin resolved to ci:1336105 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:eleanor-larosa",
+   "to": "ci:1351912",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:eleanor-larosa resolved to ci:1351912 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:ellie-johnston",
+   "to": "ci:1249772",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:ellie-johnston resolved to ci:1249772 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:emma-de-broughe",
+   "to": "ci:1201485",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:emma-de-broughe resolved to ci:1201485 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:frankie-nicklin",
+   "to": "ci:1354671",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:frankie-nicklin resolved to ci:1354671 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:georgia-prestwidge",
+   "to": "ci:792417",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:georgia-prestwidge resolved to ci:792417 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:georgia-redmayne",
+   "to": "ci:381197",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:georgia-redmayne resolved to ci:381197 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:grace-parsons",
+   "to": "ci:1303894",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:grace-parsons resolved to ci:1303894 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:hannah-darlington",
+   "to": "ci:1128781",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:hannah-darlington resolved to ci:1128781 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:hasrat-gill",
+   "to": "ci:1339695",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:hasrat-gill resolved to ci:1339695 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:hayley-silver-holmes",
+   "to": "ci:1142973",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:hayley-silver-holmes resolved to ci:1142973 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:ines-mckeon",
+   "to": "ci:338257",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:ines-mckeon resolved to ci:338257 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:jemma-barsby",
+   "to": "ci:381263",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:jemma-barsby resolved to ci:381263 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:kate-pelle",
+   "to": "ci:1351913",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:kate-pelle resolved to ci:1351913 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:katie-mack",
+   "to": "ci:678831",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:katie-mack resolved to ci:678831 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:lauren-cheatle",
+   "to": "ci:858811",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:lauren-cheatle resolved to ci:858811 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:lauren-smith",
+   "to": "ci:788623",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:lauren-smith resolved to ci:788623 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:lilly-mills",
+   "to": "ci:1203888",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:lilly-mills resolved to ci:1203888 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:lily-bassingthwaighte",
+   "to": "ci:1453529",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:lily-bassingthwaighte resolved to ci:1453529 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:lucinda-bourke",
+   "to": "ci:1454734",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:lucinda-bourke resolved to ci:1454734 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:lucy-finn",
+   "to": "ci:1427047",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:lucy-finn resolved to ci:1427047 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:maisy-gibson",
+   "to": "ci:947807",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:maisy-gibson resolved to ci:947807 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:mikayla-hinkley",
+   "to": "ci:944419",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:mikayla-hinkley resolved to ci:944419 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:mikayla-wrigley",
+   "to": "ci:1452796",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:mikayla-wrigley resolved to ci:1452796 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:milly-illingworth",
+   "to": "ci:1351911",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:milly-illingworth resolved to ci:1351911 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:molly-strano",
+   "to": "ci:382231",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:molly-strano resolved to ci:382231 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:naomi-stalenberg",
+   "to": "ci:592588",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:naomi-stalenberg resolved to ci:592588 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:nicola-hancock",
+   "to": "ci:767597",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:nicola-hancock resolved to ci:767597 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:nicole-faltum",
+   "to": "ci:1074185",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:nicole-faltum resolved to ci:1074185 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:olivia-porter",
+   "to": "ci:1208159",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:olivia-porter resolved to ci:1208159 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:rachel-trenaman",
+   "to": "ci:1065982",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:rachel-trenaman resolved to ci:1065982 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:rhys-mckenna",
+   "to": "ci:1282067",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:rhys-mckenna resolved to ci:1282067 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:ruby-strange",
+   "to": "ci:1454732",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:ruby-strange resolved to ci:1454732 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:ruth-johnston",
+   "to": "ci:1282061",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:ruth-johnston resolved to ci:1282061 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:sam-bates",
+   "to": "ci:537440",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:sam-bates resolved to ci:537440 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:sara-kennedy",
+   "to": "ci:1351915",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:sara-kennedy resolved to ci:1351915 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:sianna-ginger",
+   "to": "ci:1351910",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:sianna-ginger resolved to ci:1351910 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:sophie-day",
+   "to": "ci:1184973",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:sophie-day resolved to ci:1184973 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:sophie-reid",
+   "to": "ci:1303225",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:sophie-reid resolved to ci:1303225 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:tahlia-wilson",
+   "to": "ci:1142969",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:tahlia-wilson resolved to ci:1142969 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:taneale-peschel",
+   "to": "ci:679171",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:taneale-peschel resolved to ci:679171 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:tayla-vlaeminck",
+   "to": "ci:1071711",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:tayla-vlaeminck resolved to ci:1071711 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:tess-flintoff",
+   "to": "ci:1201479",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:tess-flintoff resolved to ci:1201479 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:amy-smith",
+   "to": "ci:1173526",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:amy-smith resolved to ci:1173526 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:bonnie-berry",
+   "to": "ci:1427044",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:bonnie-berry resolved to ci:1427044 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:callie-wilson",
+   "to": "ci:1452731",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:callie-wilson resolved to ci:1452731 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:catherine-white",
+   "to": "ci:1556109",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:catherine-white resolved to ci:1556109 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:claire-moore",
+   "to": "ci:1282719",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:claire-moore resolved to ci:1282719 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:darcie-brown",
+   "to": "ci:388845",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:darcie-brown resolved to ci:388845 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:ella-hayward",
+   "to": "ci:1236786",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:ella-hayward resolved to ci:1236786 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:ella-wilson",
+   "to": "ci:1283342",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:ella-wilson resolved to ci:1283342 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:elsa-hunter",
+   "to": "ci:1171524",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:elsa-hunter resolved to ci:1171524 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:eva-ragg",
+   "to": "ci:1454760",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:eva-ragg resolved to ci:1454760 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:grace-lyons",
+   "to": "ci:1302182",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:grace-lyons resolved to ci:1302182 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:indigo-noble",
+   "to": "ci:1454791",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:indigo-noble resolved to ci:1454791 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:maggie-clark",
+   "to": "ci:1351909",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:maggie-clark resolved to ci:1351909 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
+  },
+  {
+   "from": "uncapped:zoe-samuel",
+   "to": "ci:1454793",
+   "at": "2026-11-01",
+   "reason": "build_registry.promote",
+   "evidence": "placeholder uncapped:zoe-samuel resolved to ci:1454793 via a human-asserted cricinfo id (manual_ci_bridges / crosswalk)"
   }
  ]
 }
