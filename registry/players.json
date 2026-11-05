@@ -1,6 +1,6 @@
 {
  "anchor": "cricinfo_id (ci:); cs:/uncapped: fallback; cricsheet_id derived from crosswalk",
- "count": 1083,
+ "count": 1088,
  "players": {
   "ci:597806": {
    "aliases": [
@@ -3055,7 +3055,9 @@
    "tours": [
     "Australia tour of Bangladesh 2026 (Men T20I)",
     "The Hundred Men's Competition 2026",
-    "Australia tour of South Africa 2026/27 (ODI)"
+    "Australia tour of South Africa 2026/27 (ODI)",
+    "England tour of Australia 2026 (ODI)",
+    "England tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "272450",
    "cricsheet_id": "3d8feaf8",
@@ -3074,7 +3076,8 @@
    ],
    "tours": [
     "Australia tour of Bangladesh 2026 (Men T20I)",
-    "Australia tour of South Africa 2026/27 (ODI)"
+    "Australia tour of South Africa 2026/27 (ODI)",
+    "England tour of Australia 2026 (ODI)"
    ],
    "cricinfo_id": "662235",
    "cricsheet_id": "989889ff",
@@ -3091,7 +3094,8 @@
    ],
    "tours": [
     "Australia tour of Bangladesh 2026 (Men T20I)",
-    "Australia tour of South Africa 2026/27 (ODI)"
+    "Australia tour of South Africa 2026/27 (ODI)",
+    "England tour of Australia 2026 (ODI)"
    ],
    "cricinfo_id": "1210488",
    "cricsheet_id": "fe366f34",
@@ -3108,7 +3112,8 @@
    ],
    "tours": [
     "Australia tour of Bangladesh 2026 (Men T20I)",
-    "Australia tour of South Africa 2026/27 (ODI)"
+    "Australia tour of South Africa 2026/27 (ODI)",
+    "England tour of Australia 2026 (ODI)"
    ],
    "cricinfo_id": "722303",
    "cricsheet_id": "218d4d78",
@@ -3126,7 +3131,8 @@
    "tours": [
     "Australia tour of Bangladesh 2026 (Men T20I)",
     "The Hundred Men's Competition 2026",
-    "European T20 Premier League 2026"
+    "European T20 Premier League 2026",
+    "England tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "892749",
    "cricsheet_id": "f1f99156",
@@ -3145,7 +3151,8 @@
     "Australia tour of Bangladesh 2026 (Men T20I)",
     "Major League Cricket 2026",
     "The Hundred Men's Competition 2026",
-    "Caribbean Premier League 2026"
+    "Caribbean Premier League 2026",
+    "England tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "1079380",
    "cricsheet_id": "1f84183a",
@@ -3163,7 +3170,8 @@
    ],
    "tours": [
     "Australia tour of Bangladesh 2026 (Men T20I)",
-    "Australia tour of South Africa 2026/27 (ODI)"
+    "Australia tour of South Africa 2026/27 (ODI)",
+    "England tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "1295851",
    "cricsheet_id": "5cdf8304",
@@ -3180,7 +3188,9 @@
    "tours": [
     "Australia tour of Bangladesh 2026 (Men T20I)",
     "Major League Cricket 2026",
-    "Australia tour of South Africa 2026/27 (ODI)"
+    "Australia tour of South Africa 2026/27 (ODI)",
+    "England tour of Australia 2026 (ODI)",
+    "England tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "1050545",
    "cricsheet_id": "3b53243a",
@@ -3197,7 +3207,8 @@
    "tours": [
     "Australia tour of Bangladesh 2026 (Men T20I)",
     "The Hundred Men's Competition 2026",
-    "Australia tour of South Africa 2026/27 (ODI)"
+    "Australia tour of South Africa 2026/27 (ODI)",
+    "England tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "826915",
    "cricsheet_id": "9eb1455b",
@@ -3215,7 +3226,9 @@
    ],
    "tours": [
     "Australia tour of Bangladesh 2026 (Men T20I)",
-    "Australia tour of South Africa 2026/27 (ODI)"
+    "Australia tour of South Africa 2026/27 (ODI)",
+    "England tour of Australia 2026 (ODI)",
+    "England tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "1123718",
    "cricsheet_id": "83c3e8e3",
@@ -3232,7 +3245,9 @@
    "tours": [
     "Australia tour of Bangladesh 2026 (Men T20I)",
     "The Hundred Men's Competition 2026",
-    "Australia tour of South Africa 2026/27 (ODI)"
+    "Australia tour of South Africa 2026/27 (ODI)",
+    "England tour of Australia 2026 (ODI)",
+    "England tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "379504",
    "cricsheet_id": "14f96089",
@@ -3250,7 +3265,8 @@
    ],
    "tours": [
     "Australia tour of Bangladesh 2026 (Men T20I)",
-    "Australia tour of South Africa 2026/27 (ODI)"
+    "Australia tour of South Africa 2026/27 (ODI)",
+    "England tour of Australia 2026 (ODI)"
    ],
    "cricinfo_id": "1076713",
    "cricsheet_id": "eaa76d3c",
@@ -3864,7 +3880,8 @@
    ],
    "tours": [
     "Major League Cricket 2026",
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "England tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "1213979",
    "cricsheet_id": "f2c936d7",
@@ -4103,7 +4120,9 @@
    ],
    "tours": [
     "Major League Cricket 2026",
-    "Australia tour of South Africa 2026/27 (ODI)"
+    "Australia tour of South Africa 2026/27 (ODI)",
+    "England tour of Australia 2026 (ODI)",
+    "England tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "1088610",
    "cricsheet_id": "f787e0eb",
@@ -4648,7 +4667,8 @@
    ],
    "tours": [
     "Major League Cricket 2026",
-    "Australia tour of South Africa 2026/27 (ODI)"
+    "Australia tour of South Africa 2026/27 (ODI)",
+    "England tour of Australia 2026 (ODI)"
    ],
    "cricinfo_id": "1418371",
    "cricsheet_id": "9c8448ba",
@@ -6082,7 +6102,9 @@
     "The Hundred Men's Competition 2026",
     "England vs Pakistan Men's Test 2026",
     "Sri Lanka tour of England 2026 (ODI)",
-    "Sri Lanka tour of England 2026 (T20I)"
+    "Sri Lanka tour of England 2026 (T20I)",
+    "England tour of Australia 2026 (ODI)",
+    "England tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "911707",
    "cricsheet_id": "4ae1755b",
@@ -6101,7 +6123,8 @@
    ],
    "tours": [
     "India tour of England 2026 (Men T20I)",
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "England tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "669365",
    "cricsheet_id": "3d284ca3",
@@ -6142,7 +6165,9 @@
     "India tour of England 2026 (Men T20I)",
     "The Hundred Men's Competition 2026",
     "Sri Lanka tour of England 2026 (ODI)",
-    "Sri Lanka tour of England 2026 (T20I)"
+    "Sri Lanka tour of England 2026 (T20I)",
+    "England tour of Australia 2026 (ODI)",
+    "England tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "877051",
    "cricsheet_id": "25f7b7d6",
@@ -6164,7 +6189,9 @@
     "The Hundred Men's Competition 2026",
     "England vs Pakistan Men's Test 2026",
     "Sri Lanka tour of England 2026 (ODI)",
-    "Sri Lanka tour of England 2026 (T20I)"
+    "Sri Lanka tour of England 2026 (T20I)",
+    "England tour of Australia 2026 (ODI)",
+    "England tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "1112537",
    "cricsheet_id": "ff154ecd",
@@ -6183,7 +6210,9 @@
    ],
    "tours": [
     "India tour of England 2026 (Men T20I)",
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "England tour of Australia 2026 (ODI)",
+    "England tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "1194959",
    "cricsheet_id": "3c55c703",
@@ -6202,7 +6231,9 @@
     "India tour of England 2026 (Men T20I)",
     "The Hundred Men's Competition 2026",
     "Sri Lanka tour of England 2026 (ODI)",
-    "Sri Lanka tour of England 2026 (T20I)"
+    "Sri Lanka tour of England 2026 (T20I)",
+    "England tour of Australia 2026 (ODI)",
+    "England tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "897549",
    "cricsheet_id": "9caf69a1",
@@ -6221,7 +6252,9 @@
    ],
    "tours": [
     "India tour of England 2026 (Men T20I)",
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "England tour of Australia 2026 (ODI)",
+    "England tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "662973",
    "cricsheet_id": "e94915e6",
@@ -6242,7 +6275,9 @@
     "India tour of England 2026 (Men T20I)",
     "The Hundred Men's Competition 2026",
     "Sri Lanka tour of England 2026 (ODI)",
-    "Sri Lanka tour of England 2026 (T20I)"
+    "Sri Lanka tour of England 2026 (T20I)",
+    "England tour of Australia 2026 (ODI)",
+    "England tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "211855",
    "cricsheet_id": "4a461c24",
@@ -6278,7 +6313,8 @@
    ],
    "tours": [
     "India tour of England 2026 (Men T20I)",
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "England tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "1231590",
    "cricsheet_id": "9c643d7b",
@@ -6299,7 +6335,9 @@
     "India tour of England 2026 (Men T20I)",
     "The Hundred Men's Competition 2026",
     "Sri Lanka tour of England 2026 (ODI)",
-    "Sri Lanka tour of England 2026 (T20I)"
+    "Sri Lanka tour of England 2026 (T20I)",
+    "England tour of Australia 2026 (ODI)",
+    "England tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "244497",
    "cricsheet_id": "249d60c9",
@@ -6321,7 +6359,8 @@
     "The Hundred Men's Competition 2026",
     "England vs Pakistan Men's Test 2026",
     "Sri Lanka tour of England 2026 (ODI)",
-    "Sri Lanka tour of England 2026 (T20I)"
+    "Sri Lanka tour of England 2026 (T20I)",
+    "England tour of Australia 2026 (ODI)"
    ],
    "cricinfo_id": "669855",
    "cricsheet_id": "5574750c",
@@ -6360,7 +6399,8 @@
     "The Hundred Men's Competition 2026",
     "England vs Pakistan Men's Test 2026",
     "Sri Lanka tour of England 2026 (ODI)",
-    "Sri Lanka tour of England 2026 (T20I)"
+    "Sri Lanka tour of England 2026 (T20I)",
+    "England tour of Australia 2026 (ODI)"
    ],
    "cricinfo_id": "857975",
    "cricsheet_id": "1f1b4c89",
@@ -6378,7 +6418,8 @@
    ],
    "tours": [
     "India tour of England 2026 (Men T20I)",
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "England tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "573170",
    "cricsheet_id": "65b6943c",
@@ -6398,7 +6439,8 @@
     "India tour of England 2026 (Men T20I)",
     "The Hundred Men's Competition 2026",
     "Sri Lanka tour of England 2026 (ODI)",
-    "Sri Lanka tour of England 2026 (T20I)"
+    "Sri Lanka tour of England 2026 (T20I)",
+    "England tour of Australia 2026 (ODI)"
    ],
    "cricinfo_id": "1191192",
    "cricsheet_id": "78c12883",
@@ -8239,7 +8281,8 @@
     "sb harper"
    ],
    "tours": [
-    "Lanka Premier League 2026"
+    "Lanka Premier League 2026",
+    "England tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "772361",
    "cricsheet_id": "a756e61a",
@@ -9175,7 +9218,8 @@
     "thomas rew"
    ],
    "tours": [
-    "The Hundred Men's Competition 2026"
+    "The Hundred Men's Competition 2026",
+    "England tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "1379431",
    "cricsheet_id": "a8ffcd4f",
@@ -9209,7 +9253,8 @@
     "The Hundred Men's Competition 2026",
     "England vs Pakistan Men's Test 2026",
     "Sri Lanka tour of England 2026 (ODI)",
-    "Sri Lanka tour of England 2026 (T20I)"
+    "Sri Lanka tour of England 2026 (T20I)",
+    "England tour of Australia 2026 (ODI)"
    ],
    "cricinfo_id": "303669",
    "cricsheet_id": "a343262c",
@@ -9423,7 +9468,9 @@
    "tours": [
     "The Hundred Men's Competition 2026",
     "Sri Lanka tour of England 2026 (ODI)",
-    "Sri Lanka tour of England 2026 (T20I)"
+    "Sri Lanka tour of England 2026 (T20I)",
+    "England tour of Australia 2026 (ODI)",
+    "England tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "510530",
    "cricsheet_id": "59559bc2",
@@ -9799,7 +9846,8 @@
     "The Hundred Men's Competition 2026",
     "England vs Pakistan Men's Test 2026",
     "Sri Lanka tour of England 2026 (ODI)",
-    "Sri Lanka tour of England 2026 (T20I)"
+    "Sri Lanka tour of England 2026 (T20I)",
+    "England tour of Australia 2026 (ODI)"
    ],
    "cricinfo_id": "521637",
    "cricsheet_id": "5f26f677",
@@ -9930,7 +9978,8 @@
    ],
    "tours": [
     "The Hundred Men's Competition 2026",
-    "European T20 Premier League 2026"
+    "European T20 Premier League 2026",
+    "England tour of Australia 2026 (T20I)"
    ],
    "cricinfo_id": "562281",
    "cricsheet_id": "72918338",
@@ -12730,7 +12779,8 @@
     "The Hundred Men's Competition 2026",
     "England vs Pakistan Men's Test 2026",
     "Sri Lanka tour of England 2026 (ODI)",
-    "Sri Lanka tour of England 2026 (T20I)"
+    "Sri Lanka tour of England 2026 (T20I)",
+    "England tour of Australia 2026 (ODI)"
    ],
    "display": "Gus Atkinson",
    "cricinfo_id": "1039481",
@@ -14903,7 +14953,9 @@
    ],
    "tours": [
     "Sri Lanka tour of England 2026 (ODI)",
-    "Sri Lanka tour of England 2026 (T20I)"
+    "Sri Lanka tour of England 2026 (T20I)",
+    "England tour of Australia 2026 (ODI)",
+    "England tour of Australia 2026 (T20I)"
    ],
    "display": "Henry Crocombe",
    "cricinfo_id": "1143809",
@@ -14960,7 +15012,8 @@
     "alex carey"
    ],
    "tours": [
-    "Australia tour of South Africa 2026/27 (ODI)"
+    "Australia tour of South Africa 2026/27 (ODI)",
+    "England tour of Australia 2026 (ODI)"
    ],
    "display": "Alex Carey",
    "draft_id": 11106,
@@ -14999,7 +15052,8 @@
     "travis head"
    ],
    "tours": [
-    "Australia tour of South Africa 2026/27 (ODI)"
+    "Australia tour of South Africa 2026/27 (ODI)",
+    "England tour of Australia 2026 (ODI)"
    ],
    "display": "Travis Head",
    "cricinfo_id": "530011",
@@ -17072,7 +17126,9 @@
    "auction_id": null,
    "cricinfo_id": "1164537",
    "cricsheet_id": "d7ff1adc",
-   "espn_id": "1164537"
+   "espn_id": "1164537",
+   "cricbuzz_id": "14378",
+   "cricbuzz_tier": 3
   },
   "ci:1128748": {
    "aliases": [
@@ -17678,6 +17734,68 @@
    "cricinfo_id": "1283342",
    "cricsheet_id": null,
    "espn_id": "1283342"
+  },
+  "ci:1393948": {
+   "aliases": [
+    "mahli beardman"
+   ],
+   "tours": [
+    "England tour of Australia 2026 (ODI)",
+    "England tour of Australia 2026 (T20I)"
+   ],
+   "display": "Mahli Beardman",
+   "cricinfo_id": "1393948",
+   "cricsheet_id": "b5a12740",
+   "espn_id": "1393948",
+   "draft_id": 11773,
+   "auction_id": null
+  },
+  "ci:1076376": {
+   "aliases": [
+    "liam scott"
+   ],
+   "tours": [
+    "England tour of Australia 2026 (ODI)"
+   ],
+   "display": "Liam Scott",
+   "cricinfo_id": "1076376",
+   "cricsheet_id": "0ebb3444",
+   "espn_id": "1076376",
+   "draft_id": 11783,
+   "auction_id": null
+  },
+  "uncapped:jake-fraser-mcgurk": {
+   "aliases": [
+    "jake fraser mcgurk"
+   ],
+   "tours": [
+    "England tour of Australia 2026 (T20I)"
+   ],
+   "display": "Jake Fraser-McGurk",
+   "draft_id": 11793,
+   "auction_id": null
+  },
+  "uncapped:lachlan-shaw": {
+   "aliases": [
+    "lachlan shaw"
+   ],
+   "tours": [
+    "England tour of Australia 2026 (T20I)"
+   ],
+   "display": "Lachlan Shaw",
+   "draft_id": 11797,
+   "auction_id": null
+  },
+  "uncapped:eddie-jack": {
+   "aliases": [
+    "eddie jack"
+   ],
+   "tours": [
+    "England tour of Australia 2026 (T20I)"
+   ],
+   "display": "Eddie Jack",
+   "draft_id": 11808,
+   "auction_id": null
   }
  }
 }

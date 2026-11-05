@@ -1,0 +1,132 @@
+{
+  "MOENG2": {
+    "name": "England",
+    "players": [
+      [
+        "Harry Brook",
+        "BAT"
+      ],
+      [
+        "Jofra Archer",
+        "BOWL"
+      ],
+      [
+        "Gus Atkinson",
+        "BOWL"
+      ],
+      [
+        "Sonny Baker",
+        "BOWL"
+      ],
+      [
+        "Tom Banton",
+        "BAT"
+      ],
+      [
+        "Jacob Bethell",
+        "BAT"
+      ],
+      [
+        "Jordan Cox",
+        "BAT"
+      ],
+      [
+        "Henry Crocombe",
+        "BOWL"
+      ],
+      [
+        "Sam Curran",
+        "AR"
+      ],
+      [
+        "Liam Dawson",
+        "AR"
+      ],
+      [
+        "Ben Duckett",
+        "BAT"
+      ],
+      [
+        "Will Jacks",
+        "BAT"
+      ],
+      [
+        "Jamie Overton",
+        "BOWL"
+      ],
+      [
+        "Adil Rashid",
+        "BOWL"
+      ],
+      [
+        "Joe Root",
+        "BAT"
+      ],
+      [
+        "Josh Tongue",
+        "BOWL"
+      ]
+    ]
+  },
+  "MOAUS2": {
+    "name": "Australia",
+    "players": [
+      [
+        "Mitchell Marsh",
+        "BAT"
+      ],
+      [
+        "Xavier Bartlett",
+        "BOWL"
+      ],
+      [
+        "Mahli Beardman",
+        "BOWL"
+      ],
+      [
+        "Alex Carey",
+        "BAT"
+      ],
+      [
+        "Cooper Connolly",
+        "BAT"
+      ],
+      [
+        "Jack Edwards",
+        "AR"
+      ],
+      [
+        "Cameron Green",
+        "BAT"
+      ],
+      [
+        "Travis Head",
+        "BAT"
+      ],
+      [
+        "Josh Inglis",
+        "BAT"
+      ],
+      [
+        "Spencer Johnson",
+        "BOWL"
+      ],
+      [
+        "Oliver Peake",
+        "BAT"
+      ],
+      [
+        "Matt Renshaw",
+        "BAT"
+      ],
+      [
+        "Liam Scott",
+        "BOWL"
+      ],
+      [
+        "Adam Zampa",
+        "BOWL"
+      ]
+    ]
+  }
+}

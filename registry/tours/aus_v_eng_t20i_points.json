@@ -1,0 +1,40 @@
+{
+ "tour": "England tour of Australia 2026 (T20I)",
+ "slug": "aus_v_eng_t20i_points",
+ "teams": {
+  "MTAUS": [
+   "ci:272450",
+   "ci:1050545",
+   "ci:1393948",
+   "ci:1079380",
+   "ci:892749",
+   "ci:1295851",
+   "ci:1088610",
+   "ci:826915",
+   "uncapped:jake-fraser-mcgurk",
+   "ci:772361",
+   "ci:1123718",
+   "ci:1213979",
+   "uncapped:lachlan-shaw",
+   "ci:379504"
+  ],
+  "MTENG2": [
+   "ci:911707",
+   "ci:877051",
+   "ci:1194959",
+   "ci:1231590",
+   "ci:1112537",
+   "ci:1143809",
+   "ci:662973",
+   "ci:211855",
+   "ci:562281",
+   "uncapped:eddie-jack",
+   "ci:897549",
+   "ci:510530",
+   "ci:244497",
+   "ci:1379431",
+   "ci:669365",
+   "ci:573170"
+  ]
+ }
+}

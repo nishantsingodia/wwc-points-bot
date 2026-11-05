@@ -320,5 +320,25 @@
     "squads": "womens_big_bash_league_2026_squads.json",
     "tab": "WOMENS BIG BASH LEAGUE 2026 POINTS",
     "cricbuzz_series": "12677"
+  },
+  {
+    "ends": "2026-11-18",
+    "espn_series": "24273",
+    "format": "ODI",
+    "gender": "male",
+    "name": "England tour of Australia 2026 (ODI)",
+    "squads": "england_tour_of_australia_2026_odi_squads.json",
+    "tab": "ENG V AUS ODI POINTS",
+    "cricbuzz_series": "11876"
+  },
+  {
+    "ends": "2026-12-02",
+    "espn_series": "24273",
+    "format": "T20",
+    "gender": "male",
+    "name": "England tour of Australia 2026 (T20I)",
+    "squads": "england_tour_of_australia_2026_t20i_squads.json",
+    "tab": "AUS V ENG T20I POINTS",
+    "cricbuzz_series": "11876"
   }
 ]

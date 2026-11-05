@@ -1,0 +1,132 @@
+{
+  "MTAUS": {
+    "name": "Australia",
+    "players": [
+      [
+        "Mitchell Marsh",
+        "BAT"
+      ],
+      [
+        "Xavier Bartlett",
+        "BOWL"
+      ],
+      [
+        "Mahli Beardman",
+        "BOWL"
+      ],
+      [
+        "Nikhil Chaudhary",
+        "BAT"
+      ],
+      [
+        "Tim David",
+        "BAT"
+      ],
+      [
+        "Joel Davies",
+        "BOWL"
+      ],
+      [
+        "Jack Edwards",
+        "AR"
+      ],
+      [
+        "Nathan Ellis",
+        "BOWL"
+      ],
+      [
+        "Jake Fraser-McGurk",
+        "BAT"
+      ],
+      [
+        "Sam Harper",
+        "BAT"
+      ],
+      [
+        "Spencer Johnson",
+        "BOWL"
+      ],
+      [
+        "Mitchell Owen",
+        "AR"
+      ],
+      [
+        "Lachlan Shaw",
+        "BAT"
+      ],
+      [
+        "Adam Zampa",
+        "BOWL"
+      ]
+    ]
+  },
+  "MTENG2": {
+    "name": "England",
+    "players": [
+      [
+        "Harry Brook",
+        "BAT"
+      ],
+      [
+        "Tom Banton",
+        "BAT"
+      ],
+      [
+        "Jacob Bethell",
+        "BAT"
+      ],
+      [
+        "James Coles",
+        "AR"
+      ],
+      [
+        "Jordan Cox",
+        "BAT"
+      ],
+      [
+        "Henry Crocombe",
+        "BOWL"
+      ],
+      [
+        "Sam Curran",
+        "AR"
+      ],
+      [
+        "Liam Dawson",
+        "AR"
+      ],
+      [
+        "Aneurin Donald",
+        "BAT"
+      ],
+      [
+        "Eddie Jack",
+        "BOWL"
+      ],
+      [
+        "Will Jacks",
+        "BAT"
+      ],
+      [
+        "Jamie Overton",
+        "BOWL"
+      ],
+      [
+        "Adil Rashid",
+        "BOWL"
+      ],
+      [
+        "Thomas Rew",
+        "BAT"
+      ],
+      [
+        "Phil Salt",
+        "BAT"
+      ],
+      [
+        "Luke Wood",
+        "BOWL"
+      ]
+    ]
+  }
+}
